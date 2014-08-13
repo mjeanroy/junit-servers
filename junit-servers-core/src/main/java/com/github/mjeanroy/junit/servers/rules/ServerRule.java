@@ -9,9 +9,7 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
  */
 public class ServerRule extends ExternalResource {
 
-	/**
-	 * Embedded server that will be start and stopped.
-	 */
+	/** Embedded server that will be start and stopped. */
 	private final EmbeddedServer server;
 
 	/**

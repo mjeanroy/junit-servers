@@ -46,14 +46,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	}
 
 	private Server initServer() {
-		final Server server;
-
-		if (port > 0) {
-			server = new Server(port);
-		} else {
-			server = new Server();
-		}
-
+		Server server = new Server(port);
 		server.setStopAtShutdown(true);
 		server.setStopTimeout(10000);
 		return server;
@@ -65,7 +58,6 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 			WebAppContext ctx = new WebAppContext();
 			ctx.setClassLoader(Thread.currentThread().getContextClassLoader());
 			ctx.setContextPath(path);
-
 			// Useful for WebXmlConfiguration
 			ctx.setBaseResource(newResource(webapp));
 
@@ -83,21 +75,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 			ctx.setServer(server);
 
 			server.setHandler(ctx);
-
-			Thread thread = new Thread() {
-				public void run() {
-					try {
-						server.start();
-					}
-					catch (Exception ex) {
-						throw new ServerStartException(ex);
-					}
-				}
-			};
-
-			thread.start();
-			thread.join();
-			thread.interrupt();
+			server.start();
 		}
 		catch (Exception ex) {
 			throw new ServerStartException(ex);
@@ -108,7 +86,6 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	protected void doStop() {
 		try {
 			server.stop();
-			server.join();
 		}
 		catch (Exception ex) {
 			throw new ServerStopException(ex);
