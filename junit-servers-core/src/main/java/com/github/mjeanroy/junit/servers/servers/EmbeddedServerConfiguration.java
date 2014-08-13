@@ -1,4 +1,4 @@
-package com.github.mjeanroy.servers;
+package com.github.mjeanroy.junit.servers.servers;
 
 import java.io.File;
 

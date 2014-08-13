@@ -1,9 +1,9 @@
-package com.github.mjeanroy.servers.utils;
+package com.github.mjeanroy.junit.servers.utils;
 
 import org.junit.ClassRule;
 
-import com.github.mjeanroy.rules.ServerRule;
-import com.github.mjeanroy.servers.rules.JettyServerRule;
+import com.github.mjeanroy.junit.servers.rules.ServerRule;
+import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
 
 /**
  * Simple abstraction that define a server rule using jetty as embedded server.

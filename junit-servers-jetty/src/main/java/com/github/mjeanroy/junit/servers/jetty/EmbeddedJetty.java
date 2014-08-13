@@ -1,4 +1,4 @@
-package com.github.mjeanroy.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty;
 
 import static org.eclipse.jetty.util.resource.Resource.newResource;
 
@@ -13,10 +13,10 @@ import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
-import com.github.mjeanroy.exceptions.ServerStartException;
-import com.github.mjeanroy.exceptions.ServerStopException;
-import com.github.mjeanroy.servers.AbstractEmbeddedServer;
-import com.github.mjeanroy.servers.EmbeddedServerConfiguration;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServerConfiguration;
 
 /**
  * Jetty Embedded Server.

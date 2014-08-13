@@ -1,6 +1,6 @@
-package com.github.mjeanroy.servers.tomcat;
+package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.servers.AbstractEmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 
 /**
  * Embedded server using tomcat as implementation.

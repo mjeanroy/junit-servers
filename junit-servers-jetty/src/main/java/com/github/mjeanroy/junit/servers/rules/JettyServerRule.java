@@ -1,7 +1,6 @@
-package com.github.mjeanroy.servers.rules;
+package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.rules.ServerRule;
-import com.github.mjeanroy.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 
 /**
  * Rule that can be used to start and stop embedded jetty server.

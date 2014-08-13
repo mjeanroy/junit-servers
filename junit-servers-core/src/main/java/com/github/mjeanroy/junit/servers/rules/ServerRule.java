@@ -1,8 +1,8 @@
-package com.github.mjeanroy.rules;
+package com.github.mjeanroy.junit.servers.rules;
 
 import org.junit.rules.ExternalResource;
 
-import com.github.mjeanroy.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 /**
  * Rule that can be used to start and stop embedded server.
@@ -36,7 +36,7 @@ public class ServerRule extends ExternalResource {
 	/**
 	 * Start embedded server.
 	 *
-	 * @see com.github.mjeanroy.servers.EmbeddedServer#start()
+	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#start()
 	 */
 	public void start() {
 		server.start();
@@ -45,7 +45,7 @@ public class ServerRule extends ExternalResource {
 	/**
 	 * Stop embedded server.
 	 *
-	 * @see com.github.mjeanroy.servers.EmbeddedServer#stop()
+	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#stop()
 	 */
 	public void stop() {
 		server.stop();
@@ -54,7 +54,7 @@ public class ServerRule extends ExternalResource {
 	/**
 	 * Restart embedded server.
 	 *
-	 * @see com.github.mjeanroy.servers.EmbeddedServer#restart()
+	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#restart()
 	 */
 	public void restart() {
 		server.restart();
@@ -64,7 +64,7 @@ public class ServerRule extends ExternalResource {
 	 * Check if embedded server is started.
 	 *
 	 * @return True if embedded server is started, false otherwise.
-	 * @see com.github.mjeanroy.servers.EmbeddedServer#isStarted()
+	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#isStarted()
 	 */
 	public boolean isStarted() {
 		return server.isStarted();
@@ -74,7 +74,7 @@ public class ServerRule extends ExternalResource {
 	 * Get port used by embedded server.
 	 *
 	 * @return Port.
-	 * @see com.github.mjeanroy.servers.EmbeddedServer#getPort()
+	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#getPort()
 	 */
 	public int getPort() {
 		return server.getPort();
