@@ -5,8 +5,12 @@ package com.github.mjeanroy.junit.servers.servers;
  */
 public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
+	/** Use lock object to be sure embedded server cannot be started twice. */
+	protected static final Object lock = new Object();
+
+	// Volatile because it can be accessed from more than one thread
 	/** Flag to keep server status. */
-	private boolean started;
+	private volatile boolean started;
 
 	/** Force specific port. */
 	protected final int port;
@@ -35,20 +39,24 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	@Override
 	public void start() {
-		if (!isStarted()) {
-			doStart();
-		}
+		synchronized (lock) {
+			if (!isStarted()) {
+				doStart();
+			}
 
-		started = true;
+			started = true;
+		}
 	}
 
 	@Override
 	public void stop() {
-		if (isStarted()) {
-			doStop();
-		}
+		synchronized (lock) {
+			if (isStarted()) {
+				doStop();
+			}
 
-		started = false;
+			started = false;
+		}
 	}
 
 	@Override
@@ -62,9 +70,15 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 		start();
 	}
 
-	/** Start embedded server. */
+	/**
+	 * Start embedded server.
+	 * Must block until server is fully started.
+	 */
 	protected abstract void doStart();
 
-	/** Stop embedded server. */
+	/**
+	 * Stop embedded server.
+	 * Must block until server is fully stopped.
+	 */
 	protected abstract void doStop();
 }
