@@ -1,4 +1,4 @@
-package com.github.mjeanoy.junit.servers.samples.configuration;
+package com.github.mjeanroy.junit.servers.samples.configuration;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -22,22 +22,29 @@ public class WebApplicationConfiguration implements WebApplicationInitializer {
 	}
 
 	private AnnotationConfigWebApplicationContext initContext(ServletContext servletContext) {
-		String configLocation = SpringConfiguration.class.getName();
-		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-		context.setConfigLocation(configLocation);
-
+		AnnotationConfigWebApplicationContext context = getContext();
 		servletContext.addListener(new ContextLoaderListener(context));
 		return context;
 	}
 
-	private void initSpringMvc(ServletContext servletContext, AnnotationConfigWebApplicationContext context) {
-		DispatcherServlet servlet = new DispatcherServlet(context);
-		servlet.setContextConfigLocation(SpringMvcConfiguration.class.getName());
-		servlet.setContextClass(AnnotationConfigWebApplicationContext.class);
+	private AnnotationConfigWebApplicationContext getContext() {
+		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+		context.setConfigLocation(configLocation());
+		return context;
+	}
 
-		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("spring", servlet);
+	private void initSpringMvc(ServletContext servletContext, AnnotationConfigWebApplicationContext context) {
+		DispatcherServlet dispatcherServlet = new DispatcherServlet(context);
+		dispatcherServlet.setContextConfigLocation(configLocation());
+		dispatcherServlet.setContextClass(AnnotationConfigWebApplicationContext.class);
+
+		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("spring", dispatcherServlet);
 		dispatcher.setLoadOnStartup(1);
 		dispatcher.addMapping("/*");
 		dispatcher.addMapping("/");
+	}
+
+	private String configLocation() {
+		return SpringMvcConfiguration.class.getPackage().getName();
 	}
 }

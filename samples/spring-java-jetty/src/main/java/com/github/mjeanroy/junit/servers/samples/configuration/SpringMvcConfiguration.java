@@ -1,4 +1,4 @@
-package com.github.mjeanoy.junit.servers.samples.configuration;
+package com.github.mjeanroy.junit.servers.samples.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("com.github.mjeanroy")
+@ComponentScan(basePackages = "com.github.mjeanroy.junit.servers.samples")
 public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
 
 	@Bean

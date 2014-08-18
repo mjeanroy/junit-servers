@@ -10,6 +10,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.resource.FileResource;
 import org.eclipse.jetty.webapp.Configuration;
+import org.eclipse.jetty.webapp.FragmentConfiguration;
+import org.eclipse.jetty.webapp.JettyWebXmlConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
@@ -63,10 +65,16 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 
 			ctx.setConfigurations(new Configuration[]{
 					new WebXmlConfiguration(),
-					new AnnotationConfiguration()
+					new AnnotationConfiguration(),
+					new JettyWebXmlConfiguration(),
+					new FragmentConfiguration(),
 			});
 
-			File classes = new File("./target/classes");
+			// Fix to scan Spring WebApplicationInitializer
+			// This will add compiled classes to jetty classpath
+			// See: http://stackoverflow.com/questions/13222071/spring-3-1-webapplicationinitializer-embedded-jetty-8-annotationconfiguration
+			// And more precisely: http://stackoverflow.com/a/18449506/1215828
+			File classes = new File(".");
 			FileResource containerResources = new FileResource(classes.toURI());
 			ctx.getMetaData().addContainerResource(containerResources);
 

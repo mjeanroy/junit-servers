@@ -17,6 +17,8 @@
 	</modules>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
 		<jetty.version>9.2.1.v20140609</jetty.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>

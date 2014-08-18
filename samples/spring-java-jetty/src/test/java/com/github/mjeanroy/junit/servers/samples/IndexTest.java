@@ -1,7 +1,8 @@
 package com.github.mjeanroy.junit.servers.samples;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,10 +23,10 @@ public class IndexTest {
 	public static JettyServerRule serverRule = new JettyServerRule(jetty);
 
 	@Test
-	@Ignore
 	public void it_should_have_an_index() {
-		String message = restTemplate.getForObject(url(), String.class);
-		System.out.println(message);
+		String url = url() + "index";
+		String message = restTemplate.getForObject(url, String.class);
+		assertThat(message).isNotEmpty().isEqualTo("Hello World");
 	}
 
 	public String url() {
