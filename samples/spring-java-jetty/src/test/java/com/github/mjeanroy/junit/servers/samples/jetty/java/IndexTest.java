@@ -1,19 +1,40 @@
-package com.github.mjeanroy.junit.servers.samples;
+package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
 import static org.assertj.core.api.Assertions.*;
+
+import java.io.File;
 
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServerConfiguration;
 
 public class IndexTest {
 
-	private static EmbeddedServerConfiguration configuration = new EmbeddedServerConfiguration()
-			.withWebapp("samples/spring-java-jetty/src/main/webapp");
+	private static final String PATH = "samples/spring-java-jetty/";
+
+	private static EmbeddedJettyConfiguration configuration = initConfiguration();
+
+	private static EmbeddedJettyConfiguration initConfiguration() {
+		try {
+			String current = new File(".").getCanonicalPath();
+			if (!current.endsWith("/")) {
+				current += "/";
+			}
+
+			String path = current.endsWith(PATH) ? current : current + PATH;
+
+			return new EmbeddedJettyConfiguration()
+					.withWebapp(path + "src/main/webapp")
+					.withClasspath(path + "target/classes");
+		}
+		catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 
 	private static EmbeddedJetty jetty = new EmbeddedJetty(configuration);
 

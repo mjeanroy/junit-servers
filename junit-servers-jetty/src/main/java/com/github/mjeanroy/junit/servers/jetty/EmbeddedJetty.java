@@ -18,7 +18,6 @@ import org.eclipse.jetty.webapp.WebXmlConfiguration;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
 import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServerConfiguration;
 
 /**
  * Jetty Embedded Server.
@@ -28,13 +27,15 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	/** Instance of Jetty Server. */
 	private final Server server;
 
+	/** Additional classpath. */
+	private final String classpath;
+
 	/** Server Connector, lazily initialized. */
 	private ServerConnector connector;
 
 	/** Build default embedded jetty server. */
 	public EmbeddedJetty() {
-		super();
-		this.server = initServer();
+		this(new EmbeddedJettyConfiguration());
 	}
 
 	/**
@@ -42,8 +43,9 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	 *
 	 * @param configuration Server configuration.
 	 */
-	public EmbeddedJetty(EmbeddedServerConfiguration configuration) {
+	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
+		this.classpath = configuration.getClasspath();
 		this.server = initServer();
 	}
 
@@ -74,7 +76,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 			// This will add compiled classes to jetty classpath
 			// See: http://stackoverflow.com/questions/13222071/spring-3-1-webapplicationinitializer-embedded-jetty-8-annotationconfiguration
 			// And more precisely: http://stackoverflow.com/a/18449506/1215828
-			File classes = new File(".");
+			File classes = new File(classpath);
 			FileResource containerResources = new FileResource(classes.toURI());
 			ctx.getMetaData().addContainerResource(containerResources);
 

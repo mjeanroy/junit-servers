@@ -14,11 +14,11 @@ public class EmbeddedConfigurationTest {
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
 
-	private EmbeddedServerConfiguration configuration;
+	private AbstractEmbeddedServerConfiguration configuration;
 
 	@Before
 	public void setUp() {
-		configuration = new EmbeddedServerConfiguration();
+		configuration = new EmbeddedConfiguration();
 	}
 
 	@Test
@@ -26,7 +26,7 @@ public class EmbeddedConfigurationTest {
 		int oldPort = configuration.getPort();
 		int newPort = oldPort + 10;
 
-		EmbeddedServerConfiguration result = configuration.withPort(newPort);
+		AbstractEmbeddedServerConfiguration result = configuration.withPort(newPort);
 
 		assertThat(result).isSameAs(configuration);
 		assertThat(result.getPort()).isNotEqualTo(oldPort).isEqualTo(newPort);
@@ -37,7 +37,7 @@ public class EmbeddedConfigurationTest {
 		String oldPath = configuration.getPath();
 		String newPath = oldPath + "foo";
 
-		EmbeddedServerConfiguration result = configuration.withPath(newPath);
+		AbstractEmbeddedServerConfiguration result = configuration.withPath(newPath);
 
 		assertThat(result).isSameAs(configuration);
 		assertThat(result.getPath()).isNotEqualTo(oldPath).isEqualTo(newPath);
@@ -48,7 +48,7 @@ public class EmbeddedConfigurationTest {
 		String oldWebapp = configuration.getWebapp();
 		String newWebapp = oldWebapp + "foo";
 
-		EmbeddedServerConfiguration result = configuration.withWebapp(newWebapp);
+		AbstractEmbeddedServerConfiguration result = configuration.withWebapp(newWebapp);
 
 		assertThat(result).isSameAs(configuration);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
@@ -60,9 +60,12 @@ public class EmbeddedConfigurationTest {
 		File file = folder.newFile("foo");
 		String newWebapp = file.getAbsolutePath();
 
-		EmbeddedServerConfiguration result = configuration.withWebapp(file);
+		AbstractEmbeddedServerConfiguration result = configuration.withWebapp(file);
 
 		assertThat(result).isSameAs(configuration);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
+	}
+
+	private static class EmbeddedConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedConfiguration> {
 	}
 }

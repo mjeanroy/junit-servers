@@ -1,4 +1,4 @@
-package com.github.mjeanroy.junit.servers.samples.configuration;
+package com.github.mjeanroy.junit.servers.samples.jetty.java.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

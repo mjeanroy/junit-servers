@@ -25,7 +25,7 @@ public class AbstractEmbeddedServerTest {
 		String path = "/foo";
 		int port = 8080;
 		String webapp = "/foo/bar";
-		EmbeddedServerConfiguration configuration = new EmbeddedServerConfiguration()
+		AbstractEmbeddedServerConfiguration configuration = new EmbeddedConfiguration()
 				.withPath(path)
 				.withPort(port)
 				.withWebapp(webapp);
@@ -113,7 +113,7 @@ public class AbstractEmbeddedServerTest {
 		public TestServer() {
 		}
 
-		public TestServer(EmbeddedServerConfiguration configuration) {
+		public TestServer(AbstractEmbeddedServerConfiguration configuration) {
 			super(configuration);
 		}
 
@@ -131,5 +131,8 @@ public class AbstractEmbeddedServerTest {
 		public int getPort() {
 			return 0;
 		}
+	}
+
+	private static class EmbeddedConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedConfiguration> {
 	}
 }

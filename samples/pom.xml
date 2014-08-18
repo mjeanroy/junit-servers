@@ -15,6 +15,7 @@
 
 	<modules>
 		<module>spring-java-jetty</module>
+		<module>spring-webxml-jetty</module>
 	</modules>
 
 	<properties>

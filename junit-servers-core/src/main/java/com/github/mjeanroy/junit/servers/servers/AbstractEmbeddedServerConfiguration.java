@@ -2,7 +2,7 @@ package com.github.mjeanroy.junit.servers.servers;
 
 import java.io.File;
 
-public class EmbeddedServerConfiguration {
+public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbeddedServerConfiguration> {
 
 	/** Server Path. */
 	private String path;
@@ -13,10 +13,21 @@ public class EmbeddedServerConfiguration {
 	/** Server port, default is to use a random port. */
 	private int port;
 
-	public EmbeddedServerConfiguration() {
+	public AbstractEmbeddedServerConfiguration() {
 		this.port = 0;
 		this.path = "/";
 		this.webapp = "src/main/webapp";
+	}
+
+	/**
+	 * Create new embedded configuration by copying existing configuration.
+	 *
+	 * @param configuration Configuration.
+	 */
+	public AbstractEmbeddedServerConfiguration(AbstractEmbeddedServerConfiguration configuration) {
+		this.port = configuration.getPort();
+		this.path = configuration.getPath();
+		this.webapp = configuration.getWebapp();
 	}
 
 	public int getPort() {
@@ -37,9 +48,9 @@ public class EmbeddedServerConfiguration {
 	 * @param path New path.
 	 * @return this.
 	 */
-	public EmbeddedServerConfiguration withPath(String path) {
+	public T withPath(String path) {
 		this.path = path;
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -48,9 +59,9 @@ public class EmbeddedServerConfiguration {
 	 * @param port New port.
 	 * @return this.
 	 */
-	public EmbeddedServerConfiguration withPort(int port) {
+	public T withPort(int port) {
 		this.port = port;
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -59,9 +70,9 @@ public class EmbeddedServerConfiguration {
 	 * @param webapp New webapp path.
 	 * @return this.
 	 */
-	public EmbeddedServerConfiguration withWebapp(String webapp) {
+	public T withWebapp(String webapp) {
 		this.webapp = webapp;
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -70,8 +81,8 @@ public class EmbeddedServerConfiguration {
 	 * @param webapp New webapp path.
 	 * @return this.
 	 */
-	public EmbeddedServerConfiguration withWebapp(File webapp) {
+	public T withWebapp(File webapp) {
 		this.webapp = webapp.getAbsolutePath();
-		return this;
+		return (T) this;
 	}
 }

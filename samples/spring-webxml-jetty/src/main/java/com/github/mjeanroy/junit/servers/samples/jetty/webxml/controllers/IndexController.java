@@ -1,4 +1,4 @@
-package com.github.mjeanroy.junit.servers.samples.controllers;
+package com.github.mjeanroy.junit.servers.samples.jetty.webxml.controllers;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
