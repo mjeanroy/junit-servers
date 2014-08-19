@@ -9,6 +9,7 @@
 	<packaging>pom</packaging>
 	<name>junit-servers</name>
 	<version>0.1.0-SNAPSHOT</version>
+	<url>https://github.com/mjeanroy/junit-servers</url>
 
 	<modules>
 		<module>junit-servers-core</module>
