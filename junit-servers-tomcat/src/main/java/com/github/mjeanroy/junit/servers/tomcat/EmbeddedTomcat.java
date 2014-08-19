@@ -88,10 +88,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 	private Tomcat initServer() {
 		Tomcat tomcat = new Tomcat();
 		tomcat.setBaseDir(baseDir);
-
-		if (port > 0) {
-			tomcat.setPort(port);
-		}
+		tomcat.setPort(port);
 
 		tomcat.getHost().setAutoDeploy(true);
 		tomcat.getHost().setDeployOnStartup(true);
@@ -166,7 +163,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 
 	@Override
 	public int getPort() {
-		return tomcat.getConnector().getPort();
+		return tomcat.getConnector().getLocalPort();
 	}
 
 	private static void deleteDirectory(String path) {
