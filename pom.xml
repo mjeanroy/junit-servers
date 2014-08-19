@@ -20,6 +20,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<jetty.version>9.2.1.v20140609</jetty.version>
+		<tomcat.version>7.0.55</tomcat.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<assertj.version>1.6.1</assertj.version>
@@ -72,6 +73,37 @@
 				<groupId>org.eclipse.jetty.websocket</groupId>
 				<artifactId>websocket-server</artifactId>
 				<version>${jetty.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-core</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-logging-juli</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-jasper</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-jasper</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-jasper-el</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-jsp-api</artifactId>
+				<version>${tomcat.version}</version>
 			</dependency>
 
 			<dependency>

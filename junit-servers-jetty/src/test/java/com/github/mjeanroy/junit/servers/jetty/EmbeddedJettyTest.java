@@ -18,7 +18,7 @@ public class EmbeddedJettyTest {
 
 	@Test
 	public void it_should_start_jetty() {
-		EmbeddedJetty jetty = new EmbeddedJetty();
+		jetty = new EmbeddedJetty();
 		jetty.start();
 
 		assertThat(jetty.isStarted()).isTrue();
@@ -27,7 +27,7 @@ public class EmbeddedJettyTest {
 
 	@Test
 	public void it_should_stop_jetty() {
-		EmbeddedJetty jetty = new EmbeddedJetty();
+		jetty = new EmbeddedJetty();
 		jetty.start();
 
 		assertThat(jetty.isStarted()).isTrue();

@@ -1,5 +1,6 @@
 package com.github.mjeanroy.junit.servers.jetty;
 
+import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
 import static org.eclipse.jetty.util.resource.Resource.newResource;
 
 import java.io.File;
@@ -27,9 +28,6 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	/** Instance of Jetty Server. */
 	private final Server server;
 
-	/** Additional classpath. */
-	private final String classpath;
-
 	/** Server Connector, lazily initialized. */
 	private ServerConnector connector;
 
@@ -45,7 +43,6 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	 */
 	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
-		this.classpath = configuration.getClasspath();
 		this.server = initServer();
 	}
 
@@ -72,13 +69,15 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 					new FragmentConfiguration(),
 			});
 
-			// Fix to scan Spring WebApplicationInitializer
-			// This will add compiled classes to jetty classpath
-			// See: http://stackoverflow.com/questions/13222071/spring-3-1-webapplicationinitializer-embedded-jetty-8-annotationconfiguration
-			// And more precisely: http://stackoverflow.com/a/18449506/1215828
-			File classes = new File(classpath);
-			FileResource containerResources = new FileResource(classes.toURI());
-			ctx.getMetaData().addContainerResource(containerResources);
+			if (isNotBlank(classpath)) {
+				// Fix to scan Spring WebApplicationInitializer
+				// This will add compiled classes to jetty classpath
+				// See: http://stackoverflow.com/questions/13222071/spring-3-1-webapplicationinitializer-embedded-jetty-8-annotationconfiguration
+				// And more precisely: http://stackoverflow.com/a/18449506/1215828
+				File classes = new File(classpath);
+				FileResource containerResources = new FileResource(classes.toURI());
+				ctx.getMetaData().addContainerResource(containerResources);
+			}
 
 			ctx.setParentLoaderPriority(true);
 			ctx.setWar(webapp);

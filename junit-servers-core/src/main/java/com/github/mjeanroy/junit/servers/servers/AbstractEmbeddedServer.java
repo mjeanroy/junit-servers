@@ -21,6 +21,8 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	/** Webapp Path. */
 	protected final String webapp;
 
+	protected final String classpath;
+
 	/** Build default embedded server. */
 	public AbstractEmbeddedServer() {
 		// Build default configuration
@@ -37,6 +39,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 		this.port = configuration.getPort();
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
+		this.classpath = configuration.getClasspath();
 	}
 
 	@Override

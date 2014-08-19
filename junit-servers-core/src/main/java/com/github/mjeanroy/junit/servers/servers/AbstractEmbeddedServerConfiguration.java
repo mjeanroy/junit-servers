@@ -4,19 +4,27 @@ import java.io.File;
 
 public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbeddedServerConfiguration> {
 
+	// Default classpath
+	// Should be enough for most projects but can be overridden (could be necessary for sub-projects)
+	public static final String DEFAULT_CLASSPATH = ".";
+
 	/** Server Path. */
-	private String path;
+	protected String path;
 
 	/** Webapp Path. */
-	private String webapp;
+	protected String webapp;
 
 	/** Server port, default is to use a random port. */
-	private int port;
+	protected int port;
+
+	/** Additional classpath. */
+	protected String classpath;
 
 	public AbstractEmbeddedServerConfiguration() {
 		this.port = 0;
 		this.path = "/";
 		this.webapp = "src/main/webapp";
+		this.classpath = DEFAULT_CLASSPATH;
 	}
 
 	/**
@@ -28,6 +36,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 		this.port = configuration.getPort();
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
+		this.classpath = configuration.getClasspath();
 	}
 
 	public int getPort() {
@@ -40,6 +49,10 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 
 	public String getWebapp() {
 		return webapp;
+	}
+
+	public String getClasspath() {
+		return classpath;
 	}
 
 	/**
@@ -83,6 +96,17 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 */
 	public T withWebapp(File webapp) {
 		this.webapp = webapp.getAbsolutePath();
+		return (T) this;
+	}
+
+	/**
+	 * Change additional classpath value.
+	 *
+	 * @param classpath New classpath.
+	 * @return this.
+	 */
+	public T withClasspath(String classpath) {
+		this.classpath = classpath;
 		return (T) this;
 	}
 }

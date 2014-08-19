@@ -1,19 +1,13 @@
 package com.github.mjeanroy.junit.servers.jetty;
 
+import java.util.Objects;
+
 import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServerConfiguration;
 
 public class EmbeddedJettyConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedJettyConfiguration> {
 
-	// Default classpath
-	// Should be enough for most projects but can be overridden (could be necessary for sub-projects)
-	public static final String DEFAULT_CLASSPATH = ".";
-
-	/** Additional classpath. */
-	private String classpath;
-
 	public EmbeddedJettyConfiguration() {
 		super();
-		this.classpath = DEFAULT_CLASSPATH;
 	}
 
 	/**
@@ -23,21 +17,36 @@ public class EmbeddedJettyConfiguration extends AbstractEmbeddedServerConfigurat
 	 */
 	public EmbeddedJettyConfiguration(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
-		this.classpath = configuration.getClasspath();
 	}
 
-	public String getClasspath() {
-		return classpath;
+	@Override
+	public String toString() {
+		return String.format(
+				"%s {path=%s, webapp=%s, port=%s, classpath=%s}",
+				getClass().getSimpleName(),
+				path, webapp, port, classpath
+		);
 	}
 
-	/**
-	 * Change additional classpath value.
-	 *
-	 * @param classpath New classpath.
-	 * @return this.
-	 */
-	public EmbeddedJettyConfiguration withClasspath(String classpath) {
-		this.classpath = classpath;
-		return this;
+	@Override
+	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
+
+		if (o instanceof EmbeddedJettyConfiguration) {
+			EmbeddedJettyConfiguration c = (EmbeddedJettyConfiguration) o;
+			return Objects.equals(path, c.path)
+					&& Objects.equals(webapp, c.webapp)
+					&& Objects.equals(port, c.port)
+					&& Objects.equals(classpath, c.classpath);
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(path, webapp, port, classpath);
 	}
 }
