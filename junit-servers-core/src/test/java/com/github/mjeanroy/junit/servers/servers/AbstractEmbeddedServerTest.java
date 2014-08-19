@@ -111,6 +111,7 @@ public class AbstractEmbeddedServerTest {
 		public int doStop = 0;
 
 		public TestServer() {
+			super(new EmbeddedConfiguration());
 		}
 
 		public TestServer(AbstractEmbeddedServerConfiguration configuration) {
