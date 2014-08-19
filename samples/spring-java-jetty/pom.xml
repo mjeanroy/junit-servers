@@ -12,6 +12,7 @@
 	</parent>
 
 	<artifactId>spring-java-jetty</artifactId>
+	<packaging>war</packaging>
 
 	<dependencies>
 		<dependency>
