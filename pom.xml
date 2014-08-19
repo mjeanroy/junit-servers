@@ -26,6 +26,20 @@
 		</license>
 	</licenses>
 
+	<scm>
+		<connection>scm:git:git@github.com:mjeanroy/junit-servers.git</connection>
+		<developerConnection>scm:git:git@github.com:mjeanroy/junit-servers.git</developerConnection>
+		<url>https://github.com/mjeanroy/junit-servers</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>mjeanroy</id>
+			<name>Mickael Jeanroy</name>
+			<email>mickael.jeanroy@gmail.com</email>
+		</developer>
+	</developers>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
