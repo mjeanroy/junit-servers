@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.rules;
 
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 /**
  * Rule that can be used to start and stop embedded tomcat server.
@@ -45,4 +46,12 @@ public class TomcatServerRule extends ServerRule {
 		super(tomcat);
 	}
 
+	/**
+	 * Create rule.
+	 *
+	 * @param configuration Tomcat Configuration.
+	 */
+	public TomcatServerRule(EmbeddedTomcatConfiguration configuration) {
+		super(new EmbeddedTomcat(configuration));
+	}
 }
