@@ -13,6 +13,7 @@
 
 	<artifactId>spring-webxml-tomcat</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
+	<name>junit-servers-spring-webxml-tomcat</name>
 	<packaging>war</packaging>
 
 	<dependencies>

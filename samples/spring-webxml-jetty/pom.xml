@@ -13,6 +13,7 @@
 
 	<artifactId>spring-webxml-jetty</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
+	<name>junit-servers-spring-webxml-jetty</name>
 	<packaging>war</packaging>
 
 	<dependencies>

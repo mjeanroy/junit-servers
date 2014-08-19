@@ -13,6 +13,7 @@
 
 	<artifactId>junit-servers-jetty</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
+	<name>junit-servers-jetty</name>
 	<packaging>jar</packaging>
 
 	<dependencies>

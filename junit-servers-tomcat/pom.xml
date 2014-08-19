@@ -13,6 +13,7 @@
 
 	<artifactId>junit-servers-tomcat</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
+	<name>junit-servers-tomcat</name>
 	<packaging>jar</packaging>
 
 	<dependencies>

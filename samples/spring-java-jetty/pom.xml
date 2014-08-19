@@ -13,6 +13,7 @@
 
 	<artifactId>spring-java-jetty</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
+	<name>junit-servers-spring-java-jetty</name>
 	<packaging>war</packaging>
 
 	<dependencies>

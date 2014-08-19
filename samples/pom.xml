@@ -12,6 +12,7 @@
 
 	<artifactId>junit-servers-samples</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
+	<name>junit-servers-samples</name>
 	<packaging>pom</packaging>
 
 	<modules>
