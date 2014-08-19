@@ -213,3 +213,11 @@ public class MyTest {
     }
 }
 ```
+
+## Licence
+
+MIT License (MIT)
+
+## Contributing
+
+If you found a bug or you thing something is missing, feel free to contribute and submit an issue or a pull request.
