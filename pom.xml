@@ -75,6 +75,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<apache-rat-plugin.version>0.10</apache-rat-plugin.version>
+		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
 
 		<jetty.version>9.2.1.v20140609</jetty.version>
 		<tomcat.version>7.0.55</tomcat.version>
