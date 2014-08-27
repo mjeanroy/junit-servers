@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.servers;
 import static java.lang.String.format;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +57,9 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	/** Old properties used to restore initial environment properties values when server stops. */
 	protected final Map<String, String> oldProperties;
 
+	/** Hooks that will be invoked before and after server execution. */
+	protected final List<Hook> hooks;
+
 	/**
 	 * Build default embedded.
 	 *
@@ -68,6 +72,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 		this.classpath = configuration.getClasspath();
 		this.oldProperties = new HashMap<>();
 		this.properties = configuration.getEnvProperties();
+		this.hooks = configuration.getHooks();
 	}
 
 	@Override
@@ -75,6 +80,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 		synchronized (this) {
 			if (!isStarted()) {
 				initEnvironment();
+				execHooks(true);
 				doStart();
 			}
 
@@ -87,6 +93,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 		synchronized (this) {
 			if (isStarted()) {
 				doStop();
+				execHooks(false);
 				destroyEnvironment();
 			}
 
@@ -141,6 +148,16 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 				System.clearProperty(name);
 			} else {
 				System.setProperty(name, oldValue);
+			}
+		}
+	}
+
+	private void execHooks(boolean pre) {
+		for (Hook hook : hooks) {
+			if (pre) {
+				hook.pre(this);
+			} else {
+				hook.post(this);
 			}
 		}
 	}

@@ -25,8 +25,10 @@
 package com.github.mjeanroy.junit.servers.servers;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -107,6 +109,23 @@ public class EmbeddedConfigurationTest {
 				.isNotEmpty()
 				.hasSize(1)
 				.containsOnly(entry(name, value));
+	}
+
+	@Test
+	public void it_should_add_hook() throws Exception {
+		Hook hook = mock(Hook.class);
+		List<Hook> oldHooks = configuration.getHooks();
+		assertThat(oldHooks).isEmpty();
+
+		AbstractEmbeddedServerConfiguration result = configuration.withHook(hook);
+
+		assertThat(result).isSameAs(configuration);
+		List<Hook> newHooks = result.getHooks();
+		assertThat(newHooks)
+				.isNotNull()
+				.isNotEmpty()
+				.hasSize(1)
+				.containsOnly(hook);
 	}
 
 	private static class EmbeddedConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedConfiguration> {

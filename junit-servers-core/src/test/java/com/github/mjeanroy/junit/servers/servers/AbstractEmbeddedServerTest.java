@@ -24,9 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -172,6 +175,28 @@ public class AbstractEmbeddedServerTest {
 
 		System.clearProperty(name1);
 		System.clearProperty(name2);
+	}
+
+	@Test
+	public void it_should_execute_hook() {
+		final Hook hook = mock(Hook.class);
+
+		server = new TestServer(new AbstractEmbeddedServerConfiguration() {
+			@Override
+			public List<Hook> getHooks() {
+				return asList(hook);
+			}
+		});
+
+		server.start();
+
+		verify(hook).pre(server);
+		verify(hook, never()).post(server);
+
+		server.stop();
+
+		verify(hook).post(server);
+		verify(hook, times(1)).pre(server);
 	}
 
 	@Test

@@ -25,8 +25,10 @@
 package com.github.mjeanroy.junit.servers.servers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbeddedServerConfiguration> {
@@ -50,12 +52,16 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	/** Map of environment properties to set before server start. */
 	protected final Map<String, String> envProperties;
 
+	/** Execution hooks. */
+	protected final List<Hook> hooks;
+
 	public AbstractEmbeddedServerConfiguration() {
 		this.port = 0;
 		this.path = "/";
 		this.webapp = "src/main/webapp";
 		this.classpath = DEFAULT_CLASSPATH;
 		this.envProperties = new HashMap<>();
+		this.hooks = new ArrayList<>();
 	}
 
 	/**
@@ -68,7 +74,8 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
 		this.classpath = configuration.getClasspath();
-		this.envProperties = new HashMap<>();
+		this.envProperties = new HashMap<String, String>(configuration.getEnvProperties());
+		this.hooks = new ArrayList<Hook>(configuration.getHooks());
 	}
 
 	public int getPort() {
@@ -85,6 +92,10 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 
 	public String getClasspath() {
 		return classpath;
+	}
+
+	public List<Hook> getHooks() {
+		return Collections.unmodifiableList(hooks);
 	}
 
 	public Map<String, String> getEnvProperties() {
@@ -156,6 +167,17 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 */
 	public T withProperty(String name, String value) {
 		envProperties.put(name, value);
+		return (T) this;
+	}
+
+	/**
+	 * Add hook that allow code to be executed before and after server start / stop.
+	 *
+	 * @param hook Hook.
+	 * @return this.
+	 */
+	public T withHook(Hook hook) {
+		hooks.add(hook);
 		return (T) this;
 	}
 }
