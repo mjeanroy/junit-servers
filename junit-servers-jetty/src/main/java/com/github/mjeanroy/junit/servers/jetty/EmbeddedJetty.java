@@ -40,6 +40,7 @@ import org.eclipse.jetty.webapp.JettyWebXmlConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
+import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
 import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
@@ -74,6 +75,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
 		this.server = initServer();
+		initContext();
 	}
 
 	private Server initServer() {
@@ -83,11 +85,18 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 		return server;
 	}
 
+	private void initContext() {
+		try {
+			createdWebAppContext();
+		}
+		catch (Exception ex) {
+			throw new ServerInitializationException(ex);
+		}
+	}
+
 	@Override
 	protected void doStart() {
 		try {
-			WebAppContext ctx = buildWebAppContext();
-			server.setHandler(ctx);
 			server.start();
 		}
 		catch (Exception ex) {
@@ -99,10 +108,9 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	 * Build web app context used to launch server.
 	 * May be override by subclasses.
 	 *
-	 * @return Web App Context.
 	 * @throws Exception May be thrown by web app context initialization (will be wrapped later).
 	 */
-	protected WebAppContext buildWebAppContext() throws Exception {
+	protected void createdWebAppContext() throws Exception {
 		WebAppContext ctx = new WebAppContext();
 		ctx.setClassLoader(Thread.currentThread().getContextClassLoader());
 		ctx.setContextPath(path);
@@ -131,7 +139,8 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 		ctx.setWar(webapp);
 		ctx.setServer(server);
 
-		return ctx;
+		// Add server context
+		server.setHandler(ctx);
 	}
 
 	@Override

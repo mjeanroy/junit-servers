@@ -26,7 +26,6 @@ package com.github.mjeanroy.junit.servers.tomcat;
 
 import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
 
-import javax.servlet.ServletException;
 import java.io.File;
 
 import org.apache.catalina.Context;
@@ -83,6 +82,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 		this.enableNaming = configuration.getEnableNaming();
 		this.forceMetaInf = configuration.getForceMetaInf();
 		this.tomcat = initServer();
+		initContext();
 	}
 
 	private Tomcat initServer() {
@@ -97,46 +97,63 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 			tomcat.enableNaming();
 		}
 
+		return tomcat;
+	}
+
+	private void initContext() {
+		try {
+			createContext();
+		}
+		catch (Exception ex) {
+			throw new ServerInitializationException(ex);
+		}
+	}
+
+	/**
+	 * Create tomcat context.
+	 * May be override by subclasses.
+	 *
+	 * @return Tomcat context.
+	 * @throws Exception Exception May be thrown by web app context initialization (will be wrapped later).
+	 */
+	protected Context createContext() throws Exception {
+		Context context = null;
+
 		File webappDirectory = new File(webapp);
 		if (webappDirectory.exists()) {
-			try {
-				String webappAbsolutePath = webappDirectory.getAbsolutePath();
-				tomcat.getHost().setAppBase(webappAbsolutePath);
-				Context context = tomcat.addWebapp(path, webappAbsolutePath);
+			String webappAbsolutePath = webappDirectory.getAbsolutePath();
+			tomcat.getHost().setAppBase(webappAbsolutePath);
+			context = tomcat.addWebapp(path, webappAbsolutePath);
 
-				Loader loader = context.getLoader();
-				if (loader == null) {
-					loader = new WebappLoader(Thread.currentThread().getContextClassLoader());
-				}
+			Loader loader = context.getLoader();
+			if (loader == null) {
+				loader = new WebappLoader(Thread.currentThread().getContextClassLoader());
+			}
 
-				// Add additional classpath entry
-				if (isNotBlank(classpath)) {
-					File file = new File(classpath);
-					if (file.exists()) {
+			// Add additional classpath entry
+			if (isNotBlank(classpath)) {
+				File file = new File(classpath);
+				if (file.exists()) {
 
-						// Check that additional classpath entry contains META-INF directory
-						File metaInf = new File(file.getAbsolutePath() + "/META-INF");
-						if (!metaInf.exists() && forceMetaInf) {
-							metaInf.mkdir();
-						}
-
-						String s = file.toURI().toString();
-						loader.addRepository(s);
-
-						// Used to scan additional classpath directory
-						// https://issues.apache.org/bugzilla/show_bug.cgi?id=52853
-						((StandardJarScanner) context.getJarScanner()).setScanAllDirectories(true);
+					// Check that additional classpath entry contains META-INF directory
+					File metaInf = new File(file.getAbsolutePath() + "/META-INF");
+					if (!metaInf.exists() && forceMetaInf) {
+						metaInf.mkdir();
 					}
-				}
 
-				context.setLoader(loader);
+					String s = file.toURI().toString();
+					loader.addRepository(s);
+
+					// Used to scan additional classpath directory
+					// https://issues.apache.org/bugzilla/show_bug.cgi?id=52853
+					((StandardJarScanner) context.getJarScanner()).setScanAllDirectories(true);
+				}
 			}
-			catch (ServletException ex) {
-				throw new ServerInitializationException(ex);
-			}
+
+			context.setLoader(loader);
 		}
 
-		return tomcat;
+		return context;
 	}
 
 	@Override
