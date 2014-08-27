@@ -128,6 +128,59 @@ public class AbstractEmbeddedServerTest {
 		assertThat(server.doStart).isNotZero().isEqualTo(2);
 	}
 
+	@Test
+	public void it_should_get_path() {
+		String path = server.getPath();
+		assertThat(path).isEqualTo("/");
+	}
+
+	@Test
+	public void it_should_get_custom_path() {
+		TestServer server = new TestServer(new AbstractEmbeddedServerConfiguration() {
+			@Override
+			public String getPath() {
+				return "/foo";
+			}
+		});
+
+		String path = server.getPath();
+		assertThat(path).isEqualTo("/foo");
+	}
+
+	@Test
+	public void it_should_get_url() {
+		String url = server.getUrl();
+		assertThat(url).isEqualTo("http://localhost:0/");
+	}
+
+	@Test
+	public void it_should_get_url_with_custom_path() {
+		TestServer server = new TestServer(new AbstractEmbeddedServerConfiguration() {
+			@Override
+			public String getPath() {
+				return "/foo";
+			}
+		});
+
+		String url = server.getUrl();
+
+		assertThat(url).isEqualTo("http://localhost:0/foo");
+	}
+
+	@Test
+	public void it_should_get_url_with_custom_path_pre_pending_slash() {
+		TestServer server = new TestServer(new AbstractEmbeddedServerConfiguration() {
+			@Override
+			public String getPath() {
+				return "foo";
+			}
+		});
+
+		String url = server.getUrl();
+
+		assertThat(url).isEqualTo("http://localhost:0/foo");
+	}
+
 	private static class TestServer extends AbstractEmbeddedServer {
 
 		public int doStart = 0;

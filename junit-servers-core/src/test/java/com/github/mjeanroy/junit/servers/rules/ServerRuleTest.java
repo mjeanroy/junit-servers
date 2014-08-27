@@ -89,6 +89,28 @@ public class ServerRuleTest {
 	}
 
 	@Test
+	public void it_should_get_server_path() {
+		String path = "/foo";
+		when(server.getPath()).thenReturn(path);
+
+		String result = rule.getPath();
+
+		assertThat(result).isEqualTo(path);
+		verify(server).getPath();
+	}
+
+	@Test
+	public void it_should_get_server_url() {
+		String url = "http://localhost:8080/foo";
+		when(server.getUrl()).thenReturn(url);
+
+		String result = rule.getUrl();
+
+		assertThat(result).isEqualTo(url);
+		verify(server).getUrl();
+	}
+
+	@Test
 	public void it_should_get_server() {
 		EmbeddedServer result = rule.getServer();
 		assertThat(result).isSameAs(server);

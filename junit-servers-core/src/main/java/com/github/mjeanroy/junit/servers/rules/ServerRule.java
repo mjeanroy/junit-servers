@@ -103,6 +103,26 @@ public class ServerRule extends ExternalResource {
 	}
 
 	/**
+	 * Get path defined on embedded server.
+	 *
+	 * @return Path.
+	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#getPath()
+	 */
+	public String getPath() {
+		return server.getPath();
+	}
+
+	/**
+	 * Get url used to query embedded server.
+	 *
+	 * @return URL.
+	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#getUrl()
+	 */
+	public String getUrl() {
+		return server.getUrl();
+	}
+
+	/**
 	 * Get embedded server.
 	 *
 	 * @return Server.

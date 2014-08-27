@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import static java.lang.String.format;
+
 /**
  * Partial implementation of an embedded server.
  */
@@ -87,6 +89,22 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	public void restart() {
 		stop();
 		start();
+	}
+
+	@Override
+	public String getPath() {
+		return path;
+	}
+
+	@Override
+	public String getUrl() {
+		int port = getPort();
+		String path = getPath();
+		if (!path.isEmpty() && path.charAt(0) != '/') {
+			path = "/" + path;
+		}
+
+		return format("http://localhost:%s%s", port, path);
 	}
 
 	/**

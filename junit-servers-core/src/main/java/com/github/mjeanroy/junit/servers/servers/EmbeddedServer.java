@@ -56,4 +56,18 @@ public interface EmbeddedServer {
 	/** Get port used by embedded server. */
 	int getPort();
 
+	/**
+	 * Get server context path.
+	 *
+	 * @return Server context path.
+	 */
+	String getPath();
+
+	/**
+	 * Get URL to query embedded server.
+	 *
+	 * @return URL.
+	 */
+	String getUrl();
+
 }
