@@ -26,6 +26,9 @@ package com.github.mjeanroy.junit.servers.servers;
 
 import static java.lang.String.format;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Partial implementation of an embedded server.
  */
@@ -44,7 +47,14 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	/** Webapp Path. */
 	protected final String webapp;
 
+	/** Additional classpath directory path. */
 	protected final String classpath;
+
+	/** Environment properties to create when server starts and destroy when server stops. */
+	protected final Map<String, String> properties;
+
+	/** Old properties used to restore initial environment properties values when server stops. */
+	protected final Map<String, String> oldProperties;
 
 	/**
 	 * Build default embedded.
@@ -56,12 +66,15 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
 		this.classpath = configuration.getClasspath();
+		this.oldProperties = new HashMap<>();
+		this.properties = configuration.getEnvProperties();
 	}
 
 	@Override
 	public void start() {
 		synchronized (this) {
 			if (!isStarted()) {
+				initEnvironment();
 				doStart();
 			}
 
@@ -74,6 +87,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 		synchronized (this) {
 			if (isStarted()) {
 				doStop();
+				destroyEnvironment();
 			}
 
 			started = false;
@@ -94,6 +108,41 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	@Override
 	public String getPath() {
 		return path;
+	}
+
+	/**
+	 * Add custom environment properties.
+	 */
+	private void initEnvironment() {
+		// Already in synchronized block, don't need to synchronize anything
+		for (Map.Entry<String, String> property : properties.entrySet()) {
+			String name = property.getKey();
+			String newValue = property.getValue();
+
+			String oldValue = System.getProperty(property.getKey());
+			oldProperties.put(name, oldValue);
+
+			System.setProperty(name, newValue);
+		}
+	}
+
+	/**
+	 * Reset custom environment properties.
+	 */
+	private void destroyEnvironment() {
+		// Already in synchronized block, don't need to synchronize anything
+		for (Map.Entry<String, String> property : properties.entrySet()) {
+			String name = property.getKey();
+
+			String oldValue = oldProperties.get(name);
+			oldProperties.remove(name);
+
+			if (oldValue == null) {
+				System.clearProperty(name);
+			} else {
+				System.setProperty(name, oldValue);
+			}
+		}
 	}
 
 	@Override

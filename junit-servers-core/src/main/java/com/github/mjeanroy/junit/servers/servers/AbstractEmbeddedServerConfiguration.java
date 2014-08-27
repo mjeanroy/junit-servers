@@ -25,6 +25,9 @@
 package com.github.mjeanroy.junit.servers.servers;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbeddedServerConfiguration> {
 
@@ -44,11 +47,15 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	/** Additional classpath. */
 	protected String classpath;
 
+	/** Map of environment properties to set before server start. */
+	protected final Map<String, String> envProperties;
+
 	public AbstractEmbeddedServerConfiguration() {
 		this.port = 0;
 		this.path = "/";
 		this.webapp = "src/main/webapp";
 		this.classpath = DEFAULT_CLASSPATH;
+		this.envProperties = new HashMap<>();
 	}
 
 	/**
@@ -61,6 +68,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
 		this.classpath = configuration.getClasspath();
+		this.envProperties = new HashMap<>();
 	}
 
 	public int getPort() {
@@ -77,6 +85,10 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 
 	public String getClasspath() {
 		return classpath;
+	}
+
+	public Map<String, String> getEnvProperties() {
+		return Collections.unmodifiableMap(envProperties);
 	}
 
 	/**
@@ -131,6 +143,19 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 */
 	public T withClasspath(String classpath) {
 		this.classpath = classpath;
+		return (T) this;
+	}
+
+	/**
+	 * Add environment property to set before server start.
+	 * Property will be removed once server is stopped.
+	 *
+	 * @param name Property name.
+	 * @param value Property value.
+	 * @return this.
+	 */
+	public T withProperty(String name, String value) {
+		envProperties.put(name, value);
 		return (T) this;
 	}
 }

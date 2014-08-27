@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.servers;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -88,6 +89,24 @@ public class EmbeddedConfigurationTest {
 
 		assertThat(result).isSameAs(configuration);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
+	}
+
+	@Test
+	public void it_should_add_property() throws Exception {
+		Map<String, String> oldProperties = configuration.getEnvProperties();
+		assertThat(oldProperties).isEmpty();
+
+		String name = "foo";
+		String value = "bar";
+		AbstractEmbeddedServerConfiguration result = configuration.withProperty(name, value);
+
+		assertThat(result).isSameAs(configuration);
+		Map<String, String> newProperties = result.getEnvProperties();
+		assertThat(newProperties)
+				.isNotNull()
+				.isNotEmpty()
+				.hasSize(1)
+				.containsOnly(entry(name, value));
 	}
 
 	private static class EmbeddedConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedConfiguration> {

@@ -26,6 +26,9 @@ package com.github.mjeanroy.junit.servers.servers;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 
 public class AbstractEmbeddedServerTest {
@@ -126,6 +129,49 @@ public class AbstractEmbeddedServerTest {
 		assertThat(server.isStarted()).isTrue();
 		assertThat(server.doStop).isNotZero().isEqualTo(1);
 		assertThat(server.doStart).isNotZero().isEqualTo(2);
+	}
+
+	@Test
+	public void it_should_set_environment_properties() {
+		String name1 = "foo";
+		String oldValue1 = "foo";
+		String newValue1 = "bar";
+		System.setProperty(name1, oldValue1);
+
+		String name2 = "foo1";
+		String newValue2 = "bar1";
+
+		final Map<String, String> properties = new HashMap<>();
+		properties.put(name1, newValue1);
+		properties.put(name2, newValue2);
+		server = new TestServer(new AbstractEmbeddedServerConfiguration() {
+			@Override
+			public Map<String, String> getEnvProperties() {
+				return properties;
+			}
+		});
+
+		server.start();
+
+		assertThat(System.getProperty(name1))
+				.isNotNull()
+				.isEqualTo(newValue1);
+
+		assertThat(System.getProperty(name2))
+				.isNotNull()
+				.isEqualTo(newValue2);
+
+		server.stop();
+
+		assertThat(System.getProperty(name1))
+				.isNotNull()
+				.isEqualTo(oldValue1);
+
+		assertThat(System.getProperty(name2))
+				.isNull();
+
+		System.clearProperty(name1);
+		System.clearProperty(name2);
 	}
 
 	@Test
