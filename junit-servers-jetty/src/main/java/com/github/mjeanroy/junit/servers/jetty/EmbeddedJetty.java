@@ -49,13 +49,19 @@ import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
  */
 public class EmbeddedJetty extends AbstractEmbeddedServer {
 
-	/** Instance of Jetty Server. */
+	/**
+	 * Instance of Jetty Server.
+	 */
 	private final Server server;
 
-	/** Server Connector, lazily initialized. */
+	/**
+	 * Server Connector, lazily initialized.
+	 */
 	private ServerConnector connector;
 
-	/** Build default embedded jetty server. */
+	/**
+	 * Build default embedded jetty server.
+	 */
 	public EmbeddedJetty() {
 		this(new EmbeddedJettyConfiguration());
 	}
@@ -80,39 +86,52 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	@Override
 	protected void doStart() {
 		try {
-			WebAppContext ctx = new WebAppContext();
-			ctx.setClassLoader(Thread.currentThread().getContextClassLoader());
-			ctx.setContextPath(path);
-			// Useful for WebXmlConfiguration
-			ctx.setBaseResource(newResource(webapp));
-
-			ctx.setConfigurations(new Configuration[]{
-					new WebXmlConfiguration(),
-					new AnnotationConfiguration(),
-					new JettyWebXmlConfiguration(),
-					new FragmentConfiguration(),
-			});
-
-			if (isNotBlank(classpath)) {
-				// Fix to scan Spring WebApplicationInitializer
-				// This will add compiled classes to jetty classpath
-				// See: http://stackoverflow.com/questions/13222071/spring-3-1-webapplicationinitializer-embedded-jetty-8-annotationconfiguration
-				// And more precisely: http://stackoverflow.com/a/18449506/1215828
-				File classes = new File(classpath);
-				FileResource containerResources = new FileResource(classes.toURI());
-				ctx.getMetaData().addContainerResource(containerResources);
-			}
-
-			ctx.setParentLoaderPriority(true);
-			ctx.setWar(webapp);
-			ctx.setServer(server);
-
+			WebAppContext ctx = buildWebAppContext();
 			server.setHandler(ctx);
 			server.start();
 		}
 		catch (Exception ex) {
 			throw new ServerStartException(ex);
 		}
+	}
+
+	/**
+	 * Build web app context used to launch server.
+	 * May be override by subclasses.
+	 *
+	 * @return Web App Context.
+	 * @throws Exception May be thrown by web app context initialization (will be wrapped later).
+	 */
+	protected WebAppContext buildWebAppContext() throws Exception {
+		WebAppContext ctx = new WebAppContext();
+		ctx.setClassLoader(Thread.currentThread().getContextClassLoader());
+		ctx.setContextPath(path);
+
+		// Useful for WebXmlConfiguration
+		ctx.setBaseResource(newResource(webapp));
+
+		ctx.setConfigurations(new Configuration[]{
+				new WebXmlConfiguration(),
+				new AnnotationConfiguration(),
+				new JettyWebXmlConfiguration(),
+				new FragmentConfiguration(),
+		});
+
+		if (isNotBlank(classpath)) {
+			// Fix to scan Spring WebApplicationInitializer
+			// This will add compiled classes to jetty classpath
+			// See: http://stackoverflow.com/questions/13222071/spring-3-1-webapplicationinitializer-embedded-jetty-8-annotationconfiguration
+			// And more precisely: http://stackoverflow.com/a/18449506/1215828
+			File classes = new File(classpath);
+			FileResource containerResources = new FileResource(classes.toURI());
+			ctx.getMetaData().addContainerResource(containerResources);
+		}
+
+		ctx.setParentLoaderPriority(true);
+		ctx.setWar(webapp);
+		ctx.setServer(server);
+
+		return ctx;
 	}
 
 	@Override
