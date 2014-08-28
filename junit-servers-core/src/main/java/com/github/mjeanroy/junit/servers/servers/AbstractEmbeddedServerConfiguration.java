@@ -60,8 +60,8 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 		this.path = "/";
 		this.webapp = "src/main/webapp";
 		this.classpath = DEFAULT_CLASSPATH;
-		this.envProperties = new HashMap<>();
-		this.hooks = new ArrayList<>();
+		this.envProperties = new HashMap<String, String>();
+		this.hooks = new ArrayList<Hook>();
 	}
 
 	/**

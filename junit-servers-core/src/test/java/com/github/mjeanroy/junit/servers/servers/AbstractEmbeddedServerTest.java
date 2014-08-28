@@ -144,7 +144,7 @@ public class AbstractEmbeddedServerTest {
 		String name2 = "foo1";
 		String newValue2 = "bar1";
 
-		final Map<String, String> properties = new HashMap<>();
+		final Map<String, String> properties = new HashMap<String, String>();
 		properties.put(name1, newValue1);
 		properties.put(name2, newValue2);
 		server = new TestServer(new AbstractEmbeddedServerConfiguration() {

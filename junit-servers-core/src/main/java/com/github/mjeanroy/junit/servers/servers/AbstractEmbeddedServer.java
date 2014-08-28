@@ -29,15 +29,16 @@ import static java.lang.String.format;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Partial implementation of an embedded server.
  */
 public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
-	// Volatile because it can be accessed from more than one thread
+	// Atomic boolean because it can be used by other thread (if tests are runs in parallel)
 	/** Flag to keep server status. */
-	private volatile boolean started;
+	private final AtomicBoolean started;
 
 	/** Force specific port. */
 	protected final int port;
@@ -66,44 +67,37 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 * @param configuration Server configuration.
 	 */
 	public AbstractEmbeddedServer(AbstractEmbeddedServerConfiguration configuration) {
+		this.started = new AtomicBoolean(false);
 		this.port = configuration.getPort();
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
 		this.classpath = configuration.getClasspath();
-		this.oldProperties = new HashMap<>();
+		this.oldProperties = new HashMap<String, String>();
 		this.properties = configuration.getEnvProperties();
 		this.hooks = configuration.getHooks();
 	}
 
 	@Override
 	public void start() {
-		synchronized (this) {
-			if (!isStarted()) {
-				initEnvironment();
-				execHooks(true);
-				doStart();
-			}
-
-			started = true;
+		if (started.compareAndSet(false, true)) {
+			initEnvironment();
+			execHooks(true);
+			doStart();
 		}
 	}
 
 	@Override
 	public void stop() {
-		synchronized (this) {
-			if (isStarted()) {
-				doStop();
-				execHooks(false);
-				destroyEnvironment();
-			}
-
-			started = false;
+		if (started.compareAndSet(true, false)) {
+			doStop();
+			execHooks(false);
+			destroyEnvironment();
 		}
 	}
 
 	@Override
 	public boolean isStarted() {
-		return started;
+		return started.get();
 	}
 
 	@Override
