@@ -24,12 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import static java.lang.String.format;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static java.lang.String.format;
 
 /**
  * Partial implementation of an embedded server.
@@ -79,19 +79,37 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	@Override
 	public void start() {
-		if (started.compareAndSet(false, true)) {
-			initEnvironment();
-			execHooks(true);
-			doStart();
+		if (!started.get()) {
+			synchronized (this) {
+				try {
+					initEnvironment();
+					execHooks(true);
+					doStart();
+					started.set(true);
+				}
+				catch (RuntimeException ex) {
+					// If an exception occurs, server is not started
+					started.set(false);
+					throw ex;
+				}
+			}
 		}
 	}
 
 	@Override
 	public void stop() {
-		if (started.compareAndSet(true, false)) {
-			doStop();
-			execHooks(false);
-			destroyEnvironment();
+		if (started.get()) {
+			synchronized (this) {
+				try {
+					doStop();
+					execHooks(false);
+					destroyEnvironment();
+				}
+				finally {
+					// Server is now stopped
+					started.set(false);
+				}
+			}
 		}
 	}
 
