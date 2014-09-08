@@ -72,7 +72,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
 		this.classpath = configuration.getClasspath();
-		this.oldProperties = new HashMap<String, String>();
+		this.oldProperties = new HashMap<>();
 		this.properties = configuration.getEnvProperties();
 		this.hooks = configuration.getHooks();
 	}

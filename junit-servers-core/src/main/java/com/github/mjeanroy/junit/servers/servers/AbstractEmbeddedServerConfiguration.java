@@ -24,9 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
+
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +62,8 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 		this.path = "/";
 		this.webapp = "src/main/webapp";
 		this.classpath = DEFAULT_CLASSPATH;
-		this.envProperties = new HashMap<String, String>();
-		this.hooks = new ArrayList<Hook>();
+		this.envProperties = new HashMap<>();
+		this.hooks = new ArrayList<>();
 	}
 
 	/**
@@ -95,11 +97,11 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	}
 
 	public List<Hook> getHooks() {
-		return Collections.unmodifiableList(hooks);
+		return unmodifiableList(hooks);
 	}
 
 	public Map<String, String> getEnvProperties() {
-		return Collections.unmodifiableMap(envProperties);
+		return unmodifiableMap(envProperties);
 	}
 
 	/**
