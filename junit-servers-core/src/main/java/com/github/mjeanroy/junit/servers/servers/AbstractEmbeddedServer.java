@@ -24,12 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import static java.lang.String.format;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static java.lang.String.format;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Partial implementation of an embedded server.
@@ -37,28 +37,44 @@ import static java.lang.String.format;
 public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	// Atomic boolean because it can be used by other thread (if tests are runs in parallel)
-	/** Flag to keep server status. */
-	private final AtomicBoolean started;
+	/**
+	 * Flag to keep server status.
+	 */
+	private final AtomicReference<ServerStatus> status;
 
-	/** Force specific port. */
+	/**
+	 * Force specific port.
+	 */
 	protected final int port;
 
-	/** Server path, default is '/' */
+	/**
+	 * Server path, default is '/'
+	 */
 	protected final String path;
 
-	/** Webapp Path. */
+	/**
+	 * Webapp Path.
+	 */
 	protected final String webapp;
 
-	/** Additional classpath directory path. */
+	/**
+	 * Additional classpath directory path.
+	 */
 	protected final String classpath;
 
-	/** Environment properties to create when server starts and destroy when server stops. */
+	/**
+	 * Environment properties to create when server starts and destroy when server stops.
+	 */
 	protected final Map<String, String> properties;
 
-	/** Old properties used to restore initial environment properties values when server stops. */
+	/**
+	 * Old properties used to restore initial environment properties values when server stops.
+	 */
 	protected final Map<String, String> oldProperties;
 
-	/** Hooks that will be invoked before and after server execution. */
+	/**
+	 * Hooks that will be invoked before and after server execution.
+	 */
 	protected final List<Hook> hooks;
 
 	/**
@@ -67,7 +83,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 * @param configuration Server configuration.
 	 */
 	public AbstractEmbeddedServer(AbstractEmbeddedServerConfiguration configuration) {
-		this.started = new AtomicBoolean(false);
+		this.status = new AtomicReference<>(ServerStatus.STOPPED);
 		this.port = configuration.getPort();
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
@@ -79,43 +95,39 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	@Override
 	public void start() {
-		if (!started.get()) {
-			synchronized (this) {
-				try {
-					initEnvironment();
-					execHooks(true);
-					doStart();
-					started.set(true);
-				}
-				catch (RuntimeException ex) {
-					// If an exception occurs, server is not started
-					started.set(false);
-					throw ex;
-				}
+		if (status.compareAndSet(ServerStatus.STOPPED, ServerStatus.STARTING)) {
+			try {
+				initEnvironment();
+				execHooks(true);
+				doStart();
+				status.set(ServerStatus.STARTED);
+			}
+			catch (RuntimeException ex) {
+				// If an exception occurs, server is not started
+				status.set(ServerStatus.STOPPED);
+				throw ex;
 			}
 		}
 	}
 
 	@Override
 	public void stop() {
-		if (started.get()) {
-			synchronized (this) {
-				try {
-					doStop();
-					execHooks(false);
-					destroyEnvironment();
-				}
-				finally {
-					// Server is now stopped
-					started.set(false);
-				}
+		if (status.compareAndSet(ServerStatus.STARTED, ServerStatus.STOPPING)) {
+			try {
+				doStop();
+				execHooks(false);
+				destroyEnvironment();
+			}
+			finally {
+				// Server is now stopped
+				status.set(ServerStatus.STOPPED);
 			}
 		}
 	}
 
 	@Override
 	public boolean isStarted() {
-		return started.get();
+		return status.get() == ServerStatus.STARTED;
 	}
 
 	@Override
@@ -158,7 +170,8 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 			if (oldValue == null) {
 				System.clearProperty(name);
-			} else {
+			}
+			else {
 				System.setProperty(name, oldValue);
 			}
 		}
@@ -168,7 +181,8 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 		for (Hook hook : hooks) {
 			if (pre) {
 				hook.pre(this);
-			} else {
+			}
+			else {
 				hook.post(this);
 			}
 		}
