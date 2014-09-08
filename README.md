@@ -72,6 +72,9 @@ public class MyTest {
 
 When embedded jetty is created, you can easyly use a custom configuration using a fluent API:
 
+- Define custom enironment properties that will be initialized before server startup and removed after server shutdown.
+- Define custom hooks to execute custom code before server startup and after server shutdown.
+
 ```java
 package com.myApp;
 
@@ -82,13 +85,26 @@ import org.springframework.web.client.RestTemplate;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
+import com.github.mjeanroy.junit.servers.servers.Hook;
 
 public class MyTest {
 
     private static EmbeddedJettyConfiguration configuration = new EmbeddedJettyConfiguration()
         .withPath("/myApp")
         .withWebapp("webapp")
-        .withPort(9090);
+        .withPort(9090)
+        .withProperty("spring.profiles.active", "test")
+        .withHook(new Hook() {
+		    @Override
+		    public void pre(EmbeddedServer server) {
+                System.out.println("Server Startup");
+		    }
+
+			@Override
+			public void post(EmbeddedServer server) {
+                System.out.println("Server Shutdown");
+			}
+		});
 
     private static EmbeddedJetty jetty = new EmbeddedJetty(configuration);
 
@@ -177,6 +193,9 @@ public class MyTest {
 
 When embedded tomcat is created, you can easyly use a custom configuration using a fluent API:
 
+- Define custom enironment properties that will be initialized before server startup and removed after server shutdown.
+- Define custom hooks to execute custom code before server startup and after server shutdown.
+
 ```java
 package com.myApp;
 
@@ -195,7 +214,19 @@ public class MyTest {
         .withWebapp("webapp")
         .withPort(9090)
         .withBaseDir("/tmp/tomcat")
-        .disableNaming();
+        .disableNaming()
+        .withProperty("spring.profiles.active", "test")
+        .withHook(new Hook() {
+		    @Override
+		    public void pre(EmbeddedServer server) {
+                System.out.println("Server Startup");
+		    }
+
+			@Override
+			public void post(EmbeddedServer server) {
+                System.out.println("Server Shutdown");
+			}
+		});
 
     private static EmbeddedTomcat jetty = new EmbeddedTomcat(configuration);
 
