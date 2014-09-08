@@ -4,6 +4,28 @@
 Simple library that will allow you to use a custom rule to start and stop an embedded
 container inside your Junit tests (currently Jetty and Tomcat supported out of the box).
 
+## Installation
+
+With Maven, add explicit dependency:
+
+```xml
+    <dependency>
+        <groupId>com.github.mjeanroy</groupId>
+        <artifactId>junit-servers-jetty</artifactId>
+        <version>0.2.0</version>
+        <scope>test</scope>
+    </dependency>
+```
+
+```xml
+    <dependency>
+        <groupId>com.github.mjeanroy</groupId>
+        <artifactId>junit-servers-tomcat</artifactId>
+        <version>0.2.0</version>
+        <scope>test</scope>
+    </dependency>
+```
+
 ## Jetty
 
 ### Default Configuration
@@ -206,6 +228,7 @@ import org.springframework.web.client.RestTemplate;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.servers.Hook;
 
 public class MyTest {
 
