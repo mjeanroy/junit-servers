@@ -33,32 +33,42 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Partial implementation of an embedded server.
+ * Subclasses should implement {@link #doStart()} and {@link #doStop()} methods.
+ * Synchronization is already managed by this abstract implementation.
  */
 public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
-	// Atomic boolean because it can be used by other thread (if tests are runs in parallel)
+	// Atomic reference because it can be used by other thread (if tests are runs in parallel)
 	/**
 	 * Flag to keep server status.
+	 * Server can be started if and only if status is equal to {@link ServerStatus#STOPPED}.
+	 * Server can be stopped if and only if status is equal to {@link ServerStatus#STARTED}.
 	 */
 	private final AtomicReference<ServerStatus> status;
 
 	/**
 	 * Force specific port.
+	 * If port is set to zero, then a random port will be used.
 	 */
 	protected final int port;
 
 	/**
-	 * Server path, default is '/'
+	 * Server path, default is '/'.
+	 * This path must be used to query server.
 	 */
 	protected final String path;
 
 	/**
 	 * Webapp Path.
+	 * In a "classic" java application, this path should be "src/main/webapp".
 	 */
 	protected final String webapp;
 
 	/**
 	 * Additional classpath directory path.
+	 * This classpath entry will be scanned when server starts.
+	 * It can be used to register compiled classes that can be needed to start
+	 * jetty or tomcat.
 	 */
 	protected final String classpath;
 
@@ -69,16 +79,19 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	/**
 	 * Old properties used to restore initial environment properties values when server stops.
+	 * It can be used to set a spring profile property or anything else.
 	 */
 	protected final Map<String, String> oldProperties;
 
 	/**
 	 * Hooks that will be invoked before and after server execution.
+	 * It can be used to start other dependencies (embedded database, start remove web server etc.) before server
+	 * starts, and shutdown these dependencies when server stops.
 	 */
 	protected final List<Hook> hooks;
 
 	/**
-	 * Build default embedded.
+	 * Build default embedded server.
 	 *
 	 * @param configuration Server configuration.
 	 */
