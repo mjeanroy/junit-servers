@@ -24,12 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
-import static org.eclipse.jetty.util.resource.Resource.newResource;
-
-import javax.servlet.ServletContext;
-import java.io.File;
-
+import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
@@ -41,10 +39,11 @@ import org.eclipse.jetty.webapp.JettyWebXmlConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
+import javax.servlet.ServletContext;
+import java.io.File;
+
+import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static org.eclipse.jetty.util.resource.Resource.newResource;
 
 /**
  * Jetty Embedded Server.
@@ -171,8 +170,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 
 	@Override
 	public ServletContext getServletContext() {
-		WebAppContext ctx = (WebAppContext) server.getHandler();
-		return ctx.getServletContext();
+		return webAppContext.getServletContext();
 	}
 
 	private ServerConnector findConnector() {
