@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.jetty;
 import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
 import static org.eclipse.jetty.util.resource.Resource.newResource;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
@@ -56,6 +57,11 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	private final Server server;
 
 	/**
+	 * Jetty Web App Context.
+	 */
+	private final WebAppContext webAppContext;
+
+	/**
 	 * Server Connector, lazily initialized.
 	 */
 	private ServerConnector connector;
@@ -75,7 +81,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
 		this.server = initServer();
-		initContext();
+		this.webAppContext = initContext();
 	}
 
 	private Server initServer() {
@@ -85,9 +91,9 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 		return server;
 	}
 
-	private void initContext() {
+	private WebAppContext initContext() {
 		try {
-			createdWebAppContext();
+			return createdWebAppContext();
 		}
 		catch (Exception ex) {
 			throw new ServerInitializationException(ex);
@@ -110,7 +116,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	 *
 	 * @throws Exception May be thrown by web app context initialization (will be wrapped later).
 	 */
-	protected void createdWebAppContext() throws Exception {
+	protected WebAppContext createdWebAppContext() throws Exception {
 		WebAppContext ctx = new WebAppContext();
 		ctx.setClassLoader(Thread.currentThread().getContextClassLoader());
 		ctx.setContextPath(path);
@@ -141,6 +147,8 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 
 		// Add server context
 		server.setHandler(ctx);
+
+		return ctx;
 	}
 
 	@Override
@@ -158,8 +166,13 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 		if (connector == null) {
 			connector = findConnector();
 		}
-
 		return connector.getLocalPort();
+	}
+
+	@Override
+	public ServletContext getServletContext() {
+		WebAppContext ctx = (WebAppContext) server.getHandler();
+		return ctx.getServletContext();
 	}
 
 	private ServerConnector findConnector() {

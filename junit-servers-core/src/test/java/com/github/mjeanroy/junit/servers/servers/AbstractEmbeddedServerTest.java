@@ -28,6 +28,7 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -279,6 +280,11 @@ public class AbstractEmbeddedServerTest {
 		@Override
 		public int getPort() {
 			return 0;
+		}
+
+		@Override
+		public ServletContext getServletContext() {
+			return null;
 		}
 	}
 

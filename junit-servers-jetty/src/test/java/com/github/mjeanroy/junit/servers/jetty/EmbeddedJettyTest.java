@@ -61,4 +61,10 @@ public class EmbeddedJettyTest {
 		assertThat(jetty.isStarted()).isFalse();
 		assertThat(jetty.getPort()).isNotZero();
 	}
+
+	@Test
+	public void it_should_get_servlet_context() {
+		jetty = new EmbeddedJetty();
+		assertThat(jetty.getServletContext()).isNotNull();
+	}
 }

@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import javax.servlet.ServletContext;
+
 /**
  * Specification of embedded server.
  * An embedded server:
@@ -71,4 +73,11 @@ public interface EmbeddedServer {
 	 */
 	String getUrl();
 
+	/**
+	 * Get servlet context used within container.
+	 * If container is not a servlet container, this method should return null.
+	 *
+	 * @return Servlet Context from container.
+	 */
+	ServletContext getServletContext();
 }

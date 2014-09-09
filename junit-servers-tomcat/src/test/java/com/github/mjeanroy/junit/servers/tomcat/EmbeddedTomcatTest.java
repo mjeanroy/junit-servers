@@ -26,10 +26,32 @@ package com.github.mjeanroy.junit.servers.tomcat;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+
 import org.junit.After;
 import org.junit.Test;
 
 public class EmbeddedTomcatTest {
+
+	private static final String PATH = "junit-servers-tomcat/";
+
+	private static EmbeddedTomcatConfiguration initConfiguration() {
+		try {
+			String current = new File(".").getCanonicalPath();
+			if (!current.endsWith("/")) {
+				current += "/";
+			}
+
+			String path = current.endsWith(PATH) ? current : current + PATH;
+
+			return new EmbeddedTomcatConfiguration()
+					.withWebapp(path + "src/test/resources")
+					.withClasspath(path + "target/classes");
+		}
+		catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 
 	private EmbeddedTomcat tomcat;
 
@@ -60,5 +82,11 @@ public class EmbeddedTomcatTest {
 		tomcat.stop();
 		assertThat(tomcat.isStarted()).isFalse();
 		assertThat(tomcat.getPort()).isNotZero();
+	}
+
+	@Test
+	public void it_should_get_servlet_context() {
+		tomcat = new EmbeddedTomcat(initConfiguration());
+		assertThat(tomcat.getServletContext()).isNotNull();
 	}
 }

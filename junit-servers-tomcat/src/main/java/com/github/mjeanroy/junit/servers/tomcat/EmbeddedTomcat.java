@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.tomcat;
 
 import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 
 import org.apache.catalina.Context;
@@ -48,6 +49,11 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 	 * Tomcat instance.
 	 */
 	private final Tomcat tomcat;
+
+	/**
+	 * Tomcat context.
+	 */
+	private final Context context;
 
 	/**
 	 * Tomcat base directory.
@@ -82,7 +88,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 		this.enableNaming = configuration.getEnableNaming();
 		this.forceMetaInf = configuration.getForceMetaInf();
 		this.tomcat = initServer();
-		initContext();
+		this.context = initContext();
 	}
 
 	private Tomcat initServer() {
@@ -100,9 +106,9 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 		return tomcat;
 	}
 
-	private void initContext() {
+	private Context initContext() {
 		try {
-			createContext();
+			return createContext();
 		}
 		catch (Exception ex) {
 			throw new ServerInitializationException(ex);
@@ -181,6 +187,11 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 	@Override
 	public int getPort() {
 		return tomcat.getConnector().getLocalPort();
+	}
+
+	@Override
+	public ServletContext getServletContext() {
+		return context == null ? null : context.getServletContext();
 	}
 
 	private static void deleteDirectory(String path) {

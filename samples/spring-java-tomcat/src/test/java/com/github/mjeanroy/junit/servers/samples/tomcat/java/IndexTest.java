@@ -26,11 +26,14 @@ package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
 import static org.assertj.core.api.Assertions.*;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
@@ -72,6 +75,14 @@ public class IndexTest {
 		String url = url() + "index";
 		String message = restTemplate.getForObject(url, String.class);
 		assertThat(message).isNotEmpty().isEqualTo("Hello World");
+
+		// Try to get servlet context
+		ServletContext servletContext = serverRule.getServer().getServletContext();
+		assertThat(servletContext).isNotNull();
+
+		// Try to retrieve spring webApplicationContext
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+		assertThat(webApplicationContext).isNotNull();
 	}
 
 	public String url() {
