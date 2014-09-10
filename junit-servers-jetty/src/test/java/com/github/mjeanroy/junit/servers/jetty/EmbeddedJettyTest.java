@@ -65,6 +65,7 @@ public class EmbeddedJettyTest {
 	@Test
 	public void it_should_get_servlet_context() {
 		jetty = new EmbeddedJetty();
+		jetty.start();
 		assertThat(jetty.getServletContext()).isNotNull();
 	}
 }

@@ -87,6 +87,7 @@ public class EmbeddedTomcatTest {
 	@Test
 	public void it_should_get_servlet_context() {
 		tomcat = new EmbeddedTomcat(initConfiguration());
+		tomcat.start();
 		assertThat(tomcat.getServletContext()).isNotNull();
 	}
 }

@@ -53,7 +53,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 	/**
 	 * Tomcat context.
 	 */
-	private final Context context;
+	private volatile Context context;
 
 	/**
 	 * Tomcat base directory.
@@ -88,7 +88,6 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 		this.enableNaming = configuration.getEnableNaming();
 		this.forceMetaInf = configuration.getForceMetaInf();
 		this.tomcat = initServer();
-		this.context = initContext();
 	}
 
 	private Tomcat initServer() {
@@ -165,6 +164,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 	@Override
 	protected void doStart() {
 		try {
+			context = initContext();
 			tomcat.start();
 		}
 		catch (Throwable ex) {
@@ -176,6 +176,12 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 	protected void doStop() {
 		try {
 			tomcat.stop();
+
+			if (context != null) {
+				context.destroy();
+				context = null;
+			}
+
 			tomcat.destroy();
 			deleteDirectory(baseDir);
 		}

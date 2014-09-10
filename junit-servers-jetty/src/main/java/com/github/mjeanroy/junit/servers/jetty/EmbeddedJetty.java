@@ -24,10 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
+import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static org.eclipse.jetty.util.resource.Resource.newResource;
+
+import javax.servlet.ServletContext;
+import java.io.File;
+
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
@@ -39,11 +41,10 @@ import org.eclipse.jetty.webapp.JettyWebXmlConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
-import javax.servlet.ServletContext;
-import java.io.File;
-
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
-import static org.eclipse.jetty.util.resource.Resource.newResource;
+import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 
 /**
  * Jetty Embedded Server.
@@ -58,12 +59,12 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	/**
 	 * Jetty Web App Context.
 	 */
-	private final WebAppContext webAppContext;
+	private volatile WebAppContext webAppContext;
 
 	/**
 	 * Server Connector, lazily initialized.
 	 */
-	private ServerConnector connector;
+	private volatile ServerConnector connector;
 
 	/**
 	 * Build default embedded jetty server.
@@ -80,7 +81,6 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
 		this.server = initServer();
-		this.webAppContext = initContext();
 	}
 
 	private Server initServer() {
@@ -102,7 +102,9 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	@Override
 	protected void doStart() {
 		try {
+			webAppContext = initContext();
 			server.start();
+			connector = findConnector();
 		}
 		catch (Exception ex) {
 			throw new ServerStartException(ex);
@@ -154,6 +156,8 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	protected void doStop() {
 		try {
 			server.stop();
+			webAppContext.destroy();
+			webAppContext = null;
 		}
 		catch (Exception ex) {
 			throw new ServerStopException(ex);
@@ -162,15 +166,12 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 
 	@Override
 	public int getPort() {
-		if (connector == null) {
-			connector = findConnector();
-		}
-		return connector.getLocalPort();
+		return connector == null ? 0 : connector.getLocalPort();
 	}
 
 	@Override
 	public ServletContext getServletContext() {
-		return webAppContext.getServletContext();
+		return webAppContext == null ? null : webAppContext.getServletContext();
 	}
 
 	private ServerConnector findConnector() {
