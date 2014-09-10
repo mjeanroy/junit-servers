@@ -157,11 +157,9 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 		try {
 			server.stop();
 
-			webAppContext.destroy();
 			webAppContext = null;
 
 			if (connector != null) {
-				connector.destroy();
 				connector = null;
 			}
 		}

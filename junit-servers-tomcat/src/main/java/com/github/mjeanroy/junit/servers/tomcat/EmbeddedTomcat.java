@@ -176,13 +176,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 	protected void doStop() {
 		try {
 			tomcat.stop();
-
-			if (context != null) {
-				context.destroy();
-				context = null;
-			}
-
-			tomcat.destroy();
+			context = null;
 			deleteDirectory(baseDir);
 		}
 		catch (Throwable ex) {

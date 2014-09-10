@@ -161,7 +161,6 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 * Add custom environment properties.
 	 */
 	private void initEnvironment() {
-		// Already in synchronized block, don't need to synchronize anything
 		for (Map.Entry<String, String> property : properties.entrySet()) {
 			String name = property.getKey();
 			String newValue = property.getValue();
@@ -177,7 +176,6 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 * Reset custom environment properties.
 	 */
 	private void destroyEnvironment() {
-		// Already in synchronized block, don't need to synchronize anything
 		for (Map.Entry<String, String> property : properties.entrySet()) {
 			String name = property.getKey();
 
