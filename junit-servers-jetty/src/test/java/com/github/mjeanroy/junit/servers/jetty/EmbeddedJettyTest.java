@@ -59,7 +59,7 @@ public class EmbeddedJettyTest {
 
 		jetty.stop();
 		assertThat(jetty.isStarted()).isFalse();
-		assertThat(jetty.getPort()).isNotZero();
+		assertThat(jetty.getPort()).isZero();
 	}
 
 	@Test
