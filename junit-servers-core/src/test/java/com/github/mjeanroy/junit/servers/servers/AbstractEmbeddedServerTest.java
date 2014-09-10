@@ -192,11 +192,13 @@ public class AbstractEmbeddedServerTest {
 		server.start();
 
 		verify(hook).pre(server);
+		verify(hook).onStarted(server, server.getServletContext());
 		verify(hook, never()).post(server);
 
 		server.stop();
 
 		verify(hook).post(server);
+		verify(hook, times(1)).pre(server);
 		verify(hook, times(1)).pre(server);
 	}
 
@@ -259,12 +261,16 @@ public class AbstractEmbeddedServerTest {
 
 		public int doStop = 0;
 
+		public ServletContext servletContext;
+
 		public TestServer() {
 			super(new EmbeddedConfiguration());
+			servletContext = mock(ServletContext.class);
 		}
 
 		public TestServer(AbstractEmbeddedServerConfiguration configuration) {
 			super(configuration);
+			servletContext = mock(ServletContext.class);
 		}
 
 		@Override
@@ -284,10 +290,11 @@ public class AbstractEmbeddedServerTest {
 
 		@Override
 		public ServletContext getServletContext() {
-			return null;
+			return isStarted() ? servletContext : null;
 		}
 	}
 
 	private static class EmbeddedConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedConfiguration> {
+
 	}
 }

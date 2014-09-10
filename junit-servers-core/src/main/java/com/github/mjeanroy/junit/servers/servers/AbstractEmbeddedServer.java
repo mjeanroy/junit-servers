@@ -114,6 +114,9 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 				execHooks(true);
 				doStart();
 				status.set(ServerStatus.STARTED);
+
+				// Server os fully initialized
+				onStarted();
 			}
 			catch (RuntimeException ex) {
 				// If an exception occurs, server is not started
@@ -198,6 +201,12 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 			else {
 				hook.post(this);
 			}
+		}
+	}
+
+	private void onStarted() {
+		for (Hook hook : hooks) {
+			hook.onStarted(this, getServletContext());
 		}
 	}
 
