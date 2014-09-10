@@ -30,11 +30,11 @@
 	<parent>
 		<artifactId>junit-servers</artifactId>
 		<groupId>com.github.mjeanroy</groupId>
-		<version>0.2.2</version>
+		<version>0.2.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>junit-servers-samples</artifactId>
-	<version>0.2.2</version>
+	<version>0.2.3-SNAPSHOT</version>
 	<name>junit-servers-samples</name>
 	<packaging>pom</packaging>
 	<url>https://github.com/mjeanroy/junit-servers</url>
