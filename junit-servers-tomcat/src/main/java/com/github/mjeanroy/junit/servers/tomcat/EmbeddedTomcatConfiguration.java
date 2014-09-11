@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
+import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+
 import java.util.Objects;
 
 import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServerConfiguration;
@@ -82,7 +84,7 @@ public class EmbeddedTomcatConfiguration extends AbstractEmbeddedServerConfigura
 	 * @return this.
 	 */
 	public EmbeddedTomcatConfiguration withBaseDir(String baseDir) {
-		this.baseDir = baseDir;
+		this.baseDir = notNull(baseDir, "baseDir");
 		return this;
 	}
 

@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Checks.positive;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
 
@@ -72,6 +74,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 * @param configuration Configuration.
 	 */
 	public AbstractEmbeddedServerConfiguration(AbstractEmbeddedServerConfiguration configuration) {
+		notNull(configuration, "configuration");
 		this.port = configuration.getPort();
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
@@ -111,7 +114,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 * @return this.
 	 */
 	public T withPath(String path) {
-		this.path = path;
+		this.path = notNull(path, "path");
 		return (T) this;
 	}
 
@@ -122,7 +125,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 * @return this.
 	 */
 	public T withPort(int port) {
-		this.port = port;
+		this.port = positive(port, "port");
 		return (T) this;
 	}
 
@@ -133,7 +136,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 * @return this.
 	 */
 	public T withWebapp(String webapp) {
-		this.webapp = webapp;
+		this.webapp = notNull(webapp, "webapp");
 		return (T) this;
 	}
 
@@ -144,6 +147,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 * @return this.
 	 */
 	public T withWebapp(File webapp) {
+		notNull(webapp, "webapp");
 		this.webapp = webapp.getAbsolutePath();
 		return (T) this;
 	}
@@ -155,6 +159,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 * @return this.
 	 */
 	public T withClasspath(String classpath) {
+		// May be null (disable classpath entry).
 		this.classpath = classpath;
 		return (T) this;
 	}
@@ -168,7 +173,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 * @return this.
 	 */
 	public T withProperty(String name, String value) {
-		envProperties.put(name, value);
+		envProperties.put(notNull(name, "name"), notNull(value, "value"));
 		return (T) this;
 	}
 
@@ -179,7 +184,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 * @return this.
 	 */
 	public T withHook(Hook hook) {
-		hooks.add(hook);
+		hooks.add(notNull(hook, "hook"));
 		return (T) this;
 	}
 }

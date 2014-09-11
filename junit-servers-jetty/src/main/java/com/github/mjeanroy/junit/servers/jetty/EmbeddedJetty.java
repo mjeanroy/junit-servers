@@ -156,12 +156,8 @@ public class EmbeddedJetty extends AbstractEmbeddedServer {
 	protected void doStop() {
 		try {
 			server.stop();
-
 			webAppContext = null;
-
-			if (connector != null) {
-				connector = null;
-			}
+			connector = null;
 		}
 		catch (Exception ex) {
 			throw new ServerStopException(ex);

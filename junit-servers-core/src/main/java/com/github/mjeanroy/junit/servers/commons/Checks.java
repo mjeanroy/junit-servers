@@ -22,34 +22,48 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers;
+package com.github.mjeanroy.junit.servers.commons;
 
-import javax.servlet.ServletContext;
+import static java.lang.String.format;
 
 /**
- * Hook that will be invoked before and after server execution.
+ * Static utilities that can be used to check object's values.
  */
-public interface Hook {
+public final class Checks {
+
+	private Checks() {
+	}
 
 	/**
-	 * Method invoked before server starts.
+	 * Check that a given value is not null.
+	 * It throws a {@link NullPointerException} exception if value is null or returned the
+	 * value.
 	 *
-	 * @param server Server.
+	 * @param value Value to check.
+	 * @param name Name of parameter, it will produce an error message such as "{name} must not be null"
+	 * @param <T> Type of value.
+	 * @return First parameter if it is not null.
 	 */
-	void pre(EmbeddedServer server);
+	public static <T> T notNull(T value, String name) {
+		if (value == null) {
+			throw new NullPointerException(format("%s must not be null", name));
+		}
+		return value;
+	}
 
 	/**
-	 * Method invoked before server stops.
+	 * Check that a given integer is positive.
+	 * If integer value is negative, it throws an {@link IllegalArgumentException} exception,
+	 * otherwise integer value is returned.
 	 *
-	 * @param server Server.
+	 * @param value Value to check.
+	 * @param name Name of value.
+	 * @return Integer value if value is positive.
 	 */
-	void post(EmbeddedServer server);
-
-	/**
-	 * Method invoked when server is fully started.
-	 *
-	 * @param server Server.
-	 * @param servletContext Servlet context started within container.
-	 */
-	void onStarted(EmbeddedServer server, ServletContext servletContext);
+	public static int positive(int value, String name) {
+		if (value < 0) {
+			throw new IllegalArgumentException(format("%s must be positive", name));
+		}
+		return value;
+	}
 }

@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
+import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+
 import org.junit.rules.ExternalResource;
 
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -42,7 +44,7 @@ public class ServerRule extends ExternalResource {
 	 * @param server Embedded server.
 	 */
 	public ServerRule(EmbeddedServer server) {
-		this.server = server;
+		this.server = notNull(server, "server");
 	}
 
 	@Override
