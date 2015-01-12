@@ -92,6 +92,9 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 */
 	protected final List<Hook> hooks;
 
+	// Lock used to synchronize start and stop tasks
+	private final Object lock = new Object();
+
 	/**
 	 * Build default embedded server.
 	 *
@@ -110,35 +113,33 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	@Override
 	public void start() {
-		if (status.compareAndSet(ServerStatus.STOPPED, ServerStatus.STARTING)) {
-			try {
-				initEnvironment();
-				execHooks(true);
-				doStart();
-				status.set(ServerStatus.STARTED);
+		if (status.get() != ServerStatus.STARTED) {
+			synchronized (lock) {
+				if (status.get() != ServerStatus.STARTED) {
+					status.set(ServerStatus.STARTING);
+					initEnvironment();
+					execHooks(true);
+					doStart();
+					status.set(ServerStatus.STARTED);
 
-				// Server os fully initialized
-				onStarted();
-			}
-			catch (RuntimeException ex) {
-				// If an exception occurs, server is not started
-				status.set(ServerStatus.STOPPED);
-				throw ex;
+					// Server is fully initialized
+					onStarted();
+				}
 			}
 		}
 	}
 
 	@Override
 	public void stop() {
-		if (status.compareAndSet(ServerStatus.STARTED, ServerStatus.STOPPING)) {
-			try {
-				doStop();
-				execHooks(false);
-				destroyEnvironment();
-			}
-			finally {
-				// Server is now stopped
-				status.set(ServerStatus.STOPPED);
+		if (status.get() != ServerStatus.STOPPED) {
+			synchronized (lock) {
+				if (status.get() != ServerStatus.STOPPED) {
+					status.set(ServerStatus.STOPPING);
+					doStop();
+					execHooks(false);
+					destroyEnvironment();
+					status.set(ServerStatus.STOPPED);
+				}
 			}
 		}
 	}

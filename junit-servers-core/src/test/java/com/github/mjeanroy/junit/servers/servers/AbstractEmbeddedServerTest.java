@@ -24,16 +24,20 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.Test;
 
 import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
-import org.junit.Test;
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class AbstractEmbeddedServerTest {
 
@@ -133,6 +137,68 @@ public class AbstractEmbeddedServerTest {
 		assertThat(server.isStarted()).isTrue();
 		assertThat(server.doStop).isNotZero().isEqualTo(1);
 		assertThat(server.doStart).isNotZero().isEqualTo(2);
+	}
+
+	@Test
+	public void it_should_block_until_server_is_started() throws Exception {
+		assertThat(server.doStart).isZero();
+		assertThat(server.isStarted()).isFalse();
+
+		CountDownLatch startSignal = new CountDownLatch(1);
+		CountDownLatch doneSignal1 = new CountDownLatch(1);
+		CountDownLatch doneSignal2 = new CountDownLatch(1);
+
+		Thread th1 = new Thread(new StartWorker(server, startSignal, doneSignal1));
+		Thread th2 = new Thread(new StartWorker(server, startSignal, doneSignal2));
+
+		th1.start();
+		th2.start();
+
+		assertThat(server.doStart).isZero();
+		assertThat(server.isStarted()).isFalse();
+
+		startSignal.countDown();
+
+		doneSignal2.await();
+		assertThat(server.isStarted()).isTrue();
+		assertThat(server.doStart).isNotZero().isEqualTo(1);
+
+		doneSignal1.await();
+		assertThat(server.isStarted()).isTrue();
+		assertThat(server.doStart).isNotZero().isEqualTo(1);
+	}
+
+	@Test
+	public void it_should_block_until_server_is_stopped() throws Exception {
+		assertThat(server.doStart).isZero();
+		assertThat(server.isStarted()).isFalse();
+
+		server.start();
+		assertThat(server.isStarted()).isTrue();
+		assertThat(server.doStart).isNotZero().isEqualTo(1);
+
+		CountDownLatch stopSignal = new CountDownLatch(1);
+		CountDownLatch doneSignal1 = new CountDownLatch(1);
+		CountDownLatch doneSignal2 = new CountDownLatch(1);
+
+		Thread th1 = new Thread(new StopWorker(server, stopSignal, doneSignal1));
+		Thread th2 = new Thread(new StopWorker(server, stopSignal, doneSignal2));
+
+		th1.start();
+		th2.start();
+
+		assertThat(server.doStop).isZero();
+		assertThat(server.isStarted()).isTrue();
+
+		stopSignal.countDown();
+
+		doneSignal2.await();
+		assertThat(server.isStarted()).isFalse();
+		assertThat(server.doStop).isNotZero().isEqualTo(1);
+
+		doneSignal1.await();
+		assertThat(server.isStarted()).isFalse();
+		assertThat(server.doStop).isNotZero().isEqualTo(1);
 	}
 
 	@Test
@@ -276,11 +342,24 @@ public class AbstractEmbeddedServerTest {
 		@Override
 		protected void doStart() {
 			doStart++;
+			try {
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException ex) {
+				throw new RuntimeException(ex);
+			}
 		}
 
 		@Override
 		protected void doStop() {
 			doStop++;
+
+			try {
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException ex) {
+				throw new RuntimeException(ex);
+			}
 		}
 
 		@Override
@@ -296,5 +375,53 @@ public class AbstractEmbeddedServerTest {
 
 	private static class EmbeddedConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedConfiguration> {
 
+	}
+
+	private static class StartWorker implements Runnable {
+		private final TestServer server;
+		private final CountDownLatch startSignal;
+		private final CountDownLatch doneSignal;
+
+		public StartWorker(TestServer server, CountDownLatch startSignal, CountDownLatch doneSignal) {
+			this.server = server;
+			this.startSignal = startSignal;
+			this.doneSignal = doneSignal;
+		}
+
+		@Override
+		public void run() {
+			try {
+				startSignal.await();
+				server.start();
+				doneSignal.countDown();
+			}
+			catch (InterruptedException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+	}
+
+	private static class StopWorker implements Runnable {
+		private final TestServer server;
+		private final CountDownLatch startSignal;
+		private final CountDownLatch doneSignal;
+
+		public StopWorker(TestServer server, CountDownLatch startSignal, CountDownLatch doneSignal) {
+			this.server = server;
+			this.startSignal = startSignal;
+			this.doneSignal = doneSignal;
+		}
+
+		@Override
+		public void run() {
+			try {
+				startSignal.await();
+				server.stop();
+				doneSignal.countDown();
+			}
+			catch (InterruptedException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
 	}
 }
