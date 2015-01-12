@@ -30,6 +30,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.String.format;
+import static java.lang.System.clearProperty;
+import static java.lang.System.getProperty;
+import static java.lang.System.setProperty;
 
 /**
  * Partial implementation of an embedded server.
@@ -100,12 +103,13 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 *
 	 * @param configuration Server configuration.
 	 */
-	public AbstractEmbeddedServer(AbstractEmbeddedServerConfiguration configuration) {
+	protected <T extends AbstractEmbeddedServerConfiguration> AbstractEmbeddedServer(T configuration) {
 		this.status = new AtomicReference<>(ServerStatus.STOPPED);
 		this.port = configuration.getPort();
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
 		this.classpath = configuration.getClasspath();
+
 		this.oldProperties = new HashMap<>();
 		this.properties = configuration.getEnvProperties();
 		this.hooks = configuration.getHooks();
@@ -168,10 +172,10 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 			String name = property.getKey();
 			String newValue = property.getValue();
 
-			String oldValue = System.getProperty(property.getKey());
+			String oldValue = getProperty(property.getKey());
 			oldProperties.put(name, oldValue);
 
-			System.setProperty(name, newValue);
+			setProperty(name, newValue);
 		}
 	}
 
@@ -186,10 +190,10 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 			oldProperties.remove(name);
 
 			if (oldValue == null) {
-				System.clearProperty(name);
+				clearProperty(name);
 			}
 			else {
-				System.setProperty(name, oldValue);
+				setProperty(name, oldValue);
 			}
 		}
 	}
