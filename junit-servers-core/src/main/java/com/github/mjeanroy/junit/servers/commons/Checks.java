@@ -52,6 +52,25 @@ public final class Checks {
 	}
 
 	/**
+	 * Check that a given string value is not blank (i.e not null, not empty and not blank).
+	 * It throws a {@link NullPointerException} exception if value is null and throw an
+	 * {@link java.lang.IllegalArgumentException} if value is empty or blank.
+	 * Otherwise original value is returned
+	 *
+	 * @param value Value to check.
+	 * @param name Name of parameter, it will produce an error message such as "{name} must not be null"
+	 *             or "{name} must not be blank".
+	 * @return First parameter if it is not blank.
+	 */
+	public static String notBlank(String value, String name) {
+		notNull(value, name);
+		if (value.trim().equals("")) {
+			throw new IllegalArgumentException(format("%s must not be blank", name));
+		}
+		return value;
+	}
+
+	/**
 	 * Check that a given integer is positive.
 	 * If integer value is negative, it throws an {@link IllegalArgumentException} exception,
 	 * otherwise integer value is returned.

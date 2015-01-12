@@ -24,12 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import static java.lang.String.format;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static java.lang.String.format;
 
 /**
  * Partial implementation of an embedded server.
@@ -85,8 +85,10 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	/**
 	 * Hooks that will be invoked before and after server execution.
-	 * It can be used to start other dependencies (embedded database, start remove web server etc.) before server
-	 * starts, and shutdown these dependencies when server stops.
+	 * It can be used to start other dependencies (embedded database, start remove web server etc.)
+	 * before server starts, and shutdown these dependencies when server stops.
+	 * Hooks will be executed in order.
+	 * Hooks should be stateless.
 	 */
 	protected final List<Hook> hooks;
 
