@@ -57,7 +57,7 @@ public abstract class AbstractEmbeddedServer<T extends AbstractConfiguration> im
 	 * Old properties used to restore initial environment properties values when server stops.
 	 * It can be used to set a spring profile property or anything else.
 	 */
-	protected final Map<String, String> oldProperties;
+	private final Map<String, String> oldProperties;
 
 	// Lock used to synchronize start and stop tasks
 	private final Object lock = new Object();
