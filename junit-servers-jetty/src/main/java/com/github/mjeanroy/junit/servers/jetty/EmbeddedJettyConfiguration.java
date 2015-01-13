@@ -24,53 +24,57 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServerConfiguration;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 
-import java.util.Objects;
+/**
+ * Jetty configuration settings.
+ */
+public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 
-public class EmbeddedJettyConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedJettyConfiguration> {
-
-	public EmbeddedJettyConfiguration() {
-		super();
+	/**
+	 * Get configuration builder.
+	 *
+	 * @return Builder.
+	 */
+	public static Builder builder() {
+		return new Builder();
 	}
 
 	/**
-	 * Build new configuration object from existing jetty configuration.
+	 * Get default configuration.
 	 *
-	 * @param configuration Jetty Configuration.
+	 * @return Default configuration.
 	 */
-	public EmbeddedJettyConfiguration(EmbeddedJettyConfiguration configuration) {
-		super(configuration);
+	public static EmbeddedJettyConfiguration defaultConfiguration() {
+		return new Builder().build();
 	}
 
-	@Override
-	public String toString() {
-		return String.format(
-				"%s {path=%s, webapp=%s, port=%s, classpath=%s}",
-				getClass().getSimpleName(),
-				getPath(), getWebapp(), getPort(), getClasspath()
-		);
+	// Private constructor, use static builder.
+	private EmbeddedJettyConfiguration(Builder builder) {
+		super(builder);
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (o == this) {
-			return true;
-		}
-
-		if (o instanceof EmbeddedJettyConfiguration) {
-			EmbeddedJettyConfiguration c = (EmbeddedJettyConfiguration) o;
-			return Objects.equals(getPath(), c.getPath())
-					&& Objects.equals(getWebapp(), c.getWebapp())
-					&& Objects.equals(getPort(), c.getPort())
-					&& Objects.equals(getClasspath(), c.getClasspath());
-		}
-
-		return false;
+		return o instanceof EmbeddedJettyConfiguration && super.equals(o);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getPath(), getWebapp(), getPort(), getClasspath());
+		return super.hashCode();
+	}
+
+	public static class Builder extends AbstractConfigurationBuilder<Builder, EmbeddedJettyConfiguration> {
+
+		@Override
+		protected Builder self() {
+			return this;
+		}
+
+		@Override
+		public EmbeddedJettyConfiguration build() {
+			return new EmbeddedJettyConfiguration(this);
+		}
 	}
 }

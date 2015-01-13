@@ -24,12 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.After;
+import org.junit.Test;
 
 import java.io.File;
 
-import org.junit.After;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmbeddedTomcatTest {
 
@@ -44,9 +44,10 @@ public class EmbeddedTomcatTest {
 
 			String path = current.endsWith(PATH) ? current : current + PATH;
 
-			return new EmbeddedTomcatConfiguration()
+			return EmbeddedTomcatConfiguration.builder()
 					.withWebapp(path + "src/test/resources")
-					.withClasspath(path + "target/classes");
+					.withClasspath(path + "target/classes")
+					.build();
 		}
 		catch (Exception ex) {
 			throw new RuntimeException(ex);

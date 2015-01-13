@@ -111,22 +111,23 @@ import com.github.mjeanroy.junit.servers.servers.Hook;
 
 public class MyTest {
 
-    private static EmbeddedJettyConfiguration configuration = new EmbeddedJettyConfiguration()
+    private static EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
         .withPath("/myApp")
         .withWebapp("webapp")
         .withPort(9090)
         .withProperty("spring.profiles.active", "test")
         .withHook(new Hook() {
-		    @Override
-		    public void pre(EmbeddedServer server) {
+            @Override
+            public void pre(EmbeddedServer server) {
                 System.out.println("Server Startup");
-		    }
+            }
 
-			@Override
-			public void post(EmbeddedServer server) {
+            @Override
+            public void post(EmbeddedServer server) {
                 System.out.println("Server Shutdown");
-			}
-		});
+            }
+        })
+        .build();
 
     private static EmbeddedJetty jetty = new EmbeddedJetty(configuration);
 
@@ -232,7 +233,7 @@ import com.github.mjeanroy.junit.servers.servers.Hook;
 
 public class MyTest {
 
-    private static EmbeddedTomcatConfiguration configuration = new EmbeddedTomcatConfiguration()
+    private static EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
         .withPath("/myApp")
         .withWebapp("webapp")
         .withPort(9090)
@@ -240,16 +241,17 @@ public class MyTest {
         .disableNaming()
         .withProperty("spring.profiles.active", "test")
         .withHook(new Hook() {
-		    @Override
-		    public void pre(EmbeddedServer server) {
+            @Override
+            public void pre(EmbeddedServer server) {
                 System.out.println("Server Startup");
-		    }
+            }
 
-			@Override
-			public void post(EmbeddedServer server) {
+            @Override
+            public void post(EmbeddedServer server) {
                 System.out.println("Server Shutdown");
-			}
-		});
+            }
+        })
+        .build();
 
     private static EmbeddedTomcat jetty = new EmbeddedTomcat(configuration);
 

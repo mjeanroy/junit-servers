@@ -24,8 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
@@ -38,7 +39,12 @@ import static java.lang.System.setProperty;
  * Subclasses should implement {@link #doStart()} and {@link #doStop()} methods.
  * Synchronization is already managed by this abstract implementation.
  */
-public abstract class AbstractEmbeddedServer implements EmbeddedServer {
+public abstract class AbstractEmbeddedServer<T extends AbstractConfiguration> implements EmbeddedServer {
+
+	/**
+	 * Server configuration.
+	 */
+	protected final T configuration;
 
 	/**
 	 * Flag to keep server status.
@@ -48,50 +54,10 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	private volatile ServerStatus status;
 
 	/**
-	 * Force specific port.
-	 * If port is set to zero, then a random port will be used.
-	 */
-	protected final int port;
-
-	/**
-	 * Server path, default is '/'.
-	 * This path must be used to query server.
-	 */
-	protected final String path;
-
-	/**
-	 * Webapp Path.
-	 * In a "classic" java application, this path should be "src/main/webapp".
-	 */
-	protected final String webapp;
-
-	/**
-	 * Additional classpath directory path.
-	 * This classpath entry will be scanned when server starts.
-	 * It can be used to register compiled classes that can be needed to start
-	 * jetty or tomcat.
-	 */
-	protected final String classpath;
-
-	/**
-	 * Environment properties to create when server starts and destroy when server stops.
-	 */
-	protected final Map<String, String> properties;
-
-	/**
 	 * Old properties used to restore initial environment properties values when server stops.
 	 * It can be used to set a spring profile property or anything else.
 	 */
 	protected final Map<String, String> oldProperties;
-
-	/**
-	 * Hooks that will be invoked before and after server execution.
-	 * It can be used to start other dependencies (embedded database, start remove web server etc.)
-	 * before server starts, and shutdown these dependencies when server stops.
-	 * Hooks will be executed in order.
-	 * Hooks should be stateless.
-	 */
-	protected final List<Hook> hooks;
 
 	// Lock used to synchronize start and stop tasks
 	private final Object lock = new Object();
@@ -102,16 +68,10 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 * @param configuration Server configuration.
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T extends AbstractEmbeddedServerConfiguration> AbstractEmbeddedServer(T configuration) {
+	protected AbstractEmbeddedServer(T configuration) {
 		this.status = ServerStatus.STOPPED;
-		this.port = configuration.getPort();
-		this.path = configuration.getPath();
-		this.webapp = configuration.getWebapp();
-		this.classpath = configuration.getClasspath();
-
+		this.configuration = configuration;
 		this.oldProperties = new HashMap<>();
-		this.properties = configuration.getEnvProperties();
-		this.hooks = configuration.getHooks();
 	}
 
 	@Override
@@ -160,7 +120,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	@Override
 	public String getPath() {
-		return path;
+		return configuration.getPath();
 	}
 
 	/**
@@ -169,7 +129,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 * and will be restore later.
 	 */
 	private void initEnvironment() {
-		for (Map.Entry<String, String> property : properties.entrySet()) {
+		for (Map.Entry<String, String> property : configuration.getEnvProperties().entrySet()) {
 			String name = property.getKey();
 			String newValue = property.getValue();
 
@@ -186,7 +146,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 * or clear.
 	 */
 	private void destroyEnvironment() {
-		for (Map.Entry<String, String> property : properties.entrySet()) {
+		for (Map.Entry<String, String> property : configuration.getEnvProperties().entrySet()) {
 			String name = property.getKey();
 
 			String oldValue = oldProperties.get(name);
@@ -206,7 +166,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 * @param pre Phase to execute (true => pre ; false => post).
 	 */
 	private void execHooks(boolean pre) {
-		for (Hook hook : hooks) {
+		for (Hook hook : configuration.getHooks()) {
 			if (pre) {
 				hook.pre(this);
 			} else {
@@ -216,7 +176,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	}
 
 	private void onStarted() {
-		for (Hook hook : hooks) {
+		for (Hook hook : configuration.getHooks()) {
 			hook.onStarted(this, getServletContext());
 		}
 	}

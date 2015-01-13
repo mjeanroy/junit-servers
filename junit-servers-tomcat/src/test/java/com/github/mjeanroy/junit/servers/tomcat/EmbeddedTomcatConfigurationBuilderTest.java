@@ -24,135 +24,133 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.io.File;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServerConfiguration;
+import java.io.File;
 
-public class EmbeddedTomcatConfigurationTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
 
-	private EmbeddedTomcatConfiguration configuration;
+	private EmbeddedTomcatConfiguration.Builder builder;
 
 	@Before
 	public void setUp() {
-		configuration = new EmbeddedTomcatConfiguration();
+		builder = EmbeddedTomcatConfiguration.builder();
 	}
 
 	@Test
 	public void it_should_have_default_values() {
-		assertThat(configuration.getPath()).isEqualTo("/");
-		assertThat(configuration.getPort()).isZero();
-		assertThat(configuration.getEnableNaming()).isTrue();
-		assertThat(configuration.getForceMetaInf()).isTrue();
-		assertThat(configuration.getClasspath()).isEqualTo("./target/classes");
-		assertThat(configuration.getBaseDir()).isEqualTo("./tomcat-work");
+		assertThat(builder.getPath()).isEqualTo("/");
+		assertThat(builder.getPort()).isZero();
+		assertThat(builder.isEnableNaming()).isTrue();
+		assertThat(builder.isForceMetaInf()).isTrue();
+		assertThat(builder.getClasspath()).isEqualTo("./target/classes");
+		assertThat(builder.getBaseDir()).isEqualTo("./tomcat-work");
 	}
 
 	@Test
 	public void it_should_change_port() {
-		int oldPort = configuration.getPort();
+		int oldPort = builder.getPort();
 		int newPort = oldPort + 10;
 
-		EmbeddedTomcatConfiguration result = configuration.withPort(newPort);
+		EmbeddedTomcatConfiguration.Builder result = builder.withPort(newPort);
 
-		assertThat(result).isSameAs(configuration);
+		assertThat(result).isSameAs(builder);
 		assertThat(result.getPort()).isNotEqualTo(oldPort).isEqualTo(newPort);
 	}
 
 	@Test
 	public void it_should_change_path() {
-		String oldPath = configuration.getPath();
+		String oldPath = builder.getPath();
 		String newPath = oldPath + "foo";
 
-		AbstractEmbeddedServerConfiguration result = configuration.withPath(newPath);
+		EmbeddedTomcatConfiguration.Builder result = builder.withPath(newPath);
 
-		assertThat(result).isSameAs(configuration);
+		assertThat(result).isSameAs(builder);
 		assertThat(result.getPath()).isNotEqualTo(oldPath).isEqualTo(newPath);
 	}
 
 	@Test
 	public void it_should_change_webapp_path() {
-		String oldWebapp = configuration.getWebapp();
+		String oldWebapp = builder.getWebapp();
 		String newWebapp = oldWebapp + "foo";
 
-		EmbeddedTomcatConfiguration result = configuration.withWebapp(newWebapp);
+		EmbeddedTomcatConfiguration.Builder result = builder.withWebapp(newWebapp);
 
-		assertThat(result).isSameAs(configuration);
+		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
 	}
 
 	@Test
 	public void it_should_change_webapp_path_with_file() throws Exception {
-		String oldWebapp = configuration.getWebapp();
+		String oldWebapp = builder.getWebapp();
 		File file = folder.newFile("foo");
 		String newWebapp = file.getAbsolutePath();
 
-		EmbeddedTomcatConfiguration result = configuration.withWebapp(file);
+		EmbeddedTomcatConfiguration.Builder result = builder.withWebapp(file);
 
-		assertThat(result).isSameAs(configuration);
+		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
 	}
 
 	@Test
 	public void it_should_change_classpath_entry() {
-		String oldClasspath = configuration.getClasspath();
+		String oldClasspath = builder.getClasspath();
 		String newClasspath = oldClasspath + "foo";
 
-		EmbeddedTomcatConfiguration result = configuration.withClasspath(newClasspath);
+		EmbeddedTomcatConfiguration.Builder result = builder.withClasspath(newClasspath);
 
-		assertThat(result).isSameAs(configuration);
+		assertThat(result).isSameAs(builder);
 		assertThat(result.getClasspath()).isNotEqualTo(oldClasspath).isEqualTo(newClasspath);
 	}
 
 	@Test
 	public void it_should_change_base_dir() {
-		String oldBaseDir = configuration.getBaseDir();
+		String oldBaseDir = builder.getBaseDir();
 		String newBaseDir = oldBaseDir + "foo";
 
-		EmbeddedTomcatConfiguration result = configuration.withBaseDir(newBaseDir);
+		EmbeddedTomcatConfiguration.Builder result = builder.withBaseDir(newBaseDir);
 
-		assertThat(result).isSameAs(configuration);
+		assertThat(result).isSameAs(builder);
 		assertThat(result.getBaseDir()).isNotEqualTo(oldBaseDir).isEqualTo(newBaseDir);
 	}
 
 	@Test
 	public void it_should_enable_naming() {
-		EmbeddedTomcatConfiguration result = configuration.enableNaming();
+		EmbeddedTomcatConfiguration.Builder result = builder.enableNaming();
 
-		assertThat(result).isSameAs(configuration);
-		assertThat(result.getEnableNaming()).isTrue();
+		assertThat(result).isSameAs(builder);
+		assertThat(result.isEnableNaming()).isTrue();
 	}
 
 	@Test
 	public void it_should_disable_naming() {
-		EmbeddedTomcatConfiguration result = configuration.disableNaming();
+		EmbeddedTomcatConfiguration.Builder result = builder.disableNaming();
 
-		assertThat(result).isSameAs(configuration);
-		assertThat(result.getEnableNaming()).isFalse();
+		assertThat(result).isSameAs(builder);
+		assertThat(result.isEnableNaming()).isFalse();
 	}
 
 	@Test
 	public void it_should_enable_metaInf_creation() {
-		EmbeddedTomcatConfiguration result = configuration.enableForceMetaInf();
+		EmbeddedTomcatConfiguration.Builder result = builder.enableForceMetaInf();
 
-		assertThat(result).isSameAs(configuration);
-		assertThat(result.getForceMetaInf()).isTrue();
+		assertThat(result).isSameAs(builder);
+		assertThat(result.isForceMetaInf()).isTrue();
 	}
 
 	@Test
 	public void it_should_disable_metaInf_creation() {
-		EmbeddedTomcatConfiguration result = configuration.disableForceMetaInf();
+		EmbeddedTomcatConfiguration.Builder result = builder.disableForceMetaInf();
 
-		assertThat(result).isSameAs(configuration);
-		assertThat(result.getForceMetaInf()).isFalse();
+		assertThat(result).isSameAs(builder);
+		assertThat(result.isForceMetaInf()).isFalse();
 	}
 }

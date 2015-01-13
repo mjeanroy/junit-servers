@@ -22,10 +22,8 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,12 +32,14 @@ public class EmbeddedJettyConfigurationTest {
 
 	@Test
 	public void it_should_build_default_configuration() {
-		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
+		EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.defaultConfiguration();
 
 		assertThat(result.getPort()).isEqualTo(0);
 		assertThat(result.getPath()).isEqualTo("/");
-		assertThat(result.getClasspath()).isEqualTo(".");
+		assertThat(result.getClasspath()).isEqualTo("./target/classes");
 		assertThat(result.getWebapp()).isEqualTo("src/main/webapp");
+		assertThat(result.isForceMetaInf()).isTrue();
+		assertThat(result.isEnableNaming()).isTrue();
 	}
 
 	@Test
@@ -49,35 +49,20 @@ public class EmbeddedJettyConfigurationTest {
 		String webapp = "foo";
 		String classpath = "/target/classes";
 
-		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.builder()
+		EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.builder()
 				.withPort(port)
 				.withClasspath(classpath)
 				.withWebapp(webapp)
 				.withPath(path)
+				.disableNaming()
+				.disableForceMetaInf()
 				.build();
 
 		assertThat(result.getPort()).isEqualTo(port);
 		assertThat(result.getPath()).isEqualTo(path);
 		assertThat(result.getClasspath()).isEqualTo(classpath);
 		assertThat(result.getWebapp()).isEqualTo(webapp);
-	}
-
-	private static class EmbeddedConfiguration extends AbstractConfiguration {
-
-		public EmbeddedConfiguration(EmbeddedConfigurationBuilder builder) {
-			super(builder);
-		}
-	}
-
-	public static class EmbeddedConfigurationBuilder extends AbstractConfigurationBuilder<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
-		@Override
-		protected EmbeddedConfigurationBuilder self() {
-			return this;
-		}
-
-		@Override
-		public EmbeddedConfiguration build() {
-			return new EmbeddedConfiguration(this);
-		}
+		assertThat(result.isForceMetaInf()).isFalse();
+		assertThat(result.isEnableNaming()).isFalse();
 	}
 }

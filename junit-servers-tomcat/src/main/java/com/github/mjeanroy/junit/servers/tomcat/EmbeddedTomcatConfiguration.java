@@ -24,114 +24,73 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServerConfiguration;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 
 import java.util.Objects;
 
 import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
 
-public class EmbeddedTomcatConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedTomcatConfiguration> {
+/**
+ * Tomcat configuration settings.
+ */
+public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 
-	/** Tomcat Base Directory. */
-	private String baseDir;
-
-	/** Flag used to enable / disable naming. */
-	private boolean enableNaming;
-
-	/** Flag used to force META-INF directory creation for additional classpath entries. */
-	private boolean forceMetaInf;
-
-	/** Build new tomcat configuration. */
-	public EmbeddedTomcatConfiguration() {
-		super();
-		this.baseDir = "./tomcat-work";
-		this.enableNaming = true;
-		this.forceMetaInf = true;
-
-		// Standard target directory for maven projects
-		// Should be changed for other projects
-		withClasspath("/target/classes");
+	/**
+	 * Get configuration builder.
+	 *
+	 * @return Builder.
+	 */
+	public static Builder builder() {
+		return new Builder();
 	}
 
 	/**
-	 * Create new tomcat configuration by copying existing configuration.
+	 * Get default configuration.
 	 *
-	 * @param configuration Configuration.
+	 * @return Default configuration.
 	 */
-	public EmbeddedTomcatConfiguration(EmbeddedTomcatConfiguration configuration) {
-		super(configuration);
-		this.baseDir = configuration.baseDir;
-		this.forceMetaInf = configuration.forceMetaInf;
-		this.enableNaming = configuration.enableNaming;
+	public static EmbeddedTomcatConfiguration defaultConfiguration() {
+		return new Builder().build();
+	}
+
+	/**
+	 * Tomcat Base Directory.
+	 */
+	private final String baseDir;
+
+	/**
+	 * Flag used to enable / disable naming.
+	 */
+	private final boolean enableNaming;
+
+	/**
+	 * Flag used to force META-INF directory creation for additional classpath entries.
+	 */
+	private final boolean forceMetaInf;
+
+	/**
+	 * Build new tomcat configuration.
+	 *
+	 * @param builder Builder object.
+	 */
+	private EmbeddedTomcatConfiguration(Builder builder) {
+		super(builder);
+		this.baseDir = builder.getBaseDir();
+		this.enableNaming = builder.isEnableNaming();
+		this.forceMetaInf = builder.isForceMetaInf();
 	}
 
 	public String getBaseDir() {
 		return baseDir;
 	}
 
-	public boolean getEnableNaming() {
+	public boolean isEnableNaming() {
 		return enableNaming;
 	}
 
-	public boolean getForceMetaInf() {
+	public boolean isForceMetaInf() {
 		return forceMetaInf;
-	}
-
-	/**
-	 * Change tomcat base directory.
-	 *
-	 * @param baseDir Base directory.
-	 * @return this.
-	 */
-	public EmbeddedTomcatConfiguration withBaseDir(String baseDir) {
-		this.baseDir = notNull(baseDir, "baseDir");
-		return this;
-	}
-
-	/**
-	 * Enable naming on tomcat server.
-	 *
-	 * @return this.
-	 */
-	public EmbeddedTomcatConfiguration enableNaming() {
-		return toggleNaming(true);
-	}
-
-	/**
-	 * Disable naming on tomcat server.
-	 *
-	 * @return this.
-	 */
-	public EmbeddedTomcatConfiguration disableNaming() {
-		return toggleNaming(false);
-	}
-
-	/**
-	 * Enable META-INF creation.
-	 *
-	 * @return this.
-	 */
-	public EmbeddedTomcatConfiguration enableForceMetaInf() {
-		return toggleMetaInf(true);
-	}
-
-	/**
-	 * Disable META-INF creation.
-	 *
-	 * @return this.
-	 */
-	public EmbeddedTomcatConfiguration disableForceMetaInf() {
-		return toggleMetaInf(false);
-	}
-
-	private EmbeddedTomcatConfiguration toggleNaming(boolean enableNaming) {
-		this.enableNaming = enableNaming;
-		return this;
-	}
-
-	private EmbeddedTomcatConfiguration toggleMetaInf(boolean forceMetaInf) {
-		this.forceMetaInf = forceMetaInf;
-		return this;
 	}
 
 	@Override
@@ -152,10 +111,7 @@ public class EmbeddedTomcatConfiguration extends AbstractEmbeddedServerConfigura
 
 		if (o instanceof EmbeddedTomcatConfiguration) {
 			EmbeddedTomcatConfiguration c = (EmbeddedTomcatConfiguration) o;
-			return Objects.equals(getPath(), c.getPath())
-					&& Objects.equals(getWebapp(), c.getWebapp())
-					&& Objects.equals(getPort(), c.getPort())
-					&& Objects.equals(getClasspath(), c.getClasspath())
+			return super.equals(c)
 					&& Objects.equals(baseDir, c.baseDir)
 					&& Objects.equals(enableNaming, c.enableNaming)
 					&& Objects.equals(forceMetaInf, c.forceMetaInf);
@@ -166,6 +122,101 @@ public class EmbeddedTomcatConfiguration extends AbstractEmbeddedServerConfigura
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getPath(), getWebapp(), getPort(), getClasspath(), baseDir, enableNaming, forceMetaInf);
+		return Objects.hash(super.hashCode(), baseDir, enableNaming, forceMetaInf);
+	}
+
+	public static class Builder extends AbstractConfigurationBuilder<Builder, EmbeddedTomcatConfiguration> {
+
+		private String baseDir;
+		private boolean enableNaming;
+		private boolean forceMetaInf;
+
+		private Builder() {
+			baseDir = "./tomcat-work";
+			enableNaming = true;
+			forceMetaInf = true;
+
+			withClasspath("./target/classes");
+		}
+
+		@Override
+		protected Builder self() {
+			return this;
+		}
+
+		@Override
+		public EmbeddedTomcatConfiguration build() {
+			return new EmbeddedTomcatConfiguration(this);
+		}
+
+		public String getBaseDir() {
+			return baseDir;
+		}
+
+		public boolean isEnableNaming() {
+			return enableNaming;
+		}
+
+		public boolean isForceMetaInf() {
+			return forceMetaInf;
+		}
+
+		/**
+		 * Change tomcat base directory.
+		 *
+		 * @param baseDir Base directory.
+		 * @return this.
+		 * @throws NullPointerException if baseDir is null.
+		 */
+		public Builder withBaseDir(String baseDir) {
+			this.baseDir = notNull(baseDir, "baseDir");
+			return self();
+		}
+
+		/**
+		 * Enable naming on tomcat server.
+		 *
+		 * @return this.
+		 */
+		public Builder enableNaming() {
+			return toggleNaming(true);
+		}
+
+		/**
+		 * Disable naming on tomcat server.
+		 *
+		 * @return this.
+		 */
+		public Builder disableNaming() {
+			return toggleNaming(false);
+		}
+
+		/**
+		 * Enable META-INF creation.
+		 *
+		 * @return this.
+		 */
+		public Builder enableForceMetaInf() {
+			return toggleMetaInf(true);
+		}
+
+		/**
+		 * Disable META-INF creation.
+		 *
+		 * @return this.
+		 */
+		public Builder disableForceMetaInf() {
+			return toggleMetaInf(false);
+		}
+
+		private Builder toggleNaming(boolean enableNaming) {
+			this.enableNaming = enableNaming;
+			return self();
+		}
+
+		private Builder toggleMetaInf(boolean forceMetaInf) {
+			this.forceMetaInf = forceMetaInf;
+			return self();
+		}
 	}
 }

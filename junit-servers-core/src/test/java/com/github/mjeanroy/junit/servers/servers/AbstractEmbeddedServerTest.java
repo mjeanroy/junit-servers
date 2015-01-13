@@ -24,15 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 import org.junit.Test;
 
 import javax.servlet.ServletContext;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -50,9 +48,7 @@ public class AbstractEmbeddedServerTest {
 
 	@Test
 	public void it_should_have_default_configuration() {
-		assertThat(server.path).isEqualTo("/");
-		assertThat(server.webapp).isEqualTo("src/main/webapp");
-		assertThat(server.port).isZero();
+		assertThat(server.configuration).isNotNull();
 	}
 
 	@Test
@@ -60,16 +56,15 @@ public class AbstractEmbeddedServerTest {
 		String path = "/foo";
 		int port = 8080;
 		String webapp = "/foo/bar";
-		AbstractEmbeddedServerConfiguration configuration = new EmbeddedConfiguration()
+		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
 				.withPath(path)
 				.withPort(port)
-				.withWebapp(webapp);
+				.withWebapp(webapp)
+				.build();
 
 		server = new TestServer(configuration);
 
-		assertThat(server.path).isEqualTo(path);
-		assertThat(server.webapp).isEqualTo(webapp);
-		assertThat(server.port).isEqualTo(port);
+		assertThat(server.configuration).isSameAs(configuration);
 	}
 
 	@Test
@@ -211,15 +206,12 @@ public class AbstractEmbeddedServerTest {
 		String name2 = "foo1";
 		String newValue2 = "bar1";
 
-		final Map<String, String> properties = new HashMap<String, String>();
-		properties.put(name1, newValue1);
-		properties.put(name2, newValue2);
-		server = new TestServer(new AbstractEmbeddedServerConfiguration() {
-			@Override
-			public Map<String, String> getEnvProperties() {
-				return properties;
-			}
-		});
+		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+				.withProperty(name1, newValue1)
+				.withProperty(name2, newValue2)
+				.build();
+
+		server = new TestServer(configuration);
 
 		server.start();
 
@@ -248,12 +240,11 @@ public class AbstractEmbeddedServerTest {
 	public void it_should_execute_hook() {
 		final Hook hook = mock(Hook.class);
 
-		server = new TestServer(new AbstractEmbeddedServerConfiguration() {
-			@Override
-			public List<Hook> getHooks() {
-				return asList(hook);
-			}
-		});
+		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+				.withHook(hook)
+				.build();
+
+		server = new TestServer(configuration);
 
 		server.start();
 
@@ -276,12 +267,11 @@ public class AbstractEmbeddedServerTest {
 
 	@Test
 	public void it_should_get_custom_path() {
-		TestServer server = new TestServer(new AbstractEmbeddedServerConfiguration() {
-			@Override
-			public String getPath() {
-				return "/foo";
-			}
-		});
+		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+				.withPath("/foo")
+				.build();
+
+		TestServer server = new TestServer(configuration);
 
 		String path = server.getPath();
 		assertThat(path).isEqualTo("/foo");
@@ -295,12 +285,11 @@ public class AbstractEmbeddedServerTest {
 
 	@Test
 	public void it_should_get_url_with_custom_path() {
-		TestServer server = new TestServer(new AbstractEmbeddedServerConfiguration() {
-			@Override
-			public String getPath() {
-				return "/foo";
-			}
-		});
+		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+				.withPath("/foo")
+				.build();
+
+		TestServer server = new TestServer(configuration);
 
 		String url = server.getUrl();
 
@@ -309,12 +298,11 @@ public class AbstractEmbeddedServerTest {
 
 	@Test
 	public void it_should_get_url_with_custom_path_pre_pending_slash() {
-		TestServer server = new TestServer(new AbstractEmbeddedServerConfiguration() {
-			@Override
-			public String getPath() {
-				return "foo";
-			}
-		});
+		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+				.withPath("foo")
+				.build();
+
+		TestServer server = new TestServer(configuration);
 
 		String url = server.getUrl();
 
@@ -330,11 +318,11 @@ public class AbstractEmbeddedServerTest {
 		public ServletContext servletContext;
 
 		public TestServer() {
-			super(new EmbeddedConfiguration());
+			super(new EmbeddedConfiguration.Builder().build());
 			servletContext = mock(ServletContext.class);
 		}
 
-		public TestServer(AbstractEmbeddedServerConfiguration configuration) {
+		public TestServer(EmbeddedConfiguration configuration) {
 			super(configuration);
 			servletContext = mock(ServletContext.class);
 		}
@@ -373,13 +361,30 @@ public class AbstractEmbeddedServerTest {
 		}
 	}
 
-	private static class EmbeddedConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedConfiguration> {
+	private static class EmbeddedConfiguration extends AbstractConfiguration {
 
+		public EmbeddedConfiguration(Builder builder) {
+			super(builder);
+		}
+
+		private static class Builder extends AbstractConfigurationBuilder<Builder, EmbeddedConfiguration> {
+			@Override
+			protected Builder self() {
+				return this;
+			}
+
+			@Override
+			public EmbeddedConfiguration build() {
+				return new EmbeddedConfiguration(this);
+			}
+		}
 	}
 
 	private static class StartWorker implements Runnable {
 		private final TestServer server;
+
 		private final CountDownLatch startSignal;
+
 		private final CountDownLatch doneSignal;
 
 		public StartWorker(TestServer server, CountDownLatch startSignal, CountDownLatch doneSignal) {
@@ -403,7 +408,9 @@ public class AbstractEmbeddedServerTest {
 
 	private static class StopWorker implements Runnable {
 		private final TestServer server;
+
 		private final CountDownLatch startSignal;
+
 		private final CountDownLatch doneSignal;
 
 		public StopWorker(TestServer server, CountDownLatch startSignal, CountDownLatch doneSignal) {

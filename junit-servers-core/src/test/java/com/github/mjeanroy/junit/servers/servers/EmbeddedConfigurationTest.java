@@ -24,110 +24,54 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-
-import java.io.File;
-import java.util.List;
-import java.util.Map;
-
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EmbeddedConfigurationTest {
 
-	@Rule
-	public TemporaryFolder folder = new TemporaryFolder();
-
-	private AbstractEmbeddedServerConfiguration configuration;
+	private EmbeddedConfigurationBuilder builder;
 
 	@Before
 	public void setUp() {
-		configuration = new EmbeddedConfiguration();
+		builder = mock(EmbeddedConfigurationBuilder.class);
+		when(builder.getPath()).thenReturn("/foo");
+		when(builder.getClasspath()).thenReturn("/target/classes");
+		when(builder.getPort()).thenReturn(8080);
+		when(builder.getWebapp()).thenReturn("src/main/webapp");
 	}
 
 	@Test
-	public void it_should_change_port() {
-		int oldPort = configuration.getPort();
-		int newPort = oldPort + 10;
+	public void it_should_build_configuration() {
+		EmbeddedConfiguration result = new EmbeddedConfiguration(builder);
 
-		AbstractEmbeddedServerConfiguration result = configuration.withPort(newPort);
-
-		assertThat(result).isSameAs(configuration);
-		assertThat(result.getPort()).isNotEqualTo(oldPort).isEqualTo(newPort);
+		assertThat(result.getPort()).isEqualTo(builder.getPort());
+		assertThat(result.getPath()).isEqualTo(builder.getPath());
+		assertThat(result.getClasspath()).isEqualTo(builder.getClasspath());
+		assertThat(result.getWebapp()).isEqualTo(builder.getWebapp());
 	}
 
-	@Test
-	public void it_should_change_path() {
-		String oldPath = configuration.getPath();
-		String newPath = oldPath + "foo";
+	private static class EmbeddedConfiguration extends AbstractConfiguration {
 
-		AbstractEmbeddedServerConfiguration result = configuration.withPath(newPath);
-
-		assertThat(result).isSameAs(configuration);
-		assertThat(result.getPath()).isNotEqualTo(oldPath).isEqualTo(newPath);
+		public EmbeddedConfiguration(EmbeddedConfigurationBuilder builder) {
+			super(builder);
+		}
 	}
 
-	@Test
-	public void it_should_change_webapp_path() {
-		String oldWebapp = configuration.getWebapp();
-		String newWebapp = oldWebapp + "foo";
+	public static class EmbeddedConfigurationBuilder extends AbstractConfigurationBuilder<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
+		@Override
+		protected EmbeddedConfigurationBuilder self() {
+			return this;
+		}
 
-		AbstractEmbeddedServerConfiguration result = configuration.withWebapp(newWebapp);
-
-		assertThat(result).isSameAs(configuration);
-		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
-	}
-
-	@Test
-	public void it_should_change_webapp_path_with_file() throws Exception {
-		String oldWebapp = configuration.getWebapp();
-		File file = folder.newFile("foo");
-		String newWebapp = file.getAbsolutePath();
-
-		AbstractEmbeddedServerConfiguration result = configuration.withWebapp(file);
-
-		assertThat(result).isSameAs(configuration);
-		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
-	}
-
-	@Test
-	public void it_should_add_property() throws Exception {
-		Map<String, String> oldProperties = configuration.getEnvProperties();
-		assertThat(oldProperties).isEmpty();
-
-		String name = "foo";
-		String value = "bar";
-		AbstractEmbeddedServerConfiguration result = configuration.withProperty(name, value);
-
-		assertThat(result).isSameAs(configuration);
-		Map<String, String> newProperties = result.getEnvProperties();
-		assertThat(newProperties)
-				.isNotNull()
-				.isNotEmpty()
-				.hasSize(1)
-				.containsOnly(entry(name, value));
-	}
-
-	@Test
-	public void it_should_add_hook() throws Exception {
-		Hook hook = mock(Hook.class);
-		List<Hook> oldHooks = configuration.getHooks();
-		assertThat(oldHooks).isEmpty();
-
-		AbstractEmbeddedServerConfiguration result = configuration.withHook(hook);
-
-		assertThat(result).isSameAs(configuration);
-		List<Hook> newHooks = result.getHooks();
-		assertThat(newHooks)
-				.isNotNull()
-				.isNotEmpty()
-				.hasSize(1)
-				.containsOnly(hook);
-	}
-
-	private static class EmbeddedConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedConfiguration> {
+		@Override
+		public EmbeddedConfiguration build() {
+			return new EmbeddedConfiguration(this);
+		}
 	}
 }

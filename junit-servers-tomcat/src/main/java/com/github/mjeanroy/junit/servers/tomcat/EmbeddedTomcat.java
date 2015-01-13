@@ -24,26 +24,26 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
-
-import javax.servlet.ServletContext;
-import java.io.File;
-
+import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 import org.apache.catalina.Context;
 import org.apache.catalina.Loader;
 import org.apache.catalina.loader.WebappLoader;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
+import javax.servlet.ServletContext;
+import java.io.File;
+
+import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 
 /**
  * Embedded server using tomcat as implementation.
  */
-public class EmbeddedTomcat extends AbstractEmbeddedServer {
+public class EmbeddedTomcat extends AbstractEmbeddedServer<EmbeddedTomcatConfiguration> {
 
 	/**
 	 * Tomcat instance.
@@ -56,25 +56,10 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 	private volatile Context context;
 
 	/**
-	 * Tomcat base directory.
-	 */
-	private final String baseDir;
-
-	/**
-	 * Flag to enable naming.
-	 */
-	private final boolean enableNaming;
-
-	/**
-	 * Flag used to force META-INF directory creation for additional classpath entry.
-	 */
-	private final boolean forceMetaInf;
-
-	/**
 	 * Build embedded tomcat with default configuration.
 	 */
 	public EmbeddedTomcat() {
-		this(new EmbeddedTomcatConfiguration());
+		this(defaultConfiguration());
 	}
 
 	/**
@@ -84,21 +69,18 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 	 */
 	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
 		super(configuration);
-		this.baseDir = configuration.getBaseDir();
-		this.enableNaming = configuration.getEnableNaming();
-		this.forceMetaInf = configuration.getForceMetaInf();
 		this.tomcat = initServer();
 	}
 
 	private Tomcat initServer() {
 		Tomcat tomcat = new Tomcat();
-		tomcat.setBaseDir(baseDir);
-		tomcat.setPort(port);
+		tomcat.setBaseDir(configuration.getBaseDir());
+		tomcat.setPort(configuration.getPort());
 
 		tomcat.getHost().setAutoDeploy(true);
 		tomcat.getHost().setDeployOnStartup(true);
 
-		if (enableNaming) {
+		if (configuration.isEnableNaming()) {
 			tomcat.enableNaming();
 		}
 
@@ -123,6 +105,11 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 	 */
 	protected Context createContext() throws Exception {
 		Context context = null;
+
+		final String webapp = configuration.getWebapp();
+		final String path = configuration.getPath();
+		final String classpath = configuration.getClasspath();
+		final boolean forceMetaInf = configuration.isForceMetaInf();
 
 		File webappDirectory = new File(webapp);
 		if (webappDirectory.exists()) {
@@ -177,7 +164,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer {
 		try {
 			tomcat.stop();
 			context = null;
-			deleteDirectory(baseDir);
+			deleteDirectory(configuration.getBaseDir());
 		}
 		catch (Throwable ex) {
 			throw new ServerStopException(ex);

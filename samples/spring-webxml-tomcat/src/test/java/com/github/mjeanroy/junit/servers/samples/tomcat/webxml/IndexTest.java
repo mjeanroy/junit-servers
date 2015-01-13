@@ -24,20 +24,19 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
-import static org.assertj.core.api.Assertions.*;
-
-import javax.servlet.ServletContext;
-import java.io.File;
-
+import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import javax.servlet.ServletContext;
+import java.io.File;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndexTest {
 
@@ -54,10 +53,11 @@ public class IndexTest {
 
 			String path = current.endsWith(PATH) ? current : current + PATH;
 
-			return new EmbeddedTomcatConfiguration()
+			return EmbeddedTomcatConfiguration.builder()
 					.withWebapp(path + "src/main/webapp")
 					.withClasspath(path + "target/classes")
-					.disableNaming();
+					.disableNaming()
+					.build();
 		}
 		catch (Exception ex) {
 			throw new RuntimeException(ex);
