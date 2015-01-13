@@ -24,11 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServerConfiguration;
 
 import java.util.Objects;
 
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServerConfiguration;
+import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
 
 public class EmbeddedTomcatConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedTomcatConfiguration> {
 
@@ -50,7 +50,7 @@ public class EmbeddedTomcatConfiguration extends AbstractEmbeddedServerConfigura
 
 		// Standard target directory for maven projects
 		// Should be changed for other projects
-		this.classpath += "/target/classes";
+		withClasspath("/target/classes");
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class EmbeddedTomcatConfiguration extends AbstractEmbeddedServerConfigura
 		return String.format(
 				"%s {path=%s, webapp=%s, port=%s, classpath=%s, baseDir=%s, enableNaming=%s, forceMetaInf=%s}",
 				getClass().getSimpleName(),
-				path, webapp, port, classpath,
+				getPath(), getWebapp(), getPath(), getClasspath(),
 				baseDir, enableNaming, forceMetaInf
 		);
 	}
@@ -152,10 +152,10 @@ public class EmbeddedTomcatConfiguration extends AbstractEmbeddedServerConfigura
 
 		if (o instanceof EmbeddedTomcatConfiguration) {
 			EmbeddedTomcatConfiguration c = (EmbeddedTomcatConfiguration) o;
-			return Objects.equals(path, c.path)
-					&& Objects.equals(webapp, c.webapp)
-					&& Objects.equals(port, c.port)
-					&& Objects.equals(classpath, c.classpath)
+			return Objects.equals(getPath(), c.getPath())
+					&& Objects.equals(getWebapp(), c.getWebapp())
+					&& Objects.equals(getPort(), c.getPort())
+					&& Objects.equals(getClasspath(), c.getClasspath())
 					&& Objects.equals(baseDir, c.baseDir)
 					&& Objects.equals(enableNaming, c.enableNaming)
 					&& Objects.equals(forceMetaInf, c.forceMetaInf);
@@ -166,6 +166,6 @@ public class EmbeddedTomcatConfiguration extends AbstractEmbeddedServerConfigura
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(path, webapp, port, classpath, baseDir, enableNaming, forceMetaInf);
+		return Objects.hash(getPath(), getWebapp(), getPort(), getClasspath(), baseDir, enableNaming, forceMetaInf);
 	}
 }

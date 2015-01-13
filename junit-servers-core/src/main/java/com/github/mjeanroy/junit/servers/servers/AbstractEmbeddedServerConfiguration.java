@@ -25,8 +25,8 @@
 package com.github.mjeanroy.junit.servers.servers;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,45 +36,55 @@ import static com.github.mjeanroy.junit.servers.commons.Checks.positive;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
 
+/**
+ * Abstract configuration containing basic properties that
+ * should be commons to all available embedded servers.
+ * Each server must provide a configuration class that extend
+ * this abstract configuration.
+ *
+ * @param <T> Type of class extending this abstract configuration. This generic
+ *            type is useful for chaining methods.
+ */
 public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbeddedServerConfiguration> {
-
-	// Default classpath
-	// Should be enough for most projects but can be overridden (could be necessary for sub-projects)
-	public static final String DEFAULT_CLASSPATH = ".";
 
 	/**
 	 * Server Path.
 	 * This path is "/" by default, but it can be customized (and path
 	 * suffix will have to be used to query application url).
 	 */
-	protected String path;
+	private String path;
 
 	/**
 	 * Webapp Path.
+	 *
 	 * By default, the path follow maven convention and is
 	 * set to "src/main/webapp".
+	 *
 	 * Path should be customized if project do not follow maven
 	 * convention or webapp path must be set to maven sub-module.
 	 */
-	protected String webapp;
+	private String webapp;
 
 	/**
 	 * Server port, default is to use a random port.
+	 *
 	 * Use this configuration port to define a specific port, otherwise
 	 * use a random port to be sure application start on an
 	 * available port.
 	 */
-	protected int port;
+	private int port;
 
 	/**
 	 * Additional classpath.
+	 *
 	 * The path will be added to application classpath
 	 * before server is started.
+	 *
 	 * This additional classpath entry is useful to start
 	 * application configured with java configuration instead
 	 * of "classic" web.xml file.
 	 */
-	protected String classpath;
+	private String classpath;
 
 	/**
 	 * Map of environment properties to set before server start.
@@ -86,33 +96,43 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 * Note that custom properties will be set before embedded server
 	 * is started and removed after server is stopped.
 	 */
-	protected final Map<String, String> envProperties;
+	private final Map<String, String> envProperties;
 
 	/**
 	 * Execution hooks.
+	 *
 	 * These hooks will be executed during server start and stop
 	 * phases.
-	 * Be careful that these hooks should be thread safe and
-	 * stateless.
+	 *
+	 * Be careful that these hooks should be thread safe.
 	 */
-	protected final List<Hook> hooks;
+	private final List<Hook> hooks;
 
 	/**
 	 * Build default configuration.
+	 *
+	 * Default settings:
+	 * - Port is set to zero (random port will be automatically defined).
+	 * - Path is set to "/"
+	 * - Webapp path follow maven convention and is set to "/src/main/webapp".
+	 * - Additional classpath is set to "." (i.e current directory).
+	 * - Properties is an empty map.
+	 * - Hooks is an empty list.
 	 */
 	protected AbstractEmbeddedServerConfiguration() {
 		this.port = 0;
 		this.path = "/";
 		this.webapp = "src/main/webapp";
-		this.classpath = DEFAULT_CLASSPATH;
+		this.classpath = ".";
 		this.envProperties = new HashMap<>();
-		this.hooks = new ArrayList<>();
+		this.hooks = new LinkedList<>();
 	}
 
 	/**
 	 * Create new embedded configuration by copying existing configuration.
 	 *
 	 * @param configuration Configuration.
+	 * @throws NullPointerException if configuration is null.
 	 */
 	protected AbstractEmbeddedServerConfiguration(T configuration) {
 		notNull(configuration, "configuration");
@@ -123,7 +143,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 		this.classpath = configuration.getClasspath();
 
 		this.envProperties = new HashMap<>(configuration.getEnvProperties());
-		this.hooks = new ArrayList<>(configuration.getHooks());
+		this.hooks = new LinkedList<>(configuration.getHooks());
 	}
 
 	/**
@@ -199,6 +219,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 *
 	 * @param port New port.
 	 * @return this.
+	 * @throws IllegalArgumentException if port is not positive (i.e < 0).
 	 */
 	@SuppressWarnings("unchecked")
 	public T withPort(int port) {
@@ -211,6 +232,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 *
 	 * @param webapp New webapp path.
 	 * @return this.
+	 * @throws NullPointerException if webapp is null.
 	 */
 	@SuppressWarnings("unchecked")
 	public T withWebapp(String webapp) {
@@ -223,6 +245,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 *
 	 * @param webapp New webapp path.
 	 * @return this.
+	 * @throws NullPointerException if webapp is null.
 	 */
 	@SuppressWarnings("unchecked")
 	public T withWebapp(File webapp) {
@@ -248,9 +271,11 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 * Add environment property to set before server start.
 	 * Property will be removed once server is stopped.
 	 *
-	 * @param name  Property name.
+	 * @param name Property name.
 	 * @param value Property value.
 	 * @return this.
+	 * @throws NullPointerException if name or value is null.
+	 * @throws IllegalArgumentException if name is empty or blank.
 	 */
 	@SuppressWarnings("unchecked")
 	public T withProperty(String name, String value) {
@@ -266,6 +291,7 @@ public abstract class AbstractEmbeddedServerConfiguration<T extends AbstractEmbe
 	 *
 	 * @param hook Hook.
 	 * @return this.
+	 * @throws NullPointerException if hook is null.
 	 */
 	@SuppressWarnings("unchecked")
 	public T withHook(Hook hook) {

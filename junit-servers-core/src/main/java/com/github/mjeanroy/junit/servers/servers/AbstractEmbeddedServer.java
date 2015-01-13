@@ -27,7 +27,6 @@ package com.github.mjeanroy.junit.servers.servers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.String.format;
 import static java.lang.System.clearProperty;
@@ -41,13 +40,12 @@ import static java.lang.System.setProperty;
  */
 public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
-	// Atomic reference because it can be used by other thread (if tests are runs in parallel)
 	/**
 	 * Flag to keep server status.
 	 * Server can be started if and only if status is equal to {@link ServerStatus#STOPPED}.
 	 * Server can be stopped if and only if status is equal to {@link ServerStatus#STARTED}.
 	 */
-	private final AtomicReference<ServerStatus> status;
+	private volatile ServerStatus status;
 
 	/**
 	 * Force specific port.
@@ -103,8 +101,9 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 	 *
 	 * @param configuration Server configuration.
 	 */
+	@SuppressWarnings("unchecked")
 	protected <T extends AbstractEmbeddedServerConfiguration> AbstractEmbeddedServer(T configuration) {
-		this.status = new AtomicReference<>(ServerStatus.STOPPED);
+		this.status = ServerStatus.STOPPED;
 		this.port = configuration.getPort();
 		this.path = configuration.getPath();
 		this.webapp = configuration.getWebapp();
@@ -117,14 +116,14 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	@Override
 	public void start() {
-		if (status.get() != ServerStatus.STARTED) {
+		if (status != ServerStatus.STARTED) {
 			synchronized (lock) {
-				if (status.get() != ServerStatus.STARTED) {
-					status.set(ServerStatus.STARTING);
+				if (status != ServerStatus.STARTED) {
+					status = ServerStatus.STARTING;
 					initEnvironment();
 					execHooks(true);
 					doStart();
-					status.set(ServerStatus.STARTED);
+					status = ServerStatus.STARTED;
 
 					// Server is fully initialized
 					onStarted();
@@ -135,14 +134,14 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	@Override
 	public void stop() {
-		if (status.get() != ServerStatus.STOPPED) {
+		if (status != ServerStatus.STOPPED) {
 			synchronized (lock) {
-				if (status.get() != ServerStatus.STOPPED) {
-					status.set(ServerStatus.STOPPING);
+				if (status != ServerStatus.STOPPED) {
+					status = ServerStatus.STOPPING;
 					doStop();
 					execHooks(false);
 					destroyEnvironment();
-					status.set(ServerStatus.STOPPED);
+					status = ServerStatus.STOPPED;
 				}
 			}
 		}
@@ -150,7 +149,7 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	@Override
 	public boolean isStarted() {
-		return status.get() == ServerStatus.STARTED;
+		return status == ServerStatus.STARTED;
 	}
 
 	@Override
@@ -166,6 +165,8 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	/**
 	 * Add custom environment properties.
+	 * Initial property value will be store in {@link #oldProperties} map
+	 * and will be restore later.
 	 */
 	private void initEnvironment() {
 		for (Map.Entry<String, String> property : properties.entrySet()) {
@@ -181,6 +182,8 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 	/**
 	 * Reset custom environment properties.
+	 * Initial values stored in {@link #oldProperties} will be restored
+	 * or clear.
 	 */
 	private void destroyEnvironment() {
 		for (Map.Entry<String, String> property : properties.entrySet()) {
@@ -191,19 +194,22 @@ public abstract class AbstractEmbeddedServer implements EmbeddedServer {
 
 			if (oldValue == null) {
 				clearProperty(name);
-			}
-			else {
+			} else {
 				setProperty(name, oldValue);
 			}
 		}
 	}
 
+	/**
+	 * Exec hooks phase.
+	 *
+	 * @param pre Phase to execute (true => pre ; false => post).
+	 */
 	private void execHooks(boolean pre) {
 		for (Hook hook : hooks) {
 			if (pre) {
 				hook.pre(this);
-			}
-			else {
+			} else {
 				hook.post(this);
 			}
 		}

@@ -24,9 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import java.util.Objects;
-
 import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServerConfiguration;
+
+import java.util.Objects;
 
 public class EmbeddedJettyConfiguration extends AbstractEmbeddedServerConfiguration<EmbeddedJettyConfiguration> {
 
@@ -48,7 +48,7 @@ public class EmbeddedJettyConfiguration extends AbstractEmbeddedServerConfigurat
 		return String.format(
 				"%s {path=%s, webapp=%s, port=%s, classpath=%s}",
 				getClass().getSimpleName(),
-				path, webapp, port, classpath
+				getPath(), getWebapp(), getPort(), getClasspath()
 		);
 	}
 
@@ -60,10 +60,10 @@ public class EmbeddedJettyConfiguration extends AbstractEmbeddedServerConfigurat
 
 		if (o instanceof EmbeddedJettyConfiguration) {
 			EmbeddedJettyConfiguration c = (EmbeddedJettyConfiguration) o;
-			return Objects.equals(path, c.path)
-					&& Objects.equals(webapp, c.webapp)
-					&& Objects.equals(port, c.port)
-					&& Objects.equals(classpath, c.classpath);
+			return Objects.equals(getPath(), c.getPath())
+					&& Objects.equals(getWebapp(), c.getWebapp())
+					&& Objects.equals(getPort(), c.getPort())
+					&& Objects.equals(getClasspath(), c.getClasspath());
 		}
 
 		return false;
@@ -71,6 +71,6 @@ public class EmbeddedJettyConfiguration extends AbstractEmbeddedServerConfigurat
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(path, webapp, port, classpath);
+		return Objects.hash(getPath(), getWebapp(), getPort(), getClasspath());
 	}
 }
