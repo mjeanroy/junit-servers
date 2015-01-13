@@ -67,7 +67,6 @@ public abstract class AbstractEmbeddedServer<T extends AbstractConfiguration> im
 	 *
 	 * @param configuration Server configuration.
 	 */
-	@SuppressWarnings("unchecked")
 	protected AbstractEmbeddedServer(T configuration) {
 		this.status = ServerStatus.STOPPED;
 		this.configuration = configuration;
