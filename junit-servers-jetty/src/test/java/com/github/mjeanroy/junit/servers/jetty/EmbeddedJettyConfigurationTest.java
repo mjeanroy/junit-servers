@@ -48,18 +48,23 @@ public class EmbeddedJettyConfigurationTest {
 		String path = "/foo";
 		String webapp = "foo";
 		String classpath = "/target/classes";
+		int stopTimeout = 50;
 
 		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.builder()
 				.withPort(port)
 				.withClasspath(classpath)
 				.withWebapp(webapp)
 				.withPath(path)
+				.withStopTimeout(stopTimeout)
+				.disableStopAtShutdown()
 				.build();
 
 		assertThat(result.getPort()).isEqualTo(port);
 		assertThat(result.getPath()).isEqualTo(path);
 		assertThat(result.getClasspath()).isEqualTo(classpath);
 		assertThat(result.getWebapp()).isEqualTo(webapp);
+		assertThat(result.getStopTimeout()).isEqualTo(stopTimeout);
+		assertThat(result.isStopAtShutdown()).isFalse();
 	}
 
 	private static class EmbeddedConfiguration extends AbstractConfiguration {

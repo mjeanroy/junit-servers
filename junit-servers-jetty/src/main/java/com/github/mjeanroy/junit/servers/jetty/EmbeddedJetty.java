@@ -85,8 +85,8 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<EmbeddedJettyConfigura
 
 	private Server initServer() {
 		Server server = new Server(configuration.getPort());
-		server.setStopAtShutdown(true);
-		server.setStopTimeout(10000);
+		server.setStopAtShutdown(configuration.isStopAtShutdown());
+		server.setStopTimeout(configuration.getStopTimeout());
 		return server;
 	}
 

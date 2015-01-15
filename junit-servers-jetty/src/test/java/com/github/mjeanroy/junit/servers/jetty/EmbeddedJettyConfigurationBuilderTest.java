@@ -107,4 +107,31 @@ public class EmbeddedJettyConfigurationBuilderTest {
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getClasspath()).isNotEqualTo(oldClasspath).isEqualTo(newClasspath);
 	}
+
+	@Test
+	public void it_should_change_stop_timeout() {
+		int oldStopTimeout = builder.getStopTimeout();
+		int newStopTimeout = oldStopTimeout + 10;
+
+		EmbeddedJettyConfiguration.Builder result = builder.withStopTimeout(newStopTimeout);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getStopTimeout()).isNotEqualTo(oldStopTimeout).isEqualTo(newStopTimeout);
+	}
+
+	@Test
+	public void it_should_enable_stop_at_shutdown() {
+		EmbeddedJettyConfiguration.Builder result = builder.enableStopAtShutdown();
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.isStopAtShutdown()).isTrue();
+	}
+
+	@Test
+	public void it_should_disable_stop_at_shutdown() {
+		EmbeddedJettyConfiguration.Builder result = builder.disableStopAtShutdown();
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.isStopAtShutdown()).isFalse();
+	}
 }

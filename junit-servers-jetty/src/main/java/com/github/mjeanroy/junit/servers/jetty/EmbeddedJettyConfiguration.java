@@ -27,10 +27,24 @@ package com.github.mjeanroy.junit.servers.jetty;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 
+import static com.github.mjeanroy.junit.servers.commons.Checks.positive;
+
 /**
  * Jetty configuration settings.
  */
 public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
+
+	/**
+	 * Configure the stop timeout in milliseconds.
+	 * Default value is 30000 ms.
+	 */
+	private final int stopTimeout;
+
+	/**
+	 * Configure jetty embedded server to stop
+	 * at shutdown.
+	 */
+	private final boolean stopAtShutdown;
 
 	/**
 	 * Get configuration builder.
@@ -53,6 +67,16 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 	// Private constructor, use static builder.
 	private EmbeddedJettyConfiguration(Builder builder) {
 		super(builder);
+		this.stopTimeout = builder.getStopTimeout();
+		this.stopAtShutdown = builder.isStopAtShutdown();
+	}
+
+	public int getStopTimeout() {
+		return stopTimeout;
+	}
+
+	public boolean isStopAtShutdown() {
+		return stopAtShutdown;
 	}
 
 	@Override
@@ -67,6 +91,15 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 
 	public static class Builder extends AbstractConfigurationBuilder<Builder, EmbeddedJettyConfiguration> {
 
+		private int stopTimeout;
+
+		private boolean stopAtShutdown;
+
+		private Builder() {
+			stopTimeout = 30000;
+			stopAtShutdown = true;
+		}
+
 		@Override
 		protected Builder self() {
 			return this;
@@ -75,6 +108,38 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		@Override
 		public EmbeddedJettyConfiguration build() {
 			return new EmbeddedJettyConfiguration(this);
+		}
+
+		public int getStopTimeout() {
+			return stopTimeout;
+		}
+
+		public boolean isStopAtShutdown() {
+			return stopAtShutdown;
+		}
+
+		/**
+		 * Update stop timeout value.
+		 * @param stopTimeout New stop timeout value.
+		 * @return this
+		 * @throws IllegalArgumentException if stop timeout is not positive.
+		 */
+		public Builder withStopTimeout(int stopTimeout) {
+			this.stopTimeout = positive(stopTimeout, "stopTimeout");
+			return this;
+		}
+
+		public Builder disableStopAtShutdown() {
+			return toggleStopAtShutdown(false);
+		}
+
+		public Builder enableStopAtShutdown() {
+			return toggleStopAtShutdown(true);
+		}
+
+		private Builder toggleStopAtShutdown(boolean stopAtShutdown) {
+			this.stopAtShutdown = stopAtShutdown;
+			return this;
 		}
 	}
 }
