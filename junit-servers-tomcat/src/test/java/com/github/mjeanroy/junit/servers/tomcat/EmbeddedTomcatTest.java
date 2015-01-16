@@ -91,4 +91,10 @@ public class EmbeddedTomcatTest {
 		tomcat.start();
 		assertThat(tomcat.getServletContext()).isNotNull();
 	}
+
+	@Test
+	public void it_should_get_original_tomcat() {
+		tomcat = new EmbeddedTomcat();
+		assertThat(tomcat.getDelegate()).isNotNull();
+	}
 }

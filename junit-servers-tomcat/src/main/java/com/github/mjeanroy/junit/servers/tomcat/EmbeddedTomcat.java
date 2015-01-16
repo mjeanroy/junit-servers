@@ -43,7 +43,7 @@ import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfigurati
 /**
  * Embedded server using tomcat as implementation.
  */
-public class EmbeddedTomcat extends AbstractEmbeddedServer<EmbeddedTomcatConfiguration> {
+public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomcatConfiguration> {
 
 	/**
 	 * Tomcat instance.
@@ -146,6 +146,11 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<EmbeddedTomcatConfigu
 		}
 
 		return context;
+	}
+
+	@Override
+	public Tomcat getDelegate() {
+		return tomcat;
 	}
 
 	@Override

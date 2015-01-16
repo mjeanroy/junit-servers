@@ -309,7 +309,20 @@ public class AbstractEmbeddedServerTest {
 		assertThat(url).isEqualTo("http://localhost:0/foo");
 	}
 
-	private static class TestServer extends AbstractEmbeddedServer<EmbeddedConfiguration> {
+	@Test
+	public void it_should_get_original_server_implementation() {
+		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+				.withPath("foo")
+				.build();
+
+		TestServer server = new TestServer(configuration);
+
+		FooServer delegateSrc = server.getDelegate();
+
+		assertThat(delegateSrc).isNotNull();
+	}
+
+	private static class TestServer extends AbstractEmbeddedServer<FooServer, EmbeddedConfiguration> {
 
 		public int doStart = 0;
 
@@ -325,6 +338,11 @@ public class AbstractEmbeddedServerTest {
 		public TestServer(EmbeddedConfiguration configuration) {
 			super(configuration);
 			servletContext = mock(ServletContext.class);
+		}
+
+		@Override
+		public FooServer getDelegate() {
+			return mock(FooServer.class);
 		}
 
 		@Override
@@ -359,6 +377,10 @@ public class AbstractEmbeddedServerTest {
 		public ServletContext getServletContext() {
 			return isStarted() ? servletContext : null;
 		}
+	}
+
+	private static class FooServer {
+
 	}
 
 	private static class EmbeddedConfiguration extends AbstractConfiguration {

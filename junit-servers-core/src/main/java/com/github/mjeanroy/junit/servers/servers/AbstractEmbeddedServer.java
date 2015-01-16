@@ -39,7 +39,7 @@ import static java.lang.System.setProperty;
  * Subclasses should implement {@link #doStart()} and {@link #doStop()} methods.
  * Synchronization is already managed by this abstract implementation.
  */
-public abstract class AbstractEmbeddedServer<T extends AbstractConfiguration> implements EmbeddedServer {
+public abstract class AbstractEmbeddedServer<S extends Object, T extends AbstractConfiguration> implements EmbeddedServer {
 
 	/**
 	 * Server configuration.
@@ -190,6 +190,18 @@ public abstract class AbstractEmbeddedServer<T extends AbstractConfiguration> im
 
 		return format("http://localhost:%s%s", port, path);
 	}
+
+	/**
+	 * Get internal server implementation.
+	 * Note that this method should not be used to start
+	 * or stop internal server, use dedicated method instead.
+	 *
+	 * This method can be used to do some custom configuration
+	 * on original implementation.
+	 *
+	 * @return Original server implementation.
+	 */
+	public abstract S getDelegate();
 
 	/**
 	 * Start embedded server.

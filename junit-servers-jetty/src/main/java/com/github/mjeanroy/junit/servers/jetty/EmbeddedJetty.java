@@ -49,7 +49,7 @@ import static org.eclipse.jetty.util.resource.Resource.newResource;
 /**
  * Jetty Embedded Server.
  */
-public class EmbeddedJetty extends AbstractEmbeddedServer<EmbeddedJettyConfiguration> {
+public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyConfiguration> {
 
 	/**
 	 * Instance of Jetty Server.
@@ -97,6 +97,11 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<EmbeddedJettyConfigura
 		catch (Exception ex) {
 			throw new ServerInitializationException(ex);
 		}
+	}
+
+	@Override
+	public Server getDelegate() {
+		return server;
 	}
 
 	@Override

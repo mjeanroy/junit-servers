@@ -24,10 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import static org.assertj.core.api.Assertions.*;
-
 import org.junit.After;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmbeddedJettyTest {
 
@@ -67,5 +67,11 @@ public class EmbeddedJettyTest {
 		jetty = new EmbeddedJetty();
 		jetty.start();
 		assertThat(jetty.getServletContext()).isNotNull();
+	}
+
+	@Test
+	public void it_should_get_original_jetty() {
+		jetty = new EmbeddedJetty();
+		assertThat(jetty.getDelegate()).isNotNull();
 	}
 }
