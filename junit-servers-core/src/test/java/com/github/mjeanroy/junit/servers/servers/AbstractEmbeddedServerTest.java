@@ -309,7 +309,7 @@ public class AbstractEmbeddedServerTest {
 		assertThat(url).isEqualTo("http://localhost:0/foo");
 	}
 
-	private static class TestServer extends AbstractEmbeddedServer {
+	private static class TestServer extends AbstractEmbeddedServer<EmbeddedConfiguration> {
 
 		public int doStart = 0;
 
