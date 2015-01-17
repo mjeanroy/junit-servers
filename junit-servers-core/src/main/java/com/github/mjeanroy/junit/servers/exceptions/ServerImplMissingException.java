@@ -25,36 +25,16 @@
 package com.github.mjeanroy.junit.servers.exceptions;
 
 /**
- * Exception thrown when embedded server fail.
+ * Exception thrown when embedded server implementation is missing.
+ * For example, this exception can be thrown in junit runner when no
+ * implementation can be found at runtime.
  */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+public class ServerImplMissingException extends AbstractEmbeddedServerException {
 
 	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
+	 * Create exception.
 	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
-	}
-
-	/**
-	 * Create exception with specific message.
-	 *
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
-	}
-
-	/**
-	 * Create exception with specific message and keep
-	 * original exception.
-	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
+	public ServerImplMissingException() {
+		super("Embedded server implementation is missing, please import appropriate sub-module");
 	}
 }

@@ -22,37 +22,37 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
+package com.github.mjeanroy.junit.servers.commons;
 
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Rule that can be used to start and stop embedded jetty server.
+ * Static collection utilities.
  */
-public class JettyServerRule extends ServerRule {
+public final class CollectionUtils {
 
-	/** Create rule using jetty as embedded server. */
-	public JettyServerRule() {
-		super(new EmbeddedJetty());
+	// Ensure non instantiation
+	private CollectionUtils() {
 	}
 
 	/**
-	 * Create rule.
+	 * Filter input by using given predicate and return
+	 * filtered outputs.
 	 *
-	 * @param jetty Jetty Embedded Server.
+	 * @param list List input.
+	 * @param predicate Predicate.
+	 * @param <T> Type of elements.
+	 * @return Filtered outputs.
 	 */
-	public JettyServerRule(EmbeddedJetty jetty) {
-		super(jetty);
-	}
-
-	/**
-	 * Create rule.
-	 *
-	 * @param configuration Jetty Configuration.
-	 */
-	public JettyServerRule(EmbeddedJettyConfiguration configuration) {
-		super(new EmbeddedJetty(configuration));
+	public static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
+		List<T> results = new ArrayList<>();
+		for (T current : list) {
+			if (predicate.apply(current)) {
+				results.add(current);
+			}
+		}
+		return results;
 	}
 
 }

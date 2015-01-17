@@ -22,39 +22,39 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.junit.rules;
+
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 
 /**
- * Exception thrown when embedded server fail.
+ * Abstract skeleton of rule that will be executed
+ * before and after each methods or test class.
  */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+public abstract class AbstractRule implements TestRule {
 
-	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
+	@Override
+	public Statement apply(final Statement base, final Description description) {
+		return new Statement() {
+			@Override
+			public void evaluate() throws Throwable {
+				before(description);
+				try {
+					base.evaluate();
+				}
+				finally {
+					after(description);
+				}
+			}
+		};
 	}
 
-	/**
-	 * Create exception with specific message.
-	 *
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
+	protected void before(Description description) throws Throwable {
+		// do nothing
 	}
 
-	/**
-	 * Create exception with specific message and keep
-	 * original exception.
-	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
+	protected void after(Description description) {
+		// do nothing
 	}
 }

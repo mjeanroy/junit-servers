@@ -22,39 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-/**
- * Exception thrown when embedded server fail.
- */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
-	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
-	}
+public interface AnnotationHandler {
 
 	/**
-	 * Create exception with specific message.
+	 * Check that given handler support given annotation.
 	 *
-	 * @param msg Message.
+	 * @param annotation Annotation.
+	 * @return True if handler support annotation, false otherwise.c
 	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
-	}
+	boolean support(Annotation annotation);
 
 	/**
-	 * Create exception with specific message and keep
-	 * original exception.
+	 * Execute handler before test invocation.
 	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
+	 * @param target Test class instance.
+	 * @param field Field.
 	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
-	}
+	void before(Object target, Field field);
+
+	/**
+	 * Execute handler after test invocation.
+	 *
+	 * @param target Test class instance.
+	 * @param field Field.
+	 */
+	void after(Object target, Field field);
 }

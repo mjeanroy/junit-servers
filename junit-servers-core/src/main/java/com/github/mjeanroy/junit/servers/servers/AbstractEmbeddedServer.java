@@ -39,7 +39,7 @@ import static java.lang.System.setProperty;
  * Subclasses should implement {@link #doStart()} and {@link #doStop()} methods.
  * Synchronization is already managed by this abstract implementation.
  */
-public abstract class AbstractEmbeddedServer<S extends Object, T extends AbstractConfiguration> implements EmbeddedServer {
+public abstract class AbstractEmbeddedServer<S extends Object, T extends AbstractConfiguration> implements EmbeddedServer<T> {
 
 	/**
 	 * Server configuration.
@@ -189,6 +189,11 @@ public abstract class AbstractEmbeddedServer<S extends Object, T extends Abstrac
 		}
 
 		return format("http://localhost:%s%s", port, path);
+	}
+
+	@Override
+	public T getConfiguration() {
+		return configuration;
 	}
 
 	/**

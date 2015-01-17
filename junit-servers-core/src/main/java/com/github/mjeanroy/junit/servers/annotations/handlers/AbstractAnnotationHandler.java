@@ -22,39 +22,42 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.annotations.handlers;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 /**
- * Exception thrown when embedded server fail.
+ * Abstract skeleton of {@link com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler}.
  */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+public abstract class AbstractAnnotationHandler implements AnnotationHandler {
 
 	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
+	 * Annotation class processed by handler.
 	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
+	private final Class annotationKlass;
+
+	/**
+	 * Initialize new abstract handler.
+	 *
+	 * @param annotationKlass Annotation class processed by handler.
+	 */
+	protected AbstractAnnotationHandler(Class annotationKlass) {
+		this.annotationKlass = annotationKlass;
 	}
 
-	/**
-	 * Create exception with specific message.
-	 *
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
+	@Override
+	public boolean support(Annotation annotation) {
+		return annotation.annotationType().equals(annotationKlass);
 	}
 
-	/**
-	 * Create exception with specific message and keep
-	 * original exception.
-	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
+	@Override
+	public void before(Object target, Field field) {
+		// Should be overridden
+	}
+
+	@Override
+	public void after(Object target, Field field) {
+		// Should be overridden
 	}
 }

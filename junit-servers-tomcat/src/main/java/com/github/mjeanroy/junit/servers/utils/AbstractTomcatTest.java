@@ -26,8 +26,8 @@ package com.github.mjeanroy.junit.servers.utils;
 
 import org.junit.ClassRule;
 
-import com.github.mjeanroy.junit.servers.rules.ServerRule;
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.junit.rules.ServerRule;
+import com.github.mjeanroy.junit.servers.junit.rules.TomcatServerRule;
 
 /**
  * Simple abstraction that define a server rule using tomcat as embedded server.

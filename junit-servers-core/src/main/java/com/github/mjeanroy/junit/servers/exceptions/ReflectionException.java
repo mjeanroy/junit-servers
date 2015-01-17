@@ -22,36 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
-
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+package com.github.mjeanroy.junit.servers.exceptions;
 
 /**
- * Rule that can be used to start and stop embedded tomcat server.
+ * Exception thrown when reflection api throws exception (such
+ * as IllegalAccessException) in annotations handlers.
  */
-public class TomcatServerRule extends ServerRule {
-
-	/** Create rule using tomcat as embedded server. */
-	public TomcatServerRule() {
-		super(new EmbeddedTomcat());
-	}
+public class ReflectionException extends AbstractEmbeddedServerException {
 
 	/**
-	 * Create rule.
+	 * Create exception.
 	 *
-	 * @param tomcat Tomcat Embedded Server.
+	 * @param throwable Original exception.
 	 */
-	public TomcatServerRule(EmbeddedTomcat tomcat) {
-		super(tomcat);
-	}
-
-	/**
-	 * Create rule.
-	 *
-	 * @param configuration Tomcat Configuration.
-	 */
-	public TomcatServerRule(EmbeddedTomcatConfiguration configuration) {
-		super(new EmbeddedTomcat(configuration));
+	public ReflectionException(Throwable throwable) {
+		super(String.format(
+				"Unable to set field: %s",
+				throwable.getMessage()
+		));
 	}
 }

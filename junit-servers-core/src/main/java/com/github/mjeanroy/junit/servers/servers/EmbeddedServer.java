@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+
 import javax.servlet.ServletContext;
 
 /**
@@ -32,7 +34,7 @@ import javax.servlet.ServletContext;
  * - Can be started, stopped or restarted.
  * - Must provide port that can be used to query resources.
  */
-public interface EmbeddedServer {
+public interface EmbeddedServer<T extends AbstractConfiguration> {
 
 	/**
 	 * Start embedded server.
@@ -46,29 +48,42 @@ public interface EmbeddedServer {
 	 */
 	void stop();
 
-	/** Restart embedded server. */
+	/**
+	 * Restart embedded server.
+	 */
 	void restart();
 
 	/**
+	 * Return server configuration.
+	 *
+	 * @return Configuration.
+	 */
+	T getConfiguration();
+
+	/**
 	 * Check if embedded server is started.
+	 *
 	 * @return True if embedded server is started, false otherwise.
 	 */
 	boolean isStarted();
 
 	/**
 	 * Get port used by embedded server.
+	 *
 	 * @return Port.
 	 */
 	int getPort();
 
 	/**
 	 * Get server context path.
+	 *
 	 * @return Server context path.
 	 */
 	String getPath();
 
 	/**
 	 * Get URL to query embedded server.
+	 *
 	 * @return URL.
 	 */
 	String getUrl();

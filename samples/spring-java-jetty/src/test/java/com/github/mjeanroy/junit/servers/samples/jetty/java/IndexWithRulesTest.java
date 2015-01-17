@@ -22,11 +22,11 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.jetty.webxml;
+package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
+import com.github.mjeanroy.junit.servers.junit.rules.JettyServerRule;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
@@ -38,9 +38,9 @@ import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IndexTest {
+public class IndexWithRulesTest {
 
-	private static final String PATH = "samples/spring-webxml-jetty/";
+	private static final String PATH = "samples/spring-java-jetty/";
 
 	private static EmbeddedJettyConfiguration configuration = initConfiguration();
 

@@ -22,39 +22,39 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.commons;
 
-/**
- * Exception thrown when embedded server fail.
- */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.Condition;
+import org.junit.Test;
 
-	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
-	}
+import java.util.List;
 
-	/**
-	 * Create exception with specific message.
-	 *
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
-	}
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
+import static java.util.Arrays.asList;
 
-	/**
-	 * Create exception with specific message and keep
-	 * original exception.
-	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
+public class CollectionUtilsTest {
+
+	@Test
+	public void it_should_filter_list() {
+		List<Integer> numbers = asList(1, 2, 3, 4, 5, 6);
+
+		List<Integer> results = filter(numbers, new Predicate<Integer>() {
+			@Override
+			public boolean apply(Integer object) {
+				return object % 2 == 0;
+			}
+		});
+
+		Assertions.assertThat(results)
+				.isNotNull()
+				.isNotEmpty()
+				.hasSize(3)
+				.are(new Condition<Integer>() {
+					@Override
+					public boolean matches(Integer value) {
+						return value % 2 == 0;
+					}
+				});
 	}
 }

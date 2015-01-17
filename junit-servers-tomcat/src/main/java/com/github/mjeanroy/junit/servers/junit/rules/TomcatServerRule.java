@@ -22,39 +22,36 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.junit.rules;
+
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 /**
- * Exception thrown when embedded server fail.
+ * Rule that can be used to start and stop embedded tomcat server.
  */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+public class TomcatServerRule extends ServerRule {
 
-	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
+	/** Create rule using tomcat as embedded server. */
+	public TomcatServerRule() {
+		super(new EmbeddedTomcat());
 	}
 
 	/**
-	 * Create exception with specific message.
+	 * Create rule.
 	 *
-	 * @param msg Message.
+	 * @param tomcat Tomcat Embedded Server.
 	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
+	public TomcatServerRule(EmbeddedTomcat tomcat) {
+		super(tomcat);
 	}
 
 	/**
-	 * Create exception with specific message and keep
-	 * original exception.
+	 * Create rule.
 	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
+	 * @param configuration Tomcat Configuration.
 	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
+	public TomcatServerRule(EmbeddedTomcatConfiguration configuration) {
+		super(new EmbeddedTomcat(configuration));
 	}
 }

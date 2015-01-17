@@ -22,39 +22,40 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.commons;
 
 /**
- * Exception thrown when embedded server fail.
+ * Static utilities.
  */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+public final class Utils {
 
-	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
+	// Ensure non instantiation
+	private Utils() {
 	}
 
 	/**
-	 * Create exception with specific message.
+	 * Return first non null parameter.
 	 *
-	 * @param msg Message.
+	 * @param obj1 First parameter to check.
+	 * @param obj2 Second parameter to check.
+	 * @param others Other parameters to check.
+	 * @param <T> Type of parameter objects.
+	 * @return First non null object, null if all parameters are null.
 	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
-	}
-
-	/**
-	 * Create exception with specific message and keep
-	 * original exception.
-	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
+	public static <T> T firstNonNull(T obj1, T obj2, T... others) {
+		if (obj1 != null) {
+			return obj1;
+		}
+		if (obj2 != null) {
+			return obj2;
+		}
+		if (others != null && others.length > 0) {
+			for (T other : others) {
+				if (other != null) {
+					return other;
+				}
+			}
+		}
+		return null;
 	}
 }

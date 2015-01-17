@@ -22,39 +22,21 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.junit.annotations;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Exception thrown when embedded server fail.
+ * Annotation that can be used to specify that a
+ * given method or static field is the configuration
+ * to use on embedded container.
  */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
-
-	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
-	}
-
-	/**
-	 * Create exception with specific message.
-	 *
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
-	}
-
-	/**
-	 * Create exception with specific message and keep
-	 * original exception.
-	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
-	}
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.FIELD, ElementType.METHOD })
+@Documented
+public @interface Configuration {
 }

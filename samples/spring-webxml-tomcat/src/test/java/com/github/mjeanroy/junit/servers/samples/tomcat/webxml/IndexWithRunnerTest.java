@@ -24,11 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.junit.annotations.Configuration;
+import com.github.mjeanroy.junit.servers.junit.annotations.Server;
+import com.github.mjeanroy.junit.servers.junit.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -38,38 +40,29 @@ import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IndexTest {
+@RunWith(JunitServerRunner.class)
+public class IndexWithRunnerTest {
 
-	private static final String PATH = "samples/spring-webxml-tomcat/";
+	@Server
+	private static EmbeddedServer tomcat;
 
-	private static EmbeddedTomcatConfiguration configuration = initConfiguration();
-
-	private static EmbeddedTomcatConfiguration initConfiguration() {
-		try {
-			String current = new File(".").getCanonicalPath();
-			if (!current.endsWith("/")) {
-				current += "/";
-			}
-
-			String path = current.endsWith(PATH) ? current : current + PATH;
-
-			return EmbeddedTomcatConfiguration.builder()
-					.withWebapp(path + "src/main/webapp")
-					.withClasspath(path + "target/classes")
-					.disableNaming()
-					.build();
+	@Configuration
+	private static EmbeddedTomcatConfiguration configuration() throws Exception {
+		String current = new File(".").getCanonicalPath();
+		if (!current.endsWith("/")) {
+			current += "/";
 		}
-		catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+
+		String subProjectPath = "samples/spring-webxml-tomcat/";
+		String path = current.endsWith(subProjectPath) ? current : current + subProjectPath;
+
+		return EmbeddedTomcatConfiguration.builder()
+				.withWebapp(path + "src/main/webapp")
+				.withClasspath(path + "target/classes")
+				.build();
 	}
 
-	private static EmbeddedTomcat tomcat = new EmbeddedTomcat(configuration);
-
 	private static RestTemplate restTemplate = new RestTemplate();
-
-	@ClassRule
-	public static TomcatServerRule serverRule = new TomcatServerRule(tomcat);
 
 	@Test
 	public void it_should_have_an_index() {
@@ -78,7 +71,7 @@ public class IndexTest {
 		assertThat(message).isNotEmpty().isEqualTo("Hello World");
 
 		// Try to get servlet context
-		ServletContext servletContext = serverRule.getServer().getServletContext();
+		ServletContext servletContext = tomcat.getServletContext();
 		assertThat(servletContext).isNotNull();
 
 		// Try to retrieve spring webApplicationContext

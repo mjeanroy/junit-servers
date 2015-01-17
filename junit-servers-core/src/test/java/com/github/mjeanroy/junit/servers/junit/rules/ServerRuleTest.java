@@ -22,18 +22,20 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
+package com.github.mjeanroy.junit.servers.junit.rules;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ServerRuleTest {
@@ -50,13 +52,13 @@ public class ServerRuleTest {
 
 	@Test
 	public void it_should_start_server() {
-		rule.before();
+		rule.before(mock(Description.class));
 		verify(server).start();
 	}
 
 	@Test
 	public void it_should_stop_server() {
-		rule.after();
+		rule.after(mock(Description.class));
 		verify(server).stop();
 	}
 

@@ -22,18 +22,17 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
-
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
-
-import org.junit.rules.ExternalResource;
+package com.github.mjeanroy.junit.servers.junit.rules;
 
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.junit.runner.Description;
+
+import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
 
 /**
  * Rule that can be used to start and stop embedded server.
  */
-public class ServerRule extends ExternalResource {
+public class ServerRule extends AbstractRule {
 
 	/** Embedded server that will be start and stopped. */
 	private final EmbeddedServer server;
@@ -48,12 +47,12 @@ public class ServerRule extends ExternalResource {
 	}
 
 	@Override
-	protected void before() {
+	protected void before(Description description) {
 		start();
 	}
 
 	@Override
-	protected void after() {
+	protected void after(Description description) {
 		stop();
 	}
 

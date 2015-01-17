@@ -22,39 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.junit.rules;
 
 /**
- * Exception thrown when embedded server fail.
+ * Abstract skeleton of rule that will be executed before
+ * and after each methods.
  */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+public abstract class AbstractRuleInstance extends AbstractRule {
 
 	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
+	 * Tested class.
 	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
+	private final Object target;
+
+	/**
+	 * Create abstract rule.
+	 *
+	 * @param target Tested class.
+	 */
+	protected AbstractRuleInstance(Object target) {
+		this.target = target;
 	}
 
 	/**
-	 * Create exception with specific message.
+	 * Get tested class.
 	 *
-	 * @param msg Message.
+	 * @return Tested class.
 	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
-	}
-
-	/**
-	 * Create exception with specific message and keep
-	 * original exception.
-	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
+	Object getTarget() {
+		return target;
 	}
 }

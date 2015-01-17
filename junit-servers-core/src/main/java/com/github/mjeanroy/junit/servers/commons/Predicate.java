@@ -22,39 +22,21 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.commons;
 
 /**
- * Exception thrown when embedded server fail.
+ * Predicate interface.
+ * Implementation must override apply method and
+ * will return true if object match predicate, false
+ * otherwise.
  */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+public interface Predicate<T> {
 
 	/**
-	 * Wrap existing exception.
+	 * Predicate method.
 	 *
-	 * @param throwable Original exception.
+	 * @param object Object to check.
+	 * @return True if parameter match predicate, false otherwise.
 	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
-	}
-
-	/**
-	 * Create exception with specific message.
-	 *
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
-	}
-
-	/**
-	 * Create exception with specific message and keep
-	 * original exception.
-	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
-	}
+	boolean apply(T object);
 }

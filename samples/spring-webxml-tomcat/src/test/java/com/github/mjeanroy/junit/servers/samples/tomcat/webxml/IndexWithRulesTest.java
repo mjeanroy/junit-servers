@@ -22,11 +22,11 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.jetty.java;
+package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
+import com.github.mjeanroy.junit.servers.junit.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
@@ -38,13 +38,13 @@ import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IndexTest {
+public class IndexWithRulesTest {
 
-	private static final String PATH = "samples/spring-java-jetty/";
+	private static final String PATH = "samples/spring-webxml-tomcat/";
 
-	private static EmbeddedJettyConfiguration configuration = initConfiguration();
+	private static EmbeddedTomcatConfiguration configuration = initConfiguration();
 
-	private static EmbeddedJettyConfiguration initConfiguration() {
+	private static EmbeddedTomcatConfiguration initConfiguration() {
 		try {
 			String current = new File(".").getCanonicalPath();
 			if (!current.endsWith("/")) {
@@ -53,9 +53,10 @@ public class IndexTest {
 
 			String path = current.endsWith(PATH) ? current : current + PATH;
 
-			return EmbeddedJettyConfiguration.builder()
+			return EmbeddedTomcatConfiguration.builder()
 					.withWebapp(path + "src/main/webapp")
 					.withClasspath(path + "target/classes")
+					.disableNaming()
 					.build();
 		}
 		catch (Exception ex) {
@@ -63,12 +64,12 @@ public class IndexTest {
 		}
 	}
 
-	private static EmbeddedJetty jetty = new EmbeddedJetty(configuration);
+	private static EmbeddedTomcat tomcat = new EmbeddedTomcat(configuration);
 
 	private static RestTemplate restTemplate = new RestTemplate();
 
 	@ClassRule
-	public static JettyServerRule serverRule = new JettyServerRule(jetty);
+	public static TomcatServerRule serverRule = new TomcatServerRule(tomcat);
 
 	@Test
 	public void it_should_have_an_index() {
@@ -86,6 +87,6 @@ public class IndexTest {
 	}
 
 	public String url() {
-		return String.format("http://%s:%s/", "localhost", jetty.getPort());
+		return String.format("http://%s:%s/", "localhost", tomcat.getPort());
 	}
 }

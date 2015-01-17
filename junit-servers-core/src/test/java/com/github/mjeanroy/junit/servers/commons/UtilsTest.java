@@ -22,39 +22,20 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.commons;
 
-/**
- * Exception thrown when embedded server fail.
- */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+import org.junit.Test;
 
-	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
-	}
+import static com.github.mjeanroy.junit.servers.commons.Utils.firstNonNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
-	/**
-	 * Create exception with specific message.
-	 *
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
-	}
+public class UtilsTest {
 
-	/**
-	 * Create exception with specific message and keep
-	 * original exception.
-	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
+	@Test
+	public void it_should_return_first_non_null_parameter() {
+		assertThat(firstNonNull("foo", null)).isEqualTo("foo");
+		assertThat(firstNonNull(null, "bar")).isEqualTo("bar");
+		assertThat(firstNonNull(null, null, "foobar")).isEqualTo("foobar");
+		assertThat(firstNonNull(null, null, null)).isNull();
 	}
 }

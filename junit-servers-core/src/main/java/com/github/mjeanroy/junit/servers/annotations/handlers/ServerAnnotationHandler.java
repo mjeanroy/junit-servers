@@ -22,39 +22,45 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.annotations.handlers;
+
+import com.github.mjeanroy.junit.servers.junit.annotations.Server;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+
+import java.lang.reflect.Field;
+
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
+import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
 
 /**
- * Exception thrown when embedded server fail.
+ * Annotation handler that will set embedded server to a field
+ * on a given class instance.
  */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+public class ServerAnnotationHandler extends AbstractAnnotationHandler {
 
 	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
+	 * Create new handler.
+	 * @param server Embedded server.
+	 * @return Handler.
+	 * @throws NullPointerException if server is null.
 	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
+	public static ServerAnnotationHandler newServerAnnotationHandler(EmbeddedServer server) {
+		return new ServerAnnotationHandler(notNull(server, "server"));
 	}
 
 	/**
-	 * Create exception with specific message.
-	 *
-	 * @param msg Message.
+	 * Embedded server set on class fields.
 	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
+	private final EmbeddedServer server;
+
+	// Use static factory instead
+	private ServerAnnotationHandler(EmbeddedServer server) {
+		super(Server.class);
+		this.server = server;
 	}
 
-	/**
-	 * Create exception with specific message and keep
-	 * original exception.
-	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
+	@Override
+	public void before(Object target, Field field) {
+		setter(target, field, server);
 	}
 }

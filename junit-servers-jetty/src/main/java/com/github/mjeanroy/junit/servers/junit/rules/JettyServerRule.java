@@ -22,39 +22,37 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.junit.rules;
+
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
 /**
- * Exception thrown when embedded server fail.
+ * Rule that can be used to start and stop embedded jetty server.
  */
-public abstract class AbstractEmbeddedServerException extends RuntimeException {
+public class JettyServerRule extends ServerRule {
 
-	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
-	 */
-	public AbstractEmbeddedServerException(Throwable throwable) {
-		super(throwable);
+	/** Create rule using jetty as embedded server. */
+	public JettyServerRule() {
+		super(new EmbeddedJetty());
 	}
 
 	/**
-	 * Create exception with specific message.
+	 * Create rule.
 	 *
-	 * @param msg Message.
+	 * @param jetty Jetty Embedded Server.
 	 */
-	public AbstractEmbeddedServerException(String msg) {
-		super(msg);
+	public JettyServerRule(EmbeddedJetty jetty) {
+		super(jetty);
 	}
 
 	/**
-	 * Create exception with specific message and keep
-	 * original exception.
+	 * Create rule.
 	 *
-	 * @param throwable Original exception.
-	 * @param msg Message.
+	 * @param configuration Jetty Configuration.
 	 */
-	public AbstractEmbeddedServerException(Throwable throwable, String msg) {
-		super(msg);
+	public JettyServerRule(EmbeddedJettyConfiguration configuration) {
+		super(new EmbeddedJetty(configuration));
 	}
+
 }
