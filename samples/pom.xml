@@ -51,7 +51,7 @@
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-		<spring.version>4.0.6.RELEASE</spring.version>
+		<spring.version>4.1.4.RELEASE</spring.version>
 	</properties>
 
 	<repositories>
