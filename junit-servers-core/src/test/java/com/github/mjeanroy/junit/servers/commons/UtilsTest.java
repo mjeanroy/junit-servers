@@ -35,7 +35,5 @@ public class UtilsTest {
 	public void it_should_return_first_non_null_parameter() {
 		assertThat(firstNonNull("foo", null)).isEqualTo("foo");
 		assertThat(firstNonNull(null, "bar")).isEqualTo("bar");
-		assertThat(firstNonNull(null, null, "foobar")).isEqualTo("foobar");
-		assertThat(firstNonNull(null, null, null)).isNull();
 	}
 }

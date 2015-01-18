@@ -38,6 +38,7 @@ import static org.mockito.Mockito.when;
 
 public class ConfigurationAnnotationHandlerTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void it_should_support_server_annotation() {
 		AbstractConfiguration configuration = mock(AbstractConfiguration.class);

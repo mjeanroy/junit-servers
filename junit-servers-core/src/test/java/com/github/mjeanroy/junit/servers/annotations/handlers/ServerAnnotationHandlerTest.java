@@ -38,6 +38,7 @@ import static org.mockito.Mockito.when;
 
 public class ServerAnnotationHandlerTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void it_should_support_server_annotation() {
 		EmbeddedServer server = mock(EmbeddedServer.class);
