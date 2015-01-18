@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.junit.runner;
+package com.github.mjeanroy.junit.servers.runner;
 
-import com.github.mjeanroy.junit.servers.junit.rules.HandlersRule;
-import com.github.mjeanroy.junit.servers.junit.rules.ServerRule;
+import com.github.mjeanroy.junit.servers.rules.HandlersRule;
+import com.github.mjeanroy.junit.servers.rules.ServerRule;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import org.junit.rules.TestRule;

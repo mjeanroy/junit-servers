@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.junit.rules;
+package com.github.mjeanroy.junit.servers.rules;
 
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.Before;

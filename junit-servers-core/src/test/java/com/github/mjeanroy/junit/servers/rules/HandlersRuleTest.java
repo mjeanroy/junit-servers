@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.junit.rules;
+package com.github.mjeanroy.junit.servers.rules;
 
 import com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler;
-import com.github.mjeanroy.junit.servers.junit.annotations.Server;
+import com.github.mjeanroy.junit.servers.annotations.Server;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.Before;
 import org.junit.Test;

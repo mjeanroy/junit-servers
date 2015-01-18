@@ -22,39 +22,37 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.junit.rules;
+package com.github.mjeanroy.junit.servers.rules;
 
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
 /**
- * Abstract skeleton of rule that will be executed
- * before and after each methods or test class.
+ * Rule that can be used to start and stop embedded jetty server.
  */
-public abstract class AbstractRule implements TestRule {
+public class JettyServerRule extends ServerRule {
 
-	@Override
-	public Statement apply(final Statement base, final Description description) {
-		return new Statement() {
-			@Override
-			public void evaluate() throws Throwable {
-				before(description);
-				try {
-					base.evaluate();
-				}
-				finally {
-					after(description);
-				}
-			}
-		};
+	/** Create rule using jetty as embedded server. */
+	public JettyServerRule() {
+		super(new EmbeddedJetty());
 	}
 
-	protected void before(Description description) throws Throwable {
-		// do nothing
+	/**
+	 * Create rule.
+	 *
+	 * @param jetty Jetty Embedded Server.
+	 */
+	public JettyServerRule(EmbeddedJetty jetty) {
+		super(jetty);
 	}
 
-	protected void after(Description description) {
-		// do nothing
+	/**
+	 * Create rule.
+	 *
+	 * @param configuration Jetty Configuration.
+	 */
+	public JettyServerRule(EmbeddedJettyConfiguration configuration) {
+		super(new EmbeddedJetty(configuration));
 	}
+
 }

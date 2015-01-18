@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.junit.annotations;
+package com.github.mjeanroy.junit.servers.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

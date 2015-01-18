@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.servers.utils;
 
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
-import com.github.mjeanroy.junit.servers.junit.annotations.Configuration;
+import com.github.mjeanroy.junit.servers.annotations.Configuration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 

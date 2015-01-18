@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import com.github.mjeanroy.junit.servers.junit.annotations.Configuration;
+import com.github.mjeanroy.junit.servers.annotations.Configuration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 import java.lang.reflect.Field;

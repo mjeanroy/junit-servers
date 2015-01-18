@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.junit.rules.JettyServerRule;
+import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;

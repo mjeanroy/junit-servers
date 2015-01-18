@@ -22,20 +22,39 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.junit.annotations;
+package com.github.mjeanroy.junit.servers.rules;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 
 /**
- * Annotation that can be used to inject embedded server
- * into unit tests.
+ * Abstract skeleton of rule that will be executed
+ * before and after each methods or test class.
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD})
-@Documented
-public @interface Server {
+public abstract class AbstractRule implements TestRule {
+
+	@Override
+	public Statement apply(final Statement base, final Description description) {
+		return new Statement() {
+			@Override
+			public void evaluate() throws Throwable {
+				before(description);
+				try {
+					base.evaluate();
+				}
+				finally {
+					after(description);
+				}
+			}
+		};
+	}
+
+	protected void before(Description description) throws Throwable {
+		// do nothing
+	}
+
+	protected void after(Description description) {
+		// do nothing
+	}
 }

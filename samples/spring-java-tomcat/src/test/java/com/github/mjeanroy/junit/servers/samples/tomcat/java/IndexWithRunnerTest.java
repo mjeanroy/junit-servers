@@ -24,9 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
-import com.github.mjeanroy.junit.servers.junit.annotations.Configuration;
-import com.github.mjeanroy.junit.servers.junit.annotations.Server;
-import com.github.mjeanroy.junit.servers.junit.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.annotations.Configuration;
+import com.github.mjeanroy.junit.servers.annotations.Server;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.Test;

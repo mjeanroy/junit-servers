@@ -22,60 +22,60 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.junit.runner;
+package com.github.mjeanroy.junit.servers.runner;
 
-import com.github.mjeanroy.junit.servers.junit.annotations.Configuration;
-import com.github.mjeanroy.junit.servers.junit.annotations.Server;
-import com.github.mjeanroy.junit.servers.junit.rules.HandlersRule;
-import com.github.mjeanroy.junit.servers.junit.rules.ServerRule;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.annotations.Configuration;
+import com.github.mjeanroy.junit.servers.annotations.Server;
+import com.github.mjeanroy.junit.servers.rules.HandlersRule;
+import com.github.mjeanroy.junit.servers.rules.ServerRule;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.assertj.core.api.Condition;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
+import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class JunitServerRunnerTest {
 
-	private static final EmbeddedTomcatConfiguration configuration = defaultConfiguration();
+	private static final EmbeddedJettyConfiguration configuration = defaultConfiguration();
 
 	@Test
-	public void it_should_instantiate_tomcat_with_default_configuration() throws Exception {
+	public void it_should_instantiate_jetty_with_default_configuration() throws Exception {
 		JunitServerRunner runner = new JunitServerRunner(Foo.class);
 
 		EmbeddedServer server = (EmbeddedServer) readField(runner, "server", true);
 		assertThat(server)
 				.isNotNull()
-				.isInstanceOf(EmbeddedTomcat.class);
+				.isInstanceOf(EmbeddedJetty.class);
 
 		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 		assertThat(conf)
 				.isNotNull()
-				.isInstanceOf(EmbeddedTomcatConfiguration.class)
+				.isInstanceOf(EmbeddedJettyConfiguration.class)
 				.isNotSameAs(configuration);
 	}
 
 	@Test
-	public void it_should_instantiate_tomcat_with_configuration() throws Exception {
+	public void it_should_instantiate_jetty_with_configuration() throws Exception {
 		JunitServerRunner runner = new JunitServerRunner(Bar.class);
 
 		EmbeddedServer server = (EmbeddedServer) readField(runner, "server", true);
 		assertThat(server)
 				.isNotNull()
-				.isInstanceOf(EmbeddedTomcat.class);
+				.isInstanceOf(EmbeddedJetty.class);
 
 		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 		assertThat(conf)
 				.isNotNull()
-				.isInstanceOf(EmbeddedTomcatConfiguration.class)
+				.isInstanceOf(EmbeddedJettyConfiguration.class)
 				.isSameAs(configuration);
 	}
 
@@ -124,7 +124,7 @@ public class JunitServerRunnerTest {
 		private static EmbeddedServer server;
 
 		@Configuration
-		private static EmbeddedTomcatConfiguration configuration;
+		private static EmbeddedJettyConfiguration configuration;
 
 		public Foo() {
 		}
@@ -141,7 +141,7 @@ public class JunitServerRunnerTest {
 		private static EmbeddedServer server;
 
 		@Configuration
-		private static EmbeddedTomcatConfiguration initConfiguration() {
+		private static EmbeddedJettyConfiguration initConfiguration() {
 			return configuration;
 		}
 

@@ -22,36 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.junit.rules;
-
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+package com.github.mjeanroy.junit.servers.rules;
 
 /**
- * Rule that can be used to start and stop embedded tomcat server.
+ * Abstract skeleton of rule that will be executed before
+ * and after each methods.
  */
-public class TomcatServerRule extends ServerRule {
+public abstract class AbstractRuleInstance extends AbstractRule {
 
-	/** Create rule using tomcat as embedded server. */
-	public TomcatServerRule() {
-		super(new EmbeddedTomcat());
+	/**
+	 * Tested class.
+	 */
+	private final Object target;
+
+	/**
+	 * Create abstract rule.
+	 *
+	 * @param target Tested class.
+	 */
+	protected AbstractRuleInstance(Object target) {
+		this.target = target;
 	}
 
 	/**
-	 * Create rule.
+	 * Get tested class.
 	 *
-	 * @param tomcat Tomcat Embedded Server.
+	 * @return Tested class.
 	 */
-	public TomcatServerRule(EmbeddedTomcat tomcat) {
-		super(tomcat);
-	}
-
-	/**
-	 * Create rule.
-	 *
-	 * @param configuration Tomcat Configuration.
-	 */
-	public TomcatServerRule(EmbeddedTomcatConfiguration configuration) {
-		super(new EmbeddedTomcat(configuration));
+	Object getTarget() {
+		return target;
 	}
 }

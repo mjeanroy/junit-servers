@@ -22,37 +22,20 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.junit.rules;
+package com.github.mjeanroy.junit.servers.annotations;
 
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Rule that can be used to start and stop embedded jetty server.
+ * Annotation that can be used to inject embedded server
+ * into unit tests.
  */
-public class JettyServerRule extends ServerRule {
-
-	/** Create rule using jetty as embedded server. */
-	public JettyServerRule() {
-		super(new EmbeddedJetty());
-	}
-
-	/**
-	 * Create rule.
-	 *
-	 * @param jetty Jetty Embedded Server.
-	 */
-	public JettyServerRule(EmbeddedJetty jetty) {
-		super(jetty);
-	}
-
-	/**
-	 * Create rule.
-	 *
-	 * @param configuration Jetty Configuration.
-	 */
-	public JettyServerRule(EmbeddedJettyConfiguration configuration) {
-		super(new EmbeddedJetty(configuration));
-	}
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.FIELD})
+@Documented
+public @interface Server {
 }

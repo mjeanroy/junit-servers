@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import com.github.mjeanroy.junit.servers.junit.annotations.Server;
+import com.github.mjeanroy.junit.servers.annotations.Server;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.Test;
 

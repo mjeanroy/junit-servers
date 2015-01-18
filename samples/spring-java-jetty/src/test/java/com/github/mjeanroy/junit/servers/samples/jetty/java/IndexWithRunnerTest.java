@@ -25,9 +25,9 @@
 package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.junit.annotations.Configuration;
-import com.github.mjeanroy.junit.servers.junit.annotations.Server;
-import com.github.mjeanroy.junit.servers.junit.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.annotations.Configuration;
+import com.github.mjeanroy.junit.servers.annotations.Server;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
