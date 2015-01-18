@@ -30,8 +30,10 @@ import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
 import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 import org.apache.catalina.Context;
 import org.apache.catalina.Loader;
+import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.loader.WebappLoader;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.catalina.webresources.StandardRoot;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 
 import javax.servlet.ServletContext;
@@ -133,8 +135,24 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 						metaInf.mkdir();
 					}
 
-					String s = file.toURI().toString();
-					loader.addRepository(s);
+					// == Tomcat 8
+					String absolutePath = file.getAbsolutePath();
+					StandardRoot root = new StandardRoot(context);
+					root.createWebResourceSet(
+							WebResourceRoot.ResourceSetType.PRE,
+							"/WEB-INF/classes",
+							absolutePath,
+							null,
+							path
+					);
+
+					context.setResources(root);
+					// == Tomcat 8
+
+					// == Tomcat 7
+					// String s = file.toURI().toString();
+					// loader.addRepository(s);
+					// == Tomcat 7
 
 					// Used to scan additional classpath directory
 					// https://issues.apache.org/bugzilla/show_bug.cgi?id=52853
