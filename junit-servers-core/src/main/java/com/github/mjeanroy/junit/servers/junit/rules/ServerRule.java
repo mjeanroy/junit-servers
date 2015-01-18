@@ -25,9 +25,11 @@
 package com.github.mjeanroy.junit.servers.junit.rules;
 
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import org.junit.runner.Description;
 
 import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
 
 /**
  * Rule that can be used to start and stop embedded server.
@@ -36,6 +38,34 @@ public class ServerRule extends AbstractRule {
 
 	/** Embedded server that will be start and stopped. */
 	private final EmbeddedServer server;
+
+	/**
+	 * Create rule with default embedded server.
+	 *
+	 * Embedded server implementation is chosen using
+	 * classpath detection: jetty or tomcat will be instantiate
+	 * if implementation is available on classpath (it means if
+	 * sub-module is imported, it should be enough to instantiate
+	 * embedded server !).
+	 */
+	public ServerRule() {
+		this((AbstractConfiguration) null);
+	}
+
+	/**
+	 * Create rule with embedded server configuration.
+	 *
+	 * Embedded server implementation is chosen using
+	 * classpath detection: jetty or tomcat will be instantiate
+	 * if implementation is available on classpath (it means if
+	 * sub-module is imported, it should be enough to instantiate
+	 * embedded server !).
+	 *
+	 * @param configuration Server configuration.
+	 */
+	public ServerRule(AbstractConfiguration configuration) {
+		this(instantiate(configuration));
+	}
 
 	/**
 	 * Create rule.

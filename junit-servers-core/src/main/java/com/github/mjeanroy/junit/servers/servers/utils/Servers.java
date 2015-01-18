@@ -66,6 +66,25 @@ public final class Servers {
 	 */
 	public static EmbeddedServer instantiate(Class<?> klass) {
 		AbstractConfiguration configuration = findConfiguration(klass);
+		return instantiate(configuration);
+	}
+
+	/**
+	 * Instantiate jetty or tomcat embedded server.
+	 *
+	 * Configuration is an optional parameter and can be null.
+	 * If configuration is null, empty constructor will be used to instantiate
+	 * embedded server.
+	 * Otherwise, constructor with one parameter (configuration) will
+	 * be used.
+	 *
+	 * Server implementation is automatically detected (jetty or
+	 * tomcat) with classpath detection.
+	 *
+	 * @param configuration Optional configuration.
+	 * @return Embedded server.
+	 */
+	public static EmbeddedServer instantiate(AbstractConfiguration configuration) {
 		EmbeddedServer srv = firstNonNull(
 				newJetty(configuration),
 				newTomcat(configuration)
@@ -107,7 +126,7 @@ public final class Servers {
 	 * @return Embedded server.
 	 */
 	public static EmbeddedServer newTomcat(AbstractConfiguration configuration) {
-		return instantiate("com.github.mjeanroy.junit.servers.jetty.EmbeddedTomcat", configuration);
+		return instantiate("com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat", configuration);
 	}
 
 	/**
