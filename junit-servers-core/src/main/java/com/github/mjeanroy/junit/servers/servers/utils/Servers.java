@@ -67,8 +67,8 @@ public final class Servers {
 	public static EmbeddedServer instantiate(Class<?> klass) {
 		AbstractConfiguration configuration = findConfiguration(klass);
 		EmbeddedServer srv = firstNonNull(
-				instantiate("com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty", configuration),
-				instantiate("com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat", configuration)
+				newJetty(configuration),
+				newTomcat(configuration)
 		);
 
 		if (srv == null) {
@@ -76,6 +76,38 @@ public final class Servers {
 		}
 
 		return srv;
+	}
+
+	/**
+	 * Instantiate jetty embedded server.
+	 *
+	 * Configuration is an optional parameter and can be null.
+	 * If configuration is null, empty constructor will be used to instantiate
+	 * embedded server.
+	 * Otherwise, constructor with one parameter (configuration) will
+	 * be used.
+	 *
+	 * @param configuration Optional configuration.
+	 * @return Embedded server.
+	 */
+	public static EmbeddedServer newJetty(AbstractConfiguration configuration) {
+		return instantiate("com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty", configuration);
+	}
+
+	/**
+	 * Instantiate tomcat embedded server.
+	 *
+	 * Configuration is an optional parameter and can be null.
+	 * If configuration is null, empty constructor will be used to instantiate
+	 * embedded server.
+	 * Otherwise, constructor with one parameter (configuration) will
+	 * be used.
+	 *
+	 * @param configuration Optional configuration.
+	 * @return Embedded server.
+	 */
+	public static EmbeddedServer newTomcat(AbstractConfiguration configuration) {
+		return instantiate("com.github.mjeanroy.junit.servers.jetty.EmbeddedTomcat", configuration);
 	}
 
 	/**
