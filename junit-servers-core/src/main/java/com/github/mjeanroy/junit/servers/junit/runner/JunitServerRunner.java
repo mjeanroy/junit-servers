@@ -40,6 +40,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static com.github.mjeanroy.junit.servers.annotations.handlers.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.annotations.handlers.ServerAnnotationHandler.newServerAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticFieldsAnnotatedWith;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
@@ -61,6 +62,11 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 	private final EmbeddedServer server;
 
 	/**
+	 * Server configuration.
+	 */
+	private final AbstractConfiguration configuration;
+
+	/**
 	 * Create runner.
 	 *
 	 * @param klass Running class.
@@ -69,6 +75,7 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 	public JunitServerRunner(Class<?> klass) throws InitializationError {
 		super(klass);
 		this.server = instantiateEmbeddedServer(klass);
+		this.configuration = this.server.getConfiguration();
 	}
 
 	@Override
@@ -86,7 +93,8 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 		List<TestRule> testRules = super.getTestRules(target);
 
 		HandlersRule rule = new HandlersRule(target,
-				newServerAnnotationHandler(server)
+				newServerAnnotationHandler(server),
+				newConfigurationAnnotationHandler(configuration)
 		);
 
 		testRules.add(rule);

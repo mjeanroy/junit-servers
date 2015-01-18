@@ -85,6 +85,7 @@
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<mockito.version>1.9.5</mockito.version>
 		<assertj.version>1.6.1</assertj.version>
+		<commons-lang3.version>3.3.2</commons-lang3.version>
 	</properties>
 
 	<dependencyManagement>
@@ -182,6 +183,11 @@
 				<groupId>org.assertj</groupId>
 				<artifactId>assertj-core</artifactId>
 				<version>${assertj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
