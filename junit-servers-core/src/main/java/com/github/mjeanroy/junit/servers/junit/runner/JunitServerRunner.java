@@ -24,8 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.junit.runner;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
-import com.github.mjeanroy.junit.servers.junit.annotations.Configuration;
 import com.github.mjeanroy.junit.servers.junit.rules.HandlersRule;
 import com.github.mjeanroy.junit.servers.junit.rules.ServerRule;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -34,19 +32,11 @@ import org.junit.rules.TestRule;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.annotations.handlers.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.annotations.handlers.ServerAnnotationHandler.newServerAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticFieldsAnnotatedWith;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.invoke;
-import static com.github.mjeanroy.junit.servers.commons.Utils.firstNonNull;
+import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
 
 /**
  * Runner that will start and stop embedded server
@@ -74,7 +64,7 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 	 */
 	public JunitServerRunner(Class<?> klass) throws InitializationError {
 		super(klass);
-		this.server = instantiateEmbeddedServer(klass);
+		this.server = instantiate(klass);
 		this.configuration = this.server.getConfiguration();
 	}
 
@@ -100,74 +90,5 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 		testRules.add(rule);
 
 		return testRules;
-	}
-
-	/**
-	 * Instantiate jetty or tomcat embedded server.
-	 *
-	 * @param klass Running class.
-	 * @return Embedded server.
-	 */
-	private EmbeddedServer instantiateEmbeddedServer(Class<?> klass) {
-		AbstractConfiguration configuration = findConfiguration(klass);
-		EmbeddedServer srv = firstNonNull(
-				instantiate("com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty", configuration),
-				instantiate("com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat", configuration)
-		);
-
-		if (srv == null) {
-			throw new ServerImplMissingException();
-		}
-
-		return srv;
-	}
-
-	/**
-	 * Instantiate embedded server.
-	 * If second parameter is null (configuration), empty constructor will
-	 * be used to instantiate embedded server by reflection.
-	 * Otherwise, constructor with one parameter (configuration) will
-	 * be used.
-	 *
-	 * @param className Class implementation of embedded server.
-	 * @param configuration Optional configuration, may be null.
-	 * @return Embedded server.
-	 */
-	private EmbeddedServer instantiate(String className, AbstractConfiguration configuration) {
-		try {
-			Class klass = Class.forName(className);
-			if (configuration == null) {
-				return (EmbeddedServer) klass.newInstance();
-			}
-			else {
-				@SuppressWarnings({ "raw", "unchecked" }) Constructor constructor = klass.getConstructor(configuration.getClass());
-				return (EmbeddedServer) constructor.newInstance(configuration);
-			}
-		}
-		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-			return null;
-		}
-	}
-
-	/**
-	 * Find configuration object on static field / method on
-	 * running class.
-	 *
-	 * @param klass Running class.
-	 * @param <T> Type of configuration.
-	 * @return Configuration.
-	 */
-	protected <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
-		List<Field> fields = findStaticFieldsAnnotatedWith(klass, Configuration.class);
-		if (!fields.isEmpty()) {
-			return getter(fields.get(0));
-		}
-
-		List<Method> methods = findStaticMethodsAnnotatedWith(klass, Configuration.class);
-		if (!methods.isEmpty()) {
-			return invoke(methods.get(0));
-		}
-
-		return null;
 	}
 }
