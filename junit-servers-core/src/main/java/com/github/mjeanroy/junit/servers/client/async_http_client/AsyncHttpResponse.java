@@ -22,32 +22,52 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.client.async_http_client;
 
-public final class Strings {
+import com.github.mjeanroy.junit.servers.client.AbstractHttpResponse;
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import com.ning.http.client.Response;
 
-	private Strings() {
-	}
+import java.io.IOException;
 
-	/**
-	 * Check that given string is not blank.
-	 *
-	 * @param value String to check.
-	 * @return True if string is not blank, false otherwise.
-	 */
-	public static boolean isNotBlank(String value) {
-		return value != null && !value.trim().isEmpty();
-	}
+/**
+ * Implementation of {HttpResponse} using async-http-client
+ * under the hood.
+ * See: https://asynchttpclient.github.io/
+ */
+public class AsyncHttpResponse extends AbstractHttpResponse {
 
 	/**
-	 * Remove string prefix if and only if string value starts with
-	 * the prefix, otherwise original string is returned.
-	 *
-	 * @param value String value.
-	 * @param prefix String prefix.
-	 * @return New string.
+	 * Original response from async-http-client library.
 	 */
-	public static String removePrefix(String value, String prefix) {
-		return value.startsWith(prefix) ? value.substring(prefix.length()) : value;
+	private final Response response;
+
+	/**
+	 * Create http response.
+	 *
+	 * @param response Original http response from async-http-client.
+	 */
+	AsyncHttpResponse(Response response) {
+		this.response = response;
+	}
+
+	@Override
+	public int status() {
+		return response.getStatusCode();
+	}
+
+	@Override
+	public String body() {
+		try {
+			return response.getResponseBody();
+		}
+		catch (IOException ex) {
+			throw new HttpClientException(ex);
+		}
+	}
+
+	@Override
+	public String header(String name) {
+		return response.getHeader(name);
 	}
 }

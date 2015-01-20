@@ -22,32 +22,58 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.client;
 
-public final class Strings {
-
-	private Strings() {
-	}
-
-	/**
-	 * Check that given string is not blank.
-	 *
-	 * @param value String to check.
-	 * @return True if string is not blank, false otherwise.
-	 */
-	public static boolean isNotBlank(String value) {
-		return value != null && !value.trim().isEmpty();
-	}
+/**
+ * Http client that can be used to query embedded server.
+ * After test suite, client should be properly destroyed
+ * using {#destroy} method.
+ */
+public interface HttpClient {
 
 	/**
-	 * Remove string prefix if and only if string value starts with
-	 * the prefix, otherwise original string is returned.
+	 * Create GET request.
 	 *
-	 * @param value String value.
-	 * @param prefix String prefix.
-	 * @return New string.
+	 * @param url URL, full url or path relative to server url.
+	 * @return GET request.
 	 */
-	public static String removePrefix(String value, String prefix) {
-		return value.startsWith(prefix) ? value.substring(prefix.length()) : value;
-	}
+	HttpRequest prepareGet(String url);
+
+	/**
+	 * Create POST request.
+	 *
+	 * @param url URL, full url or path relative to server url.
+	 * @return POST request.
+	 */
+	HttpRequest preparePost(String url);
+
+	/**
+	 * Create PUT request.
+	 *
+	 * @param url URL, full url or path relative to server url.
+	 * @return PUT request.
+	 */
+	HttpRequest preparePut(String url);
+
+	/**
+	 * Create DELETE request.
+	 *
+	 * @param url URL, full url or path relative to server url.
+	 * @return DELETE request.
+	 */
+	HttpRequest prepareDelete(String url);
+
+	/**
+	 * Create DELETE request.
+	 *
+	 * @param httpMethod Http method (i.e GET, POST, PUT, DELETE).
+	 * @param url URL, full url or path relative to server url.
+	 * @return DELETE request.
+	 */
+	HttpRequest prepareRequest(HttpMethod httpMethod, String url);
+
+	/**
+	 * Destroy client.
+	 */
+	void destroy();
 }

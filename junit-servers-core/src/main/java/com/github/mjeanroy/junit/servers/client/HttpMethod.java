@@ -22,32 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.client;
 
-public final class Strings {
+/**
+ * Http methods available with abstract
+ * client.
+ */
+public enum HttpMethod {
 
-	private Strings() {
+	GET, POST, PUT, DELETE;
+
+	private HttpMethod() {
 	}
 
 	/**
-	 * Check that given string is not blank.
+	 * Get formatted http verb:
+	 * - Upper case.
+	 * - Related to given http method.
 	 *
-	 * @param value String to check.
-	 * @return True if string is not blank, false otherwise.
+	 * @return Verb.
 	 */
-	public static boolean isNotBlank(String value) {
-		return value != null && !value.trim().isEmpty();
-	}
-
-	/**
-	 * Remove string prefix if and only if string value starts with
-	 * the prefix, otherwise original string is returned.
-	 *
-	 * @param value String value.
-	 * @param prefix String prefix.
-	 * @return New string.
-	 */
-	public static String removePrefix(String value, String prefix) {
-		return value.startsWith(prefix) ? value.substring(prefix.length()) : value;
+	public String getVerb() {
+		return name();
 	}
 }

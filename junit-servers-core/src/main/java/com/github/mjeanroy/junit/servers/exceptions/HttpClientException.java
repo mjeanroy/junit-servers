@@ -22,32 +22,20 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.exceptions;
 
-public final class Strings {
-
-	private Strings() {
-	}
-
-	/**
-	 * Check that given string is not blank.
-	 *
-	 * @param value String to check.
-	 * @return True if string is not blank, false otherwise.
-	 */
-	public static boolean isNotBlank(String value) {
-		return value != null && !value.trim().isEmpty();
-	}
+/**
+ * Exception thrown when http request throws exception (such
+ * as IOException).
+ */
+public class HttpClientException extends AbstractEmbeddedServerException {
 
 	/**
-	 * Remove string prefix if and only if string value starts with
-	 * the prefix, otherwise original string is returned.
+	 * Create exception.
 	 *
-	 * @param value String value.
-	 * @param prefix String prefix.
-	 * @return New string.
+	 * @param throwable Original exception.
 	 */
-	public static String removePrefix(String value, String prefix) {
-		return value.startsWith(prefix) ? value.substring(prefix.length()) : value;
+	public HttpClientException(Throwable throwable) {
+		super(throwable);
 	}
 }
