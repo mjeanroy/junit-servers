@@ -77,6 +77,14 @@ public interface HttpRequest {
 
 	/**
 	 * Add header to specify that content type
+	 * is "multipart/form-data".
+	 *
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest asMultipartFormData();
+
+	/**
+	 * Add header to specify that content type
 	 * is "application/json".
 	 *
 	 * @return Http request that can be used for chaining.

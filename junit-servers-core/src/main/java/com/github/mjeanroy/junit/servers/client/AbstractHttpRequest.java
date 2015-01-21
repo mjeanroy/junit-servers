@@ -52,6 +52,11 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	}
 
 	@Override
+	public HttpRequest asMultipartFormData() {
+		return addHeader("Content-Type", "multipart/form-data");
+	}
+
+	@Override
 	public HttpRequest acceptJson() {
 		return addHeader("Accept", "application/json");
 	}

@@ -88,6 +88,13 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_add_header_content_type_multipart_form_data() throws Exception {
+		HttpRequest request = createDefaultRequest();
+		request.asMultipartFormData();
+		checkHeader(request, "Content-Type", "multipart/form-data");
+	}
+
+	@Test
 	public void it_should_add_header_accept_json() throws Exception {
 		HttpRequest request = createDefaultRequest();
 		request.acceptJson();
