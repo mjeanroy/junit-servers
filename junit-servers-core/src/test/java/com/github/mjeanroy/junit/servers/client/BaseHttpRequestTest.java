@@ -24,11 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import static com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest.HeaderEntry.header;
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import static com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest.HeaderEntry.header;
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests skeleton for http request implementation.
@@ -78,6 +78,13 @@ public abstract class BaseHttpRequestTest {
 		HttpRequest request = createDefaultRequest();
 		request.asXml();
 		checkHeader(request, "Content-Type", "application/xml");
+	}
+
+	@Test
+	public void it_should_add_header_content_type_form_url_encoded() throws Exception {
+		HttpRequest request = createDefaultRequest();
+		request.asFormUrlEncoded();
+		checkHeader(request, "Content-Type", "application/x-www-form-urlencoded");
 	}
 
 	@Test

@@ -69,6 +69,14 @@ public interface HttpRequest {
 
 	/**
 	 * Add header to specify that content type
+	 * is "application/x-www-form-urlencoded".
+	 *
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest asFormUrlEncoded();
+
+	/**
+	 * Add header to specify that content type
 	 * is "application/json".
 	 *
 	 * @return Http request that can be used for chaining.

@@ -47,6 +47,11 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	}
 
 	@Override
+	public HttpRequest asFormUrlEncoded() {
+		return addHeader("Content-Type", "application/x-www-form-urlencoded");
+	}
+
+	@Override
 	public HttpRequest acceptJson() {
 		return addHeader("Accept", "application/json");
 	}
