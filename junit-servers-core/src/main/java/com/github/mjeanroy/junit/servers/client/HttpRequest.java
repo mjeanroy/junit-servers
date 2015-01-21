@@ -30,10 +30,16 @@ package com.github.mjeanroy.junit.servers.client;
  * original object to allow chaining.
  *
  * TODO Add method to add cache headers
- * TODO Add method: addFormParam
  * TODO Add method: setBody
  */
 public interface HttpRequest {
+
+	/**
+	 * Return http request method.
+	 *
+	 * @return Method.
+	 */
+	HttpMethod getMethod();
 
 	/**
 	 * Add header.
@@ -54,6 +60,39 @@ public interface HttpRequest {
 	 * @return Http request that can be used for chaining.
 	 */
 	HttpRequest addQueryParam(String name, String value);
+
+	/**
+	 * Add collection of query parameters.
+	 *
+	 * @param parameter Parameter.
+	 * @param parameters Optional next parameters.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addQueryParams(HttpParameter parameter, HttpParameter... parameters);
+
+	/**
+	 * Add form parameters.
+	 * This method should be used for POST or PUT request only, otherwise
+	 * it will throw {@link UnsupportedOperationException} exception.
+	 *
+	 * @param name Parameter name.
+	 * @param value Parameter value.
+	 * @return Http request that can be used for chaining.
+	 * @throws UnsupportedOperationException if request is not POST or PUT request.
+	 */
+	HttpRequest addFormParam(String name, String value);
+
+	/**
+	 * Add collection of parameters.
+	 * This method should be used for POST or PUT request only, otherwise
+	 * it will throw {@link UnsupportedOperationException} exception.
+	 *
+	 * @param parameter Parameter.
+	 * @param parameters Optional next parameters.
+	 * @return Http request that can be used for chaining.
+	 * @throws UnsupportedOperationException if request is not POST or PUT request.
+	 */
+	HttpRequest addFormParams(HttpParameter parameter, HttpParameter... parameters);
 
 	/**
 	 * Add header specific to standard js library.

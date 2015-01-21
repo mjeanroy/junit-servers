@@ -24,6 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 
 /**
@@ -57,6 +60,51 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	}
 
 	@Override
+	public HttpRequest addQueryParam(String name, String value) {
+		return addQueryParams(param(name, value));
+	}
+
+	@Override
+	public HttpRequest addQueryParams(HttpParameter parameter, HttpParameter... parameters) {
+		notNull(parameter, "parameter");
+		HttpRequest self = applyQueryParam(parameter.getName(), parameter.getValue());
+
+		// Add other parameters if available
+		if (parameters != null) {
+			for (HttpParameter p : parameters) {
+				notNull(p, "parameter");
+				self = applyQueryParam(p.getName(), p.getValue());
+			}
+		}
+
+		return self;
+	}
+
+	@Override
+	public HttpRequest addFormParam(String name, String value) {
+		return addFormParams(param(name, value));
+	}
+
+	@Override
+	public HttpRequest addFormParams(HttpParameter parameter, HttpParameter... parameters) {
+		if (!getMethod().isBodyAllowed()) {
+			throw new UnsupportedOperationException("Http method " + getMethod() + " does not support body parameters");
+		}
+
+		notNull(parameter, "parameter");
+		HttpRequest self = applyFormParameter(parameter.getName(), parameter.getValue());
+
+		if (parameters != null) {
+			for (HttpParameter p : parameters) {
+				notNull(p, "parameter");
+				self = applyFormParameter(p.getName(), p.getValue());
+			}
+		}
+
+		return self.asFormUrlEncoded();
+	}
+
+	@Override
 	public HttpRequest acceptJson() {
 		return addHeader("Accept", "application/json");
 	}
@@ -70,7 +118,8 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	public HttpResponse execute() {
 		try {
 			return doExecute();
-		} catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new HttpClientException(ex);
 		}
 	}
@@ -94,4 +143,27 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	 * @throws Exception
 	 */
 	protected abstract HttpResponse doExecute() throws Exception;
+
+	/**
+	 * Add form parameters.
+	 * This method will be called for POST or PUT request only.
+	 * This method can assume that parameter name is not blank and
+	 * parameter value is not null.
+	 *
+	 * @param name Parameter name, will never be blank.
+	 * @param value Parameter value, will never be null.
+	 * @return Current request.
+	 */
+	protected abstract HttpRequest applyFormParameter(String name, String value);
+
+	/**
+	 * Add query parameters.
+	 * This method should not check for parameters validity since it will be already
+	 * checked before.
+	 *
+	 * @param name Parameter name.
+	 * @param value Parameter value.
+	 * @return Current request.
+	 */
+	protected abstract HttpRequest applyQueryParam(String name, String value);
 }

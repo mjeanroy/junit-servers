@@ -24,6 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.client.async_http_client;
 
+import static com.github.mjeanroy.junit.servers.commons.Checks.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+
 import com.github.mjeanroy.junit.servers.client.AbstractHttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
@@ -32,9 +35,6 @@ import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
-
-import static com.github.mjeanroy.junit.servers.commons.Checks.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
 
 /**
  * Implementation for {HttpRequest} that use async-http-client
@@ -56,6 +56,11 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 	private final RequestBuilder builder;
 
 	/**
+	 * Http request method.
+	 */
+	private final HttpMethod httpMethod;
+
+	/**
 	 * Create http request.
 	 *
 	 * @param client Client used to execute request using async-http-client.
@@ -63,10 +68,16 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 	 * @param url Request URL.
 	 */
 	AsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, String url) {
+		this.httpMethod = httpMethod;
 		this.client = client;
 		this.builder = new RequestBuilder()
 				.setUrl(notBlank(url, "url"))
 				.setMethod(notNull(httpMethod, "httpMethod").getVerb());
+	}
+
+	@Override
+	public HttpMethod getMethod() {
+		return httpMethod;
 	}
 
 	@Override
@@ -79,11 +90,14 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 	}
 
 	@Override
-	public HttpRequest addQueryParam(String name, String value) {
-		builder.addQueryParam(
-				notBlank(name, "name"),
-				notNull(value, "value") // Empty values should be allowed
-		);
+	protected HttpRequest applyQueryParam(String name, String value) {
+		builder.addQueryParam(name, value);
+		return this;
+	}
+
+	@Override
+	protected HttpRequest applyFormParameter(String name, String value) {
+		builder.addFormParam(name, value);
 		return this;
 	}
 

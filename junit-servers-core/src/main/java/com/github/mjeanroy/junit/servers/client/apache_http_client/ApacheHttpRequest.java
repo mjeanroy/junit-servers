@@ -24,20 +24,33 @@
 
 package com.github.mjeanroy.junit.servers.client.apache_http_client;
 
+import static com.github.mjeanroy.junit.servers.commons.Checks.notBlank;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.message.BasicNameValuePair;
+
 import com.github.mjeanroy.junit.servers.client.AbstractHttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.utils.URIBuilder;
-
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.github.mjeanroy.junit.servers.commons.Checks.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
 
 /**
  * Implementation for {HttpRequest} that use apache http-client
@@ -45,6 +58,8 @@ import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
  * See: http://hc.apache.org/httpcomponents-client-ga/index.html
  */
 public class ApacheHttpRequest extends AbstractHttpRequest {
+
+	private static final ApacheHttpRequestFactory FACTORY = new ApacheHttpRequestFactory();
 
 	/**
 	 * Original http client.
@@ -69,6 +84,11 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	private final Map<String, String> queryParams;
 
 	/**
+	 * Map of form parameters.
+	 */
+	private final Map<String, String> formParams;
+
+	/**
 	 * Map of headers.
 	 */
 	private final Map<String, String> headers;
@@ -85,7 +105,13 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 		this.httpMethod = httpMethod;
 		this.url = url;
 		this.queryParams = new HashMap<>();
+		this.formParams = new HashMap<>();
 		this.headers = new HashMap<>();
+	}
+
+	@Override
+	public HttpMethod getMethod() {
+		return httpMethod;
 	}
 
 	@Override
@@ -98,42 +124,87 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	}
 
 	@Override
-	public HttpRequest addQueryParam(String name, String value) {
-		queryParams.put(
-				notBlank(name, "name"),
-				notNull(value, "value") // Empty values should be allowed
-		);
+	protected HttpRequest applyQueryParam(String name, String value) {
+		queryParams.put(name, value);
+		return this;
+	}
+
+	@Override
+	protected HttpRequest applyFormParameter(String name, String value) {
+		formParams.put(name, value);
 		return this;
 	}
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
-		URIBuilder uriBuilder = new URIBuilder(url);
-		for (Map.Entry<String, String> p : queryParams.entrySet()) {
-			uriBuilder = uriBuilder.addParameter(p.getKey(), p.getValue());
-		}
+		HttpRequestBase httpRequest = FACTORY.create(httpMethod);
 
-		HttpRequestBase httpRequest = new ParameterizedHttpRequest(httpMethod, uriBuilder.build());
-		for (Map.Entry<String, String> h : headers.entrySet()) {
-			httpRequest.addHeader(h.getKey(), h.getValue());
+		// Create request URI with additional query params
+		httpRequest.setURI(createRequestURI());
+
+		// Add http headers
+		handleHeaders(httpRequest);
+
+		// Add request body if allowed
+		if (httpMethod.isBodyAllowed()) {
+			handleFormParameters((HttpEntityEnclosingRequestBase) httpRequest);
 		}
 
 		org.apache.http.HttpResponse httpResponse = client.execute(httpRequest);
 		return new ApacheHttpResponse(httpResponse);
 	}
 
-	private static class ParameterizedHttpRequest extends HttpRequestBase {
-		private final HttpMethod httpMethod;
-
-		private ParameterizedHttpRequest(HttpMethod httpMethod, URI uri) {
-			super();
-			this.httpMethod = httpMethod;
-			setURI(uri);
+	private URI createRequestURI() throws URISyntaxException {
+		URIBuilder uriBuilder = new URIBuilder(url);
+		for (Map.Entry<String, String> p : queryParams.entrySet()) {
+			uriBuilder = uriBuilder.addParameter(p.getKey(), p.getValue());
 		}
 
-		@Override
-		public String getMethod() {
-			return httpMethod.getVerb();
+		return uriBuilder.build();
+	}
+
+	private void handleHeaders(HttpRequestBase httpRequest) {
+		for (Map.Entry<String, String> h : headers.entrySet()) {
+			httpRequest.addHeader(h.getKey(), h.getValue());
+		}
+	}
+
+	private boolean handleFormParameters(HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
+		if (formParams.isEmpty()) {
+			return false;
+		}
+
+		List<NameValuePair> pairs = new ArrayList<>(formParams.size());
+
+		for (Map.Entry<String, String> p : formParams.entrySet()) {
+			NameValuePair pair = new BasicNameValuePair(p.getKey(), p.getValue());
+			pairs.add(pair);
+		}
+
+		HttpEntity entity = new UrlEncodedFormEntity(pairs);
+		httpRequest.setEntity(entity);
+		return true;
+	}
+
+	private static class ApacheHttpRequestFactory {
+		HttpRequestBase create(HttpMethod httpMethod) {
+			if (httpMethod == HttpMethod.GET) {
+				return new HttpGet();
+			}
+
+			if (httpMethod == HttpMethod.POST) {
+				return new HttpPost();
+			}
+
+			if (httpMethod == HttpMethod.PUT) {
+				return new HttpPut();
+			}
+
+			if (httpMethod == HttpMethod.DELETE) {
+				return new HttpDelete();
+			}
+
+			throw new UnsupportedOperationException("Method " + httpMethod + " is not supported by apache http-client");
 		}
 	}
 }

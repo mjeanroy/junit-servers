@@ -24,10 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.client.apache_http_client;
 
-import com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest;
-import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+
+import java.util.Map;
+
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -35,15 +38,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.assertj.core.api.Condition;
 import org.mockito.ArgumentCaptor;
 
-import java.util.Map;
-
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.entry;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
 
 public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 
@@ -94,7 +92,7 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 	@Override
 	protected HttpRequest createDefaultRequest() {
 		String url = "http://localhost:8080/foo";
-		HttpMethod httpMethod = HttpMethod.GET;
+		HttpMethod httpMethod = HttpMethod.POST;
 		return new ApacheHttpRequest(client, httpMethod, url);
 	}
 
@@ -140,6 +138,18 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 				.isNotNull()
 				.isNotEmpty()
 				.contains(entry(name, value));
+	}
+
+	@Override
+	protected void checkFormParam(HttpRequest httpRequest, String name, String value) throws Exception {
+		@SuppressWarnings("unchecked")
+		Map<String, String> formParams = (Map<String, String>) readField(httpRequest, "formParams", true);
+		assertThat(formParams)
+				.isNotNull()
+				.isNotEmpty()
+				.contains(entry(name, value));
+
+		checkHeader(httpRequest, "Content-Type", "application/x-www-form-urlencoded");
 	}
 
 	private void checkHeader(HttpUriRequest rq, final String name, final String value) {

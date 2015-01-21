@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.client;
 
 import static com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest.HeaderEntry.header;
+import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Before;
@@ -57,6 +58,29 @@ public abstract class BaseHttpRequestTest {
 		request.addHeader(headerName, headerValue);
 
 		checkHeader(request, headerName, headerValue);
+	}
+
+	@Test
+	public void it_should_add_form_param() throws Exception {
+		HttpRequest request = createDefaultRequest();
+
+		String paramName = "foo";
+		String paramValue = "bar";
+		request.addFormParam(paramName, paramValue);
+
+		checkFormParam(request, paramName, paramValue);
+	}
+
+	@Test
+	public void it_should_add_form_params() throws Exception {
+		HttpRequest request = createDefaultRequest();
+
+		HttpParameter param1 = param("foo1", "bar1");
+		HttpParameter param2 = param("foo2", "bar2");
+		request.addFormParams(param1, param2);
+
+		checkFormParam(request, param1.getName(), param1.getValue());
+		checkFormParam(request, param2.getName(), param2.getValue());
 	}
 
 	@Test
@@ -109,7 +133,7 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
-	public void it_should_add_query_params() throws Exception {
+	public void it_should_add_query_param() throws Exception {
 		HttpRequest request = createDefaultRequest();
 
 		String paramName = "foo";
@@ -117,6 +141,18 @@ public abstract class BaseHttpRequestTest {
 		request.addQueryParam(paramName, paramValue);
 
 		checkQueryParam(request, paramName, paramValue);
+	}
+
+	@Test
+	public void it_should_add_query_params() throws Exception {
+		HttpRequest request = createDefaultRequest();
+
+		HttpParameter param1 = param("foo1", "bar1");
+		HttpParameter param2 = param("foo2", "bar2");
+		request.addQueryParams(param1, param2);
+
+		checkQueryParam(request, param1.getName(), param1.getValue());
+		checkQueryParam(request, param2.getName(), param2.getValue());
 	}
 
 	@Test
@@ -241,6 +277,16 @@ public abstract class BaseHttpRequestTest {
 	 * @throws Exception
 	 */
 	protected abstract void checkHeader(HttpRequest httpRequest, String name, String value) throws Exception;
+
+	/**
+	 * Check that http request get expected form parameter.
+	 *
+	 * @param httpRequest Http request.
+	 * @param name Parameter name.
+	 * @param value Parameter value.
+	 * @throws Exception
+	 */
+	protected abstract void checkFormParam(HttpRequest httpRequest, String name, String value) throws Exception;
 
 	/**
 	 * Check that http request execution is valid.

@@ -24,6 +24,17 @@
 
 package com.github.mjeanroy.junit.servers.client.async_http_client;
 
+import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+import java.util.Map;
+
+import org.mockito.ArgumentCaptor;
+
 import com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
@@ -33,18 +44,6 @@ import com.ning.http.client.Param;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
-import org.mockito.ArgumentCaptor;
-
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 
@@ -58,12 +57,14 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	}
 
 	@Override
-	protected HttpRequest createHttpRequest(HttpMethod httpMethod, String url) throws Exception {
+	protected HttpRequest createHttpRequest(HttpMethod httpMethod, String url)
+			throws Exception {
 		return new AsyncHttpRequest(client, httpMethod, url);
 	}
 
 	@Override
-	protected void checkInternals(HttpRequest request, HttpMethod httpMethod, String url) throws Exception {
+	protected void checkInternals(HttpRequest request, HttpMethod httpMethod, String url)
+			throws Exception {
 		com.ning.http.client.AsyncHttpClient ningClient = (com.ning.http.client.AsyncHttpClient) readField(request, "client", true);
 		assertThat(ningClient)
 				.isNotNull()
@@ -90,12 +91,13 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	@Override
 	protected HttpRequest createDefaultRequest() {
 		String url = "http://localhost:8080/foo";
-		HttpMethod httpMethod = HttpMethod.GET;
+		HttpMethod httpMethod = HttpMethod.POST;
 		return new AsyncHttpRequest(client, httpMethod, url);
 	}
 
 	@Override
-	protected HttpResponse fakeExecution(HttpRequest httpRequest, ExecutionStrategy executionStrategy) throws Exception {
+	protected HttpResponse fakeExecution(HttpRequest httpRequest, ExecutionStrategy executionStrategy)
+			throws Exception {
 		@SuppressWarnings("unchecked")
 		ListenableFuture<Response> future = mock(ListenableFuture.class);
 
@@ -105,7 +107,8 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	}
 
 	@Override
-	protected void checkExecution(HttpResponse httpResponse, HeaderEntry... headers) throws Exception {
+	protected void checkExecution(HttpResponse httpResponse, HeaderEntry... headers)
+			throws Exception {
 		Response internalRsp = (Response) readField(httpResponse, "response", true);
 		assertThat(internalRsp)
 				.isNotNull()
@@ -123,7 +126,8 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	}
 
 	@Override
-	protected void checkQueryParam(HttpRequest httpRequest, String name, String value) throws Exception {
+	protected void checkQueryParam(HttpRequest httpRequest, String name, String value)
+			throws Exception {
 		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
 		assertThat(builder).isNotNull();
 
@@ -135,12 +139,28 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	}
 
 	@Override
-	protected void checkHeader(HttpRequest httpRequest, String name, String value) throws Exception {
+	protected void checkHeader(HttpRequest httpRequest, String name, String value)
+			throws Exception {
 		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
 		assertThat(builder).isNotNull();
 
 		Request rq = builder.build();
 		checkHeader(rq, name, value);
+	}
+
+	@Override
+	protected void checkFormParam(HttpRequest httpRequest, String name, String value)
+			throws Exception {
+		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
+		assertThat(builder).isNotNull();
+
+		Request rq = builder.build();
+		assertThat(rq.getFormParams())
+				.isNotNull()
+				.isNotEmpty()
+				.contains(new Param(name, value));
+
+		checkHeader(httpRequest, "Content-Type", "application/x-www-form-urlencoded");
 	}
 
 	private void checkHeader(Request rq, String name, String value) {
