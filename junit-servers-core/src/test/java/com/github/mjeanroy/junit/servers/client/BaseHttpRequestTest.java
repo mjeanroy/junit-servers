@@ -171,6 +171,16 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_set_request_body() throws Exception {
+		HttpRequest request = createDefaultRequest();
+
+		String requestBody = "{foo: 'bar'}";
+		request.setBody(requestBody);
+
+		checkRequestBody(request, requestBody);
+	}
+
+	@Test
 	public void it_should_execute_request_as_json() throws Exception {
 		HttpRequest request = createDefaultRequest();
 
@@ -287,6 +297,15 @@ public abstract class BaseHttpRequestTest {
 	 * @throws Exception
 	 */
 	protected abstract void checkFormParam(HttpRequest httpRequest, String name, String value) throws Exception;
+
+	/**
+	 * Check that http request get expected request body.
+	 *
+	 * @param httpRequest Http request.
+	 * @param body Request body.
+	 * @throws Exception
+	 */
+	protected abstract void checkRequestBody(HttpRequest httpRequest, String body) throws Exception;
 
 	/**
 	 * Check that http request execution is valid.

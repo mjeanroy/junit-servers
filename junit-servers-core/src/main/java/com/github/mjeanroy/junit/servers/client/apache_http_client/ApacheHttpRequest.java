@@ -45,6 +45,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.github.mjeanroy.junit.servers.client.AbstractHttpRequest;
@@ -94,6 +95,11 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	private final Map<String, String> headers;
 
 	/**
+	 * Request body.
+	 */
+	private String body;
+
+	/**
 	 * Create apache http request.
 	 *
 	 * @param client Apache http client.
@@ -136,6 +142,12 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	}
 
 	@Override
+	protected HttpRequest applyBody(String body) {
+		this.body = body;
+		return this;
+	}
+
+	@Override
 	protected HttpResponse doExecute() throws Exception {
 		HttpRequestBase httpRequest = FACTORY.create(httpMethod);
 
@@ -147,13 +159,27 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 
 		// Add request body if allowed
 		if (httpMethod.isBodyAllowed()) {
-			handleFormParameters((HttpEntityEnclosingRequestBase) httpRequest);
+			HttpEntityEnclosingRequestBase rq = (HttpEntityEnclosingRequestBase) httpRequest;
+
+			// Add form parameters or request body
+			if (!formParams.isEmpty()) {
+				handleFormParameters(rq);
+			} else if (body != null) {
+				handleRequestBody(rq);
+			}
 		}
 
 		org.apache.http.HttpResponse httpResponse = client.execute(httpRequest);
 		return new ApacheHttpResponse(httpResponse);
 	}
 
+	/**
+	 * Create request URI.
+	 * Each additional query parameters will be appended to final URI.
+	 *
+	 * @return Created URI.
+	 * @throws URISyntaxException
+	 */
 	private URI createRequestURI() throws URISyntaxException {
 		URIBuilder uriBuilder = new URIBuilder(url);
 		for (Map.Entry<String, String> p : queryParams.entrySet()) {
@@ -163,17 +189,26 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 		return uriBuilder.build();
 	}
 
+	/**
+	 * Add headers to http request.
+	 *
+	 * @param httpRequest Http request in creation.
+	 */
 	private void handleHeaders(HttpRequestBase httpRequest) {
 		for (Map.Entry<String, String> h : headers.entrySet()) {
 			httpRequest.addHeader(h.getKey(), h.getValue());
 		}
 	}
 
-	private boolean handleFormParameters(HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
-		if (formParams.isEmpty()) {
-			return false;
-		}
-
+	/**
+	 * Add parameters as form url encoded content.
+	 * Each parameter is set as a key value entry to request
+	 * body.
+	 *
+	 * @param httpRequest Http request in creation.
+	 * @throws UnsupportedEncodingException
+	 */
+	private void handleFormParameters(HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
 		List<NameValuePair> pairs = new ArrayList<>(formParams.size());
 
 		for (Map.Entry<String, String> p : formParams.entrySet()) {
@@ -183,10 +218,21 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 
 		HttpEntity entity = new UrlEncodedFormEntity(pairs);
 		httpRequest.setEntity(entity);
-		return true;
+	}
+
+	/**
+	 * Set request body value to http request.
+	 *
+	 * @param httpRequest Http request in creation.
+	 * @throws UnsupportedEncodingException
+	 */
+	private void handleRequestBody(HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
+		HttpEntity entity = new StringEntity(body);
+		httpRequest.setEntity(entity);
 	}
 
 	private static class ApacheHttpRequestFactory {
+
 		HttpRequestBase create(HttpMethod httpMethod) {
 			if (httpMethod == HttpMethod.GET) {
 				return new HttpGet();

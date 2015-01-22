@@ -89,6 +89,7 @@
 		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<async-http-client.version>1.9.5</async-http-client.version>
 		<httpclient.version>4.3.6</httpclient.version>
+		<commons-io.version>2.4</commons-io.version>
 	</properties>
 
 	<dependencyManagement>
@@ -203,6 +204,12 @@
 				<artifactId>commons-lang3</artifactId>
 				<version>${commons-lang3.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

@@ -30,7 +30,6 @@ package com.github.mjeanroy.junit.servers.client;
  * original object to allow chaining.
  *
  * TODO Add method to add cache headers
- * TODO Add method: setBody
  */
 public interface HttpRequest {
 
@@ -93,6 +92,17 @@ public interface HttpRequest {
 	 * @throws UnsupportedOperationException if request is not POST or PUT request.
 	 */
 	HttpRequest addFormParams(HttpParameter parameter, HttpParameter... parameters);
+
+	/**
+	 * Set request body.
+	 * This method should be used for POST or PUT request only, otherwise
+	 * it will throw {@link UnsupportedOperationException} exception.
+	 *
+	 * @param body Body request.
+	 * @return Http request that can be used for chaining.
+	 * @throws UnsupportedOperationException if request is not POST or PUT request.
+	 */
+	HttpRequest setBody(String body);
 
 	/**
 	 * Add header specific to standard js library.

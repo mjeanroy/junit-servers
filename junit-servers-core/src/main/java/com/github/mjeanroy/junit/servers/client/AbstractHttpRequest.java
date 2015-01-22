@@ -105,6 +105,15 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	}
 
 	@Override
+	public HttpRequest setBody(String body) {
+		if (!getMethod().isBodyAllowed()) {
+			throw new UnsupportedOperationException("Http method " + getMethod() + " does not support request body");
+		}
+
+		return applyBody(notNull(body, "body"));
+	}
+
+	@Override
 	public HttpRequest acceptJson() {
 		return addHeader("Accept", "application/json");
 	}
@@ -166,4 +175,14 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	 * @return Current request.
 	 */
 	protected abstract HttpRequest applyQueryParam(String name, String value);
+
+	/**
+	 * Add request body.
+	 * This method should not check for parameters validity since it will be already
+	 * checked before.
+	 *
+	 * @param body Request body.
+	 * @return Current request.
+	 */
+	protected abstract HttpRequest applyBody(String body);
 }

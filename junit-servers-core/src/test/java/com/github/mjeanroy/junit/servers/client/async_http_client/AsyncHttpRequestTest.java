@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.client.async_http_client;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static org.apache.commons.lang3.reflect.FieldUtils.writeField;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -57,18 +58,15 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	}
 
 	@Override
-	protected HttpRequest createHttpRequest(HttpMethod httpMethod, String url)
-			throws Exception {
+	protected HttpRequest createHttpRequest(HttpMethod httpMethod, String url) throws Exception {
 		return new AsyncHttpRequest(client, httpMethod, url);
 	}
 
 	@Override
-	protected void checkInternals(HttpRequest request, HttpMethod httpMethod, String url)
-			throws Exception {
+	protected void checkInternals(HttpRequest request, HttpMethod httpMethod, String url) throws Exception {
+		// Check internal client
 		com.ning.http.client.AsyncHttpClient ningClient = (com.ning.http.client.AsyncHttpClient) readField(request, "client", true);
-		assertThat(ningClient)
-				.isNotNull()
-				.isSameAs(client);
+		assertThat(ningClient).isSameAs(client);
 
 		RequestBuilder builder = (RequestBuilder) readField(request, "builder", true);
 		assertThat(builder).isNotNull();
@@ -78,26 +76,64 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 		assertThat(rq.getMethod()).isEqualTo(httpMethod.getVerb());
 
 		Map<String, List<String>> headers = rq.getHeaders();
-		assertThat(headers)
-				.isNotNull()
-				.isEmpty();
+		assertThat(headers).isEmpty();
 
 		List<Param> queryParams = rq.getQueryParams();
-		assertThat(queryParams)
-				.isNotNull()
-				.isEmpty();
+		assertThat(queryParams).isEmpty();
 	}
 
 	@Override
-	protected HttpRequest createDefaultRequest() {
+	protected HttpRequest createDefaultRequest() throws Exception {
 		String url = "http://localhost:8080/foo";
 		HttpMethod httpMethod = HttpMethod.POST;
-		return new AsyncHttpRequest(client, httpMethod, url);
+		AsyncHttpRequest httpRequest = new AsyncHttpRequest(client, httpMethod, url);
+
+		// Use a spy on request builder
+		RequestBuilder builder = spy((RequestBuilder) readField(httpRequest, "builder", true));
+		writeField(httpRequest, "builder", builder , true);
+
+		return httpRequest;
 	}
 
 	@Override
-	protected HttpResponse fakeExecution(HttpRequest httpRequest, ExecutionStrategy executionStrategy)
-			throws Exception {
+	protected void checkQueryParam(HttpRequest httpRequest, String name, String value) throws Exception {
+		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
+		verify(builder).addQueryParam(name, value);
+
+		Request rq = builder.build();
+		assertThat(rq.getQueryParams()).contains(new Param(name, value));
+	}
+
+	@Override
+	protected void checkHeader(HttpRequest httpRequest, String name, String value) throws Exception {
+		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
+		verify(builder).addHeader(name, value);
+
+		Request rq = builder.build();
+		checkHeader(rq, name, value);
+	}
+
+	@Override
+	protected void checkFormParam(HttpRequest httpRequest, String name, String value) throws Exception {
+		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
+		verify(builder).addFormParam(name, value);
+
+		// Check produced request
+		Request rq = builder.build();
+		assertThat(rq.getFormParams()).contains(new Param(name, value));
+
+		// Check that content-type is automatically set form-urlencoded
+		checkHeader(httpRequest, "Content-Type", "application/x-www-form-urlencoded");
+	}
+
+	@Override
+	protected void checkRequestBody(HttpRequest httpRequest, String body) throws Exception {
+		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
+		verify(builder).setBody(body);
+	}
+
+	@Override
+	protected HttpResponse fakeExecution(HttpRequest httpRequest, ExecutionStrategy executionStrategy) throws Exception {
 		@SuppressWarnings("unchecked")
 		ListenableFuture<Response> future = mock(ListenableFuture.class);
 
@@ -107,12 +143,9 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	}
 
 	@Override
-	protected void checkExecution(HttpResponse httpResponse, HeaderEntry... headers)
-			throws Exception {
+	protected void checkExecution(HttpResponse httpResponse, HeaderEntry... headers) throws Exception {
 		Response internalRsp = (Response) readField(httpResponse, "response", true);
-		assertThat(internalRsp)
-				.isNotNull()
-				.isSameAs(response);
+		assertThat(internalRsp).isSameAs(response);
 
 		ArgumentCaptor<Request> requestCaptor = ArgumentCaptor.forClass(Request.class);
 		verify(client).executeRequest(requestCaptor.capture());
@@ -123,44 +156,6 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 				checkHeader(request, h.name, h.value);
 			}
 		}
-	}
-
-	@Override
-	protected void checkQueryParam(HttpRequest httpRequest, String name, String value)
-			throws Exception {
-		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
-		assertThat(builder).isNotNull();
-
-		Request rq = builder.build();
-		assertThat(rq.getQueryParams())
-				.isNotNull()
-				.isNotEmpty()
-				.contains(new Param(name, value));
-	}
-
-	@Override
-	protected void checkHeader(HttpRequest httpRequest, String name, String value)
-			throws Exception {
-		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
-		assertThat(builder).isNotNull();
-
-		Request rq = builder.build();
-		checkHeader(rq, name, value);
-	}
-
-	@Override
-	protected void checkFormParam(HttpRequest httpRequest, String name, String value)
-			throws Exception {
-		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
-		assertThat(builder).isNotNull();
-
-		Request rq = builder.build();
-		assertThat(rq.getFormParams())
-				.isNotNull()
-				.isNotEmpty()
-				.contains(new Param(name, value));
-
-		checkHeader(httpRequest, "Content-Type", "application/x-www-form-urlencoded");
 	}
 
 	private void checkHeader(Request rq, String name, String value) {

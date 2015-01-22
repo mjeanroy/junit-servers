@@ -29,10 +29,15 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
+import java.io.StringWriter;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.assertj.core.api.Condition;
@@ -61,32 +66,20 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 
 	@Override
 	protected void checkInternals(HttpRequest request, HttpMethod httpMethod, String url) throws Exception {
-		CloseableHttpClient ningClient = (CloseableHttpClient) readField(request, "client", true);
-		assertThat(ningClient)
-				.isNotNull()
-				.isSameAs(client);
+		CloseableHttpClient apacheClient = extract(request, "client");
+		assertThat(apacheClient).isSameAs(client);
 
 		HttpMethod requestMethod = (HttpMethod) readField(request, "httpMethod", true);
-		assertThat(requestMethod)
-				.isNotNull()
-				.isEqualTo(httpMethod);
+		assertThat(requestMethod).isEqualTo(httpMethod);
 
 		String requestUrl = (String) readField(request, "url", true);
-		assertThat(requestUrl)
-				.isNotNull()
-				.isEqualTo(url);
+		assertThat(requestUrl).isEqualTo(url);
 
-		@SuppressWarnings("unchecked")
-		Map<String, String> headers = (Map<String, String>) readField(request, "headers", true);
-		assertThat(headers)
-				.isNotNull()
-				.isEmpty();
+		Map<String, String> headers = extract(request, "headers");
+		assertThat(headers).isEmpty();
 
-		@SuppressWarnings("unchecked")
-		Map<String, String> queryParams = (Map<String, String>) readField(request, "queryParams", true);
-		assertThat(queryParams)
-				.isNotNull()
-				.isEmpty();
+		Map<String, String> queryParams = extract(request, "formParams");
+		assertThat(queryParams).isEmpty();
 	}
 
 	@Override
@@ -104,10 +97,8 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 
 	@Override
 	protected void checkExecution(HttpResponse httpResponse, HeaderEntry... headers) throws Exception {
-		CloseableHttpResponse internalRsp = (CloseableHttpResponse) readField(httpResponse, "response", true);
-		assertThat(internalRsp)
-				.isNotNull()
-				.isSameAs(response);
+		CloseableHttpResponse internalRsp = extract(httpResponse, "response");
+		assertThat(internalRsp).isSameAs(response);
 
 		ArgumentCaptor<HttpUriRequest> requestCaptor = ArgumentCaptor.forClass(HttpUriRequest.class);
 		verify(client).execute(requestCaptor.capture());
@@ -122,34 +113,75 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 
 	@Override
 	protected void checkQueryParam(HttpRequest httpRequest, String name, String value) throws Exception {
-		@SuppressWarnings("unchecked")
-		Map<String, String> queryParams = (Map<String, String>) readField(httpRequest, "queryParams", true);
-		assertThat(queryParams)
-				.isNotNull()
-				.isNotEmpty()
-				.contains(entry(name, value));
+		Map<String, String> queryParams = extract(httpRequest, "queryParams");
+		assertThat(queryParams).contains(entry(name, value));
+
+		reset(client);
+		httpRequest.execute();
+
+		ArgumentCaptor<HttpRequestBase> rqCaptor = ArgumentCaptor.forClass(HttpRequestBase.class);
+		verify(client).execute(rqCaptor.capture());
+
+		HttpRequestBase rq = rqCaptor.getValue();
+
+		String uri = rq.getURI().toString();
+		assertThat(uri)
+				.matches("(.*)\\?(([a-z0-9]*)=(([a-z0-9]*))(&?))+")
+				.contains(name + "=" + value);
 	}
 
 	@Override
 	protected void checkHeader(HttpRequest httpRequest, String name, String value) throws Exception {
-		@SuppressWarnings("unchecked")
-		Map<String, String> headers = (Map<String, String>) readField(httpRequest, "headers", true);
-		assertThat(headers)
-				.isNotNull()
-				.isNotEmpty()
-				.contains(entry(name, value));
+		Map<String, String> headers = extract(httpRequest, "headers");
+		assertThat(headers).contains(entry(name, value));
+
+		reset(client);
+		httpRequest.execute();
+
+		ArgumentCaptor<HttpRequestBase> rqCaptor = ArgumentCaptor.forClass(HttpRequestBase.class);
+		verify(client).execute(rqCaptor.capture());
+
+		HttpRequestBase rq = rqCaptor.getValue();
+		assertThat(rq.getFirstHeader(name).getValue()).isEqualTo(value);
 	}
 
 	@Override
 	protected void checkFormParam(HttpRequest httpRequest, String name, String value) throws Exception {
-		@SuppressWarnings("unchecked")
-		Map<String, String> formParams = (Map<String, String>) readField(httpRequest, "formParams", true);
-		assertThat(formParams)
-				.isNotNull()
-				.isNotEmpty()
-				.contains(entry(name, value));
-
+		Map<String, String> formParams = extract(httpRequest, "formParams");
+		assertThat(formParams).contains(entry(name, value));
 		checkHeader(httpRequest, "Content-Type", "application/x-www-form-urlencoded");
+
+		reset(client);
+		httpRequest.execute();
+
+		ArgumentCaptor<HttpEntityEnclosingRequest> rqCaptor = ArgumentCaptor.forClass(HttpEntityEnclosingRequest.class);
+		verify(client).execute((HttpRequestBase) rqCaptor.capture());
+
+		HttpEntityEnclosingRequest rq = rqCaptor.getValue();
+		assertThat(rq.getEntity())
+				.isNotNull()
+				.isExactlyInstanceOf(UrlEncodedFormEntity.class);
+
+		UrlEncodedFormEntity entity = (UrlEncodedFormEntity) rq.getEntity();
+		StringWriter writer = new StringWriter();
+		IOUtils.copy(entity.getContent(), writer);
+
+		String body = writer.toString();
+		String[] parts = body.split("&");
+		assertThat(parts).contains(name + "=" + value);
+
+		assertThat(rq.getFirstHeader("Content-Type").getValue()).isEqualTo("application/x-www-form-urlencoded");
+	}
+
+	@Override
+	protected void checkRequestBody(HttpRequest httpRequest, String body) throws Exception {
+		String requestBody = extract(httpRequest, "body");
+		assertThat(requestBody).isEqualTo(body);
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T extract(Object source, String name) throws IllegalAccessException {
+		return (T) readField(source, name, true);
 	}
 
 	private void checkHeader(HttpUriRequest rq, final String name, final String value) {

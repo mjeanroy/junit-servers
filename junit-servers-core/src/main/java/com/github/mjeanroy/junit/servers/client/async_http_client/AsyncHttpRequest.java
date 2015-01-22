@@ -102,6 +102,12 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 	}
 
 	@Override
+	protected HttpRequest applyBody(String body) {
+		builder.setBody(body);
+		return this;
+	}
+
+	@Override
 	protected HttpResponse doExecute() throws Exception {
 		Request request = builder.build();
 		Response response = client.executeRequest(request).get();
