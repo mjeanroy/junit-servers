@@ -117,6 +117,28 @@ public abstract class BaseHttpResponseTest {
 		assertThat(result).isFalse();
 	}
 
+	@Test
+	public void it_should_return_true_if_etag_header_is_in_response() throws Exception {
+		HttpResponse rsp = createHttpResponse();
+
+		String headerName = "ETag";
+		String headerValue = "foo";
+		Map<String, String> headers = new HashMap<>();
+		headers.put(headerName, headerValue);
+		mockInternals(200, "foo", headers);
+
+		boolean result = rsp.hasETagHeader();
+
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void it_should_return_false_if_etag_header_is_not_available() throws Exception {
+		HttpResponse rsp = createHttpResponse();
+		boolean result = rsp.hasETagHeader();
+		assertThat(result).isFalse();
+	}
+
 	/**
 	 * Should create mock data during test setup.
 	 *

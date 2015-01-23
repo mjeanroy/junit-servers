@@ -33,4 +33,9 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	public boolean containsHeader(String name) {
 		return getHeader(name) != null;
 	}
+
+	@Override
+	public boolean hasETagHeader() {
+		return containsHeader("ETag");
+	}
 }

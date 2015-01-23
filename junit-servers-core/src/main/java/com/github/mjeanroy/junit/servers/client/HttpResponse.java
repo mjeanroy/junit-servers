@@ -62,4 +62,11 @@ public interface HttpResponse {
 	 * @throws NullPointerException if name is null.
 	 */
 	HttpHeader getHeader(String name);
+
+	/**
+	 * Check that http has ETag header.
+	 *
+	 * @return True if http response contains ETag header, false otherwise.
+	 */
+	boolean hasETagHeader();
 }
