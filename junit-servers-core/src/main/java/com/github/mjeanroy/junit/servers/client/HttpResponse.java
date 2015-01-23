@@ -97,4 +97,11 @@ public interface HttpResponse {
 	 * @return Location header.
 	 */
 	HttpHeader getLocation();
+
+	/**
+	 * Get Cache-Control header from http response.
+	 *
+	 * @return Cache-Control header.
+	 */
+	HttpHeader getCacheControl();
 }

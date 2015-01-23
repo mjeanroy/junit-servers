@@ -173,6 +173,19 @@ public abstract class BaseHttpResponseTest {
 				.isEqualTo(header(headerName, headerValue));
 	}
 
+	@Test
+	public void it_should_return_cache_control_header() throws Exception {
+		String headerName = "Cache-Control";
+		String headerValue = "max-age=3600";
+		HttpResponse rsp = mockHeader(headerName, headerValue);
+
+		HttpHeader header = rsp.getCacheControl();
+
+		assertThat(header)
+				.isNotNull()
+				.isEqualTo(header(headerName, headerValue));
+	}
+
 	private HttpResponse mockHeader(String name, String value) throws Exception {
 		HttpResponse rsp = createHttpResponse();
 		Map<String, String> headers = new HashMap<>();
