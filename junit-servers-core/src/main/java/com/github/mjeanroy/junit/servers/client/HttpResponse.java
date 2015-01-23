@@ -90,4 +90,11 @@ public interface HttpResponse {
 	 * @return Content-Encoding header.
 	 */
 	HttpHeader getContentEncoding();
+
+	/**
+	 * Get Location header from http response.
+	 *
+	 * @return Location header.
+	 */
+	HttpHeader getLocation();
 }

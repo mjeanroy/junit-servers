@@ -35,6 +35,7 @@ public final class HttpHeaders {
 	public static final String ETAG = "ETag";
 	public static final String CONTENT_TYPE = "Content-Type";
 	public static final String CONTENT_ENCODING = "Content-Encoding";
+	public static final String LOCATION = "Location";
 	public static final String REQUESTED_WITH = "X-Requested-With";
 	public static final String ACCEPT = "Accept";
 
