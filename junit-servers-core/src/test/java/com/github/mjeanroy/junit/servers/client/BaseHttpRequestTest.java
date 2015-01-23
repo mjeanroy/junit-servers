@@ -24,12 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import static com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest.HeaderEntry.header;
-import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
-import static org.assertj.core.api.Assertions.*;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest.HeaderEntry.header;
+import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests skeleton for http request implementation.
@@ -88,6 +88,14 @@ public abstract class BaseHttpRequestTest {
 		HttpRequest request = createDefaultRequest();
 		request.asXmlHttpRequest();
 		checkHeader(request, "X-Requested-With", "XMLHttpRequest");
+	}
+
+	@Test
+	public void it_should_add_user_agent() throws Exception {
+		HttpRequest request = createDefaultRequest();
+		String ua = "foo";
+		request.withUserAgent(ua);
+		checkHeader(request, "User-Agent", ua);
 	}
 
 	@Test

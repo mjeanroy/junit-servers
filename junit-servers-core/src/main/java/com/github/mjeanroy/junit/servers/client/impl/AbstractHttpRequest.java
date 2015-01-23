@@ -36,6 +36,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_X
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.MULTIPART_FORM_DATA;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REQUESTED_WITH;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.USER_AGENT;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.XML_HTTP_REQUEST;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
@@ -48,6 +49,11 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	@Override
 	public HttpRequest asXmlHttpRequest() {
 		return addHeader(REQUESTED_WITH, XML_HTTP_REQUEST);
+	}
+
+	@Override
+	public HttpRequest withUserAgent(String userAgent) {
+		return addHeader(USER_AGENT, userAgent);
 	}
 
 	@Override
