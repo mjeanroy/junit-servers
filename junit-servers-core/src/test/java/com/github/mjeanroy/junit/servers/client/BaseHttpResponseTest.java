@@ -74,13 +74,9 @@ public abstract class BaseHttpResponseTest {
 
 	@Test
 	public void it_should_return_header_value() throws Exception {
-		HttpResponse rsp = createHttpResponse();
-
 		String headerName = "foo";
 		String headerValue = "bar";
-		Map<String, String> headers = new HashMap<>();
-		headers.put(headerName, headerValue);
-		mockInternals(200, "foo", headers);
+		HttpResponse rsp = mockHeader(headerName, headerValue);
 
 		HttpHeader responseHeaderValue = rsp.getHeader(headerName);
 
@@ -91,16 +87,9 @@ public abstract class BaseHttpResponseTest {
 
 	@Test
 	public void it_should_return_true_if_header_is_in_response() throws Exception {
-		HttpResponse rsp = createHttpResponse();
-
-		String headerName = "foo";
-		String headerValue = "bar";
-		Map<String, String> headers = new HashMap<>();
-		headers.put(headerName, headerValue);
-		mockInternals(200, "foo", headers);
-
-		boolean result = rsp.containsHeader(headerName);
-
+		String name = "foo";
+		HttpResponse rsp = mockHeader(name, "bar");
+		boolean result = rsp.containsHeader(name);
 		assertThat(result).isTrue();
 	}
 
@@ -120,16 +109,8 @@ public abstract class BaseHttpResponseTest {
 
 	@Test
 	public void it_should_return_true_if_etag_header_is_in_response() throws Exception {
-		HttpResponse rsp = createHttpResponse();
-
-		String headerName = "ETag";
-		String headerValue = "foo";
-		Map<String, String> headers = new HashMap<>();
-		headers.put(headerName, headerValue);
-		mockInternals(200, "foo", headers);
-
+		HttpResponse rsp = mockHeader("ETag", "foo");
 		boolean result = rsp.hasETagHeader();
-
 		assertThat(result).isTrue();
 	}
 
@@ -142,19 +123,36 @@ public abstract class BaseHttpResponseTest {
 
 	@Test
 	public void it_should_return_etag_header() throws Exception {
-		HttpResponse rsp = createHttpResponse();
-
 		String headerName = "ETag";
 		String headerValue = "foo";
-		Map<String, String> headers = new HashMap<>();
-		headers.put(headerName, headerValue);
-		mockInternals(200, "foo", headers);
+		HttpResponse rsp = mockHeader(headerName, headerValue);
 
 		HttpHeader header = rsp.getETag();
 
 		assertThat(header)
 				.isNotNull()
-				.isEqualTo(header("ETag", "foo"));
+				.isEqualTo(header(headerName, headerValue));
+	}
+
+	@Test
+	public void it_should_return_content_type_header() throws Exception {
+		String headerName = "Content-Type";
+		String headerValue = "application/json";
+		HttpResponse rsp = mockHeader(headerName, headerValue);
+
+		HttpHeader header = rsp.getContentType();
+
+		assertThat(header)
+				.isNotNull()
+				.isEqualTo(header(headerName, headerValue));
+	}
+
+	private HttpResponse mockHeader(String name, String value) throws Exception {
+		HttpResponse rsp = createHttpResponse();
+		Map<String, String> headers = new HashMap<>();
+		headers.put(name, value);
+		mockInternals(200, "foo", headers);
+		return rsp;
 	}
 
 	/**

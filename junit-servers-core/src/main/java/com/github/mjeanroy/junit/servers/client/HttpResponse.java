@@ -76,4 +76,11 @@ public interface HttpResponse {
 	 * @return ETag header.
 	 */
 	HttpHeader getETag();
+
+	/**
+	 * Get Content-Type header from http response.
+	 *
+	 * @return Content-Type header.
+	 */
+	HttpHeader getContentType();
 }
