@@ -29,7 +29,7 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
  * Http client implementation using async-http-client

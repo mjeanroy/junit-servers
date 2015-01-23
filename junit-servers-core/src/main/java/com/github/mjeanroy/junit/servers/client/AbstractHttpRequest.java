@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.client;
 
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 

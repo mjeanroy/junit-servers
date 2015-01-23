@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.jetty;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.positive;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
 /**
  * Jetty configuration settings.

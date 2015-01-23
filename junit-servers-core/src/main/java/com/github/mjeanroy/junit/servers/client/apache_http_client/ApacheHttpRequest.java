@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.apache_http_client;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;

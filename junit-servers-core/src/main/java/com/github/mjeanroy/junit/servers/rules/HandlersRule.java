@@ -32,7 +32,7 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findAllFields;
 
 /**

@@ -34,7 +34,7 @@ import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
  * Implementation of http client using apache http client

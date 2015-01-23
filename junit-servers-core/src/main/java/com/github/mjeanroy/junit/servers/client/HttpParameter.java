@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static java.lang.String.format;
 
 /**
@@ -33,7 +33,6 @@ import static java.lang.String.format;
  * It could be used to add:
  * - Query parameters.
  * - Form parameters.
- * - Header value.
  */
 public class HttpParameter {
 

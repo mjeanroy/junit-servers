@@ -28,7 +28,7 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import org.junit.runner.Description;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
 
 /**

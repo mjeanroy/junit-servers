@@ -29,7 +29,7 @@ import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigura
 
 import java.lang.reflect.Field;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
 
 /**

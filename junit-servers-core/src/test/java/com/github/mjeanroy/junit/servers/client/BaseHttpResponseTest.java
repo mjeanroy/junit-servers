@@ -24,13 +24,14 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import org.junit.Before;
-import org.junit.Test;
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Tests skeleton for http response implementations.
@@ -80,8 +81,18 @@ public abstract class BaseHttpResponseTest {
 		headers.put(headerName, headerValue);
 		mockInternals(200, "foo", headers);
 
-		String responseHeaderValue = rsp.header(headerName);
-		assertThat(responseHeaderValue).isEqualTo(headerValue);
+		HttpHeader responseHeaderValue = rsp.getHeader(headerName);
+
+		assertThat(responseHeaderValue).isNotNull();
+		assertThat(responseHeaderValue.getName()).isEqualTo(headerName);
+		assertThat(responseHeaderValue.getValues()).isEqualTo(asList(headerValue));
+	}
+
+	@Test
+	public void it_should_return_null_if_header_is_not_available() throws Exception {
+		HttpResponse rsp = createHttpResponse();
+		HttpHeader responseHeaderValue = rsp.getHeader("foo");
+		assertThat(responseHeaderValue).isNull();
 	}
 
 	/**

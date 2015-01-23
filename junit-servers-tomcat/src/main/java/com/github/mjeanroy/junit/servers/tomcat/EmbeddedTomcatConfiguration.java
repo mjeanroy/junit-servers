@@ -29,7 +29,7 @@ import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigura
 
 import java.util.Objects;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
  * Tomcat configuration settings.

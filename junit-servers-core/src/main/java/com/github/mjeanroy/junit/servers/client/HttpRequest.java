@@ -41,7 +41,7 @@ public interface HttpRequest {
 	HttpMethod getMethod();
 
 	/**
-	 * Add header.
+	 * Add getHeader.
 	 *
 	 * @param name Header name.
 	 * @param value Header value.
@@ -105,11 +105,11 @@ public interface HttpRequest {
 	HttpRequest setBody(String body);
 
 	/**
-	 * Add header specific to standard js library.
+	 * Add getHeader specific to standard js library.
 	 *
-	 * Most library (such as jQuery) add automatically header
+	 * Most library (such as jQuery) add automatically getHeader
 	 * named "X-Requested-With" with value "XMLHttpRequest", this
-	 * method add this header and can be used to simulate ajax
+	 * method add this getHeader and can be used to simulate ajax
 	 * call.
 	 *
 	 * @return Http request that can be used for chaining.
@@ -117,7 +117,7 @@ public interface HttpRequest {
 	HttpRequest asXmlHttpRequest();
 
 	/**
-	 * Add header to specify that content type
+	 * Add getHeader to specify that content type
 	 * is "application/x-www-form-urlencoded".
 	 *
 	 * @return Http request that can be used for chaining.
@@ -125,7 +125,7 @@ public interface HttpRequest {
 	HttpRequest asFormUrlEncoded();
 
 	/**
-	 * Add header to specify that content type
+	 * Add getHeader to specify that content type
 	 * is "multipart/form-data".
 	 *
 	 * @return Http request that can be used for chaining.
@@ -133,7 +133,7 @@ public interface HttpRequest {
 	HttpRequest asMultipartFormData();
 
 	/**
-	 * Add header to specify that content type
+	 * Add getHeader to specify that content type
 	 * is "application/json".
 	 *
 	 * @return Http request that can be used for chaining.
@@ -141,7 +141,7 @@ public interface HttpRequest {
 	HttpRequest asJson();
 
 	/**
-	 * Add header to specify that content type
+	 * Add getHeader to specify that content type
 	 * is "application/xml".
 	 *
 	 * @return Http request that can be used for chaining.
@@ -149,7 +149,7 @@ public interface HttpRequest {
 	HttpRequest asXml();
 
 	/**
-	 * Add header to specify that accept type
+	 * Add getHeader to specify that accept type
 	 * is "application/json".
 	 *
 	 * @return Http request that can be used for chaining.
@@ -157,7 +157,7 @@ public interface HttpRequest {
 	HttpRequest acceptJson();
 
 	/**
-	 * Add header to specify that accept type
+	 * Add getHeader to specify that accept type
 	 * is "application/xml".
 	 *
 	 * @return Http request that can be used for chaining.
@@ -178,7 +178,7 @@ public interface HttpRequest {
 	 * Execution is synchronous and will block until
 	 * response is available.
 	 *
-	 * This method automatically add json header (i.e
+	 * This method automatically add json getHeader (i.e
 	 * methods #asJson and #acceptJson will be automatically
 	 * called before execution).
 	 *
@@ -191,7 +191,7 @@ public interface HttpRequest {
 	 * Execution is synchronous and will block until
 	 * response is available.
 	 *
-	 * This method automatically add xml header (i.e
+	 * This method automatically add xml getHeader (i.e
 	 * methods #asXml and #acceptXml will be automatically
 	 * called before execution).
 	 *

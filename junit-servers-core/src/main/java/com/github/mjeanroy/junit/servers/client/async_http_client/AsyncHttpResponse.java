@@ -24,11 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.client.async_http_client;
 
-import com.github.mjeanroy.junit.servers.client.AbstractHttpResponse;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
-import com.ning.http.client.Response;
+import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
 
 import java.io.IOException;
+import java.util.List;
+
+import com.github.mjeanroy.junit.servers.client.AbstractHttpResponse;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import com.ning.http.client.Response;
 
 /**
  * Implementation of {HttpResponse} using async-http-client
@@ -67,7 +72,12 @@ public class AsyncHttpResponse extends AbstractHttpResponse {
 	}
 
 	@Override
-	public String header(String name) {
-		return response.getHeader(name);
+	public HttpHeader getHeader(String name) {
+		List<String> headers = response.getHeaders(name);
+		if (isEmpty(headers)) {
+			return null;
+		}
+
+		return header(name, headers);
 	}
 }

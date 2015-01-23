@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.client;
 
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
 
 /**

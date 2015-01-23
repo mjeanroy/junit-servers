@@ -26,12 +26,14 @@ package com.github.mjeanroy.junit.servers.commons;
 
 import static java.lang.String.format;
 
+import java.util.Collection;
+
 /**
  * Static utilities that can be used to check object's values.
  */
-public final class Checks {
+public final class Preconditions {
 
-	private Checks() {
+	private Preconditions() {
 	}
 
 	/**
@@ -49,6 +51,26 @@ public final class Checks {
 			throw new NullPointerException(format("%s must not be null", name));
 		}
 		return value;
+	}
+
+	/**
+	 * Check that given collection is not empty (i.e null or with a size equal to zero).
+	 * It throws a {@link IllegalArgumentException} exception if collection is empty or
+	 * returned original collection otherwise.
+	 *
+	 * Generated message will be : {name} must not be empty
+	 * Where name is the value given in parameter.
+	 *
+	 * @param collection Collection.
+	 * @param name Name of field to produce exception message.
+	 * @param <T> Type of elements.
+	 * @return Original collection.
+	 */
+	public static <T> Collection<T> notEmpty(Collection<T> collection, String name) {
+		if (collection == null || collection.isEmpty()) {
+			throw new IllegalArgumentException(format("%s must not be empty", name));
+		}
+		return collection;
 	}
 
 	/**

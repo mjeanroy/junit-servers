@@ -24,16 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.client.async_http_client;
 
-import com.github.mjeanroy.junit.servers.client.BaseHttpResponseTest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.ning.http.client.Response;
+import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Map;
 
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import com.github.mjeanroy.junit.servers.client.BaseHttpResponseTest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.ning.http.client.Response;
 
 public class AsyncHttpResponseTest extends BaseHttpResponseTest {
 
@@ -66,6 +66,7 @@ public class AsyncHttpResponseTest extends BaseHttpResponseTest {
 			String headerName = entry.getKey();
 			String headerValue = entry.getValue();
 			when(response.getHeader(headerName)).thenReturn(headerValue);
+			when(response.getHeaders(headerName)).thenReturn(asList(headerValue));
 		}
 	}
 }

@@ -47,11 +47,11 @@ public interface HttpResponse {
 	String body();
 
 	/**
-	 * Get header value.
+	 * Get getHeader value.
 	 *
 	 * @param name Header name.
-	 * @return Header value.
+	 * @return Header value, null if getHeader is not in http request.
 	 * @throws NullPointerException if name is null.
 	 */
-	String header(String name);
+	HttpHeader getHeader(String name);
 }

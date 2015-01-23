@@ -24,20 +24,20 @@
 
 package com.github.mjeanroy.junit.servers.client.apache_http_client;
 
-import com.github.mjeanroy.junit.servers.client.BaseHttpResponseTest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.StatusLine;
+import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Map;
 
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.StatusLine;
+
+import com.github.mjeanroy.junit.servers.client.BaseHttpResponseTest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
 
 public class ApacheHttpResponseTest extends BaseHttpResponseTest {
 
@@ -80,7 +80,11 @@ public class ApacheHttpResponseTest extends BaseHttpResponseTest {
 			Header header = mock(Header.class);
 			when(header.getName()).thenReturn(headerName);
 			when(header.getValue()).thenReturn(headerValue);
+
 			when(response.getFirstHeader(headerName)).thenReturn(header);
+			when(response.getHeaders(headerName)).thenReturn(new Header[] {
+					header
+			});
 		}
 	}
 }

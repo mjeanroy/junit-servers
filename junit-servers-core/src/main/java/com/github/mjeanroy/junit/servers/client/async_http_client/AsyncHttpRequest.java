@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client.async_http_client;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 import com.github.mjeanroy.junit.servers.client.AbstractHttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;

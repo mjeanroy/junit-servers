@@ -32,9 +32,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.mjeanroy.junit.servers.commons.Checks.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Checks.notNull;
-import static com.github.mjeanroy.junit.servers.commons.Checks.positive;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
 public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurationBuilder<T, U>, U extends AbstractConfiguration> {
 

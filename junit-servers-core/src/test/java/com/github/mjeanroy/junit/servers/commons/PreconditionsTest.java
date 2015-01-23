@@ -24,46 +24,39 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
-import java.util.ArrayList;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notEmpty;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.rules.ExpectedException.none;
+
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Static collection utilities.
- */
-public final class CollectionUtils {
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-	// Ensure non instantiation
-	private CollectionUtils() {
+public class PreconditionsTest {
+
+	@Rule
+	public ExpectedException thrown = none();
+
+	@Test
+	public void it_should_throw_exception_if_collection_is_empty() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("foo must not be empty");
+
+		List<String> collection = emptyList();
+		notEmpty(collection, "foo");
 	}
 
-	/**
-	 * Check if a collection is null or empty.
-	 *
-	 * @param collection Collection to check.
-	 * @return True if collection is null or empty, false otherwise.
-	 */
-	public static boolean isEmpty(Collection collection) {
-		return collection == null || collection.isEmpty();
+	@Test
+	public void it_should_not_throw_exception_if_collection_is_not_empty() {
+		Collection<String> list = asList("foo", "bar");
+		Collection<String> result = notEmpty(list, "foo");
+		assertThat(result)
+				.isNotNull()
+				.isSameAs(list);
 	}
-
-	/**
-	 * Filter input by using given predicate and return
-	 * filtered outputs.
-	 *
-	 * @param list List input.
-	 * @param predicate Predicate.
-	 * @param <T> Type of elements.
-	 * @return Filtered outputs.
-	 */
-	public static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
-		List<T> results = new ArrayList<>();
-		for (T current : list) {
-			if (predicate.apply(current)) {
-				results.add(current);
-			}
-		}
-		return results;
-	}
-
 }

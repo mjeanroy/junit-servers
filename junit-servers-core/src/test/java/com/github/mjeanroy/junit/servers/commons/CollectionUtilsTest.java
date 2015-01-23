@@ -24,16 +24,29 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.Condition;
-import org.junit.Test;
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
-import static java.util.Arrays.asList;
+import org.assertj.core.api.Condition;
+import org.junit.Test;
 
 public class CollectionUtilsTest {
+
+	@Test
+	public void it_should_return_true_if_collection_is_null_or_empty() {
+		assertThat(isEmpty(null)).isTrue();
+		assertThat(isEmpty(emptyList())).isTrue();
+	}
+
+	@Test
+	public void it_should_return_false_if_collection_is_not_null_and_not_empty() {
+		assertThat(isEmpty(asList("foo"))).isFalse();
+	}
 
 	@Test
 	public void it_should_filter_list() {
@@ -46,7 +59,7 @@ public class CollectionUtilsTest {
 			}
 		});
 
-		Assertions.assertThat(results)
+		assertThat(results)
 				.isNotNull()
 				.isNotEmpty()
 				.hasSize(3)

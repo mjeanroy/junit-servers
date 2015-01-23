@@ -24,14 +24,20 @@
 
 package com.github.mjeanroy.junit.servers.client.apache_http_client;
 
-import com.github.mjeanroy.junit.servers.client.AbstractHttpResponse;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
+import com.github.mjeanroy.junit.servers.client.AbstractHttpResponse;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 
 /**
  * Implementation of {HttpResponse} using async-http-client
@@ -71,8 +77,17 @@ public class ApacheHttpResponse extends AbstractHttpResponse {
 	}
 
 	@Override
-	public String header(String name) {
-		Header header = response.getFirstHeader(name);
-		return header != null ? header.getValue() : "";
+	public HttpHeader getHeader(String name) {
+		Header[] headers = response.getHeaders(name);
+		if (headers == null || headers.length == 0) {
+			return null;
+		}
+
+		List<String> values = new ArrayList<>(headers.length);
+		for (Header h : headers) {
+			values.add(h.getValue());
+		}
+
+		return header(name, values);
 	}
 }

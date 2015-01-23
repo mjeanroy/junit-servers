@@ -279,7 +279,7 @@ public abstract class BaseHttpRequestTest {
 	protected abstract void checkQueryParam(HttpRequest httpRequest, String name, String value) throws Exception;
 
 	/**
-	 * Check that http request get expected header.
+	 * Check that http request get expected getHeader.
 	 *
 	 * @param httpRequest Http request.
 	 * @param name Header name.
