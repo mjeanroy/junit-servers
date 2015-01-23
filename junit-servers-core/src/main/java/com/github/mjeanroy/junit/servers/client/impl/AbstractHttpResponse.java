@@ -24,7 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.client.impl;
 
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
+
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ETAG;
 
 /**
  * Abstract skeleton of {HttpResponse} interface.
@@ -38,6 +41,11 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 
 	@Override
 	public boolean hasETagHeader() {
-		return containsHeader("ETag");
+		return containsHeader(ETAG);
+	}
+
+	@Override
+	public HttpHeader getETag() {
+		return getHeader(ETAG);
 	}
 }

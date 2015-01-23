@@ -24,14 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
+import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests skeleton for http response implementations.
@@ -137,6 +138,23 @@ public abstract class BaseHttpResponseTest {
 		HttpResponse rsp = createHttpResponse();
 		boolean result = rsp.hasETagHeader();
 		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void it_should_return_etag_header() throws Exception {
+		HttpResponse rsp = createHttpResponse();
+
+		String headerName = "ETag";
+		String headerValue = "foo";
+		Map<String, String> headers = new HashMap<>();
+		headers.put(headerName, headerValue);
+		mockInternals(200, "foo", headers);
+
+		HttpHeader header = rsp.getETag();
+
+		assertThat(header)
+				.isNotNull()
+				.isEqualTo(header("ETag", "foo"));
 	}
 
 	/**

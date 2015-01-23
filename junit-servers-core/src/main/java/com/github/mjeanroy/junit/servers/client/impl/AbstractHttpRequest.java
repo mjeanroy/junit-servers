@@ -24,13 +24,21 @@
 
 package com.github.mjeanroy.junit.servers.client.impl;
 
-import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_FORM_URL_ENCODED;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_JSON;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_XML;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.MULTIPART_FORM_DATA;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REQUESTED_WITH;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.XML_HTTP_REQUEST;
+import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
  * Abstract skeleton of {HttpRequest} interface.
@@ -39,27 +47,27 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	public HttpRequest asXmlHttpRequest() {
-		return addHeader("X-Requested-With", "XMLHttpRequest");
+		return addHeader(REQUESTED_WITH, XML_HTTP_REQUEST);
 	}
 
 	@Override
 	public HttpRequest asJson() {
-		return addHeader("Content-Type", "application/json");
+		return addHeader(CONTENT_TYPE, APPLICATION_JSON);
 	}
 
 	@Override
 	public HttpRequest asXml() {
-		return addHeader("Content-Type", "application/xml");
+		return addHeader(CONTENT_TYPE, APPLICATION_XML);
 	}
 
 	@Override
 	public HttpRequest asFormUrlEncoded() {
-		return addHeader("Content-Type", "application/x-www-form-urlencoded");
+		return addHeader(CONTENT_TYPE, APPLICATION_FORM_URL_ENCODED);
 	}
 
 	@Override
 	public HttpRequest asMultipartFormData() {
-		return addHeader("Content-Type", "multipart/form-data");
+		return addHeader(CONTENT_TYPE, MULTIPART_FORM_DATA);
 	}
 
 	@Override
@@ -118,12 +126,12 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	public HttpRequest acceptJson() {
-		return addHeader("Accept", "application/json");
+		return addHeader(ACCEPT, APPLICATION_JSON);
 	}
 
 	@Override
 	public HttpRequest acceptXml() {
-		return addHeader("Accept", "application/xml");
+		return addHeader(ACCEPT, APPLICATION_XML);
 	}
 
 	@Override

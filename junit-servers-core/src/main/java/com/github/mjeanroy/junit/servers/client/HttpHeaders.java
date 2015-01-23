@@ -25,55 +25,21 @@
 package com.github.mjeanroy.junit.servers.client;
 
 /**
- * Http response.
- * <p/>
- * TODO add method: hasHeader
- * TODO add method: getETagValue
+ * Set of constants for http headers.
  */
-public interface HttpResponse {
+public final class HttpHeaders {
 
-	/**
-	 * Http status code.
-	 *
-	 * @return Status code.
-	 */
-	int status();
+	private HttpHeaders() {
+	}
 
-	/**
-	 * Http response body.
-	 *
-	 * @return Body.
-	 */
-	String body();
+	public static final String ETAG = "ETag";
+	public static final String CONTENT_TYPE = "Content-Type";
+	public static final String REQUESTED_WITH = "X-Requested-With";
+	public static final String ACCEPT = "Accept";
 
-	/**
-	 * Check that given is available.
-	 *
-	 * @param name Header name.
-	 * @return True if header is in response, false otherwise.
-	 */
-	boolean containsHeader(String name);
-
-	/**
-	 * Get header from http response.
-	 *
-	 * @param name Header name.
-	 * @return Header value, null if getHeader is not in http request.
-	 * @throws NullPointerException if name is null.
-	 */
-	HttpHeader getHeader(String name);
-
-	/**
-	 * Check that http has ETag header.
-	 *
-	 * @return True if http response contains ETag header, false otherwise.
-	 */
-	boolean hasETagHeader();
-
-	/**
-	 * Get ETag header from http response.
-	 *
-	 * @return ETag header.
-	 */
-	HttpHeader getETag();
+	public static final String XML_HTTP_REQUEST = "XMLHttpRequest";
+	public static final String APPLICATION_JSON = "application/json";
+	public static final String APPLICATION_XML = "application/xml";
+	public static final String APPLICATION_FORM_URL_ENCODED = "application/x-www-form-urlencoded";
+	public static final String MULTIPART_FORM_DATA = "multipart/form-data";
 }
