@@ -22,77 +22,66 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.apache_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
-import com.github.mjeanroy.junit.servers.client.AbstractHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-
-import java.io.IOException;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
- * Implementation of http client using apache http client
- * library under the hood.
- * See: http://hc.apache.org/httpcomponents-client-ga/index.html
+ * Http client implementation using async-http-client
+ * under the hood.
+ * See: https://asynchttpclient.github.io/
  */
-public class ApacheHttpClient extends AbstractHttpClient {
+public class AsyncHttpClient extends AbstractHttpClient {
 
 	/**
 	 * Create new http client using internal
-	 * http client from apache http-client library.
+	 * http client from async-http-client library.
 	 *
 	 * @param server Embedded server.
 	 * @param client Internal http client
 	 * @return Http client.
 	 */
-	public static ApacheHttpClient newApacheHttpClient(EmbeddedServer server, CloseableHttpClient client) {
-		return new ApacheHttpClient(server, client);
+	public static AsyncHttpClient newAsyncHttpClient(EmbeddedServer server, com.ning.http.client.AsyncHttpClient client) {
+		return new AsyncHttpClient(server, client);
 	}
 
 	/**
 	 * Create new http client using internal
-	 * http client from apache http-client library.
-	 * An instance of {CloseableHttpClient} will be automatically
+	 * http client from async-http-client library.
+	 * An instance of {com.ning.http.client.AsyncHttpClient} will be automatically
 	 * created.
 	 *
 	 * @param server Embedded server.
 	 * @return Http client.
 	 */
-	public static ApacheHttpClient defaultApacheHttpClient(EmbeddedServer server) {
-		return new ApacheHttpClient(server, HttpClients.createDefault());
+	public static AsyncHttpClient defaultAsyncHttpClient(EmbeddedServer server) {
+		return new AsyncHttpClient(server, new com.ning.http.client.AsyncHttpClient());
 	}
 
 	/**
-	 * Internal apache http client.
-	 * This http client will be closed when http client
-	 * is destroyed.
+	 * Original http client.
+	 * This client will be used under the hood.
 	 */
-	private final CloseableHttpClient client;
+	private final com.ning.http.client.AsyncHttpClient client;
 
 	// Use static factory
-	private ApacheHttpClient(EmbeddedServer server, CloseableHttpClient client) {
+	private AsyncHttpClient(EmbeddedServer server, com.ning.http.client.AsyncHttpClient client) {
 		super(server);
 		this.client = notNull(client, "client");
 	}
 
 	@Override
 	protected HttpRequest buildRequest(HttpMethod httpMethod, String url) {
-		return new ApacheHttpRequest(client, httpMethod, url);
+		return new AsyncHttpRequest(client, httpMethod, url);
 	}
 
 	@Override
 	public void destroy() {
-		try {
-			client.close();
-		}
-		catch (IOException ex) {
-			throw new HttpClientException(ex);
-		}
+		client.close();
 	}
 }

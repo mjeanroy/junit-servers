@@ -24,11 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import static com.github.mjeanroy.junit.servers.client.apache_http_client.ApacheHttpClient.defaultApacheHttpClient;
-import static com.github.mjeanroy.junit.servers.client.async_http_client.AsyncHttpClient.defaultAsyncHttpClient;
-
 import com.github.mjeanroy.junit.servers.commons.ClassUtils;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+
+import static com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient.defaultApacheHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.defaultAsyncHttpClient;
 
 /**
  * Available strategies that can be used to build

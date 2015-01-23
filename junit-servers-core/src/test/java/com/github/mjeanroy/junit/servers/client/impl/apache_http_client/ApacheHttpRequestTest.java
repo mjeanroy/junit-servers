@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.apache_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.*;

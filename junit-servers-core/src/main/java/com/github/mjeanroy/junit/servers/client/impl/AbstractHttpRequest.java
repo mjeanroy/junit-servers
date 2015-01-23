@@ -22,11 +22,14 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client;
+package com.github.mjeanroy.junit.servers.client.impl;
 
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
+import com.github.mjeanroy.junit.servers.client.HttpParameter;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 
 /**

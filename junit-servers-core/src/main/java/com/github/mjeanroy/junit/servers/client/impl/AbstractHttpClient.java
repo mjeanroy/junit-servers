@@ -22,8 +22,11 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client;
+package com.github.mjeanroy.junit.servers.client.impl;
 
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;

@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
-import com.github.mjeanroy.junit.servers.client.AbstractHttpRequest;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;

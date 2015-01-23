@@ -22,18 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
-import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import com.ning.http.client.Response;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.github.mjeanroy.junit.servers.client.AbstractHttpResponse;
-import com.github.mjeanroy.junit.servers.client.HttpHeader;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
-import com.ning.http.client.Response;
+import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
 
 /**
  * Implementation of {HttpResponse} using async-http-client

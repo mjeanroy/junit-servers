@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.apache_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
 
@@ -35,7 +35,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 
-import com.github.mjeanroy.junit.servers.client.AbstractHttpResponse;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 

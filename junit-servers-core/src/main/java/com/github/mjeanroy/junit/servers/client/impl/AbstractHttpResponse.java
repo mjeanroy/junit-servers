@@ -22,7 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client;
+package com.github.mjeanroy.junit.servers.client.impl;
+
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
 
 /**
  * Abstract skeleton of {HttpResponse} interface.

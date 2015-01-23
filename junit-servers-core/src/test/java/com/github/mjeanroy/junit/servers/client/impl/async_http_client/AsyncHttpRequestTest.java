@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;

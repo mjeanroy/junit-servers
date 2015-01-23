@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.apache_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 
@@ -48,7 +48,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.github.mjeanroy.junit.servers.client.AbstractHttpRequest;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;

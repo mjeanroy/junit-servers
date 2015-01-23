@@ -22,47 +22,46 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.apache_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.apache.http.impl.client.CloseableHttpClient;
+import com.ning.http.client.Request;
+import com.ning.http.client.RequestBuilder;
 
-import java.util.Map;
-
-import static com.github.mjeanroy.junit.servers.client.apache_http_client.ApacheHttpClient.defaultApacheHttpClient;
-import static com.github.mjeanroy.junit.servers.client.apache_http_client.ApacheHttpClient.newApacheHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.defaultAsyncHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.newAsyncHttpClient;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class ApacheHttpClientTest extends BaseHttpClientTest {
+public class AsyncHttpClientTest extends BaseHttpClientTest {
 
-	private CloseableHttpClient internalClient;
+	private com.ning.http.client.AsyncHttpClient internalClient;
 
 	@Override
 	protected void onSetUp() throws Exception {
-		internalClient = mock(CloseableHttpClient.class);
+		internalClient = mock(com.ning.http.client.AsyncHttpClient.class);
 	}
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer server) throws Exception {
-		return defaultApacheHttpClient(server);
+		return defaultAsyncHttpClient(server);
 	}
 
 	@Override
 	protected HttpClient createCustomClient(EmbeddedServer server) throws Exception {
-		return newApacheHttpClient(server, internalClient);
+		return newAsyncHttpClient(server, internalClient);
 	}
 
 	@Override
 	protected void checkInternalHttpClient(HttpClient httpClient) throws Exception {
-		CloseableHttpClient internalClient = (CloseableHttpClient) readField(httpClient, "client", true);
+		com.ning.http.client.AsyncHttpClient internalClient = (com.ning.http.client.AsyncHttpClient) readField(httpClient, "client", true);
 		assertThat(internalClient).isNotNull();
 	}
 
@@ -70,35 +69,26 @@ public class ApacheHttpClientTest extends BaseHttpClientTest {
 	protected void checkHttpRequest(HttpRequest httpRequest, HttpMethod httpMethod, String path) throws Exception {
 		assertThat(httpRequest)
 				.isNotNull()
-				.isExactlyInstanceOf(ApacheHttpRequest.class);
+				.isExactlyInstanceOf(AsyncHttpRequest.class);
 
-		CloseableHttpClient internalClient = (CloseableHttpClient) readField(httpRequest, "client", true);
+		com.ning.http.client.AsyncHttpClient internalClient = (com.ning.http.client.AsyncHttpClient) readField(httpRequest, "client", true);
 		assertThat(internalClient)
 				.isNotNull()
 				.isSameAs(this.internalClient);
 
-		HttpMethod method = (HttpMethod) readField(httpRequest, "httpMethod", true);
-		assertThat(method)
-				.isNotNull()
-				.isEqualTo(httpMethod);
+		RequestBuilder requestBuilder = (RequestBuilder) readField(httpRequest, "builder", true);
+		assertThat(requestBuilder).isNotNull();
 
-		String url = (String) readField(httpRequest, "url", true);
-		assertThat(url)
+		// Build request to test initialization values
+
+		Request request = requestBuilder.build();
+		assertThat(request.getMethod())
 				.isNotNull()
-				.isNotEmpty()
+				.isEqualTo(httpMethod.getVerb());
+
+		assertThat(request.getUrl())
+				.isNotNull()
 				.isEqualTo(format("http://localhost:8080/path%s", path));
-
-		@SuppressWarnings("unchecked")
-		Map<String, String> queryParams = (Map<String, String>) readField(httpRequest, "queryParams", true);
-		assertThat(queryParams)
-				.isNotNull()
-				.isEmpty();
-
-		@SuppressWarnings("unchecked")
-		Map<String, String> headers = (Map<String, String>) readField(httpRequest, "headers", true);
-		assertThat(headers)
-				.isNotNull()
-				.isEmpty();
 	}
 
 	@Override
