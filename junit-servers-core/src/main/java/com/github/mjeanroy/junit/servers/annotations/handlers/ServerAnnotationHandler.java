@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import com.github.mjeanroy.junit.servers.annotations.Server;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import java.lang.reflect.Field;
@@ -55,7 +55,7 @@ public class ServerAnnotationHandler extends AbstractAnnotationHandler {
 
 	// Use static factory instead
 	private ServerAnnotationHandler(EmbeddedServer server) {
-		super(Server.class);
+		super(TestServer.class);
 		this.server = server;
 	}
 

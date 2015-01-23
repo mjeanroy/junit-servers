@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import com.github.mjeanroy.junit.servers.annotations.Configuration;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import org.junit.Test;
 
@@ -44,7 +44,7 @@ public class ConfigurationAnnotationHandlerTest {
 		AbstractConfiguration configuration = mock(AbstractConfiguration.class);
 		ConfigurationAnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 
-		Class serverClass = Configuration.class;
+		Class serverClass = TestServerConfiguration.class;
 		Annotation annotation = mock(Annotation.class);
 		when(annotation.annotationType()).thenReturn(serverClass);
 
@@ -66,7 +66,7 @@ public class ConfigurationAnnotationHandlerTest {
 	}
 
 	private static class Foo {
-		@Configuration
+		@TestServerConfiguration
 		private AbstractConfiguration configuration;
 
 	}

@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.servers.utils;
 
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
-import com.github.mjeanroy.junit.servers.annotations.Configuration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
@@ -56,7 +56,7 @@ public final class Servers {
 	 *
 	 * Server configuration is automatically read on static field / methods
 	 * available on given class (i.e field or method annotated
-	 * with {@link Configuration} annotation).
+	 * with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} annotation).
 	 *
 	 * Server implementation is automatically detected (jetty or
 	 * tomcat) with classpath detection.
@@ -162,7 +162,7 @@ public final class Servers {
 	 * running class.
 	 *
 	 * Configuration is read from static method or static field
-	 * annotated with {@link Configuration} annotation.
+	 * annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} annotation.
 	 *
 	 * @param klass Class to inspect.
 	 * @param <T> Type of configuration.
@@ -170,13 +170,13 @@ public final class Servers {
 	 */
 	public static  <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
 		// Look for static methods first
-		List<Method> methods = findStaticMethodsAnnotatedWith(klass, Configuration.class);
+		List<Method> methods = findStaticMethodsAnnotatedWith(klass, TestServerConfiguration.class);
 		if (!methods.isEmpty()) {
 			return invoke(methods.get(0));
 		}
 
 		// Then, look for static field
-		List<Field> fields = findStaticFieldsAnnotatedWith(klass, Configuration.class);
+		List<Field> fields = findStaticFieldsAnnotatedWith(klass, TestServerConfiguration.class);
 		if (!fields.isEmpty()) {
 			return getter(fields.get(0));
 		}

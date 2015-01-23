@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import com.github.mjeanroy.junit.servers.annotations.Server;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.Test;
 
@@ -44,7 +44,7 @@ public class ServerAnnotationHandlerTest {
 		EmbeddedServer server = mock(EmbeddedServer.class);
 		ServerAnnotationHandler handler = newServerAnnotationHandler(server);
 
-		Class serverClass = Server.class;
+		Class serverClass = TestServer.class;
 		Annotation annotation = mock(Annotation.class);
 		when(annotation.annotationType()).thenReturn(serverClass);
 
@@ -66,7 +66,7 @@ public class ServerAnnotationHandlerTest {
 	}
 
 	private static class Foo {
-		@Server
+		@TestServer
 		private EmbeddedServer server;
 
 	}

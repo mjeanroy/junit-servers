@@ -25,8 +25,8 @@
 package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.annotations.Configuration;
-import com.github.mjeanroy.junit.servers.annotations.Server;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.Test;
@@ -44,10 +44,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(JunitServerRunner.class)
 public class IndexWithRunnerTest {
 
-	@Server
+	@TestServer
 	private static EmbeddedServer jetty;
 
-	@Configuration
+	@TestServerConfiguration
 	private static EmbeddedJettyConfiguration configuration() throws Exception {
 		String current = new File(".").getCanonicalPath();
 		if (!current.endsWith("/")) {

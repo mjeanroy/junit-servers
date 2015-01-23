@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import com.github.mjeanroy.junit.servers.annotations.Configuration;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 import java.lang.reflect.Field;
@@ -34,7 +34,7 @@ import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
 
 /**
  * Annotation handler that will set configuration to a field
- * annotated with {@link Configuration}
+ * annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration}
  * on a given class instance.
  */
 public class ConfigurationAnnotationHandler extends AbstractAnnotationHandler {
@@ -56,7 +56,7 @@ public class ConfigurationAnnotationHandler extends AbstractAnnotationHandler {
 
 	// Use static factory instead
 	private ConfigurationAnnotationHandler(AbstractConfiguration configuration) {
-		super(Configuration.class);
+		super(TestServerConfiguration.class);
 		this.configuration = configuration;
 	}
 

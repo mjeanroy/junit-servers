@@ -31,11 +31,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation that can be used to inject embedded server
- * into unit tests.
+ * Annotation that can be used to specify that a
+ * given method or static field is the configuration
+ * to use on embedded container.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD})
+@Target({ ElementType.FIELD, ElementType.METHOD })
 @Documented
-public @interface Server {
+public @interface TestServerConfiguration {
 }

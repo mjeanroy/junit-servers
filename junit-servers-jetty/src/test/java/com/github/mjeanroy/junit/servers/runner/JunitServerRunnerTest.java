@@ -26,8 +26,8 @@ package com.github.mjeanroy.junit.servers.runner;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.annotations.Configuration;
-import com.github.mjeanroy.junit.servers.annotations.Server;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.rules.HandlersRule;
 import com.github.mjeanroy.junit.servers.rules.ServerRule;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -120,10 +120,10 @@ public class JunitServerRunnerTest {
 	}
 
 	public static class Foo {
-		@Server
+		@TestServer
 		private static EmbeddedServer server;
 
-		@Configuration
+		@TestServerConfiguration
 		private static EmbeddedJettyConfiguration configuration;
 
 		public Foo() {
@@ -137,10 +137,10 @@ public class JunitServerRunnerTest {
 
 	public static class Bar {
 
-		@Server
+		@TestServer
 		private static EmbeddedServer server;
 
-		@Configuration
+		@TestServerConfiguration
 		private static EmbeddedJettyConfiguration initConfiguration() {
 			return configuration;
 		}

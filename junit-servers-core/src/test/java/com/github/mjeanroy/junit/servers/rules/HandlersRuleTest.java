@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.rules;
 
 import com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler;
-import com.github.mjeanroy.junit.servers.annotations.Server;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,7 +78,7 @@ public class HandlersRuleTest {
 
 		Annotation annotation = annotationCaptor.getValue();
 		assertThat(annotation).isNotNull();
-		assertThat(annotation.annotationType()).isEqualTo(Server.class);
+		assertThat(annotation.annotationType()).isEqualTo(TestServer.class);
 	}
 
 	@Test
@@ -95,7 +95,7 @@ public class HandlersRuleTest {
 
 		Annotation annotation = annotationCaptor.getValue();
 		assertThat(annotation).isNotNull();
-		assertThat(annotation.annotationType()).isEqualTo(Server.class);
+		assertThat(annotation.annotationType()).isEqualTo(TestServer.class);
 	}
 
 	@Test
@@ -112,7 +112,7 @@ public class HandlersRuleTest {
 
 		Annotation annotation = annotationCaptor.getValue();
 		assertThat(annotation).isNotNull();
-		assertThat(annotation.annotationType()).isEqualTo(Server.class);
+		assertThat(annotation.annotationType()).isEqualTo(TestServer.class);
 	}
 
 	@Test
@@ -129,12 +129,12 @@ public class HandlersRuleTest {
 
 		Annotation annotation = annotationCaptor.getValue();
 		assertThat(annotation).isNotNull();
-		assertThat(annotation.annotationType()).isEqualTo(Server.class);
+		assertThat(annotation.annotationType()).isEqualTo(TestServer.class);
 	}
 
 	private static class Foo {
 
-		@Server
+		@TestServer
 		private EmbeddedServer server;
 	}
 }
