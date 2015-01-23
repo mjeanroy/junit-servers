@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.client.impl;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_ENCODING;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ETAG;
 
@@ -53,5 +54,10 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	@Override
 	public HttpHeader getContentType() {
 		return getHeader(CONTENT_TYPE);
+	}
+
+	@Override
+	public HttpHeader getContentEncoding() {
+		return getHeader(CONTENT_ENCODING);
 	}
 }

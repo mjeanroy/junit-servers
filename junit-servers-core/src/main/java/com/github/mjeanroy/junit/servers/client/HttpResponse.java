@@ -83,4 +83,11 @@ public interface HttpResponse {
 	 * @return Content-Type header.
 	 */
 	HttpHeader getContentType();
+
+	/**
+	 * Get Content-Encoding header from http response.
+	 *
+	 * @return Content-Encoding header.
+	 */
+	HttpHeader getContentEncoding();
 }
