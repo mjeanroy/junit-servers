@@ -89,10 +89,32 @@ public abstract class BaseHttpResponseTest {
 	}
 
 	@Test
+	public void it_should_return_true_if_header_is_in_response() throws Exception {
+		HttpResponse rsp = createHttpResponse();
+
+		String headerName = "foo";
+		String headerValue = "bar";
+		Map<String, String> headers = new HashMap<>();
+		headers.put(headerName, headerValue);
+		mockInternals(200, "foo", headers);
+
+		boolean result = rsp.containsHeader(headerName);
+
+		assertThat(result).isTrue();
+	}
+
+	@Test
 	public void it_should_return_null_if_header_is_not_available() throws Exception {
 		HttpResponse rsp = createHttpResponse();
 		HttpHeader responseHeaderValue = rsp.getHeader("foo");
 		assertThat(responseHeaderValue).isNull();
+	}
+
+	@Test
+	public void it_should_return_false_if_header_is_not_available() throws Exception {
+		HttpResponse rsp = createHttpResponse();
+		boolean result = rsp.containsHeader("foo");
+		assertThat(result).isFalse();
 	}
 
 	/**

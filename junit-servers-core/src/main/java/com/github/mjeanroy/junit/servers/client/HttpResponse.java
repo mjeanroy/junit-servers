@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.client;
 
 /**
  * Http response.
- *
+ * <p/>
  * TODO add method: hasHeader
  * TODO add method: getETagValue
  */
@@ -45,6 +45,14 @@ public interface HttpResponse {
 	 * @return Body.
 	 */
 	String body();
+
+	/**
+	 * Check that given is available.
+	 *
+	 * @param name Header name.
+	 * @return True if header is in response, false otherwise.
+	 */
+	boolean containsHeader(String name);
 
 	/**
 	 * Get getHeader value.

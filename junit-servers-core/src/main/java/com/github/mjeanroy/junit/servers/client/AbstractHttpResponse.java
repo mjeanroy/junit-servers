@@ -28,4 +28,9 @@ package com.github.mjeanroy.junit.servers.client;
  * Abstract skeleton of {HttpResponse} interface.
  */
 public abstract class AbstractHttpResponse implements HttpResponse {
+
+	@Override
+	public boolean containsHeader(String name) {
+		return getHeader(name) != null;
+	}
 }
