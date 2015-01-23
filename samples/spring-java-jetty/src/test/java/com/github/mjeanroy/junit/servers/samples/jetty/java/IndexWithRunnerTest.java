@@ -24,28 +24,33 @@
 
 package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import static org.assertj.core.api.Assertions.*;
+
+import javax.servlet.ServletContext;
+import java.io.File;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
-
-import java.io.File;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 @RunWith(JunitServerRunner.class)
 public class IndexWithRunnerTest {
 
 	@TestServer
 	private static EmbeddedServer jetty;
+
+	@TestHttpClient
+	private static HttpClient client;
 
 	@TestServerConfiguration
 	private static EmbeddedJettyConfiguration configuration() throws Exception {
@@ -63,13 +68,13 @@ public class IndexWithRunnerTest {
 				.build();
 	}
 
-	private static RestTemplate restTemplate = new RestTemplate();
-
 	@Test
 	public void it_should_have_an_index() {
-		String url = url() + "index";
-		String message = restTemplate.getForObject(url, String.class);
-		assertThat(message).isNotEmpty().isEqualTo("Hello World");
+		HttpResponse rsp = client.prepareGet("/index").execute();
+		String message = rsp.body();
+		assertThat(message)
+				.isNotEmpty()
+				.isEqualTo("Hello World");
 
 		// Try to get servlet context
 		ServletContext servletContext = jetty.getServletContext();
@@ -78,9 +83,5 @@ public class IndexWithRunnerTest {
 		// Try to retrieve spring webApplicationContext
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		assertThat(webApplicationContext).isNotNull();
-	}
-
-	public String url() {
-		return String.format("http://%s:%s/", "localhost", jetty.getPort());
 	}
 }

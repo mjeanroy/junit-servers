@@ -24,7 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
-import com.github.mjeanroy.junit.servers.exceptions.ReflectionException;
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
+import static java.lang.reflect.Modifier.isStatic;
+import static java.util.Arrays.asList;
+import static java.util.Collections.addAll;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -33,10 +36,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
-import static java.lang.reflect.Modifier.isStatic;
-import static java.util.Arrays.asList;
-import static java.util.Collections.addAll;
+import com.github.mjeanroy.junit.servers.exceptions.ReflectionException;
 
 /**
  * Static reflection utilities.
@@ -130,11 +130,32 @@ public final class ReflectionUtils {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Get value of static field.
+	 *
+	 * @param field Field.
+	 * @param <T> Type of expected value.
+	 * @return Value of static field.
+	 */
 	public static <T> T getter(Field field) {
+		return getter(null, field);
+	}
+
+	/**
+	 * Get value of field on target object.
+	 * If target is null, it means that field is static and do not
+	 * need any target instance.
+	 *
+	 * @param target Target object.
+	 * @param field Field.
+	 * @param <T> Type of expected value.
+	 * @return Field value.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getter(Object target, Field field) {
 		try {
 			field.setAccessible(true);
-			return (T) field.get(null);
+			return (T) field.get(target);
 		}
 		catch (IllegalAccessException ex) {
 			throw new ReflectionException(ex);
@@ -153,6 +174,7 @@ public final class ReflectionUtils {
 	}
 
 	private static class FieldAnnotatedWithPredicate implements Predicate<Field> {
+
 		private final Class<? extends Annotation> annotationKlass;
 
 		public FieldAnnotatedWithPredicate(Class<? extends Annotation> annotationKlass) {
@@ -166,6 +188,7 @@ public final class ReflectionUtils {
 	}
 
 	private static class FieldStaticPredicate implements Predicate<Field> {
+
 		@Override
 		public boolean apply(Field field) {
 			return isStatic(field.getModifiers());
@@ -173,6 +196,7 @@ public final class ReflectionUtils {
 	}
 
 	private static class MethodAnnotatedWithPredicate implements Predicate<Method> {
+
 		private final Class<? extends Annotation> annotationKlass;
 
 		public MethodAnnotatedWithPredicate(Class<? extends Annotation> annotationKlass) {
@@ -186,6 +210,7 @@ public final class ReflectionUtils {
 	}
 
 	private static class MethodStaticPredicate implements Predicate<Method> {
+
 		@Override
 		public boolean apply(Method object) {
 			return isStatic(object.getModifiers());
