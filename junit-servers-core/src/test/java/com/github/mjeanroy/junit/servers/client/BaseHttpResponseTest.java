@@ -213,6 +213,19 @@ public abstract class BaseHttpResponseTest {
 				.isEqualTo(header(headerName, headerValue));
 	}
 
+	@Test
+	public void it_should_return_strict_transport_security_header() throws Exception {
+		String headerName = "Strict-Transport-Security";
+		String headerValue = "max-age=16070400; includeSubDomains";
+		HttpResponse rsp = mockHeader(headerName, headerValue);
+
+		HttpHeader header = rsp.getStrictTransportSecurity();
+
+		assertThat(header)
+				.isNotNull()
+				.isEqualTo(header(headerName, headerValue));
+	}
+
 	private HttpResponse mockHeader(String name, String value) throws Exception {
 		HttpResponse rsp = createHttpResponse();
 		Map<String, String> headers = new HashMap<>();

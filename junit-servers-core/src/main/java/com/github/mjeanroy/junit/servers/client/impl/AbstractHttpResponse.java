@@ -33,6 +33,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ETAG;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LAST_MODIFIED;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LOCATION;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.STRICT_TRANSPORT_SECURITY;
 
 /**
  * Abstract skeleton of {HttpResponse} interface.
@@ -82,5 +83,10 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	@Override
 	public HttpHeader getLastModified() {
 		return getHeader(LAST_MODIFIED);
+	}
+
+	@Override
+	public HttpHeader getStrictTransportSecurity() {
+		return getHeader(STRICT_TRANSPORT_SECURITY);
 	}
 }

@@ -127,4 +127,11 @@ public interface HttpResponse {
 	 * @return Last-Modified header.
 	 */
 	HttpHeader getLastModified();
+
+	/**
+	 * Get Strict-Transport-Security header from http response.
+	 *
+	 * @return Strict-Transport-Security header.
+	 */
+	HttpHeader getStrictTransportSecurity();
 }
