@@ -120,4 +120,11 @@ public interface HttpResponse {
 	 * @return Cache-Control header.
 	 */
 	HttpHeader getCacheControl();
+
+	/**
+	 * Get Last-Modified header from http response.
+	 *
+	 * @return Last-Modified header.
+	 */
+	HttpHeader getLastModified();
 }

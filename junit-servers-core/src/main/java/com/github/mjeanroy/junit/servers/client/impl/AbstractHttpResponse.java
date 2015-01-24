@@ -31,6 +31,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CACHE_CONTROL
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_ENCODING;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ETAG;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LAST_MODIFIED;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LOCATION;
 
 /**
@@ -76,5 +77,10 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	@Override
 	public HttpHeader getCacheControl() {
 		return getHeader(CACHE_CONTROL);
+	}
+
+	@Override
+	public HttpHeader getLastModified() {
+		return getHeader(LAST_MODIFIED);
 	}
 }
