@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static java.lang.System.nanoTime;
 
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
@@ -110,7 +111,9 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 	@Override
 	protected HttpResponse doExecute() throws Exception {
 		Request request = builder.build();
+
+		long start = nanoTime();
 		Response response = client.executeRequest(request).get();
-		return new AsyncHttpResponse(response);
+		return new AsyncHttpResponse(response, nanoTime() - start);
 	}
 }

@@ -34,6 +34,8 @@ import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
 import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
 /**
  * Implementation of {HttpResponse} using async-http-client
@@ -48,12 +50,28 @@ public class AsyncHttpResponse extends AbstractHttpResponse {
 	private final Response response;
 
 	/**
+	 * Request execution duration in nano seconds.
+	 * This is the time to produce http response.
+	 * The value must be strictly positive.
+	 */
+	private final long duration;
+
+	/**
 	 * Create http response.
 	 *
 	 * @param response Original http response from async-http-client.
+	 * @param duration Duration of request execution (a.k.a time to produce response).
+	 * @throws NullPointerException if response is null.
+	 * @throws IllegalArgumentException if duration is not positive.
 	 */
-	AsyncHttpResponse(Response response) {
-		this.response = response;
+	AsyncHttpResponse(Response response, long duration) {
+		this.response = notNull(response, "response");
+		this.duration = positive(duration, "duration");
+	}
+
+	@Override
+	public long getRequestDuration() {
+		return duration;
 	}
 
 	@Override

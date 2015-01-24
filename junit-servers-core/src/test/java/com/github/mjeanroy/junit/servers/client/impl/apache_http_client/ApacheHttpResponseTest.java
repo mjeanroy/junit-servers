@@ -24,20 +24,20 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.github.mjeanroy.junit.servers.client.BaseHttpResponseTest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.StatusLine;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.StatusLine;
-
-import com.github.mjeanroy.junit.servers.client.BaseHttpResponseTest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ApacheHttpResponseTest extends BaseHttpResponseTest {
 
@@ -50,7 +50,7 @@ public class ApacheHttpResponseTest extends BaseHttpResponseTest {
 
 	@Override
 	protected HttpResponse createHttpResponse() throws Exception {
-		return new ApacheHttpResponse(response);
+		return new ApacheHttpResponse(response, 1_000_000);
 	}
 
 	@Override

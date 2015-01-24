@@ -164,6 +164,16 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_set_request_body() throws Exception {
+		HttpRequest request = createDefaultRequest();
+
+		String requestBody = "{foo: 'bar'}";
+		request.setBody(requestBody);
+
+		checkRequestBody(request, requestBody);
+	}
+
+	@Test
 	public void it_should_execute_request() throws Exception {
 		HttpRequest request = createDefaultRequest();
 
@@ -175,17 +185,8 @@ public abstract class BaseHttpRequestTest {
 		});
 
 		assertThat(httpResponse).isNotNull();
+		assertThat(httpResponse.getRequestDuration()).isPositive();
 		checkExecution(httpResponse);
-	}
-
-	@Test
-	public void it_should_set_request_body() throws Exception {
-		HttpRequest request = createDefaultRequest();
-
-		String requestBody = "{foo: 'bar'}";
-		request.setBody(requestBody);
-
-		checkRequestBody(request, requestBody);
 	}
 
 	@Test
@@ -200,6 +201,7 @@ public abstract class BaseHttpRequestTest {
 		});
 
 		assertThat(httpResponse).isNotNull();
+		assertThat(httpResponse.getRequestDuration()).isPositive();
 		checkExecution(httpResponse,
 				header("Content-Type", "application/json"),
 				header("Accept", "application/json")
@@ -218,6 +220,7 @@ public abstract class BaseHttpRequestTest {
 		});
 
 		assertThat(httpResponse).isNotNull();
+		assertThat(httpResponse.getRequestDuration()).isPositive();
 		checkExecution(httpResponse,
 				header("Content-Type", "application/xml"),
 				header("Accept", "application/xml")

@@ -24,14 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
-
-import java.io.StringWriter;
-import java.util.Map;
-
+import com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -43,10 +39,17 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.assertj.core.api.Condition;
 import org.mockito.ArgumentCaptor;
 
-import com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest;
-import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import java.io.StringWriter;
+import java.util.Map;
+
+import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 
@@ -117,6 +120,7 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 		assertThat(queryParams).contains(entry(name, value));
 
 		reset(client);
+		when(client.execute(any(HttpRequestBase.class))).thenReturn(mock(CloseableHttpResponse.class));
 		httpRequest.execute();
 
 		ArgumentCaptor<HttpRequestBase> rqCaptor = ArgumentCaptor.forClass(HttpRequestBase.class);
@@ -136,6 +140,7 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 		assertThat(headers).contains(entry(name, value));
 
 		reset(client);
+		when(client.execute(any(HttpRequestBase.class))).thenReturn(mock(CloseableHttpResponse.class));
 		httpRequest.execute();
 
 		ArgumentCaptor<HttpRequestBase> rqCaptor = ArgumentCaptor.forClass(HttpRequestBase.class);
@@ -152,6 +157,7 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 		checkHeader(httpRequest, "Content-Type", "application/x-www-form-urlencoded");
 
 		reset(client);
+		when(client.execute(any(HttpRequestBase.class))).thenReturn(mock(CloseableHttpResponse.class));
 		httpRequest.execute();
 
 		ArgumentCaptor<HttpEntityEnclosingRequest> rqCaptor = ArgumentCaptor.forClass(HttpEntityEnclosingRequest.class);

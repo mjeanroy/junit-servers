@@ -24,9 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
-import static java.lang.String.format;
-
 import java.util.Collection;
+
+import static java.lang.String.format;
 
 /**
  * Static utilities that can be used to check object's values.
@@ -102,7 +102,24 @@ public final class Preconditions {
 	 * @return Integer value if value is positive.
 	 */
 	public static int positive(int value, String name) {
-		if (value < 0) {
+		return checkPositiveNumber(value, name);
+	}
+
+	/**
+	 * Check that a given long value is positive.
+	 * If long value is negative, it throws an {@link IllegalArgumentException} exception,
+	 * otherwise integer value is returned.
+	 *
+	 * @param value Value to check.
+	 * @param name Name of value.
+	 * @return Long value if value is positive.
+	 */
+	public static long positive(long value, String name) {
+		return checkPositiveNumber(value, name);
+	}
+
+	private static <T extends Number> T checkPositiveNumber(T value, String name) {
+		if (value.doubleValue() < 0) {
 			throw new IllegalArgumentException(format("%s must be positive", name));
 		}
 		return value;

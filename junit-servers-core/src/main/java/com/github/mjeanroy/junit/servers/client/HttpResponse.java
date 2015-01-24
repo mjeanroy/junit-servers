@@ -26,11 +26,27 @@ package com.github.mjeanroy.junit.servers.client;
 
 /**
  * Http response.
- * <p/>
- * TODO add method: hasHeader
- * TODO add method: getETagValue
+ * An http response is defined by:
+ * - A status code: http return code (i.e 200, 400, 500 etc.).
+ * - A response body: this is the body of the http response as textual representation.
+ * - A set of headers.
+ * - Duration: time to produce http response.
  */
 public interface HttpResponse {
+
+	/**
+	 * Get duration of request execution in nano seconds.
+	 *
+	 * @return Request execution duration.
+	 */
+	long getRequestDuration();
+
+	/**
+	 * Get duration of request execution in milli seconds.
+	 *
+	 * @return Request execution duration.
+	 */
+	long getRequestDurationInMillis();
 
 	/**
 	 * Http status code.

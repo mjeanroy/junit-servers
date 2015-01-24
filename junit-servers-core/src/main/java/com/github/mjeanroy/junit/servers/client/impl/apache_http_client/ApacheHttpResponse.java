@@ -24,20 +24,21 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
-import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
-import com.github.mjeanroy.junit.servers.client.HttpHeader;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
 /**
  * Implementation of {HttpResponse} using async-http-client
@@ -52,12 +53,29 @@ public class ApacheHttpResponse extends AbstractHttpResponse {
 	private final HttpResponse response;
 
 	/**
+	 * Request duration in nano seconds.
+	 * This is the time to execute http request and
+	 * produce http response.
+	 * This duration will always be a positive number.
+	 */
+	private final long duration;
+
+	/**
 	 * Create apache http response.
 	 *
 	 * @param response Original http response.
+	 * @param duration Request duration.
+	 * @throws NullPointerException if response is null.
+	 * @throws IllegalArgumentException if duration is not positive.
 	 */
-	ApacheHttpResponse(HttpResponse response) {
-		this.response = response;
+	ApacheHttpResponse(HttpResponse response, long duration) {
+		this.response = notNull(response, "response");
+		this.duration = positive(duration, "duration");
+	}
+
+	@Override
+	public long getRequestDuration() {
+		return duration;
 	}
 
 	@Override

@@ -39,6 +39,11 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LOCATION;
 public abstract class AbstractHttpResponse implements HttpResponse {
 
 	@Override
+	public long getRequestDurationInMillis() {
+		return getRequestDuration() / 1000;
+	}
+
+	@Override
 	public boolean containsHeader(String name) {
 		return getHeader(name) != null;
 	}

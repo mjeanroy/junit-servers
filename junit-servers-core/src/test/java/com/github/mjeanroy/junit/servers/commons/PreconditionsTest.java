@@ -24,18 +24,19 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notEmpty;
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.rules.ExpectedException.none;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notEmpty;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.rules.ExpectedException.none;
 
 public class PreconditionsTest {
 
@@ -58,5 +59,31 @@ public class PreconditionsTest {
 		assertThat(result)
 				.isNotNull()
 				.isSameAs(list);
+	}
+
+	@Test
+	public void it_should_throw_exception_if_int_is_negative() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("foo must be positive");
+		positive(-1, "foo");
+	}
+
+	@Test
+	public void it_should_not_throw_exception_if_int_is_zero_or_positive() {
+		assertThat(positive(0, "foo")).isZero();
+		assertThat(positive(1, "foo")).isEqualTo(1);
+	}
+
+	@Test
+	public void it_should_throw_exception_if_long_is_negative() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("foo must be positive");
+		positive(-1L, "foo");
+	}
+
+	@Test
+	public void it_should_not_throw_exception_if_long_is_zero_or_positive() {
+		assertThat(positive(0L, "foo")).isZero();
+		assertThat(positive(1L, "foo")).isEqualTo(1L);
 	}
 }

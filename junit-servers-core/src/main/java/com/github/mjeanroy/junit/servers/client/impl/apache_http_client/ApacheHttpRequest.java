@@ -24,16 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -48,10 +42,16 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
+import static java.lang.System.nanoTime;
 
 /**
  * Implementation for {HttpRequest} that use apache http-client
@@ -169,8 +169,9 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 			}
 		}
 
+		long start = nanoTime();
 		org.apache.http.HttpResponse httpResponse = client.execute(httpRequest);
-		return new ApacheHttpResponse(httpResponse);
+		return new ApacheHttpResponse(httpResponse, nanoTime() - start);
 	}
 
 	/**

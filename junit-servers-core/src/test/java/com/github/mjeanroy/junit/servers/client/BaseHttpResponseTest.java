@@ -45,6 +45,20 @@ public abstract class BaseHttpResponseTest {
 	}
 
 	@Test
+	public void it_should_get_request_duration() throws Exception {
+		HttpResponse rsp = createHttpResponse();
+		long duration = rsp.getRequestDuration();
+		assertThat(duration).isEqualTo(1_000_000);
+	}
+
+	@Test
+	public void it_should_get_request_duration_in_millis() throws Exception {
+		HttpResponse rsp = createHttpResponse();
+		long duration = rsp.getRequestDurationInMillis();
+		assertThat(duration).isEqualTo(1_000);
+	}
+
+	@Test
 	public void it_should_build_http_response() throws Exception {
 		HttpResponse rsp = createHttpResponse();
 		checkInternals(rsp);
