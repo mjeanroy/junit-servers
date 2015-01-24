@@ -29,11 +29,14 @@ import com.github.mjeanroy.junit.servers.client.HttpResponse;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CACHE_CONTROL;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_ENCODING;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_SECURITY_POLICY;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ETAG;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LAST_MODIFIED;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LOCATION;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.STRICT_TRANSPORT_SECURITY;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CONTENT_SECURITY_POLICY;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_WEBKIT_CSP;
 
 /**
  * Abstract skeleton of {HttpResponse} interface.
@@ -88,5 +91,20 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	@Override
 	public HttpHeader getStrictTransportSecurity() {
 		return getHeader(STRICT_TRANSPORT_SECURITY);
+	}
+
+	@Override
+	public HttpHeader getContentSecurityPolicy() {
+		return getHeader(CONTENT_SECURITY_POLICY);
+	}
+
+	@Override
+	public HttpHeader getXContentSecurityPolicy() {
+		return getHeader(X_CONTENT_SECURITY_POLICY);
+	}
+
+	@Override
+	public HttpHeader getXWebkitCSP() {
+		return getHeader(X_WEBKIT_CSP);
 	}
 }

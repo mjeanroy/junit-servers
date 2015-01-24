@@ -226,6 +226,45 @@ public abstract class BaseHttpResponseTest {
 				.isEqualTo(header(headerName, headerValue));
 	}
 
+	@Test
+	public void it_should_return_content_security_policy_header() throws Exception {
+		String headerName = "Content-Security-Policy";
+		String headerValue = "default-src 'self'";
+		HttpResponse rsp = mockHeader(headerName, headerValue);
+
+		HttpHeader header = rsp.getContentSecurityPolicy();
+
+		assertThat(header)
+				.isNotNull()
+				.isEqualTo(header(headerName, headerValue));
+	}
+
+	@Test
+	public void it_should_return_x_content_security_policy_header() throws Exception {
+		String headerName = "X-Content-Security-Policy";
+		String headerValue = "default-src 'self'";
+		HttpResponse rsp = mockHeader(headerName, headerValue);
+
+		HttpHeader header = rsp.getXContentSecurityPolicy();
+
+		assertThat(header)
+				.isNotNull()
+				.isEqualTo(header(headerName, headerValue));
+	}
+
+	@Test
+	public void it_should_return_x_webkit_csp_header() throws Exception {
+		String headerName = "X-Webkit-CSP";
+		String headerValue = "default-src 'self'";
+		HttpResponse rsp = mockHeader(headerName, headerValue);
+
+		HttpHeader header = rsp.getXWebkitCSP();
+
+		assertThat(header)
+				.isNotNull()
+				.isEqualTo(header(headerName, headerValue));
+	}
+
 	private HttpResponse mockHeader(String name, String value) throws Exception {
 		HttpResponse rsp = createHttpResponse();
 		Map<String, String> headers = new HashMap<>();

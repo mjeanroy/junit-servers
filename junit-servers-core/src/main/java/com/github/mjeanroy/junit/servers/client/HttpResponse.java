@@ -134,4 +134,36 @@ public interface HttpResponse {
 	 * @return Strict-Transport-Security header.
 	 */
 	HttpHeader getStrictTransportSecurity();
+
+	/**
+	 * Get Content-Security-Policy header from http response.
+	 * This header is the standard header for Content-Security-Policy.
+	 *
+	 * At the time of writing (January, 2015), it is supported
+	 * in Chrome since version 25, and in Firefox since version 23.
+	 *
+	 * @return Content-Security-Policy header.
+	 */
+	HttpHeader getContentSecurityPolicy();
+
+	/**
+	 * Get X-Content-Security-Policy header from http response.
+	 * This header was initially an experimental header implemented
+	 * in Firefox.
+	 *
+	 * At the time of writing (January, 2015), it is supported
+	 * in Firefox from version 4 to version 22 and in IE 10 and IE 11.
+	 *
+	 * @return X-Content-Security-Policy header.
+	 */
+	HttpHeader getXContentSecurityPolicy();
+
+	/**
+	 * Get X-Webkit-CSP header from http response.
+	 * This header was initially an experimental header implemented
+	 * in Webkit browser (Chrome and Safari).
+	 *
+	 * @return X-Content-Security-Policy header.
+	 */
+	HttpHeader getXWebkitCSP();
 }
