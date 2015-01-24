@@ -38,6 +38,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.STRICT_TRANSP
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CONTENT_SECURITY_POLICY;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CONTENT_TYPE_OPTIONS;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_WEBKIT_CSP;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_XSS_PROTECTION;
 
 /**
  * Abstract skeleton of {HttpResponse} interface.
@@ -112,5 +113,10 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	@Override
 	public HttpHeader getXContentTypeOptions() {
 		return getHeader(X_CONTENT_TYPE_OPTIONS);
+	}
+
+	@Override
+	public HttpHeader getXXSSProtection() {
+		return getHeader(X_XSS_PROTECTION);
 	}
 }

@@ -173,4 +173,11 @@ public interface HttpResponse {
 	 * @return X-Content-Type-Options header.
 	 */
 	HttpHeader getXContentTypeOptions();
+
+	/**
+	 * Get X-XSS-Protection header from http response.
+	 *
+	 * @return X-XSS-Protection header.
+	 */
+	HttpHeader getXXSSProtection();
 }
