@@ -36,6 +36,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LAST_MODIFIED
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LOCATION;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.STRICT_TRANSPORT_SECURITY;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CONTENT_SECURITY_POLICY;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CONTENT_TYPE_OPTIONS;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_WEBKIT_CSP;
 
 /**
@@ -106,5 +107,10 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	@Override
 	public HttpHeader getXWebkitCSP() {
 		return getHeader(X_WEBKIT_CSP);
+	}
+
+	@Override
+	public HttpHeader getXContentTypeOptions() {
+		return getHeader(X_CONTENT_TYPE_OPTIONS);
 	}
 }

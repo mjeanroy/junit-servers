@@ -42,6 +42,7 @@ public final class HttpHeaders {
 	public static final String CONTENT_SECURITY_POLICY = "Content-Security-Policy";
 	public static final String X_CONTENT_SECURITY_POLICY = "X-Content-Security-Policy";
 	public static final String X_WEBKIT_CSP = "X-Webkit-CSP";
+	public static final String X_CONTENT_TYPE_OPTIONS = "X-Content-Type-Options";
 	public static final String USER_AGENT = "User-Agent";
 	public static final String REQUESTED_WITH = "X-Requested-With";
 	public static final String ACCEPT = "Accept";

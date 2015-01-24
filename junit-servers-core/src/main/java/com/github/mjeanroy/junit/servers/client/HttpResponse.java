@@ -166,4 +166,11 @@ public interface HttpResponse {
 	 * @return X-Content-Security-Policy header.
 	 */
 	HttpHeader getXWebkitCSP();
+
+	/**
+	 * Get X-Content-Type-Options header from http response.
+	 *
+	 * @return X-Content-Type-Options header.
+	 */
+	HttpHeader getXContentTypeOptions();
 }

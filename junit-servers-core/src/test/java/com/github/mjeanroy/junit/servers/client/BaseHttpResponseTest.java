@@ -265,6 +265,19 @@ public abstract class BaseHttpResponseTest {
 				.isEqualTo(header(headerName, headerValue));
 	}
 
+	@Test
+	public void it_should_return_x_content_type_options_header() throws Exception {
+		String headerName = "X-Content-Type-Options";
+		String headerValue = "nosniff";
+		HttpResponse rsp = mockHeader(headerName, headerValue);
+
+		HttpHeader header = rsp.getXContentTypeOptions();
+
+		assertThat(header)
+				.isNotNull()
+				.isEqualTo(header(headerName, headerValue));
+	}
+
 	private HttpResponse mockHeader(String name, String value) throws Exception {
 		HttpResponse rsp = createHttpResponse();
 		Map<String, String> headers = new HashMap<>();
