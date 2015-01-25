@@ -24,18 +24,19 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static java.lang.System.nanoTime;
-
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
+import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
+
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static java.lang.System.nanoTime;
 
 /**
  * Implementation for {HttpRequest} that use async-http-client
@@ -105,6 +106,24 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 	@Override
 	protected HttpRequest applyBody(String body) {
 		builder.setBody(body);
+		return this;
+	}
+
+	@Override
+	protected HttpRequest applyCookie(Cookie cookie) {
+		com.ning.http.client.cookie.Cookie c = new com.ning.http.client.cookie.Cookie(
+				cookie.getName(),
+				cookie.getValue(),
+				cookie.getValue(),
+				cookie.getDomain(),
+				cookie.getPath(),
+				cookie.getExpires(),
+				cookie.getMaxAge(),
+				cookie.isSecure(),
+				cookie.isHttpOnly()
+		);
+
+		builder.addCookie(c);
 		return this;
 	}
 

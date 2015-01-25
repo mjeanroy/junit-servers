@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
 import com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest;
+import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
@@ -40,6 +41,7 @@ import org.assertj.core.api.Condition;
 import org.mockito.ArgumentCaptor;
 
 import java.io.StringWriter;
+import java.util.List;
 import java.util.Map;
 
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
@@ -183,6 +185,25 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 	protected void checkRequestBody(HttpRequest httpRequest, String body) throws Exception {
 		String requestBody = extract(httpRequest, "body");
 		assertThat(requestBody).isEqualTo(body);
+	}
+
+	@Override
+	protected void checkCookie(HttpRequest httpRequest, Cookie cookie) throws Exception {
+		List<Cookie> cookies = extract(httpRequest, "cookies");
+		assertThat(cookies)
+				.isNotNull()
+				.isNotEmpty()
+				.contains(cookie);
+
+		reset(client);
+		when(client.execute(any(HttpRequestBase.class))).thenReturn(mock(CloseableHttpResponse.class));
+		httpRequest.execute();
+
+		ArgumentCaptor<HttpRequestBase> rqCaptor = ArgumentCaptor.forClass(HttpRequestBase.class);
+		verify(client).execute(rqCaptor.capture());
+
+		HttpRequestBase rq = rqCaptor.getValue();
+		assertThat(rq.getFirstHeader("Cookie").getValue()).isEqualTo(cookie.toHeaderValue());
 	}
 
 	@SuppressWarnings("unchecked")

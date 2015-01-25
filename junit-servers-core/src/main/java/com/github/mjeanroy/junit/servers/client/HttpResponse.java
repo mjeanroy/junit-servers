@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import java.util.List;
+
 /**
  * Http response.
  * An http response is defined by:
@@ -78,6 +80,21 @@ public interface HttpResponse {
 	 * @throws NullPointerException if name is null.
 	 */
 	HttpHeader getHeader(String name);
+
+	/**
+	 * Get cookie by its name.
+	 *
+	 * @param name Cookie name.
+	 * @return Cookie.
+	 */
+	Cookie getCookie(String name);
+
+	/**
+	 * Get cookies sent by server.
+	 *
+	 * @return Cookies.
+	 */
+	List<Cookie> getCookies();
 
 	/**
 	 * Check that http has ETag header.

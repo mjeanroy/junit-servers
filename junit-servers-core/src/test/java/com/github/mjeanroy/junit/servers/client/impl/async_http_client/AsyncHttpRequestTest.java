@@ -24,19 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
-import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.apache.commons.lang3.reflect.FieldUtils.writeField;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
-
-import java.util.List;
-import java.util.Map;
-
-import org.mockito.ArgumentCaptor;
-
 import com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest;
+import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
@@ -45,10 +34,25 @@ import com.ning.http.client.Param;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
+import org.mockito.ArgumentCaptor;
+
+import java.util.List;
+import java.util.Map;
+
+import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static org.apache.commons.lang3.reflect.FieldUtils.writeField;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 
 	private com.ning.http.client.AsyncHttpClient client;
+
 	private Response response;
 
 	@Override
@@ -90,7 +94,7 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 
 		// Use a spy on request builder
 		RequestBuilder builder = spy((RequestBuilder) readField(httpRequest, "builder", true));
-		writeField(httpRequest, "builder", builder , true);
+		writeField(httpRequest, "builder", builder, true);
 
 		return httpRequest;
 	}
@@ -130,6 +134,31 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	protected void checkRequestBody(HttpRequest httpRequest, String body) throws Exception {
 		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
 		verify(builder).setBody(body);
+	}
+
+	@Override
+	protected void checkCookie(HttpRequest httpRequest, Cookie cookie) throws Exception {
+		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
+
+		ArgumentCaptor<com.ning.http.client.cookie.Cookie> cookieCaptor = ArgumentCaptor.forClass(com.ning.http.client.cookie.Cookie.class);
+		verify(builder).addCookie(cookieCaptor.capture());
+
+		com.ning.http.client.cookie.Cookie c = cookieCaptor.getValue();
+		assertThat(c.getName()).isEqualTo(cookie.getName());
+		assertThat(c.getValue()).isEqualTo(cookie.getValue());
+		assertThat(c.getDomain()).isEqualTo(cookie.getDomain());
+		assertThat(c.getPath()).isEqualTo(cookie.getPath());
+		assertThat(c.getExpires()).isEqualTo(cookie.getExpires());
+		assertThat(c.getMaxAge()).isEqualTo(cookie.getMaxAge());
+		assertThat(c.isSecure()).isEqualTo(cookie.isSecure());
+		assertThat(c.isHttpOnly()).isEqualTo(cookie.isHttpOnly());
+
+		// Check produced request
+		Request rq = builder.build();
+		assertThat(rq.getCookies())
+				.isNotNull()
+				.isNotEmpty()
+				.contains(c);
 	}
 
 	@Override

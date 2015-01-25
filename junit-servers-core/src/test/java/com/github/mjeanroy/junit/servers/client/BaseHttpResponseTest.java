@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
@@ -289,6 +290,51 @@ public abstract class BaseHttpResponseTest {
 		assertThat(header)
 				.isNotNull()
 				.isEqualTo(header(headerName, headerValue));
+	}
+
+	@Test
+	public void it_should_get_cookie() throws Exception {
+		String headerName = "Set-Cookie";
+		String headerValue = "ubid-acbfr=277-2963663-2993265; path=/; domain=.amazon.fr; expires=Mon, 31-Dec-2035 23:00:01 GMT";
+		HttpResponse rsp = mockHeader(headerName, headerValue);
+
+		Cookie cookie = rsp.getCookie("ubid-acbfr");
+
+		assertThat(cookie).isNotNull();
+		assertThat(cookie.getName()).isEqualTo("ubid-acbfr");
+		assertThat(cookie.getValue()).isEqualTo("277-2963663-2993265");
+		assertThat(cookie.getPath()).isEqualTo("/");
+		assertThat(cookie.getDomain()).isEqualTo(".amazon.fr");
+		assertThat(cookie.getExpires()).isEqualTo(2082754801000L);
+	}
+
+	@Test
+	public void it_should_get_all_cookies() throws Exception {
+		String headerName = "Set-Cookie";
+		String headerValue = "ubid-acbfr=277-2963663-2993265; path=/; domain=.amazon.fr; expires=Mon, 31-Dec-2035 23:00:01 GMT";
+		HttpResponse rsp = mockHeader(headerName, headerValue);
+
+		List<Cookie> cookies = rsp.getCookies();
+
+		assertThat(cookies).isNotNull().isNotEmpty();
+
+		Cookie cookie = cookies.get(0);
+		assertThat(cookie.getName()).isEqualTo("ubid-acbfr");
+		assertThat(cookie.getValue()).isEqualTo("277-2963663-2993265");
+		assertThat(cookie.getPath()).isEqualTo("/");
+		assertThat(cookie.getDomain()).isEqualTo(".amazon.fr");
+		assertThat(cookie.getExpires()).isEqualTo(2082754801000L);
+	}
+
+	@Test
+	public void it_should_return_null_if_cookie_does_not_exist() throws Exception {
+		String headerName = "Set-Cookie";
+		String headerValue = "ubid-acbfr=277-2963663-2993265; path=/; domain=.amazon.fr; expires=Mon, 31-Dec-2035 23:00:01 GMT";
+		HttpResponse rsp = mockHeader(headerName, headerValue);
+
+		Cookie cookie = rsp.getCookie("foo");
+
+		assertThat(cookie).isNull();
 	}
 
 	private HttpResponse mockHeader(String name, String value) throws Exception {

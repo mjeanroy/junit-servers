@@ -173,6 +173,14 @@ public interface HttpRequest {
 	HttpRequest withUserAgent(String userAgent);
 
 	/**
+	 * Add cookie to http request.
+	 *
+	 * @param cookie Cookie.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addCookie(Cookie cookie);
+
+	/**
 	 * Execute request and return http response.
 	 * Execution is synchronous and will block until
 	 * response is available.

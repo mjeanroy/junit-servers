@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
+import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
@@ -47,9 +48,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static java.lang.System.nanoTime;
 
@@ -95,6 +98,11 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	private final Map<String, String> headers;
 
 	/**
+	 * List of cookies.
+	 */
+	private final List<Cookie> cookies;
+
+	/**
 	 * Request body.
 	 */
 	private String body;
@@ -113,6 +121,7 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 		this.queryParams = new HashMap<>();
 		this.formParams = new HashMap<>();
 		this.headers = new HashMap<>();
+		this.cookies = new LinkedList<>();
 	}
 
 	@Override
@@ -148,6 +157,12 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	}
 
 	@Override
+	protected HttpRequest applyCookie(Cookie cookie) {
+		this.cookies.add(cookie);
+		return this;
+	}
+
+	@Override
 	protected HttpResponse doExecute() throws Exception {
 		HttpRequestBase httpRequest = FACTORY.create(httpMethod);
 
@@ -156,6 +171,9 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 
 		// Add http headers
 		handleHeaders(httpRequest);
+
+		// Add http cookies
+		handleCookies(httpRequest);
 
 		// Add request body if allowed
 		if (httpMethod.isBodyAllowed()) {
@@ -230,6 +248,30 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	private void handleRequestBody(HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
 		HttpEntity entity = new StringEntity(body);
 		httpRequest.setEntity(entity);
+	}
+
+	/**
+	 * Set request body value to http request.
+	 *
+	 * @param httpRequest Http request in creation.
+	 * @throws UnsupportedEncodingException
+	 */
+	private void handleCookies(HttpRequestBase httpRequest) throws UnsupportedEncodingException {
+		if (!cookies.isEmpty()) {
+			int size = cookies.size();
+
+			// Build header value
+			StringBuilder builder = new StringBuilder();
+			for (int i = 0; i < size; ++i) {
+				Cookie cookie = cookies.get(i);
+				builder.append(cookie.toHeaderValue());
+				if (i != (size - 1)) {
+					builder.append("; ");
+				}
+			}
+
+			httpRequest.addHeader(COOKIE, builder.toString());
+		}
 	}
 
 	private static class ApacheHttpRequestFactory {

@@ -47,6 +47,8 @@ public final class HttpHeaders {
 	public static final String USER_AGENT = "User-Agent";
 	public static final String REQUESTED_WITH = "X-Requested-With";
 	public static final String ACCEPT = "Accept";
+	public static final String COOKIE = "Cookie";
+	public static final String SET_COOKIE = "Set-Cookie";
 
 	public static final String XML_HTTP_REQUEST = "XMLHttpRequest";
 	public static final String APPLICATION_JSON = "application/json";

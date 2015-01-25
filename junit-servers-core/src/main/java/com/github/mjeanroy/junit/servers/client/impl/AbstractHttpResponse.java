@@ -24,9 +24,14 @@
 
 package com.github.mjeanroy.junit.servers.client.impl;
 
+import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.github.mjeanroy.junit.servers.client.Cookie.read;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CACHE_CONTROL;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_ENCODING;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_SECURITY_POLICY;
@@ -34,11 +39,15 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ETAG;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LAST_MODIFIED;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.LOCATION;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.SET_COOKIE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.STRICT_TRANSPORT_SECURITY;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CONTENT_SECURITY_POLICY;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CONTENT_TYPE_OPTIONS;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_WEBKIT_CSP;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_XSS_PROTECTION;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * Abstract skeleton of {HttpResponse} interface.
@@ -53,6 +62,46 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	@Override
 	public boolean containsHeader(String name) {
 		return getHeader(name) != null;
+	}
+
+	@Override
+	public Cookie getCookie(String name) {
+		notBlank(name, "name");
+
+		HttpHeader header = getHeader("Set-Cookie");
+		if (header == null) {
+			// No cookie in response
+			return null;
+		}
+
+		// Check each cookie to find cookie by its name
+		for (String value : header.getValues()) {
+			Cookie cookie = read(value);
+			if (cookie.getName().equals(name)) {
+				return cookie;
+			}
+		}
+
+		// No matching
+		return null;
+	}
+
+	@Override
+	public List<Cookie> getCookies() {
+		HttpHeader header = getHeader(SET_COOKIE);
+		if (header == null) {
+			// No cookie in response
+			return emptyList();
+		}
+
+		List<String> values = header.getValues();
+		List<Cookie> cookies = new ArrayList<>(values.size());
+		for (String value : values) {
+			Cookie cookie = read(value);
+			cookies.add(cookie);
+		}
+
+		return unmodifiableList(cookies);
 	}
 
 	@Override

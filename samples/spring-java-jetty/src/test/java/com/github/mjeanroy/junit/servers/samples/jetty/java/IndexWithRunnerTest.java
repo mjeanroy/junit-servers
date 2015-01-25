@@ -24,16 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
-import static org.assertj.core.api.Assertions.*;
-
-import javax.servlet.ServletContext;
-import java.io.File;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
@@ -42,6 +32,16 @@ import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import javax.servlet.ServletContext;
+import java.io.File;
+
+import static com.github.mjeanroy.junit.servers.client.Cookie.cookie;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(JunitServerRunner.class)
 public class IndexWithRunnerTest {
@@ -70,11 +70,14 @@ public class IndexWithRunnerTest {
 
 	@Test
 	public void it_should_have_an_index() {
-		HttpResponse rsp = client.prepareGet("/index").execute();
+		HttpResponse rsp = client.prepareGet("/index")
+				.addCookie(cookie("foo", "bar", null, null, 0, 0, false, false))
+				.execute();
+
 		String message = rsp.body();
 		assertThat(message)
 				.isNotEmpty()
-				.isEqualTo("Hello World");
+				.isEqualTo("Hello bar");
 
 		// Try to get servlet context
 		ServletContext servletContext = jetty.getServletContext();

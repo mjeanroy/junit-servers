@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest.HeaderEntry.header;
+import static com.github.mjeanroy.junit.servers.client.Cookie.cookie;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -174,6 +175,14 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_add_cookie() throws Exception {
+		Cookie cookie = cookie("foo", "bar", "foo.com", "/bar", 0, 0, true, true);
+		HttpRequest request = createDefaultRequest();
+		request.addCookie(cookie);
+		checkCookie(request, cookie);
+	}
+
+	@Test
 	public void it_should_execute_request() throws Exception {
 		HttpRequest request = createDefaultRequest();
 
@@ -317,6 +326,15 @@ public abstract class BaseHttpRequestTest {
 	 * @throws Exception
 	 */
 	protected abstract void checkRequestBody(HttpRequest httpRequest, String body) throws Exception;
+
+	/**
+	 * Check that http request get expected cookie.
+	 *
+	 * @param httpRequest Http request.
+	 * @param cookie Cookie to check.
+	 * @throws Exception
+	 */
+	protected abstract void checkCookie(HttpRequest httpRequest, Cookie cookie) throws Exception;
 
 	/**
 	 * Check that http request execution is valid.
