@@ -35,6 +35,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_F
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_JSON;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_XML;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_MATCH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_NONE_MATCH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.MULTIPART_FORM_DATA;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REQUESTED_WITH;
@@ -57,6 +58,11 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	@Override
 	public HttpRequest addIfNoneMatch(String etag) {
 		return addHeader(IF_NONE_MATCH, notBlank(etag, "etag"));
+	}
+
+	@Override
+	public HttpRequest addIfMatch(String etag) {
+		return addHeader(IF_MATCH, notBlank(etag, "etag"));
 	}
 
 	@Override

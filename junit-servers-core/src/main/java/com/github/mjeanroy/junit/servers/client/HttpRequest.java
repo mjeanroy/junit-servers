@@ -191,6 +191,19 @@ public interface HttpRequest {
 	HttpRequest addIfNoneMatch(String etag);
 
 	/**
+	 * Add "If-Match" header with expected value.
+	 * This header should work with ETag header sent by server
+	 * response.
+	 *
+	 * This header should be added for POST, PUT or DELETE
+	 * request but no check will be made.
+	 *
+	 * @param etag ETag value.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addIfMatch(String etag);
+
+	/**
 	 * Execute request and return http response.
 	 * Execution is synchronous and will block until
 	 * response is available.
