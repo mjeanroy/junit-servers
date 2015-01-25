@@ -183,6 +183,14 @@ public interface HttpRequest {
 	HttpRequest addOrigin(String origin);
 
 	/**
+	 * Add Referer header.
+	 *
+	 * @param referer Referer value.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addReferer(String referer);
+
+	/**
 	 * Add user agent header to http request.
 	 *
 	 * @param userAgent User-Agent value.

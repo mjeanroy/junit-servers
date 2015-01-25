@@ -198,6 +198,14 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_add_referer() throws Exception {
+		String referer = "http://en.wikipedia.org/wiki/Main_Page";
+		HttpRequest request = createDefaultRequest();
+		request.addReferer(referer);
+		checkHeader(request, "Referer", referer);
+	}
+
+	@Test
 	public void it_should_add_query_param() throws Exception {
 		HttpRequest request = createDefaultRequest();
 
