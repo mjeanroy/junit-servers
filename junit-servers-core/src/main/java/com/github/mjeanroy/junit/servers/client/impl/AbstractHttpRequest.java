@@ -35,11 +35,13 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_F
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_JSON;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_XML;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_NONE_MATCH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.MULTIPART_FORM_DATA;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REQUESTED_WITH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.USER_AGENT;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.XML_HTTP_REQUEST;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
@@ -50,6 +52,11 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	@Override
 	public HttpRequest asXmlHttpRequest() {
 		return addHeader(REQUESTED_WITH, XML_HTTP_REQUEST);
+	}
+
+	@Override
+	public HttpRequest addIfNoneMatch(String etag) {
+		return addHeader(IF_NONE_MATCH, notBlank(etag, "etag"));
 	}
 
 	@Override

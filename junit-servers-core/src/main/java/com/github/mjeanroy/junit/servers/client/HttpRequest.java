@@ -181,6 +181,16 @@ public interface HttpRequest {
 	HttpRequest addCookie(Cookie cookie);
 
 	/**
+	 * Add "If-None-Match" header with expected value.
+	 * This header should work with ETag header sent by server
+	 * response.
+	 *
+	 * @param etag ETag value.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addIfNoneMatch(String etag);
+
+	/**
 	 * Execute request and return http response.
 	 * Execution is synchronous and will block until
 	 * response is available.

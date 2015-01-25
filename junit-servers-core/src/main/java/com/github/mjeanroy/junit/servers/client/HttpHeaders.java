@@ -49,6 +49,7 @@ public final class HttpHeaders {
 	public static final String ACCEPT = "Accept";
 	public static final String COOKIE = "Cookie";
 	public static final String SET_COOKIE = "Set-Cookie";
+	public static final String IF_NONE_MATCH = "If-None-Match";
 
 	public static final String XML_HTTP_REQUEST = "XMLHttpRequest";
 	public static final String APPLICATION_JSON = "application/json";

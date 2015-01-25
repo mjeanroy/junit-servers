@@ -142,6 +142,14 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_add_if_none_match_header() throws Exception {
+		HttpRequest request = createDefaultRequest();
+		String etag = "foo";
+		request.addIfNoneMatch(etag);
+		checkHeader(request, "If-None-Match", etag);
+	}
+
+	@Test
 	public void it_should_add_query_param() throws Exception {
 		HttpRequest request = createDefaultRequest();
 
