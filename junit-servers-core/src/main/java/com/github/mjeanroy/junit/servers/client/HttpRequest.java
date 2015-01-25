@@ -175,6 +175,14 @@ public interface HttpRequest {
 	HttpRequest acceptLanguage(String lang);
 
 	/**
+	 * Add Origin header.
+	 *
+	 * @param origin Origin value.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addOrigin(String origin);
+
+	/**
 	 * Add user agent header to http request.
 	 *
 	 * @param userAgent User-Agent value.

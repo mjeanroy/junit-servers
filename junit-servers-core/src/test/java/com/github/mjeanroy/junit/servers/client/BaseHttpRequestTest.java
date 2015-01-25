@@ -183,9 +183,18 @@ public abstract class BaseHttpRequestTest {
 
 	@Test
 	public void it_should_accept_languages() throws Exception {
+		String lang = "FR";
 		HttpRequest request = createDefaultRequest();
-		request.acceptLanguage("FR");
-		checkHeader(request, "Accept-Language", "FR");
+		request.acceptLanguage(lang);
+		checkHeader(request, "Accept-Language", lang);
+	}
+
+	@Test
+	public void it_should_add_origin() throws Exception {
+		String origin = "http://www.example-social-network.com";
+		HttpRequest request = createDefaultRequest();
+		request.addOrigin(origin);
+		checkHeader(request, "Origin", origin);
 	}
 
 	@Test

@@ -43,6 +43,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_MODIFIED_S
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_NONE_MATCH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_UNMODIFIED_SINCE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.MULTIPART_FORM_DATA;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ORIGIN;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REQUESTED_WITH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.USER_AGENT;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.XML_HTTP_REQUEST;
@@ -64,6 +65,11 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	@Override
 	public HttpRequest acceptLanguage(String lang) {
 		return addHeader(ACCEPT_LANGUAGE, notBlank(lang, "lang"));
+	}
+
+	@Override
+	public HttpRequest addOrigin(String origin) {
+		return addHeader(ORIGIN, notBlank(origin, "origin"));
 	}
 
 	@Override
