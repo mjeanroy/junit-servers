@@ -49,6 +49,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REFERER;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REQUESTED_WITH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.USER_AGENT;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.XML_HTTP_REQUEST;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CSRF_TOKEN;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_HTTP_METHOD_OVERRIDE;
 import static com.github.mjeanroy.junit.servers.client.HttpMethod.DELETE;
 import static com.github.mjeanroy.junit.servers.client.HttpMethod.PUT;
@@ -205,7 +206,12 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	public HttpRequest addXHttpMethodOverride(String method) {
-		return addHeader(X_HTTP_METHOD_OVERRIDE, method);
+		return addHeader(X_HTTP_METHOD_OVERRIDE, notBlank(method, "method"));
+	}
+
+	@Override
+	public HttpRequest addCsrfToken(String token) {
+		return addHeader(X_CSRF_TOKEN, notBlank(token, "token"));
 	}
 
 	@Override

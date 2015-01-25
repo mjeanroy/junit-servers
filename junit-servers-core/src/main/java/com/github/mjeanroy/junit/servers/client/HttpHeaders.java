@@ -58,6 +58,7 @@ public final class HttpHeaders {
 	public static final String IF_MODIFIED_SINCE = "If-Modified-Since";
 	public static final String IF_UNMODIFIED_SINCE = "If-Unmodified-Since";
 	public static final String X_HTTP_METHOD_OVERRIDE = "X-Http-Method-Override";
+	public static final String X_CSRF_TOKEN = "X-Csrf-Token";
 
 	public static final String XML_HTTP_REQUEST = "XMLHttpRequest";
 	public static final String APPLICATION_JSON = "application/json";

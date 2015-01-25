@@ -271,6 +271,14 @@ public interface HttpRequest {
 	HttpRequest addXHttpMethodOverride(String method);
 
 	/**
+	 * Add CSRF Token to http header (as header "X-Csrf-Token").
+	 *
+	 * @param token Token value.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addCsrfToken(String token);
+
+	/**
 	 * Add X-Http-Method-Override value with PUT value.
 	 *
 	 * @return Http request that can be used for chaining.

@@ -242,6 +242,14 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_add_csrf_token() throws Exception {
+		String token = "token";
+		HttpRequest request = createDefaultRequest();
+		request.addCsrfToken(token);
+		checkHeader(request, "X-Csrf-Token", token);
+	}
+
+	@Test
 	public void it_should_add_query_param() throws Exception {
 		HttpRequest request = createDefaultRequest();
 
