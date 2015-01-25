@@ -25,15 +25,12 @@
 package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.AbstractJettyTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -43,11 +40,7 @@ import java.io.File;
 import static com.github.mjeanroy.junit.servers.client.Cookie.cookie;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(JunitServerRunner.class)
-public class IndexWithRunnerTest {
-
-	@TestServer
-	private static EmbeddedServer jetty;
+public class IndexWithRunnerTest extends AbstractJettyTest {
 
 	@TestHttpClient
 	private static HttpClient client;
@@ -80,7 +73,7 @@ public class IndexWithRunnerTest {
 				.isEqualTo("Hello bar");
 
 		// Try to get servlet context
-		ServletContext servletContext = jetty.getServletContext();
+		ServletContext servletContext = server.getServletContext();
 		assertThat(servletContext).isNotNull();
 
 		// Try to retrieve spring webApplicationContext

@@ -24,17 +24,18 @@
 
 package com.github.mjeanroy.junit.servers.utils;
 
-import org.junit.ClassRule;
-
-import com.github.mjeanroy.junit.servers.rules.ServerRule;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.junit.runner.RunWith;
 
 /**
  * Simple abstraction that define a server rule using jetty as embedded server.
  */
+@RunWith(JunitServerRunner.class)
 public abstract class AbstractJettyTest {
 
-	@ClassRule
-	public static ServerRule server = new JettyServerRule();
+	@TestServer
+	public static EmbeddedServer server;
 
 }
