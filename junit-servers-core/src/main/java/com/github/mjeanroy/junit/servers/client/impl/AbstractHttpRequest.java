@@ -40,6 +40,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_MATCH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_MODIFIED_SINCE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_NONE_MATCH;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_UNMODIFIED_SINCE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.MULTIPART_FORM_DATA;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REQUESTED_WITH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.USER_AGENT;
@@ -73,6 +74,12 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	public HttpRequest addIfModifiedSince(Date date) {
 		String value = format(date, "EEE, dd MMM yyyy HH:mm:ss zzz");
 		return addHeader(IF_MODIFIED_SINCE, value);
+	}
+
+	@Override
+	public HttpRequest addIfUnmodifiedSince(Date date) {
+		String value = format(date, "EEE, dd MMM yyyy HH:mm:ss zzz");
+		return addHeader(IF_UNMODIFIED_SINCE, value);
 	}
 
 	@Override

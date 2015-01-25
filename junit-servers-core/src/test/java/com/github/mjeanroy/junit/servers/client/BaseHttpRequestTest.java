@@ -171,6 +171,17 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_add_if_unmodified_since_header() throws Exception {
+		HttpRequest request = createDefaultRequest();
+
+		Date date = new Date();
+		date.setTime(1610576581000L);
+
+		request.addIfUnmodifiedSince(date);
+		checkHeader(request, "If-Unmodified-Since", "Wed, 13 Jan 2021 22:23:01 GMT");
+	}
+
+	@Test
 	public void it_should_add_query_param() throws Exception {
 		HttpRequest request = createDefaultRequest();
 

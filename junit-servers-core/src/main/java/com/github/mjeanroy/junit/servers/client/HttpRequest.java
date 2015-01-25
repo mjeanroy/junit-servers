@@ -215,6 +215,15 @@ public interface HttpRequest {
 	HttpRequest addIfModifiedSince(Date date);
 
 	/**
+	 * Add If-Unmodified-Since value with expected date.
+	 * Date will be translated as GMT format.
+	 *
+	 * @param date Date.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addIfUnmodifiedSince(Date date);
+
+	/**
 	 * Execute request and return http response.
 	 * Execution is synchronous and will block until
 	 * response is available.
