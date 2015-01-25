@@ -33,6 +33,7 @@ import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import java.util.Date;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT_LANGUAGE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_FORM_URL_ENCODED;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_JSON;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_XML;
@@ -61,6 +62,11 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	}
 
 	@Override
+	public HttpRequest acceptLanguage(String lang) {
+		return addHeader(ACCEPT_LANGUAGE, notBlank(lang, "lang"));
+	}
+
+	@Override
 	public HttpRequest addIfNoneMatch(String etag) {
 		return addHeader(IF_NONE_MATCH, notBlank(etag, "etag"));
 	}
@@ -72,19 +78,19 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	public HttpRequest addIfModifiedSince(Date date) {
-		String value = format(date, "EEE, dd MMM yyyy HH:mm:ss zzz");
+		String value = format(notNull(date, "date"), "EEE, dd MMM yyyy HH:mm:ss zzz");
 		return addHeader(IF_MODIFIED_SINCE, value);
 	}
 
 	@Override
 	public HttpRequest addIfUnmodifiedSince(Date date) {
-		String value = format(date, "EEE, dd MMM yyyy HH:mm:ss zzz");
+		String value = format(notNull(date, "date"), "EEE, dd MMM yyyy HH:mm:ss zzz");
 		return addHeader(IF_UNMODIFIED_SINCE, value);
 	}
 
 	@Override
 	public HttpRequest withUserAgent(String userAgent) {
-		return addHeader(USER_AGENT, userAgent);
+		return addHeader(USER_AGENT, notBlank(userAgent, "userAgent"));
 	}
 
 	@Override

@@ -167,6 +167,14 @@ public interface HttpRequest {
 	HttpRequest acceptXml();
 
 	/**
+	 * Add Accept-Language header.
+	 *
+	 * @param lang Accepted languages.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest acceptLanguage(String lang);
+
+	/**
 	 * Add user agent header to http request.
 	 *
 	 * @param userAgent User-Agent value.

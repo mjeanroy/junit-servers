@@ -182,6 +182,13 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_accept_languages() throws Exception {
+		HttpRequest request = createDefaultRequest();
+		request.acceptLanguage("FR");
+		checkHeader(request, "Accept-Language", "FR");
+	}
+
+	@Test
 	public void it_should_add_query_param() throws Exception {
 		HttpRequest request = createDefaultRequest();
 
