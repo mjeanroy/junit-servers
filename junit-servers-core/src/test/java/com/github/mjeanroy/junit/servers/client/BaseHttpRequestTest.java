@@ -206,6 +206,21 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_add_accept_encoding() throws Exception {
+		String encoding = "gzip, deflate";
+		HttpRequest request = createDefaultRequest();
+		request.addAcceptEncoding(encoding);
+		checkHeader(request, "Accept-Encoding", encoding);
+	}
+
+	@Test
+	public void it_should_add_accept_encoding_gzip() throws Exception {
+		HttpRequest request = createDefaultRequest();
+		request.acceptGzip();
+		checkHeader(request, "Accept-Encoding", "gzip, deflate");
+	}
+
+	@Test
 	public void it_should_add_query_param() throws Exception {
 		HttpRequest request = createDefaultRequest();
 

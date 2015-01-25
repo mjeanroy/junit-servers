@@ -36,6 +36,7 @@ public final class HttpHeaders {
 	public static final String CONTENT_TYPE = "Content-Type";
 	public static final String CONTENT_ENCODING = "Content-Encoding";
 	public static final String ACCEPT_LANGUAGE = "Accept-Language";
+	public static final String ACCEPT_ENCODING = "Accept-Encoding";
 	public static final String ORIGIN = "Origin";
 	public static final String REFERER = "Referer";
 	public static final String LOCATION = "Location";

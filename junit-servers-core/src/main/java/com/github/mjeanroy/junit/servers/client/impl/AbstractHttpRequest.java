@@ -33,6 +33,7 @@ import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import java.util.Date;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT_ENCODING;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT_LANGUAGE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_FORM_URL_ENCODED;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_JSON;
@@ -66,6 +67,16 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	@Override
 	public HttpRequest acceptLanguage(String lang) {
 		return addHeader(ACCEPT_LANGUAGE, notBlank(lang, "lang"));
+	}
+
+	@Override
+	public HttpRequest addAcceptEncoding(String encoding) {
+		return addHeader(ACCEPT_ENCODING, notBlank(encoding, "encoding"));
+	}
+
+	@Override
+	public HttpRequest acceptGzip() {
+		return addAcceptEncoding("gzip, deflate");
 	}
 
 	@Override

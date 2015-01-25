@@ -191,6 +191,21 @@ public interface HttpRequest {
 	HttpRequest addReferer(String referer);
 
 	/**
+	 * Add Accept-Encoding header.
+	 *
+	 * @param encoding Encoding value.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addAcceptEncoding(String encoding);
+
+	/**
+	 * Add Accept-Encoding header with "gzip, deflate" value.
+	 *
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest acceptGzip();
+
+	/**
 	 * Add user agent header to http request.
 	 *
 	 * @param userAgent User-Agent value.
