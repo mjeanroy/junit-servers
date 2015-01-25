@@ -49,6 +49,9 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REFERER;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REQUESTED_WITH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.USER_AGENT;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.XML_HTTP_REQUEST;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_HTTP_METHOD_OVERRIDE;
+import static com.github.mjeanroy.junit.servers.client.HttpMethod.DELETE;
+import static com.github.mjeanroy.junit.servers.client.HttpMethod.PUT;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
 import static com.github.mjeanroy.junit.servers.commons.Dates.format;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
@@ -198,6 +201,21 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	@Override
 	public HttpRequest acceptXml() {
 		return addHeader(ACCEPT, APPLICATION_XML);
+	}
+
+	@Override
+	public HttpRequest addXHttpMethodOverride(String method) {
+		return addHeader(X_HTTP_METHOD_OVERRIDE, method);
+	}
+
+	@Override
+	public HttpRequest overridePut() {
+		return addXHttpMethodOverride(PUT.getVerb());
+	}
+
+	@Override
+	public HttpRequest overrideDelete() {
+		return addXHttpMethodOverride(DELETE.getVerb());
 	}
 
 	@Override

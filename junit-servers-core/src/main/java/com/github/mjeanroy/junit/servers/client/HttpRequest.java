@@ -261,6 +261,30 @@ public interface HttpRequest {
 	HttpRequest addIfUnmodifiedSince(Date date);
 
 	/**
+	 * Add X-Http-Method-Override value with http verb to override.
+	 * This method should be used with POST request to override
+	 * PUT or DELETE requests (but no checks are made).
+	 *
+	 * @param method Http method to override.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addXHttpMethodOverride(String method);
+
+	/**
+	 * Add X-Http-Method-Override value with PUT value.
+	 *
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest overridePut();
+
+	/**
+	 * Add X-Http-Method-Override value with DELETE value.
+	 *
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest overrideDelete();
+
+	/**
 	 * Execute request and return http response.
 	 * Execution is synchronous and will block until
 	 * response is available.

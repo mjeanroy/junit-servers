@@ -221,6 +221,27 @@ public abstract class BaseHttpRequestTest {
 	}
 
 	@Test
+	public void it_should_override_method_request() throws Exception {
+		HttpRequest request = createDefaultRequest();
+		request.addXHttpMethodOverride("PUT");
+		checkHeader(request, "X-Http-Method-Override", "PUT");
+	}
+
+	@Test
+	public void it_should_override_put_request() throws Exception {
+		HttpRequest request = createDefaultRequest();
+		request.overridePut();
+		checkHeader(request, "X-Http-Method-Override", "PUT");
+	}
+
+	@Test
+	public void it_should_override_delete_request() throws Exception {
+		HttpRequest request = createDefaultRequest();
+		request.overrideDelete();
+		checkHeader(request, "X-Http-Method-Override", "DELETE");
+	}
+
+	@Test
 	public void it_should_add_query_param() throws Exception {
 		HttpRequest request = createDefaultRequest();
 
