@@ -30,8 +30,6 @@ import java.util.Date;
  * Http request contract.
  * Each method (except #execute) should return
  * original object to allow chaining.
- *
- * TODO Add method to add cache headers
  */
 public interface HttpRequest {
 
