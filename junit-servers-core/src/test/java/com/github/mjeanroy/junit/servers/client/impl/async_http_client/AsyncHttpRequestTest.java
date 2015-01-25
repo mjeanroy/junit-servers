@@ -29,6 +29,7 @@ import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.utils.Pair;
 import com.ning.http.client.ListenableFuture;
 import com.ning.http.client.Param;
 import com.ning.http.client.Request;
@@ -172,7 +173,7 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	}
 
 	@Override
-	protected void checkExecution(HttpResponse httpResponse, HeaderEntry... headers) throws Exception {
+	protected void checkExecution(HttpResponse httpResponse, Pair... headers) throws Exception {
 		Response internalRsp = (Response) readField(httpResponse, "response", true);
 		assertThat(internalRsp).isSameAs(response);
 
@@ -181,8 +182,8 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 
 		if (headers != null) {
 			Request request = requestCaptor.getValue();
-			for (HeaderEntry h : headers) {
-				checkHeader(request, h.name, h.value);
+			for (Pair h : headers) {
+				checkHeader(request, h.getO1(), h.getO2());
 			}
 		}
 	}

@@ -24,14 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import com.github.mjeanroy.junit.servers.utils.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
 
-import static com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest.HeaderEntry.header;
 import static com.github.mjeanroy.junit.servers.client.Cookie.cookie;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static com.github.mjeanroy.junit.servers.utils.Pair.pair;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -320,8 +321,8 @@ public abstract class BaseHttpRequestTest {
 		assertThat(httpResponse).isNotNull();
 		assertThat(httpResponse.getRequestDuration()).isPositive();
 		checkExecution(httpResponse,
-				header("Content-Type", "application/json"),
-				header("Accept", "application/json")
+				pair("Content-Type", "application/json"),
+				pair("Accept", "application/json")
 		);
 	}
 
@@ -339,8 +340,8 @@ public abstract class BaseHttpRequestTest {
 		assertThat(httpResponse).isNotNull();
 		assertThat(httpResponse.getRequestDuration()).isPositive();
 		checkExecution(httpResponse,
-				header("Content-Type", "application/xml"),
-				header("Accept", "application/xml")
+				pair("Content-Type", "application/xml"),
+				pair("Accept", "application/xml")
 		);
 	}
 
@@ -451,24 +452,9 @@ public abstract class BaseHttpRequestTest {
 	 * @param headers Headers, if http request should had some headers before execution.
 	 * @throws Exception
 	 */
-	protected abstract void checkExecution(HttpResponse httpResponse, HeaderEntry... headers) throws Exception;
+	protected abstract void checkExecution(HttpResponse httpResponse, Pair... headers) throws Exception;
 
 	protected static interface ExecutionStrategy {
 		HttpResponse execute(HttpRequest request);
-	}
-
-	protected static class HeaderEntry {
-		public final String name;
-
-		public final String value;
-
-		public static HeaderEntry header(String name, String value) {
-			return new HeaderEntry(name, value);
-		}
-
-		public HeaderEntry(String name, String value) {
-			this.name = name;
-			this.value = value;
-		}
 	}
 }

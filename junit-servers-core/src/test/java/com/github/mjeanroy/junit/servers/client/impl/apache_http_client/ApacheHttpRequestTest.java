@@ -29,6 +29,7 @@ import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.utils.Pair;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -101,7 +102,7 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 	}
 
 	@Override
-	protected void checkExecution(HttpResponse httpResponse, HeaderEntry... headers) throws Exception {
+	protected void checkExecution(HttpResponse httpResponse, Pair... headers) throws Exception {
 		CloseableHttpResponse internalRsp = extract(httpResponse, "response");
 		assertThat(internalRsp).isSameAs(response);
 
@@ -110,8 +111,8 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 
 		if (headers != null) {
 			HttpUriRequest request = requestCaptor.getValue();
-			for (HeaderEntry h : headers) {
-				checkHeader(request, h.name, h.value);
+			for (Pair h : headers) {
+				checkHeader(request, h.getO1(), h.getO2());
 			}
 		}
 	}
