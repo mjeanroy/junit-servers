@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import java.util.Date;
+
 /**
  * Http request contract.
  * Each method (except #execute) should return
@@ -202,6 +204,15 @@ public interface HttpRequest {
 	 * @return Http request that can be used for chaining.
 	 */
 	HttpRequest addIfMatch(String etag);
+
+	/**
+	 * Add If-Modified-Since value with expected date.
+	 * Date will be translated as GMT format.
+	 *
+	 * @param date Date.
+	 * @return Http request that can be used for chaining.
+	 */
+	HttpRequest addIfModifiedSince(Date date);
 
 	/**
 	 * Execute request and return http response.

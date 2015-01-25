@@ -27,6 +27,8 @@ package com.github.mjeanroy.junit.servers.client;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Date;
+
 import static com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest.HeaderEntry.header;
 import static com.github.mjeanroy.junit.servers.client.Cookie.cookie;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
@@ -155,6 +157,17 @@ public abstract class BaseHttpRequestTest {
 		String etag = "foo";
 		request.addIfMatch(etag);
 		checkHeader(request, "If-Match", etag);
+	}
+
+	@Test
+	public void it_should_add_if_modified_since_header() throws Exception {
+		HttpRequest request = createDefaultRequest();
+
+		Date date = new Date();
+		date.setTime(1610576581000L);
+
+		request.addIfModifiedSince(date);
+		checkHeader(request, "If-Modified-Since", "Wed, 13 Jan 2021 22:23:01 GMT");
 	}
 
 	@Test

@@ -30,18 +30,22 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 
+import java.util.Date;
+
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_FORM_URL_ENCODED;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_JSON;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_XML;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_MATCH;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_MODIFIED_SINCE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_NONE_MATCH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.MULTIPART_FORM_DATA;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REQUESTED_WITH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.USER_AGENT;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.XML_HTTP_REQUEST;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static com.github.mjeanroy.junit.servers.commons.Dates.format;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
@@ -63,6 +67,12 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	@Override
 	public HttpRequest addIfMatch(String etag) {
 		return addHeader(IF_MATCH, notBlank(etag, "etag"));
+	}
+
+	@Override
+	public HttpRequest addIfModifiedSince(Date date) {
+		String value = format(date, "EEE, dd MMM yyyy HH:mm:ss zzz");
+		return addHeader(IF_MODIFIED_SINCE, value);
 	}
 
 	@Override
