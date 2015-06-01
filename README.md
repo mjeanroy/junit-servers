@@ -109,7 +109,7 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 @RunWith(JunitServerRunner.class)
 public class MyTest {
 
-    @Server
+    @TestServer
     private static EmbeddedServer jetty;
 
     @Test
@@ -198,8 +198,8 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 @RunWith(JunitServerRunner.class)
 public class MyTest {
 
-    @Server
-	private static EmbeddedServer jetty;
+    @TestServer
+    private static EmbeddedServer jetty;
 
     @Configuration
     private static EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
@@ -302,8 +302,8 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 @RunWith(JunitServerRunner.class)
 public class MyTest {
 
-    @Server
-	private static EmbeddedServer tomcat;
+    @TestServer
+    private static EmbeddedServer tomcat;
 
     @Test
     public void myUnitTest() {
@@ -395,8 +395,8 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 @RunWith(JunitServerRunner.class)
 public class MyTest {
 
-    @Server
-    private EmbeddedServer tomcat;
+    @TestServer
+    private static EmbeddedServer tomcat;
 
     @Configuration
     private static EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
