@@ -24,199 +24,208 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.String.format;
-import static java.lang.System.clearProperty;
-import static java.lang.System.getProperty;
-import static java.lang.System.setProperty;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
  * Partial implementation of an embedded server.
  * Subclasses should implement {@link #doStart()} and {@link #doStop()} methods.
  * Synchronization is already managed by this abstract implementation.
  */
-public abstract class AbstractEmbeddedServer<S extends Object, T extends AbstractConfiguration> implements EmbeddedServer<T> {
+public abstract class AbstractEmbeddedServer<S extends Object, T extends AbstractConfiguration>
+    implements EmbeddedServer<T> {
 
-	/**
-	 * Server configuration.
-	 */
-	protected final T configuration;
+    /**
+     * Server configuration.
+     */
+    protected final T configuration;
 
-	/**
-	 * Flag to keep server status.
-	 * Server can be started if and only if status is equal to {@link ServerStatus#STOPPED}.
-	 * Server can be stopped if and only if status is equal to {@link ServerStatus#STARTED}.
-	 */
-	private volatile ServerStatus status;
+    /**
+     * Flag to keep server status.
+     * Server can be started if and only if status is equal to {@link ServerStatus#STOPPED}.
+     * Server can be stopped if and only if status is equal to {@link ServerStatus#STARTED}.
+     */
+    private volatile ServerStatus status;
 
-	/**
-	 * Old properties used to restore initial environment properties values when server stops.
-	 * It can be used to set a spring profile property or anything else.
-	 */
-	private final Map<String, String> oldProperties;
+    /**
+     * Old properties used to restore initial environment properties values when server stops.
+     * It can be used to set a spring profile property or anything else.
+     */
+    private final Map<String, String> oldProperties;
 
-	// Lock used to synchronize start and stop tasks
-	private final Object lock = new Object();
+    // Lock used to synchronize start and stop tasks
+    private final Object lock = new Object();
 
-	/**
-	 * Build default embedded server.
-	 *
-	 * @param configuration Server configuration.
-	 */
-	protected AbstractEmbeddedServer(T configuration) {
-		this.status = ServerStatus.STOPPED;
-		this.configuration = configuration;
-		this.oldProperties = new HashMap<>();
-	}
+    /**
+     * Build default embedded server.
+     *
+     * @param configuration Server configuration.
+     */
+    protected AbstractEmbeddedServer(final T configuration) {
 
-	@Override
-	public void start() {
-		if (status != ServerStatus.STARTED) {
-			synchronized (lock) {
-				if (status != ServerStatus.STARTED) {
-					status = ServerStatus.STARTING;
-					initEnvironment();
-					execHooks(true);
-					doStart();
-					status = ServerStatus.STARTED;
+        this.status = ServerStatus.STOPPED;
+        this.configuration = configuration;
+        this.oldProperties = new HashMap<>();
+    }
 
-					// Server is fully initialized
-					onStarted();
-				}
-			}
-		}
-	}
+    @Override
+    public void start() {
 
-	@Override
-	public void stop() {
-		if (status != ServerStatus.STOPPED) {
-			synchronized (lock) {
-				if (status != ServerStatus.STOPPED) {
-					status = ServerStatus.STOPPING;
-					doStop();
-					execHooks(false);
-					destroyEnvironment();
-					status = ServerStatus.STOPPED;
-				}
-			}
-		}
-	}
+        if (this.status != ServerStatus.STARTED) {
+            synchronized (this.lock) {
+                if (this.status != ServerStatus.STARTED) {
+                    this.status = ServerStatus.STARTING;
+                    initEnvironment();
+                    execHooks(true);
+                    doStart();
+                    this.status = ServerStatus.STARTED;
 
-	@Override
-	public boolean isStarted() {
-		return status == ServerStatus.STARTED;
-	}
+                    // Server is fully initialized
+                    onStarted();
+                }
+            }
+        }
+    }
 
-	@Override
-	public void restart() {
-		stop();
-		start();
-	}
+    @Override
+    public void stop() {
 
-	@Override
-	public String getPath() {
-		return configuration.getPath();
-	}
+        if (this.status != ServerStatus.STOPPED) {
+            synchronized (this.lock) {
+                if (this.status != ServerStatus.STOPPED) {
+                    this.status = ServerStatus.STOPPING;
+                    execHooks(false);
+                    doStop();
+                    destroyEnvironment();
+                    this.status = ServerStatus.STOPPED;
+                }
+            }
+        }
+    }
 
-	/**
-	 * Add custom environment properties.
-	 * Initial property value will be store in {@link #oldProperties} map
-	 * and will be restore later.
-	 */
-	private void initEnvironment() {
-		for (Map.Entry<String, String> property : configuration.getEnvProperties().entrySet()) {
-			String name = property.getKey();
-			String newValue = property.getValue();
+    @Override
+    public boolean isStarted() {
 
-			String oldValue = getProperty(property.getKey());
-			oldProperties.put(name, oldValue);
+        return this.status == ServerStatus.STARTED;
+    }
 
-			setProperty(name, newValue);
-		}
-	}
+    @Override
+    public void restart() {
 
-	/**
-	 * Reset custom environment properties.
-	 * Initial values stored in {@link #oldProperties} will be restored
-	 * or clear.
-	 */
-	private void destroyEnvironment() {
-		for (Map.Entry<String, String> property : configuration.getEnvProperties().entrySet()) {
-			String name = property.getKey();
+        stop();
+        start();
+    }
 
-			String oldValue = oldProperties.get(name);
-			oldProperties.remove(name);
+    @Override
+    public String getPath() {
 
-			if (oldValue == null) {
-				clearProperty(name);
-			} else {
-				setProperty(name, oldValue);
-			}
-		}
-	}
+        return this.configuration.getPath();
+    }
 
-	/**
-	 * Exec hooks phase.
-	 *
-	 * @param pre Phase to execute (true => pre ; false => post).
-	 */
-	private void execHooks(boolean pre) {
-		for (Hook hook : configuration.getHooks()) {
-			if (pre) {
-				hook.pre(this);
-			} else {
-				hook.post(this);
-			}
-		}
-	}
+    /**
+     * Add custom environment properties.
+     * Initial property value will be store in {@link #oldProperties} map
+     * and will be restore later.
+     */
+    private void initEnvironment() {
 
-	private void onStarted() {
-		for (Hook hook : configuration.getHooks()) {
-			hook.onStarted(this, getServletContext());
-		}
-	}
+        for (final Map.Entry<String, String> property : this.configuration.getEnvProperties().entrySet()) {
+            final String name = property.getKey();
+            final String newValue = property.getValue();
 
-	@Override
-	public String getUrl() {
-		int port = getPort();
-		String path = getPath();
-		if (!path.isEmpty() && path.charAt(0) != '/') {
-			path = "/" + path;
-		}
+            final String oldValue = System.getProperty(property.getKey());
+            this.oldProperties.put(name, oldValue);
 
-		return format("http://localhost:%s%s", port, path);
-	}
+            System.setProperty(name, newValue);
+        }
+    }
 
-	@Override
-	public T getConfiguration() {
-		return configuration;
-	}
+    /**
+     * Reset custom environment properties.
+     * Initial values stored in {@link #oldProperties} will be restored
+     * or clear.
+     */
+    private void destroyEnvironment() {
 
-	/**
-	 * Get internal server implementation.
-	 * Note that this method should not be used to start
-	 * or stop internal server, use dedicated method instead.
-	 *
-	 * This method can be used to do some custom configuration
-	 * on original implementation.
-	 *
-	 * @return Original server implementation.
-	 */
-	public abstract S getDelegate();
+        for (final Map.Entry<String, String> property : this.configuration.getEnvProperties().entrySet()) {
+            final String name = property.getKey();
 
-	/**
-	 * Start embedded server.
-	 * Must block until server is fully started.
-	 */
-	protected abstract void doStart();
+            final String oldValue = this.oldProperties.get(name);
+            this.oldProperties.remove(name);
 
-	/**
-	 * Stop embedded server.
-	 * Must block until server is fully stopped.
-	 */
-	protected abstract void doStop();
+            if (oldValue == null) {
+                System.clearProperty(name);
+            } else {
+                System.setProperty(name, oldValue);
+            }
+        }
+    }
+
+    /**
+     * Exec hooks phase.
+     *
+     * @param pre Phase to execute (true => pre ; false => post).
+     */
+    private void execHooks(
+        final boolean pre) {
+
+        for (final Hook hook : this.configuration.getHooks()) {
+            if (pre) {
+                hook.pre(this);
+            } else {
+                hook.post(this);
+            }
+        }
+    }
+
+    private void onStarted() {
+
+        for (final Hook hook : this.configuration.getHooks()) {
+            hook.onStarted(this, getServletContext());
+        }
+    }
+
+    @Override
+    public String getUrl() {
+
+        final int port = getPort();
+        String path = getPath();
+        if (!path.isEmpty() && path.charAt(0) != '/') {
+            path = "/" + path;
+        }
+
+        return String.format("http://localhost:%s%s", port, path);
+    }
+
+    @Override
+    public T getConfiguration() {
+
+        return this.configuration;
+    }
+
+    /**
+     * Get internal server implementation.
+     * Note that this method should not be used to start
+     * or stop internal server, use dedicated method instead.
+     *
+     * This method can be used to do some custom configuration
+     * on original implementation.
+     *
+     * @return Original server implementation.
+     */
+    public abstract S getDelegate();
+
+    /**
+     * Start embedded server.
+     * Must block until server is fully started.
+     */
+    protected abstract void doStart();
+
+    /**
+     * Stop embedded server.
+     * Must block until server is fully stopped.
+     */
+    protected abstract void doStop();
 }
