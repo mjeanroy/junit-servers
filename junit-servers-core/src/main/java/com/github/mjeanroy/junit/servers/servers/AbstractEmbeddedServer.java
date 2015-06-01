@@ -97,8 +97,8 @@ public abstract class AbstractEmbeddedServer<S extends Object, T extends Abstrac
 			synchronized (lock) {
 				if (status != ServerStatus.STOPPED) {
 					status = ServerStatus.STOPPING;
-					doStop();
 					execHooks(false);
+					doStop();
 					destroyEnvironment();
 					status = ServerStatus.STOPPED;
 				}
