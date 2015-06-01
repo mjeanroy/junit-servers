@@ -60,7 +60,7 @@ public abstract class AbstractEmbeddedServer<S extends Object, T extends Abstrac
 	private final Map<String, String> oldProperties;
 
 	// Lock used to synchronize start and stop tasks
-	private final Object lock = new Object();
+	private static final Object lock = new Object();
 
 	/**
 	 * Build default embedded server.

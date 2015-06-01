@@ -27,9 +27,15 @@ package com.github.mjeanroy.junit.servers.tomcat;
 import org.junit.After;
 import org.junit.Test;
 
+import org.apache.catalina.Context;
 import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class EmbeddedTomcatTest {
 
@@ -65,7 +71,7 @@ public class EmbeddedTomcatTest {
 
 	@Test
 	public void it_should_start_tomcat() {
-		tomcat = new EmbeddedTomcat();
+		tomcat = new EmbeddedTomcat(initConfiguration());
 		tomcat.start();
 
 		assertThat(tomcat.isStarted()).isTrue();
@@ -74,7 +80,7 @@ public class EmbeddedTomcatTest {
 
 	@Test
 	public void it_should_stop_tomcat() {
-		tomcat = new EmbeddedTomcat();
+		tomcat = new EmbeddedTomcat(initConfiguration());
 		tomcat.start();
 
 		assertThat(tomcat.isStarted()).isTrue();
@@ -83,6 +89,21 @@ public class EmbeddedTomcatTest {
 		tomcat.stop();
 		assertThat(tomcat.isStarted()).isFalse();
 		assertThat(tomcat.getPort()).isNotZero();
+	}
+
+	@Test
+	public void it_should_destroy_context_on_stop() throws Exception {
+		Context context = mock(Context.class);
+		tomcat = spy(new EmbeddedTomcat(initConfiguration()));
+		when(tomcat.createContext()).thenReturn(context);
+
+		tomcat.start();
+
+		verify(context, never()).destroy();
+
+		tomcat.stop();
+
+		verify(context).destroy();
 	}
 
 	@Test

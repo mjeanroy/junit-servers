@@ -177,7 +177,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 			context = initContext();
 			tomcat.start();
 		}
-		catch (Throwable ex) {
+		catch (Exception ex) {
 			throw new ServerStartException(ex);
 		}
 	}
@@ -186,10 +186,16 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 	protected void doStop() {
 		try {
 			tomcat.stop();
-			context = null;
+
+			// Do not forget to destroy context
+			if (context != null) {
+				context.destroy();
+				context = null;
+			}
+
 			deleteDirectory(configuration.getBaseDir());
 		}
-		catch (Throwable ex) {
+		catch (Exception ex) {
 			throw new ServerStopException(ex);
 		}
 	}
