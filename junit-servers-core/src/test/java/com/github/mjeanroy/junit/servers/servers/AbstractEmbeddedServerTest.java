@@ -27,13 +27,16 @@ package com.github.mjeanroy.junit.servers.servers;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 import org.junit.Test;
+import org.mockito.InOrder;
 
 import javax.servlet.ServletContext;
 import java.util.concurrent.CountDownLatch;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -257,6 +260,24 @@ public class AbstractEmbeddedServerTest {
 		verify(hook).post(server);
 		verify(hook, times(1)).pre(server);
 		verify(hook, times(1)).pre(server);
+	}
+
+	@Test
+	public void it_should_execute_hook_before_doStop() {
+		Hook hook = mock(Hook.class);
+
+		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+				.withHook(hook)
+				.build();
+
+		server = spy(new TestServer(configuration));
+
+		server.start();
+		server.stop();
+
+		InOrder inOrder = inOrder(server, hook);
+		inOrder.verify(hook).post(server);
+		inOrder.verify(server).doStop();
 	}
 
 	@Test
