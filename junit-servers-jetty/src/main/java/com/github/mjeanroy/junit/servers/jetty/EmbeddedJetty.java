@@ -36,7 +36,9 @@ import org.eclipse.jetty.util.resource.FileResource;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.FragmentConfiguration;
 import org.eclipse.jetty.webapp.JettyWebXmlConfiguration;
+import org.eclipse.jetty.webapp.MetaInfConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
 import javax.servlet.ServletContext;
@@ -135,9 +137,11 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		ctx.setBaseResource(newResource(webapp));
 
 		ctx.setConfigurations(new Configuration[]{
+			    new WebInfConfiguration(),
 				new WebXmlConfiguration(),
 				new AnnotationConfiguration(),
 				new JettyWebXmlConfiguration(),
+				new MetaInfConfiguration(),
 				new FragmentConfiguration(),
 		});
 
