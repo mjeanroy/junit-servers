@@ -27,10 +27,17 @@ package com.github.mjeanroy.junit.servers.servers.configuration;
 import com.github.mjeanroy.junit.servers.servers.Hook;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
@@ -73,6 +80,13 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @see com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration#classpath
 	 */
 	private String classpath;
+	
+	/**
+	 * Parent classpath URLs
+	 * 
+	 */
+
+	private List<URL> parentClasspath;
 
 	/**
 	 * Map of properties.
@@ -87,6 +101,8 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @see com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration#hooks
 	 */
 	private final List<Hook> hooks;
+
+	private String overrideDescriptor;
 
 	/**
 	 * Build default configuration.
@@ -215,5 +231,60 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	public T withHook(Hook hook) {
 		this.hooks.add(notNull(hook, "hook"));
 		return self();
+	}
+
+
+	/**
+	 * Change parent classpath value.
+	 *
+	 * @param classpath New webapp value.
+	 * @return this
+	 */
+	public T withParentClasspath(List<URL> classpath) {
+		this.parentClasspath = classpath;
+		return self();
+	}
+
+   /**
+	 * Change parent classpath value.
+	 *
+	 * @param classpath New webapp value.
+	 * @return this
+	 */
+	public T withParentClasspath(Class<?> cls, FileFilter filter) {
+		URLClassLoader urlClassLoader = (URLClassLoader) cls.getClassLoader();
+
+		Set<URL> urls = new HashSet<>();
+		for(URL url : urlClassLoader.getURLs()) {
+			if(filter.accept(new File(url.getFile()))) {
+				urls.add(url);
+			}
+		}
+		this.parentClasspath = new ArrayList<>(urls);
+		return self();
+	}
+
+	/**
+	 * Change parent classpath value.
+	 *
+	 * @param classpath New webapp value.
+	 * @return this
+	 */
+	public T withParentClasspath(URL ... classpath) {
+		this.parentClasspath = Arrays.asList(classpath);
+		return self();
+	}
+	
+	public List<URL> getParentClasspath() {
+		return parentClasspath;
+	}
+
+	public T withOverrideDescriptor (String overrideDescriptor) {
+		this.overrideDescriptor = overrideDescriptor;
+		return self();
+	}
+
+	public String getOverrideDescriptor() {
+		return overrideDescriptor;
 	}
 }

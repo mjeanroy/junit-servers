@@ -34,6 +34,8 @@ import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
 
+import java.net.URL;
+
 /**
  * Generic configuration that should be extended for
  * each custom embedded server.
@@ -79,6 +81,16 @@ public abstract class AbstractConfiguration {
 	 */
 	private final String classpath;
 
+   /**
+	 * Additional parent (classloader) classpath.
+	 *
+	 * The path will be added to application parent classlodaer classpath
+	 * before server is started.
+	 *
+	 */
+
+	private final List<URL> parentClasspath;
+	
 	/**
 	 * Map of environment properties to set before server start.
 	 *
@@ -101,6 +113,8 @@ public abstract class AbstractConfiguration {
 	 */
 	private final List<Hook> hooks;
 
+	private String overrideDescriptor;
+
 	/**
 	 * Initialize configuration.
 	 *
@@ -114,6 +128,8 @@ public abstract class AbstractConfiguration {
 		this.port = builder.getPort();
 		this.envProperties = builder.getEnvProperties();
 		this.hooks = builder.getHooks();
+		this.parentClasspath = builder.getParentClasspath();
+		this.overrideDescriptor = builder.getOverrideDescriptor();
 	}
 
 	public String getPath() {
@@ -128,8 +144,16 @@ public abstract class AbstractConfiguration {
 		return classpath;
 	}
 
+	public List<URL> getParentClasspath() {
+		return parentClasspath;
+	}
+	   
 	public int getPort() {
 		return port;
+	}
+	
+	public String getOverrideDescriptor() {
+		return overrideDescriptor ;
 	}
 
 	public Map<String, String> getEnvProperties() {
@@ -152,7 +176,9 @@ public abstract class AbstractConfiguration {
 					Objects.equals(webapp, c.webapp) &&
 					Objects.equals(classpath, c.classpath) &&
 					Objects.equals(envProperties, c.envProperties) &&
-					Objects.equals(hooks, c.hooks);
+					Objects.equals(hooks, c.hooks) &&					
+					Objects.equals(overrideDescriptor, c.overrideDescriptor) &&
+					Objects.equals(parentClasspath, c.parentClasspath);
 		}
 		return false;
 	}

@@ -29,6 +29,8 @@ import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigura
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
+import org.eclipse.jetty.util.resource.Resource;
+
 /**
  * Jetty configuration settings.
  */
@@ -45,6 +47,8 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 	 * at shutdown.
 	 */
 	private final boolean stopAtShutdown;
+
+	private Resource baseResource;
 
 	/**
 	 * Get configuration builder.
@@ -69,6 +73,7 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		super(builder);
 		this.stopTimeout = builder.getStopTimeout();
 		this.stopAtShutdown = builder.isStopAtShutdown();
+		this.baseResource = builder.getBaseResource();
 	}
 
 	public int getStopTimeout() {
@@ -89,11 +94,17 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		return super.hashCode();
 	}
 
+	public Resource getBaseResource() {
+		return baseResource;
+	}
+	
 	public static class Builder extends AbstractConfigurationBuilder<Builder, EmbeddedJettyConfiguration> {
 
 		private int stopTimeout;
 
 		private boolean stopAtShutdown;
+
+		private Resource baseResource;
 
 		private Builder() {
 			stopTimeout = 30000;
@@ -116,6 +127,10 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 
 		public boolean isStopAtShutdown() {
 			return stopAtShutdown;
+		}
+
+		public Resource getBaseResource() {
+			return baseResource;
 		}
 
 		/**
@@ -141,5 +156,11 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 			this.stopAtShutdown = stopAtShutdown;
 			return this;
 		}
+
+		public Builder withBaseResource(Resource resource) {
+			this.baseResource = resource;
+			return this;
+		}
+
 	}
 }
