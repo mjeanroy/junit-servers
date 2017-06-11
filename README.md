@@ -1,6 +1,9 @@
 # Junit-Servers
 ---------------------
 
+[![Build Status](https://travis-ci.org/mjeanroy/junit-servers.svg?branch=master)](https://travis-ci.org/mjeanroy/junit-servers)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.mjeanroy/junit-servers/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.mjeanroy/junit-servers)
+
 Simple library that will allow you to use a custom rule to start and stop an embedded
 container inside your Junit tests (currently Jetty and Tomcat supported out of the box).
 
