@@ -24,12 +24,20 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
-import com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest;
-import com.github.mjeanroy.junit.servers.client.Cookie;
-import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.utils.Pair;
+import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -41,18 +49,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.assertj.core.api.Condition;
 import org.mockito.ArgumentCaptor;
 
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
-
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.entry;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest;
+import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.utils.Pair;
 
 public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 
@@ -173,7 +175,7 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 
 		UrlEncodedFormEntity entity = (UrlEncodedFormEntity) rq.getEntity();
 		StringWriter writer = new StringWriter();
-		IOUtils.copy(entity.getContent(), writer);
+		IOUtils.copy(entity.getContent(), writer, Charset.defaultCharset());
 
 		String body = writer.toString();
 		String[] parts = body.split("&");
