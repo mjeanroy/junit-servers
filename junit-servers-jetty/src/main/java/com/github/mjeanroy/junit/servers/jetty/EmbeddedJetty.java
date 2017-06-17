@@ -24,15 +24,23 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
+import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import static org.eclipse.jetty.util.resource.Resource.newResource;
+
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.resource.FileResource;
+import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.FragmentConfiguration;
 import org.eclipse.jetty.webapp.JettyWebXmlConfiguration;
@@ -41,12 +49,10 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
-import javax.servlet.ServletContext;
-import java.io.File;
-
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
-import static org.eclipse.jetty.util.resource.Resource.newResource;
+import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 
 /**
  * Jetty Embedded Server.
@@ -128,22 +134,41 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		final String path = configuration.getPath();
 		final String webapp = configuration.getWebapp();
 		final String classpath = configuration.getClasspath();
+		final List<URL> parentClasspath = configuration.getParentClasspath();
+		final String overrideDescriptor = configuration.getOverrideDescriptor ();
+		final Resource baseResource = configuration.getBaseResource();
+
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		
+		if(parentClasspath != null && !parentClasspath.isEmpty()) {
+			classLoader = new URLClassLoader(parentClasspath.toArray(new URL[parentClasspath.size()]), classLoader);
+		}
 
 		WebAppContext ctx = new WebAppContext();
-		ctx.setClassLoader(Thread.currentThread().getContextClassLoader());
+		ctx.setClassLoader(classLoader);
 		ctx.setContextPath(path);
 
-		// Useful for WebXmlConfiguration
-		ctx.setBaseResource(newResource(webapp));
+		if(baseResource == null) {
+		    // use default base resource
+		    ctx.setBaseResource(newResource(webapp));
+		} else {
+		    ctx.setBaseResource(baseResource);
+		}
+
+		if(overrideDescriptor != null) {
+			ctx.setOverrideDescriptor(overrideDescriptor);
+		}
 
 		ctx.setConfigurations(new Configuration[]{
-			    new WebInfConfiguration(),
+				new WebInfConfiguration(),
 				new WebXmlConfiguration(),
 				new AnnotationConfiguration(),
 				new JettyWebXmlConfiguration(),
 				new MetaInfConfiguration(),
-				new FragmentConfiguration(),
+				new FragmentConfiguration()
 		});
+
+		ctx.addOverrideDescriptor(overrideDescriptor);
 
 		if (isNotBlank(classpath)) {
 			// Fix to scan Spring WebApplicationInitializer

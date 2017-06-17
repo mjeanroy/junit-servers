@@ -1,5 +1,4 @@
 # Junit-Servers
----------------------
 
 [![Build Status](https://travis-ci.org/mjeanroy/junit-servers.svg?branch=master)](https://travis-ci.org/mjeanroy/junit-servers)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.mjeanroy/junit-servers/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.mjeanroy/junit-servers)
@@ -15,7 +14,7 @@ With Maven, add explicit dependency:
     <dependency>
         <groupId>com.github.mjeanroy</groupId>
         <artifactId>junit-servers-jetty</artifactId>
-        <version>0.4.2</version>
+        <version>0.4.3</version>
         <scope>test</scope>
     </dependency>
 ```
@@ -24,7 +23,7 @@ With Maven, add explicit dependency:
     <dependency>
         <groupId>com.github.mjeanroy</groupId>
         <artifactId>junit-servers-tomcat</artifactId>
-        <version>0.4.2</version>
+        <version>0.4.3</version>
         <scope>test</scope>
     </dependency>
 ```
@@ -132,6 +131,8 @@ public class MyTest {
 When embedded jetty is created, you can easyly use a custom configuration using a fluent API:
 
 - Define custom enironment properties that will be initialized before server startup and removed after server shutdown.
+- Define an override descriptor for web.xml, for example for loading a spring configuration with additional setup from test resources.
+- Define additional parent classpath from either existing Maven dependencies or jar files in a directory, helping with JSPs.
 - Define custom hooks to execute custom code before server startup and after server shutdown.
 
 ```java
@@ -153,6 +154,13 @@ public class MyTest {
         .withWebapp("webapp")
         .withPort(9090)
         .withProperty("spring.profiles.active", "test")
+        .withOverrideDescriptor("src/test/resources/WEB-INF/web.xml")
+        .withParentClasspath(WebAppContext.class, new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.getName().startsWith("apache-jstl");
+            }
+        })
         .withHook(new Hook() {
             @Override
             public void pre(EmbeddedServer server) {
@@ -418,10 +426,10 @@ public class MyTest {
 }
 ```
 
-## Licence
+## Licence
 
 MIT License (MIT)
 
-## Contributing
+## Contributing
 
 If you found a bug or you thing something is missing, feel free to contribute and submit an issue or a pull request.
