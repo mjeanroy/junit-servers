@@ -37,7 +37,7 @@
 	<artifactId>junit-servers</artifactId>
 	<packaging>pom</packaging>
 	<name>junit-servers</name>
-	<version>0.4.3-SNAPSHOT</version>
+	<version>0.5.0</version>
 	<url>https://github.com/mjeanroy/junit-servers</url>
 
 	<modules>
