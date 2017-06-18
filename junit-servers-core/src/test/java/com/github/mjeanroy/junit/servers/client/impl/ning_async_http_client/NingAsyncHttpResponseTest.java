@@ -22,21 +22,21 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.BaseHttpResponseTest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import org.asynchttpclient.Response;
+import com.ning.http.client.Response;
 
 import java.util.Map;
 
-import static java.util.Collections.singletonList;
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AsyncHttpResponseTest extends BaseHttpResponseTest {
+public class NingAsyncHttpResponseTest extends BaseHttpResponseTest {
 
 	private Response response;
 
@@ -47,7 +47,7 @@ public class AsyncHttpResponseTest extends BaseHttpResponseTest {
 
 	@Override
 	protected HttpResponse createHttpResponse() throws Exception {
-		return new AsyncHttpResponse(response, 1_000_000);
+		return new NingAsyncHttpResponse(response, 1_000_000);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class AsyncHttpResponseTest extends BaseHttpResponseTest {
 			String headerName = entry.getKey();
 			String headerValue = entry.getValue();
 			when(response.getHeader(headerName)).thenReturn(headerValue);
-			when(response.getHeaders(headerName)).thenReturn(singletonList(headerValue));
+			when(response.getHeaders(headerName)).thenReturn(asList(headerValue));
 		}
 	}
 }

@@ -22,16 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.asynchttpclient.DefaultAsyncHttpClient;
-
-import java.io.IOException;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
@@ -40,7 +36,7 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
  * under the hood.
  * See: https://asynchttpclient.github.io/
  */
-public class AsyncHttpClient extends AbstractHttpClient {
+public class NingAsyncHttpClient extends AbstractHttpClient {
 
 	/**
 	 * Create new http client using internal
@@ -50,8 +46,8 @@ public class AsyncHttpClient extends AbstractHttpClient {
 	 * @param client Internal http client
 	 * @return Http client.
 	 */
-	public static AsyncHttpClient newAsyncHttpClient(EmbeddedServer server, org.asynchttpclient.AsyncHttpClient client) {
-		return new AsyncHttpClient(server, client);
+	public static NingAsyncHttpClient newAsyncHttpClient(EmbeddedServer server, com.ning.http.client.AsyncHttpClient client) {
+		return new NingAsyncHttpClient(server, client);
 	}
 
 	/**
@@ -63,33 +59,29 @@ public class AsyncHttpClient extends AbstractHttpClient {
 	 * @param server Embedded server.
 	 * @return Http client.
 	 */
-	public static AsyncHttpClient defaultAsyncHttpClient(EmbeddedServer server) {
-		return new AsyncHttpClient(server, new DefaultAsyncHttpClient());
+	public static NingAsyncHttpClient defaultAsyncHttpClient(EmbeddedServer server) {
+		return new NingAsyncHttpClient(server, new com.ning.http.client.AsyncHttpClient());
 	}
 
 	/**
 	 * Original http client.
 	 * This client will be used under the hood.
 	 */
-	private final org.asynchttpclient.AsyncHttpClient client;
+	private final com.ning.http.client.AsyncHttpClient client;
 
 	// Use static factory
-	private AsyncHttpClient(EmbeddedServer server, org.asynchttpclient.AsyncHttpClient client) {
+	private NingAsyncHttpClient(EmbeddedServer server, com.ning.http.client.AsyncHttpClient client) {
 		super(server);
 		this.client = notNull(client, "client");
 	}
 
 	@Override
 	protected HttpRequest buildRequest(HttpMethod httpMethod, String url) {
-		return new AsyncHttpRequest(client, httpMethod, url);
+		return new NingAsyncHttpRequest(client, httpMethod, url);
 	}
 
 	@Override
 	public void destroy() {
-		try {
-			client.close();
-		} catch (IOException ex) {
-			throw new HttpClientException(ex);
-		}
+		client.close();
 	}
 }

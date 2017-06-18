@@ -22,12 +22,14 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
-import org.asynchttpclient.Response;
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import com.ning.http.client.Response;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
@@ -40,7 +42,7 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
  * under the hood.
  * See: https://asynchttpclient.github.io/
  */
-public class AsyncHttpResponse extends AbstractHttpResponse {
+public class NingAsyncHttpResponse extends AbstractHttpResponse {
 
 	/**
 	 * Original response from async-http-client library.
@@ -62,7 +64,7 @@ public class AsyncHttpResponse extends AbstractHttpResponse {
 	 * @throws NullPointerException if response is null.
 	 * @throws IllegalArgumentException if duration is not positive.
 	 */
-	AsyncHttpResponse(Response response, long duration) {
+	NingAsyncHttpResponse(Response response, long duration) {
 		this.response = notNull(response, "response");
 		this.duration = positive(duration, "duration");
 	}
@@ -79,7 +81,12 @@ public class AsyncHttpResponse extends AbstractHttpResponse {
 
 	@Override
 	public String body() {
-		return response.getResponseBody();
+		try {
+			return response.getResponseBody();
+		}
+		catch (IOException ex) {
+			throw new HttpClientException(ex);
+		}
 	}
 
 	@Override

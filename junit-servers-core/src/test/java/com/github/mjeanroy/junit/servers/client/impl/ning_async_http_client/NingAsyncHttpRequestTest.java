@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.BaseHttpRequestTest;
 import com.github.mjeanroy.junit.servers.client.Cookie;
@@ -30,12 +30,17 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.utils.Pair;
-import io.netty.handler.codec.http.HttpHeaders;
-import org.asynchttpclient.*;
+import com.ning.http.client.ListenableFuture;
+import com.ning.http.client.Param;
+import com.ning.http.client.Request;
+import com.ning.http.client.RequestBuilder;
+import com.ning.http.client.Response;
 import org.mockito.ArgumentCaptor;
 
 import java.util.List;
+import java.util.Map;
 
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.apache.commons.lang3.reflect.FieldUtils.writeField;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,28 +50,28 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class AsyncHttpRequestTest extends BaseHttpRequestTest {
+public class NingAsyncHttpRequestTest extends BaseHttpRequestTest {
 
-	private org.asynchttpclient.AsyncHttpClient client;
+	private com.ning.http.client.AsyncHttpClient client;
 
 	private Response response;
 
 	@Override
 	protected void onSetUp() throws Exception {
-		client = mock(org.asynchttpclient.AsyncHttpClient.class);
+		client = mock(com.ning.http.client.AsyncHttpClient.class);
 		response = mock(Response.class);
 	}
 
 	@Override
 	protected HttpRequest createHttpRequest(HttpMethod httpMethod, String url) throws Exception {
-		return new AsyncHttpRequest(client, httpMethod, url);
+		return new NingAsyncHttpRequest(client, httpMethod, url);
 	}
 
 	@Override
 	protected void checkInternals(HttpRequest request, HttpMethod httpMethod, String url) throws Exception {
 		// Check internal client
-		org.asynchttpclient.AsyncHttpClient client = (org.asynchttpclient.AsyncHttpClient) readField(request, "client", true);
-		assertThat(client).isSameAs(client);
+		com.ning.http.client.AsyncHttpClient ningClient = (com.ning.http.client.AsyncHttpClient) readField(request, "client", true);
+		assertThat(ningClient).isSameAs(client);
 
 		RequestBuilder builder = (RequestBuilder) readField(request, "builder", true);
 		assertThat(builder).isNotNull();
@@ -75,7 +80,8 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 		assertThat(rq.getUrl()).isEqualTo(url);
 		assertThat(rq.getMethod()).isEqualTo(httpMethod.getVerb());
 
-		assertThat(rq.getHeaders().entries()).isEmpty();
+		Map<String, List<String>> headers = rq.getHeaders();
+		assertThat(headers).isEmpty();
 
 		List<Param> queryParams = rq.getQueryParams();
 		assertThat(queryParams).isEmpty();
@@ -85,7 +91,7 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	protected HttpRequest createDefaultRequest() throws Exception {
 		String url = "http://localhost:8080/foo";
 		HttpMethod httpMethod = HttpMethod.POST;
-		AsyncHttpRequest httpRequest = new AsyncHttpRequest(client, httpMethod, url);
+		NingAsyncHttpRequest httpRequest = new NingAsyncHttpRequest(client, httpMethod, url);
 
 		// Use a spy on request builder
 		RequestBuilder builder = spy((RequestBuilder) readField(httpRequest, "builder", true));
@@ -135,17 +141,17 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	protected void checkCookie(HttpRequest httpRequest, Cookie cookie) throws Exception {
 		RequestBuilder builder = (RequestBuilder) readField(httpRequest, "builder", true);
 
-		ArgumentCaptor<org.asynchttpclient.cookie.Cookie> cookieCaptor = ArgumentCaptor.forClass(org.asynchttpclient.cookie.Cookie.class);
+		ArgumentCaptor<com.ning.http.client.cookie.Cookie> cookieCaptor = ArgumentCaptor.forClass(com.ning.http.client.cookie.Cookie.class);
 		verify(builder).addCookie(cookieCaptor.capture());
 
-		org.asynchttpclient.cookie.Cookie c = cookieCaptor.getValue();
+		com.ning.http.client.cookie.Cookie c = cookieCaptor.getValue();
 		assertThat(c.getName()).isEqualTo(cookie.getName());
 		assertThat(c.getValue()).isEqualTo(cookie.getValue());
 		assertThat(c.getDomain()).isEqualTo(cookie.getDomain());
 		assertThat(c.getPath()).isEqualTo(cookie.getPath());
 		assertThat(c.isSecure()).isEqualTo(cookie.isSecure());
 		assertThat(c.isHttpOnly()).isEqualTo(cookie.isHttpOnly());
-		assertThat(c.getMaxAge()).isEqualTo(cookie.getMaxAge());
+		assertThat(c.getMaxAge()).isEqualTo(Long.valueOf(cookie.getMaxAge()));
 
 		// Check produced request
 		Request rq = builder.build();
@@ -182,7 +188,10 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 	}
 
 	private void checkHeader(Request rq, String name, String value) {
-		HttpHeaders headers = rq.getHeaders();
-		assertThat(headers.contains(name, value, false)).isTrue();
+		Map<String, List<String>> headers = rq.getHeaders();
+		assertThat(headers)
+				.isNotNull()
+				.isNotEmpty()
+				.containsEntry(name, asList(value));
 	}
 }

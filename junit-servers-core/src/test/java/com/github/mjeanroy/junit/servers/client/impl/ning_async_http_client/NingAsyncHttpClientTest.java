@@ -22,45 +22,46 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.Request;
-import org.asynchttpclient.RequestBuilder;
+import com.ning.http.client.Request;
+import com.ning.http.client.RequestBuilder;
 
+import static com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient.defaultAsyncHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient.newAsyncHttpClient;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class AsyncHttpClientTest extends BaseHttpClientTest {
+public class NingAsyncHttpClientTest extends BaseHttpClientTest {
 
-	private AsyncHttpClient internalClient;
+	private com.ning.http.client.AsyncHttpClient internalClient;
 
 	@Override
 	protected void onSetUp() throws Exception {
-		internalClient = mock(AsyncHttpClient.class);
+		internalClient = mock(com.ning.http.client.AsyncHttpClient.class);
 	}
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer server) throws Exception {
-		return com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.defaultAsyncHttpClient(server);
+		return defaultAsyncHttpClient(server);
 	}
 
 	@Override
 	protected HttpClient createCustomClient(EmbeddedServer server) throws Exception {
-		return com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.newAsyncHttpClient(server, internalClient);
+		return newAsyncHttpClient(server, internalClient);
 	}
 
 	@Override
 	protected void checkInternalHttpClient(HttpClient httpClient) throws Exception {
-		org.asynchttpclient.AsyncHttpClient internalClient = (org.asynchttpclient.AsyncHttpClient) readField(httpClient, "client", true);
+		com.ning.http.client.AsyncHttpClient internalClient = (com.ning.http.client.AsyncHttpClient) readField(httpClient, "client", true);
 		assertThat(internalClient).isNotNull();
 	}
 
@@ -68,9 +69,9 @@ public class AsyncHttpClientTest extends BaseHttpClientTest {
 	protected void checkHttpRequest(HttpRequest httpRequest, HttpMethod httpMethod, String path) throws Exception {
 		assertThat(httpRequest)
 				.isNotNull()
-				.isExactlyInstanceOf(AsyncHttpRequest.class);
+				.isExactlyInstanceOf(NingAsyncHttpRequest.class);
 
-		AsyncHttpClient internalClient = (AsyncHttpClient) readField(httpRequest, "client", true);
+		com.ning.http.client.AsyncHttpClient internalClient = (com.ning.http.client.AsyncHttpClient) readField(httpRequest, "client", true);
 		assertThat(internalClient)
 				.isNotNull()
 				.isSameAs(this.internalClient);

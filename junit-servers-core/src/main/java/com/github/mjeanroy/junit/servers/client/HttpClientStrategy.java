@@ -24,11 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient;
 import com.github.mjeanroy.junit.servers.commons.ClassUtils;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-
-import static com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient.defaultApacheHttpClient;
-import static com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.defaultAsyncHttpClient;
 
 /**
  * Available strategies that can be used to build
@@ -42,7 +42,17 @@ public enum HttpClientStrategy {
 	ASYNC_HTTP_CLIENT {
 		@Override
 		public HttpClient build(EmbeddedServer server) {
-			return defaultAsyncHttpClient(server);
+			return AsyncHttpClient.defaultAsyncHttpClient(server);
+		}
+	},
+
+	/**
+	 * Build http client using NingAsyncHttpClient library.
+	 */
+	NING_ASYNC_HTTP_CLIENT {
+		@Override
+		public HttpClient build(EmbeddedServer server) {
+			return NingAsyncHttpClient.defaultAsyncHttpClient(server);
 		}
 	},
 
@@ -52,7 +62,7 @@ public enum HttpClientStrategy {
 	APACHE_HTTP_CLIENT {
 		@Override
 		public HttpClient build(EmbeddedServer server) {
-			return defaultApacheHttpClient(server);
+			return ApacheHttpClient.defaultApacheHttpClient(server);
 		}
 	},
 
@@ -63,8 +73,12 @@ public enum HttpClientStrategy {
 	AUTO {
 		@Override
 		public HttpClient build(EmbeddedServer server) {
-			if (ClassUtils.isPresent("com.ning.http.client.AsyncHttpClient")) {
+			if (ClassUtils.isPresent("org.asynchttpclient.DefaultAsyncHttpClient")) {
 				return ASYNC_HTTP_CLIENT.build(server);
+			}
+
+			if (ClassUtils.isPresent("com.ning.http.client.AsyncHttpClient")) {
+				return NING_ASYNC_HTTP_CLIENT.build(server);
 			}
 
 			if (ClassUtils.isPresent("org.apache.http.impl.client.CloseableHttpClient")) {

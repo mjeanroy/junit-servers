@@ -22,16 +22,17 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
-import org.asynchttpclient.Request;
-import org.asynchttpclient.RequestBuilder;
-import org.asynchttpclient.Response;
+import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.Request;
+import com.ning.http.client.RequestBuilder;
+import com.ning.http.client.Response;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
@@ -42,7 +43,7 @@ import static java.lang.System.nanoTime;
  * under the hood.
  * See: https://asynchttpclient.github.io/
  */
-public class AsyncHttpRequest extends AbstractHttpRequest {
+public class NingAsyncHttpRequest extends AbstractHttpRequest {
 
 	/**
 	 * The request URL.
@@ -53,7 +54,7 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 	 * Original http client.
 	 * It will be used to execute http request.
 	 */
-	private final org.asynchttpclient.AsyncHttpClient client;
+	private final AsyncHttpClient client;
 
 	/**
 	 * Http request builder.
@@ -73,13 +74,13 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 	 * @param httpMethod Http method.
 	 * @param url Request URL.
 	 */
-	AsyncHttpRequest(org.asynchttpclient.AsyncHttpClient client, HttpMethod httpMethod, String url) {
+	NingAsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, String url) {
 		this.url = url;
 		this.httpMethod = httpMethod;
 		this.client = client;
 		this.builder = new RequestBuilder()
-			.setUrl(notBlank(url, "url"))
-			.setMethod(notNull(httpMethod, "httpMethod").getVerb());
+				.setUrl(notBlank(url, "url"))
+				.setMethod(notNull(httpMethod, "httpMethod").getVerb());
 	}
 
 	@Override
@@ -144,7 +145,7 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 			maxAgeValue = 0;
 		}
 
-		builder.addCookie(org.asynchttpclient.cookie.Cookie.newValidCookie(name, value, wrap, domain, path, maxAgeValue, secured, httpOnly));
+		builder.addCookie(com.ning.http.client.cookie.Cookie.newValidCookie(name, value, wrap, domain, path, maxAgeValue, secured, httpOnly));
 		return this;
 	}
 
@@ -154,6 +155,6 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 
 		long start = nanoTime();
 		Response response = client.executeRequest(request).get();
-		return new AsyncHttpResponse(response, nanoTime() - start);
+		return new NingAsyncHttpResponse(response, nanoTime() - start);
 	}
 }
