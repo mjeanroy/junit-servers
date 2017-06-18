@@ -111,19 +111,30 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 
 	@Override
 	protected HttpRequest applyCookie(Cookie cookie) {
-		com.ning.http.client.cookie.Cookie c = new com.ning.http.client.cookie.Cookie(
-				cookie.getName(),
-				cookie.getValue(),
-				cookie.getValue(),
-				cookie.getDomain(),
-				cookie.getPath(),
-				cookie.getExpires(),
-				cookie.getMaxAge(),
-				cookie.isSecure(),
-				cookie.isHttpOnly()
-		);
+		String name = cookie.getName();
+		String value = cookie.getValue();
+		boolean wrap = true;
+		String domain = cookie.getDomain();
+		String path = cookie.getPath();
+		boolean secured = cookie.isSecure();
+		boolean httpOnly = cookie.isHttpOnly();
 
-		builder.addCookie(c);
+		final Long maxAge = cookie.getMaxAge();
+		final Long expires = cookie.getExpires();
+
+		final long maxAgeValue;
+		if (maxAge != null) {
+			// Max-Age must be tested first.
+			maxAgeValue = maxAge;
+		} else if (expires != null) {
+			// Then, fallback to expires
+			maxAgeValue = expires - System.currentTimeMillis();
+		} else {
+			// Final default value.
+			maxAgeValue = 0;
+		}
+
+		builder.addCookie(com.ning.http.client.cookie.Cookie.newValidCookie(name, value, wrap, domain, path, maxAgeValue, secured, httpOnly));
 		return this;
 	}
 

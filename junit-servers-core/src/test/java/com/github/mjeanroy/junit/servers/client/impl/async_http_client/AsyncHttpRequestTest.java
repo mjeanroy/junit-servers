@@ -149,10 +149,9 @@ public class AsyncHttpRequestTest extends BaseHttpRequestTest {
 		assertThat(c.getValue()).isEqualTo(cookie.getValue());
 		assertThat(c.getDomain()).isEqualTo(cookie.getDomain());
 		assertThat(c.getPath()).isEqualTo(cookie.getPath());
-		assertThat(c.getExpires()).isEqualTo(cookie.getExpires());
-		assertThat(c.getMaxAge()).isEqualTo(cookie.getMaxAge());
 		assertThat(c.isSecure()).isEqualTo(cookie.isSecure());
 		assertThat(c.isHttpOnly()).isEqualTo(cookie.isHttpOnly());
+		assertThat(c.getMaxAge()).isEqualTo(Long.valueOf(cookie.getMaxAge()));
 
 		// Check produced request
 		Request rq = builder.build();

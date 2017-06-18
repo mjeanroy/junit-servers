@@ -30,7 +30,6 @@ import java.util.Objects;
 
 import static com.github.mjeanroy.junit.servers.commons.Dates.getTime;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Utils.firstNonNull;
 
 /**
  * Default implementation for cookie object.
@@ -74,20 +73,25 @@ public class Cookie {
 
 		final String domain = params.get("domain");
 		final String path = params.get("path");
-		final String expiresDate = params.get("expires");
-		final int maxAge = Integer.valueOf(firstNonNull(params.get("max-age"), "0"));
 		final boolean secure = params.containsKey("secure");
 		final boolean httpOnly = params.containsKey("httponly");
 
-		final long expires;
+		final String maxAgeTt = params.get("max-age");
+		final String expiresDate = params.get("expires");
+
+		Long expires;
+		Long maxAge = maxAgeTt == null ? null : Long.valueOf(maxAgeTt);
+
 		if (expiresDate != null) {
-			expires = getTime(expiresDate,
-					"EEE, d MMM yyyy HH:mm:ss Z",
-					"EEE, d-MMM-yyyy HH:mm:ss Z",
-					"EEE, d/MMM/yyyy HH:mm:ss Z"
-			);
+			expires = getTime(expiresDate, "EEE, d MMM yyyy HH:mm:ss Z", "EEE, d-MMM-yyyy HH:mm:ss Z", "EEE, d/MMM/yyyy HH:mm:ss Z");
 		} else {
-			expires = 0;
+			expires = null;
+		}
+
+		if (maxAge == null && expires == null) {
+			maxAge = 0L;
+		} else if (maxAge == null) {
+			maxAge = expires - System.currentTimeMillis();
 		}
 
 		return new Cookie(name, value, domain, path, secure, httpOnly, expires, maxAge);
@@ -103,7 +107,7 @@ public class Cookie {
 	 * @throws IllegalArgumentException if name is empty or blank.
 	 */
 	public static Cookie cookie(String name, String value) {
-		return new Cookie(name, value, null, null, false, false, -1, 0);
+		return new Cookie(name, value, null, null, false, false, null, null);
 	}
 
 	/**
@@ -121,7 +125,7 @@ public class Cookie {
 	 * @throws NullPointerException if name or value is null.
 	 * @throws IllegalArgumentException if name is empty or blank.
 	 */
-	public static Cookie cookie(String name, String value, String domain, String path, long expires, int maxAge, boolean secure, boolean httpOnly) {
+	public static Cookie cookie(String name, String value, String domain, String path, long expires, long maxAge, boolean secure, boolean httpOnly) {
 		return new Cookie(name, value, domain, path, secure, httpOnly, expires, maxAge);
 	}
 
@@ -139,7 +143,7 @@ public class Cookie {
 	 * @throws NullPointerException if name or value is null.
 	 * @throws IllegalArgumentException if name is empty or blank.
 	 */
-	public static Cookie secureCookie(String name, String value, String domain, String path, long expires, int maxAge) {
+	public static Cookie secureCookie(String name, String value, String domain, String path, long expires, long maxAge) {
 		return new Cookie(name, value, domain, path, true, true, expires, maxAge);
 	}
 
@@ -157,7 +161,7 @@ public class Cookie {
 	 * @throws IllegalArgumentException if name is empty or blank.
 	 */
 	public static Cookie sessionCookie(String name, String value, String domain, String path) {
-		return new Cookie(name, value, domain, path, true, true, -1, 0);
+		return new Cookie(name, value, domain, path, true, true, -1L, 0L);
 	}
 
 	/**
@@ -185,12 +189,12 @@ public class Cookie {
 	/**
 	 * Cookie expires value.
 	 */
-	private final long expires;
+	private final Long expires;
 
 	/**
 	 * Cookie max age.
 	 */
-	private final int maxAge;
+	private final Long maxAge;
 
 	/**
 	 * Secure flag.
@@ -203,7 +207,7 @@ public class Cookie {
 	private final boolean httpOnly;
 
 	// Use static factories
-	private Cookie(String name, String value, String domain, String path, boolean secure, boolean httpOnly, long expires, int maxAge) {
+	private Cookie(String name, String value, String domain, String path, boolean secure, boolean httpOnly, Long expires, Long maxAge) {
 		this.name = name;
 		this.value = value;
 		this.domain = domain;
@@ -258,7 +262,7 @@ public class Cookie {
 	 *
 	 * @return Expires value.
 	 */
-	public long getExpires() {
+	public Long getExpires() {
 		return expires;
 	}
 
@@ -268,7 +272,7 @@ public class Cookie {
 	 *
 	 * @return Max age value.
 	 */
-	public int getMaxAge() {
+	public Long getMaxAge() {
 		return maxAge;
 	}
 

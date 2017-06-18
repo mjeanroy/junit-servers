@@ -61,8 +61,8 @@ public class CookieTest {
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
 		assertThat(cookie.getValue()).isEqualTo(value);
-		assertThat(cookie.getExpires()).isEqualTo(-1L);
-		assertThat(cookie.getMaxAge()).isZero();
+		assertThat(cookie.getExpires()).isNull();
+		assertThat(cookie.getMaxAge()).isNull();
 		assertThat(cookie.getDomain()).isNull();
 		assertThat(cookie.getPath()).isNull();
 		assertThat(cookie.isSecure()).isFalse();
@@ -146,7 +146,7 @@ public class CookieTest {
 		assertThat(cookie.getPath()).isNull();
 		assertThat(cookie.isSecure()).isFalse();
 		assertThat(cookie.isHttpOnly()).isFalse();
-		assertThat(cookie.getExpires()).isZero();
+		assertThat(cookie.getExpires()).isNull();
 		assertThat(cookie.getMaxAge()).isZero();
 	}
 
@@ -161,7 +161,7 @@ public class CookieTest {
 		assertThat(cookie.getPath()).isEqualTo("/");
 		assertThat(cookie.isSecure()).isTrue();
 		assertThat(cookie.isHttpOnly()).isTrue();
-		assertThat(cookie.getExpires()).isZero();
+		assertThat(cookie.getExpires()).isNull();
 		assertThat(cookie.getMaxAge()).isZero();
 	}
 
