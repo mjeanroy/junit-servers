@@ -439,4 +439,6 @@ MIT License (MIT)
 
 ## Contributing
 
+Thanks to [https://github.com/skjolber](@skjolber) for his [https://github.com/mjeanroy/junit-servers/pull/4](contribution)!
+
 If you found a bug or you thing something is missing, feel free to contribute and submit an issue or a pull request.
