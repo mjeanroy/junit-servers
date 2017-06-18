@@ -44,7 +44,7 @@ public class HttpParameter {
 	 * @param value Parameter value.
 	 * @return Parameter object.
 	 * @throws IllegalArgumentException if name is empty or blank.
-	 * @@throws NullPointerException if name or value is null.
+	 * @throws NullPointerException if name or value is null.
 	 */
 	public static HttpParameter param(String name, String value) {
 		return new HttpParameter(name, value);

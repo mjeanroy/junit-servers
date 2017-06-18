@@ -50,7 +50,8 @@ public class HandlersRule extends AbstractRuleInstance {
 	 * Create new rules.
 	 *
 	 * @param target Target class (i.e tested class).
-	 * @param handlers List of handlers.
+	 * @param handler First handler (required).
+	 * @param handlers List of other (optional) handlers.
 	 */
 	public HandlersRule(Object target, AnnotationHandler handler, AnnotationHandler... handlers) {
 		super(target);

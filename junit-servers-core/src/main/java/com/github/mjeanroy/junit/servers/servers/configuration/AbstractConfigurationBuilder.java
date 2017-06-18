@@ -297,6 +297,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * Change parent classpath value.
 	 *
 	 * @param classpath New webapp value.
+	 * @param others Other (optional) urls.
 	 * @return this
 	 */
 	public T withParentClasspath(URL classpath, URL... others) {

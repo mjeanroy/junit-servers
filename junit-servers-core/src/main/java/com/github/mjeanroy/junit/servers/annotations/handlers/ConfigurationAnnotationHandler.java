@@ -42,6 +42,7 @@ public class ConfigurationAnnotationHandler extends AbstractAnnotationHandler {
 	/**
 	 * Create new handler.
 	 * @param configuration Server configuration.
+	 * @param <T> Type of configuration instance.
 	 * @return Handler.
 	 * @throws NullPointerException if configuration is null.
 	 */

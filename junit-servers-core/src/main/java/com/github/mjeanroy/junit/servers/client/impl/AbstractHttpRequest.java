@@ -255,7 +255,7 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	 * an instance of {HttpClientException}.
 	 *
 	 * @return Http response.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract HttpResponse doExecute() throws Exception;
 

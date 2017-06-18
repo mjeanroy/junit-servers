@@ -24,21 +24,20 @@
 
 package com.github.mjeanroy.junit.servers.runner;
 
-import static com.github.mjeanroy.junit.servers.annotations.handlers.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.annotations.handlers.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.annotations.handlers.ServerAnnotationHandler.newServerAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
-
-import java.util.List;
-
-import org.junit.rules.TestRule;
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.InitializationError;
-
 import com.github.mjeanroy.junit.servers.rules.HandlersRule;
 import com.github.mjeanroy.junit.servers.rules.ServerRule;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import org.junit.rules.TestRule;
+import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.InitializationError;
+
+import java.util.List;
+
+import static com.github.mjeanroy.junit.servers.annotations.handlers.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.annotations.handlers.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.annotations.handlers.ServerAnnotationHandler.newServerAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
 
 /**
  * Runner that will start and stop embedded server
@@ -62,7 +61,7 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 	 * Create runner.
 	 *
 	 * @param klass Running class.
-	 * @throws InitializationError
+	 * @throws InitializationError If an error occurred while starting embedded server.
 	 */
 	public JunitServerRunner(Class<?> klass) throws InitializationError {
 		super(klass);

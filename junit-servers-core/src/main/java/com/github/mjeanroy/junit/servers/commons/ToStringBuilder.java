@@ -123,6 +123,7 @@ public final class ToStringBuilder {
 	 *
 	 * @param name The name of the field.
 	 * @param values The collection of values.
+	 * @param <T> Type of elements in collection.
 	 * @return The current builder (for chaining).
 	 */
 	public <T> ToStringBuilder append(String name, Iterable<T> values) {
