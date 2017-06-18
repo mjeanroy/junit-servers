@@ -108,6 +108,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
 					<!-- Needed to make jetty find its JSP TLDs. Without this, you'll get:
 						org.apache.jasper.JasperException: /WEB-INF/views/index.jsp(1,68) PWC6188:

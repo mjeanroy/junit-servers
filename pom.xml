@@ -75,6 +75,7 @@
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
 		<apache-rat-plugin.version>0.10</apache-rat-plugin.version>
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
 		<maven-war-plugin>2.4</maven-war-plugin>
@@ -233,6 +234,12 @@
 					<target>${maven.compiler.target}</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
 			</plugin>
 
 			<plugin>
