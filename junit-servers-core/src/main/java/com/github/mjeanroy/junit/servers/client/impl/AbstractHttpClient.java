@@ -38,6 +38,11 @@ import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
 public abstract class AbstractHttpClient implements HttpClient {
 
 	/**
+	 * The standard URL path separator.
+	 */
+	private static final char URL_SEPARATOR = '/';
+
+	/**
 	 * Embedded server to query.
 	 */
 	private final EmbeddedServer server;
@@ -76,9 +81,17 @@ public abstract class AbstractHttpClient implements HttpClient {
 	public HttpRequest prepareRequest(HttpMethod httpMethod, String url) {
 		notNull(url, "url");
 
-		url = removePrefix(url, server.getPath());
-		url = removePrefix(url, server.getUrl());
-		return buildRequest(httpMethod, server.getUrl() + url);
+		final String serverUrl = server.getUrl();
+
+		String endpoint = url;
+		endpoint = removePrefix(endpoint, server.getPath());
+		endpoint = removePrefix(endpoint, serverUrl);
+
+		if (endpoint.charAt(0) != URL_SEPARATOR && serverUrl.charAt(serverUrl.length() - 1) != URL_SEPARATOR) {
+			endpoint = String.valueOf(URL_SEPARATOR) + endpoint;
+		}
+
+		return buildRequest(httpMethod, serverUrl + endpoint);
 	}
 
 	/**

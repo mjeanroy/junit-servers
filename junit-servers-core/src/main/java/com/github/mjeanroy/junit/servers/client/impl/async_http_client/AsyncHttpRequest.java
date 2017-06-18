@@ -46,6 +46,11 @@ import static java.lang.System.nanoTime;
 public class AsyncHttpRequest extends AbstractHttpRequest {
 
 	/**
+	 * The request URL.
+	 */
+	private final String url;
+
+	/**
 	 * Original http client.
 	 * It will be used to execute http request.
 	 */
@@ -70,11 +75,17 @@ public class AsyncHttpRequest extends AbstractHttpRequest {
 	 * @param url Request URL.
 	 */
 	AsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, String url) {
+		this.url = url;
 		this.httpMethod = httpMethod;
 		this.client = client;
 		this.builder = new RequestBuilder()
 				.setUrl(notBlank(url, "url"))
 				.setMethod(notNull(httpMethod, "httpMethod").getVerb());
+	}
+
+	@Override
+	public String getUrl() {
+		return url;
 	}
 
 	@Override

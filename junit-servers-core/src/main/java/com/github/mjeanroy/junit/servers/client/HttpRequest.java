@@ -34,6 +34,13 @@ import java.util.Date;
 public interface HttpRequest {
 
 	/**
+	 * Request URL.
+	 *
+	 * @return The request URL.
+	 */
+	String getUrl();
+
+	/**
 	 * Return http request method.
 	 *
 	 * @return Method.

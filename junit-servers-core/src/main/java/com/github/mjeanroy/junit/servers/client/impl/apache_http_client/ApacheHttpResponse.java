@@ -87,7 +87,7 @@ public class ApacheHttpResponse extends AbstractHttpResponse {
 	public String body() {
 		try {
 			HttpEntity entity = response.getEntity();
-			return EntityUtils.toString(entity);
+			return entity == null ? "" : EntityUtils.toString(entity);
 		}
 		catch (IOException ex) {
 			throw new HttpClientException(ex);

@@ -125,6 +125,11 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	}
 
 	@Override
+	public String getUrl() {
+		return url;
+	}
+
+	@Override
 	public HttpMethod getMethod() {
 		return httpMethod;
 	}

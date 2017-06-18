@@ -115,6 +115,20 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void it_should_create_request_and_set_path_separator() throws Exception {
+		final String serverUrl = "http://localhost:9999";
+		when(server.getUrl()).thenReturn(serverUrl);
+		when(server.getPath()).thenReturn("/");
+
+		final HttpClient client = createCustomClient(server);
+		final String path = "/foo";
+		final HttpMethod httpMethod = HttpMethod.GET;
+
+		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
+		assertThat(httpRequest.getUrl()).isEqualTo(serverUrl + path);
+	}
+
+	@Test
 	public void it_should_create_get_request() throws Exception {
 		HttpClient client = createCustomClient(server);
 
@@ -160,7 +174,7 @@ public abstract class BaseHttpClientTest {
 	/**
 	 * Should create mock data during test setup.
 	 *
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void onSetUp() throws Exception;
 
@@ -169,7 +183,7 @@ public abstract class BaseHttpClientTest {
 	 *
 	 * @param server Fake embedded server.
 	 * @return Default http client.
-	 * @throws Exception
+	 * @throws Exception If an error occurred while creating client.
 	 */
 	protected abstract HttpClient createDefaultClient(EmbeddedServer server) throws Exception;
 
@@ -178,7 +192,7 @@ public abstract class BaseHttpClientTest {
 	 *
 	 * @param server Fake embedded server.
 	 * @return Default http client.
-	 * @throws Exception
+	 * @throws Exception If an error occurred while creating custom client.
 	 */
 	protected abstract HttpClient createCustomClient(EmbeddedServer server) throws Exception;
 
@@ -187,7 +201,7 @@ public abstract class BaseHttpClientTest {
 	 * http client.
 	 *
 	 * @param httpClient Previously created client.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkInternalHttpClient(HttpClient httpClient) throws Exception;
 
@@ -197,7 +211,7 @@ public abstract class BaseHttpClientTest {
 	 * @param httpRequest Previously created request.
 	 * @param httpMethod Method used to create http request.
 	 * @param path Path used to create http request.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkHttpRequest(HttpRequest httpRequest, HttpMethod httpMethod, String path) throws Exception;
 
@@ -205,7 +219,7 @@ public abstract class BaseHttpClientTest {
 	 * Check that http client is properly destroyed.
 	 *
 	 * @param client Destroyed http client.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkDestroy(HttpClient client) throws Exception;
 }

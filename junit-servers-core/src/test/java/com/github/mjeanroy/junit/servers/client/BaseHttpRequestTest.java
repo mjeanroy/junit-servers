@@ -348,7 +348,7 @@ public abstract class BaseHttpRequestTest {
 	/**
 	 * Should create mock data during test setup.
 	 *
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void onSetUp() throws Exception;
 
@@ -360,7 +360,7 @@ public abstract class BaseHttpRequestTest {
 	 * @param httpMethod Http method.
 	 * @param url Http request url.
 	 * @return Created http request.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract HttpRequest createHttpRequest(HttpMethod httpMethod, String url) throws Exception;
 
@@ -373,7 +373,7 @@ public abstract class BaseHttpRequestTest {
 	 * @param request Created http request.
 	 * @param httpMethod Http method used to create http request.
 	 * @param url Url used to create http request.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkInternals(HttpRequest request, HttpMethod httpMethod, String url) throws Exception;
 
@@ -381,7 +381,7 @@ public abstract class BaseHttpRequestTest {
 	 * Create default http request used in tests, except test of constructor.
 	 *
 	 * @return Http request.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract HttpRequest createDefaultRequest() throws Exception;
 
@@ -393,7 +393,7 @@ public abstract class BaseHttpRequestTest {
 	 * @param httpRequest Http request.
 	 * @param executionStrategy Execution strategy.
 	 * @return Produced http response.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract HttpResponse fakeExecution(HttpRequest httpRequest, ExecutionStrategy executionStrategy) throws Exception;
 
@@ -403,7 +403,7 @@ public abstract class BaseHttpRequestTest {
 	 * @param httpRequest Http request.
 	 * @param name Parameter name.
 	 * @param value Parameter value.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkQueryParam(HttpRequest httpRequest, String name, String value) throws Exception;
 
@@ -413,7 +413,7 @@ public abstract class BaseHttpRequestTest {
 	 * @param httpRequest Http request.
 	 * @param name Header name.
 	 * @param value Header value.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkHeader(HttpRequest httpRequest, String name, String value) throws Exception;
 
@@ -423,7 +423,7 @@ public abstract class BaseHttpRequestTest {
 	 * @param httpRequest Http request.
 	 * @param name Parameter name.
 	 * @param value Parameter value.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkFormParam(HttpRequest httpRequest, String name, String value) throws Exception;
 
@@ -432,7 +432,7 @@ public abstract class BaseHttpRequestTest {
 	 *
 	 * @param httpRequest Http request.
 	 * @param body Request body.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkRequestBody(HttpRequest httpRequest, String body) throws Exception;
 
@@ -441,7 +441,7 @@ public abstract class BaseHttpRequestTest {
 	 *
 	 * @param httpRequest Http request.
 	 * @param cookie Cookie to check.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkCookie(HttpRequest httpRequest, Cookie cookie) throws Exception;
 
@@ -450,11 +450,11 @@ public abstract class BaseHttpRequestTest {
 	 *
 	 * @param httpResponse Produced http response.
 	 * @param headers Headers, if http request should had some headers before execution.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkExecution(HttpResponse httpResponse, Pair... headers) throws Exception;
 
-	protected static interface ExecutionStrategy {
+	protected interface ExecutionStrategy {
 		HttpResponse execute(HttpRequest request);
 	}
 }
