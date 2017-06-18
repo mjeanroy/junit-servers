@@ -357,6 +357,13 @@ public class MyTest {
         .withBaseDir("/tmp/tomcat")
         .disableNaming()
         .withProperty("spring.profiles.active", "test")
+        .withOverrideDescriptor("src/test/resources/WEB-INF/web.xml")
+        .withParentClasspath(WebAppContext.class, new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.getName().startsWith("apache-jstl");
+            }
+        })
         .withHook(new Hook() {
             @Override
             public void pre(EmbeddedServer server) {

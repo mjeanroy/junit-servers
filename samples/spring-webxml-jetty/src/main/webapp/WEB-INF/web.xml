@@ -33,7 +33,7 @@ THE SOFTWARE.
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>com.github.mjeanroy.junit.servers.samples.jetty.webxml.configuration.SpringConfiguration</param-value>
+		<param-value>com.github.mjeanroy.junit.servers.samples.tomcat.webxml.configuration.SpringConfiguration</param-value>
 	</context-param>
 
 	<listener>
@@ -50,7 +50,7 @@ THE SOFTWARE.
 		</init-param>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>com.github.mjeanroy.junit.servers.samples.jetty.webxml.configuration</param-value>
+			<param-value>com.github.mjeanroy.junit.servers.samples.tomcat.webxml.configuration</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

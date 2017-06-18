@@ -38,6 +38,9 @@ import org.apache.tomcat.util.scan.StandardJarScanner;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Collection;
 
 import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
@@ -112,6 +115,8 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 		final String path = configuration.getPath();
 		final String classpath = configuration.getClasspath();
 		final boolean forceMetaInf = configuration.isForceMetaInf();
+		final Collection<URL> parentClasspath = configuration.getParentClasspath();
+		final String descriptor = configuration.getOverrideDescriptor();
 
 		File webappDirectory = new File(webapp);
 		if (webappDirectory.exists()) {
@@ -147,6 +152,19 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 					);
 
 					context.setResources(root);
+
+					// Custom parent classloader.
+					int nbUrls = parentClasspath.size();
+					if (nbUrls > 0) {
+						URL[] urls = parentClasspath.toArray(new URL[nbUrls]);
+						ClassLoader parentClassLoader = new URLClassLoader(urls);
+						context.setParentClassLoader(parentClassLoader);
+					}
+
+					// Override web.xml path
+					if (descriptor != null) {
+						context.setAltDDName(descriptor);
+					}
 
 					// == Tomcat 8
 
