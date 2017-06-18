@@ -32,12 +32,19 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class EmbeddedConfigurationBuilderTest {
 
@@ -94,6 +101,65 @@ public class EmbeddedConfigurationBuilderTest {
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
+	}
+
+	@Test
+	public void it_should_override_descriptor_file() throws Exception {
+		String newDescriptor = "src/test/resources/web.xml";
+		String oldDescriptor = builder.getOverrideDescriptor();
+		EmbeddedConfigurationBuilder result = builder.withOverrideDescriptor(newDescriptor);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getOverrideDescriptor()).isNotEqualTo(oldDescriptor).isEqualTo(newDescriptor);
+	}
+
+	@Test
+	public void it_should_override_parent_classpath() throws Exception {
+		URL c1 = new File("/").toURI().toURL();
+		URL c2 = new File(".").toURI().toURL();
+
+		EmbeddedConfigurationBuilder result = builder.withParentClasspath(c1, c2);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getParentClasspath())
+			.isNotEmpty()
+			.containsAll(Arrays.asList(c1, c2));
+	}
+
+	@Test
+	public void it_should_override_parent_classpath_with_collection() throws Exception {
+		URL c1 = new File("/").toURI().toURL();
+		URL c2 = new File(".").toURI().toURL();
+		List<URL> urls = Arrays.asList(c1, c2);
+
+		EmbeddedConfigurationBuilder result = builder.withParentClasspath(urls);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getParentClasspath())
+			.isNotEmpty()
+			.containsAll(urls);
+	}
+
+	@Test
+	public void it_should_override_class_classloader() throws Exception {
+		Class<?> klass = getClass();
+		FileFilter filter = mock(FileFilter.class);
+		when(filter.accept(any(File.class))).thenReturn(true);
+
+		EmbeddedConfigurationBuilder result = builder.withParentClasspath(klass, filter);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getParentClasspath()).isNotEmpty();
+		verify(filter, atLeastOnce()).accept(any(File.class));
+	}
+
+	@Test
+	public void it_should_override_class_classloader_without_filter() throws Exception {
+		Class<?> klass = getClass();
+		EmbeddedConfigurationBuilder result = builder.withParentClasspath(klass);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getParentClasspath()).isNotEmpty();
 	}
 
 	@Test

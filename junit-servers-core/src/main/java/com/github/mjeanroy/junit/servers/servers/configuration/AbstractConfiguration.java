@@ -24,17 +24,18 @@
 
 package com.github.mjeanroy.junit.servers.servers.configuration;
 
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.Hook;
 
+import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static java.lang.String.format;
+import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
-
-import java.net.URL;
 
 /**
  * Generic configuration that should be extended for
@@ -88,8 +89,7 @@ public abstract class AbstractConfiguration {
 	 * before server is started.
 	 *
 	 */
-
-	private final List<URL> parentClasspath;
+	private final Collection<URL> parentClasspath;
 	
 	/**
 	 * Map of environment properties to set before server start.
@@ -113,7 +113,10 @@ public abstract class AbstractConfiguration {
 	 */
 	private final List<Hook> hooks;
 
-	private String overrideDescriptor;
+	/**
+	 * The path to the custom descriptor file (a.k.a web.xml).
+	 */
+	private final String overrideDescriptor;
 
 	/**
 	 * Initialize configuration.
@@ -144,14 +147,14 @@ public abstract class AbstractConfiguration {
 		return classpath;
 	}
 
-	public List<URL> getParentClasspath() {
-		return parentClasspath;
+	public Collection<URL> getParentClasspath() {
+		return unmodifiableCollection(parentClasspath);
 	}
-	   
+
 	public int getPort() {
 		return port;
 	}
-	
+
 	public String getOverrideDescriptor() {
 		return overrideDescriptor ;
 	}
@@ -176,7 +179,7 @@ public abstract class AbstractConfiguration {
 					Objects.equals(webapp, c.webapp) &&
 					Objects.equals(classpath, c.classpath) &&
 					Objects.equals(envProperties, c.envProperties) &&
-					Objects.equals(hooks, c.hooks) &&					
+					Objects.equals(hooks, c.hooks) &&
 					Objects.equals(overrideDescriptor, c.overrideDescriptor) &&
 					Objects.equals(parentClasspath, c.parentClasspath);
 		}
@@ -185,14 +188,18 @@ public abstract class AbstractConfiguration {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(port, path, webapp, classpath, envProperties, hooks);
+		return Objects.hash(port, path, webapp, classpath, envProperties, hooks, overrideDescriptor, parentClasspath);
 	}
 
 	@Override
 	public String toString() {
-		return format(
-				"%s{port=%s, path=%s, webapp=%s, classpath=%s}",
-				getClass().getSimpleName(), port, path, webapp, classpath
-		);
+		return ToStringBuilder.create(getClass())
+			.append("port", port)
+			.append("path", path)
+			.append("webapp", webapp)
+			.append("classpath", classpath)
+			.append("overrideDescriptor", overrideDescriptor)
+			.append("parentClasspath", parentClasspath)
+			.build();
 	}
 }

@@ -147,6 +147,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 					);
 
 					context.setResources(root);
+
 					// == Tomcat 8
 
 					// == Tomcat 7

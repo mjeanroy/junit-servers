@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 
@@ -95,12 +96,15 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 
 	@Override
 	public String toString() {
-		return String.format(
-				"%s {path=%s, webapp=%s, port=%s, classpath=%s, baseDir=%s, enableNaming=%s, forceMetaInf=%s}",
-				getClass().getSimpleName(),
-				getPath(), getWebapp(), getPath(), getClasspath(),
-				baseDir, enableNaming, forceMetaInf
-		);
+		return ToStringBuilder.create(getClass())
+			.append("path", getPath())
+			.append("webapp", getWebapp())
+			.append("port", getPort())
+			.append("classpath", getClasspath())
+			.append("baseDir", baseDir)
+			.append("enableNaming", enableNaming)
+			.append("forceMetaInf", forceMetaInf)
+			.build();
 	}
 
 	@Override

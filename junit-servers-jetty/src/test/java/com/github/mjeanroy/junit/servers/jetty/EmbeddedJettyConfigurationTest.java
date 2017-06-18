@@ -26,7 +26,9 @@ package com.github.mjeanroy.junit.servers.jetty;
 
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
+import org.eclipse.jetty.util.resource.Resource;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,6 +51,7 @@ public class EmbeddedJettyConfigurationTest {
 		String webapp = "foo";
 		String classpath = "/target/classes";
 		int stopTimeout = 50;
+		Resource resource = Mockito.mock(Resource.class);
 
 		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.builder()
 				.withPort(port)
@@ -57,6 +60,7 @@ public class EmbeddedJettyConfigurationTest {
 				.withPath(path)
 				.withStopTimeout(stopTimeout)
 				.disableStopAtShutdown()
+				.withBaseResource(resource)
 				.build();
 
 		assertThat(result.getPort()).isEqualTo(port);
@@ -65,6 +69,7 @@ public class EmbeddedJettyConfigurationTest {
 		assertThat(result.getWebapp()).isEqualTo(webapp);
 		assertThat(result.getStopTimeout()).isEqualTo(stopTimeout);
 		assertThat(result.isStopAtShutdown()).isFalse();
+		assertThat(result.getBaseResource()).isSameAs(resource);
 	}
 
 	private static class EmbeddedConfiguration extends AbstractConfiguration {

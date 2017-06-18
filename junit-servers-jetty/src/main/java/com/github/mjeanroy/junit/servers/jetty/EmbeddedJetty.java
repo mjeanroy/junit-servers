@@ -24,22 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
-import static org.eclipse.jetty.util.resource.Resource.newResource;
-
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
+import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.util.resource.FileResource;
+import org.eclipse.jetty.util.resource.PathResource;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.FragmentConfiguration;
@@ -49,10 +42,15 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Collection;
+
+import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import static org.eclipse.jetty.util.resource.Resource.newResource;
 
 /**
  * Jetty Embedded Server.
@@ -134,13 +132,13 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		final String path = configuration.getPath();
 		final String webapp = configuration.getWebapp();
 		final String classpath = configuration.getClasspath();
-		final List<URL> parentClasspath = configuration.getParentClasspath();
+		final Collection<URL> parentClasspath = configuration.getParentClasspath();
 		final String overrideDescriptor = configuration.getOverrideDescriptor ();
 		final Resource baseResource = configuration.getBaseResource();
 
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		
-		if(parentClasspath != null && !parentClasspath.isEmpty()) {
+
+		if (!parentClasspath.isEmpty()) {
 			classLoader = new URLClassLoader(parentClasspath.toArray(new URL[parentClasspath.size()]), classLoader);
 		}
 
@@ -148,14 +146,14 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		ctx.setClassLoader(classLoader);
 		ctx.setContextPath(path);
 
-		if(baseResource == null) {
-		    // use default base resource
-		    ctx.setBaseResource(newResource(webapp));
+		if (baseResource == null) {
+			// use default base resource
+			ctx.setBaseResource(newResource(webapp));
 		} else {
-		    ctx.setBaseResource(baseResource);
+			ctx.setBaseResource(baseResource);
 		}
 
-		if(overrideDescriptor != null) {
+		if (overrideDescriptor != null) {
 			ctx.setOverrideDescriptor(overrideDescriptor);
 		}
 
@@ -168,7 +166,9 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 				new FragmentConfiguration()
 		});
 
-		ctx.addOverrideDescriptor(overrideDescriptor);
+		if (overrideDescriptor != null) {
+			ctx.addOverrideDescriptor(overrideDescriptor);
+		}
 
 		if (isNotBlank(classpath)) {
 			// Fix to scan Spring WebApplicationInitializer
@@ -176,7 +176,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 			// See: http://stackoverflow.com/questions/13222071/spring-3-1-webapplicationinitializer-embedded-jetty-8-annotationconfiguration
 			// And more precisely: http://stackoverflow.com/a/18449506/1215828
 			File classes = new File(classpath);
-			FileResource containerResources = new FileResource(classes.toURI());
+			PathResource containerResources = new PathResource(classes.toURI());
 			ctx.getMetaData().addContainerResource(containerResources);
 		}
 

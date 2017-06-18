@@ -30,8 +30,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -80,13 +80,13 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @see com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration#classpath
 	 */
 	private String classpath;
-	
+
 	/**
 	 * Parent classpath URLs
-	 * 
+	 *
+	 * @see com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration#parentClasspath
 	 */
-
-	private List<URL> parentClasspath;
+	private Collection<URL> parentClasspath;
 
 	/**
 	 * Map of properties.
@@ -102,6 +102,9 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 */
 	private final List<Hook> hooks;
 
+	/**
+	 * The path of the custom web.xml descriptor.
+	 */
 	private String overrideDescriptor;
 
 	/**
@@ -114,6 +117,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 		this.classpath = DEFAULT_CLASSPATH;
 		this.envProperties = new HashMap<>();
 		this.hooks = new LinkedList<>();
+		this.parentClasspath = Collections.emptyList();
 	}
 
 	protected abstract T self();
@@ -142,6 +146,14 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 
 	public List<Hook> getHooks() {
 		return hooks;
+	}
+
+	public Collection<URL> getParentClasspath() {
+		return parentClasspath;
+	}
+
+	public String getOverrideDescriptor() {
+		return overrideDescriptor;
 	}
 
 	/**
@@ -233,35 +245,52 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 		return self();
 	}
 
-
 	/**
 	 * Change parent classpath value.
 	 *
 	 * @param classpath New webapp value.
 	 * @return this
 	 */
-	public T withParentClasspath(List<URL> classpath) {
+	public T withParentClasspath(Collection<URL> classpath) {
 		this.parentClasspath = classpath;
 		return self();
 	}
 
-   /**
+	/**
 	 * Change parent classpath value.
 	 *
-	 * @param classpath New webapp value.
+	 * @param cls The class that will be used to get classloader.
+	 * @param filter The file filter.
 	 * @return this
 	 */
 	public T withParentClasspath(Class<?> cls, FileFilter filter) {
+		notNull(cls, "Base class must not be null");
+
 		URLClassLoader urlClassLoader = (URLClassLoader) cls.getClassLoader();
 
 		Set<URL> urls = new HashSet<>();
-		for(URL url : urlClassLoader.getURLs()) {
-			if(filter.accept(new File(url.getFile()))) {
+		for (URL url : urlClassLoader.getURLs()) {
+			if (filter.accept(new File(url.getFile()))) {
 				urls.add(url);
 			}
 		}
-		this.parentClasspath = new ArrayList<>(urls);
-		return self();
+
+		return withParentClasspath(urls);
+	}
+
+	/**
+	 * Change parent classpath value.
+	 *
+	 * @param cls The class that will be used to get classloader.
+	 * @return this
+	 */
+	public T withParentClasspath(Class<?> cls) {
+		return withParentClasspath(cls, new FileFilter() {
+			@Override
+			public boolean accept(File pathname) {
+				return true;
+			}
+		});
 	}
 
 	/**
@@ -270,21 +299,21 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @param classpath New webapp value.
 	 * @return this
 	 */
-	public T withParentClasspath(URL ... classpath) {
-		this.parentClasspath = Arrays.asList(classpath);
-		return self();
-	}
-	
-	public List<URL> getParentClasspath() {
-		return parentClasspath;
+	public T withParentClasspath(URL classpath, URL... others) {
+		Set<URL> classpathUrls = new HashSet<>();
+		classpathUrls.add(classpath);
+		Collections.addAll(classpathUrls, others);
+		return withParentClasspath(classpathUrls);
 	}
 
-	public T withOverrideDescriptor (String overrideDescriptor) {
+	/**
+	 * Change path of the custom web.xml file descriptor.
+	 *
+	 * @param overrideDescriptor The new path.
+	 * @return this
+	 */
+	public T withOverrideDescriptor(String overrideDescriptor) {
 		this.overrideDescriptor = overrideDescriptor;
 		return self();
-	}
-
-	public String getOverrideDescriptor() {
-		return overrideDescriptor;
 	}
 }

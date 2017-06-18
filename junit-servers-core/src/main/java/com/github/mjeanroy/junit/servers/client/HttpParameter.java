@@ -24,9 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static java.lang.String.format;
 
 /**
  * Parameter object that could be sent in an http request.
@@ -104,6 +105,9 @@ public class HttpParameter {
 
 	@Override
 	public String toString() {
-		return format("%s{%s => %s}", getClass().getSimpleName(), getName(), getValue());
+		return ToStringBuilder.create(getClass())
+			.append("name", name)
+			.append("value", value)
+			.build();
 	}
 }

@@ -26,10 +26,9 @@ package com.github.mjeanroy.junit.servers.jetty;
 
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
+import org.eclipse.jetty.util.resource.Resource;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
-
-import org.eclipse.jetty.util.resource.Resource;
 
 /**
  * Jetty configuration settings.
@@ -48,7 +47,10 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 	 */
 	private final boolean stopAtShutdown;
 
-	private Resource baseResource;
+	/**
+	 * The Jetty base resource (default is "./src/main/webapp").
+	 */
+	private final Resource baseResource;
 
 	/**
 	 * Get configuration builder.
@@ -161,6 +163,5 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 			this.baseResource = resource;
 			return this;
 		}
-
 	}
 }
