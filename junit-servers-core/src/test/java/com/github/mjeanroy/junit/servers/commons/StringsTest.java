@@ -26,14 +26,41 @@ package com.github.mjeanroy.junit.servers.commons;
 
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.commons.Utils.firstNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UtilsTest {
+public class StringsTest {
 
 	@Test
-	public void it_should_return_first_non_null_parameter() {
-		assertThat(firstNonNull("foo", null)).isEqualTo("foo");
-		assertThat(firstNonNull(null, "bar")).isEqualTo("bar");
+	public void it_should_turn_string_to_lower_case() {
+		assertThat(Strings.toLowerCase(null)).isNull();
+		assertThat(Strings.toLowerCase("")).isEqualTo("");
+		assertThat(Strings.toLowerCase("FOO")).isEqualTo("foo");
+		assertThat(Strings.toLowerCase("foo")).isEqualTo("foo");
+	}
+
+	@Test
+	public void it_should_check_if_string_is_not_blank() {
+		assertThat(Strings.isNotBlank(null)).isFalse();
+		assertThat(Strings.isNotBlank("")).isFalse();
+		assertThat(Strings.isNotBlank("   ")).isFalse();
+		assertThat(Strings.isNotBlank("  foo  ")).isTrue();
+	}
+
+	@Test
+	public void it_should_check_if_string_is_blank() {
+		assertThat(Strings.isBlank(null)).isTrue();
+		assertThat(Strings.isBlank("")).isTrue();
+		assertThat(Strings.isBlank("   ")).isTrue();
+		assertThat(Strings.isBlank("  foo  ")).isFalse();
+	}
+
+	@Test
+	public void it_should_remove_string_prefix() {
+		assertThat(Strings.removePrefix(null, null)).isNull();
+		assertThat(Strings.removePrefix("", "")).isEqualTo("");
+		assertThat(Strings.removePrefix("foo", "bar")).isEqualTo("foo");
+		assertThat(Strings.removePrefix("foo", "foobar")).isEqualTo("foo");
+		assertThat(Strings.removePrefix("/foo", "/")).isEqualTo("foo");
+		assertThat(Strings.removePrefix("/foo", "/foo")).isEqualTo("");
 	}
 }

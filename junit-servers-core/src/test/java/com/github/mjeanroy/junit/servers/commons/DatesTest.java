@@ -89,6 +89,17 @@ public class DatesTest {
 	}
 
 	@Test
+	public void it_should_parse_date_and_return_null_without_matching_pattern() {
+		String value = "2021-01-01";
+		String pattern1 = "EEE, d MMM yyyy HH:mm:ss Z";
+		String pattern2 = "EEE, d-MMM-yyyy HH:mm:ss Z";
+
+		Date date = parse(value, pattern1, pattern2);
+
+		assertThat(date).isNull();
+	}
+
+	@Test
 	public void it_should_parse_date_and_get_time() {
 		String value = "Wed, 13 Jan 2021 22:23:01 GMT";
 		String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";

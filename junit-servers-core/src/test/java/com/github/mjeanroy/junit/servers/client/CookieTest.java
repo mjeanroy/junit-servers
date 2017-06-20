@@ -24,9 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.TimeZone;
 
@@ -37,6 +41,9 @@ import static com.github.mjeanroy.junit.servers.client.Cookie.sessionCookie;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CookieTest {
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	private TimeZone tz;
 
@@ -181,9 +188,38 @@ public class CookieTest {
 	}
 
 	@Test
+	public void it_should_not_create_cookie_without_name_value() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("Cookie must have a valid name and a valid value");
+		read("name; Domain=foo.com; Path=/; Secure; HttpOnly");
+	}
+
+	@Test
+	public void it_should_not_create_cookie_with_empty_name() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("Cookie must have a valid name");
+		read("=value; Domain=foo.com; Path=/; Secure; HttpOnly");
+	}
+
+	@Test
 	public void it_should_create_cookie_header_value_with_name_value() {
 		Cookie cookie = cookie("foo", "bar", null, null, 0, 0, false, false);
-		String rawValue = cookie.toHeaderValue();
+		String rawValue = cookie.raw();
 		assertThat(rawValue).isEqualTo("foo=bar");
+	}
+
+	@Test
+	public void it_should_implement_to_string() {
+		Cookie cookie = read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
+		assertThat(cookie.toString()).isEqualTo(
+			"Cookie{name: \"name\", value: \"value\", domain: \"foo.com\", path: \"/\", expires: null, maxAge: 0, secure: true, httpOnly: true}"
+		);
+	}
+
+	@Test
+	public void it_should_implement_equals() {
+		EqualsVerifier.forClass(Cookie.class)
+			.suppress(Warning.STRICT_INHERITANCE)
+			.verify();
 	}
 }

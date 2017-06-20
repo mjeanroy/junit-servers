@@ -269,7 +269,7 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 			StringBuilder builder = new StringBuilder();
 			for (int i = 0; i < size; ++i) {
 				Cookie cookie = cookies.get(i);
-				builder.append(cookie.toHeaderValue());
+				builder.append(cookie.raw());
 				if (i != (size - 1)) {
 					builder.append("; ");
 				}

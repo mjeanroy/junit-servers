@@ -56,7 +56,7 @@ public final class CollectionUtils {
 	 * @param <T> Type of elements.
 	 * @return Filtered outputs.
 	 */
-	public static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
+	static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
 		List<T> results = new ArrayList<>();
 		for (T current : list) {
 			if (predicate.apply(current)) {
@@ -65,5 +65,4 @@ public final class CollectionUtils {
 		}
 		return results;
 	}
-
 }

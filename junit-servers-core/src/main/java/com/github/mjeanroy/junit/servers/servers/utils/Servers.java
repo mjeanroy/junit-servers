@@ -39,7 +39,7 @@ import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStat
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.invoke;
-import static com.github.mjeanroy.junit.servers.commons.Utils.firstNonNull;
+import static com.github.mjeanroy.junit.servers.commons.ObjectUtils.firstNonNull;
 
 /**
  * Static utilities for server instantiation

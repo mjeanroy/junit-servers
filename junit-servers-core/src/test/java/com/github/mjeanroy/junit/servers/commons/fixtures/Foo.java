@@ -22,32 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.fixtures;
 
-/**
- * Static utilities.
- */
-public final class Utils {
+public class Foo {
+	private final int id;
 
-	// Ensure non instantiation
-	private Utils() {
-	}
-
-	/**
-	 * Return first non null parameter.
-	 *
-	 * @param obj1 First parameter to check.
-	 * @param obj2 Second parameter to check.
-	 * @param <T> Type of parameter objects.
-	 * @return First non null object, null if all parameters are null.
-	 */
-	public static <T> T firstNonNull(T obj1, T obj2) {
-		if (obj1 != null) {
-			return obj1;
-		}
-		if (obj2 != null) {
-			return obj2;
-		}
-		return null;
+	protected Foo(int id) {
+		this.id = id;
 	}
 }

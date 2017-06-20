@@ -22,16 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.it;
+package com.github.mjeanroy.junit.servers.commons.fixtures;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+public class Bar extends Foo {
+	private static String staticField = "foo";
 
-public class ApacheHttpClientTest extends BaseHttpClientTest {
+	@FooAnnotation
+	private static String staticFieldAnnotated = "foo";
 
-	@Override
-	protected HttpClient createClient(EmbeddedServer server) {
-		return HttpClientStrategy.APACHE_HTTP_CLIENT.build(server);
+	public static int getStaticMethod() {
+		return 0;
+	}
+
+	private static int getStaticPrivateMethod() {
+		return 0;
+	}
+
+	@FooAnnotation
+	public static int getStaticMethodAnnotated() {
+		return 0;
+	}
+
+	private final String name;
+
+	public Bar(int id, String name) {
+		super(id);
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 }

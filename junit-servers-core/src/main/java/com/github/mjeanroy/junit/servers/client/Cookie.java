@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -301,7 +303,7 @@ public class Cookie {
 	 *
 	 * @return Header value.
 	 */
-	public String toHeaderValue() {
+	public String raw() {
 		return new StringBuilder()
 				.append(getName()).append("=").append(getValue())
 				.toString();
@@ -315,14 +317,14 @@ public class Cookie {
 
 		if (o instanceof Cookie) {
 			Cookie c = (Cookie) o;
-			return getName().equals(c.getName()) &&
-					getValue().equals(c.getValue()) &&
-					Objects.equals(getDomain(), c.getDomain()) &&
-					Objects.equals(getPath(), c.getPath()) &&
-					getExpires() == c.getExpires() &&
-					getMaxAge() == c.getMaxAge() &&
-					isSecure() == c.isSecure() &&
-					isHttpOnly() == c.isHttpOnly();
+			return Objects.equals(name, c.name) &&
+					Objects.equals(value, c.value) &&
+					Objects.equals(domain, c.domain) &&
+					Objects.equals(path, c.path) &&
+					Objects.equals(expires, c.expires) &&
+					Objects.equals(maxAge, c.maxAge) &&
+					secure == c.secure &&
+					httpOnly == c.httpOnly;
 		}
 
 		return false;
@@ -330,27 +332,20 @@ public class Cookie {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(
-				getName(), getValue(),
-				getDomain(), getPath(),
-				getExpires(), getMaxAge(),
-				isSecure(), isHttpOnly()
-		);
+		return Objects.hash(name, value, domain, path, expires, maxAge, secure, httpOnly);
 	}
 
 	@Override
 	public String toString() {
-		return new StringBuilder()
-				.append("Cookie { ")
-				.append("Name=").append(getName()).append("; ")
-				.append("Value=").append(getValue()).append("; ")
-				.append("Domain=").append(getDomain()).append("; ")
-				.append("Path=").append(getPath()).append("; ")
-				.append("Expires=").append(getExpires()).append("; ")
-				.append("MaxAge=").append(getMaxAge()).append("; ")
-				.append("Secure=").append(isSecure()).append("; ")
-				.append("HttpOnly=").append(isHttpOnly())
-				.append(" }")
-				.toString();
+		return ToStringBuilder.create(getClass())
+				.append("name", name)
+				.append("value", value)
+				.append("domain", domain)
+				.append("path", path)
+				.append("expires", expires)
+				.append("maxAge", maxAge)
+				.append("secure", secure)
+				.append("httpOnly", httpOnly)
+				.build();
 	}
 }

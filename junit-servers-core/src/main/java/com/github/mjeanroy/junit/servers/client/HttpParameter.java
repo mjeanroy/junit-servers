@@ -26,6 +26,8 @@ package com.github.mjeanroy.junit.servers.client;
 
 import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 
+import java.util.Objects;
+
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
@@ -92,15 +94,14 @@ public class HttpParameter {
 		}
 		if (o instanceof HttpParameter) {
 			HttpParameter p = (HttpParameter) o;
-			return getName().equals(p.getName()) &&
-					getValue().equals(p.getValue());
+			return Objects.equals(name, p.name) && Objects.equals(value, p.value);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return getName().hashCode() + getValue().hashCode();
+		return Objects.hash(name, value);
 	}
 
 	@Override

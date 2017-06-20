@@ -206,7 +206,7 @@ public class ApacheHttpRequestTest extends BaseHttpRequestTest {
 		verify(client).execute(rqCaptor.capture());
 
 		HttpRequestBase rq = rqCaptor.getValue();
-		assertThat(rq.getFirstHeader("Cookie").getValue()).isEqualTo(cookie.toHeaderValue());
+		assertThat(rq.getFirstHeader("Cookie").getValue()).isEqualTo(cookie.raw());
 	}
 
 	@SuppressWarnings("unchecked")

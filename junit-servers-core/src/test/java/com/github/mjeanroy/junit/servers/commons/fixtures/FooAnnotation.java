@@ -22,16 +22,15 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.it;
+package com.github.mjeanroy.junit.servers.commons.fixtures;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class ApacheHttpClientTest extends BaseHttpClientTest {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+public @interface FooAnnotation {
 
-	@Override
-	protected HttpClient createClient(EmbeddedServer server) {
-		return HttpClientStrategy.APACHE_HTTP_CLIENT.build(server);
-	}
 }

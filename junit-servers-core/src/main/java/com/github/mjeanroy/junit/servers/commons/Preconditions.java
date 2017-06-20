@@ -45,6 +45,7 @@ public final class Preconditions {
 	 * @param name Name of parameter, it will produce an error message such as "{name} must not be null"
 	 * @param <T> Type of value.
 	 * @return First parameter if it is not null.
+	 * @throws NullPointerException If {@code value} is {@code null}.
 	 */
 	public static <T> T notNull(T value, String name) {
 		if (value == null) {
@@ -65,11 +66,16 @@ public final class Preconditions {
 	 * @param name Name of field to produce exception message.
 	 * @param <T> Type of elements.
 	 * @return Original collection.
+	 * @throws NullPointerException If {@code collection} is {@code null}.
+	 * @throws IllegalArgumentException If {@code collection} is empty.
 	 */
 	public static <T> Collection<T> notEmpty(Collection<T> collection, String name) {
-		if (collection == null || collection.isEmpty()) {
+		notNull(collection, name);
+
+		if (collection.isEmpty()) {
 			throw new IllegalArgumentException(format("%s must not be empty", name));
 		}
+
 		return collection;
 	}
 
@@ -86,9 +92,11 @@ public final class Preconditions {
 	 */
 	public static String notBlank(String value, String name) {
 		notNull(value, name);
-		if (value.trim().equals("")) {
+
+		if (Strings.isBlank(value)) {
 			throw new IllegalArgumentException(format("%s must not be blank", name));
 		}
+
 		return value;
 	}
 

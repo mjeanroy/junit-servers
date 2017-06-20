@@ -73,21 +73,25 @@ public enum HttpClientStrategy {
 	AUTO {
 		@Override
 		public HttpClient build(EmbeddedServer server) {
-			if (ClassUtils.isPresent("org.asynchttpclient.DefaultAsyncHttpClient")) {
+			if (SUPPORT_ASYNC_HTTP_CLIENT) {
 				return ASYNC_HTTP_CLIENT.build(server);
 			}
 
-			if (ClassUtils.isPresent("com.ning.http.client.AsyncHttpClient")) {
+			if (SUPPORT_NING_ASYNC_HTTP_CLIENT) {
 				return NING_ASYNC_HTTP_CLIENT.build(server);
 			}
 
-			if (ClassUtils.isPresent("org.apache.http.impl.client.CloseableHttpClient")) {
+			if (SUPPORT_APACHE_HTTP_CLIENT) {
 				return APACHE_HTTP_CLIENT.build(server);
 			}
 
 			throw new UnsupportedOperationException("Http client implementation cannot be found, please add AsyncHttpClient or ApacheHttpClient to your classpath");
 		}
 	};
+
+	private static final boolean SUPPORT_ASYNC_HTTP_CLIENT = ClassUtils.isPresent("org.asynchttpclient.DefaultAsyncHttpClient");
+	private static final boolean SUPPORT_NING_ASYNC_HTTP_CLIENT = ClassUtils.isPresent("com.ning.http.client.AsyncHttpClient");
+	private static final boolean SUPPORT_APACHE_HTTP_CLIENT = ClassUtils.isPresent("org.apache.http.impl.client.CloseableHttpClient");
 
 	/**
 	 * Return http client implementation.

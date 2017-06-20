@@ -25,13 +25,13 @@
 package com.github.mjeanroy.junit.servers.client.it;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 public class NingAsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClient createClient(EmbeddedServer server) {
-		return NingAsyncHttpClient.defaultAsyncHttpClient(server);
+		return HttpClientStrategy.NING_ASYNC_HTTP_CLIENT.build(server);
 	}
 }

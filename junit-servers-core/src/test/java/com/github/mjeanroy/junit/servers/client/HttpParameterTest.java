@@ -22,53 +22,39 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.client;
 
-import org.assertj.core.api.Condition;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
-import java.util.List;
-
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CollectionUtilsTest {
+public class HttpParameterTest {
 
 	@Test
-	public void it_should_return_true_if_collection_is_null_or_empty() {
-		assertThat(isEmpty(null)).isTrue();
-		assertThat(isEmpty(emptyList())).isTrue();
+	public void it_should_create_http_parameter() {
+		final String name = "foo";
+		final String value = "bar";
+
+		final HttpParameter parameter = HttpParameter.param(name, value);
+
+		assertThat(parameter.getName()).isEqualTo(name);
+		assertThat(parameter.getValue()).isEqualTo(value);
 	}
 
 	@Test
-	public void it_should_return_false_if_collection_is_not_null_and_not_empty() {
-		assertThat(isEmpty(singletonList("foo"))).isFalse();
+	public void it_should_implement_to_string() {
+		final String name = "foo";
+		final String value = "bar";
+		final HttpParameter parameter = HttpParameter.param(name, value);
+		assertThat(parameter.toString()).isEqualTo("HttpParameter{name: \"foo\", value: \"bar\"}");
 	}
 
 	@Test
-	public void it_should_filter_list() {
-		List<Integer> numbers = asList(1, 2, 3, 4, 5, 6);
-
-		List<Integer> results = filter(numbers, new Predicate<Integer>() {
-			@Override
-			public boolean apply(Integer object) {
-				return object % 2 == 0;
-			}
-		});
-
-		assertThat(results)
-				.isNotNull()
-				.isNotEmpty()
-				.hasSize(3)
-				.are(new Condition<Integer>() {
-					@Override
-					public boolean matches(Integer value) {
-						return value % 2 == 0;
-					}
-				});
+	public void it_should_implement_equals() {
+		EqualsVerifier.forClass(HttpParameter.class)
+			.suppress(Warning.STRICT_INHERITANCE)
+			.verify();
 	}
 }

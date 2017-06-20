@@ -53,7 +53,7 @@ public final class Dates {
 	 * @param patterns Other pattern to test.
 	 * @return Date, null if pattern is not valid.
 	 */
-	public static Date parse(String date, String pattern, String... patterns) {
+	static Date parse(String date, String pattern, String... patterns) {
 		Set<String> set = new HashSet<>();
 		set.add(pattern);
 		if (patterns != null) {
@@ -105,7 +105,7 @@ public final class Dates {
 	 * @param pattern Pattern.
 	 * @return Formatted date.
 	 */
-	public static String formatTime(long time, String pattern) {
+	static String formatTime(long time, String pattern) {
 		Date date = new Date();
 		date.setTime(time);
 		return format(date, pattern);

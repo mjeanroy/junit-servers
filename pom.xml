@@ -92,6 +92,7 @@
 		<httpclient.version>4.5.3</httpclient.version>
 		<commons-io.version>2.5</commons-io.version>
 		<wiremock.version>2.1.12</wiremock.version>
+		<equalsverifier.version>2.3</equalsverifier.version>
 	</properties>
 
 	<dependencyManagement>
@@ -220,6 +221,11 @@
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>nl.jqno.equalsverifier</groupId>
+				<artifactId>equalsverifier</artifactId>
+				<version>${equalsverifier.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

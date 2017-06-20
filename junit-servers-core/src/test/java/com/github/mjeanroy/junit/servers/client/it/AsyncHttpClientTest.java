@@ -25,13 +25,13 @@
 package com.github.mjeanroy.junit.servers.client.it;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 public class AsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClient createClient(EmbeddedServer server) {
-		return AsyncHttpClient.defaultAsyncHttpClient(server);
+		return HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
 	}
 }

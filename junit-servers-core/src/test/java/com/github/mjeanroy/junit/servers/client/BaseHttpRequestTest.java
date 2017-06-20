@@ -26,7 +26,9 @@ package com.github.mjeanroy.junit.servers.client;
 
 import com.github.mjeanroy.junit.servers.utils.Pair;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Date;
 
@@ -40,6 +42,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public abstract class BaseHttpRequestTest {
 
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
 	@Before
 	public void setUp() throws Exception {
 		onSetUp();
@@ -51,6 +56,24 @@ public abstract class BaseHttpRequestTest {
 		HttpMethod httpMethod = HttpMethod.GET;
 		HttpRequest request = createHttpRequest(httpMethod, url);
 		checkInternals(request, httpMethod, url);
+	}
+
+	@Test
+	public void it_should_fail_to_add_body_on_get_request() throws Exception {
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage("Http method GET does not support request body");
+
+		String url = "http://localhost:8080/foo";
+		createHttpRequest(HttpMethod.GET, url).setBody("body");
+	}
+
+	@Test
+	public void it_should_fail_to_add_body_on_delete_request() throws Exception {
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage("Http method DELETE does not support request body");
+
+		String url = "http://localhost:8080/foo";
+		createHttpRequest(HttpMethod.DELETE, url).setBody("body");
 	}
 
 	@Test
@@ -85,6 +108,20 @@ public abstract class BaseHttpRequestTest {
 
 		checkFormParam(request, param1.getName(), param1.getValue());
 		checkFormParam(request, param2.getName(), param2.getValue());
+	}
+
+	@Test
+	public void it_should_fail_to_add_form_param_on_get_request() throws Exception {
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage("Http method GET does not support body parameters");
+		createHttpRequest(HttpMethod.GET, "http://localhost/foo").addFormParam("name", "value");
+	}
+
+	@Test
+	public void it_should_fail_to_add_form_param_on_delete_request() throws Exception {
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage("Http method DELETE does not support body parameters");
+		createHttpRequest(HttpMethod.DELETE, "http://localhost/foo").addFormParam("name", "value");
 	}
 
 	@Test

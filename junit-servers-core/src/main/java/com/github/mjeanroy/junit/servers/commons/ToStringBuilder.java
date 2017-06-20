@@ -103,7 +103,18 @@ public final class ToStringBuilder {
 	 * @param value The field value.
 	 * @return The current builder (for chaining).
 	 */
-	public ToStringBuilder append(String name, int value) {
+	public ToStringBuilder append(String name, Integer value) {
+		return appendValue(name, value);
+	}
+
+	/**
+	 * Append new long value.
+	 *
+	 * @param name The name of the field.
+	 * @param value The field value.
+	 * @return The current builder (for chaining).
+	 */
+	public ToStringBuilder append(String name, Long value) {
 		return appendValue(name, value);
 	}
 
@@ -114,7 +125,7 @@ public final class ToStringBuilder {
 	 * @param value The field value.
 	 * @return The current builder (for chaining).
 	 */
-	public ToStringBuilder append(String name, boolean value) {
+	public ToStringBuilder append(String name, Boolean value) {
 		return appendValue(name, value);
 	}
 
@@ -187,7 +198,7 @@ public final class ToStringBuilder {
 	 *   <li>Returns the result of {@code toString} function otherwise.</li>
 	 * </ul>
 	 *
-	 * @param value The value to format.
+	 * @param value The value to raw.
 	 * @return The formatted value.
 	 */
 	private static String formatValue(Object value) {

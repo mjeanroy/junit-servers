@@ -309,6 +309,13 @@ public abstract class BaseHttpResponseTest {
 	}
 
 	@Test
+	public void it_should_not_fail_to_get_cookie_and_returns_null_without_cookies() throws Exception {
+		HttpResponse rsp = createHttpResponse();
+		Cookie cookie = rsp.getCookie("ubid-acbfr");
+		assertThat(cookie).isNull();
+	}
+
+	@Test
 	public void it_should_get_all_cookies() throws Exception {
 		String headerName = "Set-Cookie";
 		String headerValue = "ubid-acbfr=277-2963663-2993265; path=/; domain=.amazon.fr; expires=Mon, 31-Dec-2035 23:00:01 GMT";
@@ -324,6 +331,13 @@ public abstract class BaseHttpResponseTest {
 		assertThat(cookie.getPath()).isEqualTo("/");
 		assertThat(cookie.getDomain()).isEqualTo(".amazon.fr");
 		assertThat(cookie.getExpires()).isEqualTo(2082754801000L);
+	}
+
+	@Test
+	public void it_should_not_fail_to_get_all_cookies_and_returns_empty_list_without_cookie() throws Exception {
+		HttpResponse rsp = createHttpResponse();
+		List<Cookie> cookies = rsp.getCookies();
+		assertThat(cookies).isNotNull().isEmpty();
 	}
 
 	@Test
@@ -348,7 +362,7 @@ public abstract class BaseHttpResponseTest {
 	/**
 	 * Should create mock data during test setup.
 	 *
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void onSetUp() throws Exception;
 
@@ -356,7 +370,7 @@ public abstract class BaseHttpResponseTest {
 	 * Should create a default http response.
 	 *
 	 * @return Default http response.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract HttpResponse createHttpResponse() throws Exception;
 
@@ -365,7 +379,7 @@ public abstract class BaseHttpResponseTest {
 	 * is valid.
 	 *
 	 * @param rsp Http response.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkInternals(HttpResponse rsp) throws Exception;
 
@@ -375,7 +389,7 @@ public abstract class BaseHttpResponseTest {
 	 * @param status Http response status.
 	 * @param body Http response body.
 	 * @param headers Http response headers.
-	 * @throws Exception
+	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void mockInternals(int status, String body, Map<String, String> headers) throws Exception;
 }

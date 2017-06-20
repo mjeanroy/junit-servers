@@ -24,9 +24,32 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
+/**
+ * Static string utilities.
+ */
 public final class Strings {
 
 	private Strings() {
+	}
+
+	/**
+	 * Check that given string is blank.
+	 *
+	 * @param value String to check.
+	 * @return True if string is blank, false otherwise.
+	 */
+	static boolean isBlank(String value) {
+		if (value == null) {
+			return true;
+		}
+
+		for (char character : value.toCharArray()) {
+			if (!Character.isWhitespace(character)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -36,7 +59,7 @@ public final class Strings {
 	 * @return True if string is not blank, false otherwise.
 	 */
 	public static boolean isNotBlank(String value) {
-		return value != null && !value.trim().isEmpty();
+		return !isBlank(value);
 	}
 
 	/**
@@ -48,6 +71,24 @@ public final class Strings {
 	 * @return New string.
 	 */
 	public static String removePrefix(String value, String prefix) {
+		if (value == null || prefix == null || prefix.length() > value.length()) {
+			return value;
+		}
+
 		return value.startsWith(prefix) ? value.substring(prefix.length()) : value;
+	}
+
+	/**
+	 * Returns the lowercase value of a given string:
+	 * <ul>
+	 *   <li>Returns {@code null} if {@code value} is {@code null}.</li>
+	 *   <li>Returns the result of {@link String#toLowerCase()} otherwise.</li>
+	 * </ul>
+	 *
+	 * @param value The string value.
+	 * @return The lowercase value.
+	 */
+	public static String toLowerCase(String value) {
+		return value == null ? null : value.toLowerCase();
 	}
 }

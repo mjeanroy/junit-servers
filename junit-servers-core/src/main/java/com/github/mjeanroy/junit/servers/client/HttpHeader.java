@@ -29,10 +29,12 @@ import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notEmpty;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Strings.toLowerCase;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 
@@ -133,22 +135,21 @@ public class HttpHeader {
 		}
 		if (o instanceof HttpHeader) {
 			HttpHeader h = (HttpHeader) o;
-			return getName().equalsIgnoreCase(h.getName()) &&
-					getValues().equals(h.getValues());
+			return Objects.equals(toLowerCase(name), toLowerCase(h.name)) && Objects.equals(values, h.values);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return getName().toLowerCase().hashCode() + getValues().hashCode();
+		return Objects.hash(toLowerCase(name), values);
 	}
 
 	@Override
 	public String toString() {
 		return ToStringBuilder.create(getClass())
 			.append("name", name)
-			.append("value", values)
+			.append("values", values)
 			.build();
 	}
 }

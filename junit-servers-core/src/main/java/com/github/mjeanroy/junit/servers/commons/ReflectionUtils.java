@@ -24,10 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
-import static java.lang.reflect.Modifier.isStatic;
-import static java.util.Arrays.asList;
-import static java.util.Collections.addAll;
+import com.github.mjeanroy.junit.servers.exceptions.ReflectionException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -36,7 +33,10 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.github.mjeanroy.junit.servers.exceptions.ReflectionException;
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
+import static java.lang.reflect.Modifier.isStatic;
+import static java.util.Arrays.asList;
+import static java.util.Collections.addAll;
 
 /**
  * Static reflection utilities.
@@ -72,8 +72,8 @@ public final class ReflectionUtils {
 	 * @param type Class to inspect.
 	 * @return Fields.
 	 */
-	public static List<Field> findStaticFields(Class type) {
-		return filter(asList(type.getDeclaredFields()), new FieldStaticPredicate());
+	private static List<Field> findStaticFields(Class type) {
+		return filter(asList(type.getDeclaredFields()), STATIC_FIELD_PREDICATE);
 	}
 
 	/**
@@ -82,8 +82,8 @@ public final class ReflectionUtils {
 	 * @param type Class to inspect.
 	 * @return Fields.
 	 */
-	public static List<Method> findStaticMethods(Class type) {
-		return filter(asList(type.getDeclaredMethods()), new MethodStaticPredicate());
+	private static List<Method> findStaticMethods(Class type) {
+		return filter(asList(type.getDeclaredMethods()), STATIC_METHOD_PREDICATE);
 	}
 
 	/**
@@ -121,12 +121,23 @@ public final class ReflectionUtils {
 	 * @throws ReflectionException if set operation is not permitted.
 	 */
 	public static void setter(Object instance, Field field, Object value) {
+		boolean forceAccess = false;
+
 		try {
-			field.setAccessible(true);
+			if (!field.isAccessible()) {
+				forceAccess = true;
+				field.setAccessible(true);
+			}
+
 			field.set(instance, value);
 		}
 		catch (IllegalAccessException ex) {
 			throw new ReflectionException(ex);
+		}
+		finally {
+			if (forceAccess) {
+				field.setAccessible(false);
+			}
 		}
 	}
 
@@ -153,23 +164,52 @@ public final class ReflectionUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getter(Object target, Field field) {
+		boolean forceAccess = false;
+
 		try {
-			field.setAccessible(true);
+			if (!field.isAccessible()) {
+				field.setAccessible(true);
+				forceAccess = true;
+			}
+
 			return (T) field.get(target);
 		}
 		catch (IllegalAccessException ex) {
 			throw new ReflectionException(ex);
 		}
+		finally {
+			if (forceAccess) {
+				field.setAccessible(false);
+			}
+		}
 	}
 
+	/**
+	 * Invoke the static method without any arguments.
+	 *
+	 * @param method The method to invoke.
+	 * @param <T> Return type.
+	 * @return The result of the method invocation.
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T invoke(Method method) {
+		boolean forceAccess = false;
+
 		try {
-			method.setAccessible(true);
+			if (!method.isAccessible()) {
+				method.setAccessible(true);
+				forceAccess = true;
+			}
+
 			return (T) method.invoke(null);
 		}
 		catch (InvocationTargetException | IllegalAccessException ex) {
 			throw new ReflectionException(ex);
+		}
+		finally {
+			if (forceAccess) {
+				method.setAccessible(false);
+			}
 		}
 	}
 
@@ -177,7 +217,7 @@ public final class ReflectionUtils {
 
 		private final Class<? extends Annotation> annotationKlass;
 
-		public FieldAnnotatedWithPredicate(Class<? extends Annotation> annotationKlass) {
+		private FieldAnnotatedWithPredicate(Class<? extends Annotation> annotationKlass) {
 			this.annotationKlass = annotationKlass;
 		}
 
@@ -187,19 +227,11 @@ public final class ReflectionUtils {
 		}
 	}
 
-	private static class FieldStaticPredicate implements Predicate<Field> {
-
-		@Override
-		public boolean apply(Field field) {
-			return isStatic(field.getModifiers());
-		}
-	}
-
 	private static class MethodAnnotatedWithPredicate implements Predicate<Method> {
 
 		private final Class<? extends Annotation> annotationKlass;
 
-		public MethodAnnotatedWithPredicate(Class<? extends Annotation> annotationKlass) {
+		private MethodAnnotatedWithPredicate(Class<? extends Annotation> annotationKlass) {
 			this.annotationKlass = annotationKlass;
 		}
 
@@ -209,11 +241,17 @@ public final class ReflectionUtils {
 		}
 	}
 
-	private static class MethodStaticPredicate implements Predicate<Method> {
+	private static final Predicate<Field> STATIC_FIELD_PREDICATE = new Predicate<Field>() {
+		@Override
+		public boolean apply(Field field) {
+			return isStatic(field.getModifiers());
+		}
+	};
 
+	private static final Predicate<Method> STATIC_METHOD_PREDICATE = new Predicate<Method>() {
 		@Override
 		public boolean apply(Method object) {
 			return isStatic(object.getModifiers());
 		}
-	}
+	};
 }

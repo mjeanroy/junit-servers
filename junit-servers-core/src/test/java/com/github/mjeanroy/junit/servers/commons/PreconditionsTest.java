@@ -31,7 +31,9 @@ import org.junit.rules.ExpectedException;
 import java.util.Collection;
 import java.util.List;
 
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notEmpty;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -44,6 +46,13 @@ public class PreconditionsTest {
 	public ExpectedException thrown = none();
 
 	@Test
+	public void it_should_throw_exception_if_value_is_null() {
+		thrown.expect(NullPointerException.class);
+		thrown.expectMessage("foo must not be null");
+		notNull(null, "foo");
+	}
+
+	@Test
 	public void it_should_throw_exception_if_collection_is_empty() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("foo must not be empty");
@@ -53,12 +62,47 @@ public class PreconditionsTest {
 	}
 
 	@Test
+	public void it_should_throw_exception_if_collection_is_null() {
+		thrown.expect(NullPointerException.class);
+		thrown.expectMessage("foo must not be null");
+		notEmpty(null, "foo");
+	}
+
+	@Test
 	public void it_should_not_throw_exception_if_collection_is_not_empty() {
 		Collection<String> list = asList("foo", "bar");
 		Collection<String> result = notEmpty(list, "foo");
 		assertThat(result)
 				.isNotNull()
 				.isSameAs(list);
+	}
+
+	@Test
+	public void it_should_throw_exception_if_string_is_null() {
+		thrown.expect(NullPointerException.class);
+		thrown.expectMessage("foo must not be null");
+		notBlank(null, "foo");
+	}
+
+	@Test
+	public void it_should_throw_exception_if_string_is_empty() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("foo must not be blank");
+		notBlank("", "foo");
+	}
+
+	@Test
+	public void it_should_throw_exception_if_string_is_blank() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("foo must not be blank");
+		notBlank("   ", "foo");
+	}
+
+	@Test
+	public void it_should_not_throw_exception_if_string_is_not_blank() {
+		String input = "  foo  ";
+		String output = notBlank(input, "foo");
+		assertThat(output).isEqualTo(input);
 	}
 
 	@Test

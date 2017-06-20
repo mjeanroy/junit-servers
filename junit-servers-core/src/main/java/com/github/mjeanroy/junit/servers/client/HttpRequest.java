@@ -251,7 +251,7 @@ public interface HttpRequest {
 
 	/**
 	 * Add If-Modified-Since value with expected date.
-	 * Date will be translated as GMT format.
+	 * Date will be translated as GMT raw.
 	 *
 	 * @param date Date.
 	 * @return Http request that can be used for chaining.
@@ -260,7 +260,7 @@ public interface HttpRequest {
 
 	/**
 	 * Add If-Unmodified-Since value with expected date.
-	 * Date will be translated as GMT format.
+	 * Date will be translated as GMT raw.
 	 *
 	 * @param date Date.
 	 * @return Http request that can be used for chaining.
