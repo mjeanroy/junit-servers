@@ -14,7 +14,7 @@ With Maven, add explicit dependency:
     <dependency>
         <groupId>com.github.mjeanroy</groupId>
         <artifactId>junit-servers-jetty</artifactId>
-        <version>0.4.3</version>
+        <version>0.5.0</version>
         <scope>test</scope>
     </dependency>
 ```
@@ -23,7 +23,7 @@ With Maven, add explicit dependency:
     <dependency>
         <groupId>com.github.mjeanroy</groupId>
         <artifactId>junit-servers-tomcat</artifactId>
-        <version>0.4.3</version>
+        <version>0.5.0</version>
         <scope>test</scope>
     </dependency>
 ```
