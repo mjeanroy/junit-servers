@@ -80,6 +80,8 @@
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
 		<maven-war-plugin>2.4</maven-war-plugin>
 		<versions-maven-plugin.version>2.1</versions-maven-plugin.version>
+		<animal-sniffer-maven-plugin.version>1.15</animal-sniffer-maven-plugin.version>
+		<java17-signature.version>1.0</java17-signature.version>
 
 		<jetty.version>9.3.0.M1</jetty.version>
 		<tomcat.version>8.0.44</tomcat.version>
@@ -231,6 +233,66 @@
 	</dependencyManagement>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>animal-sniffer-maven-plugin</artifactId>
+					<version>${animal-sniffer-maven-plugin.version}</version>
+					<configuration>
+						<signature>
+							<groupId>org.codehaus.mojo.signature</groupId>
+							<artifactId>java17</artifactId>
+							<version>${java17-signature.version}</version>
+						</signature>
+					</configuration>
+					<executions>
+						<execution>
+							<id>check-jdk7-compatibility</id>
+							<phase>test</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.rat</groupId>
+					<artifactId>apache-rat-plugin</artifactId>
+					<version>${apache-rat-plugin.version}</version>
+					<configuration>
+						<excludes>
+							<exclude>**/index.jsp</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>versions-maven-plugin</artifactId>
+					<version>${versions-maven-plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.rat</groupId>
@@ -267,5 +329,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

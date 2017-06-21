@@ -89,31 +89,16 @@
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jetty.version}</version>
-				<configuration>
-					<scanIntervalSeconds>1</scanIntervalSeconds>
-					<stopKey>stop-jetty</stopKey>
-					<stopPort>9999</stopPort>
-				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
-				<version>${maven-deploy-plugin.version}</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>${maven-war-plugin}</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
 			</plugin>
+
 			<plugin>
 				<!-- For use in test-case which points to explicit lib directory  -->
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -139,6 +124,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -150,6 +136,7 @@
 					<useSystemClassLoader>false</useSystemClassLoader>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<!-- validate JSPs -->
 				<groupId>org.eclipse.jetty</groupId>

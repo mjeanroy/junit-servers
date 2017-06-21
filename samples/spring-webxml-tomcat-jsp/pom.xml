@@ -34,7 +34,8 @@
 	
 	<properties>
 		<owasp-xss-encoder.version>1.2.1</owasp-xss-encoder.version>
-		<owasp-html-sanitizer.version>r239</owasp-html-sanitizer.version>	  
+		<owasp-html-sanitizer.version>r239</owasp-html-sanitizer.version>
+		<javax.servlet-jstl.version>1.2</javax.servlet-jstl.version>
 	</properties>
 
 	<dependencies>
@@ -65,13 +66,13 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<version>${javax.servlet-jstl.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.github.mjeanroy</groupId>
 			<artifactId>junit-servers-tomcat</artifactId>
-			<version>0.5.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -86,19 +87,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
-				<version>${maven-deploy-plugin.version}</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>${maven-war-plugin}</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

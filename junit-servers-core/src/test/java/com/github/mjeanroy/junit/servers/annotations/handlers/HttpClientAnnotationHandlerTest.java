@@ -24,19 +24,21 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import static com.github.mjeanroy.junit.servers.annotations.handlers.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.Test;
-
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import static com.github.mjeanroy.junit.servers.annotations.handlers.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class HttpClientAnnotationHandlerTest {
 
@@ -75,6 +77,5 @@ public class HttpClientAnnotationHandlerTest {
 	private static class Foo {
 		@TestHttpClient
 		private HttpClient client;
-
 	}
 }
