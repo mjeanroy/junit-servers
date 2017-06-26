@@ -59,7 +59,7 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
- * Abstract skeleton of {HttpRequest} interface.
+ * Abstract skeleton of {@link HttpRequest} interface.
  */
 public abstract class AbstractHttpRequest implements HttpRequest {
 

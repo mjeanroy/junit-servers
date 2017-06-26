@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils;
+package com.github.mjeanroy.junit.servers.utils.commons;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

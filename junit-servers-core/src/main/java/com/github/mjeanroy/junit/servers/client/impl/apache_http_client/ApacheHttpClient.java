@@ -24,15 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
@@ -65,8 +66,17 @@ public class ApacheHttpClient extends AbstractHttpClient {
 	 * @return Http client.
 	 */
 	public static ApacheHttpClient defaultApacheHttpClient(EmbeddedServer server) {
-		return new ApacheHttpClient(server, HttpClients.createDefault());
+		CloseableHttpClient client = HttpClientBuilder.create()
+			.disableContentCompression()
+			.build();
+
+		return new ApacheHttpClient(server, client);
 	}
+
+	/**
+	 * The {@code close} flag.
+	 */
+	private final AtomicBoolean destroyed;
 
 	/**
 	 * Internal apache http client.
@@ -79,6 +89,7 @@ public class ApacheHttpClient extends AbstractHttpClient {
 	private ApacheHttpClient(EmbeddedServer server, CloseableHttpClient client) {
 		super(server);
 		this.client = notNull(client, "client");
+		this.destroyed = new AtomicBoolean(false);
 	}
 
 	@Override
@@ -88,11 +99,17 @@ public class ApacheHttpClient extends AbstractHttpClient {
 
 	@Override
 	public void destroy() {
-		try {
-			client.close();
+		if (destroyed.compareAndSet(false, true)) {
+			try {
+				client.close();
+			} catch (IOException ex) {
+				throw new HttpClientException(ex);
+			}
 		}
-		catch (IOException ex) {
-			throw new HttpClientException(ex);
-		}
+	}
+
+	@Override
+	public boolean isDestroyed() {
+		return destroyed.get();
 	}
 }

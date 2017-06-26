@@ -22,19 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.it;
+package com.github.mjeanroy.junit.servers.utils.junit.run_if;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
 
-@RunIf(Java8Condition.class)
-public class AsyncHttpClientTest extends BaseHttpClientTest {
+/**
+ * Ensure that the current java version is, at least, Java 8.
+ */
+public class Java8Condition implements RunIfCondition {
 
 	@Override
-	protected HttpClient createClient(EmbeddedServer server) {
-		return HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
+	public boolean apply() {
+		return SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8);
 	}
 }

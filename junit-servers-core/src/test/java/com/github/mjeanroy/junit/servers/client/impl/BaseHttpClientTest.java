@@ -22,11 +22,16 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client;
+package com.github.mjeanroy.junit.servers.client.impl;
 
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,6 +41,7 @@ import static org.mockito.Mockito.when;
 /**
  * Tests skeleton for http client implementations.
  */
+@RunWith(RunIfRunner.class)
 public abstract class BaseHttpClientTest {
 
 	protected EmbeddedServer server;
@@ -69,14 +75,10 @@ public abstract class BaseHttpClientTest {
 	@Test
 	public void it_should_create_custom_client() throws Exception {
 		HttpClient client = createCustomClient(server);
-
-		assertThat(client)
-				.isNotNull();
+		assertThat(client).isNotNull();
 
 		EmbeddedServer internalServer = (EmbeddedServer) readField(client, "server", true);
-		assertThat(internalServer)
-				.isNotNull()
-				.isSameAs(server);
+		assertThat(internalServer).isNotNull().isSameAs(server);
 
 		checkInternalHttpClient(client);
 	}
@@ -89,7 +91,8 @@ public abstract class BaseHttpClientTest {
 		HttpMethod httpMethod = HttpMethod.POST;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
-		checkHttpRequest(httpRequest, httpMethod, path);
+		assertThat(httpRequest.getUrl()).startsWith(server.getUrl() + path);
+		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
 	}
 
 	@Test
@@ -100,7 +103,8 @@ public abstract class BaseHttpClientTest {
 		HttpMethod httpMethod = HttpMethod.POST;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, server.getPath() + path);
-		checkHttpRequest(httpRequest, httpMethod, path);
+		assertThat(httpRequest.getUrl()).startsWith(server.getUrl() + path);
+		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
 	}
 
 	@Test
@@ -111,7 +115,8 @@ public abstract class BaseHttpClientTest {
 		HttpMethod httpMethod = HttpMethod.POST;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, server.getUrl() + path);
-		checkHttpRequest(httpRequest, httpMethod, path);
+		assertThat(httpRequest.getUrl()).startsWith(server.getUrl() + path);
+		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
 	}
 
 	@Test
@@ -131,44 +136,29 @@ public abstract class BaseHttpClientTest {
 	@Test
 	public void it_should_create_get_request() throws Exception {
 		HttpClient client = createCustomClient(server);
-
-		String path = "/foo";
-		HttpRequest httpRequest = client.prepareGet(path);
-		checkHttpRequest(httpRequest, HttpMethod.GET, path);
+		HttpRequest httpRequest = client.prepareGet("/foo");
+		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
 	}
 
 	@Test
 	public void it_should_create_post_request() throws Exception {
 		HttpClient client = createCustomClient(server);
-
-		String path = "/foo";
-		HttpRequest httpRequest = client.preparePost(path);
-		checkHttpRequest(httpRequest, HttpMethod.POST, path);
+		HttpRequest httpRequest = client.preparePost("/foo");
+		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST);
 	}
 
 	@Test
 	public void it_should_create_put_request() throws Exception {
 		HttpClient client = createCustomClient(server);
-
-		String path = "/foo";
-		HttpRequest httpRequest = client.preparePut(path);
-		checkHttpRequest(httpRequest, HttpMethod.PUT, path);
+		HttpRequest httpRequest = client.preparePut("/foo");
+		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.PUT);
 	}
 
 	@Test
 	public void it_should_create_delete_request() throws Exception {
 		HttpClient client = createCustomClient(server);
-
-		String path = "/foo";
-		HttpRequest httpRequest = client.prepareDelete(path);
-		checkHttpRequest(httpRequest, HttpMethod.DELETE, path);
-	}
-
-	@Test
-	public void it_should_destroy_client() throws Exception {
-		HttpClient client = createCustomClient(server);
-		client.destroy();
-		checkDestroy(client);
+		HttpRequest httpRequest = client.prepareDelete("/foo");
+		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.DELETE);
 	}
 
 	/**
@@ -204,22 +194,4 @@ public abstract class BaseHttpClientTest {
 	 * @throws Exception If an error occurred.
 	 */
 	protected abstract void checkInternalHttpClient(HttpClient httpClient) throws Exception;
-
-	/**
-	 * Check created http request.
-	 *
-	 * @param httpRequest Previously created request.
-	 * @param httpMethod Method used to create http request.
-	 * @param path Path used to create http request.
-	 * @throws Exception If an error occurred.
-	 */
-	protected abstract void checkHttpRequest(HttpRequest httpRequest, HttpMethod httpMethod, String path) throws Exception;
-
-	/**
-	 * Check that http client is properly destroyed.
-	 *
-	 * @param client Destroyed http client.
-	 * @throws Exception If an error occurred.
-	 */
-	protected abstract void checkDestroy(HttpClient client) throws Exception;
 }

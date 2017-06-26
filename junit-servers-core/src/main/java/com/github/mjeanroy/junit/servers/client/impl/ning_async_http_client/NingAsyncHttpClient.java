@@ -84,4 +84,9 @@ public class NingAsyncHttpClient extends AbstractHttpClient {
 	public void destroy() {
 		client.close();
 	}
+
+	@Override
+	public boolean isDestroyed() {
+		return client.isClosed();
+	}
 }

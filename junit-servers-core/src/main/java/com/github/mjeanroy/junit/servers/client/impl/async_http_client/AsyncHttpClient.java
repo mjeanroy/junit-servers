@@ -92,4 +92,9 @@ public class AsyncHttpClient extends AbstractHttpClient {
 			throw new HttpClientException(ex);
 		}
 	}
+
+	@Override
+	public boolean isDestroyed() {
+		return client.isClosed();
+	}
 }

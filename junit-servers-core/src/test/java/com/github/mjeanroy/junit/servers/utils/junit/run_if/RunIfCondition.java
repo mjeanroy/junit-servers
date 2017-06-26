@@ -22,19 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.it;
+package com.github.mjeanroy.junit.servers.utils.junit.run_if;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
+/**
+ * Condition that will be instantiated and evaluated to ensure that a test
+ * can be executed.
+ */
+public interface RunIfCondition {
 
-@RunIf(Java8Condition.class)
-public class AsyncHttpClientTest extends BaseHttpClientTest {
-
-	@Override
-	protected HttpClient createClient(EmbeddedServer server) {
-		return HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
-	}
+	/**
+	 * The condition implementation:
+	 * <ul>
+	 *   <li>Must returns {@code true} to execute test.</li>
+	 *   <li>Must returns {@code false} otherwise.</li>
+	 * </ul>
+	 *
+	 * @return {@code true} to execute test, {@code false} to ignore it.
+	 */
+	boolean apply();
 }

@@ -81,7 +81,7 @@ public class CookieTest {
 		final String name = "foo";
 		final String value = "bar";
 		final long expires = 0;
-		final int maxAge = 10;
+		final long maxAge = 10;
 		final String domain = "domain";
 		final String path = "path";
 		final boolean secure = true;
@@ -105,7 +105,7 @@ public class CookieTest {
 		final String name = "foo";
 		final String value = "bar";
 		final long expires = 0;
-		final int maxAge = 10;
+		final long maxAge = 10;
 		final String domain = "domain";
 		final String path = "path";
 
@@ -203,9 +203,9 @@ public class CookieTest {
 
 	@Test
 	public void it_should_create_cookie_header_value_with_name_value() {
-		Cookie cookie = cookie("foo", "bar", null, null, 0, 0, false, false);
+		Cookie cookie = cookie("foo", "bar", null, null, null, null, false, false);
 		String rawValue = cookie.raw();
-		assertThat(rawValue).isEqualTo("foo=bar");
+		assertThat(rawValue).isEqualTo("foo=\"bar\"");
 	}
 
 	@Test

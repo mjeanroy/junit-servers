@@ -93,7 +93,7 @@
 		<async-http-client.version>2.0.31</async-http-client.version>
 		<httpclient.version>4.5.3</httpclient.version>
 		<commons-io.version>2.5</commons-io.version>
-		<wiremock.version>2.1.12</wiremock.version>
+		<wiremock.version>2.6.0</wiremock.version>
 		<equalsverifier.version>2.3</equalsverifier.version>
 	</properties>
 

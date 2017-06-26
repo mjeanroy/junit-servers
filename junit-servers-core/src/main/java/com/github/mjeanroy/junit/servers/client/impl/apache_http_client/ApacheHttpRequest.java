@@ -47,8 +47,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +60,7 @@ import static java.lang.System.nanoTime;
  * under the hood.
  * See: http://hc.apache.org/httpcomponents-client-ga/index.html
  */
-public class ApacheHttpRequest extends AbstractHttpRequest {
+class ApacheHttpRequest extends AbstractHttpRequest {
 
 	private static final ApacheHttpRequestFactory FACTORY = new ApacheHttpRequestFactory();
 
@@ -118,10 +117,14 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 		this.client = client;
 		this.httpMethod = httpMethod;
 		this.url = url;
-		this.queryParams = new HashMap<>();
-		this.formParams = new HashMap<>();
-		this.headers = new HashMap<>();
-		this.cookies = new LinkedList<>();
+
+		// Preserver insertion order with LinkedHashMap
+		this.queryParams = new LinkedHashMap<>();
+		this.formParams = new LinkedHashMap<>();
+		this.headers = new LinkedHashMap<>();
+
+		// Default of 10 should be enough 99% of time
+		this.cookies = new ArrayList<>(10);
 	}
 
 	@Override
@@ -136,10 +139,9 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 
 	@Override
 	public HttpRequest addHeader(String name, String value) {
-		headers.put(
-				notBlank(name, "name"),
-				notBlank(value, "value")
-		);
+		notBlank(name, "name");
+		notBlank(value, "value");
+		headers.put(name, value);
 		return this;
 	}
 
@@ -202,7 +204,7 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	 * Each additional query parameters will be appended to final URI.
 	 *
 	 * @return Created URI.
-	 * @throws URISyntaxException
+	 * @throws URISyntaxException If an error occurred while building URI.
 	 */
 	private URI createRequestURI() throws URISyntaxException {
 		URIBuilder uriBuilder = new URIBuilder(url);
@@ -230,7 +232,7 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	 * body.
 	 *
 	 * @param httpRequest Http request in creation.
-	 * @throws UnsupportedEncodingException
+	 * @throws UnsupportedEncodingException If an encoding error occurred while create body request.
 	 */
 	private void handleFormParameters(HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
 		List<NameValuePair> pairs = new ArrayList<>(formParams.size());
@@ -248,7 +250,7 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	 * Set request body value to http request.
 	 *
 	 * @param httpRequest Http request in creation.
-	 * @throws UnsupportedEncodingException
+	 * @throws UnsupportedEncodingException If an encoding error occurred while creating request body.
 	 */
 	private void handleRequestBody(HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
 		HttpEntity entity = new StringEntity(body);
@@ -256,10 +258,10 @@ public class ApacheHttpRequest extends AbstractHttpRequest {
 	}
 
 	/**
-	 * Set request body value to http request.
+	 * Add cookies to http request.
 	 *
 	 * @param httpRequest Http request in creation.
-	 * @throws UnsupportedEncodingException
+	 * @throws UnsupportedEncodingException If an encoding error occurred while creating cookies.
 	 */
 	private void handleCookies(HttpRequestBase httpRequest) throws UnsupportedEncodingException {
 		if (!cookies.isEmpty()) {

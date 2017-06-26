@@ -33,7 +33,7 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
 
 /**
- * Abstract skeleton of {HttpClient} interface.
+ * Abstract skeleton of {@link HttpClient} interface.
  */
 public abstract class AbstractHttpClient implements HttpClient {
 
@@ -81,12 +81,15 @@ public abstract class AbstractHttpClient implements HttpClient {
 	public HttpRequest prepareRequest(HttpMethod httpMethod, String url) {
 		notNull(url, "url");
 
+		if (isDestroyed()) {
+			throw new IllegalStateException("Cannot create request from a destroyed client");
+		}
+
 		final String serverUrl = server.getUrl();
 
 		String endpoint = url;
 		endpoint = removePrefix(endpoint, server.getPath());
 		endpoint = removePrefix(endpoint, serverUrl);
-
 		if (endpoint.charAt(0) != URL_SEPARATOR && serverUrl.charAt(serverUrl.length() - 1) != URL_SEPARATOR) {
 			endpoint = String.valueOf(URL_SEPARATOR) + endpoint;
 		}

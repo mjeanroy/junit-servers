@@ -64,7 +64,7 @@ public class IndexWithRunnerTest extends AbstractTomcatTest {
 	@Test
 	public void it_should_have_an_index() {
 		HttpResponse rsp = client.prepareGet("/index")
-				.addCookie(cookie("foo", "bar", null, null, 0, 0, false, false))
+				.addCookie(cookie("foo", "bar", null, null, 0L, 0L, false, false))
 				.execute();
 
 		String message = rsp.body();

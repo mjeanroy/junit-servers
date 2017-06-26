@@ -43,7 +43,7 @@ import static java.lang.System.nanoTime;
  * under the hood.
  * See: https://asynchttpclient.github.io/
  */
-public class NingAsyncHttpRequest extends AbstractHttpRequest {
+class NingAsyncHttpRequest extends AbstractHttpRequest {
 
 	/**
 	 * The request URL.

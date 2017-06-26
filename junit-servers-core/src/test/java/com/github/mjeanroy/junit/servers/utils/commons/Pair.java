@@ -22,19 +22,45 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.it;
+package com.github.mjeanroy.junit.servers.utils.commons;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
+/**
+ * Pair of strings to use in unit tests.
+ */
+public class Pair {
 
-@RunIf(Java8Condition.class)
-public class AsyncHttpClientTest extends BaseHttpClientTest {
+	/**
+	 * Create new pair of strings.
+	 *
+	 * @param o1 String 1.
+	 * @param o2 String 2.
+	 * @return Pair object.
+	 */
+	public static Pair pair(String o1, String o2) {
+		return new Pair(o1, o2);
+	}
 
-	@Override
-	protected HttpClient createClient(EmbeddedServer server) {
-		return HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
+	/**
+	 * First string.
+	 */
+	private final String o1;
+
+	/**
+	 * Second string.
+	 */
+	private final String o2;
+
+	// Use static factory
+	private Pair(String o1, String o2) {
+		this.o1 = o1;
+		this.o2 = o2;
+	}
+
+	public String getO1() {
+		return o1;
+	}
+
+	public String getO2() {
+		return o2;
 	}
 }

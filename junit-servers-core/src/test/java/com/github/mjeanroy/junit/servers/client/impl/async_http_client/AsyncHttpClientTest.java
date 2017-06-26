@@ -24,74 +24,39 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
-import com.github.mjeanroy.junit.servers.client.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.Request;
-import org.asynchttpclient.RequestBuilder;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
 
-import static java.lang.String.format;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
+@RunIf(Java8Condition.class)
 public class AsyncHttpClientTest extends BaseHttpClientTest {
 
-	private AsyncHttpClient internalClient;
+	private org.asynchttpclient.AsyncHttpClient internalClient;
 
 	@Override
 	protected void onSetUp() throws Exception {
-		internalClient = mock(AsyncHttpClient.class);
+		internalClient = mock(org.asynchttpclient.AsyncHttpClient.class);
 	}
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer server) throws Exception {
-		return com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.defaultAsyncHttpClient(server);
+		return AsyncHttpClient.defaultAsyncHttpClient(server);
 	}
 
 	@Override
 	protected HttpClient createCustomClient(EmbeddedServer server) throws Exception {
-		return com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.newAsyncHttpClient(server, internalClient);
+		return AsyncHttpClient.newAsyncHttpClient(server, internalClient);
 	}
 
 	@Override
 	protected void checkInternalHttpClient(HttpClient httpClient) throws Exception {
 		org.asynchttpclient.AsyncHttpClient internalClient = (org.asynchttpclient.AsyncHttpClient) readField(httpClient, "client", true);
 		assertThat(internalClient).isNotNull();
-	}
-
-	@Override
-	protected void checkHttpRequest(HttpRequest httpRequest, HttpMethod httpMethod, String path) throws Exception {
-		assertThat(httpRequest)
-				.isNotNull()
-				.isExactlyInstanceOf(AsyncHttpRequest.class);
-
-		AsyncHttpClient internalClient = (AsyncHttpClient) readField(httpRequest, "client", true);
-		assertThat(internalClient)
-				.isNotNull()
-				.isSameAs(this.internalClient);
-
-		RequestBuilder requestBuilder = (RequestBuilder) readField(httpRequest, "builder", true);
-		assertThat(requestBuilder).isNotNull();
-
-		// Build request to test initialization values
-
-		Request request = requestBuilder.build();
-		assertThat(request.getMethod())
-				.isNotNull()
-				.isEqualTo(httpMethod.getVerb());
-
-		assertThat(request.getUrl())
-				.isNotNull()
-				.isEqualTo(format("http://localhost:8080/path%s", path));
-	}
-
-	@Override
-	protected void checkDestroy(HttpClient client) throws Exception {
-		verify(internalClient).close();
 	}
 }

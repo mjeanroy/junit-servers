@@ -42,7 +42,7 @@ import static java.lang.System.nanoTime;
  * under the hood.
  * See: https://asynchttpclient.github.io/
  */
-public class AsyncHttpRequest extends AbstractHttpRequest {
+class AsyncHttpRequest extends AbstractHttpRequest {
 
 	/**
 	 * The request URL.

@@ -45,7 +45,7 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
  * under the hood.
  * See: https://asynchttpclient.github.io/
  */
-public class ApacheHttpResponse extends AbstractHttpResponse {
+class ApacheHttpResponse extends AbstractHttpResponse {
 
 	/**
 	 * Original response from apache http-client library.

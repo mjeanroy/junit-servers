@@ -22,45 +22,21 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils;
+package com.github.mjeanroy.junit.servers.utils.commons;
 
 /**
- * Pair of strings to use in unit tests.
+ * A mapper function is a function that takes an argument of type T and return a
+ * result of type U (U and T may be the same type).
+ *
+ * @param <T> Argument type.
+ * @param <U> Return type.
  */
-public class Pair {
+public interface MapperFunction<T, U> {
 
 	/**
-	 * Create new pair of strings.
-	 *
-	 * @param o1 String 1.
-	 * @param o2 String 2.
-	 * @return Pair object.
+	 * Execute function and return the result.
+	 * @param arg Function argument.
+	 * @return Function result.
 	 */
-	public static Pair pair(String o1, String o2) {
-		return new Pair(o1, o2);
-	}
-
-	/**
-	 * First string.
-	 */
-	private final String o1;
-
-	/**
-	 * Second string.
-	 */
-	private final String o2;
-
-	// Use static factory
-	private Pair(String o1, String o2) {
-		this.o1 = o1;
-		this.o2 = o2;
-	}
-
-	public String getO1() {
-		return o1;
-	}
-
-	public String getO2() {
-		return o2;
-	}
+	U apply(T arg);
 }

@@ -89,9 +89,28 @@ public enum HttpClientStrategy {
 		}
 	};
 
-	private static final boolean SUPPORT_ASYNC_HTTP_CLIENT = ClassUtils.isPresent("org.asynchttpclient.DefaultAsyncHttpClient");
-	private static final boolean SUPPORT_NING_ASYNC_HTTP_CLIENT = ClassUtils.isPresent("com.ning.http.client.AsyncHttpClient");
-	private static final boolean SUPPORT_APACHE_HTTP_CLIENT = ClassUtils.isPresent("org.apache.http.impl.client.CloseableHttpClient");
+	// The JAVA version.
+	private static final int JAVA_VERSION;
+
+	static {
+		final String javaVersion = System.getProperty("java.specification.version");
+		final String[] parts = javaVersion.split("\\.");
+
+		// For JDK9, the return value will be "9", otherwise, it will be "1.8" or "1.7".
+		// Lower Java version are not supported.
+		final String majorVersion = parts[0];
+		final String minorVersion = parts.length > 1 ? parts[1] : majorVersion;
+		JAVA_VERSION = Integer.parseInt(minorVersion);
+	}
+
+	private static final String ASYNC_HTTP_CLIENT_CLASS = "org.asynchttpclient.DefaultAsyncHttpClient";
+	private static final boolean SUPPORT_ASYNC_HTTP_CLIENT = JAVA_VERSION >= 8 && ClassUtils.isPresent(ASYNC_HTTP_CLIENT_CLASS);
+
+	private static final String NING_ASYNC_HTTP_CLIENT_CLASS = "com.ning.http.client.AsyncHttpClient";
+	private static final boolean SUPPORT_NING_ASYNC_HTTP_CLIENT = ClassUtils.isPresent(NING_ASYNC_HTTP_CLIENT_CLASS);
+
+	private static final String APACHE_HTTP_CLIENT_CLASS = "org.apache.http.impl.client.CloseableHttpClient";
+	private static final boolean SUPPORT_APACHE_HTTP_CLIENT = ClassUtils.isPresent(APACHE_HTTP_CLIENT_CLASS);
 
 	/**
 	 * Return http client implementation.

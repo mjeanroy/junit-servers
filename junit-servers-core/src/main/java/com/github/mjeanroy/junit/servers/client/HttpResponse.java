@@ -97,13 +97,6 @@ public interface HttpResponse {
 	List<Cookie> getCookies();
 
 	/**
-	 * Check that http has ETag header.
-	 *
-	 * @return True if http response contains ETag header, false otherwise.
-	 */
-	boolean hasETagHeader();
-
-	/**
 	 * Get ETag header from http response.
 	 *
 	 * @return ETag header.

@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.commons;
 
 import com.github.mjeanroy.junit.servers.commons.fixtures.Bar;
 import com.github.mjeanroy.junit.servers.commons.fixtures.FooAnnotation;
-import com.github.mjeanroy.junit.servers.utils.Fields;
+import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 import org.junit.Test;
 
 import java.lang.reflect.Field;

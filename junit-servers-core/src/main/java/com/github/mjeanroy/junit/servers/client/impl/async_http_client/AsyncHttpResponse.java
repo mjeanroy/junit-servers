@@ -40,7 +40,7 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
  * under the hood.
  * See: https://asynchttpclient.github.io/
  */
-public class AsyncHttpResponse extends AbstractHttpResponse {
+class AsyncHttpResponse extends AbstractHttpResponse {
 
 	/**
 	 * Original response from async-http-client library.

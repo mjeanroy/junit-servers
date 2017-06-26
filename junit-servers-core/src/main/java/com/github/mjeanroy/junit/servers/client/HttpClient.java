@@ -76,4 +76,11 @@ public interface HttpClient {
 	 * Destroy client.
 	 */
 	void destroy();
+
+	/**
+	 * Check that HTTP client has been destroyed.
+	 *
+	 * @return {@code true} if client is closed, {@code false} otherwise.
+	 */
+	boolean isDestroyed();
 }

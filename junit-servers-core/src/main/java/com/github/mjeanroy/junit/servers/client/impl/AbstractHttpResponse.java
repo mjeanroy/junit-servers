@@ -50,7 +50,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
 /**
- * Abstract skeleton of {HttpResponse} interface.
+ * Abstract skeleton of {@link HttpResponse} interface.
  */
 public abstract class AbstractHttpResponse implements HttpResponse {
 
@@ -102,11 +102,6 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 		}
 
 		return unmodifiableList(cookies);
-	}
-
-	@Override
-	public boolean hasETagHeader() {
-		return containsHeader(ETAG);
 	}
 
 	@Override

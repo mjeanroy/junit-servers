@@ -127,7 +127,7 @@ public class Cookie {
 	 * @throws NullPointerException if name or value is null.
 	 * @throws IllegalArgumentException if name is empty or blank.
 	 */
-	public static Cookie cookie(String name, String value, String domain, String path, long expires, long maxAge, boolean secure, boolean httpOnly) {
+	public static Cookie cookie(String name, String value, String domain, String path, Long expires, Long maxAge, boolean secure, boolean httpOnly) {
 		return new Cookie(name, value, domain, path, secure, httpOnly, expires, maxAge);
 	}
 
@@ -145,7 +145,7 @@ public class Cookie {
 	 * @throws NullPointerException if name or value is null.
 	 * @throws IllegalArgumentException if name is empty or blank.
 	 */
-	public static Cookie secureCookie(String name, String value, String domain, String path, long expires, long maxAge) {
+	public static Cookie secureCookie(String name, String value, String domain, String path, Long expires, Long maxAge) {
 		return new Cookie(name, value, domain, path, true, true, expires, maxAge);
 	}
 
@@ -305,7 +305,7 @@ public class Cookie {
 	 */
 	public String raw() {
 		return new StringBuilder()
-				.append(getName()).append("=").append(getValue())
+				.append(getName()).append("=\"").append(getValue()).append("\"")
 				.toString();
 	}
 

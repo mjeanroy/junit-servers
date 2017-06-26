@@ -22,19 +22,31 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.it;
+package com.github.mjeanroy.junit.servers.utils.junit.run_if;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@RunIf(Java8Condition.class)
-public class AsyncHttpClientTest extends BaseHttpClientTest {
+/**
+ * Annotation that can be used with {@link RunIfRunner} to skip a test (or the entire
+ * test class) using the result of a given condition ({@link RunIfCondition}):
+ * <ul>
+ *   <li>If the condition returns {@code true}, the test will be executed.</li>
+ *   <li>Otherwise, the test will be skipped.</li>
+ * </ul>
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Documented
+public @interface RunIf {
 
-	@Override
-	protected HttpClient createClient(EmbeddedServer server) {
-		return HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
-	}
+	/**
+	 * The condition class that will be instantiated and evaluated before running test.
+	 *
+	 * @return The condition class.
+	 */
+	Class<? extends RunIfCondition> value();
 }
