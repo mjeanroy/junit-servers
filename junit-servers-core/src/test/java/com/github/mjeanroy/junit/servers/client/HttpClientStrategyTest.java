@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.client;
 import com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
@@ -60,6 +61,7 @@ public class HttpClientStrategyTest {
 		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_ASYNC_HTTP_CLIENT", true);
 		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_NING_ASYNC_HTTP_CLIENT", true);
 		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_APACHE_HTTP_CLIENT", true);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_OK_HTTP_CLIENT", true);
 	}
 
 	@Test
@@ -79,39 +81,11 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
-	public void it_should_create_automatic_http_client_with_ning_async_http_client() {
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_ASYNC_HTTP_CLIENT", false);
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_NING_ASYNC_HTTP_CLIENT", true);
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_APACHE_HTTP_CLIENT", true);
-
-		HttpClient client = HttpClientStrategy.AUTO.build(server);
+	public void it_should_create_ok_async_http_client() {
+		HttpClient client = HttpClientStrategy.OK_HTTP.build(server);
 		assertThat(client)
 			.isNotNull()
-			.isExactlyInstanceOf(NingAsyncHttpClient.class);
-	}
-
-	@Test
-	public void it_should_create_automatic_http_client_with_apache_async_http_client() {
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_ASYNC_HTTP_CLIENT", false);
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_NING_ASYNC_HTTP_CLIENT", false);
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_APACHE_HTTP_CLIENT", true);
-
-		HttpClient client = HttpClientStrategy.AUTO.build(server);
-		assertThat(client)
-			.isNotNull()
-			.isExactlyInstanceOf(ApacheHttpClient.class);
-	}
-
-	@Test
-	public void it_should_not_create_automatic_http_client_and_fail_without_implementation() {
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_ASYNC_HTTP_CLIENT", false);
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_NING_ASYNC_HTTP_CLIENT", false);
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_APACHE_HTTP_CLIENT", false);
-
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage("Http client implementation cannot be found, please add AsyncHttpClient or ApacheHttpClient to your classpath");
-
-		HttpClientStrategy.AUTO.build(server);
+			.isExactlyInstanceOf(OkHttpClient.class);
 	}
 
 	@Test
@@ -125,9 +99,22 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
+	public void it_should_create_automatic_http_client_with_ning_async_http_client() {
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_OK_HTTP_CLIENT", false);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_ASYNC_HTTP_CLIENT", false);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_NING_ASYNC_HTTP_CLIENT", true);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_APACHE_HTTP_CLIENT", true);
+
+		HttpClient client = HttpClientStrategy.AUTO.build(server);
+		assertThat(client)
+			.isNotNull()
+			.isExactlyInstanceOf(NingAsyncHttpClient.class);
+	}
+
+	@Test
 	@RunIf(Java8Condition.class)
 	public void it_should_create_automatic_http_client_with_async_http_client() {
-		// AsyncHttpClient requires Java >= 8
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_OK_HTTP_CLIENT", false);
 		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_ASYNC_HTTP_CLIENT", true);
 		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_NING_ASYNC_HTTP_CLIENT", true);
 		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_APACHE_HTTP_CLIENT", true);
@@ -136,5 +123,45 @@ public class HttpClientStrategyTest {
 		assertThat(client)
 			.isNotNull()
 			.isExactlyInstanceOf(AsyncHttpClient.class);
+	}
+
+	@Test
+	public void it_should_create_automatic_http_client_with_apache_http_client() {
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_OK_HTTP_CLIENT", false);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_ASYNC_HTTP_CLIENT", false);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_NING_ASYNC_HTTP_CLIENT", false);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_APACHE_HTTP_CLIENT", true);
+
+		HttpClient client = HttpClientStrategy.AUTO.build(server);
+		assertThat(client)
+			.isNotNull()
+			.isExactlyInstanceOf(ApacheHttpClient.class);
+	}
+
+	@Test
+	public void it_should_not_create_automatic_http_client_and_fail_without_implementation() {
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_OK_HTTP_CLIENT", false);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_ASYNC_HTTP_CLIENT", false);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_NING_ASYNC_HTTP_CLIENT", false);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_APACHE_HTTP_CLIENT", false);
+
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage("Http client implementation cannot be found, please add OkHttp, AsyncHttpClient or ApacheHttpClient to your classpath");
+
+		HttpClientStrategy.AUTO.build(server);
+	}
+
+	@Test
+	public void it_should_create_automatic_http_client_with_ok_http_client() {
+		// AsyncHttpClient requires Java >= 8
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_OK_HTTP_CLIENT", true);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_ASYNC_HTTP_CLIENT", true);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_NING_ASYNC_HTTP_CLIENT", true);
+		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_APACHE_HTTP_CLIENT", true);
+
+		HttpClient client = HttpClientStrategy.AUTO.build(server);
+		assertThat(client)
+			.isNotNull()
+			.isExactlyInstanceOf(OkHttpClient.class);
 	}
 }

@@ -202,13 +202,6 @@ public class CookieTest {
 	}
 
 	@Test
-	public void it_should_create_cookie_header_value_with_name_value() {
-		Cookie cookie = cookie("foo", "bar", null, null, null, null, false, false);
-		String rawValue = cookie.raw();
-		assertThat(rawValue).isEqualTo("foo=\"bar\"");
-	}
-
-	@Test
 	public void it_should_implement_to_string() {
 		Cookie cookie = read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
 		assertThat(cookie.toString()).isEqualTo(

@@ -25,8 +25,9 @@
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
 import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import org.apache.http.HttpEntity;
@@ -47,12 +48,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static java.lang.System.nanoTime;
 
 /**
@@ -71,42 +69,6 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 	private final HttpClient client;
 
 	/**
-	 * Http request method (i.e GET, POST,
-	 * PUT, DELETE).
-	 */
-	private final HttpMethod httpMethod;
-
-	/**
-	 * Http request url.
-	 */
-	private final String url;
-
-	/**
-	 * Map of query parameters.
-	 */
-	private final Map<String, String> queryParams;
-
-	/**
-	 * Map of form parameters.
-	 */
-	private final Map<String, String> formParams;
-
-	/**
-	 * Map of headers.
-	 */
-	private final Map<String, String> headers;
-
-	/**
-	 * List of cookies.
-	 */
-	private final List<Cookie> cookies;
-
-	/**
-	 * Request body.
-	 */
-	private String body;
-
-	/**
 	 * Create apache http request.
 	 *
 	 * @param client Apache http client.
@@ -114,64 +76,14 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 	 * @param url Http request url.
 	 */
 	ApacheHttpRequest(HttpClient client, HttpMethod httpMethod, String url) {
+		super(url, httpMethod);
 		this.client = client;
-		this.httpMethod = httpMethod;
-		this.url = url;
-
-		// Preserver insertion order with LinkedHashMap
-		this.queryParams = new LinkedHashMap<>();
-		this.formParams = new LinkedHashMap<>();
-		this.headers = new LinkedHashMap<>();
-
-		// Default of 10 should be enough 99% of time
-		this.cookies = new ArrayList<>(10);
-	}
-
-	@Override
-	public String getUrl() {
-		return url;
-	}
-
-	@Override
-	public HttpMethod getMethod() {
-		return httpMethod;
-	}
-
-	@Override
-	public HttpRequest addHeader(String name, String value) {
-		notBlank(name, "name");
-		notBlank(value, "value");
-		headers.put(name, value);
-		return this;
-	}
-
-	@Override
-	protected HttpRequest applyQueryParam(String name, String value) {
-		queryParams.put(name, value);
-		return this;
-	}
-
-	@Override
-	protected HttpRequest applyFormParameter(String name, String value) {
-		formParams.put(name, value);
-		return this;
-	}
-
-	@Override
-	protected HttpRequest applyBody(String body) {
-		this.body = body;
-		return this;
-	}
-
-	@Override
-	protected HttpRequest applyCookie(Cookie cookie) {
-		this.cookies.add(cookie);
-		return this;
 	}
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
-		HttpRequestBase httpRequest = FACTORY.create(httpMethod);
+		HttpMethod method = getMethod();
+		HttpRequestBase httpRequest = FACTORY.create(method);
 
 		// Create request URI with additional query params
 		httpRequest.setURI(createRequestURI());
@@ -183,10 +95,10 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 		handleCookies(httpRequest);
 
 		// Add request body if allowed
-		if (httpMethod.isBodyAllowed()) {
+		if (hasBody()) {
 			HttpEntityEnclosingRequestBase rq = (HttpEntityEnclosingRequestBase) httpRequest;
 
-			// Add form parameters or request body
+			// Add form parameters or request body.
 			if (!formParams.isEmpty()) {
 				handleFormParameters(rq);
 			} else if (body != null) {
@@ -207,9 +119,10 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 	 * @throws URISyntaxException If an error occurred while building URI.
 	 */
 	private URI createRequestURI() throws URISyntaxException {
+		String url = getUrl();
 		URIBuilder uriBuilder = new URIBuilder(url);
-		for (Map.Entry<String, String> p : queryParams.entrySet()) {
-			uriBuilder = uriBuilder.addParameter(p.getKey(), p.getValue());
+		for (HttpParameter p : queryParams.values()) {
+			uriBuilder = uriBuilder.addParameter(p.getName(), p.getValue());
 		}
 
 		return uriBuilder.build();
@@ -221,8 +134,8 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 	 * @param httpRequest Http request in creation.
 	 */
 	private void handleHeaders(HttpRequestBase httpRequest) {
-		for (Map.Entry<String, String> h : headers.entrySet()) {
-			httpRequest.addHeader(h.getKey(), h.getValue());
+		for (HttpHeader header : headers.values()) {
+			httpRequest.addHeader(header.getName(), header.serializeValues());
 		}
 	}
 
@@ -237,8 +150,8 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 	private void handleFormParameters(HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
 		List<NameValuePair> pairs = new ArrayList<>(formParams.size());
 
-		for (Map.Entry<String, String> p : formParams.entrySet()) {
-			NameValuePair pair = new BasicNameValuePair(p.getKey(), p.getValue());
+		for (HttpParameter p : formParams.values()) {
+			NameValuePair pair = new BasicNameValuePair(p.getName(), p.getValue());
 			pairs.add(pair);
 		}
 
@@ -265,16 +178,17 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 	 */
 	private void handleCookies(HttpRequestBase httpRequest) throws UnsupportedEncodingException {
 		if (!cookies.isEmpty()) {
-			int size = cookies.size();
+			boolean first = true;
 
 			// Build header value
 			StringBuilder builder = new StringBuilder();
-			for (int i = 0; i < size; ++i) {
-				Cookie cookie = cookies.get(i);
-				builder.append(cookie.raw());
-				if (i != (size - 1)) {
+			for (Cookie cookie : cookies) {
+				if (!first) {
 					builder.append("; ");
 				}
+
+				builder.append(cookie.getName()).append("=").append(cookie.getValue());
+				first = false;
 			}
 
 			httpRequest.addHeader(COOKIE, builder.toString());

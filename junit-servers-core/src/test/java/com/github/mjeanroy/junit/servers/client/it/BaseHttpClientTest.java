@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.client.it;
 
 import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
@@ -48,7 +49,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -65,6 +65,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -185,6 +187,26 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testPostWithBodyElement() {
+		final int status = 201;
+		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
+
+		stubPostRequest(status, body);
+
+		final HttpResponse rsp = client
+			.preparePost(ENDPOINT)
+			.acceptJson()
+			.asJson()
+			.asXmlHttpRequest()
+			.execute();
+
+		assertRequest(ENDPOINT, HttpMethod.POST);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEqualTo(body);
+		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
 	public void testPut() {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
@@ -197,6 +219,27 @@ public abstract class BaseHttpClientTest {
 			.asJson()
 			.asXmlHttpRequest()
 			.setBody("{\"id\": 1, \"name\": \"Jane Doe\"}")
+			.execute();
+
+		assertRequest(endpoint, HttpMethod.PUT);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEmpty();
+		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
+	public void testPutWithoutBody() {
+		final String endpoint = ENDPOINT + "/1";
+		final int status = 204;
+
+		stubPutRequest(status);
+
+		final HttpResponse rsp = client
+			.preparePut(endpoint)
+			.acceptJson()
+			.asJson()
+			.asXmlHttpRequest()
 			.execute();
 
 		assertRequest(endpoint, HttpMethod.PUT);
@@ -672,6 +715,30 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testRequest_with_simple_cookies() {
+		stubGetRequest();
+
+		String n1 = "f1";
+		String v1 = "b1";
+
+		String n2 = "f2";
+		String v2 = "b2";
+
+		client
+			.prepareGet(ENDPOINT)
+			.addCookie(Cookie.cookie(n1, v1))
+			.addCookie(Cookie.cookie(n2, v2))
+			.executeJson();
+
+		List<Pair> expectedCookies = asList(
+			pair(n1, v1),
+			pair(n2, v2)
+		);
+
+		assertRequestWithCookies(ENDPOINT, HttpMethod.GET, expectedCookies);
+	}
+
+	@Test
 	public void testRequest_with_complex_cookie() {
 		stubGetRequest();
 
@@ -711,7 +778,7 @@ public abstract class BaseHttpClientTest {
 			.prepareGet(ENDPOINT)
 			.executeJson();
 
-		List<String> headers = Arrays.asList(
+		List<String> headers = asList(
 			ETAG,
 			LOCATION,
 			LAST_MODIFIED,
@@ -875,6 +942,7 @@ public abstract class BaseHttpClientTest {
 		// WHEN
 		HttpResponse rsp = client
 			.prepareGet(ENDPOINT)
+			.addAcceptEncoding("identity")
 			.executeJson();
 
 		// THEN
@@ -966,7 +1034,11 @@ public abstract class BaseHttpClientTest {
 		newClient.prepareGet("/foo");
 	}
 
-	protected abstract HttpClient createClient(EmbeddedServer server);
+	protected abstract HttpClientStrategy strategy();
+
+	private HttpClient createClient(EmbeddedServer<?> server) {
+		return strategy().build(server);
+	}
 
 	private static void assertHeader(HttpHeader header, String name, String value) {
 		assertThat(header.getName()).isEqualTo(name);
@@ -996,9 +1068,17 @@ public abstract class BaseHttpClientTest {
 	}
 
 	private static void assertRequestWithCookie(String endpoint, HttpMethod method, String cookieName, String cookieValue) {
+		assertRequestWithCookies(endpoint, method, singleton(pair(cookieName, cookieValue)));
+	}
+
+	private static void assertRequestWithCookies(String endpoint, HttpMethod method, Iterable<Pair> cookies) {
 		RequestMethod rqMethod = new RequestMethod(method.name());
 		RequestPatternBuilder rq = new RequestPatternBuilder(rqMethod, urlEqualTo(endpoint));
-		rq.withCookie(cookieName, equalTo(cookieValue));
+
+		for (Pair cookie : cookies) {
+			rq.withCookie(cookie.getO1(), equalTo(cookie.getO2()));
+		}
+
 		WireMock.verify(1, rq);
 	}
 

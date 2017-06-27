@@ -48,6 +48,39 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Join elements of a collection to a final string using a given separator. Note that:
+	 * <ul>
+	 *   <li>If {@code values} is {@code null}, {@code null} will be returned.</li>
+	 *   <li>If {@code separator} is {@code null}, an empty string is used instead.</li>
+	 * </ul>
+	 *
+	 * @param values The values to join.
+	 * @param separator Value separator.
+	 * @param <T> Type of elements in the collection.
+	 * @return The joined elements.
+	 */
+	public static <T> String join(Iterable<T> values, String separator) {
+		if (values == null) {
+			return null;
+		}
+
+		String sep = separator == null ? "" : separator;
+		StringBuilder sb = new StringBuilder();
+		boolean first = true;
+
+		for (T value : values) {
+			if (!first) {
+				sb.append(sep);
+			}
+
+			sb.append(value == null ? null : value.toString());
+			first = false;
+		}
+
+		return sb.toString();
+	}
+
+	/**
 	 * Filter input by using given predicate and return
 	 * filtered outputs.
 	 *

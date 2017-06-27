@@ -25,13 +25,20 @@
 package com.github.mjeanroy.junit.servers.client.impl;
 
 import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
+import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT_ENCODING;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT_LANGUAGE;
@@ -62,6 +69,70 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
  * Abstract skeleton of {@link HttpRequest} interface.
  */
 public abstract class AbstractHttpRequest implements HttpRequest {
+
+	/**
+	 * The request URL.
+	 */
+	private final String url;
+
+	/**
+	 * The request method.
+	 */
+	private final HttpMethod method;
+
+	/**
+	 * Request parameters.
+	 * Query parameters are the parameters following {@code ?} character in the URL.
+	 */
+	protected final Map<String, HttpParameter> queryParams;
+
+	/**
+	 * Form parameters, typically sent using a "classic" HTML form.
+	 */
+	protected final Map<String, HttpParameter> formParams;
+
+	/**
+	 * The request body.
+	 */
+	protected String body;
+
+	/**
+	 * Cookie elements.
+	 */
+	protected final List<Cookie> cookies;
+
+	/**
+	 * HTTP Headers.
+	 */
+	protected final Map<String, HttpHeader> headers;
+
+	protected AbstractHttpRequest(String url, HttpMethod method) {
+		this.url = notBlank(url, "url");
+		this.method = notNull(method, "method");
+
+		this.queryParams = new LinkedHashMap<>();
+		this.formParams = new LinkedHashMap<>();
+		this.headers = new LinkedHashMap<>();
+		this.cookies = new ArrayList<>(10);
+	}
+
+	@Override
+	public String getUrl() {
+		return url;
+	}
+
+	@Override
+	public HttpMethod getMethod() {
+		return method;
+	}
+
+	@Override
+	public HttpRequest addHeader(String name, String value) {
+		notBlank(name, "name");
+		notNull(value, "value");
+		headers.put(name, header(name, value));
+		return this;
+	}
 
 	@Override
 	public HttpRequest asXmlHttpRequest() {
@@ -148,17 +219,19 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	@Override
 	public HttpRequest addQueryParams(HttpParameter parameter, HttpParameter... parameters) {
 		notNull(parameter, "parameter");
-		HttpRequest self = applyQueryParam(parameter.getName(), parameter.getValue());
+
+		// Add first parameter.
+		queryParams.put(parameter.getName(), parameter);
 
 		// Add other parameters if available
 		if (parameters != null) {
 			for (HttpParameter p : parameters) {
 				notNull(p, "parameter");
-				self = applyQueryParam(p.getName(), p.getValue());
+				queryParams.put(p.getName(), p);
 			}
 		}
 
-		return self;
+		return this;
 	}
 
 	@Override
@@ -168,30 +241,49 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	public HttpRequest addFormParams(HttpParameter parameter, HttpParameter... parameters) {
+		notNull(parameter, "parameter");
+
+		// Ensure request method allow body.
 		if (!getMethod().isBodyAllowed()) {
 			throw new UnsupportedOperationException("Http method " + getMethod() + " does not support body parameters");
 		}
 
-		notNull(parameter, "parameter");
-		HttpRequest self = applyFormParameter(parameter.getName(), parameter.getValue());
+		// Ensure a body has not been previously set.
+		if (body != null) {
+			throw new IllegalStateException("Cannot add form parameter if a request body is already defined");
+		}
+
+		// Add first parameter.
+		formParams.put(parameter.getName(), parameter);
 
 		if (parameters != null) {
 			for (HttpParameter p : parameters) {
 				notNull(p, "parameter");
-				self = applyFormParameter(p.getName(), p.getValue());
+				formParams.put(p.getName(), p);
 			}
 		}
 
-		return self.asFormUrlEncoded();
+		return asFormUrlEncoded();
 	}
 
 	@Override
 	public HttpRequest setBody(String body) {
+		notNull(body, "body");
+
+		// Ensure request body is allowed.
 		if (!getMethod().isBodyAllowed()) {
 			throw new UnsupportedOperationException("Http method " + getMethod() + " does not support request body");
 		}
 
-		return applyBody(notNull(body, "body"));
+		// Ensure form parameters have not been previously set.
+		if (!formParams.isEmpty()) {
+			throw new IllegalStateException("Cannot add request body if form parameters are already defined");
+		}
+
+		// Set the request body.
+		this.body = body;
+
+		return this;
 	}
 
 	@Override
@@ -226,7 +318,9 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	public HttpRequest addCookie(Cookie cookie) {
-		return applyCookie(notNull(cookie, "cookie"));
+		notNull(cookie, "cookie");
+		cookies.add(cookie);
+		return this;
 	}
 
 	@Override
@@ -250,6 +344,15 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	}
 
 	/**
+	 * Check if the request have a body content (form parameters or request body value).
+	 *
+	 * @return {@code true} if request has a body, {@code false} otherwise.
+	 */
+	protected boolean hasBody() {
+		return body != null || !formParams.isEmpty();
+	}
+
+	/**
 	 * Execute request.
 	 * Exception will be automatically catched and translated into
 	 * an instance of {HttpClientException}.
@@ -258,46 +361,4 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	 * @throws Exception If an error occurred.
 	 */
 	protected abstract HttpResponse doExecute() throws Exception;
-
-	/**
-	 * Add form parameters.
-	 * This method will be called for POST or PUT request only.
-	 * This method can assume that parameter name is not blank and
-	 * parameter value is not null.
-	 *
-	 * @param name Parameter name, will never be blank.
-	 * @param value Parameter value, will never be null.
-	 * @return Current request.
-	 */
-	protected abstract HttpRequest applyFormParameter(String name, String value);
-
-	/**
-	 * Add query parameters.
-	 * This method should not check for parameters validity since it will be already
-	 * checked before.
-	 *
-	 * @param name Parameter name.
-	 * @param value Parameter value.
-	 * @return Current request.
-	 */
-	protected abstract HttpRequest applyQueryParam(String name, String value);
-
-	/**
-	 * Add request body.
-	 * This method should not check for parameters validity since it will be already
-	 * checked before.
-	 *
-	 * @param body Request body.
-	 * @return Current request.
-	 */
-	protected abstract HttpRequest applyBody(String body);
-
-	/**
-	 * Add cookie to http request.
-	 * This method can assume that cookie parameter is not null.
-	 *
-	 * @param cookie Cookie.
-	 * @return Current request.
-	 */
-	protected abstract HttpRequest applyCookie(Cookie cookie);
 }

@@ -31,8 +31,10 @@ import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
 import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.join;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,6 +49,16 @@ public class CollectionUtilsTest {
 	@Test
 	public void it_should_return_false_if_collection_is_not_null_and_not_empty() {
 		assertThat(isEmpty(singletonList("foo"))).isFalse();
+	}
+
+	@Test
+	public void it_should_join_elements() {
+		String separator = ";";
+		assertThat(join(null, separator)).isEqualTo(null);
+		assertThat(join(emptyList(), separator)).isEqualTo("");
+		assertThat(join(singleton("foo"), separator)).isEqualTo("foo");
+		assertThat(join(asList("foo", "bar"), separator)).isEqualTo("foo;bar");
+		assertThat(join(asList("foo", "bar"), null)).isEqualTo("foobar");
 	}
 
 	@Test

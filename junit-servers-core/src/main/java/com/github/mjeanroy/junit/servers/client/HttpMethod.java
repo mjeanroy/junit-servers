@@ -30,7 +30,10 @@ package com.github.mjeanroy.junit.servers.client;
  */
 public enum HttpMethod {
 
-	GET(false), POST(true), PUT(true), DELETE(false);
+	GET(false),
+	POST(true),
+	PUT(true),
+	DELETE(false);
 
 	/**
 	 * Flag to know if http method allow body request.
@@ -39,7 +42,7 @@ public enum HttpMethod {
 	private final boolean allowBody;
 
 	// Enum private constructor
-	private HttpMethod(boolean allowBody) {
+	HttpMethod(boolean allowBody) {
 		this.allowBody = allowBody;
 	}
 
@@ -56,8 +59,7 @@ public enum HttpMethod {
 
 	/**
 	 * Check if request method allow body
-	 * request (as form url encoded parameters
-	 * or json / xml body).
+	 * request (as form url encoded parameter or as json / xml body).
 	 *
 	 * @return True if method allow body request, false otherwise.
 	 */

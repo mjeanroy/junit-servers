@@ -22,17 +22,39 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.it;
+package com.github.mjeanroy.junit.servers.exceptions;
 
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
+/**
+ * Exception thrown when http request cannot be created because of a
+ * malformed URL.
+ */
+public class HttpClientUrlException extends HttpClientException {
 
-@RunIf(Java8Condition.class)
-public class AsyncHttpClientTest extends BaseHttpClientTest {
+	/**
+	 * The malformed URL.
+	 */
+	private final String url;
 
-	@Override
-	protected HttpClientStrategy strategy() {
-		return HttpClientStrategy.ASYNC_HTTP_CLIENT;
+	/**
+	 * Create exception.
+	 *
+	 * @param url Malformed URL.
+	 */
+	public HttpClientUrlException(String url) {
+		super(createMessage(url));
+		this.url = url;
+	}
+
+	/**
+	 * Return the URL that was the cause of the exception.
+	 *
+	 * @return The malformed URL.
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	private static String createMessage(String url) {
+		return String.format("Malformed URL: %s", url);
 	}
 }

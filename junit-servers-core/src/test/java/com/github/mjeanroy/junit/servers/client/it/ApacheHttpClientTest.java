@@ -24,14 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 public class ApacheHttpClientTest extends BaseHttpClientTest {
 
 	@Override
-	protected HttpClient createClient(EmbeddedServer server) {
-		return HttpClientStrategy.APACHE_HTTP_CLIENT.build(server);
+	protected HttpClientStrategy strategy() {
+		return HttpClientStrategy.APACHE_HTTP_CLIENT;
 	}
 }

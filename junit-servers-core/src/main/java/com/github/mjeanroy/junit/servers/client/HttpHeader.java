@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import com.github.mjeanroy.junit.servers.commons.CollectionUtils;
 import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 
 import java.util.ArrayList;
@@ -46,6 +47,11 @@ import static java.util.Collections.unmodifiableList;
  * in a request).
  */
 public class HttpHeader {
+
+	/**
+	 * The separator for header values.
+	 */
+	private static final String HEADER_SEPARATOR = ",";
 
 	/**
 	 * Create a getHeader with a single value.
@@ -126,6 +132,15 @@ public class HttpHeader {
 	 */
 	public String getLastValue() {
 		return values.get(values.size() - 1);
+	}
+
+	/**
+	 * Serialize header values using the default separator.
+	 *
+	 * @return Header values serialized as a string.
+	 */
+	public String serializeValues() {
+		return CollectionUtils.join(values, HEADER_SEPARATOR);
 	}
 
 	@Override

@@ -66,10 +66,7 @@ public class ApacheHttpClient extends AbstractHttpClient {
 	 * @return Http client.
 	 */
 	public static ApacheHttpClient defaultApacheHttpClient(EmbeddedServer server) {
-		CloseableHttpClient client = HttpClientBuilder.create()
-			.disableContentCompression()
-			.build();
-
+		CloseableHttpClient client = HttpClientBuilder.create().build();
 		return new ApacheHttpClient(server, client);
 	}
 

@@ -38,4 +38,13 @@ public class HttpClientException extends AbstractEmbeddedServerException {
 	public HttpClientException(Throwable throwable) {
 		super(throwable);
 	}
+
+	/**
+	 * Create exception with error message.
+	 *
+	 * @param message Error message.
+	 */
+	HttpClientException(String message) {
+		super(message);
+	}
 }

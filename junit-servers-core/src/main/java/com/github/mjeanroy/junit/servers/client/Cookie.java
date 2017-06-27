@@ -296,19 +296,6 @@ public class Cookie {
 		return httpOnly;
 	}
 
-	/**
-	 * Transform cookie as header value: result string
-	 * can be used and transmit by client as header value (i.e
-	 * value of header named "Cookie").
-	 *
-	 * @return Header value.
-	 */
-	public String raw() {
-		return new StringBuilder()
-				.append(getName()).append("=\"").append(getValue()).append("\"")
-				.toString();
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (o == this) {

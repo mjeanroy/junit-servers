@@ -25,8 +25,9 @@
 package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import com.ning.http.client.AsyncHttpClient;
@@ -34,8 +35,6 @@ import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static java.lang.System.nanoTime;
 
 /**
@@ -46,26 +45,10 @@ import static java.lang.System.nanoTime;
 class NingAsyncHttpRequest extends AbstractHttpRequest {
 
 	/**
-	 * The request URL.
-	 */
-	private final String url;
-
-	/**
 	 * Original http client.
 	 * It will be used to execute http request.
 	 */
 	private final AsyncHttpClient client;
-
-	/**
-	 * Http request builder.
-	 * This builder will be used to create request to execute.
-	 */
-	private final RequestBuilder builder;
-
-	/**
-	 * Http request method.
-	 */
-	private final HttpMethod httpMethod;
 
 	/**
 	 * Create http request.
@@ -75,53 +58,68 @@ class NingAsyncHttpRequest extends AbstractHttpRequest {
 	 * @param url Request URL.
 	 */
 	NingAsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, String url) {
-		this.url = url;
-		this.httpMethod = httpMethod;
+		super(url, httpMethod);
 		this.client = client;
-		this.builder = new RequestBuilder()
-				.setUrl(notBlank(url, "url"))
-				.setMethod(notNull(httpMethod, "httpMethod").getVerb());
 	}
 
 	@Override
-	public String getUrl() {
-		return url;
+	protected HttpResponse doExecute() throws Exception {
+		RequestBuilder builder = new RequestBuilder()
+			.setUrl(getUrl())
+			.setMethod(getMethod().getVerb());
+
+		handleQueryParameters(builder);
+		handleBody(builder);
+		handleHeaders(builder);
+		handleCookies(builder);
+
+		Request request = builder.build();
+		long start = nanoTime();
+		Response response = client.executeRequest(request).get();
+		return new NingAsyncHttpResponse(response, nanoTime() - start);
 	}
 
-	@Override
-	public HttpMethod getMethod() {
-		return httpMethod;
+	private void handleQueryParameters(RequestBuilder builder) {
+		for (HttpParameter p : queryParams.values()) {
+			builder.addQueryParam(p.getName(), p.getValue());
+		}
 	}
 
-	@Override
-	public HttpRequest addHeader(String name, String value) {
-		builder.addHeader(
-				notBlank(name, "name"),
-				notBlank(value, "value")
-		);
-		return this;
+	private void handleBody(RequestBuilder builder) {
+		if (!hasBody()) {
+			return;
+		}
+
+		if (body != null) {
+			handleRequestBody(builder);
+		} else {
+			handleFormParameters(builder);
+		}
 	}
 
-	@Override
-	protected HttpRequest applyQueryParam(String name, String value) {
-		builder.addQueryParam(name, value);
-		return this;
+	private void handleFormParameters(RequestBuilder builder) {
+		for (HttpParameter p : formParams.values()) {
+			builder.addFormParam(p.getName(), p.getValue());
+		}
 	}
 
-	@Override
-	protected HttpRequest applyFormParameter(String name, String value) {
-		builder.addFormParam(name, value);
-		return this;
-	}
-
-	@Override
-	protected HttpRequest applyBody(String body) {
+	private void handleRequestBody(RequestBuilder builder) {
 		builder.setBody(body);
-		return this;
 	}
 
-	@Override
-	protected HttpRequest applyCookie(Cookie cookie) {
+	private void handleCookies(RequestBuilder builder) {
+		for (Cookie cookie : cookies) {
+			handleCookie(builder, cookie);
+		}
+	}
+
+	private void handleHeaders(RequestBuilder builder) {
+		for (HttpHeader header : headers.values()) {
+			builder.addHeader(header.getName(), header.serializeValues());
+		}
+	}
+
+	private void handleCookie(RequestBuilder builder, Cookie cookie) {
 		String name = cookie.getName();
 		String value = cookie.getValue();
 		boolean wrap = true;
@@ -146,15 +144,5 @@ class NingAsyncHttpRequest extends AbstractHttpRequest {
 		}
 
 		builder.addCookie(com.ning.http.client.cookie.Cookie.newValidCookie(name, value, wrap, domain, path, maxAgeValue, secured, httpOnly));
-		return this;
-	}
-
-	@Override
-	protected HttpResponse doExecute() throws Exception {
-		Request request = builder.build();
-
-		long start = nanoTime();
-		Response response = client.executeRequest(request).get();
-		return new NingAsyncHttpResponse(response, nanoTime() - start);
 	}
 }

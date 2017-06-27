@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.client;
 import com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient;
 import com.github.mjeanroy.junit.servers.commons.ClassUtils;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
@@ -67,12 +68,26 @@ public enum HttpClientStrategy {
 	},
 
 	/**
+	 * Build http client using OkHttp library.
+	 */
+	OK_HTTP {
+		@Override
+		public HttpClient build(EmbeddedServer server) {
+			return OkHttpClient.defaultOkHttpClient(server);
+		}
+	},
+
+	/**
 	 * Detect class available on classpath and use appropriate strategy to
 	 * build http client client implementation.
 	 */
 	AUTO {
 		@Override
 		public HttpClient build(EmbeddedServer server) {
+			if (SUPPORT_OK_HTTP_CLIENT) {
+				return OK_HTTP.build(server);
+			}
+
 			if (SUPPORT_ASYNC_HTTP_CLIENT) {
 				return ASYNC_HTTP_CLIENT.build(server);
 			}
@@ -85,7 +100,9 @@ public enum HttpClientStrategy {
 				return APACHE_HTTP_CLIENT.build(server);
 			}
 
-			throw new UnsupportedOperationException("Http client implementation cannot be found, please add AsyncHttpClient or ApacheHttpClient to your classpath");
+			throw new UnsupportedOperationException(
+				"Http client implementation cannot be found, please add OkHttp, AsyncHttpClient or ApacheHttpClient to your classpath"
+			);
 		}
 	};
 
@@ -111,6 +128,9 @@ public enum HttpClientStrategy {
 
 	private static final String APACHE_HTTP_CLIENT_CLASS = "org.apache.http.impl.client.CloseableHttpClient";
 	private static final boolean SUPPORT_APACHE_HTTP_CLIENT = ClassUtils.isPresent(APACHE_HTTP_CLIENT_CLASS);
+
+	private static final String OK_HTTP_CLIENT_CLASS = "okhttp3.OkHttpClient";
+	private static final boolean SUPPORT_OK_HTTP_CLIENT = ClassUtils.isPresent(OK_HTTP_CLIENT_CLASS);
 
 	/**
 	 * Return http client implementation.
