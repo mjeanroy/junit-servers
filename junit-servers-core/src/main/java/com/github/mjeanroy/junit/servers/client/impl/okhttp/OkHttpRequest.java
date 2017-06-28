@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.okhttp;
 
-import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpHeaders;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
@@ -108,24 +108,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 */
 	private void handleCookies(Request.Builder builder) {
 		if (!cookies.isEmpty()) {
-			StringBuilder values = new StringBuilder();
-			boolean first = true;
-
-			for (Cookie cookie : cookies) {
-				if (!first) {
-					values.append("; ");
-				}
-
-				// Append cookie name/value.
-				values.append(cookie.getName())
-					.append("=")
-					.append(cookie.getValue());
-
-				first = false;
-			}
-
-			// Append cookie header.
-			builder.addHeader(HttpHeaders.COOKIE, values.toString());
+			builder.addHeader(HttpHeaders.COOKIE, Cookies.serialize(cookies));
 		}
 	}
 

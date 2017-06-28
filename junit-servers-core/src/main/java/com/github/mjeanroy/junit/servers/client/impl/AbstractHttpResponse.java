@@ -31,7 +31,7 @@ import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.client.Cookie.read;
+import static com.github.mjeanroy.junit.servers.client.Cookies.read;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CACHE_CONTROL;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_ENCODING;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_SECURITY_POLICY;

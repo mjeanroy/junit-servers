@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.client.it;
 
 import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
@@ -708,7 +709,7 @@ public abstract class BaseHttpClientTest {
 
 		client
 			.prepareGet(ENDPOINT)
-			.addCookie(Cookie.cookie(name, value))
+			.addCookie(Cookies.cookie(name, value))
 			.executeJson();
 
 		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);
@@ -726,8 +727,8 @@ public abstract class BaseHttpClientTest {
 
 		client
 			.prepareGet(ENDPOINT)
-			.addCookie(Cookie.cookie(n1, v1))
-			.addCookie(Cookie.cookie(n2, v2))
+			.addCookie(Cookies.cookie(n1, v1))
+			.addCookie(Cookies.cookie(n2, v2))
 			.executeJson();
 
 		List<Pair> expectedCookies = asList(
@@ -764,7 +765,7 @@ public abstract class BaseHttpClientTest {
 		client
 			.prepareGet(ENDPOINT)
 			.addHeader(ORIGIN, server.getUrl())
-			.addCookie(Cookie.cookie(name, value, domain, path, expires, maxAge, secured, httpOnly))
+			.addCookie(Cookies.cookie(name, value, domain, path, expires, maxAge, secured, httpOnly))
 			.executeJson();
 
 		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);

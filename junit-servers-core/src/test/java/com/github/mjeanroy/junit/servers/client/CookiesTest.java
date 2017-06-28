@@ -24,39 +24,49 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.Calendar;
-import java.util.TimeZone;
-
-import static com.github.mjeanroy.junit.servers.client.Cookie.cookie;
-import static com.github.mjeanroy.junit.servers.client.Cookie.read;
-import static com.github.mjeanroy.junit.servers.client.Cookie.secureCookie;
-import static com.github.mjeanroy.junit.servers.client.Cookie.sessionCookie;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CookieTest {
+public class CookiesTest {
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
-	private TimeZone tz;
+	@Test
+	public void it_should_serialize_single_cookie() {
+		String name = "foo";
+		String value = "bar";
+		Cookie cookie = Cookies.cookie(name, value);
 
-	@Before
-	public void setUp() {
-		tz = TimeZone.getDefault();
-		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+		String result = Cookies.serialize(singleton(cookie));
+
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.isEqualTo(formatCookie(name, value));
 	}
 
-	@After
-	public void tearDown() {
-		TimeZone.setDefault(tz);
+	@Test
+	public void it_should_serialize_list_of_cookies() {
+		String n1 = "f1";
+		String v1 = "b1";
+		Cookie c1 = Cookies.cookie(n1, v1);
+
+		String n2 = "f2";
+		String v2 = "b2";
+		Cookie c2 = Cookies.cookie(n2, v2);
+
+		String result = Cookies.serialize(asList(c1, c2));
+
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.isEqualTo(formatCookie(n1, v1) + "; " + formatCookie(n2, v2));
 	}
 
 	@Test
@@ -64,7 +74,7 @@ public class CookieTest {
 		final String name = "foo";
 		final String value = "bar";
 
-		Cookie cookie = cookie(name, value);
+		Cookie cookie = Cookies.cookie(name, value);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -88,7 +98,7 @@ public class CookieTest {
 		final boolean secure = true;
 		final boolean httpOnly = false;
 
-		Cookie cookie = cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
+		Cookie cookie = Cookies.cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -110,7 +120,7 @@ public class CookieTest {
 		final String domain = "domain";
 		final String path = "path";
 
-		Cookie cookie = secureCookie(name, value, domain, path, expires, maxAge);
+		Cookie cookie = Cookies.secureCookie(name, value, domain, path, expires, maxAge);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -130,7 +140,7 @@ public class CookieTest {
 		final String domain = "domain";
 		final String path = "path";
 
-		Cookie cookie = sessionCookie(name, value, domain, path);
+		Cookie cookie = Cookies.sessionCookie(name, value, domain, path);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -145,7 +155,7 @@ public class CookieTest {
 
 	@Test
 	public void it_should_create_cookie_with_name_and_value() {
-		Cookie cookie = read("name=value");
+		Cookie cookie = Cookies.read("name=value");
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -160,7 +170,7 @@ public class CookieTest {
 
 	@Test
 	public void it_should_create_cookie_with_name_value_domain_path_and_flags() {
-		Cookie cookie = read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
+		Cookie cookie = Cookies.read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -175,7 +185,7 @@ public class CookieTest {
 
 	@Test
 	public void it_should_create_cookie_with_name_value_domain_path_expires_max_date_and_flags() {
-		Cookie cookie = read("name=value; Domain=foo.com; Expires=Wed, 13-Jan-2021 22:23:01 GMT; max-age=3600; Path=/; Secure; HttpOnly");
+		Cookie cookie = Cookies.read("name=value; Domain=foo.com; Expires=Wed, 13-Jan-2021 22:23:01 GMT; max-age=3600; Path=/; Secure; HttpOnly");
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -192,101 +202,17 @@ public class CookieTest {
 	public void it_should_not_create_cookie_without_name_value() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("Cookie must have a valid name and a valid value");
-		read("name; Domain=foo.com; Path=/; Secure; HttpOnly");
+		Cookies.read("name; Domain=foo.com; Path=/; Secure; HttpOnly");
 	}
 
 	@Test
 	public void it_should_not_create_cookie_with_empty_name() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("Cookie must have a valid name");
-		read("=value; Domain=foo.com; Path=/; Secure; HttpOnly");
+		Cookies.read("=value; Domain=foo.com; Path=/; Secure; HttpOnly");
 	}
 
-	@Test
-	public void it_should_implement_to_string() {
-		Cookie cookie = read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
-		assertThat(cookie.toString()).isEqualTo(
-			"Cookie{name: \"name\", value: \"value\", domain: \"foo.com\", path: \"/\", expires: null, maxAge: 0, secure: true, httpOnly: true}"
-		);
-	}
-
-	@Test
-	public void it_should_create_simple_cookie_with_builder() {
-		String name = "name";
-		String value = "value";
-		Cookie cookie = new Cookie.Builder(name, value).build();
-		assertThat(cookie).isNotNull();
-		assertThat(cookie.getName()).isEqualTo(name);
-		assertThat(cookie.getValue()).isEqualTo(value);
-	}
-
-	@Test
-	public void it_should_create_complex_cookie_with_builder() {
-		String name = "name";
-		String value = "value";
-		String domain = "domain";
-		String path = "path";
-		boolean secure = true;
-		boolean httpOnly = true;
-		long maxAge = 3600;
-
-		Cookie cookie = new Cookie.Builder(name, value)
-			.domain(domain)
-			.path(path)
-			.secure(secure)
-			.httpOnly(httpOnly)
-			.maxAge(maxAge)
-			.build();
-
-		assertThat(cookie).isNotNull();
-		assertThat(cookie.getName()).isEqualTo(name);
-		assertThat(cookie.getValue()).isEqualTo(value);
-		assertThat(cookie.getDomain()).isEqualTo(domain);
-		assertThat(cookie.getPath()).isEqualTo(path);
-		assertThat(cookie.isSecure()).isEqualTo(secure);
-		assertThat(cookie.isHttpOnly()).isEqualTo(httpOnly);
-		assertThat(cookie.getMaxAge()).isEqualTo(maxAge);
-		assertThat(cookie.getExpires()).isNull();
-	}
-
-	@Test
-	public void it_should_create_complex_cookie_with_expires_date_with_builder() {
-		String name = "name";
-		String value = "value";
-		String domain = "domain";
-		String path = "path";
-		boolean secure = true;
-		boolean httpOnly = true;
-		long maxAge = 3600;
-
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) + 1);
-		long expires = cal.getTimeInMillis();
-
-		Cookie cookie = new Cookie.Builder(name, value)
-			.domain(domain)
-			.path(path)
-			.secure(secure)
-			.httpOnly(httpOnly)
-			.maxAge(maxAge)
-			.expires(expires)
-			.build();
-
-		assertThat(cookie).isNotNull();
-		assertThat(cookie.getName()).isEqualTo(name);
-		assertThat(cookie.getValue()).isEqualTo(value);
-		assertThat(cookie.getDomain()).isEqualTo(domain);
-		assertThat(cookie.getPath()).isEqualTo(path);
-		assertThat(cookie.isSecure()).isEqualTo(secure);
-		assertThat(cookie.isHttpOnly()).isEqualTo(httpOnly);
-		assertThat(cookie.getMaxAge()).isEqualTo(maxAge);
-		assertThat(cookie.getExpires()).isEqualTo(expires);
-	}
-
-	@Test
-	public void it_should_implement_equals() {
-		EqualsVerifier.forClass(Cookie.class)
-			.suppress(Warning.STRICT_INHERITANCE)
-			.verify();
+	private static String formatCookie(String name, String value) {
+		return name + "=" + value;
 	}
 }

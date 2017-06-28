@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
-import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
@@ -174,24 +174,10 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 	 * Add cookies to http request.
 	 *
 	 * @param httpRequest Http request in creation.
-	 * @throws UnsupportedEncodingException If an encoding error occurred while creating cookies.
 	 */
-	private void handleCookies(HttpRequestBase httpRequest) throws UnsupportedEncodingException {
+	private void handleCookies(HttpRequestBase httpRequest) {
 		if (!cookies.isEmpty()) {
-			boolean first = true;
-
-			// Build header value
-			StringBuilder builder = new StringBuilder();
-			for (Cookie cookie : cookies) {
-				if (!first) {
-					builder.append("; ");
-				}
-
-				builder.append(cookie.getName()).append("=").append(cookie.getValue());
-				first = false;
-			}
-
-			httpRequest.addHeader(COOKIE, builder.toString());
+			httpRequest.addHeader(COOKIE, Cookies.serialize(cookies));
 		}
 	}
 

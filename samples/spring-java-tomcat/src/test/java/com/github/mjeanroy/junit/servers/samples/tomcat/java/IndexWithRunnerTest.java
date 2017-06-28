@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
@@ -37,7 +38,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import javax.servlet.ServletContext;
 import java.io.File;
 
-import static com.github.mjeanroy.junit.servers.client.Cookie.cookie;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndexWithRunnerTest extends AbstractTomcatTest {
@@ -64,7 +64,9 @@ public class IndexWithRunnerTest extends AbstractTomcatTest {
 	@Test
 	public void it_should_have_an_index() {
 		HttpResponse rsp = client.prepareGet("/index")
-				.addCookie(cookie("foo", "bar", null, null, 0L, 0L, false, false))
+				.addCookie(new Cookie.Builder("foo", "bar")
+					.maxAge(0L)
+					.build())
 				.execute();
 
 		String message = rsp.body();

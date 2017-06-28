@@ -26,15 +26,35 @@ package com.github.mjeanroy.junit.servers.client;
 
 import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
-
-import static com.github.mjeanroy.junit.servers.commons.Dates.getTime;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 
 /**
  * Default implementation for cookie object.
+ * To build a cookie, use:
+ * <ul>
+ *   <li>The {@link Builder}</li>
+ *   <li>Or one of the static factories in {@link Cookies} class</li>
+ * </ul>
+ *
+ * Using the builder is easy:
+ *
+ * <pre><code>
+ *   Cookie cookie = new Cookie.Builder("name", "value")
+ *     .domain("domain")
+ *     .path("path")
+ *     .secure(true)   // Defaults to false.
+ *     .httpOnly(true) // Defaults to false.
+ *     .maxAge(3600)
+ *     .expires(tt.getTime())
+ *     .build();
+ * </code></pre>
+ *
+ * You can also use one of the static factories:
+ *
+ * <pre><code>
+ *   Cookie c1 = Cookies.cookie("name", "value");
+ *   Cookie c2 = Cookies.cookie("name", "value", "domain", "path", maxAge, expires, true, true);
+ * </code></pre>
  */
 public class Cookie {
 
@@ -43,60 +63,11 @@ public class Cookie {
 	 *
 	 * @param rawValue Header value.
 	 * @return Cookie.
+	 * @deprecated Use {@link Cookies#read(String)} instead.
 	 */
+	@Deprecated
 	public static Cookie read(String rawValue) {
-		rawValue = notBlank(rawValue, "Cookie value");
-
-		final String[] parts = rawValue.split(";");
-
-		// Extract name and value
-		final String[] nameAndValue = parts[0].split("=");
-		if (nameAndValue.length != 2) {
-			throw new IllegalArgumentException("Cookie must have a valid name and a valid value");
-		}
-
-		final String name = nameAndValue[0].trim();
-		final String value = nameAndValue[1].trim();
-		if (name.isEmpty()) {
-			throw new IllegalArgumentException("Cookie must have a valid name");
-		}
-
-		// Extract other parts
-		Map<String, String> params = new HashMap<>();
-		if (parts.length > 1) {
-			for (String part : parts) {
-				String[] param = part.split("=");
-				params.put(
-						param[0].toLowerCase().trim(),
-						param.length == 2 ? param[1].trim() : ""
-				);
-			}
-		}
-
-		final String domain = params.get("domain");
-		final String path = params.get("path");
-		final boolean secure = params.containsKey("secure");
-		final boolean httpOnly = params.containsKey("httponly");
-
-		final String maxAgeTt = params.get("max-age");
-		final String expiresDate = params.get("expires");
-
-		Long expires;
-		Long maxAge = maxAgeTt == null ? null : Long.valueOf(maxAgeTt);
-
-		if (expiresDate != null) {
-			expires = getTime(expiresDate, "EEE, d MMM yyyy HH:mm:ss Z", "EEE, d-MMM-yyyy HH:mm:ss Z", "EEE, d/MMM/yyyy HH:mm:ss Z");
-		} else {
-			expires = null;
-		}
-
-		if (maxAge == null && expires == null) {
-			maxAge = 0L;
-		} else if (maxAge == null) {
-			maxAge = expires - System.currentTimeMillis();
-		}
-
-		return new Cookie(name, value, domain, path, secure, httpOnly, expires, maxAge);
+		return Cookies.read(rawValue);
 	}
 
 	/**
@@ -107,9 +78,11 @@ public class Cookie {
 	 * @return Cookie.
 	 * @throws NullPointerException if name or value is null.
 	 * @throws IllegalArgumentException if name is empty or blank.
+	 * @deprecated Use {@link Cookies#cookie(String, String)} instead.
 	 */
+	@Deprecated
 	public static Cookie cookie(String name, String value) {
-		return new Cookie(name, value, null, null, false, false, null, null);
+		return Cookies.cookie(name, value);
 	}
 
 	/**
@@ -126,9 +99,11 @@ public class Cookie {
 	 * @return Cookie.
 	 * @throws NullPointerException if name or value is null.
 	 * @throws IllegalArgumentException if name is empty or blank.
+	 * @deprecated Use {@link Cookies#cookie(String, String, String, String, Long, Long, boolean, boolean)} instead.
 	 */
+	@Deprecated
 	public static Cookie cookie(String name, String value, String domain, String path, Long expires, Long maxAge, boolean secure, boolean httpOnly) {
-		return new Cookie(name, value, domain, path, secure, httpOnly, expires, maxAge);
+		return Cookies.cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
 	}
 
 	/**
@@ -144,9 +119,11 @@ public class Cookie {
 	 * @return Cookie.
 	 * @throws NullPointerException if name or value is null.
 	 * @throws IllegalArgumentException if name is empty or blank.
+	 * @deprecated Use {@link Cookies#secureCookie(String, String, String, String, Long, Long)} instead.
 	 */
+	@Deprecated
 	public static Cookie secureCookie(String name, String value, String domain, String path, Long expires, Long maxAge) {
-		return new Cookie(name, value, domain, path, true, true, expires, maxAge);
+		return Cookies.secureCookie(name, value, domain, path, expires, maxAge);
 	}
 
 	/**
@@ -161,9 +138,11 @@ public class Cookie {
 	 * @return Cookie.
 	 * @throws NullPointerException if name or value is null.
 	 * @throws IllegalArgumentException if name is empty or blank.
+	 * @deprecated Use {@link Cookies#sessionCookie(String, String, String, String)} instead.
 	 */
+	@Deprecated
 	public static Cookie sessionCookie(String name, String value, String domain, String path) {
-		return new Cookie(name, value, domain, path, true, true, -1L, 0L);
+		return Cookies.sessionCookie(name, value, domain, path);
 	}
 
 	/**
@@ -334,5 +313,144 @@ public class Cookie {
 				.append("secure", secure)
 				.append("httpOnly", httpOnly)
 				.build();
+	}
+
+	/**
+	 * Builder to create {@link Cookie} instances.
+	 */
+	public static class Builder {
+		/**
+		 * The cookie name.
+		 * @see Cookie#name
+		 */
+		private String name;
+
+		/**
+		 * The cookie value.
+		 * @see Cookie#value
+		 */
+		private String value;
+
+		/**
+		 * The cookie domain.
+		 * @see Cookie#domain
+		 */
+		private String domain;
+
+		/**
+		 * The cookie path.
+		 * @see Cookie#path
+		 */
+		private String path;
+
+		/**
+		 * The cookie max-age.
+		 * @see Cookie#maxAge
+		 */
+		private Long maxAge;
+
+		/**
+		 * The cookie expires value.
+		 * @see Cookie#expires
+		 */
+		private Long expires;
+
+		/**
+		 * The cookie secure flag.
+		 * @see Cookie#secure
+		 */
+		private boolean secure;
+
+		/**
+		 * The cookie http-only flag.
+		 * @see Cookie#httpOnly
+		 */
+		private boolean httpOnly;
+
+		/**
+		 * Create the builder with a cookie name and value.
+		 *
+		 * @param name Cookie name.
+		 * @param value Cookie value.
+		 */
+		public Builder(String name, String value) {
+			this.name = name;
+			this.value = value;
+		}
+
+		/**
+		 * Update cookie domain.
+		 *
+		 * @param domain Cookie domain.
+		 * @return The builder (for chaining).
+		 */
+		public Builder domain(String domain) {
+			this.domain = domain;
+			return this;
+		}
+
+		/**
+		 * Update cookie path.
+		 *
+		 * @param path Cookie path.
+		 * @return The builder (for chaining).
+		 */
+		public Builder path(String path) {
+			this.path = path;
+			return this;
+		}
+
+		/**
+		 * Update cookie secure flag.
+		 *
+		 * @param secure Cookie secure flag.
+		 * @return The builder (for chaining).
+		 */
+		public Builder secure(boolean secure) {
+			this.secure = secure;
+			return this;
+		}
+
+		/**
+		 * Update cookie http-only flag.
+		 *
+		 * @param httpOnly Cookie http-only flag.
+		 * @return The builder (for chaining).
+		 */
+		public Builder httpOnly(boolean httpOnly) {
+			this.httpOnly = httpOnly;
+			return this;
+		}
+
+		/**
+		 * Update cookie max-age.
+		 *
+		 * @param maxAge Cookie max-age.
+		 * @return The builder (for chaining).
+		 */
+		public Builder maxAge(long maxAge) {
+			this.maxAge = maxAge;
+			return this;
+		}
+
+		/**
+		 * Update cookie expires value.
+		 *
+		 * @param expires Cookie expires.
+		 * @return The builder (for chaining).
+		 */
+		public Builder expires(long expires) {
+			this.expires = expires;
+			return this;
+		}
+
+		/**
+		 * Create the cookie.
+		 *
+		 * @return The cookie.
+		 */
+		public Cookie build() {
+			return new Cookie(name, value, domain, path, secure, httpOnly, expires, maxAge);
+		}
 	}
 }
