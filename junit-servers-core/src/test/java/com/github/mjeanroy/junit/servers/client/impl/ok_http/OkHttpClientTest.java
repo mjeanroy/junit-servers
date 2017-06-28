@@ -29,7 +29,7 @@ import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -38,23 +38,23 @@ public class OkHttpClientTest extends BaseHttpClientTest {
 	private okhttp3.OkHttpClient internalClient;
 
 	@Override
-	protected void onSetUp() throws Exception {
+	protected void onSetUp() {
 		internalClient = mock(okhttp3.OkHttpClient.class);
 	}
 
 	@Override
-	protected HttpClient createDefaultClient(EmbeddedServer server) throws Exception {
+	protected HttpClient createDefaultClient(EmbeddedServer server) {
 		return OkHttpClient.defaultOkHttpClient(server);
 	}
 
 	@Override
-	protected HttpClient createCustomClient(EmbeddedServer server) throws Exception {
+	protected HttpClient createCustomClient(EmbeddedServer server) {
 		return OkHttpClient.newOkHttpClient(server, internalClient);
 	}
 
 	@Override
-	protected void checkInternalHttpClient(HttpClient httpClient) throws Exception {
-		okhttp3.OkHttpClient internalClient = (okhttp3.OkHttpClient) readField(httpClient, "client", true);
+	protected void checkInternalHttpClient(HttpClient httpClient) {
+		okhttp3.OkHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
 	}
 }

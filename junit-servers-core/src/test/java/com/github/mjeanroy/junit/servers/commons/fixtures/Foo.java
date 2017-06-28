@@ -24,10 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.commons.fixtures;
 
-public class Foo {
+class Foo {
 	private final int id;
 
-	protected Foo(int id) {
+	Foo(int id) {
 		this.id = id;
 	}
 }

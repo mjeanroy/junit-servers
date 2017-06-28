@@ -31,7 +31,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 
 import static com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient.defaultApacheHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient.newApacheHttpClient;
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -40,23 +40,23 @@ public class ApacheHttpClientTest extends BaseHttpClientTest {
 	private CloseableHttpClient internalClient;
 
 	@Override
-	protected void onSetUp() throws Exception {
+	protected void onSetUp() {
 		internalClient = mock(CloseableHttpClient.class);
 	}
 
 	@Override
-	protected HttpClient createDefaultClient(EmbeddedServer server) throws Exception {
+	protected HttpClient createDefaultClient(EmbeddedServer server) {
 		return defaultApacheHttpClient(server);
 	}
 
 	@Override
-	protected HttpClient createCustomClient(EmbeddedServer server) throws Exception {
+	protected HttpClient createCustomClient(EmbeddedServer server) {
 		return newApacheHttpClient(server, internalClient);
 	}
 
 	@Override
-	protected void checkInternalHttpClient(HttpClient httpClient) throws Exception {
-		CloseableHttpClient internalClient = (CloseableHttpClient) readField(httpClient, "client", true);
+	protected void checkInternalHttpClient(HttpClient httpClient) {
+		CloseableHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
 	}
 }

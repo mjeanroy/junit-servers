@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.utils.commons;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -63,6 +65,40 @@ public final class Fields {
 		try {
 			return klass.getDeclaredMethod(name);
 		} catch (Exception ex) {
+			throw new AssertionError(ex);
+		}
+	}
+
+	/**
+	 * Read private field on given object instance.
+	 *
+	 * @param instance The object instance.
+	 * @param name The field name.
+	 * @param <T> Type of the returned value.
+	 * @return The value of the field on given instance.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T readPrivate(Object instance, String name) {
+		try {
+			return (T) FieldUtils.readField(instance, name, true);
+		} catch (IllegalAccessException ex) {
+			throw new AssertionError(ex);
+		}
+	}
+
+	/**
+	 * Write private field on given object instance.
+	 *
+	 * @param instance The object instance.
+	 * @param name The field name.
+	 * @param value The field value.
+	 * @param <T> Type of the returned value.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> void writePrivate(Object instance, String name, T value) {
+		try {
+			FieldUtils.writeField(instance, name, value, true);
+		} catch (IllegalAccessException ex) {
 			throw new AssertionError(ex);
 		}
 	}

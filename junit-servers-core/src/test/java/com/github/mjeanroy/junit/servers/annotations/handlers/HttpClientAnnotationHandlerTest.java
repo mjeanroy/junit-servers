@@ -27,13 +27,13 @@ package com.github.mjeanroy.junit.servers.annotations.handlers;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import static com.github.mjeanroy.junit.servers.annotations.handlers.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.writePrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -67,7 +67,7 @@ public class HttpClientAnnotationHandlerTest {
 		assertThat(foo.client).isNotNull();
 
 		HttpClient spy = spy(foo.client);
-		FieldUtils.writeField(foo, "client", spy, true);
+		writePrivate(foo, "client", spy);
 
 		handler.after(foo, field);
 		verify(spy).destroy();

@@ -30,7 +30,7 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import static com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient.defaultAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient.newAsyncHttpClient;
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -39,23 +39,23 @@ public class NingAsyncHttpClientTest extends BaseHttpClientTest {
 	private com.ning.http.client.AsyncHttpClient internalClient;
 
 	@Override
-	protected void onSetUp() throws Exception {
+	protected void onSetUp() {
 		internalClient = mock(com.ning.http.client.AsyncHttpClient.class);
 	}
 
 	@Override
-	protected HttpClient createDefaultClient(EmbeddedServer server) throws Exception {
+	protected HttpClient createDefaultClient(EmbeddedServer server) {
 		return defaultAsyncHttpClient(server);
 	}
 
 	@Override
-	protected HttpClient createCustomClient(EmbeddedServer server) throws Exception {
+	protected HttpClient createCustomClient(EmbeddedServer server) {
 		return newAsyncHttpClient(server, internalClient);
 	}
 
 	@Override
-	protected void checkInternalHttpClient(HttpClient httpClient) throws Exception {
-		com.ning.http.client.AsyncHttpClient internalClient = (com.ning.http.client.AsyncHttpClient) readField(httpClient, "client", true);
+	protected void checkInternalHttpClient(HttpClient httpClient) {
+		com.ning.http.client.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
 	}
 }

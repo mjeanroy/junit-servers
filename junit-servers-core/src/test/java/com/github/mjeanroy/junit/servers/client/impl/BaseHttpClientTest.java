@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RunIfRunner.class)
 public abstract class BaseHttpClientTest {
 
-	protected EmbeddedServer server;
+	private EmbeddedServer server;
 
 	@Before
 	public void setUp() throws Exception {
@@ -64,7 +64,7 @@ public abstract class BaseHttpClientTest {
 		assertThat(client)
 				.isNotNull();
 
-		EmbeddedServer internalServer = (EmbeddedServer) readField(client, "server", true);
+		EmbeddedServer internalServer = readPrivate(client, "server");
 		assertThat(internalServer)
 				.isNotNull()
 				.isSameAs(server);
@@ -77,7 +77,7 @@ public abstract class BaseHttpClientTest {
 		HttpClient client = createCustomClient(server);
 		assertThat(client).isNotNull();
 
-		EmbeddedServer internalServer = (EmbeddedServer) readField(client, "server", true);
+		EmbeddedServer internalServer = readPrivate(client, "server");
 		assertThat(internalServer).isNotNull().isSameAs(server);
 
 		checkInternalHttpClient(client);
@@ -163,35 +163,30 @@ public abstract class BaseHttpClientTest {
 
 	/**
 	 * Should create mock data during test setup.
-	 *
-	 * @throws Exception If an error occurred.
 	 */
-	protected abstract void onSetUp() throws Exception;
+	protected abstract void onSetUp();
 
 	/**
 	 * Should create a default http client.
 	 *
 	 * @param server Fake embedded server.
 	 * @return Default http client.
-	 * @throws Exception If an error occurred while creating client.
 	 */
-	protected abstract HttpClient createDefaultClient(EmbeddedServer server) throws Exception;
+	protected abstract HttpClient createDefaultClient(EmbeddedServer server);
 
 	/**
 	 * Should create a custom http client.
 	 *
 	 * @param server Fake embedded server.
 	 * @return Default http client.
-	 * @throws Exception If an error occurred while creating custom client.
 	 */
-	protected abstract HttpClient createCustomClient(EmbeddedServer server) throws Exception;
+	protected abstract HttpClient createCustomClient(EmbeddedServer server);
 
 	/**
 	 * Should check internal data of previously created custom
 	 * http client.
 	 *
 	 * @param httpClient Previously created client.
-	 * @throws Exception If an error occurred.
 	 */
-	protected abstract void checkInternalHttpClient(HttpClient httpClient) throws Exception;
+	protected abstract void checkInternalHttpClient(HttpClient httpClient);
 }

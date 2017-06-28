@@ -349,7 +349,7 @@ public class AbstractEmbeddedServerTest {
 
 		public int doStop = 0;
 
-		public ServletContext servletContext;
+		public final ServletContext servletContext;
 
 		public TestServer() {
 			super(new EmbeddedConfiguration.Builder().build());

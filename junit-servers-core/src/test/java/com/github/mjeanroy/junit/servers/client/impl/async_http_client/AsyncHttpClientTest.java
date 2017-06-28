@@ -30,7 +30,7 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
 
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -40,23 +40,23 @@ public class AsyncHttpClientTest extends BaseHttpClientTest {
 	private org.asynchttpclient.AsyncHttpClient internalClient;
 
 	@Override
-	protected void onSetUp() throws Exception {
+	protected void onSetUp() {
 		internalClient = mock(org.asynchttpclient.AsyncHttpClient.class);
 	}
 
 	@Override
-	protected HttpClient createDefaultClient(EmbeddedServer server) throws Exception {
+	protected HttpClient createDefaultClient(EmbeddedServer server) {
 		return AsyncHttpClient.defaultAsyncHttpClient(server);
 	}
 
 	@Override
-	protected HttpClient createCustomClient(EmbeddedServer server) throws Exception {
+	protected HttpClient createCustomClient(EmbeddedServer server) {
 		return AsyncHttpClient.newAsyncHttpClient(server, internalClient);
 	}
 
 	@Override
-	protected void checkInternalHttpClient(HttpClient httpClient) throws Exception {
-		org.asynchttpclient.AsyncHttpClient internalClient = (org.asynchttpclient.AsyncHttpClient) readField(httpClient, "client", true);
+	protected void checkInternalHttpClient(HttpClient httpClient) {
+		org.asynchttpclient.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
 	}
 }

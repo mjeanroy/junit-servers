@@ -63,7 +63,7 @@ public class EmbeddedConfigurationTest {
 		}
 	}
 
-	public static class EmbeddedConfigurationBuilder extends AbstractConfigurationBuilder<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
+	protected static class EmbeddedConfigurationBuilder extends AbstractConfigurationBuilder<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
 		@Override
 		protected EmbeddedConfigurationBuilder self() {
 			return this;
