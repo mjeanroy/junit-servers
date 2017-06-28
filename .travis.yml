@@ -3,3 +3,12 @@ jdk:
   - oraclejdk8
 os:
   - linux
+
+env:
+  matrix:
+    - jdk_id=openjdk7
+    - jdk_id=oraclejdk7
+    - jdk_id=oraclejdk8
+
+script:
+  - echo ${jdk_id} && jdk_switcher use ${jdk_id} && java -version && echo "Java home is set to ${JAVA_HOME}" && mvn test
