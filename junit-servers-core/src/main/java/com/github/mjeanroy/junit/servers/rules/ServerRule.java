@@ -125,12 +125,19 @@ public class ServerRule extends AbstractRule {
 
 	/**
 	 * Get port used by embedded server.
+	 * Note that:
+	 * <ul>
+	 *   <li>If the server is not started, the returned port is the one set in the configuration.</li>
+	 *   <li>Otherwise, the "real" port is returned (the port used by the embedded server)</li>
+	 * </ul>
 	 *
 	 * @return Port.
 	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#getPort()
 	 */
 	public int getPort() {
-		return server.getPort();
+		return server.isStarted() ?
+			server.getPort() :
+			server.getConfiguration().getPort();
 	}
 
 	/**

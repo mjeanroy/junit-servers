@@ -36,7 +36,7 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 /**
  * Jetty configuration settings.
  */
-public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
+public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 
 	/**
 	 * Configure the stop timeout in milliseconds.

@@ -54,5 +54,4 @@ public class JettyServerRule extends ServerRule {
 	public JettyServerRule(EmbeddedJettyConfiguration configuration) {
 		super(new EmbeddedJetty(configuration));
 	}
-
 }

@@ -25,40 +25,44 @@
 package com.github.mjeanroy.junit.servers.rules;
 
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.Description;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.runner.Description.createTestDescription;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ServerRuleTest {
 
-	@Mock
+	private AbstractConfiguration configuration;
 	private EmbeddedServer server;
-
 	private ServerRule rule;
+	private Description description;
 
 	@Before
 	public void setUp() {
+		configuration = mock(AbstractConfiguration.class);
+		server = mock(EmbeddedServer.class);
+		when(server.getConfiguration()).thenReturn(configuration);
+
 		rule = new ServerRule(server);
+		description = createTestDescription(ServerRuleTest.class, "name");
 	}
 
 	@Test
 	public void it_should_start_server() {
-		rule.before(mock(Description.class));
+		rule.before(description);
 		verify(server).start();
 	}
 
 	@Test
 	public void it_should_stop_server() {
-		rule.after(mock(Description.class));
+		rule.after(description);
 		verify(server).stop();
 	}
 
@@ -80,14 +84,33 @@ public class ServerRuleTest {
 	}
 
 	@Test
-	public void it_should_get_server_port() {
+	public void it_should_get_server_port_when_server_is_stopped() {
 		int port = 8080;
+		int configPort = 9000;
+		when(configuration.getPort()).thenReturn(configPort);
 		when(server.getPort()).thenReturn(port);
+		when(server.isStarted()).thenReturn(false);
+
+		int result = rule.getPort();
+
+		assertThat(result).isEqualTo(configPort);
+		verify(server, never()).getPort();
+		verify(configuration).getPort();
+	}
+
+	@Test
+	public void it_should_get_server_port_when_server_is_started() {
+		int port = 8080;
+		int configPort = 9000;
+		when(configuration.getPort()).thenReturn(configPort);
+		when(server.getPort()).thenReturn(port);
+		when(server.isStarted()).thenReturn(true);
 
 		int result = rule.getPort();
 
 		assertThat(result).isEqualTo(port);
 		verify(server).getPort();
+		verify(configuration, never()).getPort();
 	}
 
 	@Test
