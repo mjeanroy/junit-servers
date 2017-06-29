@@ -24,11 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmbeddedJettyConfigurationTest {
+public class EmbeddedTomcatConfigurationTest {
 
 	@Test
 	public void it_should_build_default_configuration() {
@@ -64,5 +66,30 @@ public class EmbeddedJettyConfigurationTest {
 		assertThat(result.getWebapp()).isEqualTo(webapp);
 		assertThat(result.isForceMetaInf()).isFalse();
 		assertThat(result.isEnableNaming()).isFalse();
+	}
+
+	@Test
+	public void it_should_implement_equals_hashCode() {
+		EqualsVerifier.forClass(EmbeddedTomcatConfiguration.class)
+			.suppress(Warning.STRICT_INHERITANCE)
+			.withRedefinedSuperclass()
+			.verify();
+	}
+
+	@Test
+	public void it_should_have_to_string() {
+		EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.defaultConfiguration();
+		assertThat(result.toString()).isEqualTo(
+			"EmbeddedTomcatConfiguration{" +
+				"port: 0, " +
+				"path: \"/\", " +
+				"webapp: \"src/main/webapp\", " +
+				"classpath: \"./target/classes\", " +
+				"overrideDescriptor: null, " +
+				"parentClasspath: [], " +
+				"baseDir: \"./tomcat-work\", " +
+				"enableNaming: true, " +
+				"forceMetaInf: true" +
+			"}");
 	}
 }

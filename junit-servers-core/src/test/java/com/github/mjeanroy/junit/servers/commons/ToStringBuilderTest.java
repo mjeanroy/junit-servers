@@ -42,6 +42,8 @@ public class ToStringBuilderTest {
 		boolean f4 = true;
 		List<String> f5 = Arrays.asList("foo", "bar");
 		List<String> f6 = Collections.emptyList();
+		Value f7 = new Value("val");
+		Value f8 = null;
 
 		String toString = ToStringBuilder.create(ToStringBuilderTest.class)
 			.append("f1", f1)
@@ -50,6 +52,8 @@ public class ToStringBuilderTest {
 			.append("f4", f4)
 			.append("f5", f5)
 			.append("f6", f6)
+			.append("f7", f7)
+			.append("f8", f8)
 			.build();
 
 		assertThat(toString)
@@ -61,7 +65,22 @@ public class ToStringBuilderTest {
 					"f3: 10, " +
 					"f4: true, " +
 					"f5: [\"foo\", \"bar\"], " +
-					"f6: []" +
+					"f6: [], " +
+					"f7: val, " +
+					"f8: null" +
 				"}");
+	}
+
+	private static class Value {
+		private final String value;
+
+		private Value(String value) {
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return value;
+		}
 	}
 }

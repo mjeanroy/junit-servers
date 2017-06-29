@@ -172,9 +172,11 @@ public abstract class AbstractConfiguration {
 		if (o == this) {
 			return true;
 		}
+
 		if (o instanceof AbstractConfiguration) {
 			AbstractConfiguration c = (AbstractConfiguration) o;
-			return Objects.equals(port, c.port) &&
+			return c.canEqual(this) &&
+					Objects.equals(port, c.port) &&
 					Objects.equals(path, c.path) &&
 					Objects.equals(webapp, c.webapp) &&
 					Objects.equals(classpath, c.classpath) &&
@@ -183,7 +185,18 @@ public abstract class AbstractConfiguration {
 					Objects.equals(overrideDescriptor, c.overrideDescriptor) &&
 					Objects.equals(parentClasspath, c.parentClasspath);
 		}
+
 		return false;
+	}
+
+	/**
+	 * Ensure that an object can be equal to the current instance.
+	 *
+	 * @param o The tested object.
+	 * @return {@code true} if {@code o} can be equal to {@code this}, {@code false} otherwise.
+	 */
+	protected boolean canEqual(Object o) {
+		return o instanceof AbstractConfiguration;
 	}
 
 	@Override

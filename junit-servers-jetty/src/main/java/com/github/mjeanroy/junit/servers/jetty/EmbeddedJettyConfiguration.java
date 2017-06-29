@@ -24,9 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 import org.eclipse.jetty.util.resource.Resource;
+
+import java.util.Objects;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
@@ -86,20 +89,53 @@ public final class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		return stopAtShutdown;
 	}
 
+	public Resource getBaseResource() {
+		return baseResource;
+	}
+
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof EmbeddedJettyConfiguration && super.equals(o);
+		if (o == this) {
+			return true;
+		}
+
+		if (o instanceof EmbeddedJettyConfiguration) {
+			EmbeddedJettyConfiguration c = (EmbeddedJettyConfiguration) o;
+			return c.canEqual(this)
+					&& super.equals(c)
+					&& Objects.equals(stopTimeout, c.stopTimeout)
+					&& Objects.equals(stopAtShutdown, c.stopAtShutdown)
+					&& Objects.equals(baseResource, c.baseResource);
+		}
+
+		return false;
+	}
+
+	@Override
+	protected boolean canEqual(Object o) {
+		return o instanceof EmbeddedJettyConfiguration;
 	}
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return Objects.hash(super.hashCode(), stopTimeout, stopAtShutdown, baseResource);
 	}
 
-	public Resource getBaseResource() {
-		return baseResource;
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("port", getPort())
+			.append("path", getPath())
+			.append("webapp", getWebapp())
+			.append("classpath", getClasspath())
+			.append("overrideDescriptor", getOverrideDescriptor())
+			.append("parentClasspath", getParentClasspath())
+			.append("stopTimeout", stopTimeout)
+			.append("stopAtShutdown", stopAtShutdown)
+			.append("baseResource", baseResource)
+			.build();
 	}
-	
+
 	public static class Builder extends AbstractConfigurationBuilder<Builder, EmbeddedJettyConfiguration> {
 
 		private int stopTimeout;

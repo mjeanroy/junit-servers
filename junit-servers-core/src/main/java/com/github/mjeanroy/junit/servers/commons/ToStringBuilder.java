@@ -130,6 +130,17 @@ public final class ToStringBuilder {
 	}
 
 	/**
+	 * Append new object value.
+	 *
+	 * @param name The name of the field.
+	 * @param value The field value.
+	 * @return The current builder (for chaining).
+	 */
+	public ToStringBuilder append(String name, Object value) {
+		return appendValue(name, value);
+	}
+
+	/**
 	 * Append new boolean value.
 	 *
 	 * @param name The name of the field.

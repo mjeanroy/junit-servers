@@ -97,10 +97,12 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 	@Override
 	public String toString() {
 		return ToStringBuilder.create(getClass())
+			.append("port", getPort())
 			.append("path", getPath())
 			.append("webapp", getWebapp())
-			.append("port", getPort())
 			.append("classpath", getClasspath())
+			.append("overrideDescriptor", getOverrideDescriptor())
+			.append("parentClasspath", getParentClasspath())
 			.append("baseDir", baseDir)
 			.append("enableNaming", enableNaming)
 			.append("forceMetaInf", forceMetaInf)
@@ -122,6 +124,11 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 		}
 
 		return false;
+	}
+
+	@Override
+	protected boolean canEqual(Object o) {
+		return o instanceof EmbeddedTomcatConfiguration;
 	}
 
 	@Override

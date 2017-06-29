@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.eclipse.jetty.util.resource.Resource;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -72,22 +72,29 @@ public class EmbeddedJettyConfigurationTest {
 		assertThat(result.getBaseResource()).isSameAs(resource);
 	}
 
-	private static class EmbeddedConfiguration extends AbstractConfiguration {
-
-		public EmbeddedConfiguration(EmbeddedConfigurationBuilder builder) {
-			super(builder);
-		}
+	@Test
+	public void it_should_implement_equals_hashCode() {
+		EqualsVerifier.forClass(EmbeddedJettyConfiguration.class)
+			.suppress(Warning.STRICT_INHERITANCE)
+			.withRedefinedSuperclass()
+			.verify();
 	}
 
-	public static class EmbeddedConfigurationBuilder extends AbstractConfigurationBuilder<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
-		@Override
-		protected EmbeddedConfigurationBuilder self() {
-			return this;
-		}
-
-		@Override
-		public EmbeddedConfiguration build() {
-			return new EmbeddedConfiguration(this);
-		}
+	@Test
+	public void it_should_implement_to_string() {
+		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
+		assertThat(result.toString()).isEqualTo(
+			"EmbeddedJettyConfiguration{" +
+				"port: 0, " +
+				"path: \"/\", " +
+				"webapp: \"src/main/webapp\", " +
+				"classpath: \".\", " +
+				"overrideDescriptor: null, " +
+				"parentClasspath: [], " +
+				"stopTimeout: 30000, " +
+				"stopAtShutdown: true, " +
+				"baseResource: null" +
+			"}"
+		);
 	}
 }
