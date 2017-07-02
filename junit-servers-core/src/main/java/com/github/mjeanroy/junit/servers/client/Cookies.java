@@ -56,7 +56,17 @@ public final class Cookies {
 	}
 
 	/**
-	 * Create cookie.
+	 * Create cookie with a name and a value, all other parameters will
+	 * use the default values:
+	 *
+	 * <ul>
+	 *   <li>The webapp path is initialized with {@code "src/main/webapp"}</li>
+	 *   <li>The path is initialized with {@code "/"}</li>
+	 *   <li>The port is initialized with zero.</li>
+	 *   <li>The cookie is not secured.</li>
+	 *   <li>The cookie is not http-only.</li>
+	 *   <li>The cookie max-age is {@code null}.</li>
+	 * </ul>.
 	 *
 	 * @param name Cookie name.
 	 * @param value Cookie value.

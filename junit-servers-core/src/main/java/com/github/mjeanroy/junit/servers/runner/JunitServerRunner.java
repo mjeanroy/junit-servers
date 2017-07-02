@@ -40,10 +40,42 @@ import static com.github.mjeanroy.junit.servers.annotations.handlers.ServerAnnot
 import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
 
 /**
- * Runner that will start and stop embedded server
- * before tests.
- * This runner will also add some custom rules to
- * inject data to test classes.
+ * Runner that will start and stop embedded server before tests.
+ * This runner will also add some custom rules to inject data to test classes.
+ *
+ * <h3>How to use?</h3>
+ *
+ * Simply set the {@link JunitServerRunner} class with the JUnit {@link org.junit.runner.RunWith} annotation:
+ *
+ * <pre><code>
+ *   &#064;RunWith(JunitServerRunner.class)
+ *   public class MyTest {
+ *
+ *     // Get the server
+ *     &#064;TestHttpServer
+ *     private static EmbeddedServer server;
+ *
+ *     // Get a client to query embedded server
+ *     &#064;TestHttpServer
+ *     private HttpClient client;
+ *
+ *     &#064;Test
+ *     public void testGET() {
+ *       HttpResponse rsp = client.prepareGet("/path")
+ *         .acceptJson()
+ *         .execute();
+ *
+ *       Assert.assertTrue(rsp.status() == 200);
+ *     }
+ *   }
+ * </code></pre>
+ *
+ * <h3>Should I use the {@link ServerRule} or the runner?</h3>
+ *
+ * The runner should be used, but due to the limitation of JUnit (only one runner can be used), the rule can
+ * be used if you need to use a custom runner.
+ *
+ * @see ServerRule
  */
 public class JunitServerRunner extends BlockJUnit4ClassRunner {
 

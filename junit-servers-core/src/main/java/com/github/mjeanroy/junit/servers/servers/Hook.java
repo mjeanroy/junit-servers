@@ -27,7 +27,13 @@ package com.github.mjeanroy.junit.servers.servers;
 import javax.servlet.ServletContext;
 
 /**
- * Hook that will be invoked before and after server execution.
+ * Hook that will be invoked:
+ *
+ * <ol>
+ *   <li>Before server is started.</li>
+ *   <li>Just after server is started.</li>
+ *   <li>After server is stopped.</li>
+ * </ol>
  */
 public interface Hook {
 

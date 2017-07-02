@@ -30,21 +30,28 @@ import javax.servlet.ServletContext;
 
 /**
  * Specification of embedded server.
+ *
+ * <p>
+ *
  * An embedded server:
- * - Can be started, stopped or restarted.
- * - Must provide port that can be used to query resources.
+ * <ul>
+ *   <li>Can be started, stopped or restarted.</li>
+ *   <li>Must provide port that can be used to query resources.</li>
+ * </ul>
+ *
+ * @param <T> The type of configuration used by the embedded server implementation.
  */
 public interface EmbeddedServer<T extends AbstractConfiguration> {
 
 	/**
 	 * Start embedded server.
-	 * If server is already started, this method do nothing.
+	 * If server is already started, this method should do nothing.
 	 */
 	void start();
 
 	/**
 	 * Stop embedded server.
-	 * If server is already stopped, this method do nothing.
+	 * If server is already stopped, this method should do nothing.
 	 */
 	void stop();
 
@@ -63,7 +70,7 @@ public interface EmbeddedServer<T extends AbstractConfiguration> {
 	/**
 	 * Check if embedded server is started.
 	 *
-	 * @return True if embedded server is started, false otherwise.
+	 * @return {@code true} if embedded server is started, {@code false} otherwise.
 	 */
 	boolean isStarted();
 

@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
+import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
@@ -38,32 +39,32 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
- * Implementation of http client using apache http client
+ * Implementation of {@link HttpClient} using apache http client
  * library under the hood.
- * See: http://hc.apache.org/httpcomponents-client-ga/index.html
+ *
+ * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
  */
-public class ApacheHttpClient extends AbstractHttpClient {
+public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
 
 	/**
-	 * Create new http client using internal
-	 * http client from apache http-client library.
+	 * Create new http client using internal with custom internal client.
 	 *
 	 * @param server Embedded server.
 	 * @param client Internal http client
 	 * @return Http client.
+	 * @throws NullPointerException If {@code server} of {@code client} are {@code null}.
 	 */
 	public static ApacheHttpClient newApacheHttpClient(EmbeddedServer server, CloseableHttpClient client) {
 		return new ApacheHttpClient(server, client);
 	}
 
 	/**
-	 * Create new http client using internal
-	 * http client from apache http-client library.
-	 * An instance of {CloseableHttpClient} will be automatically
-	 * created.
+	 * Create new http client using default internal client.
 	 *
 	 * @param server Embedded server.
 	 * @return Http client.
+	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public static ApacheHttpClient defaultApacheHttpClient(EmbeddedServer server) {
 		CloseableHttpClient client = HttpClientBuilder.create().build();

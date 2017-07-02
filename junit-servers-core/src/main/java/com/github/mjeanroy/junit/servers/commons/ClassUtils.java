@@ -26,6 +26,11 @@ package com.github.mjeanroy.junit.servers.commons;
 
 /**
  * Static class utilities.
+ *
+ * <p>
+ *
+ * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
+ * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
 public final class ClassUtils {
 
@@ -37,7 +42,7 @@ public final class ClassUtils {
 	 * Check if a given class is available in classpath.
 	 *
 	 * @param className Fully qualified name of class to test.
-	 * @return True if class is available, false otherwise.
+	 * @return {@code true} if class is available, {@code false} otherwise.
 	 */
 	public static boolean isPresent(String className) {
 		try {

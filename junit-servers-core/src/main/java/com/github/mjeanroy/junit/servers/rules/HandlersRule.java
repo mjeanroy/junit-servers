@@ -77,8 +77,7 @@ public class HandlersRule extends AbstractRuleInstance {
 	/**
 	 * Process handlers.
 	 *
-	 * @param before Flag to know if handler has to run "before" phase
-	 *               or "after" phase.
+	 * @param before Flag to know if handler has to run "before" phase or "after" phase.
 	 */
 	protected void process(boolean before) {
 		List<Field> fields = findAllFields(getTarget().getClass());
@@ -94,8 +93,7 @@ public class HandlersRule extends AbstractRuleInstance {
 	 *
 	 * @param handler Handler.
 	 * @param field Field.
-	 * @param before Flag to know if handler has to run "before" phase
-	 *               or "after" phase.
+	 * @param before Flag to know if handler has to run "before" phase or "after" phase.
 	 */
 	protected void processField(AnnotationHandler handler, Field field, boolean before) {
 		for (Annotation annotation : field.getAnnotations()) {

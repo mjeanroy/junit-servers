@@ -28,6 +28,7 @@ import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import org.asynchttpclient.ListenableFuture;
@@ -38,15 +39,16 @@ import org.asynchttpclient.Response;
 import static java.lang.System.nanoTime;
 
 /**
- * Implementation for {HttpRequest} that use async-http-client
+ * Implementation for {@link HttpRequest} that use async-http-client
  * under the hood.
- * See: https://asynchttpclient.github.io/
+ *
+ * @see <a href="https://asynchttpclient.github.io/">https://asynchttpclient.github.io/</a>
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#ASYNC_HTTP_CLIENT
  */
-class AsyncHttpRequest extends AbstractHttpRequest {
+class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 	/**
-	 * Original http client.
-	 * It will be used to execute http request.
+	 * Original http client, will be used to execute http request.
 	 */
 	private final org.asynchttpclient.AsyncHttpClient client;
 
@@ -82,12 +84,25 @@ class AsyncHttpRequest extends AbstractHttpRequest {
 		return new AsyncHttpResponse(response, duration);
 	}
 
+	/**
+	 * Add query parameter to the final HTTP request.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#addQueryParam(String, String)
+	 */
 	private void handleQueryParameters(RequestBuilder builder) {
 		for (HttpParameter p : queryParams.values()) {
 			builder.addQueryParam(p.getName(), p.getValue());
 		}
 	}
 
+	/**
+	 * Add body entity to the final HTTP request.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#addFormParam(String, String)
+	 * @see RequestBuilder#setBody(String)
+	 */
 	private void handleBody(RequestBuilder builder) {
 		if (!hasBody()) {
 			return;
@@ -100,28 +115,59 @@ class AsyncHttpRequest extends AbstractHttpRequest {
 		}
 	}
 
+	/**
+	 * Serialize form parameters to the request body.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#addFormParam(String, String)
+	 */
 	private void handleFormParameters(RequestBuilder builder) {
 		for (HttpParameter p : formParams.values()) {
 			builder.addFormParam(p.getName(), p.getValue());
 		}
 	}
 
+	/**
+	 * Set body to the final HTTP request.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#setBody(String)
+	 */
 	private void handleRequestBody(RequestBuilder builder) {
 		builder.setBody(body);
 	}
 
+	/**
+	 * Add headers to the final HTTP request.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#addHeader(CharSequence, String)
+	 */
 	private void handleHeaders(RequestBuilder builder) {
 		for (HttpHeader header : headers.values()) {
 			builder.addHeader(header.getName(), header.getValues());
 		}
 	}
 
+	/**
+	 * Add cookies to the final HTTP request.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#addCookie(org.asynchttpclient.cookie.Cookie)
+	 */
 	private void handleCookies(RequestBuilder builder) {
 		for (Cookie cookie : cookies) {
 			handleCookie(builder, cookie);
 		}
 	}
 
+	/**
+	 * Add single cookie to the final HTTP request.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @param cookie The cookie to add.
+	 * @see RequestBuilder#addCookie(org.asynchttpclient.cookie.Cookie)
+	 */
 	private void handleCookie(RequestBuilder builder, Cookie cookie) {
 		String name = cookie.getName();
 		String value = cookie.getValue();

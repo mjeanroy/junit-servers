@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import com.ning.http.client.Response;
@@ -38,11 +39,13 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
 /**
- * Implementation of {HttpResponse} using async-http-client
+ * Implementation of {@link HttpResponse} using (ning) async-http-client
  * under the hood.
- * See: https://asynchttpclient.github.io/
+ *
+ * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
  */
-class NingAsyncHttpResponse extends AbstractHttpResponse {
+class NingAsyncHttpResponse extends AbstractHttpResponse implements HttpResponse {
 
 	/**
 	 * Original response from async-http-client library.

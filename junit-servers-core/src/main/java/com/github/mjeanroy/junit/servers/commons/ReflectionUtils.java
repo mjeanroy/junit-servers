@@ -40,6 +40,11 @@ import static java.util.Collections.addAll;
 
 /**
  * Static reflection utilities.
+ *
+ * <p>
+ *
+ * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
+ * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
 public final class ReflectionUtils {
 
@@ -213,10 +218,22 @@ public final class ReflectionUtils {
 		}
 	}
 
+	/**
+	 * Predicate that will return {@code true} if the field in parameter is annotated with a
+	 * given {@link Annotation}.
+	 */
 	private static class FieldAnnotatedWithPredicate implements Predicate<Field> {
 
+		/**
+		 * The annotation to check.
+		 */
 		private final Class<? extends Annotation> annotationKlass;
 
+		/**
+		 * Create the predicate.
+		 *
+		 * @param annotationKlass The annotation to check.
+		 */
 		private FieldAnnotatedWithPredicate(Class<? extends Annotation> annotationKlass) {
 			this.annotationKlass = annotationKlass;
 		}
@@ -227,10 +244,22 @@ public final class ReflectionUtils {
 		}
 	}
 
+	/**
+	 * Predicate that will return {@code true} if the method in parameter is annotated with a
+	 * given {@link Annotation}.
+	 */
 	private static class MethodAnnotatedWithPredicate implements Predicate<Method> {
 
+		/**
+		 * The annotation to check.
+		 */
 		private final Class<? extends Annotation> annotationKlass;
 
+		/**
+		 * Create the predicate.
+		 *
+		 * @param annotationKlass The annotation to check.
+		 */
 		private MethodAnnotatedWithPredicate(Class<? extends Annotation> annotationKlass) {
 			this.annotationKlass = annotationKlass;
 		}
@@ -241,6 +270,9 @@ public final class ReflectionUtils {
 		}
 	}
 
+	/**
+	 * Predicate that will return {@code true} if the field in parameter is a static field.
+	 */
 	private static final Predicate<Field> STATIC_FIELD_PREDICATE = new Predicate<Field>() {
 		@Override
 		public boolean apply(Field field) {
@@ -248,6 +280,9 @@ public final class ReflectionUtils {
 		}
 	};
 
+	/**
+	 * Predicate that will return {@code true} if the method in parameter is a static method.
+	 */
 	private static final Predicate<Method> STATIC_METHOD_PREDICATE = new Predicate<Method>() {
 		@Override
 		public boolean apply(Method object) {

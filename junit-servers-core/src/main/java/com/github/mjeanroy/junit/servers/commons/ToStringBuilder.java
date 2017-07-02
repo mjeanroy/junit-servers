@@ -26,6 +26,11 @@ package com.github.mjeanroy.junit.servers.commons;
 
 /**
  * Static utility to create easily toString implementation.
+ *
+ * <p>
+ *
+ * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
+ * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
 public final class ToStringBuilder {
 

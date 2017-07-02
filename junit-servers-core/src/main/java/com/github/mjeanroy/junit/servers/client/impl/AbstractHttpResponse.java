@@ -51,6 +51,10 @@ import static java.util.Collections.unmodifiableList;
 
 /**
  * Abstract skeleton of {@link HttpResponse} interface.
+ *
+ * <p>
+ *
+ * <strong>This abstract class is not part of the public API and should not be used publicly.</strong>
  */
 public abstract class AbstractHttpResponse implements HttpResponse {
 
@@ -68,7 +72,7 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	public Cookie getCookie(String name) {
 		notBlank(name, "name");
 
-		HttpHeader header = getHeader("Set-Cookie");
+		HttpHeader header = getHeader(SET_COOKIE);
 		if (header == null) {
 			// No cookie in response
 			return null;

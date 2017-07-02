@@ -28,8 +28,10 @@ import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -54,17 +56,18 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
 import static java.lang.System.nanoTime;
 
 /**
- * Implementation for {HttpRequest} that use apache http-client
+ * Implementation for {@link HttpRequest} that use apache http-client
  * under the hood.
- * See: http://hc.apache.org/httpcomponents-client-ga/index.html
+ *
+ * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
  */
-class ApacheHttpRequest extends AbstractHttpRequest {
+class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 	private static final ApacheHttpRequestFactory FACTORY = new ApacheHttpRequestFactory();
 
 	/**
-	 * Original http client.
-	 * It will be used to execute http request.
+	 * Original http client, will be used to execute http request.
 	 */
 	private final HttpClient client;
 
@@ -117,6 +120,7 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 	 *
 	 * @return Created URI.
 	 * @throws URISyntaxException If an error occurred while building URI.
+	 * @see URIBuilder
 	 */
 	private URI createRequestURI() throws URISyntaxException {
 		String url = getUrl();
@@ -132,6 +136,7 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 	 * Add headers to http request.
 	 *
 	 * @param httpRequest Http request in creation.
+	 * @see org.apache.http.HttpRequest#addHeader(Header)
 	 */
 	private void handleHeaders(HttpRequestBase httpRequest) {
 		for (HttpHeader header : headers.values()) {

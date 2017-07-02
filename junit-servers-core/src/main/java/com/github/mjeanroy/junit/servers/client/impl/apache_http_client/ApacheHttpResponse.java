@@ -41,9 +41,11 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
 /**
- * Implementation of {HttpResponse} using async-http-client
+ * Implementation of {@link HttpResponse} using apache http-client
  * under the hood.
- * See: https://asynchttpclient.github.io/
+ *
+ * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
  */
 class ApacheHttpResponse extends AbstractHttpResponse {
 
@@ -53,10 +55,8 @@ class ApacheHttpResponse extends AbstractHttpResponse {
 	private final HttpResponse response;
 
 	/**
-	 * Request duration in nano seconds.
-	 * This is the time to execute http request and
-	 * produce http response.
-	 * This duration will always be a positive number.
+	 * Request duration in nano seconds: this is the time to execute http request and
+	 * produce http response. This duration will always be a positive number.
 	 */
 	private final long duration;
 
@@ -65,8 +65,8 @@ class ApacheHttpResponse extends AbstractHttpResponse {
 	 *
 	 * @param response Original http response.
 	 * @param duration Request duration.
-	 * @throws NullPointerException if response is null.
-	 * @throws IllegalArgumentException if duration is not positive.
+	 * @throws NullPointerException If {@code response} is null.
+	 * @throws IllegalArgumentException If {@code duration} is not positive.
 	 */
 	ApacheHttpResponse(HttpResponse response, long duration) {
 		this.response = notNull(response, "response");

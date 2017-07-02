@@ -27,9 +27,8 @@ package com.github.mjeanroy.junit.servers.client;
 import java.util.Date;
 
 /**
- * Http request contract.
- * Each method (except #execute) should return
- * original object to allow chaining.
+ * HTTP request.
+ * @see <a href="https://tools.ietf.org/html/rfc2616#section-5">https://tools.ietf.org/html/rfc2616#section-5</a>
  */
 public interface HttpRequest {
 
@@ -59,20 +58,24 @@ public interface HttpRequest {
 	HttpRequest addHeader(String name, String value);
 
 	/**
-	 * Add query parameters.
+	 * Add query parameters: a query parameter is a parameter that will
+	 * follow the {@code ?} character in the request URL.
 	 *
 	 * @param name Parameter name.
 	 * @param value Parameter value.
 	 * @return Http request that can be used for chaining.
+	 * @see <a href="https://tools.ietf.org/html/rfc3986#section-3.4">https://tools.ietf.org/html/rfc3986#section-3.4</a>
 	 */
 	HttpRequest addQueryParam(String name, String value);
 
 	/**
-	 * Add collection of query parameters.
+	 * Add collection of query parameters: a query parameter is a parameter that will
+	 * follow the {@code ?} character in the request URL.
 	 *
 	 * @param parameter Parameter.
 	 * @param parameters Optional next parameters.
 	 * @return Http request that can be used for chaining.
+	 * @see <a href="https://tools.ietf.org/html/rfc3986#section-3.4">https://tools.ietf.org/html/rfc3986#section-3.4</a>
 	 */
 	HttpRequest addQueryParams(HttpParameter parameter, HttpParameter... parameters);
 
@@ -112,109 +115,138 @@ public interface HttpRequest {
 	HttpRequest setBody(String body);
 
 	/**
-	 * Add header specific to standard js library.
-	 *
 	 * Most library (such as jQuery) add automatically header
 	 * named "X-Requested-With" with value "XMLHttpRequest", this
 	 * method add this header and can be used to simulate ajax
 	 * call.
 	 *
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#REQUESTED_WITH
+	 * @see HttpHeaders#XML_HTTP_REQUEST
 	 */
 	HttpRequest asXmlHttpRequest();
 
 	/**
 	 * Add header to specify that content type
-	 * is "application/x-www-form-urlencoded".
+	 * is {@code "application/x-www-form-urlencoded"}.
 	 *
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#APPLICATION_FORM_URL_ENCODED
+	 * @see <a href="https://tools.ietf.org/html/draft-hoehrmann-urlencoded-01">https://tools.ietf.org/html/draft-hoehrmann-urlencoded-01</a>
 	 */
 	HttpRequest asFormUrlEncoded();
 
 	/**
 	 * Add header to specify that content type
-	 * is "multipart/form-data".
+	 * is {@code "multipart/form-data"}.
 	 *
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#MULTIPART_FORM_DATA
+	 * @see <a href="https://www.ietf.org/rfc/rfc1867.txt">https://www.ietf.org/rfc/rfc1867.txt</a>
 	 */
 	HttpRequest asMultipartFormData();
 
 	/**
 	 * Add header to specify that content type
-	 * is "application/json".
+	 * is {@code "application/json"}.
 	 *
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#CONTENT_TYPE
+	 * @see HttpHeaders#APPLICATION_JSON
+	 * @see <a href="https://www.w3.org/Protocols/rfc1341/4_Content-Type.html">https://www.w3.org/Protocols/rfc1341/4_Content-Type.html</a>
 	 */
 	HttpRequest asJson();
 
 	/**
 	 * Add header to specify that content type
-	 * is "application/xml".
+	 * is {@code "application/xml"}.
 	 *
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#CONTENT_TYPE
+	 * @see HttpHeaders#APPLICATION_XML
+	 * @see <a href="https://www.w3.org/Protocols/rfc1341/4_Content-Type.html">https://www.w3.org/Protocols/rfc1341/4_Content-Type.html</a>
 	 */
 	HttpRequest asXml();
 
 	/**
 	 * Add header to specify that accept type
-	 * is "application/json".
+	 * is {@code "application/json"}.
 	 *
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#ACCEPT
+	 * @see HttpHeaders#APPLICATION_JSON
+	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-5.3.2">https://tools.ietf.org/html/rfc7231#section-5.3.2</a>
 	 */
 	HttpRequest acceptJson();
 
 	/**
 	 * Add header to specify that accept type
-	 * is "application/xml".
+	 * is {@code "application/xml"}.
 	 *
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#ACCEPT
+	 * @see HttpHeaders#APPLICATION_XML
+	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-5.3.2">https://tools.ietf.org/html/rfc7231#section-5.3.2</a>
 	 */
 	HttpRequest acceptXml();
 
 	/**
-	 * Add Accept-Language header.
+	 * Add {@code Accept-Language} header.
 	 *
 	 * @param lang Accepted languages.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#ACCEPT_LANGUAGE
+	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-5.3.5">https://tools.ietf.org/html/rfc7231#section-5.3.5</a>
 	 */
 	HttpRequest acceptLanguage(String lang);
 
 	/**
-	 * Add Origin header.
+	 * Add {@code Origin} header.
 	 *
 	 * @param origin Origin value.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#ORIGIN
+	 * @see <a href="https://tools.ietf.org/html/rfc6454">https://tools.ietf.org/html/rfc6454</a>
 	 */
 	HttpRequest addOrigin(String origin);
 
 	/**
-	 * Add Referer header.
+	 * Add {@code Referer} header.
 	 *
 	 * @param referer Referer value.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#REFERER
+	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-5.5.2">https://tools.ietf.org/html/rfc7231#section-5.5.2</a>
 	 */
 	HttpRequest addReferer(String referer);
 
 	/**
-	 * Add Accept-Encoding header.
+	 * Add {@code Accept-Encoding} header.
 	 *
 	 * @param encoding Encoding value.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#ACCEPT_ENCODING
+	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-5.3.4">https://tools.ietf.org/html/rfc7231#section-5.3.4</a>
 	 */
 	HttpRequest addAcceptEncoding(String encoding);
 
 	/**
-	 * Add Accept-Encoding header with "gzip, deflate" value.
+	 * Add {@code Accept-Encoding} header with {@code "gzip, deflate"} value.
 	 *
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#ACCEPT_ENCODING
+	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-5.3.4">https://tools.ietf.org/html/rfc7231#section-5.3.4</a>
+	 * @see #addAcceptEncoding(String)
 	 */
 	HttpRequest acceptGzip();
 
 	/**
-	 * Add user agent header to http request.
+	 * Add {@code User-Agent} header to http request.
 	 *
 	 * @param userAgent User-Agent value.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#USER_AGENT
+	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-14.43">https://tools.ietf.org/html/rfc2616#section-14.43</a>
 	 */
 	HttpRequest withUserAgent(String userAgent);
 
@@ -223,85 +255,98 @@ public interface HttpRequest {
 	 *
 	 * @param cookie Cookie.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#COOKIE
+	 * @see <a href="https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Cookie">https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Cookie</a>
+	 * @see <a href="https://tools.ietf.org/html/rfc6265#section-5.4">https://tools.ietf.org/html/rfc6265#section-5.4</a>
 	 */
 	HttpRequest addCookie(Cookie cookie);
 
 	/**
-	 * Add "If-None-Match" header with expected value.
-	 * This header should work with ETag header sent by server
+	 * Add {@code If-None-Match} header with expected value.
+	 * This header should work with {@code ETag} header sent by server
 	 * response.
 	 *
 	 * @param etag ETag value.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#IF_NONE_MATCH
+	 * @see <a href="https://tools.ietf.org/html/rfc7232#section-3.2">https://tools.ietf.org/html/rfc7232#section-3.2</a>
 	 */
 	HttpRequest addIfNoneMatch(String etag);
 
 	/**
-	 * Add "If-Match" header with expected value.
+	 * Add {@code If-Match} header with expected value.
 	 * This header should work with ETag header sent by server
 	 * response.
 	 *
-	 * This header should be added for POST, PUT or DELETE
-	 * request but no check will be made.
-	 *
 	 * @param etag ETag value.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#IF_MATCH
+	 * @see <a href="https://tools.ietf.org/html/rfc7232#section-3.1">https://tools.ietf.org/html/rfc7232#section-3.1</a>
 	 */
 	HttpRequest addIfMatch(String etag);
 
 	/**
-	 * Add If-Modified-Since value with expected date.
-	 * Date will be translated as GMT raw.
+	 * Add {@code If-Modified-Since} value with expected date (date will be translated
+	 * as GMT raw).
 	 *
 	 * @param date Date.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#IF_MODIFIED_SINCE
+	 * @see <a href="https://tools.ietf.org/html/rfc7232#section-3.3">https://tools.ietf.org/html/rfc7232#section-3.3</a>
 	 */
 	HttpRequest addIfModifiedSince(Date date);
 
 	/**
-	 * Add If-Unmodified-Since value with expected date.
-	 * Date will be translated as GMT raw.
+	 * Add {@code If-Unmodified-Since} value with expected date (date will be translated
+	 * as GMT raw).
 	 *
 	 * @param date Date.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#IF_UNMODIFIED_SINCE
+	 * @see <a href="https://tools.ietf.org/html/rfc7232#section-3.4">https://tools.ietf.org/html/rfc7232#section-3.4</a>
 	 */
 	HttpRequest addIfUnmodifiedSince(Date date);
 
 	/**
-	 * Add X-Http-Method-Override value with http verb to override.
-	 * This method should be used with POST request to override
-	 * PUT or DELETE requests (but no checks are made).
+	 * Add {@code X-Http-Method-Override} value with HTTP verb to override.
+	 * This method is generally used with {@code POST} request to override
+	 * {@code PUT} or {@code DELETE} requests.
 	 *
 	 * @param method Http method to override.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#X_HTTP_METHOD_OVERRIDE
 	 */
 	HttpRequest addXHttpMethodOverride(String method);
 
 	/**
-	 * Add CSRF Token to http header (as header "X-Csrf-Token").
+	 * Add CSRF Token to http header ({@code X-Csrf-Token} header).
 	 *
 	 * @param token Token value.
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#X_CSRF_TOKEN
 	 */
 	HttpRequest addCsrfToken(String token);
 
 	/**
-	 * Add X-Http-Method-Override value with PUT value.
+	 * Add @{code X-Http-Method-Override} value with {@code PUT} value.
 	 *
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#X_HTTP_METHOD_OVERRIDE
+	 * @see #addXHttpMethodOverride(String)
 	 */
 	HttpRequest overridePut();
 
 	/**
-	 * Add X-Http-Method-Override value with DELETE value.
+	 * Add {@code X-Http-Method-Override} value with {@code DELETE} value.
 	 *
 	 * @return Http request that can be used for chaining.
+	 * @see HttpHeaders#X_HTTP_METHOD_OVERRIDE
+	 * @see #addXHttpMethodOverride(String)
 	 */
 	HttpRequest overrideDelete();
 
 	/**
-	 * Execute request and return http response.
-	 * Execution is synchronous and will block until
+	 * Execute request and return http response: execution is synchronous and will block until
 	 * response is available.
 	 *
 	 * @return Http response.
@@ -309,28 +354,34 @@ public interface HttpRequest {
 	HttpResponse execute();
 
 	/**
-	 * Execute request and return http response.
-	 * Execution is synchronous and will block until
+	 * Execute request and return http response: execution is synchronous and will block until
 	 * response is available.
 	 *
+	 * <p>
+	 *
 	 * This method automatically add json header (i.e
-	 * methods #asJson and #acceptJson will be automatically
-	 * called before execution).
+	 * methods {@link #asJson} and {@link #acceptJson} will be automatically
+	 * be called before execution).
 	 *
 	 * @return Http response.
+	 * @see #acceptJson()
+	 * @see #asJson()
 	 */
 	HttpResponse executeJson();
 
 	/**
-	 * Execute request and return http response.
-	 * Execution is synchronous and will block until
+	 * Execute request and return http response: execution is synchronous and will block until
 	 * response is available.
 	 *
+	 * <p>
+	 *
 	 * This method automatically add xml header (i.e
-	 * methods #asXml and #acceptXml will be automatically
+	 * methods {@link #asXml} and {@link #acceptXml} will be automatically
 	 * called before execution).
 	 *
 	 * @return Http response.
+	 * @see #acceptXml()
+	 * @see #asXml()
 	 */
 	HttpResponse executeXml();
 }

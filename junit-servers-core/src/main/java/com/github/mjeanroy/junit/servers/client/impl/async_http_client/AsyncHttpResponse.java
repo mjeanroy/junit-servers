@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
 import org.asynchttpclient.Response;
 
@@ -36,21 +37,21 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
 /**
- * Implementation of {HttpResponse} using async-http-client
+ * Implementation of {@link HttpResponse} using async-http-client
  * under the hood.
- * See: https://asynchttpclient.github.io/
+ *
+ * @see <a href="https://asynchttpclient.github.io/">https://asynchttpclient.github.io/</a>
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#ASYNC_HTTP_CLIENT
  */
-class AsyncHttpResponse extends AbstractHttpResponse {
+class AsyncHttpResponse extends AbstractHttpResponse implements HttpResponse {
 
 	/**
-	 * Original response from async-http-client library.
+	 * Original response.
 	 */
 	private final Response response;
 
 	/**
 	 * Request execution duration in nano seconds.
-	 * This is the time to produce http response.
-	 * The value must be strictly positive.
 	 */
 	private final long duration;
 

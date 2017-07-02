@@ -54,9 +54,13 @@ public final class Servers {
 	/**
 	 * Instantiate jetty or tomcat embedded server.
 	 *
+	 * <p>
+	 *
 	 * Server configuration is automatically read on static field / methods
 	 * available on given class (i.e field or method annotated
 	 * with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} annotation).
+	 *
+	 * <p>
 	 *
 	 * Server implementation is automatically detected (jetty or
 	 * tomcat) with classpath detection.
@@ -72,11 +76,15 @@ public final class Servers {
 	/**
 	 * Instantiate jetty or tomcat embedded server.
 	 *
+	 * <p>
+	 *
 	 * Configuration is an optional parameter and can be null.
 	 * If configuration is null, empty constructor will be used to instantiate
 	 * embedded server.
 	 * Otherwise, constructor with one parameter (configuration) will
 	 * be used.
+	 *
+	 * <p>
 	 *
 	 * Server implementation is automatically detected (jetty or
 	 * tomcat) with classpath detection.
@@ -100,11 +108,13 @@ public final class Servers {
 	/**
 	 * Instantiate jetty embedded server.
 	 *
-	 * Configuration is an optional parameter and can be null.
-	 * If configuration is null, empty constructor will be used to instantiate
-	 * embedded server.
-	 * Otherwise, constructor with one parameter (configuration) will
-	 * be used.
+	 * <p>
+	 *
+	 * Configuration is an optional parameter and can be {@code null}:
+	 * <ul>
+	 *   <li>If {@code configuration} is {@code null}, empty constructor will be used to instantiate embedded server.</li>
+	 *   <li> Otherwise, constructor with one parameter (configuration) will be used.</li>
+	 * </ul>
 	 *
 	 * @param configuration Optional configuration.
 	 * @return Embedded server.
@@ -116,11 +126,13 @@ public final class Servers {
 	/**
 	 * Instantiate tomcat embedded server.
 	 *
+	 * <p>
+	 *
 	 * Configuration is an optional parameter and can be null.
-	 * If configuration is null, empty constructor will be used to instantiate
-	 * embedded server.
-	 * Otherwise, constructor with one parameter (configuration) will
-	 * be used.
+	 * <ul>
+	 *   <li>If {@code configuration} is {@code null}, empty constructor will be used to instantiate embedded server.</li>
+	 *   <li> Otherwise, constructor with one parameter (configuration) will be used.</li>
+	 * </ul>
 	 *
 	 * @param configuration Optional configuration.
 	 * @return Embedded server.
@@ -132,13 +144,16 @@ public final class Servers {
 	/**
 	 * Instantiate embedded server.
 	 *
-	 * If second parameter is null (configuration), empty constructor will
-	 * be used to instantiate embedded server by reflection.
-	 * Otherwise, constructor with one parameter (configuration) will
-	 * be used.
+	 * <p>
+	 *
+	 * Configuration is an optional parameter and can be null.
+	 * <ul>
+	 *   <li>If {@code configuration} is {@code null}, empty constructor will be used to instantiate embedded server.</li>
+	 *   <li> Otherwise, constructor with one parameter (configuration) will be used.</li>
+	 * </ul>
 	 *
 	 * @param className Class implementation of embedded server.
-	 * @param configuration Optional configuration, may be null.
+	 * @param configuration Optional configuration, may be {@code null}.
 	 * @return Embedded server.
 	 */
 	public static EmbeddedServer instantiate(String className, AbstractConfiguration configuration) {
@@ -159,9 +174,7 @@ public final class Servers {
 
 	/**
 	 * Find configuration object on static field / method on
-	 * running class.
-	 *
-	 * Configuration is read from static method or static field
+	 * running class. Configuration is read from static method or static field
 	 * annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} annotation.
 	 *
 	 * @param klass Class to inspect.

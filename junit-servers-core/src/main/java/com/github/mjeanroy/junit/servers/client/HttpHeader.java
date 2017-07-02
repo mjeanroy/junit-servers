@@ -41,10 +41,13 @@ import static java.util.Collections.unmodifiableList;
 
 /**
  * Http getHeader representation.
- * A getHeader is defined by:
- * - A name.
- * - A value or a list of values (since a getHeader can appear multiple times
- * in a request).
+ *
+ * <p>
+ * A header is defined by:
+ * <ul>
+ *   <li> A (case insensitive) name.</li>
+ *   <li>A value, or a list of values.</li>
+ * </ul>
  */
 public class HttpHeader {
 
@@ -54,7 +57,7 @@ public class HttpHeader {
 	private static final String HEADER_SEPARATOR = ",";
 
 	/**
-	 * Create a getHeader with a single value.
+	 * Create a header with a single value.
 	 *
 	 * @param name Header name, must not be blank.
 	 * @param value Header value.
@@ -65,7 +68,7 @@ public class HttpHeader {
 	}
 
 	/**
-	 * Create a getHeader with multiple values.
+	 * Create a header with multiple values.
 	 *
 	 * @param name Header name.
 	 * @param values Header values, must not be empty.
@@ -96,17 +99,16 @@ public class HttpHeader {
 	}
 
 	/**
-	 * Get getHeader name.
+	 * Get header name.
 	 *
-	 * @return Header name.l
+	 * @return Header name.
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Get getHeader values.
-	 * Not that returned list is not modifiable.
+	 * Get header values (returned list is not modifiable).
 	 *
 	 * @return Header values.
 	 */
@@ -115,27 +117,28 @@ public class HttpHeader {
 	}
 
 	/**
-	 * Get first value of getHeader.
+	 * Get first value of header.
 	 *
-	 * @return Header value.
+	 * @return First header value.
 	 */
 	public String getFirstValue() {
 		return values.get(0);
 	}
 
 	/**
-	 * Get last value of getHeader.
-	 * If getHeader has only a single value, result will be the same as the
+	 * Get last value of header.
+	 * If header has only a single value, result will be the same as the
 	 * result of {@link #getFirstValue()}.
 	 *
-	 * @return Last getHeader value.
+	 * @return Last header value.
 	 */
 	public String getLastValue() {
 		return values.get(values.size() - 1);
 	}
 
 	/**
-	 * Serialize header values using the default separator.
+	 * Serialize header values using the default separator. The result is a string value that
+	 * can be added to any HTTP request.
 	 *
 	 * @return Header values serialized as a string.
 	 */
@@ -148,10 +151,13 @@ public class HttpHeader {
 		if (o == this) {
 			return true;
 		}
+
 		if (o instanceof HttpHeader) {
 			HttpHeader h = (HttpHeader) o;
-			return Objects.equals(toLowerCase(name), toLowerCase(h.name)) && Objects.equals(values, h.values);
+			return Objects.equals(toLowerCase(name), toLowerCase(h.name))
+				&& Objects.equals(values, h.values);
 		}
+
 		return false;
 	}
 

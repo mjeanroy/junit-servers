@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
+import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
@@ -36,32 +37,32 @@ import java.io.IOException;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
- * Http client implementation using async-http-client
+ * Implementation of {@link HttpClient} using async-http-client
  * under the hood.
- * See: https://asynchttpclient.github.io/
+ *
+ * @see <a href="https://asynchttpclient.github.io/">https://asynchttpclient.github.io/</a>
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#ASYNC_HTTP_CLIENT
  */
-public class AsyncHttpClient extends AbstractHttpClient {
+public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
 
 	/**
-	 * Create new http client using internal
-	 * http client from async-http-client library.
+	 * Create new http client using custom internal http client.
 	 *
 	 * @param server Embedded server.
 	 * @param client Internal http client
 	 * @return Http client.
+	 * @throws NullPointerException If {@code server} or {@code client} are {@code null}.
 	 */
 	public static AsyncHttpClient newAsyncHttpClient(EmbeddedServer server, org.asynchttpclient.AsyncHttpClient client) {
 		return new AsyncHttpClient(server, client);
 	}
 
 	/**
-	 * Create new http client using internal
-	 * http client from async-http-client library.
-	 * An instance of {com.ning.http.client.NingAsyncHttpClient} will be automatically
-	 * created.
+	 * Create new http client using default internal http client.
 	 *
 	 * @param server Embedded server.
 	 * @return Http client.
+	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public static AsyncHttpClient defaultAsyncHttpClient(EmbeddedServer server) {
 		return new AsyncHttpClient(server, new DefaultAsyncHttpClient());
@@ -69,7 +70,6 @@ public class AsyncHttpClient extends AbstractHttpClient {
 
 	/**
 	 * Original http client.
-	 * This client will be used under the hood.
 	 */
 	private final org.asynchttpclient.AsyncHttpClient client;
 

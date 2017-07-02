@@ -26,9 +26,16 @@ package com.github.mjeanroy.junit.servers.commons;
 
 /**
  * Predicate interface.
- * Implementation must override apply method and
- * will return true if object match predicate, false
- * otherwise.
+ *
+ * <p>
+ *
+ * Implementation must override apply method and will return {@code true} if object
+ * match predicate, {@code false} otherwise.
+ *
+ * <p>
+ *
+ * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
+ * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
 public interface Predicate<T> {
 
@@ -36,7 +43,7 @@ public interface Predicate<T> {
 	 * Predicate method.
 	 *
 	 * @param object Object to check.
-	 * @return True if parameter match predicate, false otherwise.
+	 * @return {@code true} if parameter match predicate, {@code false} otherwise.
 	 */
 	boolean apply(T object);
 }

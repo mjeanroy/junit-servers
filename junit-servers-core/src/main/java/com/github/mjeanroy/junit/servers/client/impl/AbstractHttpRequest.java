@@ -67,6 +67,10 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
  * Abstract skeleton of {@link HttpRequest} interface.
+ *
+ * <p>
+ *
+ * <strong>This abstract class is not part of the public API and should not be used publicly.</strong>
  */
 public abstract class AbstractHttpRequest implements HttpRequest {
 

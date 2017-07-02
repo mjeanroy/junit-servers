@@ -28,6 +28,7 @@ import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import com.ning.http.client.AsyncHttpClient;
@@ -38,15 +39,16 @@ import com.ning.http.client.Response;
 import static java.lang.System.nanoTime;
 
 /**
- * Implementation for {HttpRequest} that use async-http-client
+ * Implementation for {@link HttpRequest} that use (ning) async-http-client
  * under the hood.
- * See: https://asynchttpclient.github.io/
+ *
+ * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
  */
-class NingAsyncHttpRequest extends AbstractHttpRequest {
+class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 	/**
-	 * Original http client.
-	 * It will be used to execute http request.
+	 * Original http client, will be used to execute http request.
 	 */
 	private final AsyncHttpClient client;
 
@@ -79,12 +81,30 @@ class NingAsyncHttpRequest extends AbstractHttpRequest {
 		return new NingAsyncHttpResponse(response, nanoTime() - start);
 	}
 
+	/**
+	 * Add query parameter to the final HTTP request.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#addQueryParam(String, String)
+	 */
 	private void handleQueryParameters(RequestBuilder builder) {
 		for (HttpParameter p : queryParams.values()) {
 			builder.addQueryParam(p.getName(), p.getValue());
 		}
 	}
 
+	/**
+	 * Add request body:
+	 *
+	 * <ul>
+	 *   <li>Set request body if {@link #body} is defined.</li>
+	 *   <li>Add form parmeters ({@link #formParams}) otherwise if it is not empty.</li>
+	 * </ul>
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#addFormParam(String, String)
+	 * @see RequestBuilder#setBody(String)
+	 */
 	private void handleBody(RequestBuilder builder) {
 		if (!hasBody()) {
 			return;
@@ -97,28 +117,59 @@ class NingAsyncHttpRequest extends AbstractHttpRequest {
 		}
 	}
 
+	/**
+	 * Add form parameters to the final HTTP request.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#addFormParam(String, String)
+	 */
 	private void handleFormParameters(RequestBuilder builder) {
 		for (HttpParameter p : formParams.values()) {
 			builder.addFormParam(p.getName(), p.getValue());
 		}
 	}
 
+	/**
+	 * Set request body value.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#setBody(String)
+	 */
 	private void handleRequestBody(RequestBuilder builder) {
 		builder.setBody(body);
 	}
 
+	/**
+	 * Add cookies to the final HTTP request.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#addCookie(com.ning.http.client.cookie.Cookie)
+	 */
 	private void handleCookies(RequestBuilder builder) {
 		for (Cookie cookie : cookies) {
 			handleCookie(builder, cookie);
 		}
 	}
 
+	/**
+	 * Add request headers.
+	 *
+	 * @param builder The pending HTTP request.
+	 * @see RequestBuilder#addHeader(String, String)
+	 */
 	private void handleHeaders(RequestBuilder builder) {
 		for (HttpHeader header : headers.values()) {
 			builder.addHeader(header.getName(), header.serializeValues());
 		}
 	}
 
+	/**
+	 * Add single cookie to the final HTTP request.
+	 *
+	 * @param builder The pending request.
+	 * @param cookie The cookie to add.
+	 * @see RequestBuilder#addCookie(com.ning.http.client.cookie.Cookie)
+	 */
 	private void handleCookie(RequestBuilder builder, Cookie cookie) {
 		String name = cookie.getName();
 		String value = cookie.getValue();

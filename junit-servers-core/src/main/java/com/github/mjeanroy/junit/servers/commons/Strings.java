@@ -26,6 +26,11 @@ package com.github.mjeanroy.junit.servers.commons;
 
 /**
  * Static string utilities.
+ *
+ * <p>
+ *
+ * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
+ * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
 public final class Strings {
 
@@ -36,7 +41,7 @@ public final class Strings {
 	 * Check that given string is blank.
 	 *
 	 * @param value String to check.
-	 * @return True if string is blank, false otherwise.
+	 * @return {@code true} if string is blank, {@code false} otherwise.
 	 */
 	static boolean isBlank(String value) {
 		if (value == null) {
@@ -56,7 +61,7 @@ public final class Strings {
 	 * Check that given string is not blank.
 	 *
 	 * @param value String to check.
-	 * @return True if string is not blank, false otherwise.
+	 * @return {@code true} if string is not blank, {@code false} otherwise.
 	 */
 	public static boolean isNotBlank(String value) {
 		return !isBlank(value);

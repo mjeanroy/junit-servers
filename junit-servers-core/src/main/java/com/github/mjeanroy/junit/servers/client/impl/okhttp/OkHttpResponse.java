@@ -38,6 +38,9 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
 
 /**
  * Implementation of {@link HttpResponse} using OkHttp library.
+ *
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP
+ * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
  */
 class OkHttpResponse extends AbstractHttpResponse implements HttpResponse {
 

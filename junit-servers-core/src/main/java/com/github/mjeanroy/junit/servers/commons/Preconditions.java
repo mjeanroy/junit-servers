@@ -30,6 +30,11 @@ import static java.lang.String.format;
 
 /**
  * Static utilities that can be used to check object's values.
+ *
+ * <p>
+ *
+ * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
+ * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
 public final class Preconditions {
 
@@ -38,7 +43,7 @@ public final class Preconditions {
 
 	/**
 	 * Check that a given value is not null.
-	 * It throws a {@link NullPointerException} exception if value is null or returned the
+	 * It throws a {@link NullPointerException} exception if value is {@code null} or returned the
 	 * value.
 	 *
 	 * @param value Value to check.

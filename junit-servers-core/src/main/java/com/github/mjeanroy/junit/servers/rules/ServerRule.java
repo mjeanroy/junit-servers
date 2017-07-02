@@ -33,20 +33,47 @@ import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiat
 
 /**
  * Rule that can be used to start and stop embedded server.
+ * This rule is automatically used if the {@link com.github.mjeanroy.junit.servers.runner.JunitServerRunner} is used.
+ *
+ * <p>
+ *
+ * This rule should be used as a {@link org.junit.ClassRule} to start embedded container before all tests and shutdown
+ * after all tests. Here is an example automatic classpath detection:
+ *
+ * <pre><code>
+ *   public class Test {
+ *     &#064;ClassRule
+ *     public static serverRule = ServerRule();
+ *
+ *     &#064;Test
+ *     public void it_should_have_a_port() {
+ *       assertTrue(serverRule.getPort() &gt; 0).
+ *     }
+ *   }
+ * </code></pre>
  */
 public class ServerRule extends AbstractRule {
 
-	/** Embedded server that will be start and stopped. */
+	/**
+	 * Embedded server that will be start and stopped.
+	 */
 	private final EmbeddedServer server;
 
 	/**
 	 * Create rule with default embedded server.
 	 *
+	 * <p>
+	 *
 	 * Embedded server implementation is chosen using
 	 * classpath detection: jetty or tomcat will be instantiate
 	 * if implementation is available on classpath (it means if
 	 * sub-module is imported, it should be enough to instantiate
-	 * embedded server !).
+	 * embedded server).
+	 *
+	 * <p>
+	 *
+	 * The server will automatically use the default configuration,
+	 * to specify a custom configuration, use {@link #ServerRule(AbstractConfiguration)} constructor.
 	 */
 	public ServerRule() {
 		this((AbstractConfiguration) null);
@@ -54,6 +81,8 @@ public class ServerRule extends AbstractRule {
 
 	/**
 	 * Create rule with embedded server configuration.
+	 *
+	 * <p>
 	 *
 	 * Embedded server implementation is chosen using
 	 * classpath detection: jetty or tomcat will be instantiate
@@ -68,9 +97,10 @@ public class ServerRule extends AbstractRule {
 	}
 
 	/**
-	 * Create rule.
+	 * Create rule with an embedded server.
 	 *
-	 * @param server Embedded server.
+	 * @param server Embedded server, not null.
+	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public ServerRule(EmbeddedServer server) {
 		this.server = notNull(server, "server");
@@ -116,7 +146,7 @@ public class ServerRule extends AbstractRule {
 	/**
 	 * Check if embedded server is started.
 	 *
-	 * @return True if embedded server is started, false otherwise.
+	 * @return {@code true} if embedded server is started, {@code false} otherwise.
 	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#isStarted()
 	 */
 	public boolean isStarted() {
@@ -125,13 +155,16 @@ public class ServerRule extends AbstractRule {
 
 	/**
 	 * Get port used by embedded server.
+	 *
+	 * <p>
+	 *
 	 * Note that:
 	 * <ul>
 	 *   <li>If the server is not started, the returned port is the one set in the configuration.</li>
 	 *   <li>Otherwise, the "real" port is returned (the port used by the embedded server)</li>
 	 * </ul>
 	 *
-	 * @return Port.
+	 * @return The port.
 	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#getPort()
 	 */
 	public int getPort() {

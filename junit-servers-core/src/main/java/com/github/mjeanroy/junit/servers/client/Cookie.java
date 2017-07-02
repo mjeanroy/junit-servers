@@ -30,15 +30,20 @@ import java.util.Objects;
 
 /**
  * Default implementation for cookie object.
+ *
+ * <br>
+ *
  * To build a cookie, use:
  * <ul>
- *   <li>The {@link Builder}</li>
+ *   <li>The {@link Builder} API</li>
  *   <li>Or one of the static factories in {@link Cookies} class</li>
  * </ul>
  *
+ * <br>
+ *
  * Using the builder is easy:
  *
- * <pre><code>
+ * <pre>{@code
  *   Cookie cookie = new Cookie.Builder("name", "value")
  *     .domain("domain")
  *     .path("path")
@@ -47,14 +52,16 @@ import java.util.Objects;
  *     .maxAge(3600)
  *     .expires(tt.getTime())
  *     .build();
- * </code></pre>
+ * }</pre>
  *
  * You can also use one of the static factories:
  *
- * <pre><code>
+ * <pre>{@code
  *   Cookie c1 = Cookies.cookie("name", "value");
  *   Cookie c2 = Cookies.cookie("name", "value", "domain", "path", maxAge, expires, true, true);
- * </code></pre>
+ * }</pre>
+ *
+ * @see <a href="https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Set-Cookie">https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Set-Cookie</a>
  */
 public class Cookie {
 

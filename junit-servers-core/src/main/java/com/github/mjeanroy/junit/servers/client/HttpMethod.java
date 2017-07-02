@@ -30,14 +30,32 @@ package com.github.mjeanroy.junit.servers.client;
  */
 public enum HttpMethod {
 
+	/**
+	 * The {@code GET} HTTP method.
+	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.3">https://tools.ietf.org/html/rfc2616#section-9.3</a>
+	 */
 	GET(false),
+
+	/**
+	 * The {@code POST} HTTP method.
+	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.5">https://tools.ietf.org/html/rfc2616#section-9.5</a>
+	 */
 	POST(true),
+
+	/**
+	 * The {@code PUT} HTTP method.
+	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.6">https://tools.ietf.org/html/rfc2616#section-9.6</a>
+	 */
 	PUT(true),
+
+	/**
+	 * The {@code DELETE} HTTP method.
+	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.7">https://tools.ietf.org/html/rfc2616#section-9.7</a>
+	 */
 	DELETE(false);
 
 	/**
 	 * Flag to know if http method allow body request.
-	 * Body request should be allowed for POST and PUT method only.
 	 */
 	private final boolean allowBody;
 
@@ -48,8 +66,11 @@ public enum HttpMethod {
 
 	/**
 	 * Get formatted http verb:
-	 * - Upper case.
-	 * - Related to given http method.
+	 *
+	 * <ul>
+	 *   <li>Always in upper case.</li>
+	 *   <li>Relatted to given HTTP method.</li>
+	 * </ul>
 	 *
 	 * @return Verb.
 	 */
@@ -58,10 +79,10 @@ public enum HttpMethod {
 	}
 
 	/**
-	 * Check if request method allow body
-	 * request (as form url encoded parameter or as json / xml body).
+	 * Check if request method allow body request (as form url encoded parameter or
+	 * as json / xml body).
 	 *
-	 * @return True if method allow body request, false otherwise.
+	 * @return {@code true} if method allow body request, {@code false} otherwise.
 	 */
 	public boolean isBodyAllowed() {
 		return allowBody;

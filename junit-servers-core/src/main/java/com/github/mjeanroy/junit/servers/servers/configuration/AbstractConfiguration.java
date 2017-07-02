@@ -135,34 +135,74 @@ public abstract class AbstractConfiguration {
 		this.overrideDescriptor = builder.getOverrideDescriptor();
 	}
 
+	/**
+	 * Get {@link #path}.
+	 *
+	 * @return {@link #path}
+	 */
 	public String getPath() {
 		return path;
 	}
 
+	/**
+	 * Get {@link #webapp}.
+	 *
+	 * @return {@link #webapp}
+	 */
 	public String getWebapp() {
 		return webapp;
 	}
 
+	/**
+	 * Get {@link #classpath}.
+	 *
+	 * @return {@link #classpath}
+	 */
 	public String getClasspath() {
 		return classpath;
 	}
 
+	/**
+	 * Get {@link #parentClasspath}, as a non-modifiable collection.
+	 *
+	 * @return {@link #parentClasspath}
+	 */
 	public Collection<URL> getParentClasspath() {
 		return unmodifiableCollection(parentClasspath);
 	}
 
+	/**
+	 * Get {@link #port}.
+	 *
+	 * @return {@link #port}
+	 */
 	public int getPort() {
 		return port;
 	}
 
+	/**
+	 * Get {@link #overrideDescriptor}.
+	 *
+	 * @return {@link #overrideDescriptor}
+	 */
 	public String getOverrideDescriptor() {
 		return overrideDescriptor ;
 	}
 
+	/**
+	 * Get {@link #envProperties} as a non-modifiable map.
+	 *
+	 * @return {@link #envProperties}
+	 */
 	public Map<String, String> getEnvProperties() {
 		return unmodifiableMap(envProperties);
 	}
 
+	/**
+	 * Get {@link #hooks} as a non-modifiable list.
+	 *
+	 * @return {@link #hooks}
+	 */
 	public List<Hook> getHooks() {
 		return unmodifiableList(hooks);
 	}

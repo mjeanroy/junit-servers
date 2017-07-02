@@ -43,14 +43,32 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
+/**
+ * Builder for {@link AbstractConfiguration} instances, should be extended by custom configuration implementation.
+ *
+ * @param <T> Type of extended builder.
+ * @param <U> Type of {@link AbstractConfiguration} implementation.
+ */
 public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurationBuilder<T, U>, U extends AbstractConfiguration> {
 
+	/**
+	 * The default path.
+	 */
 	public static final String DEFAULT_PATH = "/";
 
+	/**
+	 * The default webapp value.
+	 */
 	public static final String DEFAULT_WEBAPP = "src/main/webapp";
 
+	/**
+	 * The default classpath.
+	 */
 	public static final String DEFAULT_CLASSPATH = ".";
 
+	/**
+	 * The default port: zero means that a random port will be assigned.
+	 */
 	public static final int DEFAULT_PORT = 0;
 
 	/**
@@ -124,44 +142,84 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 
 	public abstract U build();
 
+	/**
+	 * Get current {@link #path}.
+	 *
+	 * @return {@link #path}.
+	 */
 	public String getPath() {
 		return path;
 	}
 
+	/**
+	 * Get current {@link #webapp}.
+	 *
+	 * @return {@link #webapp}.
+	 */
 	public String getWebapp() {
 		return webapp;
 	}
 
+	/**
+	 * Get current {@link #classpath}.
+	 *
+	 * @return {@link #classpath}.
+	 */
 	public String getClasspath() {
 		return classpath;
 	}
 
+	/**
+	 * Get current {@link #port}.
+	 *
+	 * @return {@link #port}.
+	 */
 	public int getPort() {
 		return port;
 	}
 
+	/**
+	 * Get current {@link #envProperties}.
+	 *
+	 * @return {@link #envProperties}.
+	 */
 	public Map<String, String> getEnvProperties() {
 		return envProperties;
 	}
 
+	/**
+	 * Get current {@link #hooks}.
+	 *
+	 * @return {@link #hooks}.
+	 */
 	public List<Hook> getHooks() {
 		return hooks;
 	}
 
+	/**
+	 * Get current {@link #parentClasspath}.
+	 *
+	 * @return {@link #parentClasspath}.
+	 */
 	public Collection<URL> getParentClasspath() {
 		return parentClasspath;
 	}
 
+	/**
+	 * Get current {@link #overrideDescriptor}.
+	 *
+	 * @return {@link #overrideDescriptor}.
+	 */
 	public String getOverrideDescriptor() {
 		return overrideDescriptor;
 	}
 
 	/**
-	 * Change path value.
+	 * Change {@link #path} value.
 	 *
-	 * @param path New path value.
+	 * @param path New {@link #path} value.
 	 * @return this
-	 * @throws NullPointerException if path is null.
+	 * @throws NullPointerException If {@code path} is {@code null}.
 	 */
 	public T withPath(String path) {
 		this.path = notNull(path, "path");
@@ -169,11 +227,11 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Change webapp value.
+	 * Change {@link #webapp} value.
 	 *
-	 * @param webapp New webapp value.
+	 * @param webapp New {@link #webapp} value.
 	 * @return this
-	 * @throws NullPointerException if webapp is null.
+	 * @throws NullPointerException If {@code webapp} is {@code null}.
 	 */
 	public T withWebapp(String webapp) {
 		this.webapp = notNull(webapp, "webapp");
@@ -181,11 +239,11 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Change webapp value.
+	 * Change {@link #webapp} value.
 	 *
-	 * @param webapp New webapp value.
+	 * @param webapp New {@link #webapp} value (the absolute path will be used).
 	 * @return this
-	 * @throws NullPointerException if webapp is null.
+	 * @throws NullPointerException If {@code webapp} is null.
 	 */
 	public T withWebapp(File webapp) {
 		notNull(webapp, "webapp");
@@ -194,11 +252,11 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Change port value.
+	 * Change {@link #port} value.
 	 *
-	 * @param port New port value.
+	 * @param port New {@link #port} value.
 	 * @return this
-	 * @throws IllegalArgumentException if port is strictly lower than zero.
+	 * @throws IllegalArgumentException If {@code port} is strictly lower than zero.
 	 */
 	public T withPort(int port) {
 		this.port = positive(port, "port");
@@ -206,9 +264,9 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Change classpath value.
+	 * Change {@link #classpath} value.
 	 *
-	 * @param classpath New webapp value.
+	 * @param classpath New {@link #classpath} value.
 	 * @return this
 	 */
 	public T withClasspath(String classpath) {
@@ -217,13 +275,13 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Add new property entry.
+	 * Add new property entry to the {@link #envProperties} map.
 	 *
 	 * @param name Property name.
 	 * @param value Property value.
 	 * @return this
-	 * @throws NullPointerException if name or value is null.
-	 * @throws IllegalArgumentException if name is empty or blank.
+	 * @throws NullPointerException If {@code name} or {@code value} are {@code null}.
+	 * @throws IllegalArgumentException if {@code name} is empty or blank.
 	 */
 	public T withProperty(String name, String value) {
 		this.envProperties.put(
@@ -234,11 +292,11 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Add new executable hook.
+	 * Add new executable hook to the {@link #hooks} list.
 	 *
 	 * @param hook Hook.
 	 * @return this
-	 * @throws NullPointerException if hook is null.
+	 * @throws NullPointerException if {@code hook} is {@code null}.
 	 */
 	public T withHook(Hook hook) {
 		this.hooks.add(notNull(hook, "hook"));
@@ -246,9 +304,9 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Change parent classpath value.
+	 * Change {@link #parentClasspath} value.
 	 *
-	 * @param classpath New webapp value.
+	 * @param classpath New {@link #parentClasspath} value.
 	 * @return this
 	 */
 	public T withParentClasspath(Collection<URL> classpath) {
@@ -257,7 +315,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Change parent classpath value.
+	 * Change {@link #parentClasspath} value.
 	 *
 	 * @param cls The class that will be used to get classloader.
 	 * @param filter The file filter.
@@ -279,7 +337,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Change parent classpath value.
+	 * Change {@link #parentClasspath} value.
 	 *
 	 * @param cls The class that will be used to get classloader.
 	 * @return this
@@ -294,10 +352,10 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Change parent classpath value.
+	 * Change {@link #parentClasspath} value.
 	 *
-	 * @param classpath New webapp value.
-	 * @param others Other (optional) urls.
+	 * @param classpath New classpath entry.
+	 * @param others Other (optional) classpath urls.
 	 * @return this
 	 */
 	public T withParentClasspath(URL classpath, URL... others) {
@@ -308,9 +366,9 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	}
 
 	/**
-	 * Change path of the custom web.xml file descriptor.
+	 * Change {@link #overrideDescriptor} (path of the custom web.xml file descriptor=.
 	 *
-	 * @param overrideDescriptor The new path.
+	 * @param overrideDescriptor The new {@link #overrideDescriptor} value.
 	 * @return this
 	 */
 	public T withOverrideDescriptor(String overrideDescriptor) {

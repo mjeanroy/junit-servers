@@ -36,12 +36,16 @@ import com.github.mjeanroy.junit.servers.exceptions.HttpClientUrlException;
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
  * Implementation of {@link HttpRequest} using OkHttp library.
+ *
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP
+ * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
  */
 class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
@@ -94,6 +98,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * Add all HTTP headers to the final request.
 	 *
 	 * @param builder The OkHttp request builder.
+	 * @see Request.Builder#addHeader(String, String)
 	 */
 	private void handleHeaders(Request.Builder builder) {
 		for (HttpHeader h : headers.values()) {
@@ -102,9 +107,10 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	}
 
 	/**
-	 * Add all cookies to the final request.
+	 * Add all cookies to the final request (i.e add the {@code Cookie} header).
 	 *
 	 * @param builder The OkHttp request builder.
+	 * @see Request.Builder#addHeader(String, String)
 	 */
 	private void handleCookies(Request.Builder builder) {
 		if (!cookies.isEmpty()) {
@@ -113,9 +119,15 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	}
 
 	/**
-	 * Add request body if appropriate.
+	 * Add request body if appropriate:
+	 * <ul>
+	 *   <li>Add request body if {@link #body} is defined.</li>
+	 *   <li>Add form parameters ({@link #formParams} otherwise if it is not empty.</li>
+	 * </ul>
 	 *
 	 * @param builder The native OkHttp request builder.
+	 * @see Request.Builder#method(String, RequestBody)
+	 * @see RequestBody
 	 */
 	private void handleBody(Request.Builder builder) {
 		HttpMethod method = getMethod();
@@ -131,9 +143,16 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	}
 
 	/**
-	 * Create the OkHttp request body.
+	 * Create the OkHttp request body:
+	 * <ul>
+	 *   <li>Create body from {@link #body} value if it is defined.</li>
+	 *   <li>Create {@link FormBody} from {@link #formParams} otherwise if it is not empty.</li>
+	 *   <li>Returns {@code null} otherwise.</li>
+	 * </ul>
 	 *
 	 * @return OkHttp {@link RequestBody} instance.
+	 * @see RequestBody#create(MediaType, String)
+	 * @see FormBody
 	 */
 	private RequestBody createBody() {
 		RequestBody rqBody = null;
@@ -159,6 +178,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * Create a new empty request body.
 	 *
 	 * @return Request body element.
+	 * @see RequestBody
 	 */
 	private static RequestBody createEmptyBody() {
 		return RequestBody.create(null, "");

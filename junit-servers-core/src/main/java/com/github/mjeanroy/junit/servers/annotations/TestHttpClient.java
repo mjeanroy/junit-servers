@@ -24,13 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.annotations;
 
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 
 /**
  * Annotation that can be used to inject simple http

@@ -34,6 +34,10 @@ import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
 
 /**
  * Abstract skeleton of {@link HttpClient} interface.
+ *
+ * <p>
+ *
+ * <strong>This abstract class is not part of the public API and should not be used publicly.</strong>
  */
 public abstract class AbstractHttpClient implements HttpClient {
 

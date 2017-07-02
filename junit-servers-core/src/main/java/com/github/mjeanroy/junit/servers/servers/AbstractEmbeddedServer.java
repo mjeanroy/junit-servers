@@ -36,8 +36,11 @@ import static java.lang.System.setProperty;
 
 /**
  * Partial implementation of an embedded server.
- * Subclasses should implement {@link #doStart()} and {@link #doStop()} methods.
- * Synchronization is already managed by this abstract implementation.
+ *
+ * <p>
+ *
+ * Subclasses should implement {@link #doStart()} and {@link #doStop()} methods and synchronization is already
+ * managed by this abstract implementation.
  */
 public abstract class AbstractEmbeddedServer<S extends Object, T extends AbstractConfiguration> implements EmbeddedServer<T> {
 
@@ -47,9 +50,11 @@ public abstract class AbstractEmbeddedServer<S extends Object, T extends Abstrac
 	protected final T configuration;
 
 	/**
-	 * Flag to keep server status.
-	 * Server can be started if and only if status is equal to {@link ServerStatus#STOPPED}.
-	 * Server can be stopped if and only if status is equal to {@link ServerStatus#STARTED}.
+	 * Flag to keep server status:
+	 * <ul>
+	 *   <li>Server can be started if and only if status is equal to {@link ServerStatus#STOPPED}.</li>
+	 *   <li>Server can be stopped if and only if status is equal to {@link ServerStatus#STARTED}.</li>
+	 * </ul>
 	 */
 	private volatile ServerStatus status;
 

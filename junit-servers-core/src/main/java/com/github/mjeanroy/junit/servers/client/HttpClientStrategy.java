@@ -34,41 +34,37 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 /**
  * Available strategies that can be used to build
  * appropriate implementation of http client.
+ *
+ * <p>
+ *
+ * Currently, following strategies are available:
+ * <ul>
+ *   <li>{@link HttpClientStrategy#ASYNC_HTTP_CLIENT}: use the <a href="https://github.com/AsyncHttpClient/async-http-client">async-http-client</a> library.</li>
+ *   <li>{@link HttpClientStrategy#OK_HTTP}: use <a href="http://square.github.io/okhttp/">OkHttp</a> library.</li>
+ *   <li>{@link HttpClientStrategy#NING_ASYNC_HTTP_CLIENT}: use <a href="https://github.com/ning/async-http-client">async-http-client from ning</a> library.</li>
+ *   <li>{@link HttpClientStrategy#APACHE_HTTP_CLIENT}: use <a href="https://hc.apache.org/">apache http-client</a> library.</li>
+ *   <li>{@link HttpClientStrategy#AUTO}: use classpath detection and choose the best available strategy (see below).</li>
+ * </ul>
+ *
+ * <p>
+ *
+ * <strong>How the "best" strategy is selected:</strong>
+ * <br>
+ * Classpath detection is implemented in this order:
+ * <ol>
+ *   <li>If OkHttp library is detected, this strategy is automatically selected.</li>
+ *   <li>
+ *     If async-http-client is detected, this strategy is automatically (note that this strategy will be skipped
+ *     with a jdk &lt; 8, since this library requires Java 8).
+ *   </li>
+ *   <li>Third test is ning-async-http-client, and it will be selected if library is detected.</li>
+ *   <li>Finally, apache httpcomponent will be selected if available.</li>
+ *   <li>If none of these libraries are available, an exception will be thrown.</li>
+ * </ol>
  */
 public enum HttpClientStrategy {
-
 	/**
-	 * Build http client using AsyncHttpClient library.
-	 */
-	ASYNC_HTTP_CLIENT {
-		@Override
-		public HttpClient build(EmbeddedServer server) {
-			return AsyncHttpClient.defaultAsyncHttpClient(server);
-		}
-	},
-
-	/**
-	 * Build http client using NingAsyncHttpClient library.
-	 */
-	NING_ASYNC_HTTP_CLIENT {
-		@Override
-		public HttpClient build(EmbeddedServer server) {
-			return NingAsyncHttpClient.defaultAsyncHttpClient(server);
-		}
-	},
-
-	/**
-	 * Build http client using ApacheHttpClient library.
-	 */
-	APACHE_HTTP_CLIENT {
-		@Override
-		public HttpClient build(EmbeddedServer server) {
-			return ApacheHttpClient.defaultApacheHttpClient(server);
-		}
-	},
-
-	/**
-	 * Build http client using OkHttp library.
+	 * Build http client using <a href="http://square.github.io/okhttp/">OkHttp</a> library.
 	 */
 	OK_HTTP {
 		@Override
@@ -78,8 +74,49 @@ public enum HttpClientStrategy {
 	},
 
 	/**
+	 * Build http client using <a href="https://github.com/AsyncHttpClient/async-http-client">AsyncHttpClient</a> library.
+	 *
+	 * <p>
+	 *
+	 * <strong>This strategy requires Java 8.</strong>
+	 */
+	ASYNC_HTTP_CLIENT {
+		@Override
+		public HttpClient build(EmbeddedServer server) {
+			return AsyncHttpClient.defaultAsyncHttpClient(server);
+		}
+	},
+
+	/**
+	 * Build http client using <a href="https://github.com/ning/async-http-client">(Ning) AsyncHttpClient</a> library.
+	 */
+	NING_ASYNC_HTTP_CLIENT {
+		@Override
+		public HttpClient build(EmbeddedServer server) {
+			return NingAsyncHttpClient.defaultAsyncHttpClient(server);
+		}
+	},
+
+	/**
+	 * Build http client using <a href="https://hc.apache.org/">ApacheHttpClient</a> library.
+	 */
+	APACHE_HTTP_CLIENT {
+		@Override
+		public HttpClient build(EmbeddedServer server) {
+			return ApacheHttpClient.defaultApacheHttpClient(server);
+		}
+	},
+
+	/**
 	 * Detect class available on classpath and use appropriate strategy to
-	 * build http client client implementation.
+	 * build http client client implementation:
+	 *
+	 * <ol>
+	 *   <li>Try {@link HttpClientStrategy#OK_HTTP}.</li>
+	 *   <li>Try {@link HttpClientStrategy#ASYNC_HTTP_CLIENT}.</li>
+	 *   <li>Try {@link HttpClientStrategy#NING_ASYNC_HTTP_CLIENT}.</li>
+	 *   <li>Try {@link HttpClientStrategy#APACHE_HTTP_CLIENT}.</li>
+	 * </ol>
 	 */
 	AUTO {
 		@Override
@@ -133,7 +170,7 @@ public enum HttpClientStrategy {
 	private static final boolean SUPPORT_OK_HTTP_CLIENT = ClassUtils.isPresent(OK_HTTP_CLIENT_CLASS);
 
 	/**
-	 * Return http client implementation.
+	 * Return the http client implementation.
 	 *
 	 * @param server Embedded server.
 	 * @return Http client.

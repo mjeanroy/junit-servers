@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
+import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
@@ -32,19 +33,21 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
- * Http client implementation using async-http-client
+ * Implementation of {@link HttpClient} using (ning) async-http-client
  * under the hood.
- * See: https://asynchttpclient.github.io/
+ *
+ * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
  */
-public class NingAsyncHttpClient extends AbstractHttpClient {
+public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClient {
 
 	/**
-	 * Create new http client using internal
-	 * http client from async-http-client library.
+	 * Create new http client using custom internal http client.
 	 *
 	 * @param server Embedded server.
 	 * @param client Internal http client
 	 * @return Http client.
+	 * @throws NullPointerException If {@code server} or {@code client} are {@code null}.
 	 */
 	public static NingAsyncHttpClient newAsyncHttpClient(EmbeddedServer server, com.ning.http.client.AsyncHttpClient client) {
 		return new NingAsyncHttpClient(server, client);
@@ -58,6 +61,7 @@ public class NingAsyncHttpClient extends AbstractHttpClient {
 	 *
 	 * @param server Embedded server.
 	 * @return Http client.
+	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public static NingAsyncHttpClient defaultAsyncHttpClient(EmbeddedServer server) {
 		return new NingAsyncHttpClient(server, new com.ning.http.client.AsyncHttpClient());

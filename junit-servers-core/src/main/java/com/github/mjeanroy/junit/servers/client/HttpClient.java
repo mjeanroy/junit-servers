@@ -26,49 +26,64 @@ package com.github.mjeanroy.junit.servers.client;
 
 /**
  * Http client that can be used to query embedded server.
+ *
+ * <p>
+ *
  * After test suite, client should be properly destroyed
  * using {#destroy} method.
  */
 public interface HttpClient {
 
 	/**
-	 * Create GET request.
+	 * Create {@code GET} request.
 	 *
 	 * @param url URL, full url or path relative to server url.
 	 * @return GET request.
+	 * @see #prepareRequest(HttpMethod, String)
 	 */
 	HttpRequest prepareGet(String url);
 
 	/**
-	 * Create POST request.
+	 * Create {@code POST} request.
 	 *
 	 * @param url URL, full url or path relative to server url.
 	 * @return POST request.
+	 * @see #prepareRequest(HttpMethod, String)
 	 */
 	HttpRequest preparePost(String url);
 
 	/**
-	 * Create PUT request.
+	 * Create {@code PUT} request.
 	 *
 	 * @param url URL, full url or path relative to server url.
 	 * @return PUT request.
+	 * @see #prepareRequest(HttpMethod, String)
 	 */
 	HttpRequest preparePut(String url);
 
 	/**
-	 * Create DELETE request.
+	 * Create {@code DELETE} request.
 	 *
 	 * @param url URL, full url or path relative to server url.
 	 * @return DELETE request.
+	 * @see #prepareRequest(HttpMethod, String)
 	 */
 	HttpRequest prepareDelete(String url);
 
 	/**
-	 * Create DELETE request.
+	 * Create request.
 	 *
-	 * @param httpMethod Http method (i.e GET, POST, PUT, DELETE).
+	 * <p>
+	 *
+	 * Once destroyed, this client should not be able to create HTTP request and should
+	 * throw an instance of {@link IllegalStateException}.
+	 *
+	 * @param httpMethod Http method (i.e {@code GET}, {@code POST}, {@code PUT}, {@code DELETE}).
 	 * @param url URL, full url or path relative to server url.
-	 * @return DELETE request.
+	 * @return The request.
+	 * @throws IllegalStateException If client has already been destroyed.
+	 * @see #destroy()
+	 * @see #isDestroyed()
 	 */
 	HttpRequest prepareRequest(HttpMethod httpMethod, String url);
 

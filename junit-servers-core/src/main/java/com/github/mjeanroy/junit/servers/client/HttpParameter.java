@@ -32,10 +32,11 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
- * Parameter object that could be sent in an http request.
- * It could be used to add:
- * - Query parameters.
- * - Form parameters.
+ * Parameter object that could be sent in an http request as:
+ * <ul>
+ *   <li>Query parameters (following {@code ?} character in URL.</li>
+ *   <li>Form parameters (such as HTML forms, with {@link HttpHeaders#APPLICATION_FORM_URL_ENCODED} media type).</li>
+ * </ul>
  */
 public class HttpParameter {
 
@@ -70,18 +71,18 @@ public class HttpParameter {
 	}
 
 	/**
-	 * Get parameter name.
+	 * Get {@link #name}.
 	 *
-	 * @return Parameter name.
+	 * @return {@link #name}.
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Get parameter value.
+	 * Get {@link #value}.
 	 *
-	 * @return Parameter value.
+	 * @return {@link #value}.
 	 */
 	public String getValue() {
 		return value;
@@ -92,10 +93,12 @@ public class HttpParameter {
 		if (o == this) {
 			return true;
 		}
+
 		if (o instanceof HttpParameter) {
 			HttpParameter p = (HttpParameter) o;
 			return Objects.equals(name, p.name) && Objects.equals(value, p.value);
 		}
+
 		return false;
 	}
 
