@@ -107,12 +107,12 @@ public class ServerRule extends AbstractRule {
 	}
 
 	@Override
-	protected void before(Description description) {
+	void before(Description description) {
 		start();
 	}
 
 	@Override
-	protected void after(Description description) {
+	void after(Description description) {
 		stop();
 	}
 

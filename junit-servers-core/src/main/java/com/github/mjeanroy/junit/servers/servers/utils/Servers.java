@@ -119,7 +119,7 @@ public final class Servers {
 	 * @param configuration Optional configuration.
 	 * @return Embedded server.
 	 */
-	public static EmbeddedServer newJetty(AbstractConfiguration configuration) {
+	private static EmbeddedServer newJetty(AbstractConfiguration configuration) {
 		return instantiate("com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty", configuration);
 	}
 
@@ -137,7 +137,7 @@ public final class Servers {
 	 * @param configuration Optional configuration.
 	 * @return Embedded server.
 	 */
-	public static EmbeddedServer newTomcat(AbstractConfiguration configuration) {
+	private static EmbeddedServer newTomcat(AbstractConfiguration configuration) {
 		return instantiate("com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat", configuration);
 	}
 
@@ -156,7 +156,7 @@ public final class Servers {
 	 * @param configuration Optional configuration, may be {@code null}.
 	 * @return Embedded server.
 	 */
-	public static EmbeddedServer instantiate(String className, AbstractConfiguration configuration) {
+	private static EmbeddedServer instantiate(String className, AbstractConfiguration configuration) {
 		try {
 			Class klass = Class.forName(className);
 			if (configuration == null) {
@@ -181,7 +181,7 @@ public final class Servers {
 	 * @param <T> Type of configuration.
 	 * @return Configuration.
 	 */
-	public static  <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
+	private static  <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
 		// Look for static methods first
 		List<Method> methods = findStaticMethodsAnnotatedWith(klass, TestServerConfiguration.class);
 		if (!methods.isEmpty()) {

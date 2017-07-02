@@ -32,7 +32,7 @@ import org.junit.runners.model.Statement;
  * Abstract skeleton of rule that will be executed
  * before and after each methods or test class.
  */
-public abstract class AbstractRule implements TestRule {
+abstract class AbstractRule implements TestRule {
 
 	@Override
 	public Statement apply(final Statement base, final Description description) {
@@ -50,11 +50,11 @@ public abstract class AbstractRule implements TestRule {
 		};
 	}
 
-	protected void before(Description description) throws Throwable {
+	void before(Description description) throws Throwable {
 		// do nothing
 	}
 
-	protected void after(Description description) {
+	void after(Description description) {
 		// do nothing
 	}
 }

@@ -65,12 +65,12 @@ public class HandlersRule extends AbstractRuleInstance {
 	}
 
 	@Override
-	protected void before(Description description) {
+	void before(Description description) {
 		process(true);
 	}
 
 	@Override
-	protected void after(Description description) {
+	void after(Description description) {
 		process(false);
 	}
 
@@ -79,7 +79,7 @@ public class HandlersRule extends AbstractRuleInstance {
 	 *
 	 * @param before Flag to know if handler has to run "before" phase or "after" phase.
 	 */
-	protected void process(boolean before) {
+	private void process(boolean before) {
 		List<Field> fields = findAllFields(getTarget().getClass());
 		for (Field field : fields) {
 			for (AnnotationHandler handler : handlers) {
@@ -95,7 +95,7 @@ public class HandlersRule extends AbstractRuleInstance {
 	 * @param field Field.
 	 * @param before Flag to know if handler has to run "before" phase or "after" phase.
 	 */
-	protected void processField(AnnotationHandler handler, Field field, boolean before) {
+	private void processField(AnnotationHandler handler, Field field, boolean before) {
 		for (Annotation annotation : field.getAnnotations()) {
 			if (handler.support(annotation)) {
 				if (before) {

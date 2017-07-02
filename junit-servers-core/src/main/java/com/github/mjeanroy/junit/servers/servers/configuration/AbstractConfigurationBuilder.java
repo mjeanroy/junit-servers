@@ -54,22 +54,22 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	/**
 	 * The default path.
 	 */
-	public static final String DEFAULT_PATH = "/";
+	private static final String DEFAULT_PATH = "/";
 
 	/**
 	 * The default webapp value.
 	 */
-	public static final String DEFAULT_WEBAPP = "src/main/webapp";
+	private static final String DEFAULT_WEBAPP = "src/main/webapp";
 
 	/**
 	 * The default classpath.
 	 */
-	public static final String DEFAULT_CLASSPATH = ".";
+	private static final String DEFAULT_CLASSPATH = ".";
 
 	/**
 	 * The default port: zero means that a random port will be assigned.
 	 */
-	public static final int DEFAULT_PORT = 0;
+	private static final int DEFAULT_PORT = 0;
 
 	/**
 	 * Path value.

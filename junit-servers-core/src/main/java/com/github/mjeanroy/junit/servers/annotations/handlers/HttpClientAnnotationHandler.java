@@ -24,16 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
-
-import java.lang.reflect.Field;
-
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+
+import java.lang.reflect.Field;
+
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
 
 /**
  * Annotation handler that will set simple http client implementation

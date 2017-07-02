@@ -30,7 +30,7 @@ import java.lang.reflect.Field;
 /**
  * Abstract skeleton of {@link com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler}.
  */
-public abstract class AbstractAnnotationHandler implements AnnotationHandler {
+abstract class AbstractAnnotationHandler implements AnnotationHandler {
 
 	/**
 	 * Annotation class processed by handler.
@@ -42,7 +42,7 @@ public abstract class AbstractAnnotationHandler implements AnnotationHandler {
 	 *
 	 * @param annotationKlass Annotation class processed by handler.
 	 */
-	protected AbstractAnnotationHandler(Class annotationKlass) {
+	AbstractAnnotationHandler(Class annotationKlass) {
 		this.annotationKlass = annotationKlass;
 	}
 

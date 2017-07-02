@@ -28,7 +28,7 @@ package com.github.mjeanroy.junit.servers.rules;
  * Abstract skeleton of rule that will be executed before
  * and after each methods.
  */
-public abstract class AbstractRuleInstance extends AbstractRule {
+abstract class AbstractRuleInstance extends AbstractRule {
 
 	/**
 	 * Tested class.
@@ -40,7 +40,7 @@ public abstract class AbstractRuleInstance extends AbstractRule {
 	 *
 	 * @param target Tested class.
 	 */
-	protected AbstractRuleInstance(Object target) {
+	AbstractRuleInstance(Object target) {
 		this.target = target;
 	}
 

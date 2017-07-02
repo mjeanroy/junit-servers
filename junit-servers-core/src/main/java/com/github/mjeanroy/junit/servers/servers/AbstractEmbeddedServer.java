@@ -42,7 +42,7 @@ import static java.lang.System.setProperty;
  * Subclasses should implement {@link #doStart()} and {@link #doStop()} methods and synchronization is already
  * managed by this abstract implementation.
  */
-public abstract class AbstractEmbeddedServer<S extends Object, T extends AbstractConfiguration> implements EmbeddedServer<T> {
+public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration> implements EmbeddedServer<T> {
 
 	/**
 	 * Server configuration.
