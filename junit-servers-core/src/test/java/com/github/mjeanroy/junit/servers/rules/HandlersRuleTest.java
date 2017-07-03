@@ -24,42 +24,35 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.Description;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.same;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.Description;
+import org.mockito.ArgumentCaptor;
+
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+
 public class HandlersRuleTest {
 
-	@Mock
 	private AnnotationHandler handler;
-
-	@Mock
-	private EmbeddedServer server;
-
 	private Foo foo;
 	private HandlersRule rule;
 
 	@Before
 	public void setUp() {
+		handler = mock(AnnotationHandler.class);
 		foo = new Foo();
 		rule = new HandlersRule(foo, handler);
 	}
