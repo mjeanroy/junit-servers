@@ -22,16 +22,16 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers;
-
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
-import org.junit.Before;
-import org.junit.Test;
+package com.github.mjeanroy.junit.servers.servers.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 public class EmbeddedConfigurationTest {
 
@@ -56,9 +56,27 @@ public class EmbeddedConfigurationTest {
 		assertThat(result.getWebapp()).isEqualTo(builder.getWebapp());
 	}
 
-	private static class EmbeddedConfiguration extends AbstractConfiguration {
+	@Test
+	public void it_should_have_to_string() {
+		EmbeddedConfiguration result = new EmbeddedConfiguration(builder);
+		assertThat(result.toString()).isEqualTo(
+				"EmbeddedConfiguration{" +
+						"port: 8080, " +
+						"path: \"/foo\", " +
+						"webapp: \"src/main/webapp\", " +
+						"classpath: \"/target/classes\", " +
+						"overrideDescriptor: null, " +
+						"parentClasspath: []" +
+				"}");
+	}
 
-		public EmbeddedConfiguration(EmbeddedConfigurationBuilder builder) {
+	@Test
+	public void it_should_implement_equals_hashCode() {
+		EqualsVerifier.forClass(EmbeddedConfiguration.class).verify();
+	}
+
+	private static final class EmbeddedConfiguration extends AbstractConfiguration {
+		private EmbeddedConfiguration(EmbeddedConfigurationBuilder builder) {
 			super(builder);
 		}
 	}

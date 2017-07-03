@@ -24,13 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 import java.util.Objects;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 
 /**
  * Tomcat configuration settings.

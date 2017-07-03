@@ -24,17 +24,18 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.FileFilter;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.springframework.web.client.RestTemplate;
+
+import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 public class IndexWithRulesTest {
 
@@ -81,5 +82,4 @@ public class IndexWithRulesTest {
 		String message = restTemplate.getForObject(url, String.class);
 		assertThat(message).isNotEmpty().contains("Hello");
 	}
-
 }

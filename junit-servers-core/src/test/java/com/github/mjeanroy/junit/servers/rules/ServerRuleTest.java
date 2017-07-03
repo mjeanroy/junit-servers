@@ -24,12 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.Description;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.runner.Description.createTestDescription;
 import static org.mockito.Mockito.mock;
@@ -37,7 +31,20 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.Description;
+
+import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+
 public class ServerRuleTest {
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	private AbstractConfiguration configuration;
 	private EmbeddedServer server;
@@ -139,5 +146,19 @@ public class ServerRuleTest {
 	public void it_should_get_server() {
 		EmbeddedServer result = rule.getServer();
 		assertThat(result).isSameAs(server);
+	}
+
+	@Test
+	public void it_should_fail_to_instantiate_server_without_implementations() {
+		thrown.expect(ServerImplMissingException.class);
+		thrown.expectMessage("Embedded server implementation is missing, please import appropriate sub-module");
+		new ServerRule();
+	}
+
+	@Test
+	public void it_should_fail_to_instantiate_server_with_configuration_but_without_implementations() {
+		thrown.expect(ServerImplMissingException.class);
+		thrown.expectMessage("Embedded server implementation is missing, please import appropriate sub-module");
+		new ServerRule(mock(AbstractConfiguration.class));
 	}
 }

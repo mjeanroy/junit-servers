@@ -24,12 +24,26 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import org.junit.After;
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+import java.net.URL;
+
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+
 public class EmbeddedJettyTest {
+
+	@Rule
+	public TemporaryFolder tmp = new TemporaryFolder();
 
 	private EmbeddedJetty jetty;
 
@@ -73,5 +87,50 @@ public class EmbeddedJettyTest {
 	public void it_should_get_original_jetty() {
 		jetty = new EmbeddedJetty();
 		assertThat(jetty.getDelegate()).isNotNull();
+	}
+
+	@Test
+	public void it_should_add_parent_classloader() throws Exception {
+		File tmpFile = tmp.newFile();
+		File dir = tmpFile.getParentFile();
+
+		jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
+				.withWebapp(dir)
+				.withParentClasspath(dir.toURI().toURL())
+				.build());
+
+		jetty.start();
+
+		WebAppContext ctx = (WebAppContext) jetty.getDelegate().getHandler();
+		ClassLoader cl = ctx.getClassLoader();
+
+		assertThat(cl).isNotNull();
+		assertThat(cl.getResource("custom-web.xml")).isNotNull();
+		assertThat(cl.getResource(tmpFile.getName())).isNotNull();
+	}
+
+	@Test
+	public void it_should_override_web_xml() throws Exception {
+		URL resource = getClass().getResource("/custom-web.xml");
+		String webXmlPath = resource.getFile();
+		File descriptor = new File(webXmlPath);
+
+		jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
+				.withOverrideDescriptor(descriptor.getAbsolutePath())
+				.build());
+
+		jetty.start();
+
+		String url = jetty.getUrl() + "hello";
+		OkHttpClient client = new OkHttpClient();
+		Request rq = new Request.Builder().url(url).build();
+		Response rsp = client.newCall(rq).execute();
+
+		assertThat(rsp).isNotNull();
+		assertThat(rsp.code()).isEqualTo(200);
+
+		ResponseBody body = rsp.body();
+		String content = body == null ? null : body.string();
+		assertThat(content).isNotEmpty().contains("Hello World");
 	}
 }

@@ -24,10 +24,17 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
+import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import static org.eclipse.jetty.util.resource.Resource.newResource;
+
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Collection;
+
+import javax.servlet.ServletContext;
+
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
@@ -42,15 +49,10 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
-import javax.servlet.ServletContext;
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Collection;
-
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
-import static org.eclipse.jetty.util.resource.Resource.newResource;
+import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 
 /**
  * Jetty Embedded Server.
@@ -128,7 +130,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 	 *
 	 * @throws Exception May be thrown by web app context initialization (will be wrapped later).
 	 */
-	protected WebAppContext createdWebAppContext() throws Exception {
+	private WebAppContext createdWebAppContext() throws Exception {
 		final String path = configuration.getPath();
 		final String webapp = configuration.getWebapp();
 		final String classpath = configuration.getClasspath();
@@ -136,10 +138,14 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		final String overrideDescriptor = configuration.getOverrideDescriptor ();
 		final Resource baseResource = configuration.getBaseResource();
 
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
+		final ClassLoader threadCl = Thread.currentThread().getContextClassLoader();
+		final ClassLoader classLoader;
 		if (!parentClasspath.isEmpty()) {
-			classLoader = new URLClassLoader(parentClasspath.toArray(new URL[parentClasspath.size()]), classLoader);
+			int nbUrls = parentClasspath.size();
+			URL[] urls = parentClasspath.toArray(new URL[nbUrls]);
+			classLoader = new URLClassLoader(urls, threadCl);
+		} else {
+			classLoader = threadCl;
 		}
 
 		WebAppContext ctx = new WebAppContext();
@@ -165,10 +171,6 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 				new MetaInfConfiguration(),
 				new FragmentConfiguration()
 		});
-
-		if (overrideDescriptor != null) {
-			ctx.addOverrideDescriptor(overrideDescriptor);
-		}
 
 		if (isNotBlank(classpath)) {
 			// Fix to scan Spring WebApplicationInitializer

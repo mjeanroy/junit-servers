@@ -24,26 +24,26 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
-import org.apache.catalina.Context;
-import org.apache.catalina.Loader;
-import org.apache.catalina.WebResourceRoot;
-import org.apache.catalina.loader.WebappLoader;
-import org.apache.catalina.startup.Tomcat;
-import org.apache.catalina.webresources.StandardRoot;
-import org.apache.tomcat.util.scan.StandardJarScanner;
+import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 
-import javax.servlet.ServletContext;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
 
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
+import javax.servlet.ServletContext;
+
+import org.apache.catalina.Context;
+import org.apache.catalina.WebResourceRoot;
+import org.apache.catalina.startup.Tomcat;
+import org.apache.catalina.webresources.StandardRoot;
+import org.apache.tomcat.util.scan.StandardJarScanner;
+
+import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 
 /**
  * Embedded server using tomcat as implementation.
@@ -108,7 +108,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 	 * @return Tomcat context.
 	 * @throws Exception Exception May be thrown by web app context initialization (will be wrapped later).
 	 */
-	protected Context createContext() throws Exception {
+	private Context createContext() throws Exception {
 		Context context = null;
 
 		final String webapp = configuration.getWebapp();
@@ -124,18 +124,13 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 			tomcat.getHost().setAppBase(webappAbsolutePath);
 			context = tomcat.addWebapp(path, webappAbsolutePath);
 
-			Loader loader = context.getLoader();
-			if (loader == null) {
-				loader = new WebappLoader(Thread.currentThread().getContextClassLoader());
-			}
-
 			// Add additional classpath entry
 			if (isNotBlank(classpath)) {
 				File file = new File(classpath);
 				if (file.exists()) {
 
 					// Check that additional classpath entry contains META-INF directory
-					File metaInf = new File(file.getAbsolutePath() + "/META-INF");
+					File metaInf = new File(file, "META-INF");
 					if (!metaInf.exists() && forceMetaInf) {
 						metaInf.mkdir();
 					}
@@ -153,19 +148,6 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 
 					context.setResources(root);
 
-					// Custom parent classloader.
-					int nbUrls = parentClasspath.size();
-					if (nbUrls > 0) {
-						URL[] urls = parentClasspath.toArray(new URL[nbUrls]);
-						ClassLoader parentClassLoader = new URLClassLoader(urls);
-						context.setParentClassLoader(parentClassLoader);
-					}
-
-					// Override web.xml path
-					if (descriptor != null) {
-						context.setAltDDName(descriptor);
-					}
-
 					// == Tomcat 8
 
 					// == Tomcat 7
@@ -179,7 +161,33 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 				}
 			}
 
-			context.setLoader(loader);
+			// Custom parent classloader.
+			final ClassLoader threadCl = Thread.currentThread().getContextClassLoader();
+			final ClassLoader parentClassLoader;
+			final int nbUrls = parentClasspath.size();
+			if (nbUrls > 0) {
+				URL[] urls = parentClasspath.toArray(new URL[nbUrls]);
+				parentClassLoader = new URLClassLoader(urls, threadCl);
+			} else {
+				parentClassLoader = threadCl;
+			}
+
+			// Set the parent class loader that will be given
+			// to the created loader.
+			//
+			// Setting the parent class loader here is a shortcut for (code in previous versions):
+			//
+			//   Loader loader = context.getLoader();
+			//   if (loader == null) {
+			//     loader = new WebappLoader(parentClassLoader);
+			//   }
+			//
+			context.setParentClassLoader(parentClassLoader);
+
+			// Override web.xml path
+			if (descriptor != null) {
+				context.setAltDDName(descriptor);
+			}
 		}
 
 		return context;
@@ -242,6 +250,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 					if (f.isDirectory()) {
 						deleteDirectory(f.getAbsolutePath());
 					}
+
 					f.delete();
 				}
 			}
