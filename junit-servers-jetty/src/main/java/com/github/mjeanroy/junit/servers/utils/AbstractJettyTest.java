@@ -37,6 +37,6 @@ import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 public abstract class AbstractJettyTest {
 
 	@TestServer
-	protected static EmbeddedJetty server;
+	public static EmbeddedJetty server;
 
 }

@@ -116,6 +116,7 @@ public class EmbeddedJettyTest {
 		File descriptor = new File(webXmlPath);
 
 		jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
+				.withWebapp(descriptor.getParentFile())
 				.withOverrideDescriptor(descriptor.getAbsolutePath())
 				.build());
 

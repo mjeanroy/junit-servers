@@ -32,7 +32,9 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
  */
 public class TomcatServerRule extends ServerRule {
 
-	/** Create rule using tomcat as embedded server. */
+	/**
+	 * Create rule using tomcat as embedded server.
+	 */
 	public TomcatServerRule() {
 		super(new EmbeddedTomcat());
 	}
@@ -41,6 +43,7 @@ public class TomcatServerRule extends ServerRule {
 	 * Create rule.
 	 *
 	 * @param tomcat Tomcat Embedded Server.
+	 * @throws NullPointerException If {@code tomcat} is {@code null}.
 	 */
 	public TomcatServerRule(EmbeddedTomcat tomcat) {
 		super(tomcat);

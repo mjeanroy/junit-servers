@@ -24,14 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
-import org.eclipse.jetty.util.resource.Resource;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 
 import java.util.Objects;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
+import org.eclipse.jetty.util.resource.Resource;
+
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 
 /**
  * Jetty configuration settings.
@@ -39,14 +40,31 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 
 	/**
-	 * Configure the stop timeout in milliseconds.
-	 * Default value is 30000 ms.
+	 * The default {@link Builder#stopTimeout} value.
+	 */
+	private static final int DEFAULT_STOP_TIMEOUT = 30000;
+
+	/**
+	 * The default {@link Builder#stopAtShutdown} flag.
+	 */
+	private static final boolean DEFAULT_STOP_AT_SHUTDOWN = true;
+
+	/**
+	 * Configure the stop timeout in milliseconds: set a graceful stop time.
+	 *
+	 * @see org.eclipse.jetty.server.Server#setStopTimeout(long)
 	 */
 	private final int stopTimeout;
 
 	/**
-	 * Configure jetty embedded server to stop
-	 * at shutdown.
+	 * Configure jetty embedded server to stop at shutdown.
+	 *
+	 * <p>
+	 *
+	 * If true, the server instance will be explicitly stopped when the
+	 * JVM is shutdown. Otherwise the JVM is stopped with the server running.
+	 *
+	 * @see org.eclipse.jetty.server.Server#setStopAtShutdown(boolean)
 	 */
 	private final boolean stopAtShutdown;
 
@@ -81,14 +99,29 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		this.baseResource = builder.getBaseResource();
 	}
 
+	/**
+	 * Get {@link #stopTimeout}.
+	 *
+	 * @return {@link #stopTimeout}
+	 */
 	public int getStopTimeout() {
 		return stopTimeout;
 	}
 
+	/**
+	 * Get {@link #stopAtShutdown}.
+	 *
+	 * @return {@link #stopAtShutdown}
+	 */
 	public boolean isStopAtShutdown() {
 		return stopAtShutdown;
 	}
 
+	/**
+	 * Get {@link #baseResource}.
+	 *
+	 * @return {@link #baseResource}
+	 */
 	public Resource getBaseResource() {
 		return baseResource;
 	}
@@ -136,17 +169,39 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 			.build();
 	}
 
+	/**
+	 * Builder for {@link EmbeddedJettyConfiguration} instances.
+	 */
 	public static class Builder extends AbstractConfigurationBuilder<Builder, EmbeddedJettyConfiguration> {
-
+		/**
+		 * Configure the stop timeout in milliseconds: set a graceful stop time.
+		 *
+		 * @see EmbeddedJettyConfiguration#DEFAULT_STOP_TIMEOUT
+		 * @see org.eclipse.jetty.server.Server#setStopTimeout(long)
+		 */
 		private int stopTimeout;
 
+		/**
+		 * Configure jetty embedded server to stop at shutdown.
+		 *
+		 * <p>
+		 *
+		 * If true, the server instance will be explicitly stopped when the
+		 * JVM is shutdown. Otherwise the JVM is stopped with the server running.
+		 *
+		 * @see EmbeddedJettyConfiguration#DEFAULT_STOP_AT_SHUTDOWN
+		 * @see org.eclipse.jetty.server.Server#setStopAtShutdown(boolean)
+		 */
 		private boolean stopAtShutdown;
 
+		/**
+		 * The base resource for the Jetty context that will be created.
+		 */
 		private Resource baseResource;
 
 		private Builder() {
-			stopTimeout = 30000;
-			stopAtShutdown = true;
+			stopTimeout = DEFAULT_STOP_TIMEOUT;
+			stopAtShutdown = DEFAULT_STOP_AT_SHUTDOWN;
 		}
 
 		@Override
@@ -159,33 +214,57 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 			return new EmbeddedJettyConfiguration(this);
 		}
 
+		/**
+		 * Get current {@link #stopTimeout} value.
+		 *
+		 * @return {@link #stopTimeout}.
+		 */
 		public int getStopTimeout() {
 			return stopTimeout;
 		}
 
+		/**
+		 * Get current {@link #stopAtShutdown} value.
+		 *
+		 * @return {@link #stopAtShutdown}.
+		 */
 		public boolean isStopAtShutdown() {
 			return stopAtShutdown;
 		}
 
+		/**
+		 * Get current {@link #baseResource} value.
+		 *
+		 * @return {@link #baseResource}.
+		 */
 		public Resource getBaseResource() {
 			return baseResource;
 		}
 
 		/**
-		 * Update stop timeout value.
-		 * @param stopTimeout New stop timeout value.
+		 * Update {@link #stopTimeout} value.
+		 *
+		 * @param stopTimeout New {@link #stopTimeout} value.
 		 * @return this
-		 * @throws IllegalArgumentException if stop timeout is not positive.
+		 * @throws IllegalArgumentException If {@code stopTimeout} is not positive.
 		 */
 		public Builder withStopTimeout(int stopTimeout) {
 			this.stopTimeout = positive(stopTimeout, "stopTimeout");
 			return this;
 		}
 
+		/**
+		 * Set {@link #stopAtShutdown} to {@code false}.
+		 * @return this
+		 */
 		public Builder disableStopAtShutdown() {
 			return toggleStopAtShutdown(false);
 		}
 
+		/**
+		 * Set {@link #stopAtShutdown} to {@code true}.
+		 * @return this
+		 */
 		public Builder enableStopAtShutdown() {
 			return toggleStopAtShutdown(true);
 		}
@@ -195,6 +274,12 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 			return this;
 		}
 
+		/**
+		 * Change {@link #baseResource} value.
+		 *
+		 * @param resource New {@link #baseResource} value.
+		 * @return this
+		 */
 		public Builder withBaseResource(Resource resource) {
 			this.baseResource = resource;
 			return this;

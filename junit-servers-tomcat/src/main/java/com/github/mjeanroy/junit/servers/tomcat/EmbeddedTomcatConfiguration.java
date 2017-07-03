@@ -28,6 +28,8 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 import java.util.Objects;
 
+import org.apache.catalina.startup.Tomcat;
+
 import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
@@ -36,6 +38,26 @@ import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigura
  * Tomcat configuration settings.
  */
 public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
+
+	/**
+	 * The default value for {@link Builder#classpath}.
+	 */
+	private static final String DEFAULT_CLASSPATH = "./target/classes";
+
+	/**
+	 * The default tomcat base directory.
+	 */
+	private static final String DEFAULT_BASE_DIR = "./tomcat-work";
+
+	/**
+	 * The default value for the {@link Builder#enableNaming} flag.
+	 */
+	private static final boolean DEFAULT_ENABLE_NAMING = true;
+
+	/**
+	 * The default value for the {@link Builder#forceMetaInf} flag.
+	 */
+	private static final boolean DEFAULT_FORCE_META_INF = true;
 
 	/**
 	 * Get configuration builder.
@@ -56,17 +78,24 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 	}
 
 	/**
-	 * Tomcat Base Directory.
+	 * Tomcat Base Directory: this directory is where tomcat will store
+	 * temporary files.
+	 *
+	 * @see Tomcat#setBaseDir(String)
 	 */
 	private final String baseDir;
 
 	/**
 	 * Flag used to enable / disable naming.
+	 * This is a flag to enables JNDI naming.
+	 *
+	 * @see Tomcat#enableNaming()
 	 */
 	private final boolean enableNaming;
 
 	/**
-	 * Flag used to force META-INF directory creation for additional classpath entries.
+	 * Flag used to force META-INF directory creation
+	 * for additional classpath entries.
 	 */
 	private final boolean forceMetaInf;
 
@@ -82,14 +111,29 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 		this.forceMetaInf = builder.isForceMetaInf();
 	}
 
+	/**
+	 * Get {@link #baseDir}.
+	 *
+	 * @return {@link #baseDir}
+	 */
 	public String getBaseDir() {
 		return baseDir;
 	}
 
+	/**
+	 * Get {@link #enableNaming}.
+	 *
+	 * @return {@link #enableNaming}
+	 */
 	public boolean isEnableNaming() {
 		return enableNaming;
 	}
 
+	/**
+	 * Get {@link #forceMetaInf}.
+	 *
+	 * @return {@link #forceMetaInf}
+	 */
 	public boolean isForceMetaInf() {
 		return forceMetaInf;
 	}
@@ -136,18 +180,42 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 		return Objects.hash(super.hashCode(), baseDir, enableNaming, forceMetaInf);
 	}
 
+	/**
+	 * Builder for {@link EmbeddedTomcatConfiguration}.
+	 */
 	public static class Builder extends AbstractConfigurationBuilder<Builder, EmbeddedTomcatConfiguration> {
 
+		/**
+		 * The tomcat baseDir configuration: this directory is where tomcat will store
+		 * temporary files.
+		 * Default is {@link EmbeddedTomcatConfiguration#DEFAULT_BASE_DIR}.
+		 *
+		 * @see EmbeddedTomcatConfiguration#DEFAULT_BASE_DIR
+		 * @see Tomcat#setBaseDir(String)
+		 */
 		private String baseDir;
+
+		/**
+		 * Enable/Disable naming: this is a flag to enables JNDI naming.
+		 * Default is {@link EmbeddedTomcatConfiguration#DEFAULT_ENABLE_NAMING}.
+		 *
+		 * @see EmbeddedTomcatConfiguration#DEFAULT_ENABLE_NAMING}
+		 * @see Tomcat#enableNaming()
+		 */
 		private boolean enableNaming;
+
+		/**
+		 * Force the creation of the {@code META-INF} directory if it does not exist
+		 * in the classpath.
+		 */
 		private boolean forceMetaInf;
 
 		private Builder() {
-			baseDir = "./tomcat-work";
-			enableNaming = true;
-			forceMetaInf = true;
+			baseDir = DEFAULT_BASE_DIR;
+			enableNaming = DEFAULT_ENABLE_NAMING;
+			forceMetaInf = DEFAULT_FORCE_META_INF;
 
-			withClasspath("./target/classes");
+			withClasspath(DEFAULT_CLASSPATH);
 		}
 
 		@Override
@@ -160,14 +228,29 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 			return new EmbeddedTomcatConfiguration(this);
 		}
 
+		/**
+		 * Get current {@link #baseDir} value.
+		 *
+		 * @return {@link #baseDir}
+		 */
 		public String getBaseDir() {
 			return baseDir;
 		}
 
+		/**
+		 * Get current {@link #enableNaming} value.
+		 *
+		 * @return {@link #enableNaming}
+		 */
 		public boolean isEnableNaming() {
 			return enableNaming;
 		}
 
+		/**
+		 * Get current {@link #forceMetaInf} value.
+		 *
+		 * @return {@link #forceMetaInf}
+		 */
 		public boolean isForceMetaInf() {
 			return forceMetaInf;
 		}
@@ -177,7 +260,7 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 		 *
 		 * @param baseDir Base directory.
 		 * @return this.
-		 * @throws NullPointerException if baseDir is null.
+		 * @throws NullPointerException If {@code baseDir} is {@code null}.
 		 */
 		public Builder withBaseDir(String baseDir) {
 			this.baseDir = notNull(baseDir, "baseDir");
@@ -185,7 +268,7 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 		}
 
 		/**
-		 * Enable naming on tomcat server.
+		 * Enable naming (i.e enable JNDI) on tomcat server.
 		 *
 		 * @return this.
 		 */
@@ -194,7 +277,7 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 		}
 
 		/**
-		 * Disable naming on tomcat server.
+		 * Disable naming (i.e disable JNDI) on tomcat server.
 		 *
 		 * @return this.
 		 */

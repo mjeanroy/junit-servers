@@ -32,7 +32,9 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
  */
 public class JettyServerRule extends ServerRule {
 
-	/** Create rule using jetty as embedded server. */
+	/**
+	 * Create rule using jetty as embedded server.
+	 */
 	public JettyServerRule() {
 		super(new EmbeddedJetty());
 	}

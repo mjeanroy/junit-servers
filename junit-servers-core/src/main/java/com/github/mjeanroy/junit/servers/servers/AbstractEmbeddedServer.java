@@ -24,15 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static java.lang.String.format;
 import static java.lang.System.clearProperty;
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
  * Partial implementation of an embedded server.
@@ -73,9 +74,9 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	 * @param configuration Server configuration.
 	 */
 	protected AbstractEmbeddedServer(T configuration) {
+		this.configuration = notNull(configuration, "configuration");
 		this.status = ServerStatus.STOPPED;
-		this.configuration = configuration;
-		this.oldProperties = new HashMap<>();
+		this.oldProperties = new LinkedHashMap<>();
 	}
 
 	@Override

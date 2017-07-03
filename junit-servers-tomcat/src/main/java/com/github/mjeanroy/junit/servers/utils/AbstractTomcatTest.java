@@ -37,6 +37,6 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 public abstract class AbstractTomcatTest {
 
 	@TestServer
-	protected static EmbeddedTomcat server;
+	public static EmbeddedTomcat server;
 
 }
