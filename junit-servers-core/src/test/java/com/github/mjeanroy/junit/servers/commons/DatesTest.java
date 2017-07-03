@@ -24,19 +24,19 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-
 import static com.github.mjeanroy.junit.servers.commons.Dates.format;
 import static com.github.mjeanroy.junit.servers.commons.Dates.formatTime;
 import static com.github.mjeanroy.junit.servers.commons.Dates.getTime;
 import static com.github.mjeanroy.junit.servers.commons.Dates.parse;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DatesTest {
 
@@ -62,12 +62,12 @@ public class DatesTest {
 
 		assertThat(date)
 				.isNotNull()
-				.isWithinYear(2021)
-				.isWithinMonth(Calendar.JANUARY + 1)
-				.isWithinDayOfMonth(13)
-				.isWithinHourOfDay(22)
-				.isWithinMinute(23)
-				.isWithinSecond(1);
+				.hasYear(2021)
+				.hasMonth(Calendar.JANUARY + 1)
+				.hasDayOfMonth(13)
+				.hasHourOfDay(22)
+				.hasMinute(23)
+				.hasSecond(1);
 	}
 
 	@Test
@@ -80,12 +80,12 @@ public class DatesTest {
 
 		assertThat(date)
 				.isNotNull()
-				.isWithinYear(2021)
-				.isWithinMonth(Calendar.JANUARY + 1)
-				.isWithinDayOfMonth(13)
-				.isWithinHourOfDay(22)
-				.isWithinMinute(23)
-				.isWithinSecond(1);
+				.hasYear(2021)
+				.hasMonth(Calendar.JANUARY + 1)
+				.hasDayOfMonth(13)
+				.hasHourOfDay(22)
+				.hasMinute(23)
+				.hasSecond(1);
 	}
 
 	@Test
