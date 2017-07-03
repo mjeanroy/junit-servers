@@ -58,7 +58,13 @@ public enum HttpMethod {
 	 * The {@code DELETE} HTTP method.
 	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.7">https://tools.ietf.org/html/rfc2616#section-9.7</a>
 	 */
-	DELETE(false);
+	DELETE(false),
+
+	/**
+	 * The {@code HEAD} HTTP method.
+	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.4">https://tools.ietf.org/html/rfc2616#section-9.4</a>
+	 */
+	HEAD(false);
 
 	/**
 	 * Flag to know if http method allow body request.

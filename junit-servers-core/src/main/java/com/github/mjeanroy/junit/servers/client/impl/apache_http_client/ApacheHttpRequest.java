@@ -41,6 +41,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -209,6 +210,10 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 			if (httpMethod == HttpMethod.PATCH) {
 				return new HttpPatch();
+			}
+
+			if (httpMethod == HttpMethod.HEAD) {
+				return new HttpHead();
 			}
 
 			throw new UnsupportedOperationException("Method " + httpMethod + " is not supported by apache http-client");

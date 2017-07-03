@@ -87,6 +87,11 @@ public abstract class AbstractHttpClient implements HttpClient {
 	}
 
 	@Override
+	public HttpRequest prepareHead(String url) {
+		return prepareRequest(HttpMethod.HEAD, url);
+	}
+
+	@Override
 	public HttpRequest prepareRequest(HttpMethod httpMethod, String url) {
 		notNull(url, "url");
 

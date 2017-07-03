@@ -80,6 +80,15 @@ public interface HttpClient {
 	HttpRequest preparePatch(String url);
 
 	/**
+	 * Create {@code HEAD} request.
+	 *
+	 * @param url URL, full url or path relative to server url.
+	 * @return HEAD request.
+	 * @see #prepareRequest(HttpMethod, String)
+	 */
+	HttpRequest prepareHead(String url);
+
+	/**
 	 * Create request.
 	 *
 	 * <p>

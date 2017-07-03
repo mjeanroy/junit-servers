@@ -30,6 +30,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.head;
 import static com.github.tomakehurst.wiremock.client.WireMock.patch;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.put;
@@ -165,6 +166,24 @@ public abstract class BaseHttpClientTest {
 		assertRequest(ENDPOINT, HttpMethod.GET);
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEqualTo(body);
+		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
+	public void testHead() {
+		final int status = 200;
+
+		stubHeadRequest(status);
+
+		final HttpResponse rsp = client
+				.prepareHead(ENDPOINT)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.execute();
+
+		assertRequest(ENDPOINT, HttpMethod.HEAD);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isNullOrEmpty();
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
 	}
 
@@ -1128,6 +1147,13 @@ public abstract class BaseHttpClientTest {
 		}
 
 		stubFor(get(urlEqualTo(url)).willReturn(rsp));
+	}
+
+	private static void stubHeadRequest(int status) {
+		stubFor(head(urlEqualTo(ENDPOINT))
+			.willReturn(aResponse()
+				.withStatus(status)
+				.withHeader(CONTENT_TYPE, APPLICATION_JSON)));
 	}
 
 	private static void stubPostRequest(int status, String body) {
