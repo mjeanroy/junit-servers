@@ -24,22 +24,23 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
+import static com.github.mjeanroy.junit.servers.client.Cookie.cookie;
+import static com.github.mjeanroy.junit.servers.client.Cookie.read;
+import static com.github.mjeanroy.junit.servers.client.Cookie.secureCookie;
+import static com.github.mjeanroy.junit.servers.client.Cookie.sessionCookie;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Calendar;
+import java.util.TimeZone;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.Calendar;
-import java.util.TimeZone;
-
-import static com.github.mjeanroy.junit.servers.client.Cookie.cookie;
-import static com.github.mjeanroy.junit.servers.client.Cookie.read;
-import static com.github.mjeanroy.junit.servers.client.Cookie.secureCookie;
-import static com.github.mjeanroy.junit.servers.client.Cookie.sessionCookie;
-import static org.assertj.core.api.Assertions.assertThat;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class CookieTest {
 
@@ -64,6 +65,7 @@ public class CookieTest {
 		final String name = "foo";
 		final String value = "bar";
 
+		@SuppressWarnings("deprecation")
 		Cookie cookie = cookie(name, value);
 
 		assertThat(cookie).isNotNull();
@@ -88,6 +90,7 @@ public class CookieTest {
 		final boolean secure = true;
 		final boolean httpOnly = false;
 
+		@SuppressWarnings("deprecation")
 		Cookie cookie = cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
 
 		assertThat(cookie).isNotNull();
@@ -110,6 +113,7 @@ public class CookieTest {
 		final String domain = "domain";
 		final String path = "path";
 
+		@SuppressWarnings("deprecation")
 		Cookie cookie = secureCookie(name, value, domain, path, expires, maxAge);
 
 		assertThat(cookie).isNotNull();
@@ -130,6 +134,7 @@ public class CookieTest {
 		final String domain = "domain";
 		final String path = "path";
 
+		@SuppressWarnings("deprecation")
 		Cookie cookie = sessionCookie(name, value, domain, path);
 
 		assertThat(cookie).isNotNull();
@@ -145,6 +150,7 @@ public class CookieTest {
 
 	@Test
 	public void it_should_create_cookie_with_name_and_value() {
+		@SuppressWarnings("deprecation")
 		Cookie cookie = read("name=value");
 
 		assertThat(cookie).isNotNull();
@@ -160,6 +166,7 @@ public class CookieTest {
 
 	@Test
 	public void it_should_create_cookie_with_name_value_domain_path_and_flags() {
+		@SuppressWarnings("deprecation")
 		Cookie cookie = read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
 
 		assertThat(cookie).isNotNull();
@@ -175,6 +182,7 @@ public class CookieTest {
 
 	@Test
 	public void it_should_create_cookie_with_name_value_domain_path_expires_max_date_and_flags() {
+		@SuppressWarnings("deprecation")
 		Cookie cookie = read("name=value; Domain=foo.com; Expires=Wed, 13-Jan-2021 22:23:01 GMT; max-age=3600; Path=/; Secure; HttpOnly");
 
 		assertThat(cookie).isNotNull();
@@ -189,6 +197,7 @@ public class CookieTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void it_should_not_create_cookie_without_name_value() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("Cookie must have a valid name and a valid value");
@@ -196,6 +205,7 @@ public class CookieTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void it_should_not_create_cookie_with_empty_name() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("Cookie must have a valid name");
@@ -204,9 +214,20 @@ public class CookieTest {
 
 	@Test
 	public void it_should_implement_to_string() {
+		@SuppressWarnings("deprecation")
 		Cookie cookie = read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
+
 		assertThat(cookie.toString()).isEqualTo(
-			"Cookie{name: \"name\", value: \"value\", domain: \"foo.com\", path: \"/\", expires: null, maxAge: 0, secure: true, httpOnly: true}"
+			"Cookie{" +
+					"name: \"name\", " +
+					"value: \"value\", " +
+					"domain: \"foo.com\", " +
+					"path: \"/\", " +
+					"expires: null, " +
+					"maxAge: 0, " +
+					"secure: true, " +
+					"httpOnly: true" +
+			"}"
 		);
 	}
 
@@ -221,6 +242,7 @@ public class CookieTest {
 	}
 
 	@Test
+	@SuppressWarnings("ConstantConditions")
 	public void it_should_create_complex_cookie_with_builder() {
 		String name = "name";
 		String value = "value";
@@ -250,6 +272,7 @@ public class CookieTest {
 	}
 
 	@Test
+	@SuppressWarnings("ConstantConditions")
 	public void it_should_create_complex_cookie_with_expires_date_with_builder() {
 		String name = "name";
 		String value = "value";
