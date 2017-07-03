@@ -139,7 +139,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 			body = createEmptyBody();
 		}
 
-		builder.method(method.name(), body);
+		builder.method(method.getVerb(), body);
 	}
 
 	/**

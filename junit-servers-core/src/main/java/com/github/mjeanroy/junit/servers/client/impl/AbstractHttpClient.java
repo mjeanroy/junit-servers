@@ -24,13 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.client.impl;
 
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
+
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
 
 /**
  * Abstract skeleton of {@link HttpClient} interface.
@@ -79,6 +79,11 @@ public abstract class AbstractHttpClient implements HttpClient {
 	@Override
 	public HttpRequest preparePut(String url) {
 		return prepareRequest(HttpMethod.PUT, url);
+	}
+
+	@Override
+	public HttpRequest preparePatch(String url) {
+		return prepareRequest(HttpMethod.PATCH, url);
 	}
 
 	@Override

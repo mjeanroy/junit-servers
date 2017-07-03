@@ -24,13 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
-import com.github.mjeanroy.junit.servers.client.Cookies;
-import com.github.mjeanroy.junit.servers.client.HttpHeader;
-import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpParameter;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
+import static java.lang.System.nanoTime;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -39,6 +41,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -46,14 +49,13 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
-import static java.lang.System.nanoTime;
+import com.github.mjeanroy.junit.servers.client.Cookies;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpParameter;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 
 /**
  * Implementation for {@link HttpRequest} that use apache http-client
@@ -203,6 +205,10 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 			if (httpMethod == HttpMethod.DELETE) {
 				return new HttpDelete();
+			}
+
+			if (httpMethod == HttpMethod.PATCH) {
+				return new HttpPatch();
 			}
 
 			throw new UnsupportedOperationException("Method " + httpMethod + " is not supported by apache http-client");

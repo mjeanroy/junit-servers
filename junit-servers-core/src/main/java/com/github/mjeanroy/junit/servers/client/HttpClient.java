@@ -71,6 +71,15 @@ public interface HttpClient {
 	HttpRequest prepareDelete(String url);
 
 	/**
+	 * Create {@code PATCH} request.
+	 *
+	 * @param url URL, full url or path relative to server url.
+	 * @return PATCH request.
+	 * @see #prepareRequest(HttpMethod, String)
+	 */
+	HttpRequest preparePatch(String url);
+
+	/**
 	 * Create request.
 	 *
 	 * <p>

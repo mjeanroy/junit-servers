@@ -49,6 +49,12 @@ public enum HttpMethod {
 	PUT(true),
 
 	/**
+	 * The {@code PATCH} HTTP method.
+	 * @see <a href="https://tools.ietf.org/html/rfc2068#section-19.6.1.1">https://tools.ietf.org/html/rfc2068#section-19.6.1.1</a>
+	 */
+	PATCH(true),
+
+	/**
 	 * The {@code DELETE} HTTP method.
 	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.7">https://tools.ietf.org/html/rfc2616#section-9.7</a>
 	 */

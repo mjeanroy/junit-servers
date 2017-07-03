@@ -24,6 +24,37 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
+import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.delete;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.patch;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.put;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.UUID;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
 import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
@@ -43,35 +74,6 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.UUID;
-
-import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
-import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.delete;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.put;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static java.util.Arrays.asList;
-import static java.util.Collections.singleton;
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(RunIfRunner.class)
 public abstract class BaseHttpClientTest {
@@ -248,6 +250,27 @@ public abstract class BaseHttpClientTest {
 		assertThat(rsp.body()).isEmpty();
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
 		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
+	public void testPatch() {
+		final int status = 201;
+		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
+
+		stubPatchRequest(status, body);
+
+		final HttpResponse rsp = client
+				.preparePatch(ENDPOINT)
+				.acceptJson()
+				.asJson()
+				.asXmlHttpRequest()
+				.setBody("{\"name\": \"Jane Doe\"}")
+				.execute();
+
+		assertRequest(ENDPOINT, HttpMethod.PATCH);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEqualTo(body);
+		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
 	}
 
 	@Test
@@ -1121,6 +1144,14 @@ public abstract class BaseHttpClientTest {
 			.willReturn(aResponse()
 				.withStatus(status)
 				.withHeader(CONTENT_TYPE, APPLICATION_JSON)));
+	}
+
+	private static void stubPatchRequest(int status, String body) {
+		stubFor(patch(urlEqualTo(ENDPOINT))
+				.willReturn(aResponse()
+						.withStatus(status)
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON)
+						.withBody(body)));
 	}
 
 	private static void stubDeleteRequest(int status) {
