@@ -24,10 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.servers.utils;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticFieldsAnnotatedWith;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.invoke;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -35,17 +35,26 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticFieldsAnnotatedWith;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.invoke;
-import static com.github.mjeanroy.junit.servers.commons.ObjectUtils.firstNonNull;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
  * Static utilities for server instantiation
  * and configuration.
  */
 public final class Servers {
+
+	/**
+	 * This is the FQN name for the embedded jetty class name that will be instantiated by reflection.
+	 */
+	private static final String EMBEDDED_JETTY_CLASS = "com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty";
+
+	/**
+	 * This is the FQN name for the embedded tomcat class name that will be instantiated by reflection.
+	 */
+	private static final String EMBEDDED_TOMCAT_CLASS = "com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat";
 
 	// Ensure non instantiation
 	private Servers() {
@@ -93,16 +102,20 @@ public final class Servers {
 	 * @return Embedded server.
 	 */
 	public static EmbeddedServer instantiate(AbstractConfiguration configuration) {
-		EmbeddedServer srv = firstNonNull(
-				newJetty(configuration),
-				newTomcat(configuration)
-		);
-
-		if (srv == null) {
-			throw new ServerImplMissingException();
+		// Try Jetty first.
+		EmbeddedServer<? extends AbstractConfiguration> jetty = newJetty(configuration);
+		if (jetty != null) {
+			return jetty;
 		}
 
-		return srv;
+		// Ok, jetty is not available, try tomcat.
+		EmbeddedServer<? extends AbstractConfiguration> tomcat = newTomcat(configuration);
+		if (tomcat != null) {
+			return tomcat;
+		}
+
+		// Can't find a valid implementation.
+		throw new ServerImplMissingException();
 	}
 
 	/**
@@ -119,8 +132,8 @@ public final class Servers {
 	 * @param configuration Optional configuration.
 	 * @return Embedded server.
 	 */
-	private static EmbeddedServer newJetty(AbstractConfiguration configuration) {
-		return instantiate("com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty", configuration);
+	private static EmbeddedServer<? extends AbstractConfiguration> newJetty(AbstractConfiguration configuration) {
+		return instantiate(EMBEDDED_JETTY_CLASS, configuration);
 	}
 
 	/**
@@ -137,8 +150,8 @@ public final class Servers {
 	 * @param configuration Optional configuration.
 	 * @return Embedded server.
 	 */
-	private static EmbeddedServer newTomcat(AbstractConfiguration configuration) {
-		return instantiate("com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat", configuration);
+	private static EmbeddedServer<? extends AbstractConfiguration> newTomcat(AbstractConfiguration configuration) {
+		return instantiate(EMBEDDED_TOMCAT_CLASS, configuration);
 	}
 
 	/**
@@ -156,15 +169,16 @@ public final class Servers {
 	 * @param configuration Optional configuration, may be {@code null}.
 	 * @return Embedded server.
 	 */
-	private static EmbeddedServer instantiate(String className, AbstractConfiguration configuration) {
+	private static EmbeddedServer<? extends AbstractConfiguration> instantiate(String className, AbstractConfiguration configuration) {
 		try {
 			Class klass = Class.forName(className);
 			if (configuration == null) {
-				return (EmbeddedServer) klass.newInstance();
+				return (EmbeddedServer<? extends AbstractConfiguration>) klass.newInstance();
 			}
 			else {
-				@SuppressWarnings({ "raw", "unchecked" }) Constructor constructor = klass.getConstructor(configuration.getClass());
-				return (EmbeddedServer) constructor.newInstance(configuration);
+				@SuppressWarnings("unchecked")
+				Constructor<? extends AbstractConfiguration> constructor = klass.getConstructor(configuration.getClass());
+				return (EmbeddedServer<? extends AbstractConfiguration>) constructor.newInstance(configuration);
 			}
 		}
 		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
