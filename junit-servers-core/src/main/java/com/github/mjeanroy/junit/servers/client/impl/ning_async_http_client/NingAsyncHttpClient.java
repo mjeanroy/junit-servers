@@ -49,7 +49,7 @@ public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClien
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} or {@code client} are {@code null}.
 	 */
-	public static NingAsyncHttpClient newAsyncHttpClient(EmbeddedServer server, com.ning.http.client.AsyncHttpClient client) {
+	public static NingAsyncHttpClient newAsyncHttpClient(EmbeddedServer<?> server, com.ning.http.client.AsyncHttpClient client) {
 		return new NingAsyncHttpClient(server, client);
 	}
 
@@ -63,7 +63,7 @@ public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClien
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
-	public static NingAsyncHttpClient defaultAsyncHttpClient(EmbeddedServer server) {
+	public static NingAsyncHttpClient defaultAsyncHttpClient(EmbeddedServer<?> server) {
 		return new NingAsyncHttpClient(server, new com.ning.http.client.AsyncHttpClient());
 	}
 
@@ -74,7 +74,7 @@ public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClien
 	private final com.ning.http.client.AsyncHttpClient client;
 
 	// Use static factory
-	private NingAsyncHttpClient(EmbeddedServer server, com.ning.http.client.AsyncHttpClient client) {
+	private NingAsyncHttpClient(EmbeddedServer<?> server, com.ning.http.client.AsyncHttpClient client) {
 		super(server);
 		this.client = notNull(client, "client");
 	}

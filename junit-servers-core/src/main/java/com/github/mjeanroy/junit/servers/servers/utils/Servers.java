@@ -77,7 +77,7 @@ public final class Servers {
 	 * @param klass Class to inspect.
 	 * @return Embedded server.
 	 */
-	public static EmbeddedServer instantiate(Class<?> klass) {
+	public static EmbeddedServer<?> instantiate(Class<?> klass) {
 		AbstractConfiguration configuration = findConfiguration(klass);
 		return instantiate(configuration);
 	}
@@ -101,7 +101,7 @@ public final class Servers {
 	 * @param configuration Optional configuration.
 	 * @return Embedded server.
 	 */
-	public static EmbeddedServer instantiate(AbstractConfiguration configuration) {
+	public static EmbeddedServer<?> instantiate(AbstractConfiguration configuration) {
 		// Try Jetty first.
 		EmbeddedServer<? extends AbstractConfiguration> jetty = newJetty(configuration);
 		if (jetty != null) {
@@ -169,15 +169,15 @@ public final class Servers {
 	 * @param configuration Optional configuration, may be {@code null}.
 	 * @return Embedded server.
 	 */
+	@SuppressWarnings("unchecked")
 	private static EmbeddedServer<? extends AbstractConfiguration> instantiate(String className, AbstractConfiguration configuration) {
 		try {
-			Class klass = Class.forName(className);
+			Class<?> klass = Class.forName(className);
 			if (configuration == null) {
 				return (EmbeddedServer<? extends AbstractConfiguration>) klass.newInstance();
 			}
 			else {
-				@SuppressWarnings("unchecked")
-				Constructor<? extends AbstractConfiguration> constructor = klass.getConstructor(configuration.getClass());
+				Constructor<?> constructor = klass.getConstructor(configuration.getClass());
 				return (EmbeddedServer<? extends AbstractConfiguration>) constructor.newInstance(configuration);
 			}
 		}

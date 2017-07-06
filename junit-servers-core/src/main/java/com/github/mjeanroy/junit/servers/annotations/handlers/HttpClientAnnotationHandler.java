@@ -47,17 +47,17 @@ public class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
 	 * @return Handler.
 	 * @throws NullPointerException if server is null.
 	 */
-	public static HttpClientAnnotationHandler newHttpClientAnnotationHandler(EmbeddedServer server) {
+	public static HttpClientAnnotationHandler newHttpClientAnnotationHandler(EmbeddedServer<?> server) {
 		return new HttpClientAnnotationHandler(notNull(server, "server"));
 	}
 
 	/**
 	 * Embedded server that will be used with http client.
 	 */
-	private final EmbeddedServer server;
+	private final EmbeddedServer<?> server;
 
 	// Use static factory instead
-	private HttpClientAnnotationHandler(EmbeddedServer server) {
+	private HttpClientAnnotationHandler(EmbeddedServer<?> server) {
 		super(TestHttpClient.class);
 		this.server = server;
 	}

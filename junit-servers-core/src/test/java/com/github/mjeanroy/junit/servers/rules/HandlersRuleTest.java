@@ -128,6 +128,6 @@ public class HandlersRuleTest {
 	private static class Foo {
 
 		@TestServer
-		private EmbeddedServer server;
+		private EmbeddedServer<?> server;
 	}
 }

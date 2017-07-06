@@ -45,12 +45,12 @@ public class ApacheHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Override
-	protected HttpClient createDefaultClient(EmbeddedServer server) {
+	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
 		return defaultApacheHttpClient(server);
 	}
 
 	@Override
-	protected HttpClient createCustomClient(EmbeddedServer server) {
+	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
 		return newApacheHttpClient(server, internalClient);
 	}
 

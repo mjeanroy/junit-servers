@@ -44,12 +44,12 @@ public class NingAsyncHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Override
-	protected HttpClient createDefaultClient(EmbeddedServer server) {
+	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
 		return defaultAsyncHttpClient(server);
 	}
 
 	@Override
-	protected HttpClient createCustomClient(EmbeddedServer server) {
+	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
 		return newAsyncHttpClient(server, internalClient);
 	}
 

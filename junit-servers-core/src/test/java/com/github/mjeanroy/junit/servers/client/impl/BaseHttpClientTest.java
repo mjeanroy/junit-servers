@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RunIfRunner.class)
 public abstract class BaseHttpClientTest {
 
-	private EmbeddedServer server;
+	private EmbeddedServer<?> server;
 
 	@Before
 	public void setUp() throws Exception {
@@ -60,14 +60,10 @@ public abstract class BaseHttpClientTest {
 	@Test
 	public void it_should_create_default_client() throws Exception {
 		HttpClient client = createDefaultClient(server);
+		assertThat(client).isNotNull();
 
-		assertThat(client)
-				.isNotNull();
-
-		EmbeddedServer internalServer = readPrivate(client, "server");
-		assertThat(internalServer)
-				.isNotNull()
-				.isSameAs(server);
+		EmbeddedServer<?> internalServer = readPrivate(client, "server");
+		assertThat(internalServer).isSameAs(server);
 
 		checkInternalHttpClient(client);
 	}
@@ -77,7 +73,7 @@ public abstract class BaseHttpClientTest {
 		HttpClient client = createCustomClient(server);
 		assertThat(client).isNotNull();
 
-		EmbeddedServer internalServer = readPrivate(client, "server");
+		EmbeddedServer<?> internalServer = readPrivate(client, "server");
 		assertThat(internalServer).isNotNull().isSameAs(server);
 
 		checkInternalHttpClient(client);
@@ -172,7 +168,7 @@ public abstract class BaseHttpClientTest {
 	 * @param server Fake embedded server.
 	 * @return Default http client.
 	 */
-	protected abstract HttpClient createDefaultClient(EmbeddedServer server);
+	protected abstract HttpClient createDefaultClient(EmbeddedServer<?> server);
 
 	/**
 	 * Should create a custom http client.
@@ -180,7 +176,7 @@ public abstract class BaseHttpClientTest {
 	 * @param server Fake embedded server.
 	 * @return Default http client.
 	 */
-	protected abstract HttpClient createCustomClient(EmbeddedServer server);
+	protected abstract HttpClient createCustomClient(EmbeddedServer<?> server);
 
 	/**
 	 * Should check internal data of previously created custom

@@ -28,6 +28,7 @@ package com.github.mjeanroy.junit.servers.exceptions;
  * Exception thrown when reflection api throws exception (such
  * as IllegalAccessException) in annotations handlers.
  */
+@SuppressWarnings("serial")
 public class ReflectionException extends AbstractEmbeddedServerException {
 
 	/**

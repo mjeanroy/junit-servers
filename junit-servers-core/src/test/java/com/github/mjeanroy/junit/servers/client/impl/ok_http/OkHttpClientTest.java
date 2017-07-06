@@ -43,12 +43,12 @@ public class OkHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Override
-	protected HttpClient createDefaultClient(EmbeddedServer server) {
+	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
 		return OkHttpClient.defaultOkHttpClient(server);
 	}
 
 	@Override
-	protected HttpClient createCustomClient(EmbeddedServer server) {
+	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
 		return OkHttpClient.newOkHttpClient(server, internalClient);
 	}
 

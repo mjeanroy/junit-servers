@@ -123,8 +123,7 @@ public abstract class AbstractConfiguration {
 	 *
 	 * @param builder Configuration builder.
 	 */
-	@SuppressWarnings("unchecked")
-	protected AbstractConfiguration(AbstractConfigurationBuilder builder) {
+	protected AbstractConfiguration(AbstractConfigurationBuilder<?, ?> builder) {
 		this.classpath = builder.getClasspath();
 		this.path = builder.getPath();
 		this.webapp = builder.getWebapp();

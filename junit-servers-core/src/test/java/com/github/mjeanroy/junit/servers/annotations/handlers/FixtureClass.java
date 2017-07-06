@@ -22,15 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-/**
- * Exception thrown when server cannot be initialized.
- */
-@SuppressWarnings("serial")
-public final class ServerInitializationException extends AbstractEmbeddedServerException {
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
-	public ServerInitializationException(Throwable throwable) {
-		super(throwable);
-	}
+public class FixtureClass {
+
+	@TestServer
+	private EmbeddedServer<?> server;
+
+	@TestServerConfiguration
+	private AbstractConfiguration configuration;
+
+	@TestHttpClient
+	private HttpClient client;
 }

@@ -48,7 +48,7 @@ public class OkHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
-	public static OkHttpClient defaultOkHttpClient(EmbeddedServer server) {
+	public static OkHttpClient defaultOkHttpClient(EmbeddedServer<?> server) {
 		return new OkHttpClient(server, new okhttp3.OkHttpClient());
 	}
 
@@ -61,7 +61,7 @@ public class OkHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} or {@code client} are {@code null}.
 	 */
-	public static OkHttpClient newOkHttpClient(EmbeddedServer server, okhttp3.OkHttpClient client) {
+	public static OkHttpClient newOkHttpClient(EmbeddedServer<?> server, okhttp3.OkHttpClient client) {
 		return new OkHttpClient(server, client);
 	}
 
@@ -80,7 +80,7 @@ public class OkHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @param server The embedded server that will be queried.
 	 * @param client The internal client.
 	 */
-	private OkHttpClient(EmbeddedServer server, okhttp3.OkHttpClient client) {
+	private OkHttpClient(EmbeddedServer<?> server, okhttp3.OkHttpClient client) {
 		super(server);
 		this.client = client;
 		this.destroyed = new AtomicBoolean(false);

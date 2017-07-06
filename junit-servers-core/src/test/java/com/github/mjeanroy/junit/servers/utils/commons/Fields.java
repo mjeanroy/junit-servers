@@ -94,7 +94,6 @@ public final class Fields {
 	 * @param value The field value.
 	 * @param <T> Type of the returned value.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> void writePrivate(Object instance, String name, T value) {
 		try {
 			FieldUtils.writeField(instance, name, value, true);

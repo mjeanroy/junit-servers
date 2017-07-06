@@ -35,14 +35,14 @@ abstract class AbstractAnnotationHandler implements AnnotationHandler {
 	/**
 	 * Annotation class processed by handler.
 	 */
-	private final Class annotationKlass;
+	private final Class<? extends Annotation> annotationKlass;
 
 	/**
 	 * Initialize new abstract handler.
 	 *
 	 * @param annotationKlass Annotation class processed by handler.
 	 */
-	AbstractAnnotationHandler(Class annotationKlass) {
+	AbstractAnnotationHandler(Class<? extends Annotation> annotationKlass) {
 		this.annotationKlass = annotationKlass;
 	}
 

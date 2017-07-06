@@ -25,6 +25,8 @@
 package com.github.mjeanroy.junit.servers.commons.fixtures;
 
 public class Bar extends Foo {
+	// Remove unused warning: this field should remain private and is only here for unit testing.
+	@SuppressWarnings("unused")
 	private static String staticField = "foo";
 
 	@FooAnnotation
@@ -34,6 +36,8 @@ public class Bar extends Foo {
 		return 0;
 	}
 
+	// Remove unused warning: this method should remain private and is only here for unit testing.
+	@SuppressWarnings("unused")
 	private static int getStaticPrivateMethod() {
 		return 0;
 	}

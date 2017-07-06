@@ -30,6 +30,7 @@ import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.Ning
 import com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient;
 import com.github.mjeanroy.junit.servers.commons.ClassUtils;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
  * Available strategies that can be used to build
@@ -68,7 +69,7 @@ public enum HttpClientStrategy {
 	 */
 	OK_HTTP {
 		@Override
-		public HttpClient build(EmbeddedServer server) {
+		public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return OkHttpClient.defaultOkHttpClient(server);
 		}
 	},
@@ -82,7 +83,7 @@ public enum HttpClientStrategy {
 	 */
 	ASYNC_HTTP_CLIENT {
 		@Override
-		public HttpClient build(EmbeddedServer server) {
+		public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return AsyncHttpClient.defaultAsyncHttpClient(server);
 		}
 	},
@@ -92,7 +93,7 @@ public enum HttpClientStrategy {
 	 */
 	NING_ASYNC_HTTP_CLIENT {
 		@Override
-		public HttpClient build(EmbeddedServer server) {
+		public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return NingAsyncHttpClient.defaultAsyncHttpClient(server);
 		}
 	},
@@ -102,7 +103,7 @@ public enum HttpClientStrategy {
 	 */
 	APACHE_HTTP_CLIENT {
 		@Override
-		public HttpClient build(EmbeddedServer server) {
+		public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return ApacheHttpClient.defaultApacheHttpClient(server);
 		}
 	},
@@ -120,7 +121,7 @@ public enum HttpClientStrategy {
 	 */
 	AUTO {
 		@Override
-		public HttpClient build(EmbeddedServer server) {
+		public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
 			if (SUPPORT_OK_HTTP_CLIENT) {
 				return OK_HTTP.build(server);
 			}
@@ -175,5 +176,5 @@ public enum HttpClientStrategy {
 	 * @param server Embedded server.
 	 * @return Http client.
 	 */
-	public abstract HttpClient build(EmbeddedServer server);
+	public abstract HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server);
 }

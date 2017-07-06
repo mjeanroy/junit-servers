@@ -57,7 +57,7 @@ public class ServerRule extends AbstractRule {
 	/**
 	 * Embedded server that will be start and stopped.
 	 */
-	private final EmbeddedServer server;
+	private final EmbeddedServer<?> server;
 
 	/**
 	 * Create rule with default embedded server.
@@ -102,7 +102,7 @@ public class ServerRule extends AbstractRule {
 	 * @param server Embedded server, not null.
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
-	public ServerRule(EmbeddedServer server) {
+	public ServerRule(EmbeddedServer<?> server) {
 		this.server = notNull(server, "server");
 	}
 
@@ -198,7 +198,7 @@ public class ServerRule extends AbstractRule {
 	 *
 	 * @return Server.
 	 */
-	public EmbeddedServer getServer() {
+	public EmbeddedServer<?> getServer() {
 		return server;
 	}
 }

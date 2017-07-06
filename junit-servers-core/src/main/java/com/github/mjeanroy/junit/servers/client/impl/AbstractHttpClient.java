@@ -49,7 +49,7 @@ public abstract class AbstractHttpClient implements HttpClient {
 	/**
 	 * Embedded server to query.
 	 */
-	private final EmbeddedServer server;
+	private final EmbeddedServer<?> server;
 
 	/**
 	 * Create abstract skeleton.
@@ -57,7 +57,7 @@ public abstract class AbstractHttpClient implements HttpClient {
 	 * @param server Server.
 	 * @throws NullPointerException if server is null.
 	 */
-	protected AbstractHttpClient(EmbeddedServer server) {
+	protected AbstractHttpClient(EmbeddedServer<?> server) {
 		this.server = notNull(server, "server");
 	}
 

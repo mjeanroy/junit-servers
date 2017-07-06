@@ -24,50 +24,40 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import org.junit.Test;
+import static com.github.mjeanroy.junit.servers.annotations.handlers.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateField;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import static com.github.mjeanroy.junit.servers.annotations.handlers.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.Test;
+
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 public class ConfigurationAnnotationHandlerTest {
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void it_should_support_server_annotation() {
 		AbstractConfiguration configuration = mock(AbstractConfiguration.class);
 		ConfigurationAnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 
-		Class serverClass = TestServerConfiguration.class;
-		Annotation annotation = mock(Annotation.class);
-		when(annotation.annotationType()).thenReturn(serverClass);
-
+		Field field = getPrivateField(FixtureClass.class, "configuration");
+		Annotation annotation = field.getAnnotation(TestServerConfiguration.class);
 		assertThat(handler.support(annotation)).isTrue();
 	}
 
 	@Test
 	public void it_should_set_configuration_instance() throws Exception {
 		AbstractConfiguration configuration = mock(AbstractConfiguration.class);
-		Foo foo = new Foo();
-		Field field = Foo.class.getDeclaredField("configuration");
+		FixtureClass fixture = new FixtureClass();
+		Field field = FixtureClass.class.getDeclaredField("configuration");
 
 		ConfigurationAnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
-		handler.before(foo, field);
-
-		assertThat(foo.configuration)
-				.isNotNull()
-				.isSameAs(configuration);
-	}
-
-	private static class Foo {
-		@TestServerConfiguration
-		private AbstractConfiguration configuration;
-
+		handler.before(fixture, field);
+		assertThat(readPrivate(fixture, "configuration")).isSameAs(configuration);
 	}
 }

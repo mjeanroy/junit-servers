@@ -116,7 +116,7 @@ public abstract class BaseHttpClientTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
-	private EmbeddedServer server;
+	private EmbeddedServer<?> server;
 	private String url;
 	private HttpClient client;
 

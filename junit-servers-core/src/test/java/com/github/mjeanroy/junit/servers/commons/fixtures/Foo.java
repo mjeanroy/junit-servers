@@ -30,4 +30,8 @@ class Foo {
 	Foo(int id) {
 		this.id = id;
 	}
+
+	int getId() {
+		return id;
+	}
 }

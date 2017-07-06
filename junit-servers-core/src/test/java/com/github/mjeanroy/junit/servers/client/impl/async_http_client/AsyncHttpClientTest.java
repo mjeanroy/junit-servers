@@ -45,12 +45,12 @@ public class AsyncHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Override
-	protected HttpClient createDefaultClient(EmbeddedServer server) {
+	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
 		return AsyncHttpClient.defaultAsyncHttpClient(server);
 	}
 
 	@Override
-	protected HttpClient createCustomClient(EmbeddedServer server) {
+	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
 		return AsyncHttpClient.newAsyncHttpClient(server, internalClient);
 	}
 

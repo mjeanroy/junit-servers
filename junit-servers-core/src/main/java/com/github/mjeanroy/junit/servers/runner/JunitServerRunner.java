@@ -82,7 +82,7 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 	/**
 	 * Embedded server defined before and after tests.
 	 */
-	private final EmbeddedServer server;
+	private final EmbeddedServer<?> server;
 
 	/**
 	 * Server configuration.

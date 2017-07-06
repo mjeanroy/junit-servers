@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.exceptions;
 /**
  * Exception thrown when server cannot be stopped.
  */
+@SuppressWarnings("serial")
 public final class ServerStopException extends AbstractEmbeddedServerException {
 
 	public ServerStopException(Throwable throwable) {

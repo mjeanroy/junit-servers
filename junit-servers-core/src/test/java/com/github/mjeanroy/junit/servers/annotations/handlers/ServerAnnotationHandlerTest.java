@@ -24,50 +24,41 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.junit.Test;
+import static com.github.mjeanroy.junit.servers.annotations.handlers.ServerAnnotationHandler.newServerAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateField;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import static com.github.mjeanroy.junit.servers.annotations.handlers.ServerAnnotationHandler.newServerAnnotationHandler;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.Test;
+
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 
 public class ServerAnnotationHandlerTest {
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void it_should_support_server_annotation() {
-		EmbeddedServer server = mock(EmbeddedServer.class);
+		EmbeddedServer<?> server = mock(EmbeddedServer.class);
 		ServerAnnotationHandler handler = newServerAnnotationHandler(server);
 
-		Class serverClass = TestServer.class;
-		Annotation annotation = mock(Annotation.class);
-		when(annotation.annotationType()).thenReturn(serverClass);
-
+		Field field = Fields.getPrivateField(FixtureClass.class, "server");
+		Annotation annotation = field.getAnnotation(TestServer.class);
 		assertThat(handler.support(annotation)).isTrue();
 	}
 
 	@Test
 	public void it_should_set_server_instance() throws Exception {
-		EmbeddedServer server = mock(EmbeddedServer.class);
-		Foo foo = new Foo();
-		Field field = Foo.class.getDeclaredField("server");
+		EmbeddedServer<?> server = mock(EmbeddedServer.class);
+		Field field = getPrivateField(FixtureClass.class, "server");
+		FixtureClass fixture = new FixtureClass();
 
 		ServerAnnotationHandler handler = newServerAnnotationHandler(server);
-		handler.before(foo, field);
-
-		assertThat(foo.server)
-				.isNotNull()
-				.isSameAs(server);
-	}
-
-	private static class Foo {
-		@TestServer
-		private EmbeddedServer server;
-
+		handler.before(fixture, field);
+		assertThat(readPrivate(fixture, "server")).isSameAs(server);
 	}
 }

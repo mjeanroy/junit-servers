@@ -42,14 +42,14 @@ public interface Hook {
 	 *
 	 * @param server Server.
 	 */
-	void pre(EmbeddedServer server);
+	void pre(EmbeddedServer<?> server);
 
 	/**
 	 * Method invoked before server stops.
 	 *
 	 * @param server Server.
 	 */
-	void post(EmbeddedServer server);
+	void post(EmbeddedServer<?> server);
 
 	/**
 	 * Method invoked when server is fully started.
@@ -57,5 +57,5 @@ public interface Hook {
 	 * @param server Server.
 	 * @param servletContext Servlet context started within container.
 	 */
-	void onStarted(EmbeddedServer server, ServletContext servletContext);
+	void onStarted(EmbeddedServer<?> server, ServletContext servletContext);
 }

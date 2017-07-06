@@ -53,7 +53,7 @@ public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} or {@code client} are {@code null}.
 	 */
-	public static AsyncHttpClient newAsyncHttpClient(EmbeddedServer server, org.asynchttpclient.AsyncHttpClient client) {
+	public static AsyncHttpClient newAsyncHttpClient(EmbeddedServer<?> server, org.asynchttpclient.AsyncHttpClient client) {
 		return new AsyncHttpClient(server, client);
 	}
 
@@ -64,7 +64,7 @@ public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
-	public static AsyncHttpClient defaultAsyncHttpClient(EmbeddedServer server) {
+	public static AsyncHttpClient defaultAsyncHttpClient(EmbeddedServer<?> server) {
 		return new AsyncHttpClient(server, new DefaultAsyncHttpClient());
 	}
 
@@ -74,7 +74,7 @@ public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
 	private final org.asynchttpclient.AsyncHttpClient client;
 
 	// Use static factory
-	private AsyncHttpClient(EmbeddedServer server, org.asynchttpclient.AsyncHttpClient client) {
+	private AsyncHttpClient(EmbeddedServer<?> server, org.asynchttpclient.AsyncHttpClient client) {
 		super(server);
 		this.client = notNull(client, "client");
 	}

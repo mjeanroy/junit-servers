@@ -36,6 +36,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.Description;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -47,7 +49,7 @@ public class ServerRuleTest {
 	public ExpectedException thrown = ExpectedException.none();
 
 	private AbstractConfiguration configuration;
-	private EmbeddedServer server;
+	private EmbeddedServer<?> server;
 	private ServerRule rule;
 	private Description description;
 
@@ -55,7 +57,13 @@ public class ServerRuleTest {
 	public void setUp() {
 		configuration = mock(AbstractConfiguration.class);
 		server = mock(EmbeddedServer.class);
-		when(server.getConfiguration()).thenReturn(configuration);
+
+		when(server.getConfiguration()).thenAnswer(new Answer<AbstractConfiguration>() {
+			@Override
+			public AbstractConfiguration answer(InvocationOnMock invocation) throws Throwable {
+				return configuration;
+			}
+		});
 
 		rule = new ServerRule(server);
 		description = createTestDescription(ServerRuleTest.class, "name");
@@ -144,7 +152,7 @@ public class ServerRuleTest {
 
 	@Test
 	public void it_should_get_server() {
-		EmbeddedServer result = rule.getServer();
+		EmbeddedServer<?> result = rule.getServer();
 		assertThat(result).isSameAs(server);
 	}
 

@@ -242,7 +242,6 @@ public class CookieTest {
 	}
 
 	@Test
-	@SuppressWarnings("ConstantConditions")
 	public void it_should_create_complex_cookie_with_builder() {
 		String name = "name";
 		String value = "value";
@@ -272,7 +271,6 @@ public class CookieTest {
 	}
 
 	@Test
-	@SuppressWarnings("ConstantConditions")
 	public void it_should_create_complex_cookie_with_expires_date_with_builder() {
 		String name = "name";
 		String value = "value";

@@ -55,7 +55,7 @@ public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} of {@code client} are {@code null}.
 	 */
-	public static ApacheHttpClient newApacheHttpClient(EmbeddedServer server, CloseableHttpClient client) {
+	public static ApacheHttpClient newApacheHttpClient(EmbeddedServer<?> server, CloseableHttpClient client) {
 		return new ApacheHttpClient(server, client);
 	}
 
@@ -66,7 +66,7 @@ public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
-	public static ApacheHttpClient defaultApacheHttpClient(EmbeddedServer server) {
+	public static ApacheHttpClient defaultApacheHttpClient(EmbeddedServer<?> server) {
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		return new ApacheHttpClient(server, client);
 	}
@@ -84,7 +84,7 @@ public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
 	private final CloseableHttpClient client;
 
 	// Use static factory
-	private ApacheHttpClient(EmbeddedServer server, CloseableHttpClient client) {
+	private ApacheHttpClient(EmbeddedServer<?> server, CloseableHttpClient client) {
 		super(server);
 		this.client = notNull(client, "client");
 		this.destroyed = new AtomicBoolean(false);

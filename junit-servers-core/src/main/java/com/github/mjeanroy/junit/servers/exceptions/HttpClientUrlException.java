@@ -28,6 +28,7 @@ package com.github.mjeanroy.junit.servers.exceptions;
  * Exception thrown when http request cannot be created because of a
  * malformed URL.
  */
+@SuppressWarnings("serial")
 public class HttpClientUrlException extends HttpClientException {
 
 	/**

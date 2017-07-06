@@ -24,58 +24,50 @@
 
 package com.github.mjeanroy.junit.servers.annotations.handlers;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.junit.Test;
+import static com.github.mjeanroy.junit.servers.annotations.handlers.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
+
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateField;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import static com.github.mjeanroy.junit.servers.annotations.handlers.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.writePrivate;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.junit.Test;
+
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 public class HttpClientAnnotationHandlerTest {
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void it_should_support_server_annotation() {
-		EmbeddedServer server = mock(EmbeddedServer.class);
+		EmbeddedServer<?> server = mock(EmbeddedServer.class);
 		HttpClientAnnotationHandler handler = newHttpClientAnnotationHandler(server);
 
-		Class serverClass = TestHttpClient.class;
-		Annotation annotation = mock(Annotation.class);
-		when(annotation.annotationType()).thenReturn(serverClass);
-
+		Field field = getPrivateField(FixtureClass.class, "client");
+		Annotation annotation = field.getAnnotation(TestHttpClient.class);
 		assertThat(handler.support(annotation)).isTrue();
 	}
 
 	@Test
 	public void it_should_set_client_instance() throws Exception {
-		EmbeddedServer server = mock(EmbeddedServer.class);
-		Foo foo = new Foo();
-		Field field = Foo.class.getDeclaredField("client");
+		EmbeddedServer<?> server = mock(EmbeddedServer.class);
+		FixtureClass fixture = new FixtureClass();
+		Field field = FixtureClass.class.getDeclaredField("client");
 
 		HttpClientAnnotationHandler handler = newHttpClientAnnotationHandler(server);
 
-		handler.before(foo, field);
-		assertThat(foo.client).isNotNull();
+		handler.before(fixture, field);
 
-		HttpClient spy = spy(foo.client);
-		writePrivate(foo, "client", spy);
+		HttpClient client = readPrivate(fixture, "client");
+		assertThat(client).isNotNull();
+		assertThat(client.isDestroyed()).isFalse();
 
-		handler.after(foo, field);
-		verify(spy).destroy();
-		assertThat(foo.client).isNull();
-	}
-
-	private static class Foo {
-		@TestHttpClient
-		private HttpClient client;
+		handler.after(fixture, field);
+		assertThat(readPrivate(fixture, "client")).isNull();
+		assertThat(client.isDestroyed()).isTrue();
 	}
 }

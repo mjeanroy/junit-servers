@@ -29,6 +29,7 @@ package com.github.mjeanroy.junit.servers.exceptions;
  * For example, this exception can be thrown in junit runner when no
  * implementation can be found at runtime.
  */
+@SuppressWarnings("serial")
 public class ServerImplMissingException extends AbstractEmbeddedServerException {
 
 	/**

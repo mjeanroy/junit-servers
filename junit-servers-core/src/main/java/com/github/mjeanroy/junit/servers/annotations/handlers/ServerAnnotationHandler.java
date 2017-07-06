@@ -44,17 +44,17 @@ public class ServerAnnotationHandler extends AbstractAnnotationHandler {
 	 * @return Handler.
 	 * @throws NullPointerException if server is null.
 	 */
-	public static ServerAnnotationHandler newServerAnnotationHandler(EmbeddedServer server) {
+	public static ServerAnnotationHandler newServerAnnotationHandler(EmbeddedServer<?> server) {
 		return new ServerAnnotationHandler(notNull(server, "server"));
 	}
 
 	/**
 	 * Embedded server set on class fields.
 	 */
-	private final EmbeddedServer server;
+	private final EmbeddedServer<?> server;
 
 	// Use static factory instead
-	private ServerAnnotationHandler(EmbeddedServer server) {
+	private ServerAnnotationHandler(EmbeddedServer<?> server) {
 		super(TestServer.class);
 		this.server = server;
 	}

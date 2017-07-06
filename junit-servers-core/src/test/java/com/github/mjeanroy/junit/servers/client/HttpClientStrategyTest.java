@@ -29,6 +29,7 @@ import com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttp
 import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
@@ -49,9 +50,10 @@ public class HttpClientStrategyTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
-	private EmbeddedServer server;
+	private EmbeddedServer<? extends AbstractConfiguration> server;
 
 	@Before
+	@SuppressWarnings("unchecked")
 	public void setUp() {
 		server = mock(EmbeddedServer.class);
 	}

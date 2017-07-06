@@ -28,6 +28,7 @@ package com.github.mjeanroy.junit.servers.exceptions;
  * Exception thrown when http request throws exception (such
  * as IOException).
  */
+@SuppressWarnings("serial")
 public class HttpClientException extends AbstractEmbeddedServerException {
 
 	/**

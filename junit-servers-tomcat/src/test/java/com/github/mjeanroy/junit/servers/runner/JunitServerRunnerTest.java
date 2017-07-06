@@ -51,7 +51,7 @@ public class JunitServerRunnerTest {
 	public void it_should_instantiate_tomcat_with_default_configuration() throws Exception {
 		JunitServerRunner runner = new JunitServerRunner(Foo.class);
 
-		EmbeddedServer server = (EmbeddedServer) readField(runner, "server", true);
+		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
 		assertThat(server)
 				.isNotNull()
 				.isInstanceOf(EmbeddedTomcat.class);
@@ -67,7 +67,7 @@ public class JunitServerRunnerTest {
 	public void it_should_instantiate_tomcat_with_configuration() throws Exception {
 		JunitServerRunner runner = new JunitServerRunner(Bar.class);
 
-		EmbeddedServer server = (EmbeddedServer) readField(runner, "server", true);
+		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
 		assertThat(server)
 				.isNotNull()
 				.isInstanceOf(EmbeddedTomcat.class);
@@ -121,7 +121,7 @@ public class JunitServerRunnerTest {
 
 	public static class Foo {
 		@TestServer
-		private static EmbeddedServer server;
+		private static EmbeddedServer<?> server;
 
 		@TestServerConfiguration
 		private static EmbeddedTomcatConfiguration configuration;
@@ -138,7 +138,7 @@ public class JunitServerRunnerTest {
 	public static class Bar {
 
 		@TestServer
-		private static EmbeddedServer server;
+		private static EmbeddedServer<?> server;
 
 		@TestServerConfiguration
 		private static EmbeddedTomcatConfiguration initConfiguration() {

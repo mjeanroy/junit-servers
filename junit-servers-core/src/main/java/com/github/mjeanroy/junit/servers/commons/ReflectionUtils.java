@@ -59,7 +59,7 @@ public final class ReflectionUtils {
 	 * @param type Class to inspect.
 	 * @return Fields.
 	 */
-	public static List<Field> findAllFields(Class type) {
+	public static List<Field> findAllFields(Class<?> type) {
 		List<Field> fields = new LinkedList<>();
 		if (type != null) {
 			addAll(fields, type.getDeclaredFields());
@@ -77,7 +77,7 @@ public final class ReflectionUtils {
 	 * @param type Class to inspect.
 	 * @return Fields.
 	 */
-	private static List<Field> findStaticFields(Class type) {
+	private static List<Field> findStaticFields(Class<?> type) {
 		return filter(asList(type.getDeclaredFields()), STATIC_FIELD_PREDICATE);
 	}
 
@@ -87,7 +87,7 @@ public final class ReflectionUtils {
 	 * @param type Class to inspect.
 	 * @return Fields.
 	 */
-	private static List<Method> findStaticMethods(Class type) {
+	private static List<Method> findStaticMethods(Class<?> type) {
 		return filter(asList(type.getDeclaredMethods()), STATIC_METHOD_PREDICATE);
 	}
 
@@ -99,7 +99,7 @@ public final class ReflectionUtils {
 	 * @param klass Annotation class.
 	 * @return Fields.
 	 */
-	public static List<Field> findStaticFieldsAnnotatedWith(Class type, Class<? extends Annotation> klass) {
+	public static List<Field> findStaticFieldsAnnotatedWith(Class<?> type, Class<? extends Annotation> klass) {
 		List<Field> fields = findStaticFields(type);
 		return filter(fields, new FieldAnnotatedWithPredicate(klass));
 	}
@@ -112,7 +112,7 @@ public final class ReflectionUtils {
 	 * @param klass Annotation class.
 	 * @return Fields.
 	 */
-	public static List<Method> findStaticMethodsAnnotatedWith(Class type, Class<? extends Annotation> klass) {
+	public static List<Method> findStaticMethodsAnnotatedWith(Class<?> type, Class<? extends Annotation> klass) {
 		List<Method> methods = findStaticMethods(type);
 		return filter(methods, new MethodAnnotatedWithPredicate(klass));
 	}
