@@ -80,6 +80,7 @@
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
 		<maven-war-plugin>2.4</maven-war-plugin>
 		<maven-javadoc-plugin>2.10.4</maven-javadoc-plugin>
+		<maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
 		<versions-maven-plugin.version>2.1</versions-maven-plugin.version>
 		<animal-sniffer-maven-plugin.version>1.15</animal-sniffer-maven-plugin.version>
 		<java17-signature.version>1.0</java17-signature.version>
@@ -260,6 +261,11 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>${maven-clean-plugin.version}</version>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
