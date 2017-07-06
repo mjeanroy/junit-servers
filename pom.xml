@@ -78,7 +78,6 @@
 		<maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
 		<apache-rat-plugin.version>0.10</apache-rat-plugin.version>
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
-		<maven-war-plugin>2.4</maven-war-plugin>
 		<maven-javadoc-plugin>2.10.4</maven-javadoc-plugin>
 		<maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
 		<maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
