@@ -24,29 +24,20 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.Description;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.runner.Description.createTestDescription;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+
 public class TomcatServerRuleTest {
-
-	private Description description;
-
-	@Before
-	public void setUp() {
-		description = createTestDescription(TomcatServerRule.class, "name");
-	}
 
 	@Test
 	public void it_should_create_rule_with_server() {
@@ -72,11 +63,11 @@ public class TomcatServerRuleTest {
 		assertThat(rule.getPath()).isEqualTo(path);
 		assertThat(rule.getUrl()).isEqualTo(url);
 
-		rule.before(description);
+		rule.before();
 		verify(tomcat).start();
 		assertThat(rule.getPort()).isEqualTo(port);
 
-		rule.after(description);
+		rule.after();
 		verify(tomcat).stop();
 		assertThat(rule.getPort()).isEqualTo(configPort);
 	}
@@ -106,12 +97,12 @@ public class TomcatServerRuleTest {
 
 	private void assertRule(TomcatServerRule rule) {
 		try {
-			rule.before(description);
+			rule.before();
 			assertThat(rule.getPath()).isEqualTo("/");
 			assertThat(rule.getPort()).isGreaterThan(0);
 			assertThat(rule.getUrl()).isEqualTo("http://localhost:" + rule.getPort() + rule.getPath());
 		} finally {
-			rule.after(description);
+			rule.after();
 			assertThat(rule.getPort()).isZero();
 		}
 	}

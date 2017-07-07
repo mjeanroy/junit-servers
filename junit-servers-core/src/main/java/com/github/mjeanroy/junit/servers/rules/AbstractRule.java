@@ -24,37 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
+import org.junit.rules.ExternalResource;
 import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
 
 /**
  * Abstract skeleton of rule that will be executed
  * before and after each methods or test class.
  */
-abstract class AbstractRule implements TestRule {
-
-	@Override
-	public Statement apply(final Statement base, final Description description) {
-		return new Statement() {
-			@Override
-			public void evaluate() throws Throwable {
-				before(description);
-				try {
-					base.evaluate();
-				}
-				finally {
-					after(description);
-				}
-			}
-		};
-	}
-
-	void before(Description description) throws Throwable {
-		// do nothing
-	}
-
-	void after(Description description) {
-		// do nothing
-	}
+abstract class AbstractRule extends ExternalResource implements TestRule {
 }

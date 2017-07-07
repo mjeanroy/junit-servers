@@ -24,16 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler;
-import org.junit.runner.Description;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findAllFields;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findAllFields;
+import com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler;
 
 /**
  * Create new rule that will execute a list of annotation
@@ -65,12 +64,12 @@ public class HandlersRule extends AbstractRuleInstance {
 	}
 
 	@Override
-	void before(Description description) {
+	protected void before() throws Throwable {
 		process(true);
 	}
 
 	@Override
-	void after(Description description) {
+	protected void after() {
 		process(false);
 	}
 

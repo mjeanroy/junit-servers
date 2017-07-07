@@ -24,30 +24,21 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.Description;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.runner.Description.createTestDescription;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+
 public class JettyServerRuleTest {
-
-	private Description description;
-
-	@Before
-	public void setUp() {
-		description = createTestDescription(JettyServerRuleTest.class, "name");
-	}
 
 	@Test
 	public void it_should_create_rule_with_server() {
@@ -74,11 +65,11 @@ public class JettyServerRuleTest {
 		assertThat(rule.getPath()).isEqualTo(path);
 		assertThat(rule.getUrl()).isEqualTo(url);
 
-		rule.before(description);
+		rule.before();
 		verify(jetty).start();
 		assertThat(rule.getPort()).isEqualTo(port);
 
-		rule.after(description);
+		rule.after();
 		verify(jetty).stop();
 		assertThat(rule.getPort()).isEqualTo(configPort);
 	}
@@ -108,12 +99,12 @@ public class JettyServerRuleTest {
 
 	private void assertRule(JettyServerRule rule) {
 		try {
-			rule.before(description);
+			rule.before();
 			assertThat(rule.getPath()).isEqualTo("/");
 			assertThat(rule.getPort()).isGreaterThan(0);
 			assertThat(rule.getUrl()).isEqualTo("http://localhost:" + rule.getPort() + rule.getPath());
 		} finally {
-			rule.after(description);
+			rule.after();
 			assertThat(rule.getPort()).isZero(); // not started
 		}
 	}

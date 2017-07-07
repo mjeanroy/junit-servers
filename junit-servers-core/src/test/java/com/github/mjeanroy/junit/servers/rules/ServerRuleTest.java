@@ -25,7 +25,6 @@
 package com.github.mjeanroy.junit.servers.rules;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.runner.Description.createTestDescription;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -35,7 +34,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.Description;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -51,7 +49,6 @@ public class ServerRuleTest {
 	private AbstractConfiguration configuration;
 	private EmbeddedServer<?> server;
 	private ServerRule rule;
-	private Description description;
 
 	@Before
 	public void setUp() {
@@ -66,18 +63,17 @@ public class ServerRuleTest {
 		});
 
 		rule = new ServerRule(server);
-		description = createTestDescription(ServerRuleTest.class, "name");
 	}
 
 	@Test
 	public void it_should_start_server() {
-		rule.before(description);
+		rule.before();
 		verify(server).start();
 	}
 
 	@Test
 	public void it_should_stop_server() {
-		rule.after(description);
+		rule.after();
 		verify(server).stop();
 	}
 

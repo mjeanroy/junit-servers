@@ -24,12 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import org.junit.runner.Description;
-
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
+
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
  * Rule that can be used to start and stop embedded server.
@@ -107,12 +106,12 @@ public class ServerRule extends AbstractRule {
 	}
 
 	@Override
-	void before(Description description) {
+	protected void before() {
 		start();
 	}
 
 	@Override
-	void after(Description description) {
+	protected void after() {
 		stop();
 	}
 

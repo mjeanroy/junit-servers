@@ -37,7 +37,6 @@ import java.lang.reflect.Field;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.Description;
 import org.mockito.ArgumentCaptor;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
@@ -58,10 +57,10 @@ public class HandlersRuleTest {
 	}
 
 	@Test
-	public void it_should_process_before_handler() {
+	public void it_should_process_before_handler() throws Throwable {
 		when(handler.support(any(Annotation.class))).thenReturn(true);
 
-		rule.before(mock(Description.class));
+		rule.before();
 
 		verify(handler).before(same(foo), any(Field.class));
 		verify(handler, never()).after(same(foo), any(Field.class));
@@ -78,7 +77,7 @@ public class HandlersRuleTest {
 	public void it_should_process_after_handler() {
 		when(handler.support(any(Annotation.class))).thenReturn(true);
 
-		rule.after(mock(Description.class));
+		rule.after();
 
 		verify(handler, never()).before(same(foo), any(Field.class));
 		verify(handler).after(same(foo), any(Field.class));
@@ -92,10 +91,10 @@ public class HandlersRuleTest {
 	}
 
 	@Test
-	public void it_should_not_call_before_handler_if_annotation_is_not_supported() {
+	public void it_should_not_call_before_handler_if_annotation_is_not_supported() throws Throwable {
 		when(handler.support(any(Annotation.class))).thenReturn(false);
 
-		rule.before(mock(Description.class));
+		rule.before();
 
 		verify(handler, never()).before(same(foo), any(Field.class));
 		verify(handler, never()).after(same(foo), any(Field.class));
@@ -112,7 +111,7 @@ public class HandlersRuleTest {
 	public void it_should_not_call_after_handler_if_annotation_is_not_supported() {
 		when(handler.support(any(Annotation.class))).thenReturn(false);
 
-		rule.after(mock(Description.class));
+		rule.after();
 
 		verify(handler, never()).before(same(foo), any(Field.class));
 		verify(handler, never()).after(same(foo), any(Field.class));
