@@ -98,6 +98,32 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
+	public void it_should_delete_base_dir_on_stop() {
+		tomcat = new EmbeddedTomcat(defaultConfigurationBuilder().deleteBaseDir().build());
+		File baseDir = new File(tomcat.getConfiguration().getBaseDir());
+
+		assertThat(baseDir).exists();
+
+		tomcat.start();
+		tomcat.stop();
+
+		assertThat(baseDir).doesNotExist();
+	}
+
+	@Test
+	public void it_should_keep_base_dir_on_stop() {
+		tomcat = new EmbeddedTomcat(defaultConfigurationBuilder().keepBaseDir().build());
+		File baseDir = new File(tomcat.getConfiguration().getBaseDir());
+
+		assertThat(baseDir).exists();
+
+		tomcat.start();
+		tomcat.stop();
+
+		assertThat(baseDir).exists();
+	}
+
+	@Test
 	public void it_should_get_servlet_context() {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		tomcat.start();
