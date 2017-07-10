@@ -243,7 +243,8 @@ Default configuration is:
 - A random port is used to start embedded tomcat.
 - Webapp is set to src/main/webapp (relative to root project)
 - Context path is set to "/"
-- Base directory is set to tomcat-work (relative to root project). Base directory will be deleted after tests.
+- Base directory is set to tomcat-work (relative to root project). By default, base directory will be deleted after tests
+  but when the configuration flag _keepBaseDir_ is set to _true_ the content of this directory will be preserved.
 - Naming is enable.
 
 ```java
