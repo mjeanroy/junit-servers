@@ -161,17 +161,17 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 	@Override
 	public String toString() {
 		return ToStringBuilder.create(getClass())
-				.append("port", getPort())
-				.append("path", getPath())
-				.append("webapp", getWebapp())
-				.append("classpath", getClasspath())
-				.append("overrideDescriptor", getOverrideDescriptor())
-				.append("parentClasspath", getParentClasspath())
-				.append("baseDir", baseDir)
-				.append("keepBaseDir", keepBaseDir)
-				.append("enableNaming", enableNaming)
-				.append("forceMetaInf", forceMetaInf)
-				.build();
+			.append("port", getPort())
+			.append("path", getPath())
+			.append("webapp", getWebapp())
+			.append("classpath", getClasspath())
+			.append("overrideDescriptor", getOverrideDescriptor())
+			.append("parentClasspath", getParentClasspath())
+			.append("baseDir", baseDir)
+			.append("keepBaseDir", keepBaseDir)
+			.append("enableNaming", enableNaming)
+			.append("forceMetaInf", forceMetaInf)
+			.build();
 	}
 
 	@Override
