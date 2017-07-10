@@ -220,7 +220,9 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 				context = null;
 			}
 
-			deleteDirectory(configuration.getBaseDir());
+			if (!configuration.isKeepBaseDir()) {
+				deleteDirectory(configuration.getBaseDir());
+			}
 		}
 		catch (Exception ex) {
 			throw new ServerStopException(ex);

@@ -50,6 +50,11 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 	private static final String DEFAULT_BASE_DIR = "./tomcat-work";
 
 	/**
+	 * The default value for the {@link Builder#keepBaseDir} flag.
+	 */
+	private static final boolean DEFAULT_KEEP_BASE_DIR = false;
+
+	/**
 	 * The default value for the {@link Builder#enableNaming} flag.
 	 */
 	private static final boolean DEFAULT_ENABLE_NAMING = true;
@@ -86,6 +91,11 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 	private final String baseDir;
 
 	/**
+	 * Keep Tomcat Base Directory content on server stop.
+	 */
+	private final boolean keepBaseDir;
+
+	/**
 	 * Flag used to enable / disable naming.
 	 * This is a flag to enables JNDI naming.
 	 *
@@ -107,6 +117,7 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 	private EmbeddedTomcatConfiguration(Builder builder) {
 		super(builder);
 		this.baseDir = builder.getBaseDir();
+		this.keepBaseDir = builder.isKeepBaseDir();
 		this.enableNaming = builder.isEnableNaming();
 		this.forceMetaInf = builder.isForceMetaInf();
 	}
@@ -118,6 +129,15 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 	 */
 	public String getBaseDir() {
 		return baseDir;
+	}
+
+	/**
+	 * Get current {@link #keepBaseDir} value.
+	 *
+	 * @return {@link #keepBaseDir}
+	 */
+	public boolean isKeepBaseDir() {
+		return keepBaseDir;
 	}
 
 	/**
@@ -148,6 +168,7 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 			.append("overrideDescriptor", getOverrideDescriptor())
 			.append("parentClasspath", getParentClasspath())
 			.append("baseDir", baseDir)
+			.append("keepBaseDir", keepBaseDir)
 			.append("enableNaming", enableNaming)
 			.append("forceMetaInf", forceMetaInf)
 			.build();
@@ -163,6 +184,7 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 			EmbeddedTomcatConfiguration c = (EmbeddedTomcatConfiguration) o;
 			return super.equals(c)
 					&& Objects.equals(baseDir, c.baseDir)
+					&& Objects.equals(keepBaseDir, c.keepBaseDir)
 					&& Objects.equals(enableNaming, c.enableNaming)
 					&& Objects.equals(forceMetaInf, c.forceMetaInf);
 		}
@@ -177,7 +199,7 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(super.hashCode(), baseDir, enableNaming, forceMetaInf);
+		return Objects.hash(super.hashCode(), baseDir, keepBaseDir, enableNaming, forceMetaInf);
 	}
 
 	/**
@@ -194,6 +216,14 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 		 * @see Tomcat#setBaseDir(String)
 		 */
 		private String baseDir;
+
+		/**
+		 * Keep tomcat base directory content on server stop.
+		 * Default is {@link EmbeddedTomcatConfiguration#DEFAULT_KEEP_BASE_DIR}.
+		 *
+		 * @see EmbeddedTomcatConfiguration#DEFAULT_KEEP_BASE_DIR
+		 */
+		private boolean keepBaseDir = DEFAULT_KEEP_BASE_DIR;
 
 		/**
 		 * Enable/Disable naming: this is a flag to enables JNDI naming.
@@ -238,6 +268,15 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 		}
 
 		/**
+		 * Get current {@link #keepBaseDir} value.
+		 *
+		 * @return {@link #keepBaseDir}
+		 */
+		public boolean isKeepBaseDir() {
+			return keepBaseDir;
+		}
+
+		/**
 		 * Get current {@link #enableNaming} value.
 		 *
 		 * @return {@link #enableNaming}
@@ -264,6 +303,26 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 		 */
 		public Builder withBaseDir(String baseDir) {
 			this.baseDir = notNull(baseDir, "baseDir");
+			return self();
+		}
+
+		/**
+		 * Keep tomcat base directory content on server stop.
+		 *
+		 * @return this.
+		 */
+		public Builder keepBaseDir() {
+			this.keepBaseDir = true;
+			return self();
+		}
+
+		/**
+		 * Delete tomcat base directory on server stop.
+		 *
+		 * @return this.
+		 */
+		public Builder deleteBaseDir() {
+			this.keepBaseDir = false;
 			return self();
 		}
 

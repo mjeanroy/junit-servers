@@ -53,6 +53,7 @@ public class EmbeddedTomcatConfigurationBuilderTest {
 		assertThat(builder.isForceMetaInf()).isTrue();
 		assertThat(builder.getClasspath()).isEqualTo("./target/classes");
 		assertThat(builder.getBaseDir()).isEqualTo("./tomcat-work");
+		assertThat(builder.isKeepBaseDir()).isFalse();
 	}
 
 	@Test
@@ -120,6 +121,22 @@ public class EmbeddedTomcatConfigurationBuilderTest {
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getBaseDir()).isNotEqualTo(oldBaseDir).isEqualTo(newBaseDir);
+	}
+
+	@Test
+	public void it_should_keep_base_dir() {
+		EmbeddedTomcatConfiguration.Builder result = builder.keepBaseDir();
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.isKeepBaseDir()).isTrue();
+	}
+
+	@Test
+	public void it_should_delete_base_dir() {
+		EmbeddedTomcatConfiguration.Builder result = builder.deleteBaseDir();
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.isKeepBaseDir()).isFalse();
 	}
 
 	@Test

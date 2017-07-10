@@ -42,6 +42,7 @@ public class EmbeddedTomcatConfigurationTest {
 		assertThat(result.getWebapp()).isEqualTo("src/main/webapp");
 		assertThat(result.isForceMetaInf()).isTrue();
 		assertThat(result.isEnableNaming()).isTrue();
+		assertThat(result.isKeepBaseDir()).isFalse();
 	}
 
 	@Test
@@ -58,6 +59,7 @@ public class EmbeddedTomcatConfigurationTest {
 				.withPath(path)
 				.disableNaming()
 				.disableForceMetaInf()
+				.keepBaseDir()
 				.build();
 
 		assertThat(result.getPort()).isEqualTo(port);
@@ -66,6 +68,7 @@ public class EmbeddedTomcatConfigurationTest {
 		assertThat(result.getWebapp()).isEqualTo(webapp);
 		assertThat(result.isForceMetaInf()).isFalse();
 		assertThat(result.isEnableNaming()).isFalse();
+		assertThat(result.isKeepBaseDir()).isTrue();
 	}
 
 	@Test
@@ -88,6 +91,7 @@ public class EmbeddedTomcatConfigurationTest {
 				"overrideDescriptor: null, " +
 				"parentClasspath: [], " +
 				"baseDir: \"./tomcat-work\", " +
+				"keepBaseDir: false, " +
 				"enableNaming: true, " +
 				"forceMetaInf: true" +
 			"}");
