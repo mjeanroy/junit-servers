@@ -144,30 +144,93 @@ public enum HttpClientStrategy {
 		}
 	};
 
-	// The JAVA version.
-	private static final int JAVA_VERSION;
+	/**
+	 * The CompletableFuture FQN that has been added in JDK8.
+	 */
+	private static final String COMPLETABLE_FUTURE_CLASS = "java.util.concurrent.CompletableFuture";
 
-	static {
-		final String javaVersion = System.getProperty("java.specification.version");
-		final String[] parts = javaVersion.split("\\.");
+	/**
+	 * This is a flag that can be used to ensure that the runtime environment support Java 8 API.
+	 * For now, the only verification is the support of the new JDK8 CompletableFuture class.
+	 *
+	 * @see HttpClientStrategy#COMPLETABLE_FUTURE_CLASS
+	 */
+	private static final boolean SUPPORT_JAVA_8 = ClassUtils.isPresent(COMPLETABLE_FUTURE_CLASS);
 
-		// For JDK9, the return value will be "9", otherwise, it will be "1.8" or "1.7".
-		// Lower Java version are not supported.
-		final String majorVersion = parts[0];
-		final String minorVersion = parts.length > 1 ? parts[1] : majorVersion;
-		JAVA_VERSION = Integer.parseInt(minorVersion);
-	}
-
+	/**
+	 * The FQN entry point for the async-http-client library.
+	 *
+	 * @see <a href="http://www.javadoc.io/doc/org.asynchttpclient/async-http-client">http://www.javadoc.io/doc/org.asynchttpclient/async-http-client</a>
+	 */
 	private static final String ASYNC_HTTP_CLIENT_CLASS = "org.asynchttpclient.DefaultAsyncHttpClient";
-	private static final boolean SUPPORT_ASYNC_HTTP_CLIENT = JAVA_VERSION >= 8 && ClassUtils.isPresent(ASYNC_HTTP_CLIENT_CLASS);
 
+	/**
+	 * A flag that can be used to know if async-http-client is available.
+	 * The following conditions must be met:
+	 * <ul>
+	 *   <li>The runtime must be executed on, at least, <strong>Java 8</strong>.</li>
+	 *   <li>The async-http-client library must be available on the classpath.</li>
+	 * </ul>
+	 *
+	 * @see HttpClientStrategy#SUPPORT_JAVA_8
+	 * @see HttpClientStrategy#ASYNC_HTTP_CLIENT_CLASS
+	 * @see <a href="https://github.com/AsyncHttpClient/async-http-client">https://github.com/AsyncHttpClient/async-http-client</a>
+	 * @see <a href="http://www.javadoc.io/doc/org.asynchttpclient/async-http-client">http://www.javadoc.io/doc/org.asynchttpclient/async-http-client</a>
+	 */
+	private static final boolean SUPPORT_ASYNC_HTTP_CLIENT = SUPPORT_JAVA_8 && ClassUtils.isPresent(ASYNC_HTTP_CLIENT_CLASS);
+
+	/**
+	 * The FQN entry point for the (ning) async-http-client library.
+	 *
+	 * @see <a href="http://www.javadoc.io/doc/com.ning/async-http-client">http://www.javadoc.io/doc/com.ning/async-http-client</a>
+	 */
 	private static final String NING_ASYNC_HTTP_CLIENT_CLASS = "com.ning.http.client.AsyncHttpClient";
+
+	/**
+	 * A flag that can be used to know if (ning) async-http-client is available.
+	 * For now, the only condition is that the (ning) async-http-client library is available
+	 * on the classpath.
+	 *
+	 * @see HttpClientStrategy#NING_ASYNC_HTTP_CLIENT_CLASS
+	 * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
+	 * @see <a href="http://www.javadoc.io/doc/com.ning/async-http-client">http://www.javadoc.io/doc/com.ning/async-http-client</a>
+	 */
 	private static final boolean SUPPORT_NING_ASYNC_HTTP_CLIENT = ClassUtils.isPresent(NING_ASYNC_HTTP_CLIENT_CLASS);
 
+	/**
+	 * The FQN entry point for the apache http-component library.
+	 *
+	 * @see <a href="http://www.javadoc.io/doc/org.apache.httpcomponents/httpclient">http://www.javadoc.io/doc/org.apache.httpcomponents/httpclient</a>
+	 */
 	private static final String APACHE_HTTP_CLIENT_CLASS = "org.apache.http.impl.client.CloseableHttpClient";
+
+	/**
+	 * A flag that can be used to know if apache http-component library is available.
+	 * For now, the only condition is that the library is available
+	 * on the classpath.
+	 *
+	 * @see HttpClientStrategy#APACHE_HTTP_CLIENT_CLASS
+	 * @see <a href="https://hc.apache.org/">https://hc.apache.org/</a>
+	 * @see <a href="http://www.javadoc.io/doc/org.apache.httpcomponents/httpclient">http://www.javadoc.io/doc/org.apache.httpcomponents/httpclient</a>
+	 */
 	private static final boolean SUPPORT_APACHE_HTTP_CLIENT = ClassUtils.isPresent(APACHE_HTTP_CLIENT_CLASS);
 
+	/**
+	 * The FQN entry point for the square okhttp library.
+	 *
+	 * @see <a href="http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1>http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1</a>
+	 */
 	private static final String OK_HTTP_CLIENT_CLASS = "okhttp3.OkHttpClient";
+
+	/**
+	 * A flag that can be used to know if okhttp library is available.
+	 * For now, the only condition is that the library is available
+	 * on the classpath.
+	 *
+	 * @see HttpClientStrategy#OK_HTTP_CLIENT_CLASS
+	 * @see <a href="http://square.github.io/okhttp/">http://square.github.io/okhttp/</a>
+	 * @see <a href="http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1>http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1</a>
+	 */
 	private static final boolean SUPPORT_OK_HTTP_CLIENT = ClassUtils.isPresent(OK_HTTP_CLIENT_CLASS);
 
 	/**
