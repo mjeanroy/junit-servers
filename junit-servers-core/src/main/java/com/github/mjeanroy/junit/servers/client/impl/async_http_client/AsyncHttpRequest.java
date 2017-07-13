@@ -24,8 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
-import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.HttpHeaders;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
@@ -156,42 +157,8 @@ class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @see RequestBuilder#addCookie(org.asynchttpclient.cookie.Cookie)
 	 */
 	private void handleCookies(RequestBuilder builder) {
-		for (Cookie cookie : cookies) {
-			handleCookie(builder, cookie);
+		if (!cookies.isEmpty()) {
+			builder.addHeader(HttpHeaders.COOKIE, Cookies.serialize(cookies));
 		}
-	}
-
-	/**
-	 * Add single cookie to the final HTTP request.
-	 *
-	 * @param builder The pending HTTP request.
-	 * @param cookie The cookie to add.
-	 * @see RequestBuilder#addCookie(org.asynchttpclient.cookie.Cookie)
-	 */
-	private void handleCookie(RequestBuilder builder, Cookie cookie) {
-		String name = cookie.getName();
-		String value = cookie.getValue();
-		boolean wrap = true;
-		String domain = cookie.getDomain();
-		String path = cookie.getPath();
-		boolean secured = cookie.isSecure();
-		boolean httpOnly = cookie.isHttpOnly();
-
-		final Long maxAge = cookie.getMaxAge();
-		final Long expires = cookie.getExpires();
-
-		final long maxAgeValue;
-		if (maxAge != null) {
-			// Max-Age must be tested first.
-			maxAgeValue = maxAge;
-		} else if (expires != null) {
-			// Then, fallback to expires
-			maxAgeValue = expires - System.currentTimeMillis();
-		} else {
-			// Final default value.
-			maxAgeValue = 0;
-		}
-
-		builder.addCookie(org.asynchttpclient.cookie.Cookie.newValidCookie(name, value, wrap, domain, path, maxAgeValue, secured, httpOnly));
 	}
 }
