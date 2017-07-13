@@ -28,7 +28,6 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 /**
  * Static field utilities to use in tests.
@@ -77,26 +76,34 @@ public final class Fields {
 	 * @param <T> Type of the returned value.
 	 * @return The value of the field on given instance.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> T readPrivate(Object instance, String name) {
 		try {
-			return (T) FieldUtils.readField(instance, name, true);
+			@SuppressWarnings("unchecked")
+			T value = (T) FieldUtils.readField(instance, name, true);
+
+			return value;
 		} catch (IllegalAccessException ex) {
 			throw new AssertionError(ex);
 		}
 	}
 
 	/**
-	 * Write private field on given object instance.
+	 * Read private static field on given class.
 	 *
-	 * @param instance The object instance.
+	 * @param klass The class.
 	 * @param name The field name.
-	 * @param value The field value.
-	 * @param <T> Type of the returned value.
+	 * @param <T> Type of returned value.
+	 * @return The field value.
 	 */
-	public static <T> void writePrivate(Object instance, String name, T value) {
+	public static <T> T readPrivateStatic(Class<?> klass, String name) {
+		Field field = FieldUtils.getDeclaredField(klass, name, true);
+		FieldUtils.removeFinalModifier(field);
+
 		try {
-			FieldUtils.writeField(instance, name, value, true);
+			@SuppressWarnings("unchecked")
+			T value = (T) FieldUtils.readStaticField(field, true);
+
+			return value;
 		} catch (IllegalAccessException ex) {
 			throw new AssertionError(ex);
 		}
@@ -110,46 +117,13 @@ public final class Fields {
 	 * @param value The new field value.
 	 */
 	public static void writeStaticFinal(Class<?> klass, String name, Object value) {
-		Field field = null;
-		int modifiers = -1;
-		boolean forceFinal = false;
-		boolean forceAccess = false;
+		Field field = FieldUtils.getDeclaredField(klass, name, true);
+		FieldUtils.removeFinalModifier(field);
 
 		try {
-			field = klass.getDeclaredField(name);
-			boolean accessible = field.isAccessible();
-			if (!accessible) {
-				field.setAccessible(true);
-				forceAccess = true;
-			}
-
-			// Remove final modifier.
-			modifiers = field.getModifiers();
-			if (Modifier.isFinal(modifiers)) {
-				Field modifiersField = Field.class.getDeclaredField("modifiers");
-				modifiersField.setAccessible(true);
-				modifiersField.setInt(field, field.getModifiers() & -17);
-				forceFinal = true;
-			}
-
-			field.set(null, value);
-
-		} catch (Exception ex) {
+			FieldUtils.writeStaticField(field, value, true);
+		} catch (IllegalAccessException ex) {
 			throw new AssertionError(ex);
-		} finally {
-			if (field != null && forceAccess) {
-				field.setAccessible(false);
-			}
-
-			if (field != null && forceFinal) {
-				try {
-					Field modifiersField = Field.class.getDeclaredField("modifiers");
-					modifiersField.setInt(field, modifiers);
-					modifiersField.setAccessible(false);
-				} catch (Exception ex) {
-					// ok...
-				}
-			}
 		}
 	}
 }

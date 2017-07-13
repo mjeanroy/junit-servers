@@ -24,15 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.utils.junit.run_if;
 
+import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 
 /**
- * Ensure that the current java version is, at most, Java 7.
+ * Ensure that the current java version is, at least, Java 8.
  */
-public class Java7Condition implements RunIfCondition {
+public class AtLeastJava8 implements RunIfCondition {
 
 	@Override
 	public boolean apply() {
-		return SystemUtils.IS_JAVA_1_7;
+		return SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8);
 	}
 }

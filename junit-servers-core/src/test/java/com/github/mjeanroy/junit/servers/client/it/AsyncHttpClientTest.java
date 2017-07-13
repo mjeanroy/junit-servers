@@ -25,10 +25,10 @@
 package com.github.mjeanroy.junit.servers.client.it;
 
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.AtLeastJava8;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
 
-@RunIf(Java8Condition.class)
+@RunIf(AtLeastJava8.class)
 public class AsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override

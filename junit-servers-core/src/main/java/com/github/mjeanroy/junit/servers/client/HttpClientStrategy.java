@@ -67,9 +67,14 @@ public enum HttpClientStrategy {
 	/**
 	 * Build http client using <a href="http://square.github.io/okhttp/">OkHttp</a> library.
 	 */
-	OK_HTTP {
+	OK_HTTP("OkHttp") {
 		@Override
-		public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
+		boolean support() {
+			return SUPPORT_OK_HTTP_CLIENT;
+		}
+
+		@Override
+		HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return OkHttpClient.defaultOkHttpClient(server);
 		}
 	},
@@ -81,9 +86,14 @@ public enum HttpClientStrategy {
 	 *
 	 * <strong>This strategy requires Java 8.</strong>
 	 */
-	ASYNC_HTTP_CLIENT {
+	ASYNC_HTTP_CLIENT("AsyncHttpClient") {
 		@Override
-		public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
+		boolean support() {
+			return SUPPORT_JAVA_8 && SUPPORT_ASYNC_HTTP_CLIENT;
+		}
+
+		@Override
+		HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return AsyncHttpClient.defaultAsyncHttpClient(server);
 		}
 	},
@@ -91,9 +101,14 @@ public enum HttpClientStrategy {
 	/**
 	 * Build http client using <a href="https://github.com/ning/async-http-client">(Ning) AsyncHttpClient</a> library.
 	 */
-	NING_ASYNC_HTTP_CLIENT {
+	NING_ASYNC_HTTP_CLIENT("(Ning) AsyncHttpClient") {
 		@Override
-		public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
+		boolean support() {
+			return SUPPORT_NING_ASYNC_HTTP_CLIENT;
+		}
+
+		@Override
+		HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return NingAsyncHttpClient.defaultAsyncHttpClient(server);
 		}
 	},
@@ -101,9 +116,14 @@ public enum HttpClientStrategy {
 	/**
 	 * Build http client using <a href="https://hc.apache.org/">ApacheHttpClient</a> library.
 	 */
-	APACHE_HTTP_CLIENT {
+	APACHE_HTTP_CLIENT("Apache HttpComponent") {
 		@Override
-		public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
+		boolean support() {
+			return SUPPORT_APACHE_HTTP_CLIENT;
+		}
+
+		@Override
+		HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return ApacheHttpClient.defaultApacheHttpClient(server);
 		}
 	},
@@ -119,23 +139,24 @@ public enum HttpClientStrategy {
 	 *   <li>Try {@link HttpClientStrategy#APACHE_HTTP_CLIENT}.</li>
 	 * </ol>
 	 */
-	AUTO {
+	AUTO("OkHttp OR AsyncHttpClient OR Apache HttpComponent") {
 		@Override
-		public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
-			if (SUPPORT_OK_HTTP_CLIENT) {
-				return OK_HTTP.build(server);
+		boolean support() {
+			for (HttpClientStrategy strategy : HttpClientStrategy.values()) {
+				if (strategy != this && strategy.support()) {
+					return true;
+				}
 			}
 
-			if (SUPPORT_ASYNC_HTTP_CLIENT) {
-				return ASYNC_HTTP_CLIENT.build(server);
-			}
+			return false;
+		}
 
-			if (SUPPORT_NING_ASYNC_HTTP_CLIENT) {
-				return NING_ASYNC_HTTP_CLIENT.build(server);
-			}
-
-			if (SUPPORT_APACHE_HTTP_CLIENT) {
-				return APACHE_HTTP_CLIENT.build(server);
+		@Override
+		HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server) {
+			for (HttpClientStrategy strategy : HttpClientStrategy.values()) {
+				if (strategy.support()) {
+					return strategy.instantiate(server);
+				}
 			}
 
 			throw new UnsupportedOperationException(
@@ -234,10 +255,49 @@ public enum HttpClientStrategy {
 	private static final boolean SUPPORT_OK_HTTP_CLIENT = ClassUtils.isPresent(OK_HTTP_CLIENT_CLASS);
 
 	/**
+	 * The name of the underlying library.
+	 */
+	private final String library;
+
+	/**
+	 * Create strategy.
+	 *
+	 * @param library Name of underlying library.
+	 */
+	private HttpClientStrategy(String library) {
+		this.library = library;
+	}
+
+	/**
 	 * Return the http client implementation.
 	 *
 	 * @param server Embedded server.
 	 * @return Http client.
+	 * @throws UnsupportedOperationException If the runtime environment does not allow the strategy (such as: the library has not been imported).
 	 */
-	public abstract HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server);
+	public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
+		if (!support()) {
+			throw new UnsupportedOperationException(
+				"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+				"please import " + library
+			);
+		}
+
+		return instantiate(server);
+	}
+
+	/**
+	 * Check if the strategy can be used as it is supported by the runtime environment.
+	 *
+	 * @return {@code true} if the strategy can be instantiated, {@code false} otherwise.
+	 */
+	abstract boolean support();
+
+	/**
+	 * Instantiate srategy.
+	 *
+	 * @param server The target server.
+	 * @return The new http client instance.
+	 */
+	abstract HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server);
 }

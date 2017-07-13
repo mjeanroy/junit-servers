@@ -31,8 +31,8 @@ import com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java7Condition;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java8Condition;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java7;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.AtLeastJava8;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
 import org.junit.After;
@@ -48,6 +48,16 @@ import static org.mockito.Mockito.mock;
 @RunWith(RunIfRunner.class)
 public class HttpClientStrategyTest {
 
+	private static final String OK_HTTP_FLAG = "SUPPORT_OK_HTTP_CLIENT";
+	private static final String ASYNC_HTTP_FLAG = "SUPPORT_ASYNC_HTTP_CLIENT";
+	private static final String NING_ASYNC_HTTP_FLAG = "SUPPORT_NING_ASYNC_HTTP_CLIENT";
+	private static final String APACHE_HTTP_FLAG = "SUPPORT_APACHE_HTTP_CLIENT";
+
+	private static final boolean OK_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, OK_HTTP_FLAG);
+	private static final boolean ASYNC_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, ASYNC_HTTP_FLAG);
+	private static final boolean NING_ASYNC_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, NING_ASYNC_HTTP_FLAG);
+	private static final boolean APACHE_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, APACHE_HTTP_FLAG);
+
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
@@ -61,7 +71,7 @@ public class HttpClientStrategyTest {
 
 	@After
 	public void tearDown() {
-		setDetection(true, true, true, true);
+		setDetection(OK_HTTP, ASYNC_HTTP, NING_ASYNC_HTTP, APACHE_HTTP);
 	}
 
 	@Test
@@ -71,13 +81,41 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
+	public void it_should_fail_create_apache_http_client_if_it_does_not_exist() {
+		setApacheHttpFlag(false);
+
+		String error =
+			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+			"please import Apache HttpComponent";
+
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage(error);
+
+		HttpClientStrategy.APACHE_HTTP_CLIENT.build(server);
+	}
+
+	@Test
 	public void it_should_create_ning_async_http_client() {
 		HttpClient client = HttpClientStrategy.NING_ASYNC_HTTP_CLIENT.build(server);
 		assertThat(client).isExactlyInstanceOf(NingAsyncHttpClient.class);
 	}
 
 	@Test
-	@RunIf(Java8Condition.class)
+	public void it_should_fail_to_create_ning_async_http_client_if_it_does_not_exist() {
+		setNingAsyncHttpFlag(false);
+
+		String error =
+			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+			"please import (Ning) AsyncHttpClient";
+
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage(error);
+
+		HttpClientStrategy.NING_ASYNC_HTTP_CLIENT.build(server);
+	}
+
+	@Test
+	@RunIf(AtLeastJava8.class)
 	public void it_should_create_async_http_client() {
 		// AsyncHttpClient requires Java >= 8
 		HttpClient client = HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
@@ -85,9 +123,51 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
+	@RunIf(AtLeastJava8.class)
+	public void it_should_fail_to_create_async_http_client_if_it_does_not_exist() {
+		setAsyncHttpFlag(false);
+
+		String error =
+			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+			"please import AsyncHttpClient";
+
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage(error);
+
+		HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
+	}
+
+	@Test
+	@RunIf(Java7.class)
+	public void it_should_fail_to_create_async_http_client_if_runtime_is_java7() {
+		String error =
+			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+			"please import AsyncHttpClient";
+
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage(error);
+
+		HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
+	}
+
+	@Test
 	public void it_should_create_ok_http_client() {
 		HttpClient client = HttpClientStrategy.OK_HTTP.build(server);
 		assertThat(client).isExactlyInstanceOf(OkHttpClient.class);
+	}
+
+	@Test
+	public void it_should_fail_to_create_ok_http_client_if_it_does_not_exist() {
+		setOkHttpFlag(false);
+
+		String error =
+			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+			"please import OkHttp";
+
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage(error);
+
+		HttpClientStrategy.OK_HTTP.build(server);
 	}
 
 	@Test
@@ -98,17 +178,17 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
-	@RunIf(Java8Condition.class)
+	@RunIf(AtLeastJava8.class)
 	public void it_should_create_automatic_http_client_with_async_http_client_on_java_8() {
-		setDetection(false, true, true, true);
+		setOkHttpFlag(false);
 		HttpClient client = HttpClientStrategy.AUTO.build(server);
 		assertThat(client).isExactlyInstanceOf(AsyncHttpClient.class);
 	}
 
 	@Test
-	@RunIf(Java7Condition.class)
+	@RunIf(Java7.class)
 	public void it_should_create_automatic_http_client_with_ning_async_http_client_on_java_7() {
-		setDetection(false, false, true, true);
+		setOkHttpFlag(false);
 		HttpClient client = HttpClientStrategy.AUTO.build(server);
 		assertThat(client).isExactlyInstanceOf(NingAsyncHttpClient.class);
 	}
@@ -131,16 +211,36 @@ public class HttpClientStrategyTest {
 	public void it_should_not_create_automatic_http_client_and_fail_without_implementation() {
 		setDetection(false, false, false, false);
 
+		String error =
+			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+			"please import OkHttp OR AsyncHttpClient OR Apache HttpComponent";
+
 		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage("Http client implementation cannot be found, please add OkHttp, AsyncHttpClient or ApacheHttpClient to your classpath");
+		thrown.expectMessage(error);
 
 		HttpClientStrategy.AUTO.build(server);
 	}
 
-	private static void setDetection(boolean okhttp, boolean asyncHttp, boolean ningAsyncHttp, boolean apacheHttp) {
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_OK_HTTP_CLIENT", okhttp);
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_ASYNC_HTTP_CLIENT", asyncHttp);
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_NING_ASYNC_HTTP_CLIENT", ningAsyncHttp);
-		Fields.writeStaticFinal(HttpClientStrategy.class, "SUPPORT_APACHE_HTTP_CLIENT", apacheHttp);
+	private static void setDetection(boolean okHttp, boolean asyncHttp, boolean ningAsyncHttp, boolean apacheHttp) {
+		setOkHttpFlag(okHttp);
+		setAsyncHttpFlag(asyncHttp);
+		setNingAsyncHttpFlag(ningAsyncHttp);
+		setApacheHttpFlag(apacheHttp);
+	}
+
+	private static void setOkHttpFlag(boolean value) {
+		Fields.writeStaticFinal(HttpClientStrategy.class, OK_HTTP_FLAG, value);
+	}
+
+	private static void setAsyncHttpFlag(boolean value) {
+		Fields.writeStaticFinal(HttpClientStrategy.class, ASYNC_HTTP_FLAG, value);
+	}
+
+	private static void setNingAsyncHttpFlag(boolean value) {
+		Fields.writeStaticFinal(HttpClientStrategy.class, NING_ASYNC_HTTP_FLAG, value);
+	}
+
+	private static void setApacheHttpFlag(boolean value) {
+		Fields.writeStaticFinal(HttpClientStrategy.class, APACHE_HTTP_FLAG, value);
 	}
 }
