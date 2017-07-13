@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.client.impl;
 
 import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
@@ -325,6 +326,13 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 		notNull(cookie, "cookie");
 		cookies.add(cookie);
 		return this;
+	}
+
+	@Override
+	public HttpRequest addCookie(String name, String value) {
+		notBlank(name, "name");
+		notNull(value, "value");
+		return addCookie(Cookies.cookie(name, value));
 	}
 
 	@Override

@@ -262,6 +262,21 @@ public interface HttpRequest {
 	HttpRequest addCookie(Cookie cookie);
 
 	/**
+	 * Add cookie to http request.
+	 *
+	 * @param name Cookie name.
+	 * @param value Cookie value.
+	 * @return Http request that can be used for chaining.
+	 * @throws NullPointerException If {@code name} or {@code value} are {@code null}.
+	 * @throws IllegalArgumentException If {@code name} is empty or blank.
+	 * @see HttpHeaders#COOKIE
+	 * @see #addCookie(Cookie)
+	 * @see <a href="https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Cookie">https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Cookie</a>
+	 * @see <a href="https://tools.ietf.org/html/rfc6265#section-5.4">https://tools.ietf.org/html/rfc6265#section-5.4</a>
+	 */
+	HttpRequest addCookie(String name, String value);
+
+	/**
 	 * Add {@code If-None-Match} header with expected value.
 	 * This header should work with {@code ETag} header sent by server
 	 * response.

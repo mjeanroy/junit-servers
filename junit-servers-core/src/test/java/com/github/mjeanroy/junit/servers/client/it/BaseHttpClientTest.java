@@ -24,38 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
-import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
-import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.delete;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.head;
-import static com.github.tomakehurst.wiremock.client.WireMock.patch;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.put;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static java.util.Arrays.asList;
-import static java.util.Collections.singleton;
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.UUID;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-
 import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
@@ -75,6 +43,37 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.UUID;
+
+import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.delete;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.head;
+import static com.github.tomakehurst.wiremock.client.WireMock.patch;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.put;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(RunIfRunner.class)
 public abstract class BaseHttpClientTest {
@@ -758,6 +757,21 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testRequest_with_simple_cookie_method() {
+		stubGetRequest();
+
+		String name = "foo";
+		String value = "bar";
+
+		client
+			.prepareGet(ENDPOINT)
+			.addCookie(name, value)
+			.executeJson();
+
+		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);
+	}
+
+	@Test
 	public void testRequest_with_simple_cookies() {
 		stubGetRequest();
 
@@ -771,6 +785,30 @@ public abstract class BaseHttpClientTest {
 			.prepareGet(ENDPOINT)
 			.addCookie(Cookies.cookie(n1, v1))
 			.addCookie(Cookies.cookie(n2, v2))
+			.executeJson();
+
+		List<Pair> expectedCookies = asList(
+			pair(n1, v1),
+			pair(n2, v2)
+		);
+
+		assertRequestWithCookies(ENDPOINT, HttpMethod.GET, expectedCookies);
+	}
+
+	@Test
+	public void testRequest_with_simple_cookies_method() {
+		stubGetRequest();
+
+		String n1 = "f1";
+		String v1 = "b1";
+
+		String n2 = "f2";
+		String v2 = "b2";
+
+		client
+			.prepareGet(ENDPOINT)
+			.addCookie(n1, v1)
+			.addCookie(n2, v2)
 			.executeJson();
 
 		List<Pair> expectedCookies = asList(
