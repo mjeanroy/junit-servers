@@ -24,15 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findAllFields;
+import com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findAllFields;
 
 /**
  * Create new rule that will execute a list of annotation
@@ -55,11 +55,15 @@ public class HandlersRule extends AbstractRuleInstance {
 	public HandlersRule(Object target, AnnotationHandler handler, AnnotationHandler... handlers) {
 		super(target);
 
-		this.handlers = new LinkedList<>();
+		int size = handlers == null ? 0 : handlers.length;
+
+		this.handlers = new ArrayList<>(size + 1);
 		this.handlers.add(notNull(handler, "handler"));
 
-		for (AnnotationHandler h : handlers) {
-			this.handlers.add(notNull(h, "handler"));
+		if (handlers != null) {
+			for (AnnotationHandler h : handlers) {
+				this.handlers.add(notNull(h, "handler"));
+			}
 		}
 	}
 
