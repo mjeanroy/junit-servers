@@ -24,7 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.runner;
 
-import com.github.mjeanroy.junit.servers.rules.HandlersRule;
 import com.github.mjeanroy.junit.servers.rules.ServerRule;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
@@ -34,9 +33,9 @@ import org.junit.runners.model.InitializationError;
 
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.annotations.handlers.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.annotations.handlers.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.annotations.handlers.ServerAnnotationHandler.newServerAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.runner.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.runner.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.runner.ServerAnnotationHandler.newServerAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
 
 /**
@@ -115,12 +114,11 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 	protected List<TestRule> getTestRules(Object target) {
 		List<TestRule> testRules = super.getTestRules(target);
 
-		HandlersRule rule = new HandlersRule(target,
-				newServerAnnotationHandler(server),
-				newConfigurationAnnotationHandler(configuration),
-				newHttpClientAnnotationHandler(server)
-		);
+		AnnotationHandler h1 = newServerAnnotationHandler(server);
+		AnnotationHandler h2 = newConfigurationAnnotationHandler(configuration);
+		AnnotationHandler h3 = newHttpClientAnnotationHandler(server);
 
+		HandlersRule rule = new HandlersRule(target, h1, h2, h3);
 		testRules.add(rule);
 
 		return testRules;

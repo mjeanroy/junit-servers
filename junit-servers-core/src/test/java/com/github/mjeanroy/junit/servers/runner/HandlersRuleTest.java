@@ -22,7 +22,16 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
+package com.github.mjeanroy.junit.servers.runner;
+
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,17 +40,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 public class HandlersRuleTest {
 

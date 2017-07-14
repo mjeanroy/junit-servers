@@ -31,5 +31,5 @@ import org.junit.rules.TestRule;
  * Abstract skeleton of rule that will be executed
  * before and after each methods or test class.
  */
-abstract class AbstractRule extends ExternalResource implements TestRule {
+public abstract class AbstractRule extends ExternalResource implements TestRule {
 }

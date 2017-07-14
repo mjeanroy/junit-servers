@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.annotations.handlers;
+package com.github.mjeanroy.junit.servers.runner;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
@@ -39,7 +39,7 @@ import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
  * Annotation handler that will set simple http client implementation
  * in test classes.
  */
-public class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
+class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
 
 	/**
 	 * Create new handler.
@@ -47,7 +47,7 @@ public class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
 	 * @return Handler.
 	 * @throws NullPointerException if server is null.
 	 */
-	public static HttpClientAnnotationHandler newHttpClientAnnotationHandler(EmbeddedServer<?> server) {
+	static AnnotationHandler newHttpClientAnnotationHandler(EmbeddedServer<?> server) {
 		return new HttpClientAnnotationHandler(notNull(server, "server"));
 	}
 

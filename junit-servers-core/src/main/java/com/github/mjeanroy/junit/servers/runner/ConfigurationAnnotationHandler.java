@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.annotations.handlers;
+package com.github.mjeanroy.junit.servers.runner;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
@@ -37,7 +37,7 @@ import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
  * annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration}
  * on a given class instance.
  */
-public class ConfigurationAnnotationHandler extends AbstractAnnotationHandler {
+class ConfigurationAnnotationHandler extends AbstractAnnotationHandler {
 
 	/**
 	 * Create new handler.
@@ -46,7 +46,7 @@ public class ConfigurationAnnotationHandler extends AbstractAnnotationHandler {
 	 * @return Handler.
 	 * @throws NullPointerException if configuration is null.
 	 */
-	public static <T extends AbstractConfiguration> ConfigurationAnnotationHandler newConfigurationAnnotationHandler(T configuration) {
+	static <T extends AbstractConfiguration> AnnotationHandler newConfigurationAnnotationHandler(T configuration) {
 		return new ConfigurationAnnotationHandler(notNull(configuration, "configuration"));
 	}
 

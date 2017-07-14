@@ -26,7 +26,6 @@ package com.github.mjeanroy.junit.servers.runner;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.rules.HandlersRule;
 import com.github.mjeanroy.junit.servers.rules.ServerRule;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;

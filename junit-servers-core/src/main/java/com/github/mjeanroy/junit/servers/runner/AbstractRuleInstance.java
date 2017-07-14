@@ -22,42 +22,36 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.annotations.handlers;
+package com.github.mjeanroy.junit.servers.runner;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
+import com.github.mjeanroy.junit.servers.rules.AbstractRule;
 
 /**
- * Abstract skeleton of {@link com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler}.
+ * Abstract skeleton of rule that will be executed before
+ * and after each methods.
  */
-abstract class AbstractAnnotationHandler implements AnnotationHandler {
+abstract class AbstractRuleInstance extends AbstractRule {
 
 	/**
-	 * Annotation class processed by handler.
+	 * Tested class.
 	 */
-	private final Class<? extends Annotation> annotationKlass;
+	private final Object target;
 
 	/**
-	 * Initialize new abstract handler.
+	 * Create abstract rule.
 	 *
-	 * @param annotationKlass Annotation class processed by handler.
+	 * @param target Tested class.
 	 */
-	AbstractAnnotationHandler(Class<? extends Annotation> annotationKlass) {
-		this.annotationKlass = annotationKlass;
+	AbstractRuleInstance(Object target) {
+		this.target = target;
 	}
 
-	@Override
-	public boolean support(Annotation annotation) {
-		return annotation.annotationType().equals(annotationKlass);
-	}
-
-	@Override
-	public void before(Object target, Field field) {
-		// Should be overridden
-	}
-
-	@Override
-	public void after(Object target, Field field) {
-		// Should be overridden
+	/**
+	 * Get tested class.
+	 *
+	 * @return Tested class.
+	 */
+	Object getTarget() {
+		return target;
 	}
 }

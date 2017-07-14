@@ -22,9 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
-
-import com.github.mjeanroy.junit.servers.annotations.handlers.AnnotationHandler;
+package com.github.mjeanroy.junit.servers.runner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -38,7 +36,7 @@ import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findAllF
  * Create new rule that will execute a list of annotation
  * handlers before and after test executions.
  */
-public class HandlersRule extends AbstractRuleInstance {
+class HandlersRule extends AbstractRuleInstance {
 
 	/**
 	 * List of handlers.
@@ -52,7 +50,7 @@ public class HandlersRule extends AbstractRuleInstance {
 	 * @param handler First handler (required).
 	 * @param handlers List of other (optional) handlers.
 	 */
-	public HandlersRule(Object target, AnnotationHandler handler, AnnotationHandler... handlers) {
+	HandlersRule(Object target, AnnotationHandler handler, AnnotationHandler... handlers) {
 		super(target);
 
 		int size = handlers == null ? 0 : handlers.length;

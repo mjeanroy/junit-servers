@@ -22,29 +22,28 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.annotations.handlers;
-
-import static com.github.mjeanroy.junit.servers.annotations.handlers.ServerAnnotationHandler.newServerAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateField;
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
-import org.junit.Test;
+package com.github.mjeanroy.junit.servers.runner;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
+import org.junit.Test;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+
+import static com.github.mjeanroy.junit.servers.runner.ServerAnnotationHandler.newServerAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateField;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class ServerAnnotationHandlerTest {
 
 	@Test
 	public void it_should_support_server_annotation() {
 		EmbeddedServer<?> server = mock(EmbeddedServer.class);
-		ServerAnnotationHandler handler = newServerAnnotationHandler(server);
+		AnnotationHandler handler = newServerAnnotationHandler(server);
 
 		Field field = Fields.getPrivateField(FixtureClass.class, "server");
 		Annotation annotation = field.getAnnotation(TestServer.class);
@@ -57,7 +56,7 @@ public class ServerAnnotationHandlerTest {
 		Field field = getPrivateField(FixtureClass.class, "server");
 		FixtureClass fixture = new FixtureClass();
 
-		ServerAnnotationHandler handler = newServerAnnotationHandler(server);
+		AnnotationHandler handler = newServerAnnotationHandler(server);
 		handler.before(fixture, field);
 		assertThat(readPrivate(fixture, "server")).isSameAs(server);
 	}

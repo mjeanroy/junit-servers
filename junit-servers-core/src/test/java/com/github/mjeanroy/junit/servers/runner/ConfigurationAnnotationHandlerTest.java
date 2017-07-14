@@ -22,52 +22,41 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.annotations.handlers;
+package com.github.mjeanroy.junit.servers.runner;
 
-import static com.github.mjeanroy.junit.servers.annotations.handlers.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import org.junit.Test;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+
+import static com.github.mjeanroy.junit.servers.runner.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateField;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
-import org.junit.Test;
-
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-
-public class HttpClientAnnotationHandlerTest {
+public class ConfigurationAnnotationHandlerTest {
 
 	@Test
 	public void it_should_support_server_annotation() {
-		EmbeddedServer<?> server = mock(EmbeddedServer.class);
-		HttpClientAnnotationHandler handler = newHttpClientAnnotationHandler(server);
+		AbstractConfiguration configuration = mock(AbstractConfiguration.class);
+		AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 
-		Field field = getPrivateField(FixtureClass.class, "client");
-		Annotation annotation = field.getAnnotation(TestHttpClient.class);
+		Field field = getPrivateField(FixtureClass.class, "configuration");
+		Annotation annotation = field.getAnnotation(TestServerConfiguration.class);
 		assertThat(handler.support(annotation)).isTrue();
 	}
 
 	@Test
-	public void it_should_set_client_instance() throws Exception {
-		EmbeddedServer<?> server = mock(EmbeddedServer.class);
+	public void it_should_set_configuration_instance() throws Exception {
+		AbstractConfiguration configuration = mock(AbstractConfiguration.class);
 		FixtureClass fixture = new FixtureClass();
-		Field field = FixtureClass.class.getDeclaredField("client");
+		Field field = FixtureClass.class.getDeclaredField("configuration");
 
-		HttpClientAnnotationHandler handler = newHttpClientAnnotationHandler(server);
-
+		AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 		handler.before(fixture, field);
-
-		HttpClient client = readPrivate(fixture, "client");
-		assertThat(client).isNotNull();
-		assertThat(client.isDestroyed()).isFalse();
-
-		handler.after(fixture, field);
-		assertThat(readPrivate(fixture, "client")).isNull();
-		assertThat(client.isDestroyed()).isTrue();
+		assertThat(readPrivate(fixture, "configuration")).isSameAs(configuration);
 	}
 }

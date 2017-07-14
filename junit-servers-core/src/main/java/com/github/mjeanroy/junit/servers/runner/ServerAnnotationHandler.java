@@ -22,34 +22,45 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
+package com.github.mjeanroy.junit.servers.runner;
+
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+
+import java.lang.reflect.Field;
+
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
- * Abstract skeleton of rule that will be executed before
- * and after each methods.
+ * Annotation handler that will set embedded server to a field
+ * on a given class instance.
  */
-abstract class AbstractRuleInstance extends AbstractRule {
+class ServerAnnotationHandler extends AbstractAnnotationHandler {
 
 	/**
-	 * Tested class.
+	 * Create new handler.
+	 * @param server Embedded server.
+	 * @return Handler.
+	 * @throws NullPointerException if server is null.
 	 */
-	private final Object target;
-
-	/**
-	 * Create abstract rule.
-	 *
-	 * @param target Tested class.
-	 */
-	AbstractRuleInstance(Object target) {
-		this.target = target;
+	static AnnotationHandler newServerAnnotationHandler(EmbeddedServer<?> server) {
+		return new ServerAnnotationHandler(notNull(server, "server"));
 	}
 
 	/**
-	 * Get tested class.
-	 *
-	 * @return Tested class.
+	 * Embedded server set on class fields.
 	 */
-	Object getTarget() {
-		return target;
+	private final EmbeddedServer<?> server;
+
+	// Use static factory instead
+	private ServerAnnotationHandler(EmbeddedServer<?> server) {
+		super(TestServer.class);
+		this.server = server;
+	}
+
+	@Override
+	public void before(Object target, Field field) {
+		setter(target, field, server);
 	}
 }

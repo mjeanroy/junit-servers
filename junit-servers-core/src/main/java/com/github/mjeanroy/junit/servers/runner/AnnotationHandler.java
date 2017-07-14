@@ -22,45 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.annotations.handlers;
+package com.github.mjeanroy.junit.servers.runner;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-
-/**
- * Annotation handler that will set embedded server to a field
- * on a given class instance.
- */
-public class ServerAnnotationHandler extends AbstractAnnotationHandler {
+interface AnnotationHandler {
 
 	/**
-	 * Create new handler.
-	 * @param server Embedded server.
-	 * @return Handler.
-	 * @throws NullPointerException if server is null.
+	 * Check that given handler support given annotation.
+	 *
+	 * @param annotation Annotation.
+	 * @return True if handler support annotation, false otherwise.c
 	 */
-	public static ServerAnnotationHandler newServerAnnotationHandler(EmbeddedServer<?> server) {
-		return new ServerAnnotationHandler(notNull(server, "server"));
-	}
+	boolean support(Annotation annotation);
 
 	/**
-	 * Embedded server set on class fields.
+	 * Execute handler before test invocation.
+	 *
+	 * @param target Test class instance.
+	 * @param field Field.
 	 */
-	private final EmbeddedServer<?> server;
+	void before(Object target, Field field);
 
-	// Use static factory instead
-	private ServerAnnotationHandler(EmbeddedServer<?> server) {
-		super(TestServer.class);
-		this.server = server;
-	}
-
-	@Override
-	public void before(Object target, Field field) {
-		setter(target, field, server);
-	}
+	/**
+	 * Execute handler after test invocation.
+	 *
+	 * @param target Test class instance.
+	 * @param field Field.
+	 */
+	void after(Object target, Field field);
 }

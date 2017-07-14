@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.annotations.handlers;
+package com.github.mjeanroy.junit.servers.runner;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;

@@ -22,34 +22,42 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.annotations.handlers;
+package com.github.mjeanroy.junit.servers.runner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-public interface AnnotationHandler {
+/**
+ * Abstract skeleton of {@link AnnotationHandler}.
+ */
+abstract class AbstractAnnotationHandler implements AnnotationHandler {
 
 	/**
-	 * Check that given handler support given annotation.
-	 *
-	 * @param annotation Annotation.
-	 * @return True if handler support annotation, false otherwise.c
+	 * Annotation class processed by handler.
 	 */
-	boolean support(Annotation annotation);
+	private final Class<? extends Annotation> annotationKlass;
 
 	/**
-	 * Execute handler before test invocation.
+	 * Initialize new abstract handler.
 	 *
-	 * @param target Test class instance.
-	 * @param field Field.
+	 * @param annotationKlass Annotation class processed by handler.
 	 */
-	void before(Object target, Field field);
+	AbstractAnnotationHandler(Class<? extends Annotation> annotationKlass) {
+		this.annotationKlass = annotationKlass;
+	}
 
-	/**
-	 * Execute handler after test invocation.
-	 *
-	 * @param target Test class instance.
-	 * @param field Field.
-	 */
-	void after(Object target, Field field);
+	@Override
+	public boolean support(Annotation annotation) {
+		return annotation.annotationType().equals(annotationKlass);
+	}
+
+	@Override
+	public void before(Object target, Field field) {
+		// Should be overridden
+	}
+
+	@Override
+	public void after(Object target, Field field) {
+		// Should be overridden
+	}
 }
