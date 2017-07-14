@@ -25,10 +25,12 @@
 package com.github.mjeanroy.junit.servers.client.impl.ok_http;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
-import com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
+import static com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient.defaultOkHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient.newOkHttpClient;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -44,12 +46,23 @@ public class OkHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
-		return OkHttpClient.defaultOkHttpClient(server);
+		return defaultOkHttpClient(server);
 	}
 
 	@Override
 	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
-		return OkHttpClient.newOkHttpClient(server, internalClient);
+		return newOkHttpClient(server, internalClient);
+	}
+
+	@Override
+	protected HttpClient createCustomClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
+		return newOkHttpClient(configuration, server);
+	}
+
+	@Override
+	protected void checkInternalHttpClient(HttpClientConfiguration configuration, HttpClient httpClient) {
+		okhttp3.OkHttpClient internalClient = readPrivate(httpClient, "client");
+		assertThat(internalClient.followRedirects()).isEqualTo(configuration.isFollowRedirect());
 	}
 
 	@Override

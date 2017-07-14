@@ -25,10 +25,13 @@
 package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.AsyncHttpClientConfig;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
@@ -48,9 +51,11 @@ public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClien
 	 * @param client Internal http client
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} or {@code client} are {@code null}.
+	 * @deprecated Use {@link NingAsyncHttpClient#newAsyncHttpClient(HttpClientConfiguration, EmbeddedServer)}
 	 */
+	@Deprecated
 	public static NingAsyncHttpClient newAsyncHttpClient(EmbeddedServer<?> server, com.ning.http.client.AsyncHttpClient client) {
-		return new NingAsyncHttpClient(server, client);
+		return new NingAsyncHttpClient(HttpClientConfiguration.defaultConfiguration(), server, client);
 	}
 
 	/**
@@ -64,7 +69,29 @@ public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClien
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public static NingAsyncHttpClient defaultAsyncHttpClient(EmbeddedServer<?> server) {
-		return new NingAsyncHttpClient(server, new com.ning.http.client.AsyncHttpClient());
+		HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
+		AsyncHttpClientConfig config = new AsyncHttpClientConfig.Builder()
+			.setFollowRedirect(configuration.isFollowRedirect())
+			.build();
+
+		return new NingAsyncHttpClient(configuration, server, new com.ning.http.client.AsyncHttpClient(config));
+	}
+
+	/**
+	 * Create new http client using custom configuration.
+	 *
+	 * @param configuration Client configuration.
+	 * @param server Embedded server.
+	 * @return Http client.
+	 * @throws NullPointerException If {@code server} or {@code configuration} is {@code null}.
+	 */
+	public static NingAsyncHttpClient newAsyncHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
+		AsyncHttpClientConfig config = new AsyncHttpClientConfig.Builder()
+			.setFollowRedirect(configuration.isFollowRedirect())
+			.build();
+
+		AsyncHttpClient client = new AsyncHttpClient(config);
+		return new NingAsyncHttpClient(configuration, server, client);
 	}
 
 	/**
@@ -74,8 +101,8 @@ public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClien
 	private final com.ning.http.client.AsyncHttpClient client;
 
 	// Use static factory
-	private NingAsyncHttpClient(EmbeddedServer<?> server, com.ning.http.client.AsyncHttpClient client) {
-		super(server);
+	private NingAsyncHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server, com.ning.http.client.AsyncHttpClient client) {
+		super(configuration, server);
 		this.client = notNull(client, "client");
 	}
 

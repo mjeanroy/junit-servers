@@ -25,11 +25,15 @@
 package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.AtLeastJava8;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
+import org.asynchttpclient.AsyncHttpClientConfig;
 
+import static com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.defaultAsyncHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.newAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -46,12 +50,24 @@ public class AsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
-		return AsyncHttpClient.defaultAsyncHttpClient(server);
+		return defaultAsyncHttpClient(server);
 	}
 
 	@Override
 	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
-		return AsyncHttpClient.newAsyncHttpClient(server, internalClient);
+		return newAsyncHttpClient(server, internalClient);
+	}
+
+	@Override
+	protected HttpClient createCustomClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
+		return newAsyncHttpClient(configuration, server);
+	}
+
+	@Override
+	protected void checkInternalHttpClient(HttpClientConfiguration configuration, HttpClient httpClient) {
+		org.asynchttpclient.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
+		AsyncHttpClientConfig config = readPrivate(internalClient, "config");
+		assertThat(config.isFollowRedirect()).isEqualTo(configuration.isFollowRedirect());
 	}
 
 	@Override

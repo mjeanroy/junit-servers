@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
@@ -54,9 +55,11 @@ public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @param client Internal http client
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} of {@code client} are {@code null}.
+	 * @deprecated Use {@link ApacheHttpClient#newApacheHttpClient(HttpClientConfiguration, EmbeddedServer)}
 	 */
+	@Deprecated
 	public static ApacheHttpClient newApacheHttpClient(EmbeddedServer<?> server, CloseableHttpClient client) {
-		return new ApacheHttpClient(server, client);
+		return new ApacheHttpClient(HttpClientConfiguration.defaultConfiguration(), server, client);
 	}
 
 	/**
@@ -67,8 +70,26 @@ public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public static ApacheHttpClient defaultApacheHttpClient(EmbeddedServer<?> server) {
-		CloseableHttpClient client = HttpClientBuilder.create().build();
-		return new ApacheHttpClient(server, client);
+		HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
+		return newApacheHttpClient(configuration, server);
+	}
+
+	/**
+	 * Create new http client using custom configuration.
+	 *
+	 * @param configuration Client configuration.
+	 * @param server Embedded server.
+	 * @return Http client.
+	 * @throws NullPointerException If {@code server} or {@code configuration} are {@code null}.
+	 */
+	public static ApacheHttpClient newApacheHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
+		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+		if (!configuration.isFollowRedirect()) {
+			httpClientBuilder.disableRedirectHandling();
+		}
+
+		CloseableHttpClient client = httpClientBuilder.build();
+		return new ApacheHttpClient(configuration, server, client);
 	}
 
 	/**
@@ -84,8 +105,8 @@ public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
 	private final CloseableHttpClient client;
 
 	// Use static factory
-	private ApacheHttpClient(EmbeddedServer<?> server, CloseableHttpClient client) {
-		super(server);
+	private ApacheHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server, CloseableHttpClient client) {
+		super(configuration, server);
 		this.client = notNull(client, "client");
 		this.destroyed = new AtomicBoolean(false);
 	}

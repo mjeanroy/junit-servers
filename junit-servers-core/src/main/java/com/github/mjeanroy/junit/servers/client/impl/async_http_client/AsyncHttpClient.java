@@ -25,12 +25,15 @@
 package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.asynchttpclient.AsyncHttpClientConfig;
 import org.asynchttpclient.DefaultAsyncHttpClient;
+import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 
 import java.io.IOException;
 
@@ -52,9 +55,11 @@ public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @param client Internal http client
 	 * @return Http client.
 	 * @throws NullPointerException If {@code server} or {@code client} are {@code null}.
+	 * @deprecated Use {@link AsyncHttpClient#newAsyncHttpClient(HttpClientConfiguration, EmbeddedServer)}
 	 */
+	@Deprecated
 	public static AsyncHttpClient newAsyncHttpClient(EmbeddedServer<?> server, org.asynchttpclient.AsyncHttpClient client) {
-		return new AsyncHttpClient(server, client);
+		return new AsyncHttpClient(HttpClientConfiguration.defaultConfiguration(), server, client);
 	}
 
 	/**
@@ -65,7 +70,25 @@ public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public static AsyncHttpClient defaultAsyncHttpClient(EmbeddedServer<?> server) {
-		return new AsyncHttpClient(server, new DefaultAsyncHttpClient());
+		HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
+		return newAsyncHttpClient(configuration, server);
+	}
+
+	/**
+	 * Create new http client using custom configuration.
+	 *
+	 * @param configuration Client configuration.
+	 * @param server Embedded server.
+	 * @return Http client.
+	 * @throws NullPointerException If {@code server} or {@code configuration} are {@code null}.
+	 */
+	public static AsyncHttpClient newAsyncHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
+		AsyncHttpClientConfig config = new DefaultAsyncHttpClientConfig.Builder()
+			.setFollowRedirect(configuration.isFollowRedirect())
+			.build();
+
+		DefaultAsyncHttpClient client = new DefaultAsyncHttpClient(config);
+		return new AsyncHttpClient(configuration, server, client);
 	}
 
 	/**
@@ -74,8 +97,8 @@ public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
 	private final org.asynchttpclient.AsyncHttpClient client;
 
 	// Use static factory
-	private AsyncHttpClient(EmbeddedServer<?> server, org.asynchttpclient.AsyncHttpClient client) {
-		super(server);
+	private AsyncHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server, org.asynchttpclient.AsyncHttpClient client) {
+		super(configuration, server);
 		this.client = notNull(client, "client");
 	}
 

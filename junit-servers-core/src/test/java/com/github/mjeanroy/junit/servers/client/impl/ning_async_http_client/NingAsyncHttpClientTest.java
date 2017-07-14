@@ -25,8 +25,10 @@
 package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.ning.http.client.AsyncHttpClientConfig;
 
 import static com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient.defaultAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient.newAsyncHttpClient;
@@ -51,6 +53,18 @@ public class NingAsyncHttpClientTest extends BaseHttpClientTest {
 	@Override
 	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
 		return newAsyncHttpClient(server, internalClient);
+	}
+
+	@Override
+	protected HttpClient createCustomClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
+		return newAsyncHttpClient(configuration, server);
+	}
+
+	@Override
+	protected void checkInternalHttpClient(HttpClientConfiguration configuration, HttpClient httpClient) {
+		com.ning.http.client.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
+		AsyncHttpClientConfig config = internalClient.getConfig();
+		assertThat(config.isFollowRedirect()).isEqualTo(configuration.isFollowRedirect());
 	}
 
 	@Override

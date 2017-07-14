@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.AtLeastJava8;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;

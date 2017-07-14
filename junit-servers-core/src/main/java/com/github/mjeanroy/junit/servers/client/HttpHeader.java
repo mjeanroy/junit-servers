@@ -62,6 +62,8 @@ public class HttpHeader {
 	 * @param name Header name, must not be blank.
 	 * @param value Header value.
 	 * @return Header.
+	 * @throws NullPointerException If {@code name} or {@code value} are {@code null}.
+	 * @throws IllegalArgumentException If {@code name} is blank.
 	 */
 	public static HttpHeader header(String name, String value) {
 		return new HttpHeader(name, singletonList(value));
@@ -73,6 +75,8 @@ public class HttpHeader {
 	 * @param name Header name.
 	 * @param values Header values, must not be empty.
 	 * @return Header.
+	 * @throws NullPointerException If {@code name} or one of {@code values} are {@code null}.
+	 * @throws IllegalArgumentException If {@code name} is blank.
 	 */
 	public static HttpHeader header(String name, Collection<String> values) {
 		return new HttpHeader(name, values);

@@ -24,38 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
-import com.github.mjeanroy.junit.servers.client.Cookie;
-import com.github.mjeanroy.junit.servers.client.Cookies;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.client.HttpHeader;
-import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpParameter;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.utils.commons.Function;
-import com.github.mjeanroy.junit.servers.utils.commons.MapperFunction;
-import com.github.mjeanroy.junit.servers.utils.commons.Pair;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
-import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.http.RequestMethod;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.UUID;
-
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
 import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -74,6 +42,40 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.UUID;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
+import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.Cookies;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpParameter;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.commons.Function;
+import com.github.mjeanroy.junit.servers.utils.commons.MapperFunction;
+import com.github.mjeanroy.junit.servers.utils.commons.Pair;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.http.RequestMethod;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 
 @RunWith(RunIfRunner.class)
 public abstract class BaseHttpClientTest {
@@ -129,18 +131,18 @@ public abstract class BaseHttpClientTest {
 		when(server.getPort()).thenReturn(port);
 		when(server.getUrl()).thenReturn(url);
 		when(server.getPath()).thenReturn(path);
-
-		client = createClient(server);
 	}
 
 	@After
 	public void tearDown() {
-		client.destroy();
+		if (client != null) {
+			client.destroy();
+		}
 	}
 
 	@Test
 	public void testRequestUrl() {
-		final HttpRequest rq = client
+		final HttpRequest rq = createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.acceptJson()
 			.asXmlHttpRequest();
@@ -156,7 +158,7 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(status, body);
 
-		final HttpResponse rsp = client
+		final HttpResponse rsp = createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.acceptJson()
 			.asXmlHttpRequest()
@@ -174,7 +176,7 @@ public abstract class BaseHttpClientTest {
 
 		stubHeadRequest(status);
 
-		final HttpResponse rsp = client
+		final HttpResponse rsp = createDefaultClient()
 				.prepareHead(ENDPOINT)
 				.acceptJson()
 				.asXmlHttpRequest()
@@ -193,7 +195,7 @@ public abstract class BaseHttpClientTest {
 
 		stubPostRequest(status, body);
 
-		final HttpResponse rsp = client
+		final HttpResponse rsp = createDefaultClient()
 			.preparePost(ENDPOINT)
 			.acceptJson()
 			.asJson()
@@ -214,7 +216,7 @@ public abstract class BaseHttpClientTest {
 
 		stubPostRequest(status, body);
 
-		final HttpResponse rsp = client
+		final HttpResponse rsp = createDefaultClient()
 			.preparePost(ENDPOINT)
 			.acceptJson()
 			.asJson()
@@ -234,7 +236,7 @@ public abstract class BaseHttpClientTest {
 
 		stubPutRequest(status);
 
-		final HttpResponse rsp = client
+		final HttpResponse rsp = createDefaultClient()
 			.preparePut(endpoint)
 			.acceptJson()
 			.asJson()
@@ -256,7 +258,7 @@ public abstract class BaseHttpClientTest {
 
 		stubPutRequest(status);
 
-		final HttpResponse rsp = client
+		final HttpResponse rsp = createDefaultClient()
 			.preparePut(endpoint)
 			.acceptJson()
 			.asJson()
@@ -277,7 +279,7 @@ public abstract class BaseHttpClientTest {
 
 		stubPatchRequest(status, body);
 
-		final HttpResponse rsp = client
+		final HttpResponse rsp = createDefaultClient()
 				.preparePatch(ENDPOINT)
 				.acceptJson()
 				.asJson()
@@ -298,7 +300,7 @@ public abstract class BaseHttpClientTest {
 
 		stubDeleteRequest(status);
 
-		final HttpResponse rsp = client
+		final HttpResponse rsp = createDefaultClient()
 			.prepareDelete(endpoint)
 			.acceptJson()
 			.asJson()
@@ -313,6 +315,45 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testRequestWithDefaultHeader() {
+		final String name = "X-Custom-Header";
+		final String value = "FooBar";
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+			.addDefaultHeader(name, value)
+			.build();
+
+		final int status = 200;
+		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
+		stubGetRequest(status, body);
+
+		testRequestHeader(createCustomClient(configuration), name, value, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+			}
+		});
+	}
+
+	@Test
+	public void testRequestWithDefaultHeaderObject() {
+		final String name = "X-Custom-Header";
+		final String value = "FooBar";
+		final HttpHeader header = HttpHeader.header(name, value);
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+			.addDefaultHeader(header)
+			.build();
+
+		final int status = 200;
+		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
+		stubGetRequest(status, body);
+
+		testRequestHeader(createCustomClient(configuration), name, value, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+			}
+		});
+	}
+
+	@Test
 	public void testRequest_with_custom_header() {
 		final String name = "X-Custom-Header";
 		final String value = "FooBar";
@@ -320,6 +361,19 @@ public abstract class BaseHttpClientTest {
 			@Override
 			public void apply(HttpRequest rq) {
 				rq.addHeader(name, value);
+			}
+		});
+	}
+
+	@Test
+	public void testRequest_with_custom_header_instance() {
+		final String name = "X-Custom-Header";
+		final String value = "FooBar";
+		final HttpHeader header = HttpHeader.header(name, value);
+		testRequestHeader(name, value, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+				rq.addHeader(header);
 			}
 		});
 	}
@@ -529,6 +583,10 @@ public abstract class BaseHttpClientTest {
 	}
 
 	private void testRequestHeader(String name, String value, Function<HttpRequest> func) {
+		testRequestHeader(createDefaultClient(), name, value, func);
+	}
+
+	private void testRequestHeader(HttpClient client, String name, String value, Function<HttpRequest> func) {
 		// GIVEN
 		int rspStatus = 200;
 		String rspBody = "[]";
@@ -570,7 +628,7 @@ public abstract class BaseHttpClientTest {
 		int rspStatus = 200;
 		String rspBody = "[]";
 		stubGetRequest(200, rspBody);
-		HttpRequest rq = client.prepareGet(ENDPOINT);
+		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
 
 		// WHEN
 		HttpResponse rsp = func.apply(rq);
@@ -622,7 +680,7 @@ public abstract class BaseHttpClientTest {
 		int rspStatus = 200;
 		String rspBody = "[]";
 		stubGetRequest(expectedUrl, rspStatus, rspBody);
-		HttpRequest rq = client.prepareGet(ENDPOINT);
+		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
 
 		// WHEN
 		func.apply(rq);
@@ -684,7 +742,7 @@ public abstract class BaseHttpClientTest {
 		int rspStatus = 201;
 		String rspBody = "";
 		stubPostRequest(rspStatus, rspBody);
-		HttpRequest rq = client.preparePost(ENDPOINT);
+		HttpRequest rq = createDefaultClient().preparePost(ENDPOINT);
 
 		// WHEN
 		func.apply(rq);
@@ -702,7 +760,7 @@ public abstract class BaseHttpClientTest {
 		thrown.expect(UnsupportedOperationException.class);
 		thrown.expectMessage("Http method GET does not support body parameters");
 
-		client
+		createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.addFormParam("foo", "bar")
 			.executeJson();
@@ -713,7 +771,7 @@ public abstract class BaseHttpClientTest {
 		thrown.expect(UnsupportedOperationException.class);
 		thrown.expectMessage("Http method DELETE does not support body parameters");
 
-		client
+		createDefaultClient()
 			.prepareDelete(ENDPOINT)
 			.addFormParam("foo", "bar")
 			.executeJson();
@@ -724,7 +782,7 @@ public abstract class BaseHttpClientTest {
 		thrown.expect(UnsupportedOperationException.class);
 		thrown.expectMessage("Http method GET does not support request body");
 
-		client
+		createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.setBody("{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}")
 			.executeJson();
@@ -735,7 +793,7 @@ public abstract class BaseHttpClientTest {
 		thrown.expect(UnsupportedOperationException.class);
 		thrown.expectMessage("Http method DELETE does not support request body");
 
-		client
+		createDefaultClient()
 			.prepareDelete(ENDPOINT)
 			.setBody("{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}")
 			.executeJson();
@@ -748,9 +806,43 @@ public abstract class BaseHttpClientTest {
 		String name = "foo";
 		String value = "bar";
 
-		client
+		createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.addCookie(Cookies.cookie(name, value))
+			.executeJson();
+
+		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);
+	}
+
+	@Test
+	public void testRequest_with_default_cookie() {
+		final String name = "foo";
+		final String value = "bar";
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+			.addDefaultCookie(name, value)
+			.build();
+
+		stubGetRequest();
+
+		createCustomClient(configuration)
+			.prepareGet(ENDPOINT)
+			.executeJson();
+
+		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);
+	}
+
+	@Test
+	public void testRequest_with_default_cookie_object() {
+		final String name = "foo";
+		final String value = "bar";
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+			.addDefaultCookie(Cookies.cookie(name, value))
+			.build();
+
+		stubGetRequest();
+
+		createCustomClient(configuration)
+			.prepareGet(ENDPOINT)
 			.executeJson();
 
 		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);
@@ -763,7 +855,7 @@ public abstract class BaseHttpClientTest {
 		String name = "foo";
 		String value = "bar";
 
-		client
+		createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.addCookie(name, value)
 			.executeJson();
@@ -781,7 +873,7 @@ public abstract class BaseHttpClientTest {
 		String n2 = "f2";
 		String v2 = "b2";
 
-		client
+		createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.addCookie(Cookies.cookie(n1, v1))
 			.addCookie(Cookies.cookie(n2, v2))
@@ -805,7 +897,7 @@ public abstract class BaseHttpClientTest {
 		String n2 = "f2";
 		String v2 = "b2";
 
-		client
+		createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.addCookie(n1, v1)
 			.addCookie(n2, v2)
@@ -842,7 +934,7 @@ public abstract class BaseHttpClientTest {
 		long maxAge = maxAgeUtc.getTime();
 		Long expires = null;
 
-		client
+		createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.addHeader(ORIGIN, server.getUrl())
 			.addCookie(Cookies.cookie(name, value, domain, path, expires, maxAge, secured, httpOnly))
@@ -855,7 +947,7 @@ public abstract class BaseHttpClientTest {
 	public void testResponse_without_headers() {
 		stubGetRequest(ENDPOINT, 200, null, null);
 
-		HttpResponse rsp = client
+		HttpResponse rsp = createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.executeJson();
 
@@ -1021,7 +1113,7 @@ public abstract class BaseHttpClientTest {
 		stubGetRequest(ENDPOINT, 200, null, pair(name, value));
 
 		// WHEN
-		HttpResponse rsp = client
+		HttpResponse rsp = createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.addAcceptEncoding("identity")
 			.executeJson();
@@ -1050,7 +1142,7 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(ENDPOINT, 200, null, pair(SET_COOKIE, cookieValue));
 
-		HttpResponse rsp = client
+		HttpResponse rsp = createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.executeJson();
 
@@ -1074,7 +1166,7 @@ public abstract class BaseHttpClientTest {
 	public void testResponse_without_cookies() {
 		stubGetRequest();
 
-		HttpResponse rsp = client
+		HttpResponse rsp = createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.executeJson();
 
@@ -1086,7 +1178,7 @@ public abstract class BaseHttpClientTest {
 	public void testRequest_Response_Duration() {
 		stubGetRequest();
 
-		HttpResponse rsp = client
+		HttpResponse rsp = createDefaultClient()
 			.prepareGet(ENDPOINT)
 			.executeJson();
 
@@ -1098,7 +1190,7 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void it_should_destroy_client() {
-		HttpClient newClient = createClient(server);
+		HttpClient newClient = createDefaultClient();
 
 		assertThat(newClient.isDestroyed()).isFalse();
 		newClient.destroy();
@@ -1107,7 +1199,7 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void it_should_fail_to_create_request_from_a_destroyed_client() {
-		HttpClient newClient = createClient(server);
+		HttpClient newClient = createDefaultClient();
 		newClient.destroy();
 
 		thrown.expect(IllegalStateException.class);
@@ -1117,8 +1209,34 @@ public abstract class BaseHttpClientTest {
 
 	protected abstract HttpClientStrategy strategy();
 
-	private HttpClient createClient(EmbeddedServer<?> server) {
-		return strategy().build(server);
+	private HttpClient createDefaultClient() {
+		return createClient(new HttpClientFactory() {
+			@Override
+			public HttpClient create() {
+				return strategy().build(server);
+			}
+		});
+	}
+
+	private HttpClient createCustomClient(final HttpClientConfiguration configuration) {
+		return createClient(new HttpClientFactory() {
+			@Override
+			public HttpClient create() {
+				return strategy().build(configuration, server);
+			}
+		});
+	}
+
+	private HttpClient createClient(HttpClientFactory factory) {
+		ensureOneClient();
+		client = factory.create();
+		return client;
+	}
+
+	private void ensureOneClient() {
+		if (client != null) {
+			throw new AssertionError("Cannot create two clients on a test");
+		}
 	}
 
 	private static void assertHeader(HttpHeader header, String name, String value) {
@@ -1240,5 +1358,9 @@ public abstract class BaseHttpClientTest {
 
 	private static String formatParam(String name, String value) {
 		return name + "=" + value;
+	}
+
+	interface HttpClientFactory {
+		HttpClient create();
 	}
 }

@@ -77,6 +77,11 @@ public enum HttpClientStrategy {
 		HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return OkHttpClient.defaultOkHttpClient(server);
 		}
+
+		@Override
+		HttpClient instantiate(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server) {
+			return OkHttpClient.newOkHttpClient(configuration, server);
+		}
 	},
 
 	/**
@@ -96,6 +101,11 @@ public enum HttpClientStrategy {
 		HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return AsyncHttpClient.defaultAsyncHttpClient(server);
 		}
+
+		@Override
+		HttpClient instantiate(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server) {
+			return AsyncHttpClient.newAsyncHttpClient(configuration, server);
+		}
 	},
 
 	/**
@@ -111,6 +121,11 @@ public enum HttpClientStrategy {
 		HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return NingAsyncHttpClient.defaultAsyncHttpClient(server);
 		}
+
+		@Override
+		HttpClient instantiate(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server) {
+			return NingAsyncHttpClient.newAsyncHttpClient(configuration, server);
+		}
 	},
 
 	/**
@@ -125,6 +140,11 @@ public enum HttpClientStrategy {
 		@Override
 		HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server) {
 			return ApacheHttpClient.defaultApacheHttpClient(server);
+		}
+
+		@Override
+		HttpClient instantiate(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server) {
+			return ApacheHttpClient.newApacheHttpClient(configuration, server);
 		}
 	},
 
@@ -156,6 +176,19 @@ public enum HttpClientStrategy {
 			for (HttpClientStrategy strategy : HttpClientStrategy.values()) {
 				if (strategy.support()) {
 					return strategy.instantiate(server);
+				}
+			}
+
+			throw new UnsupportedOperationException(
+				"Http client implementation cannot be found, please add OkHttp, AsyncHttpClient or ApacheHttpClient to your classpath"
+			);
+		}
+
+		@Override
+		HttpClient instantiate(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server) {
+			for (HttpClientStrategy strategy : HttpClientStrategy.values()) {
+				if (strategy.support()) {
+					return strategy.instantiate(configuration, server);
 				}
 			}
 
@@ -276,14 +309,35 @@ public enum HttpClientStrategy {
 	 * @throws UnsupportedOperationException If the runtime environment does not allow the strategy (such as: the library has not been imported).
 	 */
 	public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
+		checkSupport();
+		return instantiate(server);
+	}
+
+	/**
+	 * Return the http client implementation.
+	 *
+	 * @param configuration HTTP Client configuration.
+	 * @param server Embedded server.
+	 * @return Http client.
+	 * @throws UnsupportedOperationException If the runtime environment does not allow the strategy (such as: the library has not been imported).
+	 */
+	public HttpClient build(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server) {
+		checkSupport();
+		return instantiate(configuration, server);
+	}
+
+	/**
+	 * Ensure that the strategy is supported, throw {@link UnsupportedOperationException} otherwise.
+	 *
+	 * @throws UnsupportedOperationException If the strategy is not supported by the runtime environment.
+	 */
+	void checkSupport() {
 		if (!support()) {
 			throw new UnsupportedOperationException(
 				"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
 				"please import " + library
 			);
 		}
-
-		return instantiate(server);
 	}
 
 	/**
@@ -294,10 +348,19 @@ public enum HttpClientStrategy {
 	abstract boolean support();
 
 	/**
-	 * Instantiate srategy.
+	 * Instantiate strategy.
 	 *
 	 * @param server The target server.
 	 * @return The new http client instance.
 	 */
 	abstract HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server);
+
+	/**
+	 * Instantiate strategy with custom configuration.
+	 *
+	 * @param configuration HTTP Client configuration.
+	 * @param server The target server.
+	 * @return The new http client instance.
+	 */
+	abstract HttpClient instantiate(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server);
 }

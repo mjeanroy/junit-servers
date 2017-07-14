@@ -76,65 +76,73 @@ public class HttpClientStrategyTest {
 
 	@Test
 	public void it_should_create_apache_http_client() {
-		HttpClient client = HttpClientStrategy.APACHE_HTTP_CLIENT.build(server);
-		assertThat(client).isExactlyInstanceOf(ApacheHttpClient.class);
-	}
-
-	@Test
-	public void it_should_fail_create_apache_http_client_if_it_does_not_exist() {
-		setApacheHttpFlag(false);
-
-		String error =
-			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
-			"please import Apache HttpComponent";
-
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage(error);
-
-		HttpClientStrategy.APACHE_HTTP_CLIENT.build(server);
-	}
-
-	@Test
-	public void it_should_create_ning_async_http_client() {
-		HttpClient client = HttpClientStrategy.NING_ASYNC_HTTP_CLIENT.build(server);
-		assertThat(client).isExactlyInstanceOf(NingAsyncHttpClient.class);
-	}
-
-	@Test
-	public void it_should_fail_to_create_ning_async_http_client_if_it_does_not_exist() {
-		setNingAsyncHttpFlag(false);
-
-		String error =
-			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
-			"please import (Ning) AsyncHttpClient";
-
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage(error);
-
-		HttpClientStrategy.NING_ASYNC_HTTP_CLIENT.build(server);
+		testHttpClient(HttpClientStrategy.APACHE_HTTP_CLIENT, ApacheHttpClient.class);
 	}
 
 	@Test
 	@RunIf(AtLeastJava8.class)
 	public void it_should_create_async_http_client() {
-		// AsyncHttpClient requires Java >= 8
-		HttpClient client = HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
-		assertThat(client).isExactlyInstanceOf(AsyncHttpClient.class);
+		testHttpClient(HttpClientStrategy.ASYNC_HTTP_CLIENT, AsyncHttpClient.class);
+	}
+
+	@Test
+	public void it_should_create_ning_async_http_client() {
+		testHttpClient(HttpClientStrategy.NING_ASYNC_HTTP_CLIENT, NingAsyncHttpClient.class);
+	}
+
+	@Test
+	public void it_should_create_ok_http_client() {
+		testHttpClient(HttpClientStrategy.OK_HTTP, OkHttpClient.class);
+	}
+
+	@Test
+	public void it_should_fail_create_apache_http_client_if_it_does_not_exist() {
+		setApacheHttpFlag(false);
+		testHttpClientWithoutImpl(HttpClientStrategy.APACHE_HTTP_CLIENT, "Apache HttpComponent");
 	}
 
 	@Test
 	@RunIf(AtLeastJava8.class)
 	public void it_should_fail_to_create_async_http_client_if_it_does_not_exist() {
 		setAsyncHttpFlag(false);
+		testHttpClientWithoutImpl(HttpClientStrategy.ASYNC_HTTP_CLIENT, "AsyncHttpClient");
+	}
 
-		String error =
-			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
-			"please import AsyncHttpClient";
+	@Test
+	public void it_should_fail_to_create_ning_async_http_client_if_it_does_not_exist() {
+		setNingAsyncHttpFlag(false);
+		testHttpClientWithoutImpl(HttpClientStrategy.NING_ASYNC_HTTP_CLIENT, "(Ning) AsyncHttpClient");
+	}
 
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage(error);
+	@Test
+	public void it_should_fail_to_create_ok_http_client_if_it_does_not_exist() {
+		setOkHttpFlag(false);
+		testHttpClientWithoutImpl(HttpClientStrategy.OK_HTTP, "OkHttp");
+	}
 
-		HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
+	@Test
+	public void it_should_fail_create_apache_http_client_with_custom_configuration_if_it_does_not_exist() {
+		setApacheHttpFlag(false);
+		testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy.APACHE_HTTP_CLIENT, "Apache HttpComponent");
+	}
+
+	@Test
+	@RunIf(AtLeastJava8.class)
+	public void it_should_fail_to_create_async_http_client_with_custom_configuration_if_it_does_not_exist() {
+		setAsyncHttpFlag(false);
+		testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy.ASYNC_HTTP_CLIENT, "AsyncHttpClient");
+	}
+
+	@Test
+	public void it_should_fail_to_create_ning_async_http_client_with_custom_configuration_if_it_does_not_exist() {
+		setNingAsyncHttpFlag(false);
+		testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy.NING_ASYNC_HTTP_CLIENT, "(Ning) AsyncHttpClient");
+	}
+
+	@Test
+	public void it_should_fail_to_create_ok_http_client_with_custom_configuration_if_it_does_not_exist() {
+		setOkHttpFlag(false);
+		testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy.OK_HTTP, "OkHttp");
 	}
 
 	@Test
@@ -151,74 +159,122 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
-	public void it_should_create_ok_http_client() {
-		HttpClient client = HttpClientStrategy.OK_HTTP.build(server);
-		assertThat(client).isExactlyInstanceOf(OkHttpClient.class);
-	}
-
-	@Test
-	public void it_should_fail_to_create_ok_http_client_if_it_does_not_exist() {
-		setOkHttpFlag(false);
+	@RunIf(Java7.class)
+	public void it_should_fail_to_create_async_http_client_with_custom_configuration_if_runtime_is_java7() {
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+			.disableFollowRedirect()
+			.build();
 
 		String error =
 			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
-			"please import OkHttp";
+			"please import AsyncHttpClient";
 
 		thrown.expect(UnsupportedOperationException.class);
 		thrown.expectMessage(error);
 
-		HttpClientStrategy.OK_HTTP.build(server);
+		HttpClientStrategy.ASYNC_HTTP_CLIENT.build(configuration, server);
 	}
 
 	@Test
 	public void it_should_create_automatic_http_client_with_ok_http_client() {
 		setDetection(true, true, true, true);
-		HttpClient client = HttpClientStrategy.AUTO.build(server);
-		assertThat(client).isExactlyInstanceOf(OkHttpClient.class);
+		testAuto(OkHttpClient.class);
 	}
 
 	@Test
 	@RunIf(AtLeastJava8.class)
 	public void it_should_create_automatic_http_client_with_async_http_client_on_java_8() {
 		setOkHttpFlag(false);
-		HttpClient client = HttpClientStrategy.AUTO.build(server);
-		assertThat(client).isExactlyInstanceOf(AsyncHttpClient.class);
+		testAuto(AsyncHttpClient.class);
 	}
 
 	@Test
 	@RunIf(Java7.class)
 	public void it_should_create_automatic_http_client_with_ning_async_http_client_on_java_7() {
 		setOkHttpFlag(false);
-		HttpClient client = HttpClientStrategy.AUTO.build(server);
-		assertThat(client).isExactlyInstanceOf(NingAsyncHttpClient.class);
+		testAuto(NingAsyncHttpClient.class);
 	}
 
 	@Test
 	public void it_should_create_automatic_http_client_with_ning_async_http_client() {
 		setDetection(false, false, true, true);
-		HttpClient client = HttpClientStrategy.AUTO.build(server);
-		assertThat(client).isExactlyInstanceOf(NingAsyncHttpClient.class);
+		testAuto(NingAsyncHttpClient.class);
 	}
 
 	@Test
 	public void it_should_create_automatic_http_client_with_apache_http_client() {
 		setDetection(false, false, false, true);
-		HttpClient client = HttpClientStrategy.AUTO.build(server);
-		assertThat(client).isExactlyInstanceOf(ApacheHttpClient.class);
+		testAuto(ApacheHttpClient.class);
 	}
 
 	@Test
 	public void it_should_not_create_automatic_http_client_and_fail_without_implementation() {
 		setDetection(false, false, false, false);
+		testHttpClientWithoutImpl(HttpClientStrategy.AUTO, "OkHttp OR AsyncHttpClient OR Apache HttpComponent");
+	}
 
+	@Test
+	public void it_should_not_create_automatic_http_client_with_custom_configuration_and_fail_without_implementation() {
+		setDetection(false, false, false, false);
+		testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy.AUTO, "OkHttp OR AsyncHttpClient OR Apache HttpComponent");
+	}
+
+	private void testHttpClient(HttpClientStrategy strategy, Class<?> expectedImpl) {
+		HttpClient c1 = strategy.build(server);
+		assertThat(c1).isExactlyInstanceOf(expectedImpl);
+
+		// ---
+
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+			.disableFollowRedirect()
+			.build();
+
+		HttpClient c2 = strategy.build(configuration, server);
+
+		assertThat(c2).isExactlyInstanceOf(expectedImpl);
+		assertThat(c2.getConfiguration()).isSameAs(configuration);
+	}
+
+	private void testAuto(Class<?> expectedImpl) {
+		HttpClient c1 = HttpClientStrategy.AUTO.build(server);
+		assertThat(c1).isExactlyInstanceOf(expectedImpl);
+		assertThat(c1.getConfiguration()).isEqualTo(HttpClientConfiguration.defaultConfiguration());
+
+		// ---
+
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+			.disableFollowRedirect()
+			.build();
+
+		HttpClient c2 = HttpClientStrategy.AUTO.build(configuration, server);
+		assertThat(c2).isExactlyInstanceOf(expectedImpl);
+		assertThat(c2.getConfiguration()).isSameAs(configuration);
+	}
+
+	private void testHttpClientWithoutImpl(HttpClientStrategy strategy, String library) {
 		String error =
 			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
-			"please import OkHttp OR AsyncHttpClient OR Apache HttpComponent";
+				"please import " + library;
 
 		thrown.expect(UnsupportedOperationException.class);
 		thrown.expectMessage(error);
 
-		HttpClientStrategy.AUTO.build(server);
+		strategy.build(server);
+	}
+
+	private void testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy strategy, String library) {
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+			.disableFollowRedirect()
+			.build();
+
+		String error =
+			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+				"please import " + library;
+
+		thrown.expect(UnsupportedOperationException.class);
+		thrown.expectMessage(error);
+
+		strategy.build(configuration, server);
 	}
 
 	private static void setDetection(boolean okHttp, boolean asyncHttp, boolean ningAsyncHttp, boolean apacheHttp) {

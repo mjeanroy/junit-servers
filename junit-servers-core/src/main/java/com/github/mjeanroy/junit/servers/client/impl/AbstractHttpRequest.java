@@ -135,7 +135,13 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	public HttpRequest addHeader(String name, String value) {
 		notBlank(name, "name");
 		notNull(value, "value");
-		headers.put(name, header(name, value));
+		return addHeader(header(name, value));
+	}
+
+	@Override
+	public HttpRequest addHeader(HttpHeader header) {
+		notNull(header, "header");
+		headers.put(header.getName(), header);
 		return this;
 	}
 

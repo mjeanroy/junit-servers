@@ -52,10 +52,20 @@ public interface HttpRequest {
 	 * @param name Header name.
 	 * @param value Header value.
 	 * @return Http request that can be used for chaining.
-	 * @throws NullPointerException if name or value is null.
-	 * @throws IllegalArgumentException if name or value is blank.
+	 * @throws NullPointerException If {@code name} or {@code value} is {@code null}.
+	 * @throws IllegalArgumentException if {@code name} is blank.
+	 * @see HttpRequest#addHeader(HttpHeader)
 	 */
 	HttpRequest addHeader(String name, String value);
+
+	/**
+	 * Add header.
+	 *
+	 * @param header The header.
+	 * @return Http request that can be used for chaining.
+	 * @throws NullPointerException If {@code header} is {@code null}.
+	 */
+	HttpRequest addHeader(HttpHeader header);
 
 	/**
 	 * Add query parameters: a query parameter is a parameter that will

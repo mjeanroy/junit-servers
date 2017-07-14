@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.client.impl;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -77,6 +78,19 @@ public abstract class BaseHttpClientTest {
 		assertThat(internalServer).isNotNull().isSameAs(server);
 
 		checkInternalHttpClient(client);
+	}
+
+	@Test
+	public void it_should_create_client_with_custom_configuration() throws Exception {
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+			.disableFollowRedirect()
+			.build();
+
+		HttpClient client = createCustomClient(configuration, server);
+
+		assertThat(client).isNotNull();
+		assertThat(readPrivate(client, "server")).isNotNull().isSameAs(server);
+		checkInternalHttpClient(configuration, client);
 	}
 
 	@Test
@@ -179,10 +193,28 @@ public abstract class BaseHttpClientTest {
 	protected abstract HttpClient createCustomClient(EmbeddedServer<?> server);
 
 	/**
+	 * Should create a custom http client.
+	 *
+	 * @param configuration The HTTP client custom configuration.
+	 * @param server Fake embedded server.
+	 * @return Default http client.
+	 */
+	protected abstract HttpClient createCustomClient(HttpClientConfiguration configuration, EmbeddedServer<?> server);
+
+	/**
 	 * Should check internal data of previously created custom
 	 * http client.
 	 *
 	 * @param httpClient Previously created client.
 	 */
 	protected abstract void checkInternalHttpClient(HttpClient httpClient);
+
+	/**
+	 * Should check internal data of previously created custom
+	 * http client.
+	 *
+	 * @param configuration The configuration used to create client.
+	 * @param httpClient Previously created client.
+	 */
+	protected abstract void checkInternalHttpClient(HttpClientConfiguration configuration, HttpClient httpClient);
 }

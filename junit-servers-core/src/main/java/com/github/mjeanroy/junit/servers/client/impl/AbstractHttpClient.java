@@ -24,13 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.client.impl;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
-
+import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
 
 /**
  * Abstract skeleton of {@link HttpClient} interface.
@@ -47,6 +50,11 @@ public abstract class AbstractHttpClient implements HttpClient {
 	private static final char URL_SEPARATOR = '/';
 
 	/**
+	 * The client configuration.
+	 */
+	private final HttpClientConfiguration configuration;
+
+	/**
 	 * Embedded server to query.
 	 */
 	private final EmbeddedServer<?> server;
@@ -54,11 +62,18 @@ public abstract class AbstractHttpClient implements HttpClient {
 	/**
 	 * Create abstract skeleton.
 	 *
+	 * @param configuration The HTTP client configuration.
 	 * @param server Server.
 	 * @throws NullPointerException if server is null.
 	 */
-	protected AbstractHttpClient(EmbeddedServer<?> server) {
+	protected AbstractHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
+		this.configuration = notNull(configuration, "configuration");
 		this.server = notNull(server, "server");
+	}
+
+	@Override
+	public HttpClientConfiguration getConfiguration() {
+		return configuration;
 	}
 
 	@Override
@@ -108,7 +123,19 @@ public abstract class AbstractHttpClient implements HttpClient {
 			endpoint = String.valueOf(URL_SEPARATOR) + endpoint;
 		}
 
-		return buildRequest(httpMethod, serverUrl + endpoint);
+		HttpRequest rq = buildRequest(httpMethod, serverUrl + endpoint);
+
+		// Add default headers.
+		for (HttpHeader header : configuration.getDefaultHeaders().values()) {
+			rq = rq.addHeader(header);
+		}
+
+		// Add default cookies.
+		for (Cookie cookie : configuration.getDefaultCookies()) {
+			rq = rq.addCookie(cookie);
+		}
+
+		return rq;
 	}
 
 	/**

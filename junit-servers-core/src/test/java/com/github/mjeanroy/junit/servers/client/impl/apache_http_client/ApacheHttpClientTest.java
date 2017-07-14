@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -52,6 +53,15 @@ public class ApacheHttpClientTest extends BaseHttpClientTest {
 	@Override
 	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
 		return newApacheHttpClient(server, internalClient);
+	}
+
+	@Override
+	protected HttpClient createCustomClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
+		return newApacheHttpClient(configuration, server);
+	}
+
+	@Override
+	protected void checkInternalHttpClient(HttpClientConfiguration configuration, HttpClient httpClient) {
 	}
 
 	@Override

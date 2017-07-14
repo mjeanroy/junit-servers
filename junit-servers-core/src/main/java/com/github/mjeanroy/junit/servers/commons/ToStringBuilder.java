@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
+import java.util.Map;
+
 /**
  * Static utility to create easily toString implementation.
  *
@@ -132,6 +134,24 @@ public final class ToStringBuilder {
 	 */
 	public ToStringBuilder append(String name, Boolean value) {
 		return appendValue(name, value);
+	}
+
+	/**
+	 * Append new map value.
+	 *
+	 * @param name The name of the field.
+	 * @param map The map.
+	 * @return The current builder (for chaining).
+	 */
+	public ToStringBuilder append(String name, Map<?, ?> map) {
+		StringBuilder sb = new StringBuilder(START_OBJ);
+		for (Map.Entry<?, ?> entry : map.entrySet()) {
+			sb.append(entry.getKey()).append(FIELD_VALUE_SEPARATOR).append(formatValue(entry.getValue()));
+		}
+
+		sb.append(END_OBJ);
+
+		return appendFormattedValue(name, sb.toString());
 	}
 
 	/**

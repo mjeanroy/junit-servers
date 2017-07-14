@@ -30,9 +30,16 @@ package com.github.mjeanroy.junit.servers.client;
  * <p>
  *
  * After test suite, client should be properly destroyed
- * using {#destroy} method.
+ * using {@link HttpClient#destroy} method.
  */
 public interface HttpClient {
+
+	/**
+	 * Get the client configuration.
+	 *
+	 * @return HTTP Client configuration.
+	 */
+	HttpClientConfiguration getConfiguration();
 
 	/**
 	 * Create {@code GET} request.
