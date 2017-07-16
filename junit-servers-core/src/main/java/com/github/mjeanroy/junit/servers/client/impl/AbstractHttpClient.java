@@ -146,4 +146,17 @@ public abstract class AbstractHttpClient implements HttpClient {
 	 * @return Http request.
 	 */
 	protected abstract HttpRequest buildRequest(HttpMethod httpMethod, String url);
+
+	// Ensure that the client is properly destroyed when garbage collected.
+	// This is a just a simple "security" if the caller forget to destroy the client: the caller should always destroy
+	// the client once used.
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+
+		// Destroy it.
+		if (!isDestroyed()) {
+			destroy();
+		}
+	}
 }
