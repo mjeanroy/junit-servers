@@ -69,7 +69,7 @@ public enum HttpClientStrategy {
 	 */
 	OK_HTTP("OkHttp") {
 		@Override
-		boolean support() {
+		public boolean support() {
 			return SUPPORT_OK_HTTP_CLIENT;
 		}
 
@@ -93,7 +93,7 @@ public enum HttpClientStrategy {
 	 */
 	ASYNC_HTTP_CLIENT("AsyncHttpClient") {
 		@Override
-		boolean support() {
+		public boolean support() {
 			return SUPPORT_JAVA_8 && SUPPORT_ASYNC_HTTP_CLIENT;
 		}
 
@@ -113,7 +113,7 @@ public enum HttpClientStrategy {
 	 */
 	NING_ASYNC_HTTP_CLIENT("(Ning) AsyncHttpClient") {
 		@Override
-		boolean support() {
+		public boolean support() {
 			return SUPPORT_NING_ASYNC_HTTP_CLIENT;
 		}
 
@@ -133,7 +133,7 @@ public enum HttpClientStrategy {
 	 */
 	APACHE_HTTP_CLIENT("Apache HttpComponent") {
 		@Override
-		boolean support() {
+		public boolean support() {
 			return SUPPORT_APACHE_HTTP_CLIENT;
 		}
 
@@ -161,7 +161,7 @@ public enum HttpClientStrategy {
 	 */
 	AUTO("OkHttp OR AsyncHttpClient OR Apache HttpComponent") {
 		@Override
-		boolean support() {
+		public boolean support() {
 			for (HttpClientStrategy strategy : HttpClientStrategy.values()) {
 				if (strategy != this && strategy.support()) {
 					return true;
@@ -345,7 +345,7 @@ public enum HttpClientStrategy {
 	 *
 	 * @return {@code true} if the strategy can be instantiated, {@code false} otherwise.
 	 */
-	abstract boolean support();
+	public abstract boolean support();
 
 	/**
 	 * Instantiate strategy.

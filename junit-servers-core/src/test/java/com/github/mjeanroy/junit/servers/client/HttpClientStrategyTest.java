@@ -220,10 +220,14 @@ public class HttpClientStrategyTest {
 	}
 
 	private void testHttpClient(HttpClientStrategy strategy, Class<?> expectedImpl) {
+		assertThat(strategy.support()).isTrue();
+
+		// --- With default configuration.
+
 		HttpClient c1 = strategy.build(server);
 		assertThat(c1).isExactlyInstanceOf(expectedImpl);
 
-		// ---
+		// --- With custom configuration.
 
 		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
@@ -236,11 +240,15 @@ public class HttpClientStrategyTest {
 	}
 
 	private void testAuto(Class<?> expectedImpl) {
+		assertThat(HttpClientStrategy.AUTO.support()).isTrue();
+
+		// --- With default configuration.
+
 		HttpClient c1 = HttpClientStrategy.AUTO.build(server);
 		assertThat(c1).isExactlyInstanceOf(expectedImpl);
 		assertThat(c1.getConfiguration()).isEqualTo(HttpClientConfiguration.defaultConfiguration());
 
-		// ---
+		// --- With custom configuration.
 
 		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
@@ -252,9 +260,11 @@ public class HttpClientStrategyTest {
 	}
 
 	private void testHttpClientWithoutImpl(HttpClientStrategy strategy, String library) {
+		assertThat(strategy.support()).isFalse();
+
 		String error =
 			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
-				"please import " + library;
+			"please import " + library;
 
 		thrown.expect(UnsupportedOperationException.class);
 		thrown.expectMessage(error);
@@ -263,13 +273,15 @@ public class HttpClientStrategyTest {
 	}
 
 	private void testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy strategy, String library) {
+		assertThat(strategy.support()).isFalse();
+
 		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
 			.build();
 
 		String error =
 			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
-				"please import " + library;
+			"please import " + library;
 
 		thrown.expect(UnsupportedOperationException.class);
 		thrown.expectMessage(error);
