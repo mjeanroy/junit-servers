@@ -42,9 +42,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndexWithRunnerTest extends AbstractJettyTest {
 
-	@TestHttpClient
-	private static HttpClient client;
-
 	@TestServerConfiguration
 	private static EmbeddedJettyConfiguration configuration() throws Exception {
 		String current = new File(".").getCanonicalPath();
@@ -61,13 +58,17 @@ public class IndexWithRunnerTest extends AbstractJettyTest {
 				.build();
 	}
 
+	@TestHttpClient
+	private HttpClient client;
+
 	@Test
 	public void it_should_have_an_index() {
-		HttpResponse rsp = client.prepareGet("/index")
-				.addCookie(new Cookie.Builder("foo", "bar")
-					.maxAge(0L)
-					.build())
-				.execute();
+		HttpResponse rsp = client
+			.prepareGet("/index")
+			.addCookie(new Cookie.Builder("foo", "bar")
+				.maxAge(0L)
+				.build())
+			.execute();
 
 		String message = rsp.body();
 		assertThat(message)

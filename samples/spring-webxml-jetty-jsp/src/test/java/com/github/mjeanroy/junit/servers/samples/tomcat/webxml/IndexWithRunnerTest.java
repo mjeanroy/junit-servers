@@ -24,20 +24,20 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.net.URL;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.web.client.RestTemplate;
-
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(JunitServerRunner.class)
 public class IndexWithRunnerTest {
@@ -65,12 +65,16 @@ public class IndexWithRunnerTest {
 				.build();
 	}
 
-	private static RestTemplate restTemplate = new RestTemplate();
+	@TestHttpClient
+	private HttpClient client;
 
 	@Test
 	public void it_should_have_an_index() {
-		String url = jetty.getUrl();
-		String message = restTemplate.getForObject(url, String.class);
+		String message = client
+			.prepareGet("/")
+			.execute()
+			.body();
+
 		assertThat(message).isNotEmpty().contains("Hello");
 	}
 

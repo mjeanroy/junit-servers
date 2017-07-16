@@ -24,38 +24,31 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
-import javax.servlet.ServletContext;
-
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-public class IndexWithRulesWithParent03Test
-    extends AbstractTest {
+import javax.servlet.ServletContext;
 
-    private static RestTemplate restTemplate = new RestTemplate();
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Test
-    public void it_should_have_an_index() {
+public class IndexWithRulesWithParent03Test extends AbstractTest {
 
-        final String url = url() + "index";
-        final String message = IndexWithRulesWithParent03Test.restTemplate.getForObject(url, String.class);
-        Assertions.assertThat(message).isNotEmpty().isEqualTo("Hello World");
+	@Test
+	public void it_should_have_an_index() {
+		String message = serverRule.getClient()
+			.prepareGet("/index")
+			.execute()
+			.body();
 
-        // Try to get servlet context
-        final ServletContext servletContext = AbstractTest.serverRule.getServer().getServletContext();
-        Assertions.assertThat(servletContext).isNotNull();
+		assertThat(message).isNotEmpty().isEqualTo("Hello World");
 
-        // Try to retrieve spring webApplicationContext
-        final WebApplicationContext webApplicationContext =
-            WebApplicationContextUtils.getWebApplicationContext(servletContext);
-        Assertions.assertThat(webApplicationContext).isNotNull();
-    }
+		// Try to get servlet context
+		ServletContext servletContext = serverRule.getServer().getServletContext();
+		assertThat(servletContext).isNotNull();
 
-    public String url() {
-
-        return String.format("http://%s:%s/", "localhost", AbstractTest.tomcat.getPort());
-    }
+		// Try to retrieve spring webApplicationContext
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+		assertThat(webApplicationContext).isNotNull();
+	}
 }

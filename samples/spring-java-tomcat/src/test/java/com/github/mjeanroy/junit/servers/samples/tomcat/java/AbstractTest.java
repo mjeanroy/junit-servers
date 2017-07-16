@@ -33,30 +33,30 @@ import java.io.File;
 
 public class AbstractTest {
 
-    private static final String PATH = "samples/spring-java-tomcat/";
+	private static final String PATH = "samples/spring-java-tomcat/";
 
-    private static EmbeddedTomcatConfiguration configuration = AbstractTest.initConfiguration();
+	private static EmbeddedTomcatConfiguration configuration() {
+		try {
+			String current = new File(".").getCanonicalPath();
+			if (!current.endsWith("/")) {
+				current += "/";
+			}
 
-    private static EmbeddedTomcatConfiguration initConfiguration() {
+			String path = current.endsWith(AbstractTest.PATH) ? current : current + AbstractTest.PATH;
 
-        try {
-            String current = new File(".").getCanonicalPath();
-            if (!current.endsWith("/")) {
-                current += "/";
-            }
+			return EmbeddedTomcatConfiguration.builder()
+				.withWebapp(path + "src/main/webapp")
+				.withClasspath(path + "target/classes")
+				.build();
 
-            final String path = current.endsWith(AbstractTest.PATH) ? current : current + AbstractTest.PATH;
+		} catch (final Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 
-            return EmbeddedTomcatConfiguration.builder().withWebapp(path + "src/main/webapp")
-                .withClasspath(path + "target/classes").build();
-        } catch (final Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+	private static EmbeddedTomcat tomcat = new EmbeddedTomcat(configuration());
 
-    protected static EmbeddedTomcat tomcat = new EmbeddedTomcat(AbstractTest.configuration);
-
-    @ClassRule
-    public static TomcatServerRule serverRule = new TomcatServerRule(AbstractTest.tomcat);
+	@ClassRule
+	public static TomcatServerRule serverRule = new TomcatServerRule(AbstractTest.tomcat);
 
 }

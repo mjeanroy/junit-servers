@@ -24,38 +24,31 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
 
-public class IndexWithRulesWithParent02Test
-    extends AbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private static RestTemplate restTemplate = new RestTemplate();
+public class IndexWithRulesWithParent02Test extends AbstractTest {
 
-    @Test
-    public void it_should_have_an_index() {
+	@Test
+	public void it_should_have_an_index() {
+		String message = serverRule.getClient()
+			.prepareGet("/index")
+			.execute()
+			.body();
 
-        final String url = url() + "index";
-        final String message = IndexWithRulesWithParent02Test.restTemplate.getForObject(url, String.class);
-        Assertions.assertThat(message).isNotEmpty().isEqualTo("Hello World");
+		assertThat(message).isNotEmpty().isEqualTo("Hello World");
 
-        // Try to get servlet context
-        final ServletContext servletContext = AbstractTest.serverRule.getServer().getServletContext();
-        Assertions.assertThat(servletContext).isNotNull();
+		// Try to get servlet context
+		ServletContext servletContext = serverRule.getServer().getServletContext();
+		assertThat(servletContext).isNotNull();
 
-        // Try to retrieve spring webApplicationContext
-        final WebApplicationContext webApplicationContext =
-            WebApplicationContextUtils.getWebApplicationContext(servletContext);
-        Assertions.assertThat(webApplicationContext).isNotNull();
-    }
-
-    public String url() {
-
-        return String.format("http://%s:%s/", "localhost", AbstractTest.tomcat.getPort());
-    }
+		// Try to retrieve spring webApplicationContext
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+		assertThat(webApplicationContext).isNotNull();
+	}
 }

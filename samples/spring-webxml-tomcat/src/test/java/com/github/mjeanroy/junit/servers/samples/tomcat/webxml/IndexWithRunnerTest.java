@@ -24,14 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -62,12 +63,16 @@ public class IndexWithRunnerTest {
 				.build();
 	}
 
-	private static RestTemplate restTemplate = new RestTemplate();
+	@TestHttpClient
+	private HttpClient client;
 
 	@Test
 	public void it_should_have_an_index() {
-		String url = url() + "index";
-		String message = restTemplate.getForObject(url, String.class);
+		String message = client
+			.prepareGet("/index")
+			.execute()
+			.body();
+
 		assertThat(message).isNotEmpty().isEqualTo("Hello World");
 
 		// Try to get servlet context
@@ -77,9 +82,5 @@ public class IndexWithRunnerTest {
 		// Try to retrieve spring webApplicationContext
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		assertThat(webApplicationContext).isNotNull();
-	}
-
-	public String url() {
-		return String.format("http://%s:%s/", "localhost", tomcat.getPort());
 	}
 }

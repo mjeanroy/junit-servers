@@ -24,26 +24,22 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FileFilter;
 
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
-
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndexWithRulesTest {
 
 	private static final String PATH = "samples/spring-webxml-tomcat-jsp/";
 
-	private static EmbeddedTomcatConfiguration configuration = initConfiguration();
-
-	private static EmbeddedTomcatConfiguration initConfiguration() {
+	private static EmbeddedTomcatConfiguration configuration() {
 		try {
 			String current = new File(".").getCanonicalPath();
 			if (!current.endsWith("/")) {
@@ -69,17 +65,18 @@ public class IndexWithRulesTest {
 		}
 	}
 
-	private static EmbeddedTomcat tomcat = new EmbeddedTomcat(configuration);
-
-	private static RestTemplate restTemplate = new RestTemplate();
+	private static final EmbeddedTomcat tomcat = new EmbeddedTomcat(configuration());
 
 	@ClassRule
 	public static TomcatServerRule serverRule = new TomcatServerRule(tomcat);
 
 	@Test
 	public void it_should_have_an_index() {
-		String url = tomcat.getUrl();
-		String message = restTemplate.getForObject(url, String.class);
+		String message = serverRule.getClient()
+			.prepareGet("/index")
+			.execute()
+			.body();
+
 		assertThat(message).isNotEmpty().contains("Hello");
 	}
 }

@@ -24,14 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.net.URL;
@@ -40,9 +39,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(JunitServerRunner.class)
 public class IndexWithRunnerTest {
-
-	@TestServer
-	private static EmbeddedServer tomcat;
 
 	@TestServerConfiguration
 	private static EmbeddedTomcatConfiguration configuration() throws Exception {
@@ -65,12 +61,16 @@ public class IndexWithRunnerTest {
 				.build();
 	}
 
-	private static RestTemplate restTemplate = new RestTemplate();
+	@TestHttpClient
+	private HttpClient client;
 
 	@Test
 	public void it_should_have_an_index() {
-		String url = tomcat.getUrl();
-		String message = restTemplate.getForObject(url, String.class);
+		String message = client
+			.prepareGet("/index")
+			.execute()
+			.body();
+
 		assertThat(message).isNotEmpty().contains("Hello");
 	}
 

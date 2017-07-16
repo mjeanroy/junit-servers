@@ -42,9 +42,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndexWithRunnerTest extends AbstractTomcatTest {
 
-	@TestHttpClient
-	private static HttpClient client;
-
 	@TestServerConfiguration
 	private static EmbeddedTomcatConfiguration configuration() throws Exception {
 		String current = new File(".").getCanonicalPath();
@@ -60,6 +57,9 @@ public class IndexWithRunnerTest extends AbstractTomcatTest {
 				.withClasspath(path + "target/classes")
 				.build();
 	}
+
+	@TestHttpClient
+	private HttpClient client;
 
 	@Test
 	public void it_should_have_an_index() {

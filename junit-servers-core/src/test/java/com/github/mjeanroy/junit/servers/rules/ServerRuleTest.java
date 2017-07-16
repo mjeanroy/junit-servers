@@ -24,12 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,9 +35,11 @@ import org.junit.rules.ExpectedException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ServerRuleTest {
 
@@ -150,6 +150,40 @@ public class ServerRuleTest {
 	public void it_should_get_server() {
 		EmbeddedServer<?> result = rule.getServer();
 		assertThat(result).isSameAs(server);
+	}
+
+	@Test
+	public void it_should_get_http_client() {
+		HttpClient client = rule.getClient();
+		assertThat(client).isNotNull();
+		assertThat(client).isSameAs(rule.getClient());
+		assertThat(client.isDestroyed()).isFalse();
+	}
+
+	@Test
+	public void it_should_get_new_http_client_if_it_has_been_destroyed() {
+		HttpClient client = rule.getClient();
+		assertThat(client).isNotNull();
+		assertThat(client).isSameAs(rule.getClient());
+		assertThat(client.isDestroyed()).isFalse();
+
+		client.destroy();
+
+		HttpClient newClient = rule.getClient();
+		assertThat(newClient).isNotNull();
+		assertThat(newClient).isNotSameAs(client);
+		assertThat(newClient.isDestroyed()).isFalse();
+	}
+
+	@Test
+	public void it_should_destroy_http_client_when_rule_stop() {
+		HttpClient client = rule.getClient();
+		assertThat(client).isNotNull();
+		assertThat(client.isDestroyed()).isFalse();
+
+		rule.after();
+
+		assertThat(client.isDestroyed()).isTrue();
 	}
 
 	@Test

@@ -27,11 +27,9 @@ package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
-
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -42,9 +40,7 @@ public class IndexWithRulesTest {
 
 	private static final String PATH = "samples/spring-webxml-jetty-jsp/";
 
-	private static EmbeddedJettyConfiguration configuration = initConfiguration();
-
-	private static EmbeddedJettyConfiguration initConfiguration() {
+	private static EmbeddedJettyConfiguration configuration() {
 		try {
 			String current = new File(".").getCanonicalPath();
 			if (!current.endsWith("/")) {
@@ -69,18 +65,18 @@ public class IndexWithRulesTest {
 		}
 	}
 
-	private static EmbeddedJetty jetty = new EmbeddedJetty(configuration);
-
-	private static RestTemplate restTemplate = new RestTemplate();
+	private static EmbeddedJetty jetty = new EmbeddedJetty(configuration());
 
 	@ClassRule
 	public static JettyServerRule serverRule = new JettyServerRule(jetty);
 
 	@Test
 	public void it_should_have_an_index() {
-		String url = jetty.getUrl();
-		String message = restTemplate.getForObject(url, String.class);
+		String message = serverRule.getClient()
+			.prepareGet("/")
+			.execute()
+			.body();
+
 		assertThat(message).isNotEmpty().contains("Hello");
 	}
-
 }

@@ -29,7 +29,6 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -42,9 +41,7 @@ public class IndexWithRulesTest {
 
 	private static final String PATH = "samples/spring-webxml-jetty/";
 
-	private static EmbeddedJettyConfiguration configuration = initConfiguration();
-
-	private static EmbeddedJettyConfiguration initConfiguration() {
+	private static EmbeddedJettyConfiguration configuration() {
 		try {
 			String current = new File(".").getCanonicalPath();
 			if (!current.endsWith("/")) {
@@ -63,17 +60,18 @@ public class IndexWithRulesTest {
 		}
 	}
 
-	private static EmbeddedJetty jetty = new EmbeddedJetty(configuration);
-
-	private static RestTemplate restTemplate = new RestTemplate();
+	private static EmbeddedJetty jetty = new EmbeddedJetty(configuration());
 
 	@ClassRule
 	public static JettyServerRule serverRule = new JettyServerRule(jetty);
 
 	@Test
 	public void it_should_have_an_index() {
-		String url = url() + "index";
-		String message = restTemplate.getForObject(url, String.class);
+		String message = serverRule.getClient()
+			.prepareGet("/index")
+			.execute()
+			.body();
+
 		assertThat(message).isNotEmpty().isEqualTo("Hello World");
 
 		// Try to get servlet context
@@ -83,9 +81,5 @@ public class IndexWithRulesTest {
 		// Try to retrieve spring webApplicationContext
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		assertThat(webApplicationContext).isNotNull();
-	}
-
-	public String url() {
-		return String.format("http://%s:%s/", "localhost", jetty.getPort());
 	}
 }

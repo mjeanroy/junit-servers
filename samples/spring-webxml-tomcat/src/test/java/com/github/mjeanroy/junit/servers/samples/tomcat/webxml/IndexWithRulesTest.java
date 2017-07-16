@@ -29,7 +29,6 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -42,9 +41,7 @@ public class IndexWithRulesTest {
 
 	private static final String PATH = "samples/spring-webxml-tomcat/";
 
-	private static EmbeddedTomcatConfiguration configuration = initConfiguration();
-
-	private static EmbeddedTomcatConfiguration initConfiguration() {
+	private static EmbeddedTomcatConfiguration configuration() {
 		try {
 			String current = new File(".").getCanonicalPath();
 			if (!current.endsWith("/")) {
@@ -64,17 +61,18 @@ public class IndexWithRulesTest {
 		}
 	}
 
-	private static EmbeddedTomcat tomcat = new EmbeddedTomcat(configuration);
-
-	private static RestTemplate restTemplate = new RestTemplate();
+	private static final EmbeddedTomcat tomcat = new EmbeddedTomcat(configuration());
 
 	@ClassRule
 	public static TomcatServerRule serverRule = new TomcatServerRule(tomcat);
 
 	@Test
 	public void it_should_have_an_index() {
-		String url = url() + "index";
-		String message = restTemplate.getForObject(url, String.class);
+		String message = serverRule.getClient()
+			.prepareGet("/index")
+			.execute()
+			.body();
+
 		assertThat(message).isNotEmpty().isEqualTo("Hello World");
 
 		// Try to get servlet context
@@ -84,9 +82,5 @@ public class IndexWithRulesTest {
 		// Try to retrieve spring webApplicationContext
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		assertThat(webApplicationContext).isNotNull();
-	}
-
-	public String url() {
-		return String.format("http://%s:%s/", "localhost", tomcat.getPort());
 	}
 }

@@ -24,11 +24,14 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
-
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
 
 /**
  * Rule that can be used to start and stop embedded server.
@@ -57,6 +60,11 @@ public class ServerRule extends AbstractRule {
 	 * Embedded server that will be start and stopped.
 	 */
 	private final EmbeddedServer<?> server;
+
+	/**
+	 * The HTTP client (will be automatically destroyed in the {@code after} step.
+	 */
+	private final HttpClientHolder client;
 
 	/**
 	 * Create rule with default embedded server.
@@ -102,7 +110,10 @@ public class ServerRule extends AbstractRule {
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public ServerRule(EmbeddedServer<?> server) {
-		this.server = notNull(server, "server");
+		notNull(server, "server");
+
+		this.server = server;
+		this.client = new HttpClientHolder(HttpClientStrategy.AUTO, HttpClientConfiguration.defaultConfiguration(), server);
 	}
 
 	@Override
@@ -131,6 +142,7 @@ public class ServerRule extends AbstractRule {
 	 */
 	public void stop() {
 		server.stop();
+		client.destroy();
 	}
 
 	/**
@@ -199,5 +211,15 @@ public class ServerRule extends AbstractRule {
 	 */
 	public EmbeddedServer<?> getServer() {
 		return server;
+	}
+
+	/**
+	 * Returns HTTP client that can be used against {@link #server}.
+	 *
+	 * @return The HTTP client.
+	 * @throws UnsupportedOperationException If the client cannot be returned because of missing implementation.
+	 */
+	public HttpClient getClient() {
+		return client.get();
 	}
 }
