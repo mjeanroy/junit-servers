@@ -149,7 +149,7 @@ public class HttpClientStrategyTest {
 	@RunIf(Java7.class)
 	public void it_should_fail_to_create_async_http_client_if_runtime_is_java7() {
 		String error =
-			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+			"HTTP Client cannot be created because it is not supported by the runtime environment, " +
 			"please import AsyncHttpClient";
 
 		thrown.expect(UnsupportedOperationException.class);
@@ -166,7 +166,7 @@ public class HttpClientStrategyTest {
 			.build();
 
 		String error =
-			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+			"HTTP Client cannot be created because it is not supported by the runtime environment, " +
 			"please import AsyncHttpClient";
 
 		thrown.expect(UnsupportedOperationException.class);
@@ -263,7 +263,7 @@ public class HttpClientStrategyTest {
 		assertThat(strategy.support()).isFalse();
 
 		String error =
-			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+			"HTTP Client cannot be created because it is not supported by the runtime environment, " +
 			"please import " + library;
 
 		thrown.expect(UnsupportedOperationException.class);
@@ -280,7 +280,7 @@ public class HttpClientStrategyTest {
 			.build();
 
 		String error =
-			"HTTP Client %s cannot be created because it is not supported by the runtime environment, " +
+			"HTTP Client cannot be created because it is not supported by the runtime environment, " +
 			"please import " + library;
 
 		thrown.expect(UnsupportedOperationException.class);
