@@ -144,6 +144,20 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void it_should_create_request_with_root_path() throws Exception {
+		final String serverUrl = "http://localhost:9999";
+		when(server.getUrl()).thenReturn(serverUrl);
+		when(server.getPath()).thenReturn("/");
+
+		final HttpClient client = createCustomClient(server);
+		final String path = "/";
+		final HttpMethod httpMethod = HttpMethod.GET;
+
+		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
+		assertThat(httpRequest.getUrl()).isEqualTo(serverUrl);
+	}
+
+	@Test
 	public void it_should_create_get_request() throws Exception {
 		HttpClient client = createCustomClient(server);
 		HttpRequest httpRequest = client.prepareGet("/foo");

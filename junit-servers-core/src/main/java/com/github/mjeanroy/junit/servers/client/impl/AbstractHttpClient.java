@@ -119,7 +119,7 @@ public abstract class AbstractHttpClient implements HttpClient {
 		String endpoint = url;
 		endpoint = removePrefix(endpoint, server.getPath());
 		endpoint = removePrefix(endpoint, serverUrl);
-		if (endpoint.charAt(0) != URL_SEPARATOR && serverUrl.charAt(serverUrl.length() - 1) != URL_SEPARATOR) {
+		if (!endpoint.isEmpty() && endpoint.charAt(0) != URL_SEPARATOR && serverUrl.charAt(serverUrl.length() - 1) != URL_SEPARATOR) {
 			endpoint = String.valueOf(URL_SEPARATOR) + endpoint;
 		}
 
