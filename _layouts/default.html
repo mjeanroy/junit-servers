@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ '/css/index.css' | prepend:site.baseurl }}">
+</head>
+<body>
+  <header class="navbar navbar-light navbar-toggleable-md bd-navbar">
+    <nav class="container">
+      <a class="navbar-brand" href="{{ '/' | prepend: site.baseurl }}">{{ site.title }}</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item {% if page.url == '/' %}active{% endif %}">
+            <a class="nav-link" href="{{ '/' | prepend: site.baseurl }}">Home</a>
+          </li>
+          <li class="nav-item {% if page.url == '/tomcat.html' %}active{% endif %}">
+            <a class="nav-link" href="{{ '/tomcat.html' | prepend: site.baseurl }}">Tomcat</a>
+          </li>
+          <li class="nav-item {% if page.url == '/jetty.html' %}active{% endif %}">
+            <a class="nav-link" href="{{ '/jetty.html' | prepend: site.baseurl }}">Jetty</a>
+          </li>
+          <li class="nav-item {% if page.url == '/license.html' %}active{% endif %}">
+            <a class="nav-link" href="{{ '/license.html' | prepend: site.baseurl }}">License</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <div class="content">
+    <div class="banner">
+      <div class="container">
+        <div class="head">JUnit Server is a small library that can be used to start an embedded server in your JUnit tests.</div>
+        <div class="subhead">It is free, open source and usable under the MIT license.</div>
+        <div class="actions">
+          <a href="https://github.com/mjeanroy/junit-servers" target="_blank" class="btn btn-primary" role="button">View on GitHub</a>
+          <a href="http://search.maven.org/#search%7Cga%7C1%7Cjunit-servers" target="_blank" class="btn btn-primary" role="button">Download</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="container">{{ content }}</div>
+    </div>
+  </div>
+</body>
+</html>

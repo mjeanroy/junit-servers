@@ -1,2 +1,7 @@
 title: JUnit Servers
 description: Use a real embedded with your JUnit tests!
+baseurl: /junit-servers
+markdown: kramdown
+sass:
+    sass_dir: _sass
+    style: compressed
