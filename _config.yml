@@ -5,3 +5,4 @@ markdown: kramdown
 sass:
     sass_dir: _sass
     style: compressed
+google_analytics: UA-103453710-1
