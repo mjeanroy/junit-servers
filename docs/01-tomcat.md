@@ -32,6 +32,18 @@ Once installed, let's see how to use it.
 The simplest way to start is to use the dedicated [JUnit runner](https://github.com/junit-team/junit4/wiki/test-runners), see the example below:
 
 ```java
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 @RunWith(JunitServerRunner.class)
 public class MyTest {
   @TestServer
@@ -60,16 +72,28 @@ What happens here:
 The previous code is equivalent to:
 
 ```java
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 public class MyTest {
   private static EmbeddedTomcat tomcat;
 
-  @BeforeAll
+  @BeforeClass
   public static void beforeAll() {
     tomcat = new EmbeddedTomcat();
     tomcat.start();
   }
 
-  @AfterAll
+  @AfterClass
   public static void afterAll() {
     tomcat.stop();
   }
@@ -95,6 +119,20 @@ The previous example use the default configuration but you can also provide the 
 See the example below:
 
 ```java
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 @RunWith(JunitServerRunner.class)
 public class MyTest {
   @TestServer
@@ -102,7 +140,7 @@ public class MyTest {
 
   @TestServerConfiguration
   public static EmbeddedTomcatConfiguration configuration() {
-    return EmbeddedTomcatConfiguration.build()
+    return EmbeddedTomcatConfiguration.builder()
       .withPath("/app")
       .withPort(8080)
       .withProperty("spring.profiles.active", "test")
@@ -132,6 +170,16 @@ public class MyTest {
 Using the [JUnit rule](https://github.com/junit-team/junit4/wiki/Rules) is relatively easy:
 
 ```java
+import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Test;
+
 public class MyTest {
   @ClassRule
   public static final TomcatServerRule tomcatRule = new TomcatServerRule();
@@ -157,6 +205,17 @@ What happens here:
 Sometimes, you will have to change some configuration option, this is possible using the dedicated builder:
 
 ```java
+import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Test;
+
 public class MyTest {
   @ClassRule
   public static final TomcatServerRule tomcatRule = new TomcatServerRule(EmbeddedTomcatConfiguration.builder()
@@ -202,6 +261,13 @@ The following options can be customized:
 Here is an example that creates a rule using a configuration object:
 
 ```java
+import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+
+import org.junit.ClassRule;
+
+// Other imports...
+
 public class MyTest {
   private static final EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
     .withPath("/app")
@@ -209,7 +275,7 @@ public class MyTest {
     .withWebapp("/src/webapp")
     .withProperty("spring.profiles.active", "test")
     .withOverrideDescriptor("src/test/resources/WEB-INF/web.xml")
-    .withParentClasspath(WebAppContext.class)
+    .withParentClasspath(MyTest.class)
     .withBaseDir("/tmp/tomcat")
     .disableNaming()
     .disableForceMetaInf()
@@ -238,6 +304,18 @@ For example, this can be useful:
 The example below use a hook to log server events:
 
 ```java
+import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.servers.Hook;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Test;
+
 public class MyTest {
   @ClassRule
   public static final TomcatServerRule tomcatRule = new TomcatServerRule(EmbeddedTomcatConfiguration.builder()

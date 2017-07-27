@@ -6,10 +6,22 @@ JUnit-Servers is an easy-to-use library that will allow you to test your web app
 Here is a simple example that demonstrate how easy it is to test your application using [OkHttp](http://square.github.io/okhttp/) library:
 
 ```java
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 @RunWith(JunitServerRunner.class)
 public class MyTest {
     @TestServer
-    private static EmbeddedServer server;
+    private static EmbeddedJetty server;
 
     @Test
     public void shoud_respond_to_index() {
