@@ -1,7 +1,10 @@
 // Main CSS
 
+$black: #222;
+$bg: darken(#fff, 2%);
+
 html, body {
-  background-color: darken(#fff, 2%);
+  background-color: $bg;
   font-size: 14px;
 }
 
@@ -17,9 +20,13 @@ h6 {
   font-weight: bold;
 }
 
+a {
+  cursor: pointer;
+}
+
 .banner {
   padding: 20px 0;
-  background: #222;
+  background-color: $black;
   color: #fff;
   font-size: 20px;
   font-weight: 100;
@@ -47,4 +54,10 @@ h6 {
 
 .main-content {
   padding: 20px 0 0 0;
+}
+
+footer {
+  border-top: 1px solid #ccc;
+  padding: 10px 0;
+  text-align: center;
 }
