@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ '/css/index.css' | prepend:site.baseurl }}">
 
-  {% if site.google_analytics %}
+  {% if site.google_analytics and jekyll.environment == 'production' %}
     {% include analytics.html %}
   {% endif %}
 </head>
