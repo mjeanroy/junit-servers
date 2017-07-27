@@ -27,8 +27,6 @@ Once installed, let's see how to use it.
 
 ##### JUnit Runner
 
-###### Default configuration
-
 The simplest way to start is to use the dedicated [JUnit runner](https://github.com/junit-team/junit4/wiki/test-runners), see the example below:
 
 ```java
