@@ -48,3 +48,11 @@ mem.script
 ehthumbs.db
 Thumbs.db
 .fuse_hidden*
+
+########################
+# Jekyll               #
+########################
+.jekyll-metadata
+.sass-cache/
+_site/
+
