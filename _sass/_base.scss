@@ -20,7 +20,7 @@ h6 {
   font-weight: bold;
 }
 
-a {
+a, button {
   cursor: pointer;
 }
 
@@ -53,10 +53,11 @@ a {
 }
 
 .main-content {
-  padding: 20px 0 0 0;
+  padding: 20px 0;
 }
 
 footer {
+  background-color: $bg;
   border-top: 1px solid #ccc;
   padding: 10px 0;
   text-align: center;

@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha256-rr9hHBQ43H7HSOmmNkxzQGazS/Khx+L8ZRHteEY1tQ4=" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha256-gL1ibrbVcRIHKlCO5OXOPC/lZz/gpdApgQAzskqqXp8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha256-+kIbbrvS+0dNOjhmQJzmwe/RILR/8lb/+4+PUNVW09k=" crossorigin="anonymous"></script>
+
   <link rel="stylesheet" href="{{ '/css/index.css' | prepend:site.baseurl }}">
 
   {% if site.google_analytics and jekyll.environment == 'production' %}
@@ -20,9 +24,12 @@
 </head>
 <body>
   <header class="navbar navbar-light navbar-toggleable-md bd-navbar">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
     <nav class="container">
       <a class="navbar-brand" href="{{ '/' | prepend: site.baseurl }}">{{ site.title }}</a>
-      <div class="collapse navbar-collapse">
+      <div id="navbarToggler" class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item {% if page.url == '/' %}active{% endif %}">
             <a class="nav-link" href="{{ '/' | prepend: site.baseurl }}">Home</a>
@@ -62,7 +69,7 @@
 
   <footer>
     <div class="container">
-      Made with &#10084; by <a href="https://twitter.com/mickaeljeanroy">Mickael Jeanroy</a>, the code is available on <a href="https://github.com/mjeanroy/junit-servers">github</a>
+      &copy; Made with &#10084; by <a href="https://twitter.com/mickaeljeanroy">Mickael Jeanroy</a>, the code is available on <a href="https://github.com/mjeanroy/junit-servers">github</a>
     </div>
   </footer>
 </body>
