@@ -43,6 +43,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -697,7 +700,7 @@ public abstract class BaseHttpClientTest {
 	public void testRequest_add_form_param() {
 		final String name = "firstName";
 		final String value = "john";
-		final String expectedBody = formatParam(name, value);
+		final String expectedBody = formatFormParam(name, value);
 		testRequestBody(expectedBody, new Function<HttpRequest>() {
 			@Override
 			public void apply(HttpRequest rq) {
@@ -716,12 +719,38 @@ public abstract class BaseHttpClientTest {
 		final String v2 = "Doe";
 		final HttpParameter p2 = param(n2, v2);
 
-		final String expectedBody = formatParam(n1, v1) + "&" + formatParam(n2, v2);
+		final String expectedBody = formatFormParam(n1, v1) + "&" + formatParam(n2, v2);
 
 		testRequestBody(expectedBody, new Function<HttpRequest>() {
 			@Override
 			public void apply(HttpRequest rq) {
 				rq.addFormParams(p1, p2);
+			}
+		});
+	}
+
+	@Test
+	public void testRequest_add_non_escaped_form_param_name() {
+		final String name = "first name";
+		final String value = "john";
+		final String expectedBody = formatFormParam(name, value);
+		testRequestBody(expectedBody, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+				rq.addFormParam(name, value);
+			}
+		});
+	}
+
+	@Test
+	public void testRequest_add_non_escaped_form_param_value() {
+		final String name = "name";
+		final String value = "john doe";
+		final String expectedBody = formatFormParam(name, value);
+		testRequestBody(expectedBody, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+				rq.addFormParam(name, value);
 			}
 		});
 	}
@@ -1358,6 +1387,18 @@ public abstract class BaseHttpClientTest {
 
 	private static String formatParam(String name, String value) {
 		return name + "=" + value;
+	}
+
+	private static String formatFormParam(String name, String value) {
+		return urlEncode(name) + "=" + urlEncode(value);
+	}
+
+	private static String urlEncode(String value) {
+		try {
+			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
+		} catch (UnsupportedEncodingException ex) {
+			throw new AssertionError(ex);
+		}
 	}
 
 	interface HttpClientFactory {

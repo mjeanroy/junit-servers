@@ -29,7 +29,7 @@ package com.github.mjeanroy.junit.servers.exceptions;
  * as IOException).
  */
 @SuppressWarnings("serial")
-public class HttpClientException extends AbstractEmbeddedServerException {
+public class HttpClientException extends AbstractException {
 
 	/**
 	 * Create exception.

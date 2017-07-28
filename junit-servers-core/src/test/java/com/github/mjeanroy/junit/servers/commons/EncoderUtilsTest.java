@@ -22,21 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.commons;
 
-/**
- * Exception thrown when reflection api throws exception (such
- * as IllegalAccessException) in annotations handlers.
- */
-@SuppressWarnings("serial")
-public class ReflectionException extends AbstractException {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	/**
-	 * Create exception.
-	 *
-	 * @param throwable Original exception.
-	 */
-	public ReflectionException(Throwable throwable) {
-		super(String.format("Unable to set field: %s", throwable.getMessage()));
+import org.junit.Test;
+
+public class EncoderUtilsTest {
+
+	@Test
+	public void it_should_url_encode_value() {
+		String value = "test avec +";
+		String encoded = EncoderUtils.urlEncode(value);
+		assertThat(encoded).isEqualTo("test+avec+%2B");
 	}
 }

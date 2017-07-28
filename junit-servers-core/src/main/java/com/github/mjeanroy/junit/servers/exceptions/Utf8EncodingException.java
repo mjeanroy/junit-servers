@@ -25,18 +25,18 @@
 package com.github.mjeanroy.junit.servers.exceptions;
 
 /**
- * Exception thrown when reflection api throws exception (such
- * as IllegalAccessException) in annotations handlers.
+ * Exception thrown when UTF-8 encoding is not supported on the runtime environment.
+ *
+ * Note that this exception should never be thrown as UTF-8 encoding should always be
+ * available (see <a href="http://docs.oracle.com/javase/6/docs/technotes/guides/intl/encoding.doc.html">here</a> for
+ * the list of supported encoding).
  */
-@SuppressWarnings("serial")
-public class ReflectionException extends AbstractException {
+public class Utf8EncodingException extends AbstractException {
 
 	/**
-	 * Create exception.
-	 *
-	 * @param throwable Original exception.
+	 * Create the exception with a default error message.
 	 */
-	public ReflectionException(Throwable throwable) {
-		super(String.format("Unable to set field: %s", throwable.getMessage()));
+	public Utf8EncodingException(Throwable ex) {
+		super("UTF-8 encoding is not supported", ex);
 	}
 }
