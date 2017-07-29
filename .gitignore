@@ -13,3 +13,13 @@
 .idea/
 .settings/
 .project
+*.iml
+
+########################
+# master               #
+########################
+
+/junit-servers-core
+/junit-servers-jetty
+/junit-servers-tomcat
+/samples
