@@ -108,12 +108,23 @@ public interface EmbeddedServer<T extends AbstractConfiguration> {
 	/**
 	 * Get server context path.
 	 *
+	 * <p>
+	 *
+	 * It is not guaranteed that the returned server path here is URL encoded. If you need to query
+	 * embedded server, use {@link #getUrl()} or {@link #getUri()}.
+	 *
 	 * @return Server context path.
 	 */
 	String getPath();
 
 	/**
 	 * Get URL to query embedded server.
+	 *
+	 * <p>
+	 *
+	 * Implementations <strong>must</strong> return a valid URL: for example, it means that the context path must be
+	 * URL encoded if it contains illegal characters (such as space for example). Usually, this method should
+	 * return the result of {@link #getUri()#toString()}.
 	 *
 	 * @return URL.
 	 */
