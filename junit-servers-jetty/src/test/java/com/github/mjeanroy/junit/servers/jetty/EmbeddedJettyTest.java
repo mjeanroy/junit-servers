@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.jetty;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -55,24 +56,57 @@ public class EmbeddedJettyTest {
 	}
 
 	@Test
-	public void it_should_start_jetty() {
+	public void it_should_start_jetty() throws Exception {
 		jetty = new EmbeddedJetty();
 		jetty.start();
 
 		assertThat(jetty.isStarted()).isTrue();
 		assertThat(jetty.getPort()).isNotZero();
+		assertThat(jetty.getScheme()).isEqualTo("http");
+		assertThat(jetty.getHost()).isEqualTo("localhost");
+		assertThat(jetty.getPath()).isEqualTo("/");
+
+		String expectedUrl = "http://localhost:" + jetty.getPort() + "/";
+		assertThat(jetty.getUrl()).isEqualTo(expectedUrl);
+		assertThat(jetty.getUri()).isEqualTo(new URI(expectedUrl));
 	}
 
 	@Test
-	public void it_should_stop_jetty() {
+	public void it_should_stop_jetty() throws Exception {
 		jetty = new EmbeddedJetty();
 		jetty.start();
 
 		assertThat(jetty.isStarted()).isTrue();
 		assertThat(jetty.getPort()).isNotZero();
+		assertThat(jetty.getScheme()).isEqualTo("http");
+		assertThat(jetty.getHost()).isEqualTo("localhost");
+		assertThat(jetty.getPath()).isEqualTo("/");
+
+		final String u1 = "http://localhost:" + jetty.getPort() + "/";
+		assertThat(jetty.getUrl()).isEqualTo(u1);
+		assertThat(jetty.getUri()).isEqualTo(new URI(u1));
 
 		jetty.stop();
 		assertThat(jetty.isStarted()).isFalse();
+		assertThat(jetty.getPort()).isZero();
+		assertThat(jetty.getScheme()).isEqualTo("http");
+		assertThat(jetty.getHost()).isEqualTo("localhost");
+		assertThat(jetty.getPath()).isEqualTo("/");
+
+		final String u2 = "http://localhost:" + jetty.getPort() + "/";
+		assertThat(jetty.getUrl()).isEqualTo(u2);
+		assertThat(jetty.getUri()).isEqualTo(new URI(u2));
+	}
+
+	@Test
+	public void it_should_get_configuration_port_until_jetty_is_started() throws Exception {
+		jetty = new EmbeddedJetty();
+		assertThat(jetty.getPort()).isZero();
+
+		jetty.start();
+		assertThat(jetty.getPort()).isNotZero();
+
+		jetty.stop();
 		assertThat(jetty.getPort()).isZero();
 	}
 

@@ -36,6 +36,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.WebResourceRoot;
+import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.StandardRoot;
 import org.apache.tomcat.util.scan.StandardJarScanner;
@@ -230,13 +231,22 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 	}
 
 	@Override
-	public int getPort() {
-		return tomcat.getConnector().getLocalPort();
+	public String getScheme() {
+		return getConnector().getScheme();
 	}
 
 	@Override
 	public ServletContext getServletContext() {
 		return context == null ? null : context.getServletContext();
+	}
+
+	@Override
+	protected int doGetPort() {
+		return getConnector().getLocalPort();
+	}
+
+	private Connector getConnector() {
+		return tomcat.getConnector();
 	}
 
 	private static void deleteDirectory(String path) {

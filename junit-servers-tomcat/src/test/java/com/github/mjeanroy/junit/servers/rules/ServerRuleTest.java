@@ -24,29 +24,61 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.net.URI;
+
+import org.junit.After;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 public class ServerRuleTest {
 
+	private ServerRule rule;
+
+	@After
+	public void tearDown() {
+		if (rule != null) {
+			rule.stop();
+		}
+	}
+
 	@Test
 	public void it_should_start_jetty_because_of_classpath_detection() {
-		ServerRule rule = new ServerRule();
+		rule = new ServerRule();
 		assertThat(rule.getServer()).isExactlyInstanceOf(EmbeddedTomcat.class);
 		assertThat(rule.getServer().getConfiguration()).isEqualTo(EmbeddedTomcatConfiguration.defaultConfiguration());
 	}
 
 	@Test
 	public void it_should_start_jetty_with_custom_configuration_because_of_classpath_detection() {
-		EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
+		final EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
 			.withPort(9000)
 			.build();
 
-		ServerRule rule = new ServerRule(configuration);
+		rule = new ServerRule(configuration);
 		assertThat(rule.getServer()).isExactlyInstanceOf(EmbeddedTomcat.class);
 		assertThat(rule.getServer().getConfiguration()).isEqualTo(configuration);
+	}
+
+	@Test
+	public void it_should_start_tomcat_and_get_real_port() {
+		rule = new ServerRule();
+		assertThat(rule.getPort()).isZero();
+
+		rule.start();
+		assertThat(rule.getPort()).isNotZero();
+	}
+
+	@Test
+	public void it_should_start_tomcat_and_get_uri() throws Exception {
+		rule = new ServerRule();
+		rule.start();
+
+		String expectedUrl = "http://localhost:" + rule.getPort() + "/";
+		assertThat(rule.getUrl()).isEqualTo(expectedUrl);
+		assertThat(rule.getUri()).isEqualTo(new URI(expectedUrl));
 	}
 }

@@ -24,10 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.net.URI;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,11 +38,10 @@ import org.junit.rules.ExpectedException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 public class ServerRuleTest {
 
@@ -95,33 +97,25 @@ public class ServerRuleTest {
 	}
 
 	@Test
-	public void it_should_get_server_port_when_server_is_stopped() {
-		int port = 8080;
-		int configPort = 9000;
-		when(configuration.getPort()).thenReturn(configPort);
-		when(server.getPort()).thenReturn(port);
-		when(server.isStarted()).thenReturn(false);
+	public void it_should_get_server_scheme() {
+		String scheme = "http";
+		when(server.getScheme()).thenReturn(scheme);
 
-		int result = rule.getPort();
+		String result = rule.getScheme();
 
-		assertThat(result).isEqualTo(configPort);
-		verify(server, never()).getPort();
-		verify(configuration).getPort();
+		assertThat(result).isEqualTo(scheme);
+		verify(server).getScheme();
 	}
 
 	@Test
-	public void it_should_get_server_port_when_server_is_started() {
-		int port = 8080;
-		int configPort = 9000;
-		when(configuration.getPort()).thenReturn(configPort);
-		when(server.getPort()).thenReturn(port);
-		when(server.isStarted()).thenReturn(true);
+	public void it_should_get_server_host() {
+		String host = "http";
+		when(server.getHost()).thenReturn(host);
 
-		int result = rule.getPort();
+		String result = rule.getHost();
 
-		assertThat(result).isEqualTo(port);
-		verify(server).getPort();
-		verify(configuration, never()).getPort();
+		assertThat(result).isEqualTo(host);
+		verify(server).getHost();
 	}
 
 	@Test
@@ -144,6 +138,17 @@ public class ServerRuleTest {
 
 		assertThat(result).isEqualTo(url);
 		verify(server).getUrl();
+	}
+
+	@Test
+	public void it_should_get_server_uri() throws Exception {
+		URI url = new URI("http://localhost:8080/foo");
+		when(server.getUri()).thenReturn(url);
+
+		URI result = rule.getUri();
+
+		assertThat(result).isEqualTo(url);
+		verify(server).getUri();
 	}
 
 	@Test

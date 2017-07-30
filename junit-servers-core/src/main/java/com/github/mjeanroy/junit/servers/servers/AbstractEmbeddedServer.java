@@ -25,14 +25,16 @@
 package com.github.mjeanroy.junit.servers.servers;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static java.lang.String.format;
 import static java.lang.System.clearProperty;
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.github.mjeanroy.junit.servers.exceptions.UrlException;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
@@ -44,6 +46,16 @@ import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigura
  * managed by this abstract implementation.
  */
 public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration> implements EmbeddedServer<T> {
+
+	/**
+	 * The default scheme returned by {@link AbstractEmbeddedServer#getScheme()}.
+	 */
+	private static final String DEFAULT_SCHEME = "http";
+
+	/**
+	 * The default host returned by {@link AbstractEmbeddedServer#getHost()}.
+	 */
+	private static final String DEFAULT_HOST = "localhost";
 
 	/**
 	 * Server configuration.
@@ -124,6 +136,11 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	}
 
 	@Override
+	public int getPort() {
+		return isStarted() ? doGetPort() : configuration.getPort();
+	}
+
+	@Override
 	public String getPath() {
 		return configuration.getPath();
 	}
@@ -187,14 +204,35 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	}
 
 	@Override
+	public String getScheme() {
+		return DEFAULT_SCHEME;
+	}
+
+	@Override
+	public String getHost() {
+		return DEFAULT_HOST;
+	}
+
+	@Override
 	public String getUrl() {
+		return getUri().toString();
+	}
+
+	@Override
+	public URI getUri() {
+		String scheme = getScheme();
+		String host = getHost();
 		int port = getPort();
 		String path = getPath();
 		if (!path.isEmpty() && path.charAt(0) != '/') {
 			path = "/" + path;
 		}
 
-		return format("http://localhost:%s%s", port, path);
+		try {
+			return new URI(scheme, null, host, port, path, null, null);
+		} catch (URISyntaxException ex) {
+			throw new UrlException(ex);
+		}
 	}
 
 	@Override
@@ -225,4 +263,11 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	 * Must block until server is fully stopped.
 	 */
 	protected abstract void doStop();
+
+	/**
+	 * Get port once server is started.
+	 *
+	 * @return The port.
+	 */
+	protected abstract int doGetPort();
 }

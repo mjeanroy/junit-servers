@@ -1,0 +1,122 @@
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 <mickael.jeanroy@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+package com.github.mjeanroy.junit.servers.servers;
+
+import static org.mockito.Mockito.mock;
+
+import javax.servlet.ServletContext;
+
+/**
+ * Fake embedded server implementation used to test {@link AbstractEmbeddedServer} class.
+ */
+class FakeEmbeddedServer extends AbstractEmbeddedServer<FakeServer, FakeConfiguration> {
+
+	/**
+	 * Value incremented each time the {@link #doStart()} is called.
+	 */
+	private int nbStart;
+
+	/**
+	 * Value incremented each time the {@link #doStop()} is called.
+	 */
+	private int nbStop;
+
+	/**
+	 * A fake servlet context.
+	 */
+	private final ServletContext servletContext;
+
+	/**
+	 * Create fake server with default configuration.
+	 */
+	FakeEmbeddedServer() {
+		this(new FakeConfiguration.Builder().build());
+	}
+
+	/**
+	 * Create fake server with custom configuration.
+	 *
+	 * @param configuration Fake configuration.
+	 */
+	FakeEmbeddedServer(FakeConfiguration configuration) {
+		super(configuration);
+		servletContext = mock(ServletContext.class);
+		nbStart = 0;
+		nbStop = 0;
+	}
+
+	@Override
+	public FakeServer getDelegate() {
+		return mock(FakeServer.class);
+	}
+
+	@Override
+	protected void doStart() {
+		nbStart++;
+		sleep();
+	}
+
+	@Override
+	protected void doStop() {
+		nbStop++;
+		sleep();
+	}
+
+	private static void sleep() {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
+	@Override
+	public ServletContext getServletContext() {
+		return isStarted() ? servletContext : null;
+	}
+
+	@Override
+	protected int doGetPort() {
+		return 80;
+	}
+
+	/**
+	 * Get the number of time the {@link #doStart()} method has been called.
+	 *
+	 * @return Number of time the {@link #doStart()} has been called.
+	 */
+	int getNbStart() {
+		return nbStart;
+	}
+
+	/**
+	 * Get the number of time the {@link #doStop()} method has been called.
+	 *
+	 * @return Number of time the {@link #doStop()} has been called.
+	 */
+	int getNbStop() {
+		return nbStop;
+	}
+}

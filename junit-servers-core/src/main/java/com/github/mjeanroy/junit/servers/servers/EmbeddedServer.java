@@ -24,9 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import java.net.URI;
 
 import javax.servlet.ServletContext;
+
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
  * Specification of embedded server.
@@ -75,7 +77,29 @@ public interface EmbeddedServer<T extends AbstractConfiguration> {
 	boolean isStarted();
 
 	/**
+	 * Get the protocol scheme ({@code "http"}, {@code "https"}).
+	 *
+	 * @return Protocol scheme.
+	 */
+	String getScheme();
+
+	/**
+	 * Get the host, should be {@code "localhost"}, unless specific configuration.
+	 *
+	 * @return The server hostname.
+	 */
+	String getHost();
+
+	/**
 	 * Get port used by embedded server.
+	 *
+	 * <p>
+	 *
+	 * Note that:
+	 * <ul>
+	 *   <li>If the server is not started, the returned port should be the one set in the configuration.</li>
+	 *   <li>Otherwise, the "real" port should be returned (the port used by the embedded server)</li>
+	 * </ul>
 	 *
 	 * @return Port.
 	 */
@@ -96,10 +120,17 @@ public interface EmbeddedServer<T extends AbstractConfiguration> {
 	String getUrl();
 
 	/**
+	 * The URL object.
+	 *
+	 * @return URL.
+	 */
+	URI getUri();
+
+	/**
 	 * Get servlet context used within container.
 	 * If container is not a servlet container, this method should return null.
 	 *
-	 * @return Servlet Context from container.
+	 * @return Servlet Cntext from container.
 	 */
 	ServletContext getServletContext();
 }

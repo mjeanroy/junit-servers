@@ -28,6 +28,7 @@ import static com.github.mjeanroy.junit.servers.tests.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 
 import org.apache.catalina.Container;
@@ -60,25 +61,46 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_start_tomcat() {
+	public void it_should_start_tomcat() throws Exception {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		tomcat.start();
 
 		assertThat(tomcat.isStarted()).isTrue();
 		assertThat(tomcat.getPort()).isNotZero();
+		assertThat(tomcat.getScheme()).isEqualTo("http");
+		assertThat(tomcat.getHost()).isEqualTo("localhost");
+		assertThat(tomcat.getPath()).isEqualTo("/");
+
+		String expectedUrl = "http://localhost:" + tomcat.getPort() + "/";
+		assertThat(tomcat.getUrl()).isEqualTo(expectedUrl);
+		assertThat(tomcat.getUri()).isEqualTo(new URI(expectedUrl));
 	}
 
 	@Test
-	public void it_should_stop_tomcat() {
+	public void it_should_stop_tomcat() throws Exception {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		tomcat.start();
 
 		assertThat(tomcat.isStarted()).isTrue();
 		assertThat(tomcat.getPort()).isNotZero();
+		assertThat(tomcat.getScheme()).isEqualTo("http");
+		assertThat(tomcat.getHost()).isEqualTo("localhost");
+		assertThat(tomcat.getPath()).isEqualTo("/");
+
+		final String u1 = "http://localhost:" + tomcat.getPort() + "/";
+		assertThat(tomcat.getUrl()).isEqualTo(u1);
+		assertThat(tomcat.getUri()).isEqualTo(new URI(u1));
 
 		tomcat.stop();
 		assertThat(tomcat.isStarted()).isFalse();
-		assertThat(tomcat.getPort()).isNotZero();
+		assertThat(tomcat.getPort()).isZero();
+		assertThat(tomcat.getScheme()).isEqualTo("http");
+		assertThat(tomcat.getHost()).isEqualTo("localhost");
+		assertThat(tomcat.getPath()).isEqualTo("/");
+
+		final String u2 = "http://localhost:" + tomcat.getPort() + "/";
+		assertThat(tomcat.getUrl()).isEqualTo(u2);
+		assertThat(tomcat.getUri()).isEqualTo(new URI(u2));
 	}
 
 	@Test

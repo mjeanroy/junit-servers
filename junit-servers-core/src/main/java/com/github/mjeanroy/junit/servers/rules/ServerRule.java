@@ -24,14 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
+
+import java.net.URI;
+
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
 
 /**
  * Rule that can be used to start and stop embedded server.
@@ -129,7 +131,7 @@ public class ServerRule extends AbstractRule {
 	/**
 	 * Start embedded server.
 	 *
-	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#start()
+	 * @see EmbeddedServer#start()
 	 */
 	public void start() {
 		server.start();
@@ -138,7 +140,7 @@ public class ServerRule extends AbstractRule {
 	/**
 	 * Stop embedded server.
 	 *
-	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#stop()
+	 * @see EmbeddedServer#stop()
 	 */
 	public void stop() {
 		server.stop();
@@ -148,7 +150,7 @@ public class ServerRule extends AbstractRule {
 	/**
 	 * Restart embedded server.
 	 *
-	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#restart()
+	 * @see EmbeddedServer#restart()
 	 */
 	public void restart() {
 		server.restart();
@@ -158,10 +160,30 @@ public class ServerRule extends AbstractRule {
 	 * Check if embedded server is started.
 	 *
 	 * @return {@code true} if embedded server is started, {@code false} otherwise.
-	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#isStarted()
+	 * @see EmbeddedServer#isStarted()
 	 */
 	public boolean isStarted() {
 		return server.isStarted();
+	}
+
+	/**
+	 * Get embedded server scheme (a.k.a {@code "http"} or {@code "https"}).
+	 *
+	 * @return Scheme.
+	 * @see EmbeddedServer#getScheme()
+	 */
+	public String getScheme() {
+		return server.getScheme();
+	}
+
+	/**
+	 * Get embedded server scheme (should be {@code "localhost"}).
+	 *
+	 * @return Host.
+	 * @see EmbeddedServer#getHost()
+	 */
+	public String getHost() {
+		return server.getHost();
 	}
 
 	/**
@@ -176,19 +198,17 @@ public class ServerRule extends AbstractRule {
 	 * </ul>
 	 *
 	 * @return The port.
-	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#getPort()
+	 * @see EmbeddedServer#getPort()
 	 */
 	public int getPort() {
-		return server.isStarted() ?
-			server.getPort() :
-			server.getConfiguration().getPort();
+		return server.getPort();
 	}
 
 	/**
 	 * Get path defined on embedded server.
 	 *
 	 * @return Path.
-	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#getPath()
+	 * @see EmbeddedServer#getPath()
 	 */
 	public String getPath() {
 		return server.getPath();
@@ -198,10 +218,20 @@ public class ServerRule extends AbstractRule {
 	 * Get url used to query embedded server.
 	 *
 	 * @return URL.
-	 * @see com.github.mjeanroy.junit.servers.servers.EmbeddedServer#getUrl()
+	 * @see EmbeddedServer#getUrl()
 	 */
 	public String getUrl() {
 		return server.getUrl();
+	}
+
+	/**
+	 * Get server URI.
+	 *
+	 * @return Server URI.
+	 * @see EmbeddedServer#getUri()
+	 */
+	public URI getUri() {
+		return server.getUri();
 	}
 
 	/**

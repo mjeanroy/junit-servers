@@ -24,16 +24,17 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
+import static com.github.mjeanroy.junit.servers.rules.IsStartedAnswer.isStarted;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.assertj.core.api.Assertions;
+import java.net.URI;
+
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
@@ -41,45 +42,63 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 public class JettyServerRuleTest {
 
 	@Test
-	public void it_should_create_rule_with_server() {
+	public void it_should_create_rule_with_server() throws Exception {
 		int port = 8080;
-		int configPort = 0;
 		String path = "/";
-		String url = "http://localhost:8080";
+		String scheme = "http";
+		String host = "localhost";
+		String url = scheme + "://" + host + ":" + port + path;
+		URI uri = new URI(url);
 
-		EmbeddedJettyConfiguration config = mock(EmbeddedJettyConfiguration.class);
-		when(config.getPort()).thenReturn(configPort);
-
+		final EmbeddedJettyConfiguration config = mock(EmbeddedJettyConfiguration.class);
 		final EmbeddedJetty jetty = mock(EmbeddedJetty.class);
+		when(jetty.getScheme()).thenReturn(scheme);
+		when(jetty.getHost()).thenReturn(host);
 		when(jetty.getPort()).thenReturn(port);
 		when(jetty.getPath()).thenReturn(path);
 		when(jetty.getUrl()).thenReturn(url);
+		when(jetty.getUri()).thenReturn(uri);
 		when(jetty.getConfiguration()).thenReturn(config);
 		when(jetty.isStarted()).thenReturn(false);
+
 		doAnswer(isStarted(jetty, true)).when(jetty).start();
 		doAnswer(isStarted(jetty, false)).when(jetty).stop();
 
 		JettyServerRule rule = new JettyServerRule(jetty);
-		Assertions.assertThat(rule.getServer()).isSameAs(jetty);
-		assertThat(rule.getPort()).isEqualTo(configPort);
+
+		assertThat(rule.getServer()).isSameAs(jetty);
+		assertThat(rule.getScheme()).isEqualTo(scheme);
+		assertThat(rule.getHost()).isEqualTo(host);
+		assertThat(rule.getPort()).isEqualTo(port);
 		assertThat(rule.getPath()).isEqualTo(path);
 		assertThat(rule.getUrl()).isEqualTo(url);
+		assertThat(rule.getUri()).isEqualTo(uri);
+
+		verify(jetty).getScheme();
+		verify(jetty).getHost();
+		verify(jetty).getPort();
+		verify(jetty).getPath();
+		verify(jetty).getUrl();
+		verify(jetty).getUri();
+
+		verify(jetty, never()).start();
+		verify(jetty, never()).stop();
 
 		rule.before();
 		verify(jetty).start();
-		assertThat(rule.getPort()).isEqualTo(port);
 
 		rule.after();
 		verify(jetty).stop();
-		assertThat(rule.getPort()).isEqualTo(configPort);
 	}
 
 	@Test
-	public void it_should_create_server_from_configuration() {
+	public void it_should_create_server_from_configuration()  throws Exception {
 		EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.defaultConfiguration();
 		JettyServerRule rule = new JettyServerRule(configuration);
 
 		assertThat(rule.getServer()).isNotNull();
+		assertThat(rule.getScheme()).isEqualTo("http");
+		assertThat(rule.getHost()).isEqualTo("localhost");
 		assertThat(rule.getPath()).isEqualTo(configuration.getPath());
 		assertThat(rule.getPort()).isZero();
 		assertThat(rule.getUrl()).isNotEmpty();
@@ -87,45 +106,36 @@ public class JettyServerRuleTest {
 	}
 
 	@Test
-	public void it_should_create_server_with_default_configuration() {
+	public void it_should_create_server_with_default_configuration() throws Exception {
 		JettyServerRule rule = new JettyServerRule();
 
 		assertThat(rule.getServer()).isNotNull();
+		assertThat(rule.getScheme()).isEqualTo("http");
+		assertThat(rule.getHost()).isEqualTo("localhost");
 		assertThat(rule.getPath()).isEqualTo("/");
 		assertThat(rule.getPort()).isZero(); // not started
 		assertThat(rule.getUrl()).isNotEmpty();
 		assertRule(rule);
 	}
 
-	private void assertRule(JettyServerRule rule) {
+	private void assertRule(JettyServerRule rule) throws Exception {
 		try {
 			rule.before();
+			assertThat(rule.getScheme()).isEqualTo("http");
+			assertThat(rule.getHost()).isEqualTo("localhost");
 			assertThat(rule.getPath()).isEqualTo("/");
 			assertThat(rule.getPort()).isGreaterThan(0);
-			assertThat(rule.getUrl()).isEqualTo("http://localhost:" + rule.getPort() + rule.getPath());
+
+			String url = url(rule.getScheme(), rule.getHost(), rule.getPort(), rule.getPath());
+			assertThat(rule.getUrl()).isEqualTo(url);
+			assertThat(rule.getUri()).isEqualTo(new URI(url));
 		} finally {
 			rule.after();
 			assertThat(rule.getPort()).isZero(); // not started
 		}
 	}
 
-	private static class IsStartedAnswer implements Answer<Void> {
-		private final EmbeddedJetty jetty;
-		private final boolean isStarted;
-
-		private IsStartedAnswer(EmbeddedJetty jetty, boolean isStarted) {
-			this.jetty = jetty;
-			this.isStarted = isStarted;
-		}
-
-		@Override
-		public Void answer(InvocationOnMock invocationOnMock) throws Throwable {
-			when(jetty.isStarted()).thenReturn(isStarted);
-			return null;
-		}
-	}
-
-	private static IsStartedAnswer isStarted(EmbeddedJetty jetty, boolean isStarted) {
-		return new IsStartedAnswer(jetty, isStarted);
+	private static String url(String scheme, String host, int port, String path) {
+		return scheme + "://" + host + ":" + port + path;
 	}
 }

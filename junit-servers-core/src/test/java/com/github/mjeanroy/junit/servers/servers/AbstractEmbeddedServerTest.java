@@ -24,14 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
-import org.junit.Test;
-import org.mockito.InOrder;
-
-import javax.servlet.ServletContext;
-import java.util.concurrent.CountDownLatch;
-
+import static com.github.mjeanroy.junit.servers.servers.FakeWorker.startWorker;
+import static com.github.mjeanroy.junit.servers.servers.FakeWorker.stopWorker;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -40,163 +34,197 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.net.URI;
+import java.util.concurrent.CountDownLatch;
+
+import org.junit.Test;
+import org.mockito.InOrder;
+
 public class AbstractEmbeddedServerTest {
 
-	private TestServer server = new TestServer();
+	private FakeEmbeddedServer server = new FakeEmbeddedServer();
 
 	@Test
 	public void it_should_not_be_started() {
 		assertThat(server.isStarted()).isFalse();
+		assertThat(server.getNbStart()).isZero();
+		assertThat(server.getNbStop()).isZero();
 	}
 
 	@Test
 	public void it_should_have_default_configuration() {
-		assertThat(server.configuration).isNotNull();
+		assertThat(server.getConfiguration()).isNotNull();
 	}
 
 	@Test
 	public void it_should_have_custom_configuration() {
-		String path = "/foo";
-		int port = 8080;
-		String webapp = "/foo/bar";
-		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+		final String path = "/foo";
+		final int port = 8080;
+		final String webapp = "/foo/bar";
+		final FakeConfiguration configuration = new FakeConfiguration.Builder()
 				.withPath(path)
 				.withPort(port)
 				.withWebapp(webapp)
 				.build();
 
-		server = new TestServer(configuration);
+		server = new FakeEmbeddedServer(configuration);
 
-		assertThat(server.configuration).isSameAs(configuration);
+		assertThat(server.getConfiguration()).isSameAs(configuration);
 	}
 
 	@Test
 	public void it_should_start_server() {
-		assertThat(server.doStart).isZero();
+		assertThat(server.getNbStart()).isZero();
+		assertThat(server.getNbStop()).isZero();
 
 		server.start();
 
 		assertThat(server.isStarted()).isTrue();
-		assertThat(server.doStart).isNotZero().isEqualTo(1);
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isZero();
 	}
 
 	@Test
 	public void it_should_not_start_server_twice() {
-		assertThat(server.doStart).isZero();
+		assertThat(server.getNbStart()).isZero();
+		assertThat(server.getNbStop()).isZero();
 
 		server.start();
 		server.start();
 
 		assertThat(server.isStarted()).isTrue();
-		assertThat(server.doStart).isNotZero().isEqualTo(1);
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isZero();
 	}
 
 	@Test
 	public void it_should_stop_server() {
-		assertThat(server.doStop).isZero();
+		assertThat(server.getNbStop()).isZero();
+		assertThat(server.getNbStart()).isZero();
 		assertThat(server.isStarted()).isFalse();
 
 		server.start();
+
 		assertThat(server.isStarted()).isTrue();
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isZero();
 
 		server.stop();
 
 		assertThat(server.isStarted()).isFalse();
-		assertThat(server.doStop).isNotZero().isEqualTo(1);
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isOne();
 	}
 
 	@Test
 	public void it_should_not_stop_server_twice() {
-		assertThat(server.doStop).isZero();
 		assertThat(server.isStarted()).isFalse();
+		assertThat(server.getNbStart()).isZero();
+		assertThat(server.getNbStop()).isZero();
 
 		server.start();
+
 		assertThat(server.isStarted()).isTrue();
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isZero();
 
 		server.stop();
 		server.stop();
 
 		assertThat(server.isStarted()).isFalse();
-		assertThat(server.doStop).isNotZero().isEqualTo(1);
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isOne();
 	}
 
 	@Test
 	public void it_should_restart_server() {
-		assertThat(server.doStop).isZero();
-		assertThat(server.doStart).isZero();
 		assertThat(server.isStarted()).isFalse();
+		assertThat(server.getNbStart()).isZero();
+		assertThat(server.getNbStop()).isZero();
 
 		server.start();
+
 		assertThat(server.isStarted()).isTrue();
-		assertThat(server.doStart).isNotZero().isEqualTo(1);
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isZero();
 
 		server.restart();
 
 		assertThat(server.isStarted()).isTrue();
-		assertThat(server.doStop).isNotZero().isEqualTo(1);
-		assertThat(server.doStart).isNotZero().isEqualTo(2);
+		assertThat(server.getNbStart()).isEqualTo(2);
+		assertThat(server.getNbStop()).isOne();
 	}
 
 	@Test
 	public void it_should_block_until_server_is_started() throws Exception {
-		assertThat(server.doStart).isZero();
 		assertThat(server.isStarted()).isFalse();
+		assertThat(server.getNbStart()).isZero();
+		assertThat(server.getNbStop()).isZero();
 
 		CountDownLatch startSignal = new CountDownLatch(1);
 		CountDownLatch doneSignal1 = new CountDownLatch(1);
 		CountDownLatch doneSignal2 = new CountDownLatch(1);
 
-		Thread th1 = new Thread(new StartWorker(server, startSignal, doneSignal1));
-		Thread th2 = new Thread(new StartWorker(server, startSignal, doneSignal2));
+		Thread th1 = new Thread(startWorker(server, startSignal, doneSignal1));
+		Thread th2 = new Thread(startWorker(server, startSignal, doneSignal2));
 
 		th1.start();
 		th2.start();
 
-		assertThat(server.doStart).isZero();
 		assertThat(server.isStarted()).isFalse();
+		assertThat(server.getNbStart()).isZero();
+		assertThat(server.getNbStop()).isZero();
 
 		startSignal.countDown();
 
 		doneSignal2.await();
 		assertThat(server.isStarted()).isTrue();
-		assertThat(server.doStart).isNotZero().isEqualTo(1);
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isZero();
 
 		doneSignal1.await();
 		assertThat(server.isStarted()).isTrue();
-		assertThat(server.doStart).isNotZero().isEqualTo(1);
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isZero();
 	}
 
 	@Test
 	public void it_should_block_until_server_is_stopped() throws Exception {
-		assertThat(server.doStart).isZero();
 		assertThat(server.isStarted()).isFalse();
+		assertThat(server.getNbStart()).isZero();
+		assertThat(server.getNbStop()).isZero();
 
 		server.start();
+
 		assertThat(server.isStarted()).isTrue();
-		assertThat(server.doStart).isNotZero().isEqualTo(1);
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isZero();
 
 		CountDownLatch stopSignal = new CountDownLatch(1);
 		CountDownLatch doneSignal1 = new CountDownLatch(1);
 		CountDownLatch doneSignal2 = new CountDownLatch(1);
 
-		Thread th1 = new Thread(new StopWorker(server, stopSignal, doneSignal1));
-		Thread th2 = new Thread(new StopWorker(server, stopSignal, doneSignal2));
+		Thread th1 = new Thread(stopWorker(server, stopSignal, doneSignal1));
+		Thread th2 = new Thread(stopWorker(server, stopSignal, doneSignal2));
 
 		th1.start();
 		th2.start();
 
-		assertThat(server.doStop).isZero();
 		assertThat(server.isStarted()).isTrue();
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isZero();
 
 		stopSignal.countDown();
 
 		doneSignal2.await();
 		assertThat(server.isStarted()).isFalse();
-		assertThat(server.doStop).isNotZero().isEqualTo(1);
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isOne();
 
 		doneSignal1.await();
 		assertThat(server.isStarted()).isFalse();
-		assertThat(server.doStop).isNotZero().isEqualTo(1);
+		assertThat(server.getNbStart()).isOne();
+		assertThat(server.getNbStop()).isOne();
 	}
 
 	@Test
@@ -209,31 +237,22 @@ public class AbstractEmbeddedServerTest {
 		String name2 = "foo1";
 		String newValue2 = "bar1";
 
-		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+		FakeConfiguration configuration = new FakeConfiguration.Builder()
 				.withProperty(name1, newValue1)
 				.withProperty(name2, newValue2)
 				.build();
 
-		server = new TestServer(configuration);
+		server = new FakeEmbeddedServer(configuration);
 
 		server.start();
 
-		assertThat(System.getProperty(name1))
-				.isNotNull()
-				.isEqualTo(newValue1);
-
-		assertThat(System.getProperty(name2))
-				.isNotNull()
-				.isEqualTo(newValue2);
+		assertThat(System.getProperty(name1)).isEqualTo(newValue1);
+		assertThat(System.getProperty(name2)).isEqualTo(newValue2);
 
 		server.stop();
 
-		assertThat(System.getProperty(name1))
-				.isNotNull()
-				.isEqualTo(oldValue1);
-
-		assertThat(System.getProperty(name2))
-				.isNull();
+		assertThat(System.getProperty(name1)).isEqualTo(oldValue1);
+		assertThat(System.getProperty(name2)).isNull();
 
 		System.clearProperty(name1);
 		System.clearProperty(name2);
@@ -242,12 +261,11 @@ public class AbstractEmbeddedServerTest {
 	@Test
 	public void it_should_execute_hook() {
 		final Hook hook = mock(Hook.class);
-
-		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+		final FakeConfiguration configuration = new FakeConfiguration.Builder()
 				.withHook(hook)
 				.build();
 
-		server = new TestServer(configuration);
+		server = new FakeEmbeddedServer(configuration);
 
 		server.start();
 
@@ -264,13 +282,12 @@ public class AbstractEmbeddedServerTest {
 
 	@Test
 	public void it_should_execute_hook_before_doStop() {
-		Hook hook = mock(Hook.class);
-
-		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+		final Hook hook = mock(Hook.class);
+		final FakeConfiguration configuration = new FakeConfiguration.Builder()
 				.withHook(hook)
 				.build();
 
-		server = spy(new TestServer(configuration));
+		server = spy(new FakeEmbeddedServer(configuration));
 
 		server.start();
 		server.stop();
@@ -282,196 +299,60 @@ public class AbstractEmbeddedServerTest {
 
 	@Test
 	public void it_should_get_path() {
-		String path = server.getPath();
-		assertThat(path).isEqualTo("/");
+		assertThat(server.getPath()).isEqualTo("/");
 	}
 
 	@Test
 	public void it_should_get_custom_path() {
-		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeConfiguration.Builder()
 				.withPath("/foo")
-				.build();
+				.build());
 
-		TestServer server = new TestServer(configuration);
-
-		String path = server.getPath();
-		assertThat(path).isEqualTo("/foo");
+		assertThat(server.getPath()).isEqualTo("/foo");
 	}
 
 	@Test
-	public void it_should_get_url() {
-		String url = server.getUrl();
-		assertThat(url).isEqualTo("http://localhost:0/");
+	public void it_should_get_url() throws Exception {
+		assertThat(server.getUrl()).isEqualTo("http://localhost:0/");
+		assertThat(server.getUri()).isEqualTo(new URI("http://localhost:0/"));
 	}
 
 	@Test
-	public void it_should_get_url_with_custom_path() {
-		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+	public void it_should_get_url_with_custom_path() throws Exception {
+		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeConfiguration.Builder()
 				.withPath("/foo")
-				.build();
+				.build());
 
-		TestServer server = new TestServer(configuration);
-
-		String url = server.getUrl();
-
-		assertThat(url).isEqualTo("http://localhost:0/foo");
+		assertThat(server.getUrl()).isEqualTo("http://localhost:0/foo");
+		assertThat(server.getUri()).isEqualTo(new URI("http://localhost:0/foo"));
 	}
 
 	@Test
-	public void it_should_get_url_with_custom_path_pre_pending_slash() {
-		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+	public void it_should_get_url_with_custom_path_pre_pending_slash() throws Exception {
+		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeConfiguration.Builder()
 				.withPath("foo")
-				.build();
+				.build());
 
-		TestServer server = new TestServer(configuration);
+		assertThat(server.getUrl()).isEqualTo("http://localhost:0/foo");
+		assertThat(server.getUri()).isEqualTo(new URI("http://localhost:0/foo"));
+	}
 
-		String url = server.getUrl();
+	@Test
+	public void it_should_get_url_and_encode_custom_path() throws Exception {
+		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeConfiguration.Builder()
+				.withPath("/foo bar")
+				.build());
 
-		assertThat(url).isEqualTo("http://localhost:0/foo");
+		assertThat(server.getUrl()).isEqualTo("http://localhost:0/foo%20bar");
+		assertThat(server.getUri()).isEqualTo(new URI("http://localhost:0/foo%20bar"));
 	}
 
 	@Test
 	public void it_should_get_original_server_implementation() {
-		EmbeddedConfiguration configuration = new EmbeddedConfiguration.Builder()
+		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeConfiguration.Builder()
 				.withPath("foo")
-				.build();
+				.build());
 
-		TestServer server = new TestServer(configuration);
-
-		FooServer delegateSrc = server.getDelegate();
-
-		assertThat(delegateSrc).isNotNull();
-	}
-
-	private static class TestServer extends AbstractEmbeddedServer<FooServer, EmbeddedConfiguration> {
-
-		public int doStart = 0;
-
-		public int doStop = 0;
-
-		public final ServletContext servletContext;
-
-		public TestServer() {
-			super(new EmbeddedConfiguration.Builder().build());
-			servletContext = mock(ServletContext.class);
-		}
-
-		public TestServer(EmbeddedConfiguration configuration) {
-			super(configuration);
-			servletContext = mock(ServletContext.class);
-		}
-
-		@Override
-		public FooServer getDelegate() {
-			return mock(FooServer.class);
-		}
-
-		@Override
-		protected void doStart() {
-			doStart++;
-			try {
-				Thread.sleep(1000);
-			}
-			catch (InterruptedException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-
-		@Override
-		protected void doStop() {
-			doStop++;
-
-			try {
-				Thread.sleep(1000);
-			}
-			catch (InterruptedException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-
-		@Override
-		public int getPort() {
-			return 0;
-		}
-
-		@Override
-		public ServletContext getServletContext() {
-			return isStarted() ? servletContext : null;
-		}
-	}
-
-	private static class FooServer {
-
-	}
-
-	private static class EmbeddedConfiguration extends AbstractConfiguration {
-
-		public EmbeddedConfiguration(Builder builder) {
-			super(builder);
-		}
-
-		private static class Builder extends AbstractConfigurationBuilder<Builder, EmbeddedConfiguration> {
-			@Override
-			protected Builder self() {
-				return this;
-			}
-
-			@Override
-			public EmbeddedConfiguration build() {
-				return new EmbeddedConfiguration(this);
-			}
-		}
-	}
-
-	private static class StartWorker implements Runnable {
-		private final TestServer server;
-
-		private final CountDownLatch startSignal;
-
-		private final CountDownLatch doneSignal;
-
-		public StartWorker(TestServer server, CountDownLatch startSignal, CountDownLatch doneSignal) {
-			this.server = server;
-			this.startSignal = startSignal;
-			this.doneSignal = doneSignal;
-		}
-
-		@Override
-		public void run() {
-			try {
-				startSignal.await();
-				server.start();
-				doneSignal.countDown();
-			}
-			catch (InterruptedException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-	}
-
-	private static class StopWorker implements Runnable {
-		private final TestServer server;
-
-		private final CountDownLatch startSignal;
-
-		private final CountDownLatch doneSignal;
-
-		public StopWorker(TestServer server, CountDownLatch startSignal, CountDownLatch doneSignal) {
-			this.server = server;
-			this.startSignal = startSignal;
-			this.doneSignal = doneSignal;
-		}
-
-		@Override
-		public void run() {
-			try {
-				startSignal.await();
-				server.stop();
-				doneSignal.countDown();
-			}
-			catch (InterruptedException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
+		assertThat(server.getDelegate()).isNotNull();
 	}
 }

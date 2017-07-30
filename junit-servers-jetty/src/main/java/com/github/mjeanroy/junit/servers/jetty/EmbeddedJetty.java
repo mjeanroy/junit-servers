@@ -205,13 +205,18 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 	}
 
 	@Override
-	public int getPort() {
-		return connector == null ? 0 : connector.getLocalPort();
+	public String getScheme() {
+		return isStarted() ? server.getURI().getScheme() : super.getScheme();
 	}
 
 	@Override
 	public ServletContext getServletContext() {
 		return webAppContext == null ? null : webAppContext.getServletContext();
+	}
+
+	@Override
+	protected int doGetPort() {
+		return connector.getLocalPort();
 	}
 
 	private ServerConnector findConnector() {
