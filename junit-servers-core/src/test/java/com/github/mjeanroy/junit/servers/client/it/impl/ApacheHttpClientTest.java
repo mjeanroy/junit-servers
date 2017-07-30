@@ -22,18 +22,15 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.it;
+package com.github.mjeanroy.junit.servers.client.it.impl;
 
-import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.AtLeastJava8;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
+import com.github.mjeanroy.junit.servers.client.it.BaseHttpClientTest;
 
-@RunIf(AtLeastJava8.class)
-public class AsyncHttpClientTest extends BaseHttpClientTest {
+public class ApacheHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClientStrategy strategy() {
-		return HttpClientStrategy.ASYNC_HTTP_CLIENT;
+		return HttpClientStrategy.APACHE_HTTP_CLIENT;
 	}
 }

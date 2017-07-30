@@ -24,12 +24,39 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
-public class ApacheHttpClientTest extends BaseHttpClientTest {
+final class HttpUtils {
+	static String formatParam(String name, String value) {
+		return name + "=" + value;
+	}
 
-	@Override
-	protected HttpClientStrategy strategy() {
-		return HttpClientStrategy.APACHE_HTTP_CLIENT;
+	static String formatFormParam(String name, String value) {
+		return urlEncode(name) + "=" + urlEncode(value);
+	}
+
+	static Date utcDate(int year, int month, int dayOfMonth, int hour, int minutes, int second) {
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		cal.set(Calendar.HOUR_OF_DAY, hour);
+		cal.set(Calendar.MINUTE, minutes);
+		cal.set(Calendar.SECOND, second);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
+
+	private static String urlEncode(String value) {
+		try {
+			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
+		} catch (UnsupportedEncodingException ex) {
+			throw new AssertionError(ex);
+		}
 	}
 }

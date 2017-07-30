@@ -22,14 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.it;
+package com.github.mjeanroy.junit.servers.client.it.impl;
 
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.client.it.BaseHttpClientTest;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.AtLeastJava8;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
 
-public class NingAsyncHttpClientTest extends BaseHttpClientTest {
+@RunIf(AtLeastJava8.class)
+public class AsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClientStrategy strategy() {
-		return HttpClientStrategy.NING_ASYNC_HTTP_CLIENT;
+		return HttpClientStrategy.ASYNC_HTTP_CLIENT;
 	}
 }

@@ -25,27 +25,57 @@
 package com.github.mjeanroy.junit.servers.client.it;
 
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.ACCEPT;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.ACCEPT_ENCODING;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.ACCEPT_LANGUAGE;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.APPLICATION_JSON;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.APPLICATION_XML;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.CACHE_CONTROL;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.CONTENT_ENCODING;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.CONTENT_SECURITY_POLICY;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.CONTENT_TYPE;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.ETAG;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.IF_MATCH;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.IF_MODIFIED_SINCE;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.IF_NONE_MATCH;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.IF_UNMODIFIED_SINCE;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.LAST_MODIFIED;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.LOCATION;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.MULTIPART_FORM_DATA;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.ORIGIN;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.REFERER;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.SET_COOKIE;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.STRICT_TRANSPORT_SECURITY;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.USER_AGENT;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_CONTENT_SECURITY_POLICY;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_CONTENT_TYPE_OPTIONS;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_CSRF_TOKEN;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_HTTP_METHOD_OVERRIDE;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_REQUESTED_WITH;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_WEBKIT_CSP;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_XSS_PROTECTION;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.assertHeader;
+import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.formatFormParam;
+import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.formatParam;
+import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.utcDate;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequest;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequestWithBody;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequestWithCookie;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequestWithCookies;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequestWithHeader;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubDefaultGetRequest;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubDeleteRequest;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubGetRequest;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubHeadRequest;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubPatchRequest;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubPostRequest;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubPutRequest;
 import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.delete;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.head;
-import static com.github.tomakehurst.wiremock.client.WireMock.patch;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.put;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static java.util.Arrays.asList;
-import static java.util.Collections.singleton;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -74,45 +104,12 @@ import com.github.mjeanroy.junit.servers.utils.commons.Function;
 import com.github.mjeanroy.junit.servers.utils.commons.MapperFunction;
 import com.github.mjeanroy.junit.servers.utils.commons.Pair;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
-import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 
 @RunWith(RunIfRunner.class)
 public abstract class BaseHttpClientTest {
 
 	private static final String ENDPOINT = "/people";
-	private static final String APPLICATION_JSON = "application/json";
-	private static final String APPLICATION_XML = "application/xml";
-	private static final String MULTIPART_FORM_DATA = "multipart/form-data";
-	private static final String X_CSRF_TOKEN = "X-Csrf-Token";
-	private static final String X_HTTP_METHOD_OVERRIDE = "X-Http-Method-Override";
-	private static final String X_REQUESTED_WITH = "X-Requested-With";
-	private static final String ACCEPT = "Accept";
-	private static final String ACCEPT_LANGUAGE = "Accept-Language";
-	private static final String ACCEPT_ENCODING = "Accept-Encoding";
-	private static final String IF_MATCH = "If-Match";
-	private static final String IF_NONE_MATCH = "If-None-Match";
-	private static final String IF_MODIFIED_SINCE = "If-Modified-Since";
-	private static final String IF_UNMODIFIED_SINCE = "If-Unmodified-Since";
-	private static final String REFERER = "Referer";
-	private static final String ORIGIN = "Origin";
-	private static final String USER_AGENT = "User-Agent";
-	private static final String CONTENT_TYPE = "Content-Type";
-	private static final String CONTENT_ENCODING = "Content-Encoding";
-	private static final String LOCATION = "Location";
-	private static final String ETAG = "ETag";
-	private static final String CACHE_CONTROL = "Cache-Control";
-	private static final String LAST_MODIFIED = "Last-Modified";
-	private static final String STRICT_TRANSPORT_SECURITY = "Strict-Transport-Security";
-	private static final String X_CONTENT_SECURITY_POLICY = "X-Content-Security-Policy";
-	private static final String X_WEBKIT_CSP = "X-Webkit-CSP";
-	private static final String CONTENT_SECURITY_POLICY = "Content-Security-Policy";
-	private static final String X_XSS_PROTECTION = "X-Xss-Protection";
-	private static final String X_CONTENT_TYPE_OPTIONS = "X-Content-Type-Options";
-	private static final String SET_COOKIE = "Set-Cookie";
 
 	@Rule
 	public WireMockRule wireMockRule = new WireMockRule();
@@ -156,18 +153,19 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testGet() {
+		final String endpoint = ENDPOINT;
 		final int status = 200;
 		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
 
-		stubGetRequest(status, body);
+		stubGetRequest(endpoint, status, body);
 
 		final HttpResponse rsp = createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.acceptJson()
 			.asXmlHttpRequest()
 			.execute();
 
-		assertRequest(ENDPOINT, HttpMethod.GET);
+		assertRequest(endpoint, HttpMethod.GET);
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
@@ -175,17 +173,18 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testHead() {
+		final String endpoint = ENDPOINT;
 		final int status = 200;
 
-		stubHeadRequest(status);
+		stubHeadRequest(endpoint, status);
 
 		final HttpResponse rsp = createDefaultClient()
-				.prepareHead(ENDPOINT)
+				.prepareHead(endpoint)
 				.acceptJson()
 				.asXmlHttpRequest()
 				.execute();
 
-		assertRequest(ENDPOINT, HttpMethod.HEAD);
+		assertRequest(endpoint, HttpMethod.HEAD);
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isNullOrEmpty();
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
@@ -193,20 +192,21 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testPost() {
+		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
 
-		stubPostRequest(status, body);
+		stubPostRequest(endpoint, status, body);
 
 		final HttpResponse rsp = createDefaultClient()
-			.preparePost(ENDPOINT)
+			.preparePost(endpoint)
 			.acceptJson()
 			.asJson()
 			.asXmlHttpRequest()
 			.setBody("{\"name\": \"Jane Doe\"}")
 			.execute();
 
-		assertRequest(ENDPOINT, HttpMethod.POST);
+		assertRequest(endpoint, HttpMethod.POST);
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
@@ -214,19 +214,20 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testPostWithBodyElement() {
+		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
 
-		stubPostRequest(status, body);
+		stubPostRequest(endpoint, status, body);
 
 		final HttpResponse rsp = createDefaultClient()
-			.preparePost(ENDPOINT)
+			.preparePost(endpoint)
 			.acceptJson()
 			.asJson()
 			.asXmlHttpRequest()
 			.execute();
 
-		assertRequest(ENDPOINT, HttpMethod.POST);
+		assertRequest(endpoint, HttpMethod.POST);
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
@@ -237,7 +238,7 @@ public abstract class BaseHttpClientTest {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
 
-		stubPutRequest(status);
+		stubPutRequest(endpoint, status);
 
 		final HttpResponse rsp = createDefaultClient()
 			.preparePut(endpoint)
@@ -259,7 +260,7 @@ public abstract class BaseHttpClientTest {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
 
-		stubPutRequest(status);
+		stubPutRequest(endpoint, status);
 
 		final HttpResponse rsp = createDefaultClient()
 			.preparePut(endpoint)
@@ -277,20 +278,21 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testPatch() {
+		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
 
-		stubPatchRequest(status, body);
+		stubPatchRequest(endpoint, status, body);
 
 		final HttpResponse rsp = createDefaultClient()
-				.preparePatch(ENDPOINT)
+				.preparePatch(endpoint)
 				.acceptJson()
 				.asJson()
 				.asXmlHttpRequest()
 				.setBody("{\"name\": \"Jane Doe\"}")
 				.execute();
 
-		assertRequest(ENDPOINT, HttpMethod.PATCH);
+		assertRequest(endpoint, HttpMethod.PATCH);
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
@@ -301,7 +303,7 @@ public abstract class BaseHttpClientTest {
 		final int status = 204;
 		final String endpoint = ENDPOINT + "/1";
 
-		stubDeleteRequest(status);
+		stubDeleteRequest(endpoint, status);
 
 		final HttpResponse rsp = createDefaultClient()
 			.prepareDelete(endpoint)
@@ -327,7 +329,7 @@ public abstract class BaseHttpClientTest {
 
 		final int status = 200;
 		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
-		stubGetRequest(status, body);
+		stubGetRequest(ENDPOINT, status, body);
 
 		testRequestHeader(createCustomClient(configuration), name, value, new Function<HttpRequest>() {
 			@Override
@@ -347,7 +349,7 @@ public abstract class BaseHttpClientTest {
 
 		final int status = 200;
 		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
-		stubGetRequest(status, body);
+		stubGetRequest(ENDPOINT, status, body);
 
 		testRequestHeader(createCustomClient(configuration), name, value, new Function<HttpRequest>() {
 			@Override
@@ -591,10 +593,11 @@ public abstract class BaseHttpClientTest {
 
 	private void testRequestHeader(HttpClient client, String name, String value, Function<HttpRequest> func) {
 		// GIVEN
-		int rspStatus = 200;
-		String rspBody = "[]";
-		stubGetRequest(rspStatus, rspBody);
-		HttpRequest rq = client.prepareGet(ENDPOINT);
+		final String endpoint = ENDPOINT;
+		final int rspStatus = 200;
+		final String rspBody = "[]";
+		stubGetRequest(endpoint, rspStatus, rspBody);
+		HttpRequest rq = client.prepareGet(endpoint);
 
 		// WHEN
 		func.apply(rq);
@@ -603,7 +606,7 @@ public abstract class BaseHttpClientTest {
 		HttpResponse rsp = rq.execute();
 		assertThat(rsp).isNotNull();
 		assertThat(rsp.status()).isEqualTo(rspStatus);
-		assertRequestWithHeader(ENDPOINT, HttpMethod.GET, name, value);
+		assertRequestWithHeader(endpoint, HttpMethod.GET, name, value);
 	}
 
 	@Test
@@ -628,9 +631,10 @@ public abstract class BaseHttpClientTest {
 
 	private void testRequestExecuteAs(String contentType, MapperFunction<HttpRequest, HttpResponse> func) {
 		// GIVEN
-		int rspStatus = 200;
-		String rspBody = "[]";
-		stubGetRequest(200, rspBody);
+		final String endpoint = ENDPOINT;
+		final int rspStatus = 200;
+		final String rspBody = "[]";
+		stubGetRequest(endpoint, 200, rspBody);
 		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
 
 		// WHEN
@@ -640,7 +644,7 @@ public abstract class BaseHttpClientTest {
 		assertThat(rsp).isNotNull();
 		assertThat(rsp.status()).isEqualTo(rspStatus);
 		assertThat(rsp.body()).isEqualTo(rspBody);
-		assertRequestWithHeader(ENDPOINT, HttpMethod.GET, CONTENT_TYPE, contentType);
+		assertRequestWithHeader(endpoint, HttpMethod.GET, CONTENT_TYPE, contentType);
 	}
 
 	@Test
@@ -768,9 +772,10 @@ public abstract class BaseHttpClientTest {
 
 	private void testRequestBody(String body, Function<HttpRequest> func) {
 		// GIVEN
-		int rspStatus = 201;
-		String rspBody = "";
-		stubPostRequest(rspStatus, rspBody);
+		final String endpoint = ENDPOINT;
+		final int rspStatus = 201;
+		final String rspBody = "";
+		stubPostRequest(endpoint, rspStatus, rspBody);
 		HttpRequest rq = createDefaultClient().preparePost(ENDPOINT);
 
 		// WHEN
@@ -781,7 +786,7 @@ public abstract class BaseHttpClientTest {
 		assertThat(rsp).isNotNull();
 		assertThat(rsp.status()).isEqualTo(rspStatus);
 		assertThat(rsp.body()).isEqualTo(rspBody);
-		assertRequestWithBody(ENDPOINT, HttpMethod.POST, body);
+		assertRequestWithBody(endpoint, HttpMethod.POST, body);
 	}
 
 	@Test
@@ -830,71 +835,79 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_with_simple_cookie() {
-		stubGetRequest();
+		final String endpoint = ENDPOINT;
+
+		stubDefaultGetRequest(endpoint);
 
 		String name = "foo";
 		String value = "bar";
 
 		createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.addCookie(Cookies.cookie(name, value))
 			.executeJson();
 
-		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);
+		assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
 	}
 
 	@Test
 	public void testRequest_with_default_cookie() {
+		final String endpoint = ENDPOINT;
 		final String name = "foo";
 		final String value = "bar";
 		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.addDefaultCookie(name, value)
 			.build();
 
-		stubGetRequest();
+		stubDefaultGetRequest(endpoint);
 
 		createCustomClient(configuration)
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.executeJson();
 
-		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);
+		assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
 	}
 
 	@Test
 	public void testRequest_with_default_cookie_object() {
+		final String endpoint = ENDPOINT;
 		final String name = "foo";
 		final String value = "bar";
 		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.addDefaultCookie(Cookies.cookie(name, value))
 			.build();
 
-		stubGetRequest();
+		stubDefaultGetRequest(endpoint);
 
 		createCustomClient(configuration)
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.executeJson();
 
-		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);
+		assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
 	}
 
 	@Test
 	public void testRequest_with_simple_cookie_method() {
-		stubGetRequest();
+		final String endpoint = ENDPOINT;
+
+		stubDefaultGetRequest(endpoint);
 
 		String name = "foo";
 		String value = "bar";
 
 		createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.addCookie(name, value)
 			.executeJson();
 
-		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);
+		assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
 	}
 
 	@Test
 	public void testRequest_with_simple_cookies() {
-		stubGetRequest();
+		final String endpoint = ENDPOINT;
+
+		stubDefaultGetRequest(endpoint);
 
 		String n1 = "f1";
 		String v1 = "b1";
@@ -903,7 +916,7 @@ public abstract class BaseHttpClientTest {
 		String v2 = "b2";
 
 		createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.addCookie(Cookies.cookie(n1, v1))
 			.addCookie(Cookies.cookie(n2, v2))
 			.executeJson();
@@ -913,12 +926,14 @@ public abstract class BaseHttpClientTest {
 			pair(n2, v2)
 		);
 
-		assertRequestWithCookies(ENDPOINT, HttpMethod.GET, expectedCookies);
+		assertRequestWithCookies(endpoint, HttpMethod.GET, expectedCookies);
 	}
 
 	@Test
 	public void testRequest_with_simple_cookies_method() {
-		stubGetRequest();
+		final String endpoint = ENDPOINT;
+
+		stubDefaultGetRequest(endpoint);
 
 		String n1 = "f1";
 		String v1 = "b1";
@@ -927,7 +942,7 @@ public abstract class BaseHttpClientTest {
 		String v2 = "b2";
 
 		createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.addCookie(n1, v1)
 			.addCookie(n2, v2)
 			.executeJson();
@@ -937,12 +952,14 @@ public abstract class BaseHttpClientTest {
 			pair(n2, v2)
 		);
 
-		assertRequestWithCookies(ENDPOINT, HttpMethod.GET, expectedCookies);
+		assertRequestWithCookies(endpoint, HttpMethod.GET, expectedCookies);
 	}
 
 	@Test
 	public void testRequest_with_complex_cookie() {
-		stubGetRequest();
+		final String endpoint = ENDPOINT;
+
+		stubDefaultGetRequest(endpoint);
 
 		String name = "foo";
 		String value = "bar";
@@ -964,20 +981,22 @@ public abstract class BaseHttpClientTest {
 		Long expires = null;
 
 		createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.addHeader(ORIGIN, server.getUrl())
 			.addCookie(Cookies.cookie(name, value, domain, path, expires, maxAge, secured, httpOnly))
 			.executeJson();
 
-		assertRequestWithCookie(ENDPOINT, HttpMethod.GET, name, value);
+		assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
 	}
 
 	@Test
 	public void testResponse_without_headers() {
-		stubGetRequest(ENDPOINT, 200, null, null);
+		final String endpoint = ENDPOINT;
+
+		stubGetRequest(endpoint, 200, null, null);
 
 		HttpResponse rsp = createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.executeJson();
 
 		List<String> headers = asList(
@@ -1150,8 +1169,8 @@ public abstract class BaseHttpClientTest {
 		// THEN
 		HttpHeader header = rsp.getHeader(name);
 		assertThat(rsp.containsHeader(name)).isTrue();
-		assertHeader(header, name, value);
 		assertThat(func.apply(rsp)).isEqualTo(header);
+		assertHeader(header, name, value);
 	}
 
 	@Test
@@ -1193,10 +1212,12 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testResponse_without_cookies() {
-		stubGetRequest();
+		final String endpoint = ENDPOINT;
+
+		stubDefaultGetRequest(endpoint);
 
 		HttpResponse rsp = createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.executeJson();
 
 		assertThat(rsp.getCookies()).isNotNull().isEmpty();
@@ -1205,10 +1226,12 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_Response_Duration() {
-		stubGetRequest();
+		final String endpoint = ENDPOINT;
+
+		stubDefaultGetRequest(endpoint);
 
 		HttpResponse rsp = createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.executeJson();
 
 		long durationNano = rsp.getRequestDuration();
@@ -1265,139 +1288,6 @@ public abstract class BaseHttpClientTest {
 	private void ensureOneClient() {
 		if (client != null) {
 			throw new AssertionError("Cannot create two clients on a test");
-		}
-	}
-
-	private static void assertHeader(HttpHeader header, String name, String value) {
-		assertThat(header.getName()).isEqualTo(name);
-		assertThat(header.getValues()).isEqualTo(singletonList(value));
-		assertThat(header.getFirstValue()).isEqualTo(value);
-		assertThat(header.getLastValue()).isEqualTo(value);
-	}
-
-	private static void assertRequest(String endpoint, HttpMethod method) {
-		RequestMethod rqMethod = new RequestMethod(method.name());
-		RequestPatternBuilder rq = new RequestPatternBuilder(rqMethod, urlEqualTo(endpoint));
-		WireMock.verify(1, rq);
-	}
-
-	private static void assertRequestWithHeader(String endpoint, HttpMethod method, String headerName, String headerValue) {
-		RequestMethod rqMethod = new RequestMethod(method.name());
-		RequestPatternBuilder rq = new RequestPatternBuilder(rqMethod, urlEqualTo(endpoint));
-		rq.withHeader(headerName, equalTo(headerValue));
-		WireMock.verify(1, rq);
-	}
-
-	private static void assertRequestWithBody(String endpoint, HttpMethod method, String body) {
-		RequestMethod rqMethod = new RequestMethod(method.name());
-		RequestPatternBuilder rq = new RequestPatternBuilder(rqMethod, urlEqualTo(endpoint));
-		rq.withRequestBody(equalTo(body));
-		WireMock.verify(1, rq);
-	}
-
-	private static void assertRequestWithCookie(String endpoint, HttpMethod method, String cookieName, String cookieValue) {
-		assertRequestWithCookies(endpoint, method, singleton(pair(cookieName, cookieValue)));
-	}
-
-	private static void assertRequestWithCookies(String endpoint, HttpMethod method, Iterable<Pair> cookies) {
-		RequestMethod rqMethod = new RequestMethod(method.name());
-		RequestPatternBuilder rq = new RequestPatternBuilder(rqMethod, urlEqualTo(endpoint));
-
-		for (Pair cookie : cookies) {
-			rq.withCookie(cookie.getO1(), equalTo(cookie.getO2()));
-		}
-
-		WireMock.verify(1, rq);
-	}
-
-	private static void stubGetRequest(int status, String body) {
-		stubGetRequest(ENDPOINT, status, body);
-	}
-
-	private static void stubGetRequest() {
-		stubGetRequest(200, "[{\"id\": 1, \"name\": \"John Doe\"}]");
-	}
-
-	private static void stubGetRequest(String url, int status, String body) {
-		stubGetRequest(url, status, body, pair(CONTENT_TYPE, APPLICATION_JSON));
-	}
-
-	private static void stubGetRequest(String url, int status, String body, Pair header) {
-		ResponseDefinitionBuilder rsp = aResponse()
-			.withStatus(status)
-			.withBody(body);
-
-		if (header != null) {
-			rsp.withHeader(header.getO1(), header.getO2());
-		}
-
-		stubFor(get(urlEqualTo(url)).willReturn(rsp));
-	}
-
-	private static void stubHeadRequest(int status) {
-		stubFor(head(urlEqualTo(ENDPOINT))
-			.willReturn(aResponse()
-				.withStatus(status)
-				.withHeader(CONTENT_TYPE, APPLICATION_JSON)));
-	}
-
-	private static void stubPostRequest(int status, String body) {
-		stubFor(post(urlEqualTo(ENDPOINT))
-			.willReturn(aResponse()
-				.withStatus(status)
-				.withHeader(CONTENT_TYPE, APPLICATION_JSON)
-				.withBody(body)));
-	}
-
-	private static void stubPutRequest(int status) {
-		String url = ENDPOINT + "/1";
-		stubFor(put(urlEqualTo(url))
-			.willReturn(aResponse()
-				.withStatus(status)
-				.withHeader(CONTENT_TYPE, APPLICATION_JSON)));
-	}
-
-	private static void stubPatchRequest(int status, String body) {
-		stubFor(patch(urlEqualTo(ENDPOINT))
-				.willReturn(aResponse()
-						.withStatus(status)
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON)
-						.withBody(body)));
-	}
-
-	private static void stubDeleteRequest(int status) {
-		String url = ENDPOINT + "/1";
-		stubFor(delete(urlEqualTo(url))
-			.willReturn(aResponse()
-				.withStatus(status)
-				.withHeader(CONTENT_TYPE, APPLICATION_JSON)));
-	}
-
-	private static Date utcDate(int year, int month, int dayOfMonth, int hour, int minutes, int second) {
-		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-		cal.set(Calendar.HOUR_OF_DAY, hour);
-		cal.set(Calendar.MINUTE, minutes);
-		cal.set(Calendar.SECOND, second);
-		cal.set(Calendar.MILLISECOND, 0);
-		return cal.getTime();
-	}
-
-	private static String formatParam(String name, String value) {
-		return name + "=" + value;
-	}
-
-	private static String formatFormParam(String name, String value) {
-		return urlEncode(name) + "=" + urlEncode(value);
-	}
-
-	private static String urlEncode(String value) {
-		try {
-			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
-		} catch (UnsupportedEncodingException ex) {
-			throw new AssertionError(ex);
 		}
 	}
 
