@@ -177,6 +177,29 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testGetWithFullEndpoint() {
+		final String endpoint = ENDPOINT;
+		final String rqUrl = url + endpoint;
+		final int status = 200;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
+		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
+
+		stubGetRequest(endpoint, status, headers, body);
+
+		final HttpResponse rsp = createDefaultClient()
+				.prepareGet(rqUrl)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.execute();
+
+		assertRequest(endpoint, HttpMethod.GET);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEqualTo(body);
+		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
 	public void testHead() {
 		final String endpoint = ENDPOINT;
 		final int status = 200;
