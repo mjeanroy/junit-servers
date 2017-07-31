@@ -24,16 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
-
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
  * Implementation of {@link HttpClient} using (ning) async-http-client

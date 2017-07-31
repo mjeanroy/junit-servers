@@ -25,16 +25,16 @@
 package com.github.mjeanroy.junit.servers.servers;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.UrlUtils.ensureAbsolutePath;
 import static java.lang.System.clearProperty;
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.github.mjeanroy.junit.servers.exceptions.UrlException;
+import com.github.mjeanroy.junit.servers.commons.UrlUtils;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
@@ -220,19 +220,11 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 
 	@Override
 	public URI getUri() {
-		String scheme = getScheme();
-		String host = getHost();
-		int port = getPort();
-		String path = getPath();
-		if (!path.isEmpty() && path.charAt(0) != '/') {
-			path = "/" + path;
-		}
-
-		try {
-			return new URI(scheme, null, host, port, path, null, null);
-		} catch (URISyntaxException ex) {
-			throw new UrlException(ex);
-		}
+		final String scheme = getScheme();
+		final String host = getHost();
+		final int port = getPort();
+		final String path = ensureAbsolutePath(getPath());
+		return UrlUtils.create(scheme, host, port, path);
 	}
 
 	@Override

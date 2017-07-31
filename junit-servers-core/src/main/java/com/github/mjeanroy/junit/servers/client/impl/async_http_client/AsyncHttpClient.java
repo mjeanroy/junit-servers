@@ -24,6 +24,14 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+
+import java.io.IOException;
+
+import org.asynchttpclient.AsyncHttpClientConfig;
+import org.asynchttpclient.DefaultAsyncHttpClient;
+import org.asynchttpclient.DefaultAsyncHttpClientConfig;
+
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
@@ -31,13 +39,6 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.asynchttpclient.AsyncHttpClientConfig;
-import org.asynchttpclient.DefaultAsyncHttpClient;
-import org.asynchttpclient.DefaultAsyncHttpClientConfig;
-
-import java.io.IOException;
-
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
  * Implementation of {@link HttpClient} using async-http-client

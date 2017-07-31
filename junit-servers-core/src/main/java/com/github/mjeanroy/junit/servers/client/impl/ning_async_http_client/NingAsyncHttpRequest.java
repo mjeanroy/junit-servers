@@ -58,10 +58,10 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 *
 	 * @param client Client used to execute request using async-http-client.
 	 * @param httpMethod Http method.
-	 * @param endpoint Request URL.
+	 * @param url Request URL.
 	 */
-	NingAsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, String endpoint) {
-		super(endpoint, httpMethod);
+	NingAsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, String url) {
+		super(url, httpMethod);
 		this.client = client;
 	}
 

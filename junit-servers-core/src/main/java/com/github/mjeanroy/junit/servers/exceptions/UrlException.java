@@ -30,11 +30,71 @@ package com.github.mjeanroy.junit.servers.exceptions;
 public class UrlException extends AbstractException {
 
 	/**
+	 * Scheme used to build malformed URL.
+	 */
+	private final String scheme;
+
+	/**
+	 * Host used to build malformed URL.
+	 */
+	private final String host;
+
+	/**
+	 * Port used to build malformed URL.
+	 */
+	private final int port;
+
+	/**
+	 * Path used to build malformed URL.
+	 */
+	private final String path;
+
+	/**
 	 * Create the exception.
 	 *
 	 * @param cause Original cause.
 	 */
-	public UrlException(Throwable cause) {
+	public UrlException(String scheme, String host, int port, String path, Throwable cause) {
 		super(cause);
+		this.scheme = scheme;
+		this.host = host;
+		this.port = port;
+		this.path = path;
+	}
+
+	/**
+	 * The scheme used to build malformed URL.
+	 *
+	 * @return URL scheme.
+	 */
+	public String getScheme() {
+		return scheme;
+	}
+
+	/**
+	 * The host used to build malformed URL.
+	 *
+	 * @return URL host.
+	 */
+	public String getHost() {
+		return host;
+	}
+
+	/**
+	 * The port used to build malformed URL.
+	 *
+	 * @return URL port.
+	 */
+	public int getPort() {
+		return port;
+	}
+
+	/**
+	 * The path used to build malformed URL.
+	 *
+	 * @return URL path.
+	 */
+	public String getPath() {
+		return path;
 	}
 }

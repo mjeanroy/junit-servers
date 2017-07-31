@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.client.impl;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
+import static com.github.mjeanroy.junit.servers.commons.UrlUtils.startsWithHttpScheme;
 
 import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
@@ -125,8 +126,8 @@ public abstract class AbstractHttpClient implements HttpClient {
 			endpoint = String.valueOf(URL_SEPARATOR) + endpoint;
 		}
 
-		String requestEndpoint = (serverUrl + endpoint).trim();
-		HttpRequest rq = buildRequest(httpMethod, requestEndpoint);
+		String requestEndpoint = startsWithHttpScheme(endpoint) ? endpoint : serverUrl + endpoint;
+		HttpRequest rq = buildRequest(httpMethod, requestEndpoint.trim());
 
 		// Add default headers.
 		for (HttpHeader header : configuration.getDefaultHeaders().values()) {
