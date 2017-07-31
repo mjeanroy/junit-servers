@@ -24,11 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.github.mjeanroy.junit.servers.client.HttpHeader;
-
 final class HeaderUtils {
 
 	private HeaderUtils() {
@@ -63,11 +58,4 @@ final class HeaderUtils {
 	static final String X_XSS_PROTECTION = "X-Xss-Protection";
 	static final String X_CONTENT_TYPE_OPTIONS = "X-Content-Type-Options";
 	static final String SET_COOKIE = "Set-Cookie";
-
-	static void assertHeader(HttpHeader header, String name, String value) {
-		assertThat(header.getName()).isEqualTo(name);
-		assertThat(header.getValues()).isEqualTo(singletonList(value));
-		assertThat(header.getFirstValue()).isEqualTo(value);
-		assertThat(header.getLastValue()).isEqualTo(value);
-	}
 }

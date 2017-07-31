@@ -32,8 +32,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 final class HttpUtils {
-	static String formatParam(String name, String value) {
-		return name + "=" + value;
+	static String formatQueryParam(String name, String value) {
+		return urlEncode(name) + "=" + urlEncode(value);
 	}
 
 	static String formatFormParam(String name, String value) {

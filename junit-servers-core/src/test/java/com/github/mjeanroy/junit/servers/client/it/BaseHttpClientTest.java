@@ -54,16 +54,15 @@ import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_HTTP_MET
 import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_REQUESTED_WITH;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_WEBKIT_CSP;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_XSS_PROTECTION;
-import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.assertHeader;
 import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.formatFormParam;
-import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.formatParam;
+import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.formatQueryParam;
 import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.utcDate;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequestWithBody;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequestWithCookie;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequestWithCookies;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequestWithHeader;
-import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubDefaultGetRequest;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubDefaultRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubDeleteRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubGetRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubHeadRequest;
@@ -72,11 +71,15 @@ import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubPost
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubPutRequest;
 import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -155,9 +158,10 @@ public abstract class BaseHttpClientTest {
 	public void testGet() {
 		final String endpoint = ENDPOINT;
 		final int status = 200;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
 		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
 
-		stubGetRequest(endpoint, status, body);
+		stubGetRequest(endpoint, status, headers, body);
 
 		final HttpResponse rsp = createDefaultClient()
 			.prepareGet(endpoint)
@@ -169,14 +173,16 @@ public abstract class BaseHttpClientTest {
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
 	}
 
 	@Test
 	public void testHead() {
 		final String endpoint = ENDPOINT;
 		final int status = 200;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
 
-		stubHeadRequest(endpoint, status);
+		stubHeadRequest(endpoint, status, headers);
 
 		final HttpResponse rsp = createDefaultClient()
 				.prepareHead(endpoint)
@@ -188,15 +194,17 @@ public abstract class BaseHttpClientTest {
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isNullOrEmpty();
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
 	}
 
 	@Test
 	public void testPost() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
 		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
 
-		stubPostRequest(endpoint, status, body);
+		stubPostRequest(endpoint, status, headers, body);
 
 		final HttpResponse rsp = createDefaultClient()
 			.preparePost(endpoint)
@@ -210,15 +218,17 @@ public abstract class BaseHttpClientTest {
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
 	}
 
 	@Test
 	public void testPostWithBodyElement() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
 		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
 
-		stubPostRequest(endpoint, status, body);
+		stubPostRequest(endpoint, status, headers, body);
 
 		final HttpResponse rsp = createDefaultClient()
 			.preparePost(endpoint)
@@ -231,14 +241,16 @@ public abstract class BaseHttpClientTest {
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
 	}
 
 	@Test
 	public void testPut() {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
+		final Collection<Pair> headers = emptyList();
 
-		stubPutRequest(endpoint, status);
+		stubPutRequest(endpoint, status, headers);
 
 		final HttpResponse rsp = createDefaultClient()
 			.preparePut(endpoint)
@@ -251,16 +263,16 @@ public abstract class BaseHttpClientTest {
 		assertRequest(endpoint, HttpMethod.PUT);
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEmpty();
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType()).isNull();
 	}
 
 	@Test
 	public void testPutWithoutBody() {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
+		final Collection<Pair> headers = emptyList();
 
-		stubPutRequest(endpoint, status);
+		stubPutRequest(endpoint, status, headers);
 
 		final HttpResponse rsp = createDefaultClient()
 			.preparePut(endpoint)
@@ -272,17 +284,17 @@ public abstract class BaseHttpClientTest {
 		assertRequest(endpoint, HttpMethod.PUT);
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEmpty();
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType()).isNull();
 	}
 
 	@Test
 	public void testPatch() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
 		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
 
-		stubPatchRequest(endpoint, status, body);
+		stubPatchRequest(endpoint, status, headers, body);
 
 		final HttpResponse rsp = createDefaultClient()
 				.preparePatch(endpoint)
@@ -296,14 +308,16 @@ public abstract class BaseHttpClientTest {
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
 	}
 
 	@Test
 	public void testDelete() {
 		final int status = 204;
+		final Collection<Pair> headers = emptyList();
 		final String endpoint = ENDPOINT + "/1";
 
-		stubDeleteRequest(endpoint, status);
+		stubDeleteRequest(endpoint, status, headers);
 
 		final HttpResponse rsp = createDefaultClient()
 			.prepareDelete(endpoint)
@@ -315,8 +329,7 @@ public abstract class BaseHttpClientTest {
 		assertRequest(endpoint, HttpMethod.DELETE);
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEmpty();
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType()).isNull();
 	}
 
 	@Test
@@ -327,9 +340,7 @@ public abstract class BaseHttpClientTest {
 			.addDefaultHeader(name, value)
 			.build();
 
-		final int status = 200;
-		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
-		stubGetRequest(ENDPOINT, status, body);
+		stubDefaultRequest(ENDPOINT);
 
 		testRequestHeader(createCustomClient(configuration), name, value, new Function<HttpRequest>() {
 			@Override
@@ -347,9 +358,7 @@ public abstract class BaseHttpClientTest {
 			.addDefaultHeader(header)
 			.build();
 
-		final int status = 200;
-		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
-		stubGetRequest(ENDPOINT, status, body);
+		stubDefaultRequest(ENDPOINT);
 
 		testRequestHeader(createCustomClient(configuration), name, value, new Function<HttpRequest>() {
 			@Override
@@ -593,19 +602,17 @@ public abstract class BaseHttpClientTest {
 
 	private void testRequestHeader(HttpClient client, String name, String value, Function<HttpRequest> func) {
 		// GIVEN
-		final String endpoint = ENDPOINT;
-		final int rspStatus = 200;
-		final String rspBody = "[]";
-		stubGetRequest(endpoint, rspStatus, rspBody);
-		HttpRequest rq = client.prepareGet(endpoint);
+		String endpoint = ENDPOINT;
+		stubDefaultRequest(ENDPOINT);
 
 		// WHEN
+		HttpRequest rq = client.prepareGet(endpoint);
 		func.apply(rq);
 
 		// THEN
 		HttpResponse rsp = rq.execute();
 		assertThat(rsp).isNotNull();
-		assertThat(rsp.status()).isEqualTo(rspStatus);
+		assertThat(rsp.status()).isEqualTo(200);
 		assertRequestWithHeader(endpoint, HttpMethod.GET, name, value);
 	}
 
@@ -633,11 +640,13 @@ public abstract class BaseHttpClientTest {
 		// GIVEN
 		final String endpoint = ENDPOINT;
 		final int rspStatus = 200;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
 		final String rspBody = "[]";
-		stubGetRequest(endpoint, 200, rspBody);
-		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
+
+		stubGetRequest(endpoint, rspStatus, headers, rspBody);
 
 		// WHEN
+		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
 		HttpResponse rsp = func.apply(rq);
 
 		// THEN
@@ -651,7 +660,7 @@ public abstract class BaseHttpClientTest {
 	public void testRequest_add_query_param() {
 		final String name = "firstName";
 		final String value = "john";
-		final String expectedUrl = ENDPOINT + "?" + formatParam(name, value);
+		final String expectedUrl = ENDPOINT + "?" + formatQueryParam(name, value);
 		testQueryParams(expectedUrl, new Function<HttpRequest>() {
 			@Override
 			public void apply(HttpRequest rq) {
@@ -671,8 +680,8 @@ public abstract class BaseHttpClientTest {
 		final HttpParameter p2 = param(n2, v2);
 
 		final String expectedUrl = ENDPOINT +
-			"?" + formatParam(n1, v1) +
-			"&" + formatParam(n2, v2);
+			"?" + formatQueryParam(n1, v1) +
+			"&" + formatQueryParam(n2, v2);
 
 		testQueryParams(expectedUrl, new Function<HttpRequest>() {
 			@Override
@@ -684,12 +693,14 @@ public abstract class BaseHttpClientTest {
 
 	private void testQueryParams(String expectedUrl, Function<HttpRequest> func) {
 		// GIVEN
-		int rspStatus = 200;
-		String rspBody = "[]";
-		stubGetRequest(expectedUrl, rspStatus, rspBody);
-		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
+		final int rspStatus = 200;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
+		final String rspBody = "[]";
+
+		stubGetRequest(expectedUrl, rspStatus, headers, rspBody);
 
 		// WHEN
+		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
 		func.apply(rq);
 
 		// THEN
@@ -723,7 +734,7 @@ public abstract class BaseHttpClientTest {
 		final String v2 = "Doe";
 		final HttpParameter p2 = param(n2, v2);
 
-		final String expectedBody = formatFormParam(n1, v1) + "&" + formatParam(n2, v2);
+		final String expectedBody = formatFormParam(n1, v1) + "&" + formatQueryParam(n2, v2);
 
 		testRequestBody(expectedBody, new Function<HttpRequest>() {
 			@Override
@@ -773,9 +784,10 @@ public abstract class BaseHttpClientTest {
 	private void testRequestBody(String body, Function<HttpRequest> func) {
 		// GIVEN
 		final String endpoint = ENDPOINT;
-		final int rspStatus = 201;
+		final int rspStatus = 204;
+		final Collection<Pair> headers = emptyList();
 		final String rspBody = "";
-		stubPostRequest(endpoint, rspStatus, rspBody);
+		stubPostRequest(endpoint, rspStatus, headers, rspBody);
 		HttpRequest rq = createDefaultClient().preparePost(ENDPOINT);
 
 		// WHEN
@@ -835,9 +847,8 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_with_simple_cookie() {
-		final String endpoint = ENDPOINT;
-
-		stubDefaultGetRequest(endpoint);
+		String endpoint = ENDPOINT;
+		stubDefaultRequest(endpoint);
 
 		String name = "foo";
 		String value = "bar";
@@ -859,7 +870,7 @@ public abstract class BaseHttpClientTest {
 			.addDefaultCookie(name, value)
 			.build();
 
-		stubDefaultGetRequest(endpoint);
+		stubDefaultRequest(endpoint);
 
 		createCustomClient(configuration)
 			.prepareGet(endpoint)
@@ -877,7 +888,7 @@ public abstract class BaseHttpClientTest {
 			.addDefaultCookie(Cookies.cookie(name, value))
 			.build();
 
-		stubDefaultGetRequest(endpoint);
+		stubDefaultRequest(endpoint);
 
 		createCustomClient(configuration)
 			.prepareGet(endpoint)
@@ -888,9 +899,8 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_with_simple_cookie_method() {
-		final String endpoint = ENDPOINT;
-
-		stubDefaultGetRequest(endpoint);
+		String endpoint = ENDPOINT;
+		stubDefaultRequest(endpoint);
 
 		String name = "foo";
 		String value = "bar";
@@ -905,9 +915,8 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_with_simple_cookies() {
-		final String endpoint = ENDPOINT;
-
-		stubDefaultGetRequest(endpoint);
+		String endpoint = ENDPOINT;
+		stubDefaultRequest(endpoint);
 
 		String n1 = "f1";
 		String v1 = "b1";
@@ -931,9 +940,8 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_with_simple_cookies_method() {
-		final String endpoint = ENDPOINT;
-
-		stubDefaultGetRequest(endpoint);
+		String endpoint = ENDPOINT;
+		stubDefaultRequest(endpoint);
 
 		String n1 = "f1";
 		String v1 = "b1";
@@ -957,9 +965,8 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_with_complex_cookie() {
-		final String endpoint = ENDPOINT;
-
-		stubDefaultGetRequest(endpoint);
+		String endpoint = ENDPOINT;
+		stubDefaultRequest(endpoint);
 
 		String name = "foo";
 		String value = "bar";
@@ -992,14 +999,17 @@ public abstract class BaseHttpClientTest {
 	@Test
 	public void testResponse_without_headers() {
 		final String endpoint = ENDPOINT;
+		final int status = 200;
+		final String body = null;
+		final Collection<Pair> headers = emptyList();
 
-		stubGetRequest(endpoint, 200, null, null);
+		stubGetRequest(endpoint, status, headers, body);
 
 		HttpResponse rsp = createDefaultClient()
 			.prepareGet(endpoint)
 			.executeJson();
 
-		List<String> headers = asList(
+		List<String> testedHeaders = asList(
 			ETAG,
 			LOCATION,
 			LAST_MODIFIED,
@@ -1014,13 +1024,13 @@ public abstract class BaseHttpClientTest {
 			X_CONTENT_TYPE_OPTIONS
 		);
 
-		for (String header : headers) {
+		for (String header : testedHeaders) {
 			assertThat(rsp.containsHeader(header))
-				.overridingErrorMessage("Header " + header + " should be missing")
+				.overridingErrorMessage("Header %s should be missing", header)
 				.isFalse();
 
 			assertThat(rsp.getHeader(header))
-				.overridingErrorMessage("Header " + header + " should be null")
+				.overridingErrorMessage("Header %s should be null", header)
 				.isNull();
 		}
 	}
@@ -1158,11 +1168,16 @@ public abstract class BaseHttpClientTest {
 
 	private void testResponseHeader(String name, String value, MapperFunction<HttpResponse, HttpHeader> func) {
 		// GIVEN
-		stubGetRequest(ENDPOINT, 200, null, pair(name, value));
+		final String endpoint = ENDPOINT;
+		final int status = 200;
+		final Collection<Pair> headers = singleton(pair(name, value));
+		final String body = null;
+
+		stubGetRequest(endpoint, status, headers, body);
 
 		// WHEN
 		HttpResponse rsp = createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.addAcceptEncoding("identity")
 			.executeJson();
 
@@ -1170,7 +1185,10 @@ public abstract class BaseHttpClientTest {
 		HttpHeader header = rsp.getHeader(name);
 		assertThat(rsp.containsHeader(name)).isTrue();
 		assertThat(func.apply(rsp)).isEqualTo(header);
-		assertHeader(header, name, value);
+		assertThat(header.getName()).isEqualTo(name);
+		assertThat(header.getValues()).isEqualTo(singletonList(value));
+		assertThat(header.getFirstValue()).isEqualTo(value);
+		assertThat(header.getLastValue()).isEqualTo(value);
 	}
 
 	@Test
@@ -1181,17 +1199,22 @@ public abstract class BaseHttpClientTest {
 		final String path = "/";
 		final long maxAge = 3600;
 
-		String cookieValue = name + "=" + value + "; " +
+		final String cookieValue = name + "=" + value + "; " +
 				"Domain=" + domain + "; " +
 				"Path=" + path + "; " +
 				"Max-Age=" + maxAge + "; " +
 				"Secure; " +
 				"HttpOnly";
 
-		stubGetRequest(ENDPOINT, 200, null, pair(SET_COOKIE, cookieValue));
+		final String endpoint = ENDPOINT;
+		final int status = 200;
+		final Collection<Pair> headers = singleton(pair(SET_COOKIE, cookieValue));
+		final String body = null;
+
+		stubGetRequest(endpoint, status, headers, body);
 
 		HttpResponse rsp = createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.executeJson();
 
 		List<Cookie> cookies = rsp.getCookies();
@@ -1212,9 +1235,8 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testResponse_without_cookies() {
-		final String endpoint = ENDPOINT;
-
-		stubDefaultGetRequest(endpoint);
+		String endpoint = ENDPOINT;
+		stubDefaultRequest(endpoint);
 
 		HttpResponse rsp = createDefaultClient()
 			.prepareGet(endpoint)
@@ -1226,9 +1248,8 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_Response_Duration() {
-		final String endpoint = ENDPOINT;
-
-		stubDefaultGetRequest(endpoint);
+		String endpoint = ENDPOINT;
+		stubDefaultRequest(endpoint);
 
 		HttpResponse rsp = createDefaultClient()
 			.prepareGet(endpoint)
@@ -1291,7 +1312,7 @@ public abstract class BaseHttpClientTest {
 		}
 	}
 
-	interface HttpClientFactory {
+	private interface HttpClientFactory {
 		HttpClient create();
 	}
 }
