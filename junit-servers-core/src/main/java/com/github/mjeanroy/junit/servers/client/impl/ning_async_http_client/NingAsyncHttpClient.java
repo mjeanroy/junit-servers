@@ -107,8 +107,8 @@ public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClien
 	}
 
 	@Override
-	protected HttpRequest buildRequest(HttpMethod httpMethod, String url) {
-		return new NingAsyncHttpRequest(client, httpMethod, url);
+	protected HttpRequest buildRequest(HttpMethod httpMethod, String endpoint) {
+		return new NingAsyncHttpRequest(client, httpMethod, endpoint);
 	}
 
 	@Override

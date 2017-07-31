@@ -145,12 +145,13 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequestUrl() {
+		final String endpoint = ENDPOINT;
 		final HttpRequest rq = createDefaultClient()
-			.prepareGet(ENDPOINT)
+			.prepareGet(endpoint)
 			.acceptJson()
 			.asXmlHttpRequest();
 
-		assertThat(rq.getUrl()).isEqualTo(url + "/people");
+		assertThat(rq.getEndpoint()).isEqualTo(url + endpoint);
 		assertThat(rq.getMethod()).isEqualTo(HttpMethod.GET);
 	}
 

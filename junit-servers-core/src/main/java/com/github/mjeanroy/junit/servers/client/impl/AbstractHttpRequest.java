@@ -24,21 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.impl;
 
-import com.github.mjeanroy.junit.servers.client.Cookie;
-import com.github.mjeanroy.junit.servers.client.Cookies;
-import com.github.mjeanroy.junit.servers.client.HttpHeader;
-import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpParameter;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT_ENCODING;
@@ -66,6 +51,21 @@ import static com.github.mjeanroy.junit.servers.commons.Dates.format;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.Cookies;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpParameter;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+
 /**
  * Abstract skeleton of {@link HttpRequest} interface.
  *
@@ -78,7 +78,7 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	/**
 	 * The request URL.
 	 */
-	private final String url;
+	private final String endpoint;
 
 	/**
 	 * The request method.
@@ -111,8 +111,8 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	 */
 	protected final Map<String, HttpHeader> headers;
 
-	protected AbstractHttpRequest(String url, HttpMethod method) {
-		this.url = notBlank(url, "url");
+	protected AbstractHttpRequest(String endpoint, HttpMethod method) {
+		this.endpoint = notBlank(endpoint, "url");
 		this.method = notNull(method, "method");
 
 		this.queryParams = new LinkedHashMap<>();
@@ -122,8 +122,8 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	}
 
 	@Override
-	public String getUrl() {
-		return url;
+	public String getEndpoint() {
+		return endpoint;
 	}
 
 	@Override

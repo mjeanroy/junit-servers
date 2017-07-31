@@ -35,9 +35,9 @@ public interface HttpRequest {
 	/**
 	 * Request URL.
 	 *
-	 * @return The request URL.
+	 * @return The request endpoint.
 	 */
-	String getUrl();
+	String getEndpoint();
 
 	/**
 	 * Return http request method.

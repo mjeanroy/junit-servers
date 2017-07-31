@@ -24,6 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
 
+import static java.lang.System.nanoTime;
+
+import org.asynchttpclient.ListenableFuture;
+import org.asynchttpclient.Request;
+import org.asynchttpclient.RequestBuilder;
+import org.asynchttpclient.Response;
+
 import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpHeaders;
@@ -32,12 +39,6 @@ import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
-import org.asynchttpclient.ListenableFuture;
-import org.asynchttpclient.Request;
-import org.asynchttpclient.RequestBuilder;
-import org.asynchttpclient.Response;
-
-import static java.lang.System.nanoTime;
 
 /**
  * Implementation for {@link HttpRequest} that use async-http-client
@@ -58,17 +59,17 @@ class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 *
 	 * @param client Client used to execute request using async-http-client.
 	 * @param httpMethod Http method.
-	 * @param url Request URL.
+	 * @param endpoint Request URL.
 	 */
-	AsyncHttpRequest(org.asynchttpclient.AsyncHttpClient client, HttpMethod httpMethod, String url) {
-		super(url, httpMethod);
+	AsyncHttpRequest(org.asynchttpclient.AsyncHttpClient client, HttpMethod httpMethod, String endpoint) {
+		super(endpoint, httpMethod);
 		this.client = client;
 	}
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
 		RequestBuilder builder = new RequestBuilder()
-			.setUrl(getUrl())
+			.setUrl(getEndpoint())
 			.setMethod(getMethod().getVerb());
 
 		handleQueryParameters(builder);

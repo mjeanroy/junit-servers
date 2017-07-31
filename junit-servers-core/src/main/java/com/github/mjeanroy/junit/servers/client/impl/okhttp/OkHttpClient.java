@@ -107,8 +107,8 @@ public class OkHttpClient extends AbstractHttpClient implements HttpClient {
 	}
 
 	@Override
-	protected HttpRequest buildRequest(HttpMethod httpMethod, String url) {
-		return new OkHttpRequest(this.client, httpMethod, url);
+	protected HttpRequest buildRequest(HttpMethod httpMethod, String endpoint) {
+		return new OkHttpRequest(this.client, httpMethod, endpoint);
 	}
 
 	@Override

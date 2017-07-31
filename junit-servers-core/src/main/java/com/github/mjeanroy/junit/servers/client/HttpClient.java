@@ -44,20 +44,20 @@ public interface HttpClient {
 	/**
 	 * Create {@code GET} request.
 	 *
-	 * @param url URL, full url or path relative to server url.
+	 * @param endpoint URL, full url or path relative to server url.
 	 * @return GET request.
 	 * @see #prepareRequest(HttpMethod, String)
 	 */
-	HttpRequest prepareGet(String url);
+	HttpRequest prepareGet(String endpoint);
 
 	/**
 	 * Create {@code POST} request.
 	 *
-	 * @param url URL, full url or path relative to server url.
+	 * @param endpoint URL, full url or path relative to server url.
 	 * @return POST request.
 	 * @see #prepareRequest(HttpMethod, String)
 	 */
-	HttpRequest preparePost(String url);
+	HttpRequest preparePost(String endpoint);
 
 	/**
 	 * Create {@code PUT} request.
@@ -71,29 +71,29 @@ public interface HttpClient {
 	/**
 	 * Create {@code DELETE} request.
 	 *
-	 * @param url URL, full url or path relative to server url.
+	 * @param endpoint URL, full url or path relative to server url.
 	 * @return DELETE request.
 	 * @see #prepareRequest(HttpMethod, String)
 	 */
-	HttpRequest prepareDelete(String url);
+	HttpRequest prepareDelete(String endpoint);
 
 	/**
 	 * Create {@code PATCH} request.
 	 *
-	 * @param url URL, full url or path relative to server url.
+	 * @param endpoint URL, full url or path relative to server url.
 	 * @return PATCH request.
 	 * @see #prepareRequest(HttpMethod, String)
 	 */
-	HttpRequest preparePatch(String url);
+	HttpRequest preparePatch(String endpoint);
 
 	/**
 	 * Create {@code HEAD} request.
 	 *
-	 * @param url URL, full url or path relative to server url.
+	 * @param endpoint URL, full url or path relative to server url.
 	 * @return HEAD request.
 	 * @see #prepareRequest(HttpMethod, String)
 	 */
-	HttpRequest prepareHead(String url);
+	HttpRequest prepareHead(String endpoint);
 
 	/**
 	 * Create request.
@@ -104,13 +104,13 @@ public interface HttpClient {
 	 * throw an instance of {@link IllegalStateException}.
 	 *
 	 * @param httpMethod Http method (i.e {@code GET}, {@code POST}, {@code PUT}, {@code DELETE}).
-	 * @param url URL, full url or path relative to server url.
+	 * @param endpoint URL, full url or path relative to server url.
 	 * @return The request.
 	 * @throws IllegalStateException If client has already been destroyed.
 	 * @see #destroy()
 	 * @see #isDestroyed()
 	 */
-	HttpRequest prepareRequest(HttpMethod httpMethod, String url);
+	HttpRequest prepareRequest(HttpMethod httpMethod, String endpoint);
 
 	/**
 	 * Destroy client.

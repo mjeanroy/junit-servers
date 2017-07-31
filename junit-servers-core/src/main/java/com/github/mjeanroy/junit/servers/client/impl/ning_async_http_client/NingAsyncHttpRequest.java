@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 
+import static java.lang.System.nanoTime;
+
 import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpHeaders;
@@ -36,8 +38,6 @@ import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
-
-import static java.lang.System.nanoTime;
 
 /**
  * Implementation for {@link HttpRequest} that use (ning) async-http-client
@@ -58,17 +58,17 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 *
 	 * @param client Client used to execute request using async-http-client.
 	 * @param httpMethod Http method.
-	 * @param url Request URL.
+	 * @param endpoint Request URL.
 	 */
-	NingAsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, String url) {
-		super(url, httpMethod);
+	NingAsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, String endpoint) {
+		super(endpoint, httpMethod);
 		this.client = client;
 	}
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
 		RequestBuilder builder = new RequestBuilder()
-			.setUrl(getUrl())
+			.setUrl(getEndpoint())
 			.setMethod(getMethod().getVerb());
 
 		handleQueryParameters(builder);

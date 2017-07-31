@@ -24,20 +24,21 @@
 
 package com.github.mjeanroy.junit.servers.client.impl;
 
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Tests skeleton for http client implementations.
@@ -101,7 +102,7 @@ public abstract class BaseHttpClientTest {
 		HttpMethod httpMethod = HttpMethod.POST;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
-		assertThat(httpRequest.getUrl()).startsWith(server.getUrl() + path);
+		assertThat(httpRequest.getEndpoint()).isEqualTo(server.getUrl() + path);
 		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
 	}
 
@@ -113,7 +114,7 @@ public abstract class BaseHttpClientTest {
 		HttpMethod httpMethod = HttpMethod.POST;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, server.getPath() + path);
-		assertThat(httpRequest.getUrl()).startsWith(server.getUrl() + path);
+		assertThat(httpRequest.getEndpoint()).isEqualTo(server.getUrl() + path);
 		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
 	}
 
@@ -125,7 +126,7 @@ public abstract class BaseHttpClientTest {
 		HttpMethod httpMethod = HttpMethod.POST;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, server.getUrl() + path);
-		assertThat(httpRequest.getUrl()).startsWith(server.getUrl() + path);
+		assertThat(httpRequest.getEndpoint()).isEqualTo(server.getUrl() + path);
 		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
 	}
 
@@ -140,7 +141,7 @@ public abstract class BaseHttpClientTest {
 		final HttpMethod httpMethod = HttpMethod.GET;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
-		assertThat(httpRequest.getUrl()).isEqualTo(serverUrl + path);
+		assertThat(httpRequest.getEndpoint()).isEqualTo(serverUrl + path);
 	}
 
 	@Test
@@ -154,7 +155,7 @@ public abstract class BaseHttpClientTest {
 		final HttpMethod httpMethod = HttpMethod.GET;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
-		assertThat(httpRequest.getUrl()).isEqualTo(serverUrl);
+		assertThat(httpRequest.getEndpoint()).isEqualTo(serverUrl);
 	}
 
 	@Test

@@ -77,18 +77,18 @@ public abstract class AbstractHttpClient implements HttpClient {
 	}
 
 	@Override
-	public HttpRequest prepareDelete(String url) {
-		return prepareRequest(HttpMethod.DELETE, url);
+	public HttpRequest prepareDelete(String endpoint) {
+		return prepareRequest(HttpMethod.DELETE, endpoint);
 	}
 
 	@Override
-	public HttpRequest prepareGet(String url) {
-		return prepareRequest(HttpMethod.GET, url);
+	public HttpRequest prepareGet(String endpoint) {
+		return prepareRequest(HttpMethod.GET, endpoint);
 	}
 
 	@Override
-	public HttpRequest preparePost(String url) {
-		return prepareRequest(HttpMethod.POST, url);
+	public HttpRequest preparePost(String endpoint) {
+		return prepareRequest(HttpMethod.POST, endpoint);
 	}
 
 	@Override
@@ -97,13 +97,13 @@ public abstract class AbstractHttpClient implements HttpClient {
 	}
 
 	@Override
-	public HttpRequest preparePatch(String url) {
-		return prepareRequest(HttpMethod.PATCH, url);
+	public HttpRequest preparePatch(String endpoint) {
+		return prepareRequest(HttpMethod.PATCH, endpoint);
 	}
 
 	@Override
-	public HttpRequest prepareHead(String url) {
-		return prepareRequest(HttpMethod.HEAD, url);
+	public HttpRequest prepareHead(String endpoint) {
+		return prepareRequest(HttpMethod.HEAD, endpoint);
 	}
 
 	@Override
@@ -117,13 +117,15 @@ public abstract class AbstractHttpClient implements HttpClient {
 		final String serverUrl = server.getUrl();
 
 		String endpoint = url;
-		endpoint = removePrefix(endpoint, server.getPath());
+
+		// Remove server prefix if it set.
 		endpoint = removePrefix(endpoint, serverUrl);
+		endpoint = removePrefix(endpoint, server.getPath());
 		if (!endpoint.isEmpty() && endpoint.charAt(0) != URL_SEPARATOR && serverUrl.charAt(serverUrl.length() - 1) != URL_SEPARATOR) {
 			endpoint = String.valueOf(URL_SEPARATOR) + endpoint;
 		}
 
-		String requestEndpoint = serverUrl + endpoint;
+		String requestEndpoint = (serverUrl + endpoint).trim();
 		HttpRequest rq = buildRequest(httpMethod, requestEndpoint);
 
 		// Add default headers.
@@ -143,10 +145,10 @@ public abstract class AbstractHttpClient implements HttpClient {
 	 * Build request object.
 	 *
 	 * @param httpMethod Http method.
-	 * @param url Request url.
+	 * @param endpoint Request url.
 	 * @return Http request.
 	 */
-	protected abstract HttpRequest buildRequest(HttpMethod httpMethod, String url);
+	protected abstract HttpRequest buildRequest(HttpMethod httpMethod, String endpoint);
 
 	// Ensure that the client is properly destroyed when garbage collected.
 	// This is a just a simple "security" if the caller forget to destroy the client: the caller should always destroy

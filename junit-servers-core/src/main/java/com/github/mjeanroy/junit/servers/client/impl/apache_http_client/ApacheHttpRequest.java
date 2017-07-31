@@ -79,10 +79,10 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 *
 	 * @param client Apache http client.
 	 * @param httpMethod Http method.
-	 * @param url Http request url.
+	 * @param endpoint Http request url.
 	 */
-	ApacheHttpRequest(HttpClient client, HttpMethod httpMethod, String url) {
-		super(url, httpMethod);
+	ApacheHttpRequest(HttpClient client, HttpMethod httpMethod, String endpoint) {
+		super(endpoint, httpMethod);
 		this.client = client;
 	}
 
@@ -126,8 +126,8 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @see URIBuilder
 	 */
 	private URI createRequestURI() throws URISyntaxException {
-		String url = getUrl();
-		URIBuilder uriBuilder = new URIBuilder(url);
+		String endpoint = getEndpoint();
+		URIBuilder uriBuilder = new URIBuilder(endpoint);
 		for (HttpParameter p : queryParams.values()) {
 			uriBuilder = uriBuilder.addParameter(p.getName(), p.getValue());
 		}

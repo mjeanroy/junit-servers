@@ -62,19 +62,19 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 *
 	 * @param client Apache http client.
 	 * @param httpMethod Http method.
-	 * @param url Http request url.
+	 * @param endpoint Http request url.
 	 */
-	OkHttpRequest(okhttp3.OkHttpClient client, HttpMethod httpMethod, String url) {
-		super(url, httpMethod);
+	OkHttpRequest(okhttp3.OkHttpClient client, HttpMethod httpMethod, String endpoint) {
+		super(endpoint, httpMethod);
 		this.client = client;
 	}
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
-		String url = getUrl();
-		HttpUrl baseUrl = HttpUrl.parse(url);
+		String endpoint = getEndpoint();
+		HttpUrl baseUrl = HttpUrl.parse(endpoint);
 		if (baseUrl == null) {
-			throw new HttpClientUrlException(url);
+			throw new HttpClientUrlException(endpoint);
 		}
 
 		// Append all query parameters.
