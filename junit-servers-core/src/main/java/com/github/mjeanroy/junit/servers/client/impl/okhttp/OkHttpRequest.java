@@ -33,12 +33,11 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientUrlException;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -64,21 +63,21 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @param httpMethod Http method.
 	 * @param endpoint Http request url.
 	 */
-	OkHttpRequest(okhttp3.OkHttpClient client, HttpMethod httpMethod, String endpoint) {
+	OkHttpRequest(okhttp3.OkHttpClient client, HttpMethod httpMethod, HttpUrl endpoint) {
 		super(endpoint, httpMethod);
 		this.client = client;
 	}
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
-		String endpoint = getEndpoint();
-		HttpUrl baseUrl = HttpUrl.parse(endpoint);
-		if (baseUrl == null) {
-			throw new HttpClientUrlException(endpoint);
-		}
+		HttpUrl endpoint = getEndpoint();
+		okhttp3.HttpUrl.Builder httpUrlBuilder = new okhttp3.HttpUrl.Builder()
+			.scheme(endpoint.getScheme())
+			.host(endpoint.getHost())
+			.port(endpoint.getPort())
+			.addPathSegments(endpoint.getPath().substring(1));
 
 		// Append all query parameters.
-		HttpUrl.Builder httpUrlBuilder = baseUrl.newBuilder();
 		for (HttpParameter queryParam : queryParams.values()) {
 			httpUrlBuilder.addQueryParameter(queryParam.getName(), queryParam.getValue());
 		}

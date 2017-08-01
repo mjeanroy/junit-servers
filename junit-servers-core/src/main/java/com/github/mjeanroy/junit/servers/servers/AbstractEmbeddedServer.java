@@ -30,9 +30,11 @@ import static java.lang.System.clearProperty;
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
 
+import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.github.mjeanroy.junit.servers.commons.UrlUtils;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**

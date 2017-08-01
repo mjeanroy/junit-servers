@@ -54,6 +54,7 @@ import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_HTTP_MET
 import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_REQUESTED_WITH;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_WEBKIT_CSP;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_XSS_PROTECTION;
+import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.encodePath;
 import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.formatFormParam;
 import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.formatQueryParam;
 import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.utcDate;
@@ -70,6 +71,7 @@ import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubPatc
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubPostRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.stubPutRequest;
 import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
+import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.url;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
@@ -121,19 +123,27 @@ public abstract class BaseHttpClientTest {
 	public ExpectedException thrown = ExpectedException.none();
 
 	private EmbeddedServer<?> server;
+	private String scheme;
+	private String host;
+	private int port;
+	private String path;
 	private String url;
 	private HttpClient client;
 
 	@Before
 	public void setUp() throws Exception {
-		int port = wireMockRule.port();
-		String path = "/";
+		scheme = "http";
+		host = "localhost";
+		port = wireMockRule.port();
+		path = "/";
 
-		url = "http://localhost:" + port;
+		url = url(scheme, host, port, path);
 		server = mock(EmbeddedServer.class);
+		when(server.getScheme()).thenReturn(scheme);
+		when(server.getHost()).thenReturn(host);
 		when(server.getPort()).thenReturn(port);
-		when(server.getUrl()).thenReturn(url);
 		when(server.getPath()).thenReturn(path);
+		when(server.getUrl()).thenReturn(url);
 	}
 
 	@After
@@ -151,7 +161,12 @@ public abstract class BaseHttpClientTest {
 			.acceptJson()
 			.asXmlHttpRequest();
 
-		assertThat(rq.getEndpoint()).isEqualTo(url + endpoint);
+		assertThat(rq.getEndpoint()).isNotNull();
+		assertThat(rq.getEndpoint().getScheme()).isEqualTo(scheme);
+		assertThat(rq.getEndpoint().getHost()).isEqualTo(host);
+		assertThat(rq.getEndpoint().getPort()).isEqualTo(port);
+		assertThat(rq.getEndpoint().getPath()).isEqualTo(endpoint);
+
 		assertThat(rq.getMethod()).isEqualTo(HttpMethod.GET);
 	}
 
@@ -180,7 +195,7 @@ public abstract class BaseHttpClientTest {
 	@Test
 	public void testGetWithFullEndpoint() {
 		final String endpoint = ENDPOINT;
-		final String rqUrl = url + endpoint;
+		final String rqUrl = url(scheme, host, port, endpoint);
 		final int status = 200;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
 		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
@@ -194,6 +209,29 @@ public abstract class BaseHttpClientTest {
 				.execute();
 
 		assertRequest(endpoint, HttpMethod.GET);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEqualTo(body);
+		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
+	public void testGetWithNonEncodedPath() {
+		final String endpoint = ENDPOINT + "/john doe";
+		final String encodedPath = encodePath(endpoint);
+		final int status = 200;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
+		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
+
+		stubGetRequest(encodedPath, status, headers, body);
+
+		final HttpResponse rsp = createDefaultClient()
+				.prepareGet(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.execute();
+
+		assertRequest(encodedPath, HttpMethod.GET);
 		assertThat(rsp.status()).isEqualTo(status);
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);

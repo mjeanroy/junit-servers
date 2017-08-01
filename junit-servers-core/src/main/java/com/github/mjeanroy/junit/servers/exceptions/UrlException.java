@@ -56,6 +56,7 @@ public class UrlException extends AbstractException {
 	 */
 	public UrlException(String scheme, String host, int port, String path, Throwable cause) {
 		super(cause);
+
 		this.scheme = scheme;
 		this.host = host;
 		this.port = port;

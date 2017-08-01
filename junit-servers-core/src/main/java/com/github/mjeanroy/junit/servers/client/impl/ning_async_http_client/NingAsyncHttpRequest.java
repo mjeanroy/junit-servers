@@ -33,6 +33,7 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Request;
@@ -60,7 +61,7 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @param httpMethod Http method.
 	 * @param url Request URL.
 	 */
-	NingAsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, String url) {
+	NingAsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, HttpUrl url) {
 		super(url, httpMethod);
 		this.client = client;
 	}
@@ -68,7 +69,7 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	@Override
 	protected HttpResponse doExecute() throws Exception {
 		RequestBuilder builder = new RequestBuilder()
-			.setUrl(getEndpoint())
+			.setUrl(getEndpoint().toString())
 			.setMethod(getMethod().getVerb());
 
 		handleQueryParameters(builder);

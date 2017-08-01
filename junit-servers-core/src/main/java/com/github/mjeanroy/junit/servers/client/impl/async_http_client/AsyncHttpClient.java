@@ -36,6 +36,7 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -104,7 +105,7 @@ public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
 	}
 
 	@Override
-	protected HttpRequest buildRequest(HttpMethod httpMethod, String endpoint) {
+	protected HttpRequest buildRequest(HttpMethod httpMethod, HttpUrl endpoint) {
 		return new AsyncHttpRequest(client, httpMethod, endpoint);
 	}
 

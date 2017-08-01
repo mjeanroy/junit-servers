@@ -22,40 +22,17 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.exceptions;
+package com.github.mjeanroy.junit.servers.commons;
 
 /**
- * Exception thrown when http request cannot be created because of a
- * malformed URL.
+ * Static Object Utilities.
  */
-@SuppressWarnings("serial")
-public class HttpClientUrlException extends HttpClientException {
+public final class ObjectUtils {
 
-	/**
-	 * The malformed URL.
-	 */
-	private final String url;
-
-	/**
-	 * Create exception.
-	 *
-	 * @param url Malformed URL.
-	 */
-	public HttpClientUrlException(String url) {
-		super(createMessage(url));
-		this.url = url;
+	private ObjectUtils() {
 	}
 
-	/**
-	 * Return the URL that was the cause of the exception.
-	 *
-	 * @return The malformed URL.
-	 */
-	public String getUrl() {
-		return url;
-	}
-
-	private static String createMessage(String url) {
-		return String.format("Malformed URL: %s", url);
+	public static <T> T firstNonNull(T o1, T o2) {
+		return o1 == null ? o2 : o1;
 	}
 }

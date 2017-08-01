@@ -56,6 +56,7 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 
 /**
@@ -81,7 +82,7 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @param httpMethod Http method.
 	 * @param endpoint Http request url.
 	 */
-	ApacheHttpRequest(HttpClient client, HttpMethod httpMethod, String endpoint) {
+	ApacheHttpRequest(HttpClient client, HttpMethod httpMethod, HttpUrl endpoint) {
 		super(endpoint, httpMethod);
 		this.client = client;
 	}
@@ -126,8 +127,8 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @see URIBuilder
 	 */
 	private URI createRequestURI() throws URISyntaxException {
-		String endpoint = getEndpoint();
-		URIBuilder uriBuilder = new URIBuilder(endpoint);
+		URI uri = getEndpoint().toURI();
+		URIBuilder uriBuilder = new URIBuilder(uri);
 		for (HttpParameter p : queryParams.values()) {
 			uriBuilder = uriBuilder.addParameter(p.getName(), p.getValue());
 		}

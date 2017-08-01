@@ -64,6 +64,7 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 
 /**
@@ -78,7 +79,7 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	/**
 	 * The request URL.
 	 */
-	private final String endpoint;
+	private final HttpUrl endpoint;
 
 	/**
 	 * The request method.
@@ -111,8 +112,8 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	 */
 	protected final Map<String, HttpHeader> headers;
 
-	protected AbstractHttpRequest(String endpoint, HttpMethod method) {
-		this.endpoint = notBlank(endpoint, "url");
+	protected AbstractHttpRequest(HttpUrl endpoint, HttpMethod method) {
+		this.endpoint = notNull(endpoint, "endpoint");
 		this.method = notNull(method, "method");
 
 		this.queryParams = new LinkedHashMap<>();
@@ -122,7 +123,7 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	}
 
 	@Override
-	public String getEndpoint() {
+	public HttpUrl getEndpoint() {
 		return endpoint;
 	}
 

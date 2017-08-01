@@ -60,7 +60,7 @@ public final class UrlUtils {
 	 * @return The final URI.
 	 * @throws UrlException If URI cannot be built because of an invalid parameter.
 	 */
-	public static URI create(String scheme, String host, int port, String path) {
+	public static URI createUri(String scheme, String host, int port, String path) {
 		try {
 			return new URI(scheme, null, host, port, path, null, null);
 		} catch (URISyntaxException ex) {
@@ -80,6 +80,33 @@ public final class UrlUtils {
 		}
 
 		return path.charAt(0) == PATH_SEPARATOR ? path : String.valueOf(PATH_SEPARATOR) + path;
+	}
+
+	/**
+	 * Concatenate two path value.
+	 *
+	 * @param path Path prefix.
+	 * @param endpoint Path suffix.
+	 * @return Final path.
+	 */
+	public static String concatenatePath(String path, String endpoint) {
+		String firstSegment = ensureAbsolutePath(path);
+		if (endpoint == null || endpoint.isEmpty()) {
+			return firstSegment;
+		}
+
+		StringBuilder sb = new StringBuilder(firstSegment);
+		if (path.charAt(path.length() - 1) != PATH_SEPARATOR) {
+			sb.append(PATH_SEPARATOR);
+		}
+
+		if (endpoint.charAt(0) == PATH_SEPARATOR) {
+			sb.append(endpoint.substring(1));
+		} else {
+			sb.append(endpoint);
+		}
+
+		return sb.toString();
 	}
 
 	/**

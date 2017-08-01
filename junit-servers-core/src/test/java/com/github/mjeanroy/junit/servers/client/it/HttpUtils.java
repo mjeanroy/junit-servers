@@ -25,6 +25,8 @@
 package com.github.mjeanroy.junit.servers.client.it;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
@@ -32,6 +34,15 @@ import java.util.Date;
 import java.util.TimeZone;
 
 final class HttpUtils {
+	static String encodePath(String path) {
+		try {
+			URI uri = new URI(null, null, path, null);
+			return uri.getRawPath();
+		} catch (URISyntaxException ex) {
+			throw new AssertionError(ex);
+		}
+	}
+
 	static String formatQueryParam(String name, String value) {
 		return urlEncode(name) + "=" + urlEncode(value);
 	}

@@ -30,6 +30,7 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.ning.http.client.AsyncHttpClient;
@@ -107,7 +108,7 @@ public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClien
 	}
 
 	@Override
-	protected HttpRequest buildRequest(HttpMethod httpMethod, String endpoint) {
+	protected HttpRequest buildRequest(HttpMethod httpMethod, HttpUrl endpoint) {
 		return new NingAsyncHttpRequest(client, httpMethod, endpoint);
 	}
 

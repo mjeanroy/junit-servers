@@ -52,7 +52,7 @@ public class UrlUtilsTest {
 		final int port = 80;
 		final String path = "/foo";
 
-		URI uri = UrlUtils.create(scheme, host, port, path);
+		URI uri = UrlUtils.createUri(scheme, host, port, path);
 
 		assertThat(uri).isNotNull();
 		assertThat(uri.getScheme()).isEqualTo(scheme);
@@ -73,7 +73,7 @@ public class UrlUtilsTest {
 		final String path = "foo";
 
 		try {
-			UrlUtils.create(scheme, host, port, path);
+			UrlUtils.createUri(scheme, host, port, path);
 			failBecauseExceptionWasNotThrown(UrlException.class);
 		} catch (UrlException ex) {
 			assertThat(ex.getCause()).isNotNull();
@@ -84,6 +84,19 @@ public class UrlUtilsTest {
 			assertThat(ex.getPort()).isEqualTo(port);
 			assertThat(ex.getPath()).isEqualTo(path);
 		}
+	}
+
+	@Test
+	public void it_should_concatenate_path() {
+		assertThat(UrlUtils.concatenatePath(null, null)).isEqualTo("/");
+		assertThat(UrlUtils.concatenatePath("", "")).isEqualTo("/");
+		assertThat(UrlUtils.concatenatePath("/", null)).isEqualTo("/");
+		assertThat(UrlUtils.concatenatePath("/", "")).isEqualTo("/");
+
+		assertThat(UrlUtils.concatenatePath("/", "/foo")).isEqualTo("/foo");
+		assertThat(UrlUtils.concatenatePath("/foo", "/bar")).isEqualTo("/foo/bar");
+		assertThat(UrlUtils.concatenatePath("/foo/", "/bar")).isEqualTo("/foo/bar");
+		assertThat(UrlUtils.concatenatePath("foo", "bar")).isEqualTo("/foo/bar");
 	}
 
 	@Test

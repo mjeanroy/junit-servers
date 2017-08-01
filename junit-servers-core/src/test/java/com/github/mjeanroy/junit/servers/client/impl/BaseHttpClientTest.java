@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.client.impl;
 
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
+import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.url;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -48,18 +49,25 @@ import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
 public abstract class BaseHttpClientTest {
 
 	private EmbeddedServer<?> server;
+	private String scheme;
+	private String host;
+	private int port;
+	private String path;
 
 	@Before
 	public void setUp() throws Exception {
 		server = mock(EmbeddedServer.class);
 
-		int port = 8080;
-		String path = "/path";
-		String url = localUrl(port, path);
+		scheme = "http";
+		host = "localhost";
+		port = 8080;
+		path = "/path";
 
-		when(server.getUrl()).thenReturn(url);
+		when(server.getScheme()).thenReturn(scheme);
+		when(server.getHost()).thenReturn(host);
 		when(server.getPort()).thenReturn(port);
 		when(server.getPath()).thenReturn(path);
+		when(server.getUrl()).thenReturn(url(scheme, host, port, path));
 
 		onSetUp();
 	}
@@ -103,41 +111,62 @@ public abstract class BaseHttpClientTest {
 	public void it_should_create_request() throws Exception {
 		HttpClient client = createCustomClient(server);
 
-		String path = "/foo";
+		String endpoint = "/foo";
 		HttpMethod httpMethod = HttpMethod.POST;
 
-		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
-		assertThat(httpRequest.getEndpoint()).isEqualTo(server.getUrl() + path);
+		HttpRequest httpRequest = client.prepareRequest(httpMethod, endpoint);
+
 		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
+		assertThat(httpRequest.getEndpoint()).isNotNull();
+		assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
+		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
+		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
+		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path + endpoint);
+		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, path + endpoint));
 	}
 
 	@Test
 	public void it_should_create_request_and_do_not_prepend_server_path() throws Exception {
 		HttpClient client = createCustomClient(server);
 
-		String path = "/foo";
+		String endpoint = "/foo";
+		String fullPath = server.getPath() + endpoint;
 		HttpMethod httpMethod = HttpMethod.POST;
 
-		HttpRequest httpRequest = client.prepareRequest(httpMethod, server.getPath() + path);
-		assertThat(httpRequest.getEndpoint()).isEqualTo(server.getUrl() + path);
+		HttpRequest httpRequest = client.prepareRequest(httpMethod, fullPath);
+
 		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
+		assertThat(httpRequest.getEndpoint()).isNotNull();
+		assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
+		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
+		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
+		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(fullPath);
+		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, fullPath));
 	}
 
 	@Test
 	public void it_should_create_request_and_do_not_prepend_server_url() throws Exception {
 		HttpClient client = createCustomClient(server);
 
-		String path = "/foo";
+		String endpoint = "/foo";
+		String absoluteUrl = server.getUrl() + endpoint;
 		HttpMethod httpMethod = HttpMethod.POST;
 
-		HttpRequest httpRequest = client.prepareRequest(httpMethod, server.getUrl() + path);
-		assertThat(httpRequest.getEndpoint()).isEqualTo(server.getUrl() + path);
+		HttpRequest httpRequest = client.prepareRequest(httpMethod, absoluteUrl);
+
 		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
+
+		assertThat(httpRequest.getEndpoint()).isNotNull();
+		assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
+		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
+		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
+		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path + endpoint);
+		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, path + endpoint));
 	}
 
 	@Test
 	public void it_should_create_request_and_set_path_separator() throws Exception {
-		final String serverUrl = "http://localhost:9999";
+		final String serverUrl = url(scheme, host, port, "");
 		when(server.getUrl()).thenReturn(serverUrl);
 		when(server.getPath()).thenReturn("/");
 
@@ -146,21 +175,33 @@ public abstract class BaseHttpClientTest {
 		final HttpMethod httpMethod = HttpMethod.GET;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
-		assertThat(httpRequest.getEndpoint()).isEqualTo(serverUrl + path);
+
+		assertThat(httpRequest.getEndpoint()).isNotNull();
+		assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
+		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
+		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
+		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path);
+		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, path));
 	}
 
 	@Test
 	public void it_should_create_request_with_root_path() throws Exception {
-		final String serverUrl = "http://localhost:9999";
+		final String serverUrl = url(scheme, host, 8080, "");
+		final String path = "/";
 		when(server.getUrl()).thenReturn(serverUrl);
-		when(server.getPath()).thenReturn("/");
+		when(server.getPath()).thenReturn(path);
 
 		final HttpClient client = createCustomClient(server);
-		final String path = "/";
 		final HttpMethod httpMethod = HttpMethod.GET;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
-		assertThat(httpRequest.getEndpoint()).isEqualTo(serverUrl);
+
+		assertThat(httpRequest.getEndpoint()).isNotNull();
+		assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
+		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
+		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
+		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path);
+		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(localUrl(port));
 	}
 
 	@Test
