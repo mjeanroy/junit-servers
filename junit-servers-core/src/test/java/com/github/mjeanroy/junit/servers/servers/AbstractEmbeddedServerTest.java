@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.servers;
 
 import static com.github.mjeanroy.junit.servers.servers.FakeWorker.startWorker;
 import static com.github.mjeanroy.junit.servers.servers.FakeWorker.stopWorker;
+import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -34,7 +35,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import java.net.URI;
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.Test;
@@ -313,8 +313,7 @@ public class AbstractEmbeddedServerTest {
 
 	@Test
 	public void it_should_get_url() throws Exception {
-		assertThat(server.getUrl()).isEqualTo("http://localhost:0/");
-		assertThat(server.getUri()).isEqualTo(new URI("http://localhost:0/"));
+		assertThat(server.getUrl()).isEqualTo(localUrl(0));
 	}
 
 	@Test
@@ -323,8 +322,7 @@ public class AbstractEmbeddedServerTest {
 				.withPath("/foo")
 				.build());
 
-		assertThat(server.getUrl()).isEqualTo("http://localhost:0/foo");
-		assertThat(server.getUri()).isEqualTo(new URI("http://localhost:0/foo"));
+		assertThat(server.getUrl()).isEqualTo(localUrl(0, "/foo"));
 	}
 
 	@Test
@@ -333,18 +331,16 @@ public class AbstractEmbeddedServerTest {
 				.withPath("foo")
 				.build());
 
-		assertThat(server.getUrl()).isEqualTo("http://localhost:0/foo");
-		assertThat(server.getUri()).isEqualTo(new URI("http://localhost:0/foo"));
+		assertThat(server.getUrl()).isEqualTo(localUrl(0, "/foo"));
 	}
 
 	@Test
-	public void it_should_get_url_and_encode_custom_path() throws Exception {
+	public void it_should_get_url_and_do_not_encode_custom_path() throws Exception {
 		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeConfiguration.Builder()
 				.withPath("/foo bar")
 				.build());
 
-		assertThat(server.getUrl()).isEqualTo("http://localhost:0/foo%20bar");
-		assertThat(server.getUri()).isEqualTo(new URI("http://localhost:0/foo%20bar"));
+		assertThat(server.getUrl()).isEqualTo(localUrl(0, "/foo bar"));
 	}
 
 	@Test

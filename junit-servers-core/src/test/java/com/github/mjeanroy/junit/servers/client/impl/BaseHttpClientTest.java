@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.client.impl;
 
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -52,9 +53,13 @@ public abstract class BaseHttpClientTest {
 	public void setUp() throws Exception {
 		server = mock(EmbeddedServer.class);
 
-		when(server.getUrl()).thenReturn("http://localhost:8080/path");
-		when(server.getPort()).thenReturn(8080);
-		when(server.getPath()).thenReturn("/path");
+		int port = 8080;
+		String path = "/path";
+		String url = localUrl(port, path);
+
+		when(server.getUrl()).thenReturn(url);
+		when(server.getPort()).thenReturn(port);
+		when(server.getPath()).thenReturn(path);
 
 		onSetUp();
 	}

@@ -26,8 +26,6 @@ package com.github.mjeanroy.junit.servers.rules;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.net.URI;
-
 import org.junit.After;
 import org.junit.Test;
 
@@ -76,9 +74,10 @@ public class ServerRuleTest {
 	public void it_should_start_jetty_and_get_uri() throws Exception {
 		rule = new ServerRule();
 		rule.start();
+		assertThat(rule.getUrl()).isEqualTo(localUrl(rule.getPort()));
+	}
 
-		String expectedUrl = "http://localhost:" + rule.getPort() + "/";
-		assertThat(rule.getUrl()).isEqualTo(expectedUrl);
-		assertThat(rule.getUri()).isEqualTo(new URI(expectedUrl));
+	private static String localUrl(int port) {
+		return "http://localhost:" + port + "/";
 	}
 }

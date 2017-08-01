@@ -32,8 +32,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.net.URI;
-
 import org.junit.Test;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
@@ -47,8 +45,7 @@ public class JettyServerRuleTest {
 		String path = "/";
 		String scheme = "http";
 		String host = "localhost";
-		String url = scheme + "://" + host + ":" + port + path;
-		URI uri = new URI(url);
+		String url = url(scheme, host, port, path);
 
 		final EmbeddedJettyConfiguration config = mock(EmbeddedJettyConfiguration.class);
 		final EmbeddedJetty jetty = mock(EmbeddedJetty.class);
@@ -57,7 +54,6 @@ public class JettyServerRuleTest {
 		when(jetty.getPort()).thenReturn(port);
 		when(jetty.getPath()).thenReturn(path);
 		when(jetty.getUrl()).thenReturn(url);
-		when(jetty.getUri()).thenReturn(uri);
 		when(jetty.getConfiguration()).thenReturn(config);
 		when(jetty.isStarted()).thenReturn(false);
 
@@ -72,14 +68,12 @@ public class JettyServerRuleTest {
 		assertThat(rule.getPort()).isEqualTo(port);
 		assertThat(rule.getPath()).isEqualTo(path);
 		assertThat(rule.getUrl()).isEqualTo(url);
-		assertThat(rule.getUri()).isEqualTo(uri);
 
 		verify(jetty).getScheme();
 		verify(jetty).getHost();
 		verify(jetty).getPort();
 		verify(jetty).getPath();
 		verify(jetty).getUrl();
-		verify(jetty).getUri();
 
 		verify(jetty, never()).start();
 		verify(jetty, never()).stop();
@@ -128,7 +122,6 @@ public class JettyServerRuleTest {
 
 			String url = url(rule.getScheme(), rule.getHost(), rule.getPort(), rule.getPath());
 			assertThat(rule.getUrl()).isEqualTo(url);
-			assertThat(rule.getUri()).isEqualTo(new URI(url));
 		} finally {
 			rule.after();
 			assertThat(rule.getPort()).isZero(); // not started

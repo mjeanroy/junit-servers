@@ -30,11 +30,9 @@ import static java.lang.System.clearProperty;
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
 
-import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.github.mjeanroy.junit.servers.commons.UrlUtils;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
@@ -215,16 +213,14 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 
 	@Override
 	public String getUrl() {
-		return getUri().toString();
-	}
-
-	@Override
-	public URI getUri() {
-		final String scheme = getScheme();
-		final String host = getHost();
-		final int port = getPort();
-		final String path = ensureAbsolutePath(getPath());
-		return UrlUtils.create(scheme, host, port, path);
+		return new StringBuilder()
+			.append(getScheme())
+			.append("://")
+			.append(getHost())
+			.append(":")
+			.append(getPort())
+			.append(ensureAbsolutePath(getPath()))
+			.toString();
 	}
 
 	@Override

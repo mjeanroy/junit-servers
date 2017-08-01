@@ -24,12 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
+import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.net.URI;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -131,24 +130,13 @@ public class ServerRuleTest {
 
 	@Test
 	public void it_should_get_server_url() {
-		String url = "http://localhost:8080/foo";
+		String url = localUrl(8080, "/foo");
 		when(server.getUrl()).thenReturn(url);
 
 		String result = rule.getUrl();
 
 		assertThat(result).isEqualTo(url);
 		verify(server).getUrl();
-	}
-
-	@Test
-	public void it_should_get_server_uri() throws Exception {
-		URI url = new URI("http://localhost:8080/foo");
-		when(server.getUri()).thenReturn(url);
-
-		URI result = rule.getUri();
-
-		assertThat(result).isEqualTo(url);
-		verify(server).getUri();
 	}
 
 	@Test

@@ -27,8 +27,6 @@ package com.github.mjeanroy.junit.servers.rules;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
 
-import java.net.URI;
-
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
@@ -222,16 +220,6 @@ public class ServerRule extends AbstractRule {
 	 */
 	public String getUrl() {
 		return server.getUrl();
-	}
-
-	/**
-	 * Get server URI.
-	 *
-	 * @return Server URI.
-	 * @see EmbeddedServer#getUri()
-	 */
-	public URI getUri() {
-		return server.getUri();
 	}
 
 	/**

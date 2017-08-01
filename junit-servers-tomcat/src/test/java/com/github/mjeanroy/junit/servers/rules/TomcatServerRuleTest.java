@@ -32,8 +32,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.net.URI;
-
 import org.junit.Test;
 
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
@@ -47,8 +45,7 @@ public class TomcatServerRuleTest {
 		String scheme = "http";
 		String host = "localhost";
 		String path = "/";
-		String url = scheme + "://" + host + ":" + port + path;
-		URI uri = new URI(url);
+		String url = url(scheme, host, port, path);
 
 		final EmbeddedTomcatConfiguration config = mock(EmbeddedTomcatConfiguration.class);
 		final EmbeddedTomcat tomcat = mock(EmbeddedTomcat.class);
@@ -57,7 +54,6 @@ public class TomcatServerRuleTest {
 		when(tomcat.getPort()).thenReturn(port);
 		when(tomcat.getPath()).thenReturn(path);
 		when(tomcat.getUrl()).thenReturn(url);
-		when(tomcat.getUri()).thenReturn(uri);
 		when(tomcat.getConfiguration()).thenReturn(config);
 		doAnswer(isStarted(tomcat, true)).when(tomcat).start();
 		doAnswer(isStarted(tomcat, false)).when(tomcat).stop();
@@ -69,14 +65,12 @@ public class TomcatServerRuleTest {
 		assertThat(rule.getPort()).isEqualTo(port);
 		assertThat(rule.getPath()).isEqualTo(path);
 		assertThat(rule.getUrl()).isEqualTo(url);
-		assertThat(rule.getUri()).isEqualTo(uri);
 
 		verify(tomcat).getScheme();
 		verify(tomcat).getHost();
 		verify(tomcat).getPort();
 		verify(tomcat).getPort();
 		verify(tomcat).getUrl();
-		verify(tomcat).getUri();
 
 		verify(tomcat, never()).start();
 		verify(tomcat, never()).stop();
@@ -125,7 +119,6 @@ public class TomcatServerRuleTest {
 
 			String url = url(rule.getScheme(), rule.getHost(), rule.getPort(), rule.getPath());
 			assertThat(rule.getUrl()).isEqualTo(url);
-			assertThat(rule.getUri()).isEqualTo(new URI(url));
 		} finally {
 			rule.after();
 			assertThat(rule.getPort()).isZero();

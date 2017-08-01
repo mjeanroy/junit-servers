@@ -27,7 +27,6 @@ package com.github.mjeanroy.junit.servers.jetty;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
-import java.net.URI;
 import java.net.URL;
 
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -65,10 +64,7 @@ public class EmbeddedJettyTest {
 		assertThat(jetty.getScheme()).isEqualTo("http");
 		assertThat(jetty.getHost()).isEqualTo("localhost");
 		assertThat(jetty.getPath()).isEqualTo("/");
-
-		String expectedUrl = "http://localhost:" + jetty.getPort() + "/";
-		assertThat(jetty.getUrl()).isEqualTo(expectedUrl);
-		assertThat(jetty.getUri()).isEqualTo(new URI(expectedUrl));
+		assertThat(jetty.getUrl()).isEqualTo(localUrl(jetty.getPort()));
 	}
 
 	@Test
@@ -81,10 +77,7 @@ public class EmbeddedJettyTest {
 		assertThat(jetty.getScheme()).isEqualTo("http");
 		assertThat(jetty.getHost()).isEqualTo("localhost");
 		assertThat(jetty.getPath()).isEqualTo("/");
-
-		final String u1 = "http://localhost:" + jetty.getPort() + "/";
-		assertThat(jetty.getUrl()).isEqualTo(u1);
-		assertThat(jetty.getUri()).isEqualTo(new URI(u1));
+		assertThat(jetty.getUrl()).isEqualTo(localUrl(jetty.getPort()));
 
 		jetty.stop();
 		assertThat(jetty.isStarted()).isFalse();
@@ -92,10 +85,7 @@ public class EmbeddedJettyTest {
 		assertThat(jetty.getScheme()).isEqualTo("http");
 		assertThat(jetty.getHost()).isEqualTo("localhost");
 		assertThat(jetty.getPath()).isEqualTo("/");
-
-		final String u2 = "http://localhost:" + jetty.getPort() + "/";
-		assertThat(jetty.getUrl()).isEqualTo(u2);
-		assertThat(jetty.getUri()).isEqualTo(new URI(u2));
+		assertThat(jetty.getUrl()).isEqualTo(localUrl(jetty.getPort()));
 	}
 
 	@Test
@@ -167,5 +157,9 @@ public class EmbeddedJettyTest {
 		ResponseBody body = rsp.body();
 		String content = body == null ? null : body.string();
 		assertThat(content).isNotEmpty().contains("Hello World");
+	}
+
+	private static String localUrl(int port) {
+		return "http://localhost:" + port + "/";
 	}
 }
