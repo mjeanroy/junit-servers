@@ -97,7 +97,7 @@ public interface HttpRequest {
 	 * @param name Parameter name.
 	 * @param value Parameter value.
 	 * @return Http request that can be used for chaining.
-	 * @throws UnsupportedOperationException if request is not POST or PUT request.
+	 * @throws UnsupportedOperationException If request method does not allow body (i.e {@code GET}, {@code HEAD} or {@code DELETE}).
 	 */
 	HttpRequest addFormParam(String name, String value);
 
@@ -109,7 +109,7 @@ public interface HttpRequest {
 	 * @param parameter Parameter.
 	 * @param parameters Optional next parameters.
 	 * @return Http request that can be used for chaining.
-	 * @throws UnsupportedOperationException if request is not POST or PUT request.
+	 * @throws UnsupportedOperationException If request method does not allow body (i.e {@code GET}, {@code HEAD} or {@code DELETE}).
 	 */
 	HttpRequest addFormParams(HttpParameter parameter, HttpParameter... parameters);
 
@@ -120,7 +120,7 @@ public interface HttpRequest {
 	 *
 	 * @param body Body request.
 	 * @return Http request that can be used for chaining.
-	 * @throws UnsupportedOperationException if request is not POST or PUT request.
+	 * @throws UnsupportedOperationException If request method does not allow body (i.e {@code GET}, {@code HEAD} or {@code DELETE}).
 	 */
 	HttpRequest setBody(String body);
 
