@@ -86,6 +86,27 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Map input values to output values.
+	 *
+	 * @param inputs Input values.
+	 * @param <T> Type of input values.
+	 * @param <U> Type of output values.
+	 * @return Output values.
+	 */
+	public static <T, U> List<U> map(Collection<T> inputs, Mapper<T, U> mapper) {
+		if (inputs == null) {
+			return null;
+		}
+
+		List<U> outputs = new ArrayList<>(inputs.size());
+		for (T input : inputs) {
+			outputs.add(mapper.apply(input));
+		}
+
+		return outputs;
+	}
+
+	/**
 	 * Filter input by using given predicate and return
 	 * filtered outputs.
 	 *

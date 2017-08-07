@@ -39,6 +39,8 @@ import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
+import com.ning.http.client.uri.Uri;
+import com.ning.http.util.UTF8UrlEncoder;
 
 /**
  * Implementation for {@link HttpRequest} that use (ning) async-http-client
@@ -68,9 +70,17 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
-		RequestBuilder builder = new RequestBuilder()
-			.setUrl(getEndpoint().toString())
-			.setMethod(getMethod().getVerb());
+		HttpUrl endpoint = getEndpoint();
+		String scheme = endpoint.getScheme();
+		String userInfo = null;
+		String host = endpoint.getHost();
+		int port = endpoint.getPort();
+		String path = UTF8UrlEncoder.encodePath(endpoint.getPath());
+		String query = null;
+		Uri uri = new Uri(scheme, userInfo, host, port, path, query);
+
+		String method = getMethod().getVerb();
+		RequestBuilder builder = new RequestBuilder(method, true).setUri(uri);
 
 		handleQueryParameters(builder);
 		handleBody(builder);
@@ -91,7 +101,7 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 */
 	private void handleQueryParameters(RequestBuilder builder) {
 		for (HttpParameter p : queryParams.values()) {
-			builder.addQueryParam(p.getName(), p.getValue());
+			builder.addQueryParam(p.getEncodedName(), p.getEncodedValue());
 		}
 	}
 

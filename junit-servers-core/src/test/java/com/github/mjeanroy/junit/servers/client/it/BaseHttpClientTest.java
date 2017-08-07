@@ -55,8 +55,8 @@ import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_REQUESTE
 import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_WEBKIT_CSP;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.X_XSS_PROTECTION;
 import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.encodePath;
-import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.formatFormParam;
-import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.formatQueryParam;
+import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.encodeFormParam;
+import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.encodeQueryParam;
 import static com.github.mjeanroy.junit.servers.client.it.HttpUtils.utcDate;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockUtils.assertRequestWithBody;
@@ -719,10 +719,36 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testRequest_add_non_encoded_query_param() {
+		final String name = "name";
+		final String value = "john doe";
+		final String expectedUrl = ENDPOINT + "?" + encodeQueryParam(name, value);
+		testQueryParams(expectedUrl, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+				rq.addQueryParam(name, value);
+			}
+		});
+	}
+
+	@Test
+	public void testRequest_add_non_encoded_query_param_with_ampersand() {
+		final String name = "name";
+		final String value = "john & jane doe";
+		final String expectedUrl = ENDPOINT + "?" + encodeQueryParam(name, value);
+		testQueryParams(expectedUrl, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+				rq.addQueryParam(name, value);
+			}
+		});
+	}
+
+	@Test
 	public void testRequest_add_query_param() {
 		final String name = "firstName";
 		final String value = "john";
-		final String expectedUrl = ENDPOINT + "?" + formatQueryParam(name, value);
+		final String expectedUrl = ENDPOINT + "?" + encodeQueryParam(name, value);
 		testQueryParams(expectedUrl, new Function<HttpRequest>() {
 			@Override
 			public void apply(HttpRequest rq) {
@@ -742,8 +768,8 @@ public abstract class BaseHttpClientTest {
 		final HttpParameter p2 = param(n2, v2);
 
 		final String expectedUrl = ENDPOINT +
-			"?" + formatQueryParam(n1, v1) +
-			"&" + formatQueryParam(n2, v2);
+			"?" + encodeQueryParam(n1, v1) +
+			"&" + encodeQueryParam(n2, v2);
 
 		testQueryParams(expectedUrl, new Function<HttpRequest>() {
 			@Override
@@ -777,7 +803,7 @@ public abstract class BaseHttpClientTest {
 	public void testRequest_add_form_param() {
 		final String name = "firstName";
 		final String value = "john";
-		final String expectedBody = formatFormParam(name, value);
+		final String expectedBody = encodeFormParam(name, value);
 		testRequestBody(expectedBody, new Function<HttpRequest>() {
 			@Override
 			public void apply(HttpRequest rq) {
@@ -796,7 +822,7 @@ public abstract class BaseHttpClientTest {
 		final String v2 = "Doe";
 		final HttpParameter p2 = param(n2, v2);
 
-		final String expectedBody = formatFormParam(n1, v1) + "&" + formatQueryParam(n2, v2);
+		final String expectedBody = encodeFormParam(n1, v1) + "&" + encodeFormParam(n2, v2);
 
 		testRequestBody(expectedBody, new Function<HttpRequest>() {
 			@Override
@@ -810,7 +836,7 @@ public abstract class BaseHttpClientTest {
 	public void testRequest_add_non_escaped_form_param_name() {
 		final String name = "first name";
 		final String value = "john";
-		final String expectedBody = formatFormParam(name, value);
+		final String expectedBody = encodeFormParam(name, value);
 		testRequestBody(expectedBody, new Function<HttpRequest>() {
 			@Override
 			public void apply(HttpRequest rq) {
@@ -823,7 +849,7 @@ public abstract class BaseHttpClientTest {
 	public void testRequest_add_non_escaped_form_param_value() {
 		final String name = "name";
 		final String value = "john doe";
-		final String expectedBody = formatFormParam(name, value);
+		final String expectedBody = encodeFormParam(name, value);
 		testRequestBody(expectedBody, new Function<HttpRequest>() {
 			@Override
 			public void apply(HttpRequest rq) {

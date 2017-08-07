@@ -24,12 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import static com.github.mjeanroy.junit.servers.commons.EncoderUtils.urlEncode;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 import java.util.Objects;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 
 /**
  * Parameter object that could be sent in an http request as:
@@ -86,6 +87,24 @@ public class HttpParameter {
 	 */
 	public String getValue() {
 		return value;
+	}
+
+	/**
+	 * Get the URL encoded parameter name.
+	 *
+	 * @return URL encoded parameter name.
+	 */
+	public String getEncodedName() {
+		return urlEncode(name);
+	}
+
+	/**
+	 * Get the URL encoded parameter value.
+	 *
+	 * @return URL encoded parameter value.
+	 */
+	public String getEncodedValue() {
+		return urlEncode(value);
 	}
 
 	@Override

@@ -24,6 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.utils.commons;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 /**
  * Static Test Utilities.
  */
@@ -68,5 +72,19 @@ public final class TestUtils {
 	 */
 	public static String localUrl(int port) {
 		return localUrl(port, "/");
+	}
+
+	/**
+	 * URL encode string value.
+	 * @param value String value.
+	 * @return URL encoded value.
+	 * @see URLEncoder#encode(String, String)
+	 */
+	public static String urlEncode(String value) {
+		try {
+			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
+		} catch (UnsupportedEncodingException ex) {
+			throw new AssertionError(ex);
+		}
 	}
 }

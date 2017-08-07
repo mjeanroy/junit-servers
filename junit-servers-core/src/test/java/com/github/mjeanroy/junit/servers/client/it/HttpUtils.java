@@ -24,16 +24,26 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
-import java.io.UnsupportedEncodingException;
+import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.urlEncode;
+
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 final class HttpUtils {
+
+	private HttpUtils() {
+	}
+
+	/**
+	 * Encode URL path (i.e replace illegal characters with the percent encoded
+	 * value). For example, a space is replaced by {@code "%20"} string).
+	 *
+	 * @param path The path to encode.
+	 * @return The encoded path.
+	 */
 	static String encodePath(String path) {
 		try {
 			URI uri = new URI(null, null, path, null);
@@ -43,14 +53,40 @@ final class HttpUtils {
 		}
 	}
 
-	static String formatQueryParam(String name, String value) {
+	/**
+	 * Encode query parameters: this is almost the same algorithm than {@link HttpUtils#encodeFormParam(String, String)}.
+	 *
+	 * @param name Parameter name.
+	 * @param value Parameter value.
+	 * @return The formatted value.
+	 */
+	static String encodeQueryParam(String name, String value) {
+		return encodeFormParam(name, value);
+	}
+
+	/**
+	 * Translates a key-value pair into {@code "application/x-www-form-urlencoded"}
+	 * format using UTF-8 encoding scheme.
+	 *
+	 * @param name The key (a.k.a parameter name).
+	 * @param value The value (a.k.a parameter value).
+	 * @return The encoded string.
+	 */
+	static String encodeFormParam(String name, String value) {
 		return urlEncode(name) + "=" + urlEncode(value);
 	}
 
-	static String formatFormParam(String name, String value) {
-		return urlEncode(name) + "=" + urlEncode(value);
-	}
-
+	/**
+	 * Translate date to UTC date that can be used as a HTTP header value.
+	 *
+	 * @param year The year.
+	 * @param month The month.
+	 * @param dayOfMonth The day of the month.
+	 * @param hour The hour.
+	 * @param minutes The minutes.
+	 * @param second The second.
+	 * @return The date created with UTC timezone.
+	 */
 	static Date utcDate(int year, int month, int dayOfMonth, int hour, int minutes, int second) {
 		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.set(Calendar.YEAR, year);
@@ -61,13 +97,5 @@ final class HttpUtils {
 		cal.set(Calendar.SECOND, second);
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTime();
-	}
-
-	private static String urlEncode(String value) {
-		try {
-			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
-		} catch (UnsupportedEncodingException ex) {
-			throw new AssertionError(ex);
-		}
 	}
 }

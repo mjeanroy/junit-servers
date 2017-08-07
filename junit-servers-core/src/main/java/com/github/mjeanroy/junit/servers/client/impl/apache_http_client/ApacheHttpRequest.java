@@ -25,12 +25,13 @@
 package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.map;
 import static java.lang.System.nanoTime;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.http.Header;
@@ -58,6 +59,7 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
+import com.github.mjeanroy.junit.servers.commons.Mapper;
 
 /**
  * Implementation for {@link HttpRequest} that use apache http-client
@@ -90,32 +92,32 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	@Override
 	protected HttpResponse doExecute() throws Exception {
 		HttpMethod method = getMethod();
+
 		HttpRequestBase httpRequest = FACTORY.create(method);
-
-		// Create request URI with additional query params
 		httpRequest.setURI(createRequestURI());
-
-		// Add http headers
 		handleHeaders(httpRequest);
-
-		// Add http cookies
 		handleCookies(httpRequest);
+		handleBody(httpRequest);
 
-		// Add request body if allowed
+		long start = nanoTime();
+		org.apache.http.HttpResponse httpResponse = client.execute(httpRequest);
+		return new ApacheHttpResponse(httpResponse, nanoTime() - start);
+	}
+
+	/**
+	 * Add request body.
+	 *
+	 * @param httpRequest The HTTP request.
+	 */
+	private void handleBody(HttpRequestBase httpRequest) {
 		if (hasBody()) {
 			HttpEntityEnclosingRequestBase rq = (HttpEntityEnclosingRequestBase) httpRequest;
-
-			// Add form parameters or request body.
 			if (!formParams.isEmpty()) {
 				handleFormParameters(rq);
 			} else if (body != null) {
 				handleRequestBody(rq);
 			}
 		}
-
-		long start = nanoTime();
-		org.apache.http.HttpResponse httpResponse = client.execute(httpRequest);
-		return new ApacheHttpResponse(httpResponse, nanoTime() - start);
 	}
 
 	/**
@@ -128,12 +130,12 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 */
 	private URI createRequestURI() throws URISyntaxException {
 		URI uri = getEndpoint().toURI();
-		URIBuilder uriBuilder = new URIBuilder(uri);
-		for (HttpParameter p : queryParams.values()) {
-			uriBuilder = uriBuilder.addParameter(p.getName(), p.getValue());
+		URIBuilder builder = new URIBuilder(uri).setCharset(StandardCharsets.UTF_8);
+		for (HttpParameter parameter : queryParams.values()) {
+			builder.addParameter(parameter.getName(), parameter.getValue());
 		}
 
-		return uriBuilder.build();
+		return builder.build();
 	}
 
 	/**
@@ -154,17 +156,10 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * body.
 	 *
 	 * @param httpRequest Http request in creation.
-	 * @throws UnsupportedEncodingException If an encoding error occurred while create body request.
 	 */
-	private void handleFormParameters(HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
-		List<NameValuePair> pairs = new ArrayList<>(formParams.size());
-
-		for (HttpParameter p : formParams.values()) {
-			NameValuePair pair = new BasicNameValuePair(p.getName(), p.getValue());
-			pairs.add(pair);
-		}
-
-		HttpEntity entity = new UrlEncodedFormEntity(pairs);
+	private void handleFormParameters(HttpEntityEnclosingRequestBase httpRequest) {
+		List<NameValuePair> pairs = map(formParams.values(), PARAM_MAPPER);
+		HttpEntity entity = new UrlEncodedFormEntity(pairs, Charset.defaultCharset());
 		httpRequest.setEntity(entity);
 	}
 
@@ -172,10 +167,9 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * Set request body value to http request.
 	 *
 	 * @param httpRequest Http request in creation.
-	 * @throws UnsupportedEncodingException If an encoding error occurred while creating request body.
 	 */
-	private void handleRequestBody(HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
-		HttpEntity entity = new StringEntity(body);
+	private void handleRequestBody(HttpEntityEnclosingRequestBase httpRequest) {
+		HttpEntity entity = new StringEntity(body, Charset.defaultCharset());
 		httpRequest.setEntity(entity);
 	}
 
@@ -220,4 +214,11 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 			throw new UnsupportedOperationException("Method " + httpMethod + " is not supported by apache http-client");
 		}
 	}
+
+	private static final Mapper<HttpParameter, NameValuePair> PARAM_MAPPER = new Mapper<HttpParameter, NameValuePair>() {
+		@Override
+		public NameValuePair apply(HttpParameter parameter) {
+			return new BasicNameValuePair(parameter.getName(), parameter.getValue());
+		}
+	};
 }

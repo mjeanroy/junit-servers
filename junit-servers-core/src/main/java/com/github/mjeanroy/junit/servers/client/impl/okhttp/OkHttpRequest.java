@@ -24,8 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.okhttp;
 
-import static com.github.mjeanroy.junit.servers.commons.EncoderUtils.urlEncode;
-
 import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpHeaders;
@@ -79,7 +77,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 		// Append all query parameters.
 		for (HttpParameter queryParam : queryParams.values()) {
-			httpUrlBuilder.addQueryParameter(queryParam.getName(), queryParam.getValue());
+			httpUrlBuilder.addEncodedQueryParameter(queryParam.getEncodedName(), queryParam.getEncodedValue());
 		}
 
 		Request.Builder builder = new Request.Builder().url(httpUrlBuilder.build());
@@ -167,10 +165,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 		else if (!formParams.isEmpty()) {
 			FormBody.Builder builder = new FormBody.Builder();
 			for (HttpParameter parameter : formParams.values()) {
-				// Use the JDK url encoding
-				String encodedName = urlEncode(parameter.getName());
-				String encodedValue = urlEncode(parameter.getValue());
-				builder.addEncoded(encodedName, encodedValue);
+				builder.addEncoded(parameter.getEncodedName(), parameter.getEncodedValue());
 			}
 
 			rqBody = builder.build();

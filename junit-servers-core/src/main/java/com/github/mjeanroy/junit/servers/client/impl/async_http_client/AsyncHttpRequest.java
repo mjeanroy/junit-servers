@@ -30,6 +30,8 @@ import org.asynchttpclient.ListenableFuture;
 import org.asynchttpclient.Request;
 import org.asynchttpclient.RequestBuilder;
 import org.asynchttpclient.Response;
+import org.asynchttpclient.uri.Uri;
+import org.asynchttpclient.util.Utf8UrlEncoder;
 
 import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
@@ -69,9 +71,17 @@ class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
-		RequestBuilder builder = new RequestBuilder()
-			.setUrl(getEndpoint().toString())
-			.setMethod(getMethod().getVerb());
+		HttpUrl endpoint = getEndpoint();
+		String scheme = endpoint.getScheme();
+		String userInfo = null;
+		String host = endpoint.getHost();
+		int port = endpoint.getPort();
+		String path = Utf8UrlEncoder.encodePath(endpoint.getPath());
+		String query = null;
+		Uri uri = new Uri(scheme, userInfo, host, port, path, query);
+
+		String method = getMethod().getVerb();
+		RequestBuilder builder = new RequestBuilder(method, true).setUri(uri);
 
 		handleQueryParameters(builder);
 		handleBody(builder);
@@ -95,7 +105,7 @@ class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 */
 	private void handleQueryParameters(RequestBuilder builder) {
 		for (HttpParameter p : queryParams.values()) {
-			builder.addQueryParam(p.getName(), p.getValue());
+			builder.addQueryParam(p.getEncodedName(), p.getEncodedValue());
 		}
 	}
 
