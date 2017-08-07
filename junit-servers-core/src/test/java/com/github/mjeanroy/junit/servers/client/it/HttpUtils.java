@@ -73,7 +73,9 @@ final class HttpUtils {
 	 * @return The encoded string.
 	 */
 	static String encodeFormParam(String name, String value) {
-		return urlEncode(name) + "=" + urlEncode(value);
+		String encodedName = urlEncode(name);
+		String encodedValue = value == null ? null : urlEncode(value);
+		return encodedName + (encodedValue == null ? "" : "=" + encodedValue);
 	}
 
 	/**

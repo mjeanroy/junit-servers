@@ -758,6 +758,19 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testRequest_add_query_param_without_value() {
+		final String name = "flag";
+		final String value = null;
+		final String expectedUrl = ENDPOINT + "?" + encodeQueryParam(name, value);
+		testQueryParams(expectedUrl, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+				rq.addQueryParam(name, value);
+			}
+		});
+	}
+
+	@Test
 	public void testRequest_add_several_query_params() {
 		final String n1 = "firstName";
 		final String v1= "john";
@@ -803,6 +816,19 @@ public abstract class BaseHttpClientTest {
 	public void testRequest_add_form_param() {
 		final String name = "firstName";
 		final String value = "john";
+		final String expectedBody = encodeFormParam(name, value);
+		testRequestBody(expectedBody, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+				rq.addFormParam(name, value);
+			}
+		});
+	}
+
+	@Test
+	public void testRequest_add_form_param_without_value() {
+		final String name = "flag";
+		final String value = "";
 		final String expectedBody = encodeFormParam(name, value);
 		testRequestBody(expectedBody, new Function<HttpRequest>() {
 			@Override

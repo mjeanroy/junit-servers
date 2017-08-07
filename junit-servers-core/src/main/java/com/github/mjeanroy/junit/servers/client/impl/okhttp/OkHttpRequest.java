@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.okhttp;
 
+import static com.github.mjeanroy.junit.servers.commons.ObjectUtils.firstNonNull;
+
 import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpHeaders;
@@ -165,7 +167,9 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 		else if (!formParams.isEmpty()) {
 			FormBody.Builder builder = new FormBody.Builder();
 			for (HttpParameter parameter : formParams.values()) {
-				builder.addEncoded(parameter.getEncodedName(), parameter.getEncodedValue());
+				String encodedName = parameter.getEncodedName();
+				String encodedValue = firstNonNull(parameter.getEncodedValue(), "");
+				builder.addEncoded(encodedName, encodedValue);
 			}
 
 			rqBody = builder.build();

@@ -26,7 +26,6 @@ package com.github.mjeanroy.junit.servers.client;
 
 import static com.github.mjeanroy.junit.servers.commons.EncoderUtils.urlEncode;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 import java.util.Objects;
 
@@ -47,8 +46,8 @@ public class HttpParameter {
 	 * @param name Parameter name.
 	 * @param value Parameter value.
 	 * @return Parameter object.
-	 * @throws IllegalArgumentException if name is empty or blank.
-	 * @throws NullPointerException if name or value is null.
+	 * @throws NullPointerException if {@code name} is {@code null}.
+	 * @throws IllegalArgumentException if {@code name} is empty or blank.
 	 */
 	public static HttpParameter param(String name, String value) {
 		return new HttpParameter(name, value);
@@ -68,7 +67,7 @@ public class HttpParameter {
 
 	private HttpParameter(String name, String value) {
 		this.name = notBlank(name, "name");
-		this.value = notNull(value, "value");
+		this.value = value;
 	}
 
 	/**
@@ -104,7 +103,7 @@ public class HttpParameter {
 	 * @return URL encoded parameter value.
 	 */
 	public String getEncodedValue() {
-		return urlEncode(value);
+		return value == null ? null : urlEncode(value);
 	}
 
 	@Override
