@@ -49,7 +49,7 @@ public final class EncoderUtils {
 	 * format using UTF-8 encoding.
 	 *
 	 * @param value The string value.
-	 * @return The encoded vallue.
+	 * @return The encoded value.
 	 * @throws Utf8EncodingException If, for some weird reason, UTF-8 encoding is not supported.
 	 */
 	public static String urlEncode(String value) {

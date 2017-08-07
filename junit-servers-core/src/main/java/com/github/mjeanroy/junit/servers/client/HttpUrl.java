@@ -258,7 +258,7 @@ public class HttpUrl {
 
 			HttpScheme result = HttpScheme.parse(scheme);
 			if (result == null) {
-				throw new IllegalArgumentException(String.format("Unknow scheme: %s", scheme));
+				throw new IllegalArgumentException(String.format("Unknown scheme: %s", scheme));
 			}
 
 			this.scheme = result;
@@ -313,7 +313,7 @@ public class HttpUrl {
 	}
 
 	/**
-	 * Supported sheme: currently only {@code "http"} and {@code "https"} protocols.
+	 * Supported scheme: currently only {@code "http"} and {@code "https"} protocols.
 	 */
 	private enum HttpScheme {
 		/**

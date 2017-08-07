@@ -58,7 +58,7 @@ public class HttpUrlTest {
 	@Test
 	public void it_should_fail_with_unknown_scheme() {
 		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("Unknow scheme: ftp");
+		thrown.expectMessage("Unknown scheme: ftp");
 		new HttpUrl.Builder().withScheme("ftp");
 	}
 

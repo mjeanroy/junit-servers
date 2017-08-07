@@ -373,8 +373,8 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 
 	/**
 	 * Execute request.
-	 * Exception will be automatically catched and translated into
-	 * an instance of {HttpClientException}.
+	 * Exception will be automatically translated into
+	 * an instance of {@link HttpClientException}.
 	 *
 	 * @return Http response.
 	 * @throws Exception If an error occurred.

@@ -121,7 +121,7 @@ public interface EmbeddedServer<T extends AbstractConfiguration> {
 	 * Get servlet context used within container.
 	 * If container is not a servlet container, this method should return null.
 	 *
-	 * @return Servlet Cntext from container.
+	 * @return Servlet Context from container.
 	 */
 	ServletContext getServletContext();
 }

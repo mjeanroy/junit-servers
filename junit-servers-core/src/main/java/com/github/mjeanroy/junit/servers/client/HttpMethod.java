@@ -81,7 +81,7 @@ public enum HttpMethod {
 	 *
 	 * <ul>
 	 *   <li>Always in upper case.</li>
-	 *   <li>Relatted to given HTTP method.</li>
+	 *   <li>Related to given HTTP method.</li>
 	 * </ul>
 	 *
 	 * @return Verb.

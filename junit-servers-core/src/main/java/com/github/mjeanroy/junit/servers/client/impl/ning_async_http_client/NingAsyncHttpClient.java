@@ -37,7 +37,7 @@ import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
 
 /**
- * Implementation of {@link HttpClient} using (ning) async-http-client
+ * Implementation of {@link HttpClient} using (Ning) async-http-client
  * under the hood.
  *
  * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>

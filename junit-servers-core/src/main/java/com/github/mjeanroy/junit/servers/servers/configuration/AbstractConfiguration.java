@@ -24,8 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.servers.configuration;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
-import com.github.mjeanroy.junit.servers.servers.Hook;
+import static java.util.Collections.unmodifiableCollection;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
 
 import java.net.URL;
 import java.util.Collection;
@@ -33,9 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static java.util.Collections.unmodifiableCollection;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableMap;
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.servers.Hook;
 
 /**
  * Generic configuration that should be extended for
@@ -85,7 +85,7 @@ public abstract class AbstractConfiguration {
    /**
 	 * Additional parent (classloader) classpath.
 	 *
-	 * The path will be added to application parent classlodaer classpath
+	 * The path will be added to application parent classloader classpath
 	 * before server is started.
 	 *
 	 */

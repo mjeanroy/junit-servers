@@ -110,7 +110,7 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 *
 	 * <ul>
 	 *   <li>Set request body if {@link #body} is defined.</li>
-	 *   <li>Add form parmeters ({@link #formParams}) otherwise if it is not empty.</li>
+	 *   <li>Add form parameters ({@link #formParams}) otherwise if it is not empty.</li>
 	 * </ul>
 	 *
 	 * @param builder The pending HTTP request.
