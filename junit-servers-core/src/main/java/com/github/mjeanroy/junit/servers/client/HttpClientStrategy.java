@@ -297,7 +297,7 @@ public enum HttpClientStrategy {
 	 *
 	 * @param library Name of underlying library.
 	 */
-	private HttpClientStrategy(String library) {
+	HttpClientStrategy(String library) {
 		this.library = library;
 	}
 

@@ -31,14 +31,6 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
  * Rule that can be used to start and stop embedded jetty server.
  */
 public class JettyServerRule extends ServerRule {
-
-	/**
-	 * Create rule using jetty as embedded server.
-	 */
-	public JettyServerRule() {
-		super(new EmbeddedJetty());
-	}
-
 	/**
 	 * Create rule.
 	 *
@@ -49,11 +41,18 @@ public class JettyServerRule extends ServerRule {
 	}
 
 	/**
+	 * Create rule using jetty as embedded server.
+	 */
+	public JettyServerRule() {
+		this(new EmbeddedJetty());
+	}
+
+	/**
 	 * Create rule.
 	 *
 	 * @param configuration Jetty Configuration.
 	 */
 	public JettyServerRule(EmbeddedJettyConfiguration configuration) {
-		super(new EmbeddedJetty(configuration));
+		this(new EmbeddedJetty(configuration));
 	}
 }

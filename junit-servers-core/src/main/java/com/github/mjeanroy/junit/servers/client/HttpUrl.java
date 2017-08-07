@@ -315,7 +315,7 @@ public class HttpUrl {
 	/**
 	 * Supported sheme: currently only {@code "http"} and {@code "https"} protocols.
 	 */
-	private static enum HttpScheme {
+	private enum HttpScheme {
 		/**
 		 * The {@code "http"} protocol.
 		 */
@@ -336,7 +336,7 @@ public class HttpUrl {
 		 */
 		private final int defaultPort;
 
-		private HttpScheme(String protocol, int defaultPort) {
+		HttpScheme(String protocol, int defaultPort) {
 			this.protocol = protocol;
 			this.defaultPort = defaultPort;
 		}

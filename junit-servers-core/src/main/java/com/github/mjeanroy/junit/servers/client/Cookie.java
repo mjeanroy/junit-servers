@@ -24,9 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
-
 import java.util.Objects;
+
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 
 /**
  * Default implementation for cookie object.
@@ -330,13 +330,13 @@ public class Cookie {
 		 * The cookie name.
 		 * @see Cookie#name
 		 */
-		private String name;
+		private final String name;
 
 		/**
 		 * The cookie value.
 		 * @see Cookie#value
 		 */
-		private String value;
+		private final String value;
 
 		/**
 		 * The cookie domain.
