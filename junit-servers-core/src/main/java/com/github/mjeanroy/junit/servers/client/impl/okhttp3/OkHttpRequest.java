@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.okhttp;
+package com.github.mjeanroy.junit.servers.client.impl.okhttp3;
 
 import static com.github.mjeanroy.junit.servers.commons.ObjectUtils.firstNonNull;
 
@@ -46,7 +46,7 @@ import okhttp3.Response;
 /**
  * Implementation of {@link HttpRequest} using OkHttp library.
  *
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
  * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
  */
 class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {

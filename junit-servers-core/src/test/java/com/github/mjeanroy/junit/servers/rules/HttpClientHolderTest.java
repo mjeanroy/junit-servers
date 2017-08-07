@@ -43,7 +43,7 @@ import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 
 public class HttpClientHolderTest {
 
-	private static final String OK_HTTP_FLAG = "SUPPORT_OK_HTTP_CLIENT";
+	private static final String OK_HTTP_FLAG = "SUPPORT_OK_HTTP3_CLIENT";
 	private static final String ASYNC_HTTP_FLAG = "SUPPORT_ASYNC_HTTP_CLIENT";
 	private static final String NING_ASYNC_HTTP_FLAG = "SUPPORT_NING_ASYNC_HTTP_CLIENT";
 	private static final String APACHE_HTTP_FLAG = "SUPPORT_APACHE_HTTP_CLIENT";

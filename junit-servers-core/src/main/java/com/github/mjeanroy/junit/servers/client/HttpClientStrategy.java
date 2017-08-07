@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.client;
 import com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient;
-import com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient;
 import com.github.mjeanroy.junit.servers.commons.ClassUtils;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
@@ -41,7 +41,7 @@ import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigura
  * Currently, following strategies are available:
  * <ul>
  *   <li>{@link HttpClientStrategy#ASYNC_HTTP_CLIENT}: use the <a href="https://github.com/AsyncHttpClient/async-http-client">async-http-client</a> library.</li>
- *   <li>{@link HttpClientStrategy#OK_HTTP}: use <a href="http://square.github.io/okhttp/">OkHttp</a> library.</li>
+ *   <li>{@link HttpClientStrategy#OK_HTTP3}: use <a href="http://square.github.io/okhttp/">OkHttp</a> library.</li>
  *   <li>{@link HttpClientStrategy#NING_ASYNC_HTTP_CLIENT}: use <a href="https://github.com/ning/async-http-client">async-http-client from ning</a> library.</li>
  *   <li>{@link HttpClientStrategy#APACHE_HTTP_CLIENT}: use <a href="https://hc.apache.org/">apache http-client</a> library.</li>
  *   <li>{@link HttpClientStrategy#AUTO}: use classpath detection and choose the best available strategy (see below).</li>
@@ -67,10 +67,10 @@ public enum HttpClientStrategy {
 	/**
 	 * Build http client using <a href="http://square.github.io/okhttp/">OkHttp</a> library.
 	 */
-	OK_HTTP("OkHttp") {
+	OK_HTTP3("OkHttp") {
 		@Override
 		public boolean support() {
-			return SUPPORT_OK_HTTP_CLIENT;
+			return SUPPORT_OK_HTTP3_CLIENT;
 		}
 
 		@Override
@@ -153,7 +153,7 @@ public enum HttpClientStrategy {
 	 * build http client client implementation:
 	 *
 	 * <ol>
-	 *   <li>Try {@link HttpClientStrategy#OK_HTTP}.</li>
+	 *   <li>Try {@link HttpClientStrategy#OK_HTTP3}.</li>
 	 *   <li>Try {@link HttpClientStrategy#ASYNC_HTTP_CLIENT}.</li>
 	 *   <li>Try {@link HttpClientStrategy#NING_ASYNC_HTTP_CLIENT}.</li>
 	 *   <li>Try {@link HttpClientStrategy#APACHE_HTTP_CLIENT}.</li>
@@ -274,18 +274,18 @@ public enum HttpClientStrategy {
 	 *
 	 * @see <a href="http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1>http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1</a>
 	 */
-	private static final String OK_HTTP_CLIENT_CLASS = "okhttp3.OkHttpClient";
+	private static final String OK_HTTP3_CLIENT_CLASS = "okhttp3.OkHttpClient";
 
 	/**
 	 * A flag that can be used to know if okhttp library is available.
 	 * For now, the only condition is that the library is available
 	 * on the classpath.
 	 *
-	 * @see HttpClientStrategy#OK_HTTP_CLIENT_CLASS
+	 * @see HttpClientStrategy#OK_HTTP3_CLIENT_CLASS
 	 * @see <a href="http://square.github.io/okhttp/">http://square.github.io/okhttp/</a>
 	 * @see <a href="http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1>http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1</a>
 	 */
-	private static final boolean SUPPORT_OK_HTTP_CLIENT = ClassUtils.isPresent(OK_HTTP_CLIENT_CLASS);
+	private static final boolean SUPPORT_OK_HTTP3_CLIENT = ClassUtils.isPresent(OK_HTTP3_CLIENT_CLASS);
 
 	/**
 	 * The name of the underlying library.

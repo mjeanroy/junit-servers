@@ -24,17 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient;
-import com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient;
-import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient;
-import com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.utils.commons.Fields;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java7;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.AtLeastJava8;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.mockito.Mockito.mock;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,13 +35,22 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.utils.commons.Fields;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.AtLeastJava8;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java7;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
+import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
 
 @RunWith(RunIfRunner.class)
 public class HttpClientStrategyTest {
 
-	private static final String OK_HTTP_FLAG = "SUPPORT_OK_HTTP_CLIENT";
+	private static final String OK_HTTP_FLAG = "SUPPORT_OK_HTTP3_CLIENT";
 	private static final String ASYNC_HTTP_FLAG = "SUPPORT_ASYNC_HTTP_CLIENT";
 	private static final String NING_ASYNC_HTTP_FLAG = "SUPPORT_NING_ASYNC_HTTP_CLIENT";
 	private static final String APACHE_HTTP_FLAG = "SUPPORT_APACHE_HTTP_CLIENT";
@@ -92,7 +94,7 @@ public class HttpClientStrategyTest {
 
 	@Test
 	public void it_should_create_ok_http_client() {
-		testHttpClient(HttpClientStrategy.OK_HTTP, OkHttpClient.class);
+		testHttpClient(HttpClientStrategy.OK_HTTP3, OkHttpClient.class);
 	}
 
 	@Test
@@ -117,7 +119,7 @@ public class HttpClientStrategyTest {
 	@Test
 	public void it_should_fail_to_create_ok_http_client_if_it_does_not_exist() {
 		setOkHttpFlag(false);
-		testHttpClientWithoutImpl(HttpClientStrategy.OK_HTTP, "OkHttp");
+		testHttpClientWithoutImpl(HttpClientStrategy.OK_HTTP3, "OkHttp");
 	}
 
 	@Test
@@ -142,7 +144,7 @@ public class HttpClientStrategyTest {
 	@Test
 	public void it_should_fail_to_create_ok_http_client_with_custom_configuration_if_it_does_not_exist() {
 		setOkHttpFlag(false);
-		testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy.OK_HTTP, "OkHttp");
+		testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy.OK_HTTP3, "OkHttp");
 	}
 
 	@Test
@@ -267,7 +269,7 @@ public class HttpClientStrategyTest {
 			"please import " + library;
 
 		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage(error);
+		thrown.expectMessage(equalTo(error));
 
 		strategy.build(server);
 	}

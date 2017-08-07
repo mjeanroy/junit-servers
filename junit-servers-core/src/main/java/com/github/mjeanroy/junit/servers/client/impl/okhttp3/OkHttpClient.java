@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.okhttp;
+package com.github.mjeanroy.junit.servers.client.impl.okhttp3;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,7 +37,7 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 /**
  * Implementation of {@link HttpClient} using OkHttp library from Square.
  *
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP
+ * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
  * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
  */
 public class OkHttpClient extends AbstractHttpClient implements HttpClient {

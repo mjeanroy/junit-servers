@@ -27,10 +27,10 @@ package com.github.mjeanroy.junit.servers.client.it.impl;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.client.it.BaseHttpClientTest;
 
-public class OkHttpClientTest extends BaseHttpClientTest {
+public class OkHttp3ClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClientStrategy strategy() {
-		return HttpClientStrategy.OK_HTTP;
+		return HttpClientStrategy.OK_HTTP3;
 	}
 }

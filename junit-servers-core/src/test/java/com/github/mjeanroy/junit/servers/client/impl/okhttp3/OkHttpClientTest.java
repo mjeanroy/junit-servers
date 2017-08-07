@@ -22,15 +22,15 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.ok_http;
+package com.github.mjeanroy.junit.servers.client.impl.okhttp3;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
-import static com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient.defaultOkHttpClient;
-import static com.github.mjeanroy.junit.servers.client.impl.okhttp.OkHttpClient.newOkHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient.defaultOkHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient.newOkHttpClient;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
