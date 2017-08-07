@@ -24,9 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
-final class HeaderUtils {
+final class HeaderTestUtils {
 
-	private HeaderUtils() {
+	private HeaderTestUtils() {
 	}
 
 	static final String APPLICATION_JSON = "application/json";

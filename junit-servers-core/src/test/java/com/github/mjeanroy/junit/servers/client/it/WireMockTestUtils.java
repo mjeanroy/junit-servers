@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
-import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.APPLICATION_JSON;
-import static com.github.mjeanroy.junit.servers.client.it.HeaderUtils.CONTENT_TYPE;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.APPLICATION_JSON;
+import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.CONTENT_TYPE;
 import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -45,7 +45,7 @@ import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.matching.UrlPattern;
 
-final class WireMockUtils {
+final class WireMockTestUtils {
 	private static final String GET = "GET";
 	private static final String POST = "POST";
 	private static final String PUT = "PUT";

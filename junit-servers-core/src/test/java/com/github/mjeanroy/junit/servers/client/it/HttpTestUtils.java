@@ -32,9 +32,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-final class HttpUtils {
+final class HttpTestUtils {
 
-	private HttpUtils() {
+	private HttpTestUtils() {
 	}
 
 	/**
@@ -54,7 +54,7 @@ final class HttpUtils {
 	}
 
 	/**
-	 * Encode query parameters: this is almost the same algorithm than {@link HttpUtils#encodeFormParam(String, String)}.
+	 * Encode query parameters: this is almost the same algorithm than {@link HttpTestUtils#encodeFormParam(String, String)}.
 	 *
 	 * @param name Parameter name.
 	 * @param value Parameter value.
