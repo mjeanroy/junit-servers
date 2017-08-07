@@ -24,20 +24,22 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.utils.commons.Fields;
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 
 public class HttpClientHolderTest {
 
@@ -116,6 +118,17 @@ public class HttpClientHolderTest {
 
 		holder.destroy();
 		assertThat(client.isDestroyed()).isTrue();
+	}
+
+	@Test
+	public void it_should_ensure_destroyed_client_is_set_to_null() {
+		HttpClientHolder holder = new HttpClientHolder(strategy, configuration, server);
+		HttpClient client = holder.get();
+		client.destroy();
+		assertThat(readPrivate(holder, "client")).isNotNull();
+
+		holder.destroy();
+		assertThat(readPrivate(holder, "client")).isNull();
 	}
 
 	@Test

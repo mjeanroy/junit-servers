@@ -96,7 +96,8 @@ class HttpClientHolder {
 	synchronized void destroy() {
 		if (client != null && !client.isDestroyed()) {
 			client.destroy();
-			client = null;
 		}
+
+		client = null;
 	}
 }
