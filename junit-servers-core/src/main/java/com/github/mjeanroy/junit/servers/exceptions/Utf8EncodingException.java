@@ -34,7 +34,9 @@ package com.github.mjeanroy.junit.servers.exceptions;
 public class Utf8EncodingException extends AbstractException {
 
 	/**
-	 * Create the exception with a default error message.
+	 * Create the exception with original cause and a default error message.
+	 *
+	 * @param ex Original cause.
 	 */
 	public Utf8EncodingException(Throwable ex) {
 		super("UTF-8 encoding is not supported", ex);

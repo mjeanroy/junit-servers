@@ -52,6 +52,10 @@ public class UrlException extends AbstractException {
 	/**
 	 * Create the exception.
 	 *
+	 * @param scheme HTTP Url scheme.
+	 * @param host HTTP Url host.
+	 * @param port HTTP Url port.
+	 * @param path HTTP Url path.
 	 * @param cause Original cause.
 	 */
 	public UrlException(String scheme, String host, int port, String path, Throwable cause) {

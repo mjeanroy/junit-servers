@@ -89,6 +89,7 @@ public final class CollectionUtils {
 	 * Map input values to output values.
 	 *
 	 * @param inputs Input values.
+	 * @param mapper Mapper function.
 	 * @param <T> Type of input values.
 	 * @param <U> Type of output values.
 	 * @return Output values.
