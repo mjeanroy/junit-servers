@@ -6,433 +6,294 @@
 Simple library that will allow you to use a custom rule to start and stop an embedded
 container inside your Junit tests (currently Jetty and Tomcat supported out of the box).
 
+[Documentation](https://mjeanroy.github.io/junit-servers/) - [Javadoc](http://javadoc.io/doc/com.github.mjeanroy/junit-servers/) - [Changelog](https://mjeanroy.github.io/junit-servers/changelogs)
+
 ## Installation
 
 With Maven, add explicit dependency:
+
+**For Jetty:**
 
 ```xml
     <dependency>
         <groupId>com.github.mjeanroy</groupId>
         <artifactId>junit-servers-jetty</artifactId>
-        <version>0.5.0</version>
+        <version>[LATEST VERSION]</version>
         <scope>test</scope>
     </dependency>
 ```
+
+**For Tomcat:**
 
 ```xml
     <dependency>
         <groupId>com.github.mjeanroy</groupId>
         <artifactId>junit-servers-tomcat</artifactId>
-        <version>0.5.0</version>
+        <version>[LATEST VERSION]</version>
         <scope>test</scope>
     </dependency>
 ```
 
-## Jetty
+## Getting Started -- Jetty
 
-### Default Configuration
+[Documentation](https://mjeanroy.github.io/junit-servers/jetty) - [Javadoc](http://javadoc.io/doc/com.github.mjeanroy/junit-servers-jetty)
 
 For most projects, default configuration will be enough, all you have to do is:
 
-- Extend default AbstractJettyTest that define a class rule used to start and stop container.
-- Or use junit rule JettyServerRule to start and stop container in your tests.
+- Use JUnit runner `JettyServerRunner` (recommended).
+- Use JUnit rule `JettyServerRule` to start and stop container in your tests.
+- Extend `AbstractJettyTest` (abstract class that is configured with the `JettyServerRunner` runner).
 
 Default configuration is:
 
 - A random port is used to start embedded jetty.
-- Webapp is set to src/main/webapp (relative to root project)
-- Context path is set to '/'
+- Webapp is set to `"src/main/webapp"` (relative to root project)
+- Context path is set to `'/'`
+
+**Using the runner:**
 
 ```java
-package com.myApp;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 
-import static org.junit.Assert.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
+import org.junit.runner.RunWith;
+
+@RunWith(JunitServerRunner.class)
+public class MyTest {
+  @TestServer
+  public static EmbeddedJetty jetty;
+
+  @Test
+  public void should_have_index() {
+    OkHttpClient client = new OkHttpClient();
+    Request request = new Request.Builder()
+      .url(jetty.getUrl())
+      .build();
+
+    Response response = client.newCall(request).execute();
+
+    Assert.assertEquals(200, response.code());
+  }
+}
+```
+
+**Using the rule:**
+
+```java
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+@RunWith(JunitServerRunner.class)
+public class MyTest {
+  @TestServer
+  public static EmbeddedJetty jetty;
+
+  @TestServerConfiguration
+  public static EmbeddedJettyConfiguration configuration() {
+    return EmbeddedJettyConfiguration.build()
+      .withPath("/app")
+      .withPort(8080)
+      .withProperty("spring.profiles.active", "test")
+      .build();
+  }
+
+  @Test
+  public void should_have_index() {
+    OkHttpClient client = new OkHttpClient();
+    Request request = new Request.Builder()
+      .url(jetty.getUrl())
+      .build();
+
+    Response response = client.newCall(request).execute();
+
+    Assert.assertEquals(200, response.code());
+  }
+}
+```
+
+**Using the abstract class `AbstractJettyTest`:**
+
+```java
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.utils.AbstractJettyTest;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 public class MyTest extends AbstractJettyTest {
-    @Test
-    public void myUnitTest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("http://localhost:%s", server.getPort());
+  @Test
+  public void should_have_index() {
+    OkHttpClient client = new OkHttpClient();
+    Request request = new Request.Builder()
+      .url(server.getUrl())
+      .build();
 
-        String response = restTemplate.getForObject(url, String.class);
+    Response response = client.newCall(request).execute();
 
-        assertEquals("Hello World", response);
-    }
+    Assert.assertEquals(200, response.code());
+  }
 }
 ```
 
-```java
-package com.myApp;
+For more information about the configuration, see the [documentation](https://mjeanroy.github.io/junit-servers/jetty).
 
-import static org.junit.Assert.*;
+## Getting Started -- Tomcat
 
-import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
-
-public class MyTest {
-
-    @ClassRule
-    public static JettyServerRule server = new JettyServerRule(new EmbeddedJetty());
-
-    @Test
-    public void myUnitTest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("http://localhost:%s", server.getPort());
-
-        String response = restTemplate.getForObject(url, String.class);
-
-        assertEquals("Hello World", response);
-    }
-}
-```
-
-You can also use dedicated runner:
-
-```java
-package com.myApp;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.web.client.RestTemplate;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-
-@RunWith(JunitServerRunner.class)
-public class MyTest {
-
-    @TestServer
-    private static EmbeddedServer jetty;
-
-    @Test
-    public void myUnitTest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("http://localhost:%s", jetty.getPort());
-
-        String response = restTemplate.getForObject(url, String.class);
-
-        assertEquals("Hello World", response);
-    }
-}
-```
-
-### Custom Configuration
-
-When embedded jetty is created, you can easyly use a custom configuration using a fluent API:
-
-- Define custom enironment properties that will be initialized before server startup and removed after server shutdown.
-- Define an override descriptor for web.xml, for example for loading a spring configuration with additional setup from test resources.
-- Define additional parent classpath from either existing Maven dependencies or jar files in a directory, helping with JSPs.
-- Define custom hooks to execute custom code before server startup and after server shutdown.
-
-```java
-package com.myApp;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
-import com.github.mjeanroy.junit.servers.servers.Hook;
-
-public class MyTest {
-
-    private static EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
-        .withPath("/myApp")
-        .withWebapp("webapp")
-        .withPort(9090)
-        .withProperty("spring.profiles.active", "test")
-        .withOverrideDescriptor("src/test/resources/WEB-INF/web.xml")
-        .withParentClasspath(WebAppContext.class, new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.getName().startsWith("apache-jstl");
-            }
-        })
-        .withHook(new Hook() {
-            @Override
-            public void pre(EmbeddedServer server) {
-                System.out.println("Server Startup");
-            }
-
-            @Override
-            public void post(EmbeddedServer server) {
-                System.out.println("Server Shutdown");
-            }
-        })
-        .build();
-
-    private static EmbeddedJetty jetty = new EmbeddedJetty(configuration);
-
-    @ClassRule
-    public static JettyServerRule server = new JettyServerRule(jetty);
-
-    @Test
-    public void myUnitTest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("http://localhost:%s", server.getPort());
-
-        String response = restTemplate.getForObject(url, String.class);
-
-        assertEquals("Hello World", response);
-    }
-}
-```
-
-If you use junit runner, just annotate configuration with @Configuration and it will be automatically detected:
-
-```java
-package com.myApp;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.web.client.RestTemplate;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-
-@RunWith(JunitServerRunner.class)
-public class MyTest {
-
-    @TestServer
-    private static EmbeddedServer jetty;
-
-    @Configuration
-    private static EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
-        .withPath("/myApp")
-        .build();
-
-    @Test
-    public void myUnitTest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("http://localhost:%s", jetty.getPort());
-
-        String response = restTemplate.getForObject(url, String.class);
-
-        assertEquals("Hello World", response);
-    }
-}
-```
-
-## Tomcat
-
-### Default Configuration
+[Documentation](https://mjeanroy.github.io/junit-servers/tomcat) - [Javadoc](http://javadoc.io/doc/com.github.mjeanroy/junit-servers-tomcat)
 
 For most projects, default configuration will be enough, all you have to do is:
 
-- Extend default AbstractTomcatTest that define a class rule used to start and stop container.
-- Or use junit rule TomcatServerRule to start and stop container in your tests.
+- Use JUnit runner `JunitServerRunner` (recommended).
+- Use JUnit rule `TomcatServerRule` to start and stop container in your tests.
+- Extend default `AbstractTomcatTest` that run your test with `JunitServerRunner` runner.
 
 Default configuration is:
 
 - A random port is used to start embedded tomcat.
-- Webapp is set to src/main/webapp (relative to root project)
-- Context path is set to "/"
-- Base directory is set to tomcat-work (relative to root project). By default, base directory will be deleted after tests
-  but when the configuration flag _keepBaseDir_ is set to _true_ the content of this directory will be preserved.
+- Webapp is set to `"src/main/webapp"` (relative to root project)
+- Context path is set to `"/"`
+- Base directory is set to `"tomcat-work"` (relative to root project). By default, base directory will be deleted after tests
+  but when the configuration flag `keepBaseDir` is set to `true` the content of this directory will be preserved.
 - Naming is enable.
 
-```java
-package com.myApp;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
-import com.github.mjeanroy.junit.servers.utils.AbstractTomcatTest;
-
-public class MyTest extends AbstractTomcatTest {
-    @Test
-    public void myUnitTest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("http://localhost:%s", server.getPort());
-
-        String response = restTemplate.getForObject(url, String.class);
-
-        assertEquals("Hello World", response);
-    }
-}
-```
+**Using the runner:**
 
 ```java
-package com.myApp;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+@RunWith(JunitServerRunner.class)
 public class MyTest {
+  @TestServer
+  public static EmbeddedTomcat tomcat;
 
-    @ClassRule
-    public static TomcatServerRule server = new TomcatServerRule(new EmbeddedTomcat());
+  @Test
+  public void should_have_index() {
+    OkHttpClient client = new OkHttpClient();
+    Request request = new Request.Builder()
+      .url(tomcat.getUrl())
+      .build();
 
-    @Test
-    public void myUnitTest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("http://localhost:%s", server.getPort());
+    Response response = client.newCall(request).execute();
 
-        String response = restTemplate.getForObject(url, String.class);
-
-        assertEquals("Hello World", response);
-    }
+    Assert.assertEquals(200, response.code());
+  }
 }
 ```
+
+**Using the rule:**
+
+```java
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+@RunWith(JunitServerRunner.class)
+public class MyTest {
+  @TestServer
+  public static EmbeddedTomcat tomcat;
+
+  @TestServerConfiguration
+  public static EmbeddedTomcatConfiguration configuration() {
+    return EmbeddedTomcatConfiguration.builder()
+      .withPath("/app")
+      .withPort(8080)
+      .withProperty("spring.profiles.active", "test")
+      .build();
+  }
+
+  @Test
+  public void should_have_index() {
+    OkHttpClient client = new OkHttpClient();
+    Request request = new Request.Builder()
+      .url(tomcat.getUrl())
+      .build();
+
+    Response response = client.newCall(request).execute();
+
+    Assert.assertEquals(200, response.code());
+  }
+}
+```
+
+**Using the abstract class `AbstractTomcatTest`:**
 
 You can also use dedicated runner and inject tomcat using @Server annotation:
 
 ```java
-package com.myApp;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.web.client.RestTemplate;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-
-@RunWith(JunitServerRunner.class)
-public class MyTest {
-
-    @TestServer
-    private static EmbeddedServer tomcat;
-
-    @Test
-    public void myUnitTest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("http://localhost:%s", tomcat.getPort());
-
-        String response = restTemplate.getForObject(url, String.class);
-
-        assertEquals("Hello World", response);
-    }
-}
-```
-
-### Custom Configuration
-
-When embedded tomcat is created, you can easyly use a custom configuration using a fluent API:
-
-- Define custom enironment properties that will be initialized before server startup and removed after server shutdown.
-- Define custom hooks to execute custom code before server startup and after server shutdown.
-
-```java
-package com.myApp;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.springframework.web.client.RestTemplate;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.Hook;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.utils.AbstractTomcatTest;
 
-public class MyTest {
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-    private static EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
-        .withPath("/myApp")
-        .withWebapp("webapp")
-        .withPort(9090)
-        .withBaseDir("/tmp/tomcat")
-        .disableNaming()
-        .withProperty("spring.profiles.active", "test")
-        .withOverrideDescriptor("src/test/resources/WEB-INF/web.xml")
-        .withParentClasspath(WebAppContext.class, new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.getName().startsWith("apache-jstl");
-            }
-        })
-        .withHook(new Hook() {
-            @Override
-            public void pre(EmbeddedServer server) {
-                System.out.println("Server Startup");
-            }
-
-            @Override
-            public void post(EmbeddedServer server) {
-                System.out.println("Server Shutdown");
-            }
-        })
-        .build();
-
-    private static EmbeddedServer tomcat = new EmbeddedTomcat(configuration);
-
-    @ClassRule
-    public static TomcatServerRule server = new TomcatServerRule(tomcat);
-
-    @Test
-    public void myUnitTest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("http://localhost:%s", server.getPort());
-
-        String response = restTemplate.getForObject(url, String.class);
-
-        assertEquals("Hello World", response);
-    }
-}
-```
-
-With junit runner, use @Configuration to automatically use configuration object:
-
-```java
-package com.myApp;
-
-import static org.junit.Assert.*;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.web.client.RestTemplate;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
-@RunWith(JunitServerRunner.class)
-public class MyTest {
+public class MyTest extends AbstractTomcatTest {
+  @Test
+  public void should_have_index() {
+    OkHttpClient client = new OkHttpClient();
+    Request request = new Request.Builder()
+      .url(server.getUrl())
+      .build();
 
-    @TestServer
-    private static EmbeddedServer tomcat;
+    Response response = client.newCall(request).execute();
 
-    @Configuration
-    private static EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
-        .withPath("/myApp")
-        .build();
-
-    @Test
-    public void myUnitTest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("http://localhost:%s", tomcat.getPort());
-
-        String response = restTemplate.getForObject(url, String.class);
-
-        assertEquals("Hello World", response);
-    }
+    Assert.assertEquals(200, response.code());
+  }
 }
 ```
+
+For more information about the configuration, please see the [documentation](https://mjeanroy.github.io/junit-servers/tomcat).
 
 ## Licence
 
