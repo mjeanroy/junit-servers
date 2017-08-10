@@ -39,6 +39,7 @@
 	<name>junit-servers-tomcat</name>
 	<packaging>jar</packaging>
 	<url>https://github.com/mjeanroy/junit-servers</url>
+	<description>Add Tomcat Embedded Server to your junit tests case.</description>
 
 	<dependencies>
 		<dependency>
