@@ -142,7 +142,7 @@ public class MyTest {
       .withPath("/app")
       .withPort(8080)
       .withProperty("spring.profiles.active", "test")
-      .build()
+      .build();
   }
 
   @Test
