@@ -26,61 +26,21 @@ package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
 import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
-import java.io.File;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
 
 public class IndexWithRulesTest {
 
-	private static final String PATH = "samples/spring-webxml-tomcat/";
-
-	private static EmbeddedTomcatConfiguration configuration() {
-		try {
-			String current = new File(".").getCanonicalPath();
-			if (!current.endsWith("/")) {
-				current += "/";
-			}
-
-			String path = current.endsWith(PATH) ? current : current + PATH;
-
-			return EmbeddedTomcatConfiguration.builder()
-					.withWebapp(path + "src/main/webapp")
-					.withClasspath(path + "target/classes")
-					.disableNaming()
-					.build();
-		}
-		catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	private static final EmbeddedTomcat tomcat = new EmbeddedTomcat(configuration());
-
 	@ClassRule
-	public static TomcatServerRule serverRule = new TomcatServerRule(tomcat);
+	public static TomcatServerRule serverRule = new TomcatServerRule(
+			new EmbeddedTomcat(createTomcatConfiguration())
+	);
 
 	@Test
 	public void it_should_have_an_index() {
-		String message = serverRule.getClient()
-			.prepareGet("/index")
-			.execute()
-			.body();
-
-		assertThat(message).isNotEmpty().isEqualTo("Hello World");
-
-		// Try to get servlet context
-		ServletContext servletContext = serverRule.getServer().getServletContext();
-		assertThat(servletContext).isNotNull();
-
-		// Try to retrieve spring webApplicationContext
-		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		assertThat(webApplicationContext).isNotNull();
+		ensureIndexIsOk(serverRule.getClient(), serverRule.getServer());
 	}
 }

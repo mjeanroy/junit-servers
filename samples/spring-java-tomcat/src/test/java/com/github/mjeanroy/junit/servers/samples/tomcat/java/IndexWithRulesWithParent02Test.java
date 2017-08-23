@@ -25,30 +25,13 @@
 package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
 import org.junit.Test;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.mjeanroy.junit.servers.samples.tomcat.java.TestUtils.ensureIndexIsOk;
 
 public class IndexWithRulesWithParent02Test extends AbstractTest {
 
 	@Test
 	public void it_should_have_an_index() {
-		String message = serverRule.getClient()
-			.prepareGet("/index")
-			.execute()
-			.body();
-
-		assertThat(message).isNotEmpty().isEqualTo("Hello World");
-
-		// Try to get servlet context
-		ServletContext servletContext = serverRule.getServer().getServletContext();
-		assertThat(servletContext).isNotNull();
-
-		// Try to retrieve spring webApplicationContext
-		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		assertThat(webApplicationContext).isNotNull();
+		ensureIndexIsOk(serverRule.getClient(), serverRule.getServer());
 	}
 }

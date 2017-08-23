@@ -24,18 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.servers.configuration;
 
-import static java.util.Collections.unmodifiableCollection;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableMap;
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.servers.Hook;
 
-import java.net.URL;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
-import com.github.mjeanroy.junit.servers.servers.Hook;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
 
 /**
  * Generic configuration that should be extended for
@@ -87,9 +84,8 @@ public abstract class AbstractConfiguration {
 	 *
 	 * The path will be added to application parent classloader classpath
 	 * before server is started.
-	 *
 	 */
-	private final Collection<URL> parentClasspath;
+	private final ClassLoader parentClassLoader;
 	
 	/**
 	 * Map of environment properties to set before server start.
@@ -130,7 +126,7 @@ public abstract class AbstractConfiguration {
 		this.port = builder.getPort();
 		this.envProperties = builder.getEnvProperties();
 		this.hooks = builder.getHooks();
-		this.parentClasspath = builder.getParentClasspath();
+		this.parentClassLoader = builder.getParentClassLoader();
 		this.overrideDescriptor = builder.getOverrideDescriptor();
 	}
 
@@ -162,12 +158,23 @@ public abstract class AbstractConfiguration {
 	}
 
 	/**
-	 * Get {@link #parentClasspath}, as a non-modifiable collection.
+	 * Get {@link #parentClassLoader}, as a non-modifiable collection.
 	 *
-	 * @return {@link #parentClasspath}
+	 * @return {@link #parentClassLoader}
+	 * @deprecated Use {@link #getParentClassLoader()} instead.
 	 */
-	public Collection<URL> getParentClasspath() {
-		return unmodifiableCollection(parentClasspath);
+	@Deprecated
+	public ClassLoader getParentClasspath() {
+		return parentClassLoader;
+	}
+
+	/**
+	 * Get {@link #parentClassLoader}, as a non-modifiable collection.
+	 *
+	 * @return {@link #parentClassLoader}
+	 */
+	public ClassLoader getParentClassLoader() {
+		return parentClassLoader;
 	}
 
 	/**
@@ -222,7 +229,7 @@ public abstract class AbstractConfiguration {
 					Objects.equals(envProperties, c.envProperties) &&
 					Objects.equals(hooks, c.hooks) &&
 					Objects.equals(overrideDescriptor, c.overrideDescriptor) &&
-					Objects.equals(parentClasspath, c.parentClasspath);
+					Objects.equals(parentClassLoader, c.parentClassLoader);
 		}
 
 		return false;
@@ -240,7 +247,7 @@ public abstract class AbstractConfiguration {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(port, path, webapp, classpath, envProperties, hooks, overrideDescriptor, parentClasspath);
+		return Objects.hash(port, path, webapp, classpath, envProperties, hooks, overrideDescriptor, parentClassLoader);
 	}
 
 	@Override
@@ -251,7 +258,7 @@ public abstract class AbstractConfiguration {
 			.append("webapp", webapp)
 			.append("classpath", classpath)
 			.append("overrideDescriptor", overrideDescriptor)
-			.append("parentClasspath", parentClasspath)
+			.append("parentClassLoader", parentClassLoader)
 			.build();
 	}
 }

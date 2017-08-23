@@ -26,37 +26,15 @@ package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
 import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.ClassRule;
 
-import java.io.File;
+import static com.github.mjeanroy.junit.servers.samples.tomcat.java.TestUtils.createTomcatConfiguration;
 
 public class AbstractTest {
 
-	private static final String PATH = "samples/spring-java-tomcat/";
-
-	private static EmbeddedTomcatConfiguration configuration() {
-		try {
-			String current = new File(".").getCanonicalPath();
-			if (!current.endsWith("/")) {
-				current += "/";
-			}
-
-			String path = current.endsWith(AbstractTest.PATH) ? current : current + AbstractTest.PATH;
-
-			return EmbeddedTomcatConfiguration.builder()
-				.withWebapp(path + "src/main/webapp")
-				.withClasspath(path + "target/classes")
-				.build();
-
-		} catch (final Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	private static EmbeddedTomcat tomcat = new EmbeddedTomcat(configuration());
-
 	@ClassRule
-	public static TomcatServerRule serverRule = new TomcatServerRule(AbstractTest.tomcat);
+	public static TomcatServerRule serverRule = new TomcatServerRule(
+			new EmbeddedTomcat(createTomcatConfiguration())
+	);
 
 }

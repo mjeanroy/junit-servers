@@ -22,64 +22,68 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.samples.jetty.webxml;
 
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
 import java.io.File;
+import java.net.URL;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IndexWithRulesTest {
+/**
+ * Static Test Utilities.
+ */
+class TestUtils {
 
-	private static final String PATH = "samples/spring-webxml-jetty/";
+	// Ensure non instantiation.
+	private TestUtils() {
+	}
 
-	private static EmbeddedJettyConfiguration configuration() {
+	/**
+	 * Create the Jetty Embedded configuration to use in unit tests.
+	 *
+	 * @return The Jetty Embedded Configuration.
+	 * @throws AssertionError If an error occurred while creation the configuration object.
+	 */
+	static EmbeddedJettyConfiguration createJettyConfiguration() {
 		try {
+
 			String current = new File(".").getCanonicalPath();
 			if (!current.endsWith("/")) {
 				current += "/";
 			}
 
-			String path = current.endsWith(PATH) ? current : current + PATH;
+			String subProjectPath = "samples/spring-webxml-jetty-jsp/";
+			String path = current.endsWith(subProjectPath) ? current : current + subProjectPath;
+
+			// note use of maven plugin to copy a maven dependency to this directory
+			URL urlParentClasspath = new File("target/lib/").toURI().toURL();
 
 			return EmbeddedJettyConfiguration.builder()
 					.withWebapp(path + "src/main/webapp")
+					.withParentClasspath(urlParentClasspath)
 					.withClasspath(path + "target/classes")
+					.withContainerJarPattern(".*\\.jar")
 					.build();
-		}
-		catch (Exception ex) {
-			throw new RuntimeException(ex);
+
+		} catch (Exception ex) {
+			throw new AssertionError(ex);
 		}
 	}
 
-	private static EmbeddedJetty jetty = new EmbeddedJetty(configuration());
+	/**
+	 * Ensure the index page is rendered with expected message.
+	 *
+	 * @param client The HTTP client to use.
+	 */
+	static void ensureIndexIsOk(HttpClient client) {
+		String message = client
+				.prepareGet("/")
+				.execute()
+				.body();
 
-	@ClassRule
-	public static JettyServerRule serverRule = new JettyServerRule(jetty);
-
-	@Test
-	public void it_should_have_an_index() {
-		String message = serverRule.getClient()
-			.prepareGet("/index")
-			.execute()
-			.body();
-
-		assertThat(message).isNotEmpty().isEqualTo("Hello World");
-
-		// Try to get servlet context
-		ServletContext servletContext = serverRule.getServer().getServletContext();
-		assertThat(servletContext).isNotNull();
-
-		// Try to retrieve spring webApplicationContext
-		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		assertThat(webApplicationContext).isNotNull();
+		assertThat(message).isNotEmpty().contains("Hello");
 	}
 }

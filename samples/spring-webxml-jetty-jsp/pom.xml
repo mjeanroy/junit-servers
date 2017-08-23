@@ -31,7 +31,7 @@
 	<name>junit-servers-spring-webxml-jetty-jsp</name>
 	<packaging>war</packaging>
 	<url>https://github.com/mjeanroy/junit-servers</url>
-	
+
 	<properties>
 		<owasp-xss-encoder.version>1.2.1</owasp-xss-encoder.version>
 		<owasp-html-sanitizer.version>r239</owasp-html-sanitizer.version>	  
@@ -61,10 +61,6 @@
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>apache-jstl</artifactId>
 			<version>${jetty.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-jsp</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -160,4 +156,33 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>JDK7</id>
+			<activation>
+				<jdk>1.7</jdk>
+			</activation>
+			<properties>
+				<jetty.version>${jetty-java7.version}</jetty.version>
+			</properties>
+		</profile>
+		<profile>
+			<id>JDK8</id>
+			<activation>
+				<jdk>1.8</jdk>
+			</activation>
+			<properties>
+				<jetty.version>${jetty-java8.version}</jetty.version>
+			</properties>
+		</profile>
+		<profile>
+			<id>JDK9</id>
+			<activation>
+				<jdk>9</jdk>
+			</activation>
+			<properties>
+				<jetty.version>${jetty-java9.version}</jetty.version>
+			</properties>
+		</profile>
+	</profiles>
 </project>

@@ -33,6 +33,10 @@ import java.nio.charset.StandardCharsets;
  */
 public final class TestUtils {
 
+	// Ensure non instantiation.
+	private TestUtils() {
+	}
+
 	/**
 	 * Create URL string.
 	 *

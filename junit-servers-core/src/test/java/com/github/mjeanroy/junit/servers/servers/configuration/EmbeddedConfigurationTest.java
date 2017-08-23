@@ -24,14 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.servers.configuration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
+import java.net.URL;
+import java.net.URLClassLoader;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EmbeddedConfigurationTest {
 
@@ -66,13 +68,17 @@ public class EmbeddedConfigurationTest {
 						"webapp: \"src/main/webapp\", " +
 						"classpath: \"/target/classes\", " +
 						"overrideDescriptor: null, " +
-						"parentClasspath: []" +
+						"parentClassLoader: null" +
 				"}");
 	}
 
 	@Test
 	public void it_should_implement_equals_hashCode() {
-		EqualsVerifier.forClass(EmbeddedConfiguration.class).verify();
+		ClassLoader red = new URLClassLoader(new URL[0]);
+		ClassLoader black = new URLClassLoader(new URL[0]);
+		EqualsVerifier.forClass(EmbeddedConfiguration.class)
+			.withPrefabValues(ClassLoader.class, red, black)
+			.verify();
 	}
 
 	private static final class EmbeddedConfiguration extends AbstractConfiguration {

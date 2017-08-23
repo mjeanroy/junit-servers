@@ -22,65 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.samples.jetty.webxml;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
-import java.io.File;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.createJettyConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.ensureIndexIsOk;
 
 @RunWith(JunitServerRunner.class)
 public class IndexWithRunnerTest {
 
 	@TestServer
-	private static EmbeddedJetty jetty;
+	private static EmbeddedServer jetty;
 
 	@TestServerConfiguration
-	private static EmbeddedJettyConfiguration configuration() throws Exception {
-		String current = new File(".").getCanonicalPath();
-		if (!current.endsWith("/")) {
-			current += "/";
-		}
-
-		String subProjectPath = "samples/spring-webxml-jetty/";
-		String path = current.endsWith(subProjectPath) ? current : current + subProjectPath;
-
-		return EmbeddedJettyConfiguration.builder()
-				.withWebapp(path + "src/main/webapp")
-				.withClasspath(path + "target/classes")
-				.build();
-	}
+	private static EmbeddedJettyConfiguration configuration = createJettyConfiguration();
 
 	@TestHttpClient
 	private HttpClient client;
 
 	@Test
 	public void it_should_have_an_index() {
-		String message = client
-			.prepareGet("/index")
-			.execute()
-			.body();
-
-		assertThat(message).isNotEmpty().isEqualTo("Hello World");
-
-		// Try to get servlet context
-		ServletContext servletContext = jetty.getServletContext();
-		assertThat(servletContext).isNotNull();
-
-		// Try to retrieve spring webApplicationContext
-		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		assertThat(webApplicationContext).isNotNull();
+		ensureIndexIsOk(client);
 	}
 }

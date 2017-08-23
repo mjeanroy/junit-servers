@@ -42,9 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class EmbeddedConfigurationBuilderTest {
@@ -108,7 +106,7 @@ public class EmbeddedConfigurationBuilderTest {
 	}
 
 	@Test
-	public void it_should_override_descriptor_file() throws Exception {
+	public void it_should_override_descriptor_file() {
 		String newDescriptor = "src/test/resources/web.xml";
 		String oldDescriptor = builder.getOverrideDescriptor();
 		EmbeddedConfigurationBuilder result = builder.withOverrideDescriptor(newDescriptor);
@@ -118,6 +116,7 @@ public class EmbeddedConfigurationBuilderTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void it_should_override_parent_classpath() throws Exception {
 		URL c1 = new File("/").toURI().toURL();
 		URL c2 = new File(".").toURI().toURL();
@@ -125,12 +124,12 @@ public class EmbeddedConfigurationBuilderTest {
 		EmbeddedConfigurationBuilder result = builder.withParentClasspath(c1, c2);
 
 		assertThat(result).isSameAs(builder);
-		assertThat(result.getParentClasspath())
-			.isNotEmpty()
-			.containsAll(Arrays.asList(c1, c2));
+		assertThat(result.getParentClassLoader()).isNotNull();
+		assertThat(result.getParentClasspath()).isNotNull();
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void it_should_override_parent_classpath_with_collection() throws Exception {
 		URL c1 = new File("/").toURI().toURL();
 		URL c2 = new File(".").toURI().toURL();
@@ -139,13 +138,13 @@ public class EmbeddedConfigurationBuilderTest {
 		EmbeddedConfigurationBuilder result = builder.withParentClasspath(urls);
 
 		assertThat(result).isSameAs(builder);
-		assertThat(result.getParentClasspath())
-			.isNotEmpty()
-			.containsAll(urls);
+		assertThat(result.getParentClassLoader()).isNotNull();
+		assertThat(result.getParentClasspath()).isNotNull();
 	}
 
 	@Test
-	public void it_should_override_class_classloader() throws Exception {
+	@SuppressWarnings("deprecation")
+	public void it_should_override_class_classloader() {
 		Class<?> klass = getClass();
 		FileFilter filter = mock(FileFilter.class);
 		when(filter.accept(any(File.class))).thenReturn(true);
@@ -153,28 +152,45 @@ public class EmbeddedConfigurationBuilderTest {
 		EmbeddedConfigurationBuilder result = builder.withParentClasspath(klass, filter);
 
 		assertThat(result).isSameAs(builder);
-		assertThat(result.getParentClasspath()).isNotEmpty();
-		verify(filter, atLeastOnce()).accept(any(File.class));
+		assertThat(result.getParentClassLoader()).isNotNull();
+		assertThat(result.getParentClassLoader().getResource("logback-test.xml")).isNotNull();
+
+		assertThat(result.getParentClasspath()).isNotNull();
+		assertThat(result.getParentClasspath().getResource("logback-test.xml")).isNotNull();
 	}
 
 	@Test
-	public void it_should_override_class_classloader_without_filter() throws Exception {
+	@SuppressWarnings("deprecation")
+	public void it_should_override_class_classloader_without_filter() {
 		Class<?> klass = getClass();
 		EmbeddedConfigurationBuilder result = builder.withParentClasspath(klass);
 
 		assertThat(result).isSameAs(builder);
-		assertThat(result.getParentClasspath()).isNotEmpty();
+		assertThat(result.getParentClassLoader()).isNotNull();
+		assertThat(result.getParentClassLoader().getResource("logback-test.xml")).isNotNull();
+
+		assertThat(result.getParentClasspath()).isNotNull();
+		assertThat(result.getParentClasspath().getResource("logback-test.xml")).isNotNull();
 	}
 
 	@Test
-	public void it_should_fail_to_override_class_loader_with_null_class() throws Exception {
+	public void it_should_fail_to_override_classloader_with_null_class() {
+		thrown.expect(NullPointerException.class);
+		thrown.expectMessage(equalTo("Base class must not be null"));
+		builder.withParentClassLoader(null);
+	}
+
+	@Test
+	@SuppressWarnings("deprecation")
+	public void it_should_fail_to_override_classpath_with_null_class() {
 		thrown.expect(NullPointerException.class);
 		thrown.expectMessage(equalTo("Base class must not be null"));
 		builder.withParentClasspath((Class<?>) null);
 	}
 
 	@Test
-	public void it_should_fail_to_override_class_loader_with_null_class_and_filter() throws Exception {
+	@SuppressWarnings("deprecation")
+	public void it_should_fail_to_override_classpath_with_null_class_and_filter() {
 		thrown.expect(NullPointerException.class);
 		thrown.expectMessage(equalTo("Base class must not be null"));
 		builder.withParentClasspath(null, new FileFilter() {
@@ -186,7 +202,7 @@ public class EmbeddedConfigurationBuilderTest {
 	}
 
 	@Test
-	public void it_should_add_property() throws Exception {
+	public void it_should_add_property() {
 		Map<String, String> oldProperties = builder.getEnvProperties();
 		assertThat(oldProperties).isEmpty();
 
@@ -204,7 +220,7 @@ public class EmbeddedConfigurationBuilderTest {
 	}
 
 	@Test
-	public void it_should_add_hook() throws Exception {
+	public void it_should_add_hook() {
 		Hook hook = mock(Hook.class);
 		List<Hook> oldHooks = builder.getHooks();
 		assertThat(oldHooks).isEmpty();
@@ -221,8 +237,7 @@ public class EmbeddedConfigurationBuilderTest {
 	}
 
 	private static class EmbeddedConfiguration extends AbstractConfiguration {
-
-		public EmbeddedConfiguration(EmbeddedConfigurationBuilder builder) {
+		EmbeddedConfiguration(EmbeddedConfigurationBuilder builder) {
 			super(builder);
 		}
 	}

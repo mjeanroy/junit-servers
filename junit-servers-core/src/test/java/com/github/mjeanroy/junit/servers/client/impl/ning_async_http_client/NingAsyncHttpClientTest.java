@@ -51,6 +51,7 @@ public class NingAsyncHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
 		return newAsyncHttpClient(server, internalClient);
 	}

@@ -33,54 +33,24 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
-import java.io.File;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
 
 @RunWith(JunitServerRunner.class)
 public class IndexWithRunnerTest {
 
+	@TestServerConfiguration
+	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();
+
 	@TestServer
 	private static EmbeddedServer tomcat;
-
-	@TestServerConfiguration
-	private static EmbeddedTomcatConfiguration configuration() throws Exception {
-		String current = new File(".").getCanonicalPath();
-		if (!current.endsWith("/")) {
-			current += "/";
-		}
-
-		String subProjectPath = "samples/spring-webxml-tomcat/";
-		String path = current.endsWith(subProjectPath) ? current : current + subProjectPath;
-
-		return EmbeddedTomcatConfiguration.builder()
-				.withWebapp(path + "src/main/webapp")
-				.withClasspath(path + "target/classes")
-				.build();
-	}
 
 	@TestHttpClient
 	private HttpClient client;
 
 	@Test
 	public void it_should_have_an_index() {
-		String message = client
-			.prepareGet("/index")
-			.execute()
-			.body();
-
-		assertThat(message).isNotEmpty().isEqualTo("Hello World");
-
-		// Try to get servlet context
-		ServletContext servletContext = tomcat.getServletContext();
-		assertThat(servletContext).isNotNull();
-
-		// Try to retrieve spring webApplicationContext
-		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		assertThat(webApplicationContext).isNotNull();
+		ensureIndexIsOk(client, tomcat);
 	}
 }

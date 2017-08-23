@@ -166,7 +166,7 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 			.append("webapp", getWebapp())
 			.append("classpath", getClasspath())
 			.append("overrideDescriptor", getOverrideDescriptor())
-			.append("parentClasspath", getParentClasspath())
+			.append("parentClassLoader", getParentClassLoader())
 			.append("baseDir", baseDir)
 			.append("keepBaseDir", keepBaseDir)
 			.append("enableNaming", enableNaming)

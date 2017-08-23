@@ -30,7 +30,11 @@ import org.eclipse.jetty.util.resource.Resource;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class EmbeddedJettyConfigurationTest {
 
@@ -46,12 +50,14 @@ public class EmbeddedJettyConfigurationTest {
 
 	@Test
 	public void it_should_build_configuration() {
-		int port = 8080;
-		String path = "/foo";
-		String webapp = "foo";
-		String classpath = "/target/classes";
-		int stopTimeout = 50;
-		Resource resource = Mockito.mock(Resource.class);
+		final int port = 8080;
+		final String path = "/foo";
+		final String webapp = "foo";
+		final String classpath = "/target/classes";
+		final int stopTimeout = 50;
+		final Resource resource = mock(Resource.class);
+		final String containerJarPattern = ".*\\.jar";
+		final String webInfJarPattern = ".*";
 
 		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.builder()
 				.withPort(port)
@@ -61,6 +67,8 @@ public class EmbeddedJettyConfigurationTest {
 				.withStopTimeout(stopTimeout)
 				.disableStopAtShutdown()
 				.withBaseResource(resource)
+				.withContainerJarPattern(containerJarPattern)
+				.withWebInfJarPattern(webInfJarPattern)
 				.build();
 
 		assertThat(result.getPort()).isEqualTo(port);
@@ -70,13 +78,18 @@ public class EmbeddedJettyConfigurationTest {
 		assertThat(result.getStopTimeout()).isEqualTo(stopTimeout);
 		assertThat(result.isStopAtShutdown()).isFalse();
 		assertThat(result.getBaseResource()).isSameAs(resource);
+		assertThat(result.getContainerJarPattern()).isEqualTo(containerJarPattern);
+		assertThat(result.getWebInfJarPattern()).isEqualTo(webInfJarPattern);
 	}
 
 	@Test
 	public void it_should_implement_equals_hashCode() {
+		ClassLoader red = new URLClassLoader(new URL[0]);
+		ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(EmbeddedJettyConfiguration.class)
 			.suppress(Warning.STRICT_INHERITANCE)
 			.withRedefinedSuperclass()
+			.withPrefabValues(ClassLoader.class, red, black)
 			.verify();
 	}
 
@@ -90,10 +103,12 @@ public class EmbeddedJettyConfigurationTest {
 				"webapp: \"src/main/webapp\", " +
 				"classpath: \".\", " +
 				"overrideDescriptor: null, " +
-				"parentClasspath: [], " +
+				"parentClassLoader: null, " +
 				"stopTimeout: 30000, " +
 				"stopAtShutdown: true, " +
-				"baseResource: null" +
+				"baseResource: null, " +
+				"containerJarPattern: null, " +
+				"webInfJarPattern: null" +
 			"}"
 		);
 	}

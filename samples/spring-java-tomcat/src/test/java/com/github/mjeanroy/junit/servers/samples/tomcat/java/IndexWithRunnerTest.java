@@ -25,61 +25,30 @@
 package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.utils.AbstractTomcatTest;
 import org.junit.Test;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
-import java.io.File;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.mjeanroy.junit.servers.samples.tomcat.java.TestUtils.createTomcatConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.tomcat.java.TestUtils.ensureIndexIsOk;
 
 public class IndexWithRunnerTest extends AbstractTomcatTest {
 
 	@TestServerConfiguration
-	private static EmbeddedTomcatConfiguration configuration() throws Exception {
-		String current = new File(".").getCanonicalPath();
-		if (!current.endsWith("/")) {
-			current += "/";
-		}
+	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();
 
-		String subProjectPath = "samples/spring-java-tomcat/";
-		String path = current.endsWith(subProjectPath) ? current : current + subProjectPath;
-
-		return EmbeddedTomcatConfiguration.builder()
-				.withWebapp(path + "src/main/webapp")
-				.withClasspath(path + "target/classes")
-				.build();
-	}
+	@TestServer
+	private static EmbeddedTomcat tomcat;
 
 	@TestHttpClient
 	private HttpClient client;
 
 	@Test
 	public void it_should_have_an_index() {
-		HttpResponse rsp = client.prepareGet("/index")
-				.addCookie(new Cookie.Builder("foo", "bar")
-					.maxAge(0L)
-					.build())
-				.execute();
-
-		String message = rsp.body();
-		assertThat(message)
-				.isNotEmpty()
-				.isEqualTo("Hello bar");
-
-		// Try to get servlet context
-		ServletContext servletContext = server.getServletContext();
-		assertThat(servletContext).isNotNull();
-
-		// Try to retrieve spring webApplicationContext
-		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		assertThat(webApplicationContext).isNotNull();
+		ensureIndexIsOk(client, tomcat);
 	}
 }

@@ -7,7 +7,15 @@ sudo: required
 language: java
 
 jdk:
-  - oraclejdk8
+  - oraclejdk9
+
+addons:
+  # https://github.com/travis-ci/travis-ci/issues/5914
+  hostname: short-hostname
+
+  apt:
+    packages:
+      - oracle-java9-installer
 
 os:
   - linux
@@ -16,10 +24,7 @@ env:
   matrix:
     - jdk_id=openjdk7
     - jdk_id=oraclejdk8
-
-# https://github.com/travis-ci/travis-ci/issues/5914
-addons:
-  hostname: short-hostname
+    - jdk_id=oraclejdk9
 
 before_install:
   - hostname #workaround for https://github.com/travis-ci/travis-ci/issues/5227
@@ -28,6 +33,6 @@ before_install:
   - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
   - hostname
   - cat /etc/hosts # optionally check the content *after*
- 
+
 script:
   - echo ${jdk_id} && jdk_switcher use ${jdk_id} && java -version && echo "Java home is set to ${JAVA_HOME}" && mvn test

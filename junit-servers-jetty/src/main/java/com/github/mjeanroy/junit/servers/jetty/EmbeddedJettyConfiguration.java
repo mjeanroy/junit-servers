@@ -74,6 +74,20 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 	private final Resource baseResource;
 
 	/**
+	 * Control which parts of the container’s classpath should be processed for things like annotations,
+	 * META-INF/resources, META-INF/web-fragment.xml and tlds inside META-INF.
+	 *
+	 * @see org.eclipse.jetty.webapp.WebInfConfiguration#CONTAINER_JAR_PATTERN
+	 */
+	private final String containerJarPattern;
+
+	/**
+	 * Control which parts of the webinf’s classpath should be processed for things like annotations,
+	 * META-INF/resources, META-INF/web-fragment.xml and tlds inside META-INF.
+	 */
+	private final String webInfJarPattern;
+
+	/**
 	 * Get configuration builder.
 	 *
 	 * @return Builder.
@@ -97,6 +111,8 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		this.stopTimeout = builder.getStopTimeout();
 		this.stopAtShutdown = builder.isStopAtShutdown();
 		this.baseResource = builder.getBaseResource();
+		this.containerJarPattern = builder.getContainerJarPattern();
+		this.webInfJarPattern = builder.getWebInfJarPattern();
 	}
 
 	/**
@@ -126,6 +142,24 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		return baseResource;
 	}
 
+	/**
+	 * Get {@link #containerJarPattern}
+	 *
+	 * @return {@link #containerJarPattern}
+	 */
+	public String getContainerJarPattern() {
+		return containerJarPattern;
+	}
+
+	/**
+	 * Get {@link #webInfJarPattern}
+	 *
+	 * @return {@link #webInfJarPattern}
+	 */
+	public String getWebInfJarPattern() {
+		return webInfJarPattern;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this) {
@@ -138,7 +172,9 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 					&& super.equals(c)
 					&& Objects.equals(stopTimeout, c.stopTimeout)
 					&& Objects.equals(stopAtShutdown, c.stopAtShutdown)
-					&& Objects.equals(baseResource, c.baseResource);
+					&& Objects.equals(baseResource, c.baseResource)
+					&& Objects.equals(containerJarPattern, c.containerJarPattern)
+					&& Objects.equals(webInfJarPattern, c.webInfJarPattern);
 		}
 
 		return false;
@@ -151,7 +187,7 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(super.hashCode(), stopTimeout, stopAtShutdown, baseResource);
+		return Objects.hash(super.hashCode(), stopTimeout, stopAtShutdown, baseResource, containerJarPattern, webInfJarPattern);
 	}
 
 	@Override
@@ -162,10 +198,12 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 			.append("webapp", getWebapp())
 			.append("classpath", getClasspath())
 			.append("overrideDescriptor", getOverrideDescriptor())
-			.append("parentClasspath", getParentClasspath())
+			.append("parentClassLoader", getParentClassLoader())
 			.append("stopTimeout", stopTimeout)
 			.append("stopAtShutdown", stopAtShutdown)
 			.append("baseResource", baseResource)
+			.append("containerJarPattern", containerJarPattern)
+			.append("webInfJarPattern", webInfJarPattern)
 			.build();
 	}
 
@@ -198,6 +236,20 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		 * The base resource for the Jetty context that will be created.
 		 */
 		private Resource baseResource;
+
+		/**
+		 * The pattern to control which part of the container classpath will
+		 * be processed.
+		 *
+		 * @see org.eclipse.jetty.webapp.WebInfConfiguration#CONTAINER_JAR_PATTERN
+		 */
+		private String containerJarPattern;
+
+		/**
+		 * The pattern to control which part of the webinf directory classpath will
+		 * be processed.
+		 */
+		private String webInfJarPattern;
 
 		private Builder() {
 			stopTimeout = DEFAULT_STOP_TIMEOUT;
@@ -242,6 +294,24 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		}
 
 		/**
+		 * Get current {@link #containerJarPattern} value.
+		 *
+		 * @return  {@link #containerJarPattern}
+		 */
+		public String getContainerJarPattern() {
+			return containerJarPattern;
+		}
+
+		/**
+		 * Get current {@link #webInfJarPattern} value.
+		 *
+		 * @return {@link #webInfJarPattern}
+		 */
+		public String getWebInfJarPattern() {
+			return webInfJarPattern;
+		}
+
+		/**
 		 * Update {@link #stopTimeout} value.
 		 *
 		 * @param stopTimeout New {@link #stopTimeout} value.
@@ -282,6 +352,28 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		 */
 		public Builder withBaseResource(Resource resource) {
 			this.baseResource = resource;
+			return this;
+		}
+
+		/**
+		 * Change {@link #containerJarPattern} value.
+		 *
+		 * @param containerJarPattern The container JAR pattern.
+		 * @return this
+		 */
+		public Builder withContainerJarPattern(String containerJarPattern) {
+			this.containerJarPattern = containerJarPattern;
+			return this;
+		}
+
+		/**
+		 * Change {@link #webInfJarPattern} value.
+		 *
+		 * @param webInfJarPattern The webinf JAR pattern.
+		 * @return this
+		 */
+		public Builder withWebInfJarPattern(String webInfJarPattern) {
+			this.webInfJarPattern = webInfJarPattern;
 			return this;
 		}
 	}

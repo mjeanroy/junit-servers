@@ -22,16 +22,13 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.java;
+package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.utils.AbstractJettyTest;
-import org.junit.Test;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -40,35 +37,52 @@ import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IndexWithRunnerTest extends AbstractJettyTest {
+class TestUtils {
 
-	@TestServerConfiguration
-	private static EmbeddedJettyConfiguration configuration() throws Exception {
-		String current = new File(".").getCanonicalPath();
-		if (!current.endsWith("/")) {
-			current += "/";
-		}
-
-		String subProjectPath = "samples/spring-java-jetty/";
-		String path = current.endsWith(subProjectPath) ? current : current + subProjectPath;
-
-		return EmbeddedJettyConfiguration.builder()
-				.withWebapp(path + "src/main/webapp")
-				.withClasspath(path + "target/classes")
-				.build();
+	// Ensure non instantiation.
+	private TestUtils() {
 	}
 
-	@TestHttpClient
-	private HttpClient client;
+	/**
+	 * Create the Jetty Embedded configuration to use in unit tests.
+	 *
+	 * @return The Jetty Embedded Configuration.
+	 * @throws AssertionError If an error occurred while creation the configuration object.
+	 */
+	static EmbeddedJettyConfiguration createJettyConfiguration() {
+		try {
 
-	@Test
-	public void it_should_have_an_index() {
+			String current = new File(".").getCanonicalPath();
+			if (!current.endsWith("/")) {
+				current += "/";
+			}
+
+			String subProjectPath = "samples/spring-java-jetty/";
+			String path = current.endsWith(subProjectPath) ? current : current + subProjectPath;
+
+			return EmbeddedJettyConfiguration.builder()
+					.withWebapp(path + "src/main/webapp")
+					.withClasspath(path + "target/classes")
+					.build();
+
+		} catch (Exception ex) {
+			throw new AssertionError(ex);
+		}
+	}
+
+	/**
+	 * Ensure the index page is rendered with expected message.
+	 *
+	 * @param client The HTTP client to use.
+	 * @param jetty The embedded jetty.
+	 */
+	static void ensureIndexIsOk(HttpClient client, EmbeddedServer jetty) {
 		HttpResponse rsp = client
-			.prepareGet("/index")
-			.addCookie(new Cookie.Builder("foo", "bar")
-				.maxAge(0L)
-				.build())
-			.execute();
+				.prepareGet("/index")
+				.addCookie(new Cookie.Builder("foo", "bar")
+						.maxAge(0L)
+						.build())
+				.execute();
 
 		String message = rsp.body();
 		assertThat(message)
@@ -76,7 +90,7 @@ public class IndexWithRunnerTest extends AbstractJettyTest {
 				.isEqualTo("Hello bar");
 
 		// Try to get servlet context
-		ServletContext servletContext = server.getServletContext();
+		ServletContext servletContext = jetty.getServletContext();
 		assertThat(servletContext).isNotNull();
 
 		// Try to retrieve spring webApplicationContext

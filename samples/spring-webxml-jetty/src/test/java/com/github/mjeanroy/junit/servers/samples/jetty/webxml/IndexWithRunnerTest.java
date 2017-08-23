@@ -22,60 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.samples.jetty.webxml;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
-import java.net.URL;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.createJettyConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.ensureIndexIsOk;
 
 @RunWith(JunitServerRunner.class)
 public class IndexWithRunnerTest {
 
 	@TestServer
-	private static EmbeddedServer jetty;
+	private static EmbeddedJetty jetty;
 
 	@TestServerConfiguration
-	private static EmbeddedJettyConfiguration configuration() throws Exception {
-		String current = new File(".").getCanonicalPath();
-		if (!current.endsWith("/")) {
-			current += "/";
-		}
-
-		String subProjectPath = "samples/spring-webxml-jetty-jsp/";
-		String path = current.endsWith(subProjectPath) ? current : current + subProjectPath;
-
-		// note use of maven plugin to copy a maven dependency to this directory
-		URL urlParentClasspath = new File("target/lib/").toURI().toURL();
-
-		return EmbeddedJettyConfiguration.builder()
-				.withWebapp(path + "src/main/webapp")
-				.withParentClasspath(urlParentClasspath)
-				.withClasspath(path + "target/classes")
-				.build();
-	}
+	private static EmbeddedJettyConfiguration configuration = createJettyConfiguration();
 
 	@TestHttpClient
 	private HttpClient client;
 
 	@Test
 	public void it_should_have_an_index() {
-		String message = client
-			.prepareGet("/")
-			.execute()
-			.body();
-
-		assertThat(message).isNotEmpty().contains("Hello");
+		ensureIndexIsOk(client, jetty);
 	}
-
 }

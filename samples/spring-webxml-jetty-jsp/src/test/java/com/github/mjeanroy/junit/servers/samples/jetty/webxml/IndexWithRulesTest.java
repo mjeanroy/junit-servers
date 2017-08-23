@@ -22,21 +22,21 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.samples.jetty.webxml;
 
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.createJettyConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.ensureIndexIsOk;
 
 public class IndexWithRulesTest {
 
 	@ClassRule
-	public static TomcatServerRule serverRule = new TomcatServerRule(
-			new EmbeddedTomcat(createTomcatConfiguration())
+	public static JettyServerRule serverRule = new JettyServerRule(
+			new EmbeddedJetty(createJettyConfiguration())
 	);
 
 	@Test

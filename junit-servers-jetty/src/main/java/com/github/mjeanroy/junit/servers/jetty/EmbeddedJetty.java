@@ -24,17 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
-import static org.eclipse.jetty.util.resource.Resource.newResource;
-
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Collection;
-
-import javax.servlet.ServletContext;
-
+import com.github.mjeanroy.junit.servers.commons.CompositeClassLoader;
+import com.github.mjeanroy.junit.servers.commons.JavaUtils;
+import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
@@ -49,10 +44,12 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
+import javax.servlet.ServletContext;
+import java.io.File;
+
+import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import static org.eclipse.jetty.util.resource.Resource.newResource;
 
 /**
  * Jetty Embedded Server.
@@ -134,21 +131,34 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		final String path = configuration.getPath();
 		final String webapp = configuration.getWebapp();
 		final String classpath = configuration.getClasspath();
-		final Collection<URL> parentClasspath = configuration.getParentClasspath();
+		final ClassLoader parentClassLoader = configuration.getParentClassLoader();
 		final String overrideDescriptor = configuration.getOverrideDescriptor ();
 		final Resource baseResource = configuration.getBaseResource();
-
-		final ClassLoader threadCl = Thread.currentThread().getContextClassLoader();
-		final ClassLoader classLoader;
-		if (!parentClasspath.isEmpty()) {
-			int nbUrls = parentClasspath.size();
-			URL[] urls = parentClasspath.toArray(new URL[nbUrls]);
-			classLoader = new URLClassLoader(urls, threadCl);
-		} else {
-			classLoader = threadCl;
-		}
+		final String containerJarPattern = configuration.getContainerJarPattern();
+		final String webInfJarPattern = configuration.getWebInfJarPattern();
 
 		WebAppContext ctx = new WebAppContext();
+
+		if (containerJarPattern != null) {
+			ctx.setAttribute(WebInfConfiguration.CONTAINER_JAR_PATTERN, containerJarPattern);
+		} else if (JavaUtils.isPostJdk9()) {
+			// Fix to make TLD scanning works with Java >= 9
+			ctx.setAttribute(WebInfConfiguration.CONTAINER_JAR_PATTERN, ".*\\.jar");
+		}
+
+		if (webInfJarPattern != null) {
+			ctx.setAttribute(WebInfConfiguration.WEBINF_JAR_PATTERN, webInfJarPattern);
+		}
+
+		final ClassLoader systemClassLoader = Thread.currentThread().getContextClassLoader();
+		final ClassLoader classLoader;
+
+		if (parentClassLoader != null) {
+			classLoader = new CompositeClassLoader(parentClassLoader, systemClassLoader);
+		} else {
+			classLoader = systemClassLoader;
+		}
+
 		ctx.setClassLoader(classLoader);
 		ctx.setContextPath(path);
 

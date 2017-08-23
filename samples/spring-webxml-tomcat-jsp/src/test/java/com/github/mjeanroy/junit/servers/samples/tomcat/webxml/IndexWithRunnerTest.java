@@ -32,46 +32,20 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
-import java.net.URL;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
 
 @RunWith(JunitServerRunner.class)
 public class IndexWithRunnerTest {
 
 	@TestServerConfiguration
-	private static EmbeddedTomcatConfiguration configuration() throws Exception {
-		String current = new File(".").getCanonicalPath();
-		if (!current.endsWith("/")) {
-			current += "/";
-		}
-
-		String subProjectPath = "samples/spring-webxml-tomcat-jsp/";
-		String path = current.endsWith(subProjectPath) ? current : current + subProjectPath;
-
-		// note use of maven plugin to copy a maven dependency to this directory
-		URL urlParentClasspath = new File("target/lib/").toURI().toURL();
-
-		return EmbeddedTomcatConfiguration.builder()
-				.withWebapp(path + "src/main/webapp")
-				.withOverrideDescriptor("src/test/resources/web.xml")
-				.withParentClasspath(urlParentClasspath)
-				.withClasspath(path + "target/classes")
-				.build();
-	}
+	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();
 
 	@TestHttpClient
 	private HttpClient client;
 
 	@Test
 	public void it_should_have_an_index() {
-		String message = client
-			.prepareGet("/index")
-			.execute()
-			.body();
-
-		assertThat(message).isNotEmpty().contains("Hello");
+		ensureIndexIsOk(client);
 	}
-
 }

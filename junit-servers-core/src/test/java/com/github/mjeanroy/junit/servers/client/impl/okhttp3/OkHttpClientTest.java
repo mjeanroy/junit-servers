@@ -50,6 +50,7 @@ public class OkHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
 		return newOkHttpClient(server, internalClient);
 	}

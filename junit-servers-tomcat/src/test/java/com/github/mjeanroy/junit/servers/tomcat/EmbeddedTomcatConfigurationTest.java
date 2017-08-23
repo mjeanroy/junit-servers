@@ -28,6 +28,9 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmbeddedTomcatConfigurationTest {
@@ -73,9 +76,12 @@ public class EmbeddedTomcatConfigurationTest {
 
 	@Test
 	public void it_should_implement_equals_hashCode() {
+		ClassLoader red = new URLClassLoader(new URL[0]);
+		ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(EmbeddedTomcatConfiguration.class)
 			.suppress(Warning.STRICT_INHERITANCE)
 			.withRedefinedSuperclass()
+			.withPrefabValues(ClassLoader.class, red, black)
 			.verify();
 	}
 
@@ -89,7 +95,7 @@ public class EmbeddedTomcatConfigurationTest {
 				"webapp: \"src/main/webapp\", " +
 				"classpath: \"./target/classes\", " +
 				"overrideDescriptor: null, " +
-				"parentClasspath: [], " +
+				"parentClassLoader: null, " +
 				"baseDir: \"./tomcat-work\", " +
 				"keepBaseDir: false, " +
 				"enableNaming: true, " +

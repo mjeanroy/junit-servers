@@ -22,25 +22,25 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import org.junit.ClassRule;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
+import org.junit.Rule;
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.jetty.java.TestUtils.createJettyConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.jetty.java.TestUtils.ensureIndexIsOk;
 
 public class IndexWithRulesTest {
 
-	@ClassRule
-	public static TomcatServerRule serverRule = new TomcatServerRule(
-			new EmbeddedTomcat(createTomcatConfiguration())
+	@Rule
+	public JettyServerRule serverRule = new JettyServerRule(
+			new EmbeddedJetty(createJettyConfiguration())
 	);
 
 	@Test
 	public void it_should_have_an_index() {
-		ensureIndexIsOk(serverRule.getClient());
+		ensureIndexIsOk(serverRule.getClient(), serverRule.getServer());
 	}
 }

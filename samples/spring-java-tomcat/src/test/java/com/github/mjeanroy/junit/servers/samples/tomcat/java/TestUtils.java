@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2017 <mickael.jeanroy@gmail.com>
+ * Copyright (c) 2015 <mickael.jeanroy@gmail.com>, <fernando.ney@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
-import org.junit.Rule;
-import org.junit.Test;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -37,45 +35,58 @@ import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IndexWithRulesTest {
+/**
+ * Static Test Utilities.
+ */
+class TestUtils {
 
-	private static final String PATH = "samples/spring-java-jetty/";
+	// Ensure non instantiation.
+	private TestUtils() {
+	}
 
-	private static EmbeddedJettyConfiguration configuration() {
+	/**
+	 * Create configuration for Embedded Tomcat in Unit Test.
+	 *
+	 * @return The configuration.
+	 * @throws AssertionError If an error occurred while creating configuration.
+	 */
+	static EmbeddedTomcatConfiguration createTomcatConfiguration() {
 		try {
+
 			String current = new File(".").getCanonicalPath();
 			if (!current.endsWith("/")) {
 				current += "/";
 			}
 
-			String path = current.endsWith(PATH) ? current : current + PATH;
+			String subProjectPath = "samples/spring-java-tomcat/";
+			String path = current.endsWith(subProjectPath) ? current : current + subProjectPath;
 
-			return EmbeddedJettyConfiguration.builder()
+			return EmbeddedTomcatConfiguration.builder()
 					.withWebapp(path + "src/main/webapp")
 					.withClasspath(path + "target/classes")
 					.build();
-		}
-		catch (Exception ex) {
-			throw new RuntimeException(ex);
+
+		} catch (Exception ex) {
+			throw new AssertionError(ex);
 		}
 	}
 
-	private static EmbeddedJetty jetty = new EmbeddedJetty(configuration());
-
-	@Rule
-	public JettyServerRule serverRule = new JettyServerRule(jetty);
-
-	@Test
-	public void it_should_have_an_index() {
-		String message = serverRule.getClient()
-			.prepareGet("/index")
-			.execute()
-			.body();
+	/**
+	 * Ensure the home page can be rendered with expected message.
+	 *
+	 * @param client The HTTP client.
+	 * @param tomcat The started embedded server.
+	 */
+	static void ensureIndexIsOk(HttpClient client, EmbeddedServer tomcat) {
+		String message = client
+				.prepareGet("/index")
+				.execute()
+				.body();
 
 		assertThat(message).isNotEmpty().isEqualTo("Hello World");
 
 		// Try to get servlet context
-		ServletContext servletContext = serverRule.getServer().getServletContext();
+		ServletContext servletContext = tomcat.getServletContext();
 		assertThat(servletContext).isNotNull();
 
 		// Try to retrieve spring webApplicationContext

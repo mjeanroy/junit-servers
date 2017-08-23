@@ -24,21 +24,21 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.File;
-import java.net.URL;
-
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmbeddedJettyTest {
 
@@ -117,10 +117,15 @@ public class EmbeddedJettyTest {
 	public void it_should_add_parent_classloader() throws Exception {
 		File tmpFile = tmp.newFile();
 		File dir = tmpFile.getParentFile();
+		URL url = dir.toURI().toURL();
+		String name = tmpFile.getName();
+
+		URLClassLoader urlClassLoader = new URLClassLoader(new URL[]{url});
+		assertThat(urlClassLoader.getResource(name)).isNotNull();
 
 		jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
 				.withWebapp(dir)
-				.withParentClasspath(dir.toURI().toURL())
+				.withParentClasspath(url)
 				.build());
 
 		jetty.start();
@@ -130,7 +135,7 @@ public class EmbeddedJettyTest {
 
 		assertThat(cl).isNotNull();
 		assertThat(cl.getResource("custom-web.xml")).isNotNull();
-		assertThat(cl.getResource(tmpFile.getName())).isNotNull();
+		assertThat(cl.getResource(name)).isNotNull();
 	}
 
 	@Test

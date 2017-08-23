@@ -22,61 +22,25 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.samples.jetty.webxml;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileFilter;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.createJettyConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.ensureIndexIsOk;
 
 public class IndexWithRulesTest {
 
-	private static final String PATH = "samples/spring-webxml-jetty-jsp/";
-
-	private static EmbeddedJettyConfiguration configuration() {
-		try {
-			String current = new File(".").getCanonicalPath();
-			if (!current.endsWith("/")) {
-				current += "/";
-			}
-
-			String path = current.endsWith(PATH) ? current : current + PATH;
-
-			return EmbeddedJettyConfiguration.builder()
-					.withWebapp(path + "src/main/webapp")
-					.withClasspath(path + "target/classes")
-					.withParentClasspath(WebAppContext.class, new FileFilter() {
-						@Override
-						public boolean accept(File pathname) {
-							return pathname.getName().startsWith("apache-jstl");
-						}
-					})
-					.build();
-		}
-		catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	private static EmbeddedJetty jetty = new EmbeddedJetty(configuration());
-
 	@ClassRule
-	public static JettyServerRule serverRule = new JettyServerRule(jetty);
+	public static JettyServerRule serverRule = new JettyServerRule(
+			new EmbeddedJetty(createJettyConfiguration())
+	);
 
 	@Test
 	public void it_should_have_an_index() {
-		String message = serverRule.getClient()
-			.prepareGet("/")
-			.execute()
-			.body();
-
-		assertThat(message).isNotEmpty().contains("Hello");
+		ensureIndexIsOk(serverRule.getClient(), serverRule.getServer());
 	}
 }
