@@ -1,3 +1,11 @@
+##### 0.6.1
+
+###### Core
+
+- In version 0.6.0, visibility of method `EmbeddedTomcat#createContext` went from `protected` to `private`. This was a breaking change and it has been reverted (see [issues #7](https://github.com/mjeanroy/junit-servers/issues/7)). The method has been deprecated since visibility may be changed to private again (as it should have been at the beginning). If this is a problem, please [submit an issue](https://github.com/mjeanroy/junit-servers/issues) to discuss it.
+
+- Method `AbstractConfigurationBuilder#withParentClasspath(Class<?> baseClass, FileFilter filter)` (introduced in 0.5.0) has been deprecated. With JDK9, the application classloader does not inherit from `URLClassLoader`, so it become (almost) impossible to derive a new `URLClassLoader` from it by filtering some classpath entries. This method has been deprecated as it will become useless once JDK9 compatibility will be implemented. If this is a problem, please [submit an issue](https://github.com/mjeanroy/junit-servers/issues) to discuss it.
+
 ##### 0.6.0
 
 ###### Features
