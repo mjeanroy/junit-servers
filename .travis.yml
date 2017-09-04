@@ -4,6 +4,9 @@ jdk:
 os:
   - linux
 
+# See: https://github.com/travis-ci/travis-ci/issues/7019
+sudo: required
+
 env:
   matrix:
     - jdk_id=openjdk7
