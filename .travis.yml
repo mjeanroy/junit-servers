@@ -1,11 +1,16 @@
-language: java
-jdk:
-  - oraclejdk8
-os:
-  - linux
+# https://docs.travis-ci.com/user/precise-to-trusty-migration-guide/
+dist: precise
 
 # See: https://github.com/travis-ci/travis-ci/issues/7019
 sudo: required
+
+language: java
+
+jdk:
+  - oraclejdk8
+
+os:
+  - linux
 
 env:
   matrix:
