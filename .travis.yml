@@ -18,5 +18,13 @@ env:
     - jdk_id=oraclejdk7
     - jdk_id=oraclejdk8
 
+before_install:
+  - hostname #workaround for https://github.com/travis-ci/travis-ci/issues/5227
+  - cat /etc/hosts # optionally check the content *before*
+  - sudo hostname "$(hostname | cut -c1-63)"
+  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
+  - hostname
+  - cat /etc/hosts # optionally check the content *after*
+ 
 script:
   - echo ${jdk_id} && jdk_switcher use ${jdk_id} && java -version && echo "Java home is set to ${JAVA_HOME}" && mvn test
