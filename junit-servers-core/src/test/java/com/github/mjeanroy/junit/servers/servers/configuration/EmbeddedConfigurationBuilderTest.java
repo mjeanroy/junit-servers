@@ -24,13 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.servers.configuration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.entry;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.github.mjeanroy.junit.servers.servers.Hook;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -39,17 +38,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import com.github.mjeanroy.junit.servers.servers.Hook;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class EmbeddedConfigurationBuilderTest {
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	private EmbeddedConfigurationBuilder builder;
 
@@ -160,6 +164,25 @@ public class EmbeddedConfigurationBuilderTest {
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getParentClasspath()).isNotEmpty();
+	}
+
+	@Test
+	public void it_should_fail_to_override_class_loader_with_null_class() throws Exception {
+		thrown.expect(NullPointerException.class);
+		thrown.expectMessage(equalTo("Base class must not be null"));
+		builder.withParentClasspath((Class<?>) null);
+	}
+
+	@Test
+	public void it_should_fail_to_override_class_loader_with_null_class_and_filter() throws Exception {
+		thrown.expect(NullPointerException.class);
+		thrown.expectMessage(equalTo("Base class must not be null"));
+		builder.withParentClasspath(null, new FileFilter() {
+			@Override
+			public boolean accept(File pathname) {
+				return true;
+			}
+		});
 	}
 
 	@Test

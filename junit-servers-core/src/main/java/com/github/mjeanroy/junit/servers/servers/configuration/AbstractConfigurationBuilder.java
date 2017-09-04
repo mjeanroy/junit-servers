@@ -42,6 +42,7 @@ import java.util.Set;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
+import static java.util.Arrays.asList;
 
 /**
  * Builder for {@link AbstractConfiguration} instances, should be extended by custom configuration implementation.
@@ -320,9 +321,11 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @param cls The class that will be used to get classloader.
 	 * @param filter The file filter.
 	 * @return this
+	 * @deprecated The {@code filter} parameter will be useless in the next release for JDK9 compatibility, please use {@link #withParentClasspath(Class)} instead.
 	 */
+	@Deprecated
 	public T withParentClasspath(Class<?> cls, FileFilter filter) {
-		notNull(cls, "Base class must not be null");
+		notNull(cls, "Base class");
 
 		URLClassLoader urlClassLoader = (URLClassLoader) cls.getClassLoader();
 
@@ -343,12 +346,12 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @return this
 	 */
 	public T withParentClasspath(Class<?> cls) {
-		return withParentClasspath(cls, new FileFilter() {
-			@Override
-			public boolean accept(File pathname) {
-				return true;
-			}
-		});
+		notNull(cls, "Base class");
+
+		ClassLoader classLoader = cls.getClassLoader();
+		URLClassLoader urlClassLoader = (URLClassLoader) classLoader;
+		URL[] urLs = urlClassLoader.getURLs();
+		return withParentClasspath(asList(urLs));
 	}
 
 	/**
