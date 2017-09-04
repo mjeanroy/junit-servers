@@ -24,16 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
-
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Collection;
-
-import javax.servlet.ServletContext;
-
+import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
+import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 import org.apache.catalina.Context;
 import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.connector.Connector;
@@ -41,10 +35,14 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.StandardRoot;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 
-import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Collection;
+
+import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 
 /**
  * Embedded server using tomcat as implementation.
@@ -108,8 +106,10 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 	 *
 	 * @return Tomcat context.
 	 * @throws Exception Exception May be thrown by web app context initialization (will be wrapped later).
+	 * @deprecated Protected visibility may be removed in a next release, please submit an issue <a href="https://github.com/mjeanroy/junit-servers/issues">here</a> to discuss it.
 	 */
-	private Context createContext() throws Exception {
+	@Deprecated
+	protected Context createContext() throws Exception {
 		Context context = null;
 
 		final String webapp = configuration.getWebapp();
