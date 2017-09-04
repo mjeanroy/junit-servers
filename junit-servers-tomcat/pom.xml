@@ -31,11 +31,11 @@
 	<parent>
 		<artifactId>junit-servers</artifactId>
 		<groupId>com.github.mjeanroy</groupId>
-		<version>0.6.1-SNAPSHOT</version>
+		<version>0.6.1</version>
 	</parent>
 
 	<artifactId>junit-servers-tomcat</artifactId>
-	<version>0.6.1-SNAPSHOT</version>
+	<version>0.6.1</version>
 	<name>junit-servers-tomcat</name>
 	<packaging>jar</packaging>
 	<url>https://github.com/mjeanroy/junit-servers</url>
