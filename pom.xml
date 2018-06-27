@@ -84,24 +84,24 @@
 
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
-		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
-		<maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
+		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+		<maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
 		<maven-javadoc-plugin>2.10.4</maven-javadoc-plugin>
-		<maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
 		<maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+		<maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-		<maven-dependency-plugin.version>3.0.1</maven-dependency-plugin.version>
+		<maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
 
-		<apache-rat-plugin.version>0.10</apache-rat-plugin.version>
-		<versions-maven-plugin.version>2.1</versions-maven-plugin.version>
-		<animal-sniffer-maven-plugin.version>1.15</animal-sniffer-maven-plugin.version>
+		<apache-rat-plugin.version>0.11</apache-rat-plugin.version>
+		<versions-maven-plugin.version>2.5</versions-maven-plugin.version>
+		<animal-sniffer-maven-plugin.version>1.17</animal-sniffer-maven-plugin.version>
 		<java17-signature.version>1.0</java17-signature.version>
 
 		<jetty.version>9.2.24.v20180105</jetty.version>
