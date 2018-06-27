@@ -83,6 +83,16 @@ public class HttpHeader {
 	}
 
 	/**
+	 * Create builder for {@link HttpHeader}.
+	 *
+	 * @param name Header name.
+	 * @return Header value.
+	 */
+	public static HttpHeader.Builder builder(String name) {
+		return new Builder(name);
+	}
+
+	/**
 	 * Header name.
 	 */
 	private final String name;
@@ -176,5 +186,45 @@ public class HttpHeader {
 			.append("name", name)
 			.append("values", values)
 			.build();
+	}
+
+	/**
+	 * Builder for {@link HttpHeader}.
+	 */
+	public static class Builder {
+		/**
+		 * The header name.
+		 */
+		private final String name;
+
+		/**
+		 * Header values.
+		 */
+		private final List<String> values;
+
+		private Builder(String name) {
+			this.name = notNull(name, "Http Header name must be defined");
+			this.values = new ArrayList<>();
+		}
+
+		/**
+		 * Add value to http header.
+		 *
+		 * @param value Header value.
+		 * @return The builder.
+		 */
+		public Builder addValue(String value) {
+			this.values.add(value);
+			return this;
+		}
+
+		/**
+		 * Build HTTP header instance.
+		 *
+		 * @return The created HTTP header.
+		 */
+		public HttpHeader build() {
+			return header(name, values);
+		}
 	}
 }

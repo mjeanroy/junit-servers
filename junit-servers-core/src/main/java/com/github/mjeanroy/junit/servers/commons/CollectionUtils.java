@@ -26,7 +26,10 @@ package com.github.mjeanroy.junit.servers.commons;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import static java.util.Collections.addAll;
 
 /**
  * Static collection utilities.
@@ -104,6 +107,22 @@ public final class CollectionUtils {
 			outputs.add(mapper.apply(input));
 		}
 
+		return outputs;
+	}
+
+	/**
+	 * Concat new value to existing inputs and returns new outputs.
+	 * Note that input is not modified.
+	 *
+	 * @param inputs Input list.
+	 * @param newValue The new value to add.
+	 * @param <T> The type of object.
+	 * @return The outputs.
+	 */
+	public static <T> List<T> concat(List<T> inputs, T newValue) {
+		List<T> outputs = new ArrayList<>(inputs.size() + 1);
+		outputs.addAll(inputs);
+		outputs.add(newValue);
 		return outputs;
 	}
 

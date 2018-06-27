@@ -77,16 +77,13 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.UUID;
+import java.util.*;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -190,6 +187,26 @@ public abstract class BaseHttpClientTest {
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
 		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
+	public void testGetReadingBodyTwice() {
+		final String endpoint = ENDPOINT;
+		final int status = 200;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
+		final String body = "[{\"id\": 1, \"name\": \"John Doe\"}]";
+
+		stubGetRequest(endpoint, status, headers, body);
+
+		final HttpResponse rsp = createDefaultClient()
+				.prepareGet(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.execute();
+
+		String r1 = rsp.body();
+		String r2 = rsp.body();
+		assertThat(r1).isEqualTo(r2);
 	}
 
 	@Test
@@ -1150,6 +1167,35 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testResponse_with_custom_header() {
+		final String name = "X-Custom-Header";
+		final String value = "Foo";
+
+		testResponseHeader(name, value, new MapperFunction<HttpResponse, HttpHeader>() {
+			@Override
+			public HttpHeader apply(HttpResponse rsp) {
+				return rsp.getHeader(name);
+			}
+		});
+	}
+
+	@Test
+	public void testResponse_with_custom_header_and_multiple_values() {
+		final String name = "X-Custom-Header";
+		final String v1 = "Foo";
+		final String v2 = "Bar";
+		final String v3 = "Quix";
+		final List<String> values = asList(v1, v2, v3);
+
+		testResponseWithSeveralValues(name, values, new MapperFunction<HttpResponse, HttpHeader>() {
+			@Override
+			public HttpHeader apply(HttpResponse rsp) {
+				return rsp.getHeader(name);
+			}
+		});
+	}
+
+	@Test
 	public void testResponse_with_content_type_header() {
 		testResponseHeader(CONTENT_TYPE, APPLICATION_XML, new MapperFunction<HttpResponse, HttpHeader>() {
 			@Override
@@ -1299,10 +1345,49 @@ public abstract class BaseHttpClientTest {
 		HttpHeader header = rsp.getHeader(name);
 		assertThat(rsp.containsHeader(name)).isTrue();
 		assertThat(func.apply(rsp)).isEqualTo(header);
+
 		assertThat(header.getName()).isEqualTo(name);
 		assertThat(header.getValues()).isEqualTo(singletonList(value));
 		assertThat(header.getFirstValue()).isEqualTo(value);
 		assertThat(header.getLastValue()).isEqualTo(value);
+
+		assertThat(rsp.getHeaders())
+				.extracting("name", "values")
+				.contains(
+						tuple(name, singletonList(value))
+				);
+	}
+
+	private void testResponseWithSeveralValues(String name, List<String> values, MapperFunction<HttpResponse, HttpHeader> func) {
+		// GIVEN
+		final String endpoint = ENDPOINT;
+		final int status = 200;
+		final String body = null;
+		final Collection<Pair> headers = singleton(pair(name, values));
+
+		stubGetRequest(endpoint, status, headers, body);
+
+		// WHEN
+		HttpResponse rsp = createDefaultClient()
+				.prepareGet(endpoint)
+				.addAcceptEncoding("identity")
+				.executeJson();
+
+		// THEN
+		HttpHeader header = rsp.getHeader(name);
+		assertThat(rsp.containsHeader(name)).isTrue();
+		assertThat(func.apply(rsp)).isEqualTo(header);
+
+		assertThat(header.getName()).isEqualTo(name);
+		assertThat(header.getValues()).isEqualTo(values);
+		assertThat(header.getFirstValue()).isEqualTo(values.get(0));
+		assertThat(header.getLastValue()).isEqualTo(values.get(values.size() - 1));
+
+		assertThat(rsp.getHeaders())
+				.extracting("name", "values")
+				.contains(
+						tuple(name, values)
+				);
 	}
 
 	@Test

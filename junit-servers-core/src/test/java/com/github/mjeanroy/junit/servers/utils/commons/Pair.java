@@ -24,6 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.utils.commons;
 
+import java.util.Collections;
+import java.util.List;
+
+import static java.util.Collections.singletonList;
+
 /**
  * Pair of strings to use in unit tests.
  */
@@ -37,6 +42,17 @@ public class Pair {
 	 * @return Pair object.
 	 */
 	public static Pair pair(String o1, String o2) {
+		return new Pair(o1, singletonList(o2));
+	}
+
+	/**
+	 * Create new pair of strings.
+	 *
+	 * @param o1 String 1.
+	 * @param o2 String 2.
+	 * @return Pair object.
+	 */
+	public static Pair pair(String o1, List<String> o2) {
 		return new Pair(o1, o2);
 	}
 
@@ -48,10 +64,10 @@ public class Pair {
 	/**
 	 * Second string.
 	 */
-	private final String o2;
+	private final List<String> o2;
 
 	// Use static factory
-	private Pair(String o1, String o2) {
+	private Pair(String o1, List<String> o2) {
 		this.o1 = o1;
 		this.o2 = o2;
 	}
@@ -60,7 +76,7 @@ public class Pair {
 		return o1;
 	}
 
-	public String getO2() {
+	public List<String> getO2() {
 		return o2;
 	}
 }

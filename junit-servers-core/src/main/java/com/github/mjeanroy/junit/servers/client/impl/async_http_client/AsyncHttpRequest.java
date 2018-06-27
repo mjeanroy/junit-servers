@@ -71,30 +71,31 @@ class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
-		HttpUrl endpoint = getEndpoint();
-		String scheme = endpoint.getScheme();
-		String userInfo = null;
-		String host = endpoint.getHost();
-		int port = endpoint.getPort();
-		String path = Utf8UrlEncoder.encodePath(endpoint.getPath());
-		String query = null;
-		Uri uri = new Uri(scheme, userInfo, host, port, path, query);
+		final HttpUrl endpoint = getEndpoint();
+		final String scheme = endpoint.getScheme();
+		final String userInfo = null;
+		final String host = endpoint.getHost();
+		final int port = endpoint.getPort();
+		final String path = Utf8UrlEncoder.encodePath(endpoint.getPath());
+		final String query = null;
+		final Uri uri = new Uri(scheme, userInfo, host, port, path, query);
 
-		String method = getMethod().getVerb();
-		RequestBuilder builder = new RequestBuilder(method, true).setUri(uri);
+		final String method = getMethod().getVerb();
+		final RequestBuilder builder = new RequestBuilder(method, true).setUri(uri);
 
 		handleQueryParameters(builder);
 		handleBody(builder);
 		handleHeaders(builder);
 		handleCookies(builder);
 
-		Request request = builder.build();
-		ListenableFuture<Response> future = client.executeRequest(request);
+		final Request request = builder.build();
+		final ListenableFuture<Response> future = client.executeRequest(request);
 
-		long start = nanoTime();
-		Response response = future.get();
-		long duration = nanoTime() - start;
-		return new AsyncHttpResponse(response, duration);
+		final long start = nanoTime();
+		final Response response = future.get();
+		final long duration = nanoTime() - start;
+
+		return AsyncHttpResponseFactory.of(response, duration);
 	}
 
 	/**

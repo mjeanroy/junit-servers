@@ -55,7 +55,7 @@ public abstract class BaseHttpClientTest {
 	private String path;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		server = mock(EmbeddedServer.class);
 
 		scheme = "http";
@@ -73,7 +73,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_create_default_client() throws Exception {
+	public void it_should_create_default_client() {
 		HttpClient client = createDefaultClient(server);
 		assertThat(client).isNotNull();
 
@@ -84,7 +84,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_create_custom_client() throws Exception {
+	public void it_should_create_custom_client() {
 		HttpClient client = createCustomClient(server);
 		assertThat(client).isNotNull();
 
@@ -95,7 +95,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_create_client_with_custom_configuration() throws Exception {
+	public void it_should_create_client_with_custom_configuration() {
 		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
 			.build();
@@ -108,7 +108,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_create_request() throws Exception {
+	public void it_should_create_request() {
 		HttpClient client = createCustomClient(server);
 
 		String endpoint = "/foo";
@@ -126,7 +126,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_create_request_and_do_not_prepend_server_path() throws Exception {
+	public void it_should_create_request_and_do_not_prepend_server_path() {
 		HttpClient client = createCustomClient(server);
 
 		String endpoint = "/foo";
@@ -145,7 +145,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_create_request_and_do_not_prepend_server_url() throws Exception {
+	public void it_should_create_request_and_do_not_prepend_server_url() {
 		HttpClient client = createCustomClient(server);
 
 		String endpoint = "/foo";
@@ -165,7 +165,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_create_request_and_set_path_separator() throws Exception {
+	public void it_should_create_request_and_set_path_separator() {
 		final String serverUrl = url(scheme, host, port, "");
 		when(server.getUrl()).thenReturn(serverUrl);
 		when(server.getPath()).thenReturn("/");
@@ -185,7 +185,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_create_request_with_root_path() throws Exception {
+	public void it_should_create_request_with_root_path() {
 		final String serverUrl = url(scheme, host, 8080, "");
 		final String path = "/";
 		when(server.getUrl()).thenReturn(serverUrl);
@@ -205,28 +205,28 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_create_get_request() throws Exception {
+	public void it_should_create_get_request() {
 		HttpClient client = createCustomClient(server);
 		HttpRequest httpRequest = client.prepareGet("/foo");
 		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
 	}
 
 	@Test
-	public void it_should_create_post_request() throws Exception {
+	public void it_should_create_post_request() {
 		HttpClient client = createCustomClient(server);
 		HttpRequest httpRequest = client.preparePost("/foo");
 		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST);
 	}
 
 	@Test
-	public void it_should_create_put_request() throws Exception {
+	public void it_should_create_put_request() {
 		HttpClient client = createCustomClient(server);
 		HttpRequest httpRequest = client.preparePut("/foo");
 		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.PUT);
 	}
 
 	@Test
-	public void it_should_create_delete_request() throws Exception {
+	public void it_should_create_delete_request() {
 		HttpClient client = createCustomClient(server);
 		HttpRequest httpRequest = client.prepareDelete("/foo");
 		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.DELETE);

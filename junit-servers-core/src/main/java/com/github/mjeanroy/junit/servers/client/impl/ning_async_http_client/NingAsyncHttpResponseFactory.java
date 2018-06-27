@@ -27,16 +27,23 @@ package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
+import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import com.ning.http.client.FluentCaseInsensitiveStringsMap;
 import com.ning.http.client.Response;
+import org.apache.http.client.methods.HttpHead;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
 import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * Implementation of {@link HttpResponse} using (ning) async-http-client
@@ -45,60 +52,55 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
  * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
  */
-class NingAsyncHttpResponse extends AbstractHttpResponse implements HttpResponse {
+final class NingAsyncHttpResponseFactory {
+
+	// Ensure non instantiation.
+	private NingAsyncHttpResponseFactory() {
+	}
 
 	/**
-	 * Original response from async-http-client library.
-	 */
-	private final Response response;
-
-	/**
-	 * Request execution duration in nano seconds.
-	 * This is the time to produce http response.
-	 * The value must be strictly positive.
-	 */
-	private final long duration;
-
-	/**
-	 * Create http response.
+	 * Create the final {@link DefaultHttpResponse} instance.
 	 *
-	 * @param response Original http response from async-http-client.
-	 * @param duration Duration of request execution (a.k.a time to produce response).
-	 * @throws NullPointerException if response is null.
-	 * @throws IllegalArgumentException if duration is not positive.
+	 * @param response The Ning HTTP response.
+	 * @param duration The request duration.
+	 * @return The HTTP response.
 	 */
-	NingAsyncHttpResponse(Response response, long duration) {
-		this.response = notNull(response, "response");
-		this.duration = positive(duration, "duration");
+	static DefaultHttpResponse of(Response response, long duration) {
+		int status = response.getStatusCode();
+		String body = extractBody(response);
+		List<HttpHeader> headers = extractHeaders(response);
+		return DefaultHttpResponse.of(duration, status, body, headers);
 	}
 
-	@Override
-	public long getRequestDuration() {
-		return duration;
+	/**
+	 * Extract headers from Ning HTTP response.
+	 *
+	 * @param response The Ning HTTP response.
+	 * @return The final list of headers.
+	 */
+	private static List<HttpHeader> extractHeaders(Response response) {
+		final FluentCaseInsensitiveStringsMap responseHeaders = response.getHeaders();
+		final List<HttpHeader> headers = new ArrayList<>(responseHeaders.size());
+
+		for (Map.Entry<String, List<String>> entry : responseHeaders.entrySet()) {
+			headers.add(header(entry.getKey(), entry.getValue()));
+		}
+
+		return unmodifiableList(headers);
 	}
 
-	@Override
-	public int status() {
-		return response.getStatusCode();
-	}
-
-	@Override
-	public String body() {
+	/**
+	 * Extract response body of Ning HTTP response.
+	 *
+	 * @param response The Ning HTTP response.
+	 * @return The response body, as a string.
+	 */
+	private static String extractBody(Response response) {
 		try {
 			return response.getResponseBody();
 		}
 		catch (IOException ex) {
 			throw new HttpClientException(ex);
 		}
-	}
-
-	@Override
-	public HttpHeader getHeader(String name) {
-		List<String> headers = response.getHeaders(name);
-		if (isEmpty(headers)) {
-			return null;
-		}
-
-		return header(name, headers);
 	}
 }

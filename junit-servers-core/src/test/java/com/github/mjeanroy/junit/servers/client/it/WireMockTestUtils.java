@@ -35,12 +35,15 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static java.util.Collections.singleton;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.utils.commons.Pair;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.http.HttpHeader;
+import com.github.tomakehurst.wiremock.http.HttpHeaders;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.matching.UrlPattern;
@@ -211,7 +214,7 @@ final class WireMockTestUtils {
 
 		for (Pair cookie : cookies) {
 			String cookieName = cookie.getO1();
-			String cookieValue = cookie.getO2();
+			String cookieValue = cookie.getO2().get(0);
 			rq.withCookie(cookieName, equalTo(cookieValue));
 		}
 
@@ -228,9 +231,16 @@ final class WireMockTestUtils {
 
 		ResponseDefinitionBuilder response = aResponse().withStatus(status);
 
+		HttpHeaders httpHeaders = new HttpHeaders();
+
 		for (Pair header : headers) {
-			response.withHeader(header.getO1(), header.getO2());
+			String name = header.getO1();
+			List<String> values = header.getO2();
+			HttpHeader h = new HttpHeader(name, values);
+			httpHeaders = httpHeaders.plus(h);
 		}
+
+		response.withHeaders(httpHeaders);
 
 		if (body != null) {
 			response.withBody(body);

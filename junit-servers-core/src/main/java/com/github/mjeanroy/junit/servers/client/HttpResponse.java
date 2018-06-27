@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -71,6 +72,14 @@ public interface HttpResponse {
 	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-7.2">https://tools.ietf.org/html/rfc2616#section-7.2</a>
 	 */
 	String body();
+
+	/**
+	 * Get the list of headers.
+	 *
+	 * @return Header list.
+	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-6.2">https://tools.ietf.org/html/rfc2616#section-6.2</a>
+	 */
+	Collection<HttpHeader> getHeaders();
 
 	/**
 	 * Check that given header is available.

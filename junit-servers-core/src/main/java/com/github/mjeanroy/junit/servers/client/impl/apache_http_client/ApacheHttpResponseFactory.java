@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
 
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
+import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -34,57 +35,50 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.concat;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
 
 /**
- * Implementation of {@link HttpResponse} using apache http-client
- * under the hood.
+ * Factory to produce {@link DefaultHttpResponse} from {@link HttpResponse}.
  *
  * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
  */
-class ApacheHttpResponse extends AbstractHttpResponse {
+final class ApacheHttpResponseFactory {
+
+	// Ensure non instantiation.
+	private ApacheHttpResponseFactory() {
+	}
 
 	/**
-	 * Original response from apache http-client library.
-	 */
-	private final HttpResponse response;
-
-	/**
-	 * Request duration in nano seconds: this is the time to execute http request and
-	 * produce http response. This duration will always be a positive number.
-	 */
-	private final long duration;
-
-	/**
-	 * Create apache http response.
+	 * Create the final {@link DefaultHttpResponse} instance.
 	 *
-	 * @param response Original http response.
-	 * @param duration Request duration.
-	 * @throws NullPointerException If {@code response} is null.
-	 * @throws IllegalArgumentException If {@code duration} is not positive.
+	 * @param response The Apache response.
+	 * @param duration The request duration.
+	 * @return The HTTP response.
 	 */
-	ApacheHttpResponse(HttpResponse response, long duration) {
-		this.response = notNull(response, "response");
-		this.duration = positive(duration, "duration");
+	static DefaultHttpResponse of(HttpResponse response, long duration) {
+		int status = response.getStatusLine().getStatusCode();
+		String body = extractBody(response);
+		List<HttpHeader> headers = extractHeaders(response);
+		return DefaultHttpResponse.of(duration, status, body, headers);
 	}
 
-	@Override
-	public long getRequestDuration() {
-		return duration;
-	}
-
-	@Override
-	public int status() {
-		return response.getStatusLine().getStatusCode();
-	}
-
-	@Override
-	public String body() {
+	/**
+	 * Extract response body of Apache response.
+	 *
+	 * @param response The Apache response.
+	 * @return The response body, as a string.
+	 */
+	private static String extractBody(HttpResponse response) {
 		try {
 			HttpEntity entity = response.getEntity();
 			return entity == null ? "" : EntityUtils.toString(entity);
@@ -94,18 +88,39 @@ class ApacheHttpResponse extends AbstractHttpResponse {
 		}
 	}
 
-	@Override
-	public HttpHeader getHeader(String name) {
-		Header[] headers = response.getHeaders(name);
-		if (headers == null || headers.length == 0) {
-			return null;
+	/**
+	 * Extract headers from Apache response.
+	 *
+	 * @param response The Apache response.
+	 * @return The final list of headers.
+	 */
+	private static List<HttpHeader> extractHeaders(HttpResponse response) {
+		final Header[] responseHeaders = response.getAllHeaders();
+		if (responseHeaders == null || responseHeaders.length == 0) {
+			return emptyList();
 		}
 
-		List<String> values = new ArrayList<>(headers.length);
-		for (Header h : headers) {
-			values.add(h.getValue());
+		final Map<String, HttpHeader.Builder> map = new HashMap<>(responseHeaders.length);
+
+		for (Header h : responseHeaders) {
+			final String name = h.getName();
+			final String value = h.getValue();
+			final String key = h.getName().toLowerCase();
+
+			HttpHeader.Builder current = map.get(key);
+			if (current == null) {
+				current = HttpHeader.builder(name);
+				map.put(key, current);
+			}
+
+			current.addValue(value);
 		}
 
-		return header(name, values);
+		final List<HttpHeader> headers = new ArrayList<>(map.size());
+		for (HttpHeader.Builder header : map.values()) {
+			headers.add(header.build());
+		}
+
+		return unmodifiableList(headers);
 	}
 }

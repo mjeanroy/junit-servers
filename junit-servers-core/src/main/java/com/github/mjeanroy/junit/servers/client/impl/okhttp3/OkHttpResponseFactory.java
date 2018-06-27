@@ -27,71 +27,76 @@ package com.github.mjeanroy.junit.servers.client.impl.okhttp3;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
+import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import okhttp3.Headers;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
+import static java.util.Collections.unmodifiableList;
 
 /**
- * Implementation of {@link HttpResponse} using OkHttp library.
+ * Factory that produce {@link DefaultHttpResponse} from {@link HttpResponse}.
  *
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
  * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
  */
-class OkHttpResponse extends AbstractHttpResponse implements HttpResponse {
+final class OkHttpResponseFactory {
+
+	// Ensure non instantiation.
+	private OkHttpResponseFactory() {
+	}
 
 	/**
-	 * The native OkHttp response.
-	 */
-	private final Response response;
-
-	/**
-	 * The request duration.
-	 */
-	private final long duration;
-
-	/**
-	 * Create the response.
+	 * Create the final {@link DefaultHttpResponse} instance.
 	 *
-	 * @param response OkHttp response.
-	 * @param duration Request duration.
+	 * @param response The OkHttp response.
+	 * @param duration The request duration.
+	 * @return The HTTP response.
 	 */
-	OkHttpResponse(Response response, long duration) {
-		this.response = response;
-		this.duration = duration;
+	static DefaultHttpResponse of(Response response, long duration) {
+		int status = response.code();
+		String body = extractBody(response);
+		List<HttpHeader> headers = extractHeaders(response);
+		return DefaultHttpResponse.of(duration, status, body, headers);
 	}
 
-	@Override
-	public long getRequestDuration() {
-		return duration;
+	/**
+	 * Extract headers from OkHttp response.
+	 *
+	 * @param response The OkHttp response.
+	 * @return The final list of headers.
+	 */
+	private static List<HttpHeader> extractHeaders(Response response) {
+		final Headers responseHeaders = response.headers();
+		final List<HttpHeader> headers = new ArrayList<>(responseHeaders.size());
+
+		for (String name : responseHeaders.names()) {
+			headers.add(header(name, responseHeaders.values(name)));
+		}
+
+		return unmodifiableList(headers);
 	}
 
-	@Override
-	public int status() {
-		return response.code();
-	}
-
-	@Override
-	public String body() {
+	/**
+	 * Extract response body of OkHttp response.
+	 *
+	 * @param response The OkHttp response.
+	 * @return The response body, as a string.
+	 */
+	private static String extractBody(Response response) {
 		try {
 			ResponseBody body = response.body();
 			return body == null ? "" : body.string();
 		} catch (IOException ex) {
 			throw new HttpClientException(ex);
 		}
-	}
-
-	@Override
-	public HttpHeader getHeader(String name) {
-		List<String> values = response.headers(name);
-		if (values == null || values.isEmpty()) {
-			return null;
-		}
-
-		return header(name, values);
 	}
 }

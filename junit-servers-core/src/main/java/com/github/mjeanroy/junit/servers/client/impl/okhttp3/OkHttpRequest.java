@@ -70,8 +70,8 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
-		HttpUrl endpoint = getEndpoint();
-		okhttp3.HttpUrl.Builder httpUrlBuilder = new okhttp3.HttpUrl.Builder()
+		final HttpUrl endpoint = getEndpoint();
+		final okhttp3.HttpUrl.Builder httpUrlBuilder = new okhttp3.HttpUrl.Builder()
 			.scheme(endpoint.getScheme())
 			.host(endpoint.getHost())
 			.port(endpoint.getPort())
@@ -82,18 +82,18 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 			httpUrlBuilder.addEncodedQueryParameter(queryParam.getEncodedName(), queryParam.getEncodedValue());
 		}
 
-		Request.Builder builder = new Request.Builder().url(httpUrlBuilder.build());
+		final Request.Builder builder = new Request.Builder().url(httpUrlBuilder.build());
 		handleCookies(builder);
 		handleHeaders(builder);
 		handleBody(builder);
 
-		Call call = client.newCall(builder.build());
+		final Call call = client.newCall(builder.build());
 
-		long start = System.nanoTime();
-		Response response = call.execute();
-		long duration = System.nanoTime() - start;
+		final long start = System.nanoTime();
+		final Response response = call.execute();
+		final long duration = System.nanoTime() - start;
 
-		return new OkHttpResponse(response, duration);
+		return OkHttpResponseFactory.of(response, duration);
 	}
 
 	/**

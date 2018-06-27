@@ -28,12 +28,14 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
 import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.map;
 import static java.lang.System.nanoTime;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -60,6 +62,7 @@ import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import com.github.mjeanroy.junit.servers.commons.Mapper;
+import org.apache.http.util.EntityUtils;
 
 /**
  * Implementation for {@link HttpRequest} that use apache http-client
@@ -91,17 +94,20 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	protected HttpResponse doExecute() throws Exception {
-		HttpMethod method = getMethod();
+		final HttpMethod method = getMethod();
 
-		HttpRequestBase httpRequest = FACTORY.create(method);
+		final HttpRequestBase httpRequest = FACTORY.create(method);
+
 		httpRequest.setURI(createRequestURI());
 		handleHeaders(httpRequest);
 		handleCookies(httpRequest);
 		handleBody(httpRequest);
 
-		long start = nanoTime();
-		org.apache.http.HttpResponse httpResponse = client.execute(httpRequest);
-		return new ApacheHttpResponse(httpResponse, nanoTime() - start);
+		final long start = nanoTime();
+		final org.apache.http.HttpResponse httpResponse = client.execute(httpRequest);
+		final long duration = nanoTime() - start;
+
+		return ApacheHttpResponseFactory.of(httpResponse, duration);
 	}
 
 	/**
