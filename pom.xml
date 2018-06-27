@@ -104,7 +104,7 @@
 		<animal-sniffer-maven-plugin.version>1.15</animal-sniffer-maven-plugin.version>
 		<java17-signature.version>1.0</java17-signature.version>
 
-		<jetty.version>9.3.0.M1</jetty.version>
+		<jetty.version>9.2.24.v20180105</jetty.version>
 		<tomcat.version>8.0.44</tomcat.version>
 		<junit.version>4.12</junit.version><javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<mockito.version>2.19.0</mockito.version>
