@@ -17,6 +17,10 @@ env:
     - jdk_id=openjdk7
     - jdk_id=oraclejdk8
 
+# https://github.com/travis-ci/travis-ci/issues/5914
+addons:
+  hostname: short-hostname
+
 before_install:
   - hostname #workaround for https://github.com/travis-ci/travis-ci/issues/5227
   - cat /etc/hosts # optionally check the content *before*
