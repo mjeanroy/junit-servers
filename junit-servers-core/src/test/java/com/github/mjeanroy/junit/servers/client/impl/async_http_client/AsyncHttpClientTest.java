@@ -28,8 +28,8 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.AtLeastJava8;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
+import com.github.mjeanroy.junit4.runif.RunIf;
+import com.github.mjeanroy.junit4.runif.conditions.AtLeastJava8Condition;
 import org.asynchttpclient.AsyncHttpClientConfig;
 
 import static com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.defaultAsyncHttpClient;
@@ -38,7 +38,7 @@ import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@RunIf(AtLeastJava8.class)
+@RunIf(AtLeastJava8Condition.class)
 public class AsyncHttpClientTest extends BaseHttpClientTest {
 
 	private org.asynchttpclient.AsyncHttpClient internalClient;

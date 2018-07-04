@@ -24,17 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.mockito.Mockito.mock;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-
 import com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient;
@@ -42,10 +31,20 @@ import com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.AtLeastJava8;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.Java7;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIf;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
+import com.github.mjeanroy.junit4.runif.RunIf;
+import com.github.mjeanroy.junit4.runif.RunIfRunner;
+import com.github.mjeanroy.junit4.runif.conditions.AtLeastJava8Condition;
+import com.github.mjeanroy.junit4.runif.conditions.Java7Condition;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.mockito.Mockito.mock;
 
 @RunWith(RunIfRunner.class)
 public class HttpClientStrategyTest {
@@ -82,7 +81,7 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
-	@RunIf(AtLeastJava8.class)
+	@RunIf(AtLeastJava8Condition.class)
 	public void it_should_create_async_http_client() {
 		testHttpClient(HttpClientStrategy.ASYNC_HTTP_CLIENT, AsyncHttpClient.class);
 	}
@@ -104,7 +103,7 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
-	@RunIf(AtLeastJava8.class)
+	@RunIf(AtLeastJava8Condition.class)
 	public void it_should_fail_to_create_async_http_client_if_it_does_not_exist() {
 		setAsyncHttpFlag(false);
 		testHttpClientWithoutImpl(HttpClientStrategy.ASYNC_HTTP_CLIENT, "AsyncHttpClient");
@@ -129,7 +128,7 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
-	@RunIf(AtLeastJava8.class)
+	@RunIf(AtLeastJava8Condition.class)
 	public void it_should_fail_to_create_async_http_client_with_custom_configuration_if_it_does_not_exist() {
 		setAsyncHttpFlag(false);
 		testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy.ASYNC_HTTP_CLIENT, "AsyncHttpClient");
@@ -148,7 +147,7 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
-	@RunIf(Java7.class)
+	@RunIf(Java7Condition.class)
 	public void it_should_fail_to_create_async_http_client_if_runtime_is_java7() {
 		String error =
 			"HTTP Client cannot be created because it is not supported by the runtime environment, " +
@@ -161,7 +160,7 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
-	@RunIf(Java7.class)
+	@RunIf(Java7Condition.class)
 	public void it_should_fail_to_create_async_http_client_with_custom_configuration_if_runtime_is_java7() {
 		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
@@ -184,14 +183,14 @@ public class HttpClientStrategyTest {
 	}
 
 	@Test
-	@RunIf(AtLeastJava8.class)
+	@RunIf(AtLeastJava8Condition.class)
 	public void it_should_create_automatic_http_client_with_async_http_client_on_java_8() {
 		setOkHttpFlag(false);
 		testAuto(AsyncHttpClient.class);
 	}
 
 	@Test
-	@RunIf(Java7.class)
+	@RunIf(Java7Condition.class)
 	public void it_should_create_automatic_http_client_with_ning_async_http_client_on_java_7() {
 		setOkHttpFlag(false);
 		testAuto(NingAsyncHttpClient.class);

@@ -24,6 +24,36 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
+import com.github.mjeanroy.junit.servers.client.Cookie;
+import com.github.mjeanroy.junit.servers.client.Cookies;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpParameter;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.commons.Function;
+import com.github.mjeanroy.junit.servers.utils.commons.MapperFunction;
+import com.github.mjeanroy.junit.servers.utils.commons.Pair;
+import com.github.mjeanroy.junit4.runif.RunIfRunner;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.UUID;
+
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.ACCEPT;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.ACCEPT_ENCODING;
@@ -54,8 +84,8 @@ import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.X_HTTP
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.X_REQUESTED_WITH;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.X_WEBKIT_CSP;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.X_XSS_PROTECTION;
-import static com.github.mjeanroy.junit.servers.client.it.HttpTestUtils.encodePath;
 import static com.github.mjeanroy.junit.servers.client.it.HttpTestUtils.encodeFormParam;
+import static com.github.mjeanroy.junit.servers.client.it.HttpTestUtils.encodePath;
 import static com.github.mjeanroy.junit.servers.client.it.HttpTestUtils.encodeQueryParam;
 import static com.github.mjeanroy.junit.servers.client.it.HttpTestUtils.utcDate;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.assertRequest;
@@ -81,33 +111,6 @@ import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.*;
-
-import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-
-import com.github.mjeanroy.junit.servers.client.Cookie;
-import com.github.mjeanroy.junit.servers.client.Cookies;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.client.HttpHeader;
-import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpParameter;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.utils.commons.Function;
-import com.github.mjeanroy.junit.servers.utils.commons.MapperFunction;
-import com.github.mjeanroy.junit.servers.utils.commons.Pair;
-import com.github.mjeanroy.junit.servers.utils.junit.run_if.RunIfRunner;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-
 @RunWith(RunIfRunner.class)
 public abstract class BaseHttpClientTest {
 
@@ -123,18 +126,17 @@ public abstract class BaseHttpClientTest {
 	private String scheme;
 	private String host;
 	private int port;
-	private String path;
-	private String url;
 	private HttpClient client;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		scheme = "http";
 		host = "localhost";
 		port = wireMockRule.port();
-		path = "/";
 
-		url = url(scheme, host, port, path);
+		String path = "/";
+		String url = url(scheme, host, port, path);
+
 		server = mock(EmbeddedServer.class);
 		when(server.getScheme()).thenReturn(scheme);
 		when(server.getHost()).thenReturn(host);
