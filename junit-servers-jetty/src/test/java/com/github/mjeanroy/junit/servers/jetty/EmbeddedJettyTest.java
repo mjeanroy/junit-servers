@@ -55,7 +55,7 @@ public class EmbeddedJettyTest {
 	}
 
 	@Test
-	public void it_should_start_jetty() throws Exception {
+	public void it_should_start_jetty() {
 		jetty = new EmbeddedJetty();
 		jetty.start();
 
@@ -68,7 +68,7 @@ public class EmbeddedJettyTest {
 	}
 
 	@Test
-	public void it_should_stop_jetty() throws Exception {
+	public void it_should_stop_jetty() {
 		jetty = new EmbeddedJetty();
 		jetty.start();
 
@@ -89,7 +89,7 @@ public class EmbeddedJettyTest {
 	}
 
 	@Test
-	public void it_should_get_configuration_port_until_jetty_is_started() throws Exception {
+	public void it_should_get_configuration_port_until_jetty_is_started() {
 		jetty = new EmbeddedJetty();
 		assertThat(jetty.getPort()).isZero();
 

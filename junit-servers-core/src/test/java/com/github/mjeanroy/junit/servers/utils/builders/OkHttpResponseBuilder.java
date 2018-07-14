@@ -22,31 +22,46 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.apache;
+package com.github.mjeanroy.junit.servers.utils.builders;
 
-import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
-import org.apache.http.HttpResponse;
+import okhttp3.MediaType;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+
+import java.util.List;
+import java.util.Map;
 
 /**
- * Factory to produce {@link com.github.mjeanroy.junit.servers.client.HttpResponse} from {@link HttpResponse}.
- *
- * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
+ * Builder for {@link Response} instances.
  */
-final class ApacheHttpResponseFactory {
+public class OkHttpResponseBuilder extends AbstractHttpResponseBuilder<Response, OkHttpResponseBuilder> {
 
-	// Ensure non instantiation.
-	private ApacheHttpResponseFactory() {
-	}
+	@Override
+	public Response build() {
+		Request request = new Request.Builder().url("http://localhost:8080").build();
+		Protocol protocol = Protocol.HTTP_1_0;
 
-	/**
-	 * Create the final {@link DefaultHttpResponse} instance.
-	 *
-	 * @param response The Apache response.
-	 * @param duration The request duration.
-	 * @return The HTTP response.
-	 */
-	static com.github.mjeanroy.junit.servers.client.HttpResponse of(HttpResponse response, long duration) {
-		return new ApacheHttpResponse(response, duration);
+		Response.Builder builder = new Response.Builder()
+				.request(request)
+				.protocol(protocol)
+				.code(status);
+
+		if (body != null) {
+			MediaType mediaType = MediaType.parse("plain/text");
+			String content = body == null ? "" : body;
+			builder.body(ResponseBody.create(mediaType, content));
+		}
+
+		for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+			String headerName = entry.getKey();
+			for (String headerValue : entry.getValue()) {
+				builder.addHeader(headerName, headerValue);
+			}
+		}
+
+		builder.message("OK");
+		return builder.build();
 	}
 }

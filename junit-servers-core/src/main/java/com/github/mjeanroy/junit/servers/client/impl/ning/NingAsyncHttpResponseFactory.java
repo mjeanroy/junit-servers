@@ -24,21 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.ning;
 
-import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
-import com.ning.http.client.FluentCaseInsensitiveStringsMap;
 import com.ning.http.client.Response;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
-import static java.util.Collections.unmodifiableList;
 
 /**
  * Implementation of {@link HttpResponse} using (ning) async-http-client
@@ -60,42 +48,7 @@ final class NingAsyncHttpResponseFactory {
 	 * @param duration The request duration.
 	 * @return The HTTP response.
 	 */
-	static DefaultHttpResponse of(Response response, long duration) {
-		int status = response.getStatusCode();
-		String body = extractBody(response);
-		List<HttpHeader> headers = extractHeaders(response);
-		return DefaultHttpResponse.of(duration, status, body, headers);
-	}
-
-	/**
-	 * Extract headers from Ning HTTP response.
-	 *
-	 * @param response The Ning HTTP response.
-	 * @return The final list of headers.
-	 */
-	private static List<HttpHeader> extractHeaders(Response response) {
-		final FluentCaseInsensitiveStringsMap responseHeaders = response.getHeaders();
-		final List<HttpHeader> headers = new ArrayList<>(responseHeaders.size());
-
-		for (Map.Entry<String, List<String>> entry : responseHeaders.entrySet()) {
-			headers.add(header(entry.getKey(), entry.getValue()));
-		}
-
-		return unmodifiableList(headers);
-	}
-
-	/**
-	 * Extract response body of Ning HTTP response.
-	 *
-	 * @param response The Ning HTTP response.
-	 * @return The response body, as a string.
-	 */
-	private static String extractBody(Response response) {
-		try {
-			return response.getResponseBody();
-		}
-		catch (IOException ex) {
-			throw new HttpClientException(ex);
-		}
+	static HttpResponse of(Response response, long duration) {
+		return new NingAsyncHttpResponse(response, duration);
 	}
 }

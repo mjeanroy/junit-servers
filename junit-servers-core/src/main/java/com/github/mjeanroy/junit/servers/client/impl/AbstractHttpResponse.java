@@ -27,9 +27,14 @@ package com.github.mjeanroy.junit.servers.client.impl;
 import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static com.github.mjeanroy.junit.servers.client.Cookies.read;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CACHE_CONTROL;
@@ -46,6 +51,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CONTENT_TYP
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_WEBKIT_CSP;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_XSS_PROTECTION;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
@@ -58,10 +64,75 @@ import static java.util.Collections.unmodifiableList;
  */
 public abstract class AbstractHttpResponse implements HttpResponse {
 
+	/**
+	 * The original request duration.
+	 */
+	private final long duration;
+
+	/**
+	 * The lock used inside {@link #readResponseBody()} to avoid concurrent
+	 * writing to {@link #_body} value.
+	 */
+	private final Lock readResponseBodyLock;
+
+	/**
+	 * The response _body element, that will be computed the first time {@link #readResponseBody()} is
+	 * called.
+	 */
+	private String _body;
+
+	/**
+	 * Create the partial HTTP response implementation.
+	 *
+	 * @param duration Original request duration.
+	 */
+	protected AbstractHttpResponse(long duration) {
+		this.duration = positive(duration, "Duration must be positive");
+		this.readResponseBodyLock = new ReentrantLock();
+	}
+
+	@Override
+	public long getRequestDuration() {
+		return duration;
+	}
+
 	@Override
 	public long getRequestDurationInMillis() {
 		return getRequestDuration() / 1000;
 	}
+
+	@Override
+	public String body() {
+		readResponseBodyLock.lock();
+
+		try {
+			readBodyIfNotAlreadyComputed();
+			return _body;
+		} catch (IOException ex) {
+			throw new HttpClientException(ex);
+		} finally {
+			readResponseBodyLock.unlock();
+		}
+	}
+
+	/**
+	 * Read HTTP Response _body as a {@link String} and update {@link #_body} value.
+	 *
+	 * @throws IOException If an error occurred while reading _body.
+	 */
+	private void readBodyIfNotAlreadyComputed() throws IOException {
+		if (_body == null) {
+			_body = readResponseBody();
+		}
+	}
+
+	/**
+	 * Read HTTP Response _body as a {@link String}.
+	 *
+	 * @return The response _body.
+	 * @throws IOException If an error occurred while reading _body.
+	 */
+	protected abstract String readResponseBody() throws IOException;
 
 	@Override
 	public boolean containsHeader(String name) {
@@ -74,7 +145,6 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 
 		HttpHeader header = getHeader(SET_COOKIE);
 		if (header == null) {
-			// No cookie in response
 			return null;
 		}
 
@@ -94,15 +164,13 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	public List<Cookie> getCookies() {
 		HttpHeader header = getHeader(SET_COOKIE);
 		if (header == null) {
-			// No cookie in response
 			return emptyList();
 		}
 
 		List<String> values = header.getValues();
 		List<Cookie> cookies = new ArrayList<>(values.size());
 		for (String value : values) {
-			Cookie cookie = read(value);
-			cookies.add(cookie);
+			cookies.add(read(value));
 		}
 
 		return unmodifiableList(cookies);
@@ -166,5 +234,34 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	@Override
 	public HttpHeader getXXSSProtection() {
 		return getHeader(X_XSS_PROTECTION);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
+
+		if (o instanceof AbstractHttpResponse) {
+			AbstractHttpResponse r = (AbstractHttpResponse) o;
+			return r.canEqual(this) && Objects.equals(duration, r.duration);
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(duration);
+	}
+
+	/**
+	 * Ensure that given object o can be equal to this.
+	 *
+	 * @param o The HTTP Response.
+	 * @return The flag.
+	 */
+	protected boolean canEqual(AbstractHttpResponse o) {
+		return o instanceof AbstractHttpResponse;
 	}
 }

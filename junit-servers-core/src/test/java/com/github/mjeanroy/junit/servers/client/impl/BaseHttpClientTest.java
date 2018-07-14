@@ -29,10 +29,8 @@ import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit4.runif.RunIfRunner;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
@@ -44,7 +42,6 @@ import static org.mockito.Mockito.when;
 /**
  * Tests skeleton for http client implementations.
  */
-@RunWith(RunIfRunner.class)
 public abstract class BaseHttpClientTest {
 
 	private EmbeddedServer<?> server;

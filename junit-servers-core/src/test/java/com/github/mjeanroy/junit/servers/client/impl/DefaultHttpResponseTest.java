@@ -77,7 +77,10 @@ public class DefaultHttpResponseTest {
 
 	@Test
 	public void it_should_implement_equals_hash_code() {
-		EqualsVerifier.forClass(DefaultHttpResponse.class).verify();
+		EqualsVerifier.forClass(DefaultHttpResponse.class)
+			.withRedefinedSuperclass()
+			.withIgnoredFields("readResponseBodyLock", "_body")
+			.verify();
 	}
 
 	@Test

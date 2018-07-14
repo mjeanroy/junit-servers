@@ -22,31 +22,24 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.apache;
+package com.github.mjeanroy.junit.servers.client.impl.ning;
 
-import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
-import org.apache.http.HttpResponse;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.utils.builders.NingHttpResponseBuilder;
+import com.ning.http.client.Response;
+import org.junit.Test;
 
-/**
- * Factory to produce {@link com.github.mjeanroy.junit.servers.client.HttpResponse} from {@link HttpResponse}.
- *
- * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
- */
-final class ApacheHttpResponseFactory {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	// Ensure non instantiation.
-	private ApacheHttpResponseFactory() {
-	}
+public class NingAsyncHttpResponseFactoryTest {
 
-	/**
-	 * Create the final {@link DefaultHttpResponse} instance.
-	 *
-	 * @param response The Apache response.
-	 * @param duration The request duration.
-	 * @return The HTTP response.
-	 */
-	static com.github.mjeanroy.junit.servers.client.HttpResponse of(HttpResponse response, long duration) {
-		return new ApacheHttpResponse(response, duration);
+	@Test
+	public void it_should_create_http_response() {
+		Response delegate = new NingHttpResponseBuilder().build();
+		long duration = 1000L;
+		HttpResponse response = NingAsyncHttpResponseFactory.of(delegate, duration);
+
+		assertThat(response).isNotNull().isExactlyInstanceOf(NingAsyncHttpResponse.class);
+		assertThat(response.getRequestDuration()).isEqualTo(duration);
 	}
 }

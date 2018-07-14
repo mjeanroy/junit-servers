@@ -22,79 +22,85 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl;
+package com.github.mjeanroy.junit.servers.client.impl.async;
 
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
 import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import io.netty.handler.codec.http.HttpHeaders;
+import org.asynchttpclient.Response;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+
 /**
- * A simple implementation of {@link HttpResponse}.
+ * Implementation of {@link HttpResponse} delegating calls to origina {@link Response}
+ * instance.
  */
-public final class DefaultHttpResponse extends AbstractHttpResponse implements HttpResponse {
+final class AsyncHttpResponse extends AbstractHttpResponse implements HttpResponse {
 
 	/**
-	 * Create a default HTTP Response from given values.
+	 * The original response.
+	 */
+	private final Response response;
+
+	/**
+	 * Create the response from AsyncHttpClient.
 	 *
-	 * @param duration Request-Response duration.
-	 * @param status The response status code.
-	 * @param body The response body.
-	 * @param headers The response headers.
-	 * @return The HTTP response.
+	 * @param response The original response.
+	 * @param duration Request duration.
 	 */
-	public static DefaultHttpResponse of(long duration, int status, String body, Collection<HttpHeader> headers) {
-		return new DefaultHttpResponse(duration, status, body, headers);
-	}
-
-	/**
-	 * The response status code.
-	 */
-	private final int status;
-
-	/**
-	 * The response body.
-	 */
-	private final String body;
-
-	/**
-	 * The response headers.
-	 */
-	private final Map<String, HttpHeader> headers;
-
-	private DefaultHttpResponse(long duration, int status, String body, Collection<HttpHeader> headers) {
+	AsyncHttpResponse(Response response, long duration) {
 		super(duration);
-		this.status = status;
-		this.body = body;
-
-		this.headers = new LinkedHashMap<>();
-		for (HttpHeader header : headers) {
-			this.headers.put(header.getName().toLowerCase(), header);
-		}
+		this.response = notNull(response, "Response");
 	}
 
 	@Override
 	public int status() {
-		return status;
+		return response.getStatusCode();
 	}
 
 	@Override
 	protected String readResponseBody() {
-		return body;
+		return response.getResponseBody();
 	}
 
 	@Override
 	public Collection<HttpHeader> getHeaders() {
-		return headers.values();
+		HttpHeaders headers = response.getHeaders();
+
+		List<HttpHeader> results = new ArrayList<>(headers.size());
+		for (Map.Entry<String, String> entry : headers) {
+			String name = entry.getKey();
+			List<String> values = headers.getAll(name);
+			results.add(HttpHeader.header(name, values));
+		}
+
+		return results;
 	}
 
 	@Override
 	public HttpHeader getHeader(String name) {
-		return headers.get(name.toLowerCase());
+		List<String> values = response.getHeaders(name);
+		if (values == null || values.isEmpty()) {
+			return null;
+		}
+
+		return HttpHeader.header(name, values);
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+				.append("duration", getRequestDuration())
+				.append("response", response)
+				.build();
 	}
 
 	@Override
@@ -103,12 +109,9 @@ public final class DefaultHttpResponse extends AbstractHttpResponse implements H
 			return true;
 		}
 
-		if (o instanceof DefaultHttpResponse) {
-			DefaultHttpResponse r = (DefaultHttpResponse) o;
-			return super.equals(o)
-					&& Objects.equals(status, r.status)
-					&& Objects.equals(body, r.body)
-					&& Objects.equals(headers, r.headers);
+		if (o instanceof AsyncHttpResponse) {
+			AsyncHttpResponse r = (AsyncHttpResponse) o;
+			return super.equals(r) && Objects.equals(response, r.response);
 		}
 
 		return false;
@@ -116,21 +119,11 @@ public final class DefaultHttpResponse extends AbstractHttpResponse implements H
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(super.hashCode(), status, body, headers);
-	}
-
-	@Override
-	public String toString() {
-		return ToStringBuilder.create(getClass())
-				.append("duration", getRequestDuration())
-				.append("status", status)
-				.append("body", body)
-				.append("headers", headers)
-				.build();
+		return Objects.hash(super.hashCode(), response);
 	}
 
 	@Override
 	protected boolean canEqual(AbstractHttpResponse o) {
-		return o instanceof DefaultHttpResponse;
+		return o instanceof AsyncHttpResponse;
 	}
 }

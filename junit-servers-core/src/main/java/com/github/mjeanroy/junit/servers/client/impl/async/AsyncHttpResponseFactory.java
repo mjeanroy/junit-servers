@@ -24,24 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.async;
 
-import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
-import io.netty.handler.codec.http.HttpHeaders;
 import org.asynchttpclient.Response;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.unmodifiableList;
-
 /**
- * Factory that produce {@link DefaultHttpResponse} from {@link HttpResponse}.
+ * Factory that produce {@link HttpResponse} from {@link Response} instances.
  *
  * @see <a href="https://asynchttpclient.github.io/">https://asynchttpclient.github.io/</a>
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#ASYNC_HTTP_CLIENT
@@ -53,52 +40,13 @@ final class AsyncHttpResponseFactory {
 	}
 
 	/**
-	 * Create the final {@link DefaultHttpResponse} instance.
+	 * Create the final {@link HttpResponse} instance.
 	 *
 	 * @param response The AsyncHttpClient response.
 	 * @param duration The request duration.
 	 * @return The HTTP response.
 	 */
-	static DefaultHttpResponse of(Response response, long duration) {
-		final int status = response.getStatusCode();
-		final String body = response.getResponseBody();
-		final List<HttpHeader> headers = extractHeaders(response);
-		return DefaultHttpResponse.of(duration, status, body, headers);
-	}
-
-	/**
-	 * Extract headers from AsyncHttpClient response.
-	 *
-	 * @param response The AsyncHttpClient response.
-	 * @return The final list of headers.
-	 */
-	private static List<HttpHeader> extractHeaders(Response response) {
-		final HttpHeaders responseHeaders = response.getHeaders();
-		if (responseHeaders.isEmpty()) {
-			return emptyList();
-		}
-
-		final Map<String, HttpHeader.Builder> map = new HashMap<>();
-
-		for (Map.Entry<String, String> entry : responseHeaders) {
-			final String name = entry.getKey();
-			final String value = entry.getValue();
-			final String key = name.toLowerCase();
-
-			HttpHeader.Builder builder = map.get(key);
-			if (builder == null) {
-				builder = HttpHeader.builder(name);
-				map.put(key, builder);
-			}
-
-			builder.addValue(value);
-		}
-
-		final List<HttpHeader> headers = new ArrayList<>(map.size());
-		for (HttpHeader.Builder builder : map.values()) {
-			headers.add(builder.build());
-		}
-
-		return unmodifiableList(headers);
+	static HttpResponse of(Response response, long duration) {
+		return new AsyncHttpResponse(response, duration);
 	}
 }
