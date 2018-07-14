@@ -24,18 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import org.junit.Rule;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class CookiesTest {
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
 	public void it_should_serialize_single_cookie() {
@@ -200,19 +197,28 @@ public class CookiesTest {
 
 	@Test
 	public void it_should_not_create_cookie_without_name_value() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("Cookie must have a valid name and a valid value");
-		Cookies.read("name; Domain=foo.com; Path=/; Secure; HttpOnly");
+		assertThatThrownBy(read("name; Domain=foo.com; Path=/; Secure; HttpOnly"))
+				.isExactlyInstanceOf(IllegalArgumentException.class)
+				.hasMessage("Cookie must have a valid name and a valid value");
 	}
 
 	@Test
 	public void it_should_not_create_cookie_with_empty_name() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("Cookie must have a valid name");
-		Cookies.read("=value; Domain=foo.com; Path=/; Secure; HttpOnly");
+		assertThatThrownBy(read("=value; Domain=foo.com; Path=/; Secure; HttpOnly"))
+				.isExactlyInstanceOf(IllegalArgumentException.class)
+				.hasMessage("Cookie must have a valid name");
 	}
 
 	private static String formatCookie(String name, String value) {
 		return name + "=" + value;
+	}
+
+	private static ThrowingCallable read(final String rawValue) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				Cookies.read(rawValue);
+			}
+		};
 	}
 }

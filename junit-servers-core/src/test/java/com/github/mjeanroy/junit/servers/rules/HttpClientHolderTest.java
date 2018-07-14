@@ -24,22 +24,21 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 public class HttpClientHolderTest {
 
@@ -52,9 +51,6 @@ public class HttpClientHolderTest {
 	private static final boolean ASYNC_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, ASYNC_HTTP_FLAG);
 	private static final boolean NING_ASYNC_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, NING_ASYNC_HTTP_FLAG);
 	private static final boolean APACHE_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, APACHE_HTTP_FLAG);
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	private HttpClientStrategy strategy;
 	private HttpClientConfiguration configuration;
@@ -141,10 +137,9 @@ public class HttpClientHolderTest {
 			"HTTP Client cannot be created because it is not supported by the runtime environment, " +
 			"please import OkHttp OR AsyncHttpClient OR Apache HttpComponent";
 
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage(error);
-
-		holder.get();
+		assertThatThrownBy(holderGet(holder))
+				.isExactlyInstanceOf(UnsupportedOperationException.class)
+				.hasMessage(error);
 	}
 
 	private static void setDetection(boolean okHttp, boolean asyncHttp, boolean ningAsyncHttp, boolean apacheHttp) {
@@ -168,5 +163,14 @@ public class HttpClientHolderTest {
 
 	private static void setApacheHttpFlag(boolean value) {
 		Fields.writeStaticFinal(HttpClientStrategy.class, APACHE_HTTP_FLAG, value);
+	}
+
+	private ThrowingCallable holderGet(final HttpClientHolder holder) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				holder.get();
+			}
+		};
 	}
 }

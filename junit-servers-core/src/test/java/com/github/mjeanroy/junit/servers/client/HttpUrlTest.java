@@ -24,21 +24,17 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.Test;
 
 import java.net.URI;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class HttpUrlTest {
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
 	public void it_should_create_default_url() {
@@ -57,9 +53,10 @@ public class HttpUrlTest {
 
 	@Test
 	public void it_should_fail_with_unknown_scheme() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("Unknown scheme: ftp");
-		new HttpUrl.Builder().withScheme("ftp");
+		HttpUrl.Builder builder = new HttpUrl.Builder();
+		assertThatThrownBy(withScheme(builder, "ftp"))
+				.isExactlyInstanceOf(IllegalArgumentException.class)
+				.hasMessage("Unknown scheme: ftp");
 	}
 
 	@Test
@@ -169,5 +166,14 @@ public class HttpUrlTest {
 		assertThat(url.getHost()).isEqualTo(host);
 		assertThat(url.getPort()).isEqualTo(port);
 		assertThat(url.getPath()).isEqualTo(path);
+	}
+
+	private static ThrowingCallable withScheme(final HttpUrl.Builder builder, final String scheme) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				builder.withScheme(scheme);
+			}
+		};
 	}
 }

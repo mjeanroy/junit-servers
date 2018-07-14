@@ -35,15 +35,14 @@ import com.github.mjeanroy.junit4.runif.RunIf;
 import com.github.mjeanroy.junit4.runif.RunIfRunner;
 import com.github.mjeanroy.junit4.runif.conditions.AtLeastJava8Condition;
 import com.github.mjeanroy.junit4.runif.conditions.Java7Condition;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 @RunWith(RunIfRunner.class)
@@ -58,9 +57,6 @@ public class HttpClientStrategyTest {
 	private static final boolean ASYNC_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, ASYNC_HTTP_FLAG);
 	private static final boolean NING_ASYNC_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, NING_ASYNC_HTTP_FLAG);
 	private static final boolean APACHE_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, APACHE_HTTP_FLAG);
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	private EmbeddedServer<? extends AbstractConfiguration> server;
 
@@ -153,10 +149,9 @@ public class HttpClientStrategyTest {
 			"HTTP Client cannot be created because it is not supported by the runtime environment, " +
 			"please import AsyncHttpClient";
 
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage(error);
-
-		HttpClientStrategy.ASYNC_HTTP_CLIENT.build(server);
+		assertThatThrownBy(build(HttpClientStrategy.ASYNC_HTTP_CLIENT, server))
+				.isExactlyInstanceOf(UnsupportedOperationException.class)
+				.hasMessage(error);
 	}
 
 	@Test
@@ -170,10 +165,9 @@ public class HttpClientStrategyTest {
 			"HTTP Client cannot be created because it is not supported by the runtime environment, " +
 			"please import AsyncHttpClient";
 
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage(error);
-
-		HttpClientStrategy.ASYNC_HTTP_CLIENT.build(configuration, server);
+		assertThatThrownBy(build(HttpClientStrategy.ASYNC_HTTP_CLIENT, configuration, server))
+				.isExactlyInstanceOf(UnsupportedOperationException.class)
+				.hasMessage(error);
 	}
 
 	@Test
@@ -267,10 +261,9 @@ public class HttpClientStrategyTest {
 			"HTTP Client cannot be created because it is not supported by the runtime environment, " +
 			"please import " + library;
 
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage(equalTo(error));
-
-		strategy.build(server);
+		assertThatThrownBy(build(strategy, server))
+				.isExactlyInstanceOf(UnsupportedOperationException.class)
+				.hasMessage(error);
 	}
 
 	private void testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy strategy, String library) {
@@ -284,10 +277,9 @@ public class HttpClientStrategyTest {
 			"HTTP Client cannot be created because it is not supported by the runtime environment, " +
 			"please import " + library;
 
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage(error);
-
-		strategy.build(configuration, server);
+		assertThatThrownBy(build(strategy, configuration, server))
+				.isExactlyInstanceOf(UnsupportedOperationException.class)
+				.hasMessage(error);
 	}
 
 	private static void setDetection(boolean okHttp, boolean asyncHttp, boolean ningAsyncHttp, boolean apacheHttp) {
@@ -311,5 +303,23 @@ public class HttpClientStrategyTest {
 
 	private static void setApacheHttpFlag(boolean value) {
 		Fields.writeStaticFinal(HttpClientStrategy.class, APACHE_HTTP_FLAG, value);
+	}
+
+	private static ThrowingCallable build(final HttpClientStrategy strategy, final EmbeddedServer<?> server) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				strategy.build(server);
+			}
+		};
+	}
+
+	private static ThrowingCallable build(final HttpClientStrategy strategy, final HttpClientConfiguration configuration, final EmbeddedServer<?> server) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				strategy.build(configuration, server);
+			}
+		};
 	}
 }

@@ -24,28 +24,24 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ServerRuleTest {
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	private AbstractConfiguration configuration;
 	private EmbeddedServer<?> server;
@@ -58,7 +54,7 @@ public class ServerRuleTest {
 
 		when(server.getConfiguration()).thenAnswer(new Answer<AbstractConfiguration>() {
 			@Override
-			public AbstractConfiguration answer(InvocationOnMock invocation) throws Throwable {
+			public AbstractConfiguration answer(InvocationOnMock invocation) {
 				return configuration;
 			}
 		});
@@ -181,15 +177,33 @@ public class ServerRuleTest {
 
 	@Test
 	public void it_should_fail_to_instantiate_server_without_implementations() {
-		thrown.expect(ServerImplMissingException.class);
-		thrown.expectMessage("Embedded server implementation is missing, please import appropriate sub-module");
-		new ServerRule();
+		assertThatThrownBy(newServerRule())
+				.isExactlyInstanceOf(ServerImplMissingException.class)
+				.hasMessage("Embedded server implementation is missing, please import appropriate sub-module");
 	}
 
 	@Test
 	public void it_should_fail_to_instantiate_server_with_configuration_but_without_implementations() {
-		thrown.expect(ServerImplMissingException.class);
-		thrown.expectMessage("Embedded server implementation is missing, please import appropriate sub-module");
-		new ServerRule(mock(AbstractConfiguration.class));
+		assertThatThrownBy(newServerRule(mock(AbstractConfiguration.class)))
+				.isExactlyInstanceOf(ServerImplMissingException.class)
+				.hasMessage("Embedded server implementation is missing, please import appropriate sub-module");
+	}
+
+	private static ThrowingCallable newServerRule() {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				new ServerRule();
+			}
+		};
+	}
+
+	private static ThrowingCallable newServerRule(final AbstractConfiguration configuration) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				new ServerRule(configuration);
+			}
+		};
 	}
 }

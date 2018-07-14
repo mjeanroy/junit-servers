@@ -25,10 +25,10 @@
 package com.github.mjeanroy.junit.servers.servers.configuration;
 
 import com.github.mjeanroy.junit.servers.servers.Hook;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
@@ -39,8 +39,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.entry;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -49,9 +49,6 @@ public class EmbeddedConfigurationBuilderTest {
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	private EmbeddedConfigurationBuilder builder;
 
@@ -175,30 +172,31 @@ public class EmbeddedConfigurationBuilderTest {
 
 	@Test
 	public void it_should_fail_to_override_classloader_with_null_class() {
-		thrown.expect(NullPointerException.class);
-		thrown.expectMessage(equalTo("Base class must not be null"));
-		builder.withParentClassLoader(null);
+		assertThatThrownBy(withParentClassLoader(builder, null))
+			.isExactlyInstanceOf(NullPointerException.class)
+			.hasMessage("Base class must not be null");
 	}
 
 	@Test
-	@SuppressWarnings("deprecation")
 	public void it_should_fail_to_override_classpath_with_null_class() {
-		thrown.expect(NullPointerException.class);
-		thrown.expectMessage(equalTo("Base class must not be null"));
-		builder.withParentClasspath((Class<?>) null);
+		assertThatThrownBy(withParentClassPath(builder, null))
+			.isExactlyInstanceOf(NullPointerException.class)
+			.hasMessage("Base class must not be null");
 	}
 
 	@Test
-	@SuppressWarnings("deprecation")
 	public void it_should_fail_to_override_classpath_with_null_class_and_filter() {
-		thrown.expect(NullPointerException.class);
-		thrown.expectMessage(equalTo("Base class must not be null"));
-		builder.withParentClasspath(null, new FileFilter() {
+		Class<?> cls = null;
+		FileFilter filter = new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
 				return true;
 			}
-		});
+		};
+
+		assertThatThrownBy(withParentClassPath(builder, cls, filter))
+			.isExactlyInstanceOf(NullPointerException.class)
+			.hasMessage("Base class must not be null");
 	}
 
 	@Test
@@ -252,5 +250,34 @@ public class EmbeddedConfigurationBuilderTest {
 		public EmbeddedConfiguration build() {
 			return new EmbeddedConfiguration(this);
 		}
+	}
+
+	private static ThrowingCallable withParentClassLoader(final EmbeddedConfigurationBuilder builder, final Class<?> klass) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				builder.withParentClassLoader(klass);
+			}
+		};
+	}
+
+	private static ThrowingCallable withParentClassPath(final EmbeddedConfigurationBuilder builder, final Class<?> klass) {
+		return new ThrowingCallable() {
+			@Override
+			@SuppressWarnings("deprecation")
+			public void call() {
+				builder.withParentClasspath(klass);
+			}
+		};
+	}
+
+	private static ThrowingCallable withParentClassPath(final EmbeddedConfigurationBuilder builder, final Class<?> klass, final FileFilter fileFilter) {
+		return new ThrowingCallable() {
+			@Override
+			@SuppressWarnings("deprecation")
+			public void call() {
+				builder.withParentClasspath(klass, fileFilter);
+			}
+		};
 	}
 }

@@ -1,18 +1,15 @@
 package com.github.mjeanroy.junit.servers.commons;
 
-import org.junit.Rule;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class CompositeClassLoaderTest {
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
 	public void it_should_load_resource_from_primary_or_fallback_class_loader() {
@@ -44,9 +41,7 @@ public class CompositeClassLoaderTest {
 
 		assertThat(cl.loadClass(class1)).isEqualTo(Foo.class);
 		assertThat(cl.loadClass(class2)).isEqualTo(Bar.class);
-
-		thrown.expect(ClassNotFoundException.class);
-		cl.loadClass("fake");
+		assertThatThrownBy(loadClass(cl, "fake")).isExactlyInstanceOf(ClassNotFoundException.class);
 	}
 
 	private static class Foo {}
@@ -69,5 +64,14 @@ public class CompositeClassLoaderTest {
 
 			throw new ClassNotFoundException();
 		}
+	}
+
+	private static ThrowingCallable loadClass(final ClassLoader classLoader, final String name) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() throws Throwable {
+				classLoader.loadClass(name);
+			}
+		};
 	}
 }

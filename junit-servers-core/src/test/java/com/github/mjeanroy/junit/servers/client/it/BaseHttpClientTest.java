@@ -40,11 +40,11 @@ import com.github.mjeanroy.junit.servers.utils.commons.MapperFunction;
 import com.github.mjeanroy.junit.servers.utils.commons.Pair;
 import com.github.mjeanroy.junit4.runif.RunIfRunner;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import java.util.Calendar;
@@ -107,6 +107,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -118,9 +119,6 @@ public abstract class BaseHttpClientTest {
 
 	@Rule
 	public WireMockRule wireMockRule = new WireMockRule();
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	private EmbeddedServer<?> server;
 	private String scheme;
@@ -936,46 +934,44 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_should_fail_to_add_form_param_on_get_request() {
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage("Http method GET does not support body parameters");
+		HttpRequest httpRequest = createDefaultClient().prepareGet(ENDPOINT);
+		String name = "foo";
+		String value = "bar";
 
-		createDefaultClient()
-			.prepareGet(ENDPOINT)
-			.addFormParam("foo", "bar")
-			.executeJson();
+		assertThatThrownBy(addFormParam(httpRequest, name, value))
+			.isExactlyInstanceOf(UnsupportedOperationException.class)
+			.hasMessage("Http method GET does not support body parameters");
 	}
 
 	@Test
 	public void testRequest_should_fail_to_add_form_param_on_delete_request() {
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage("Http method DELETE does not support body parameters");
+		HttpRequest httpRequest = createDefaultClient().prepareDelete(ENDPOINT);
+		String name = "foo";
+		String value = "bar";
 
-		createDefaultClient()
-			.prepareDelete(ENDPOINT)
-			.addFormParam("foo", "bar")
-			.executeJson();
+		assertThatThrownBy(addFormParam(httpRequest, name, value))
+			.isExactlyInstanceOf(UnsupportedOperationException.class)
+			.hasMessage("Http method DELETE does not support body parameters");
 	}
 
 	@Test
 	public void testRequest_should_fail_to_set_body_on_get_request() {
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage("Http method GET does not support request body");
+		HttpRequest httpRequest = createDefaultClient().prepareGet(ENDPOINT);
+		String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
 
-		createDefaultClient()
-			.prepareGet(ENDPOINT)
-			.setBody("{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}")
-			.executeJson();
+		assertThatThrownBy(setRequestBody(httpRequest, body))
+			.isExactlyInstanceOf(UnsupportedOperationException.class)
+			.hasMessage("Http method GET does not support request body");
 	}
 
 	@Test
 	public void testRequest_should_fail_to_set_body_on_delete_request() {
-		thrown.expect(UnsupportedOperationException.class);
-		thrown.expectMessage("Http method DELETE does not support request body");
+		HttpRequest httpRequest = createDefaultClient().prepareDelete(ENDPOINT);
+		String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
 
-		createDefaultClient()
-			.prepareDelete(ENDPOINT)
-			.setBody("{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}")
-			.executeJson();
+		assertThatThrownBy(setRequestBody(httpRequest, body))
+			.isExactlyInstanceOf(UnsupportedOperationException.class)
+			.hasMessage("Http method DELETE does not support request body");
 	}
 
 	@Test
@@ -1473,12 +1469,13 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void it_should_fail_to_create_request_from_a_destroyed_client() {
+		String endpoint = "/foo";
 		HttpClient newClient = createDefaultClient();
 		newClient.destroy();
 
-		thrown.expect(IllegalStateException.class);
-		thrown.expectMessage("Cannot create request from a destroyed client");
-		newClient.prepareGet("/foo");
+		assertThatThrownBy(prepareGet(newClient, endpoint))
+			.isExactlyInstanceOf(IllegalStateException.class)
+			.hasMessage("Cannot create request from a destroyed client");
 	}
 
 	protected abstract HttpClientStrategy strategy();
@@ -1515,5 +1512,32 @@ public abstract class BaseHttpClientTest {
 
 	private interface HttpClientFactory {
 		HttpClient create();
+	}
+
+	private static ThrowingCallable prepareGet(final HttpClient client, final String endpoint) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				client.prepareGet(endpoint);
+			}
+		};
+	}
+
+	private static ThrowingCallable addFormParam(final HttpRequest request, final String name, final String value) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				request.addFormParam(name, value);
+			}
+		};
+	}
+
+	private static ThrowingCallable setRequestBody(final HttpRequest request, final String body) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				request.setBody(body);
+			}
+		};
 	}
 }
