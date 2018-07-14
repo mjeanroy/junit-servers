@@ -22,10 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.apache;
 
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import org.apache.http.Header;
@@ -40,8 +39,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.concat;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;

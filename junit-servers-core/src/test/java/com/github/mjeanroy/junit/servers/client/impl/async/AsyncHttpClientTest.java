@@ -22,52 +22,58 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.async;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.apache.http.impl.client.CloseableHttpClient;
+import com.github.mjeanroy.junit4.runif.RunIf;
+import com.github.mjeanroy.junit4.runif.conditions.AtLeastJava8Condition;
+import org.asynchttpclient.AsyncHttpClientConfig;
 
-import static com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient.defaultApacheHttpClient;
-import static com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient.newApacheHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient.defaultAsyncHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient.newAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class ApacheHttpClientTest extends BaseHttpClientTest {
+@RunIf(AtLeastJava8Condition.class)
+public class AsyncHttpClientTest extends BaseHttpClientTest {
 
-	private CloseableHttpClient internalClient;
+	private org.asynchttpclient.AsyncHttpClient internalClient;
 
 	@Override
 	protected void onSetUp() {
-		internalClient = mock(CloseableHttpClient.class);
+		internalClient = mock(org.asynchttpclient.AsyncHttpClient.class);
 	}
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
-		return defaultApacheHttpClient(server);
+		return defaultAsyncHttpClient(server);
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
 	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
-		return newApacheHttpClient(server, internalClient);
+		return newAsyncHttpClient(server, internalClient);
 	}
 
 	@Override
 	protected HttpClient createCustomClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
-		return newApacheHttpClient(configuration, server);
+		return newAsyncHttpClient(configuration, server);
 	}
 
 	@Override
 	protected void checkInternalHttpClient(HttpClientConfiguration configuration, HttpClient httpClient) {
+		org.asynchttpclient.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
+		AsyncHttpClientConfig config = readPrivate(internalClient, "config");
+		assertThat(config.isFollowRedirect()).isEqualTo(configuration.isFollowRedirect());
 	}
 
 	@Override
 	protected void checkInternalHttpClient(HttpClient httpClient) {
-		CloseableHttpClient internalClient = readPrivate(httpClient, "client");
+		org.asynchttpclient.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
 	}
 }

@@ -22,26 +22,21 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.ning;
 
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import com.ning.http.client.FluentCaseInsensitiveStringsMap;
 import com.ning.http.client.Response;
-import org.apache.http.client.methods.HttpHead;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 import static java.util.Collections.unmodifiableList;
 

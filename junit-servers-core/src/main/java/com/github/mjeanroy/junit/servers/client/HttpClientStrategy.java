@@ -24,9 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.client.impl.apache_http_client.ApacheHttpClient;
-import com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient;
-import com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.apache.ApacheHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient;
+import com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient;
 import com.github.mjeanroy.junit.servers.commons.ClassUtils;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;

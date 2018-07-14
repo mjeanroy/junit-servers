@@ -22,14 +22,11 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.async;
 
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
-import com.github.mjeanroy.junit.servers.commons.CollectionUtils;
-import com.github.mjeanroy.junit.servers.commons.Mapper;
 import io.netty.handler.codec.http.HttpHeaders;
 import org.asynchttpclient.Response;
 
@@ -39,8 +36,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.async;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 

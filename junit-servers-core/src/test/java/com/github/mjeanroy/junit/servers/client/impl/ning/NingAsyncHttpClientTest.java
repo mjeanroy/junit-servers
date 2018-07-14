@@ -22,30 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.ning;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit4.runif.RunIf;
-import com.github.mjeanroy.junit4.runif.conditions.AtLeastJava8Condition;
-import org.asynchttpclient.AsyncHttpClientConfig;
+import com.ning.http.client.AsyncHttpClientConfig;
 
-import static com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.defaultAsyncHttpClient;
-import static com.github.mjeanroy.junit.servers.client.impl.async_http_client.AsyncHttpClient.newAsyncHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient.defaultAsyncHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient.newAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@RunIf(AtLeastJava8Condition.class)
-public class AsyncHttpClientTest extends BaseHttpClientTest {
+public class NingAsyncHttpClientTest extends BaseHttpClientTest {
 
-	private org.asynchttpclient.AsyncHttpClient internalClient;
+	private com.ning.http.client.AsyncHttpClient internalClient;
 
 	@Override
 	protected void onSetUp() {
-		internalClient = mock(org.asynchttpclient.AsyncHttpClient.class);
+		internalClient = mock(com.ning.http.client.AsyncHttpClient.class);
 	}
 
 	@Override
@@ -66,14 +63,14 @@ public class AsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected void checkInternalHttpClient(HttpClientConfiguration configuration, HttpClient httpClient) {
-		org.asynchttpclient.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
-		AsyncHttpClientConfig config = readPrivate(internalClient, "config");
+		com.ning.http.client.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
+		AsyncHttpClientConfig config = internalClient.getConfig();
 		assertThat(config.isFollowRedirect()).isEqualTo(configuration.isFollowRedirect());
 	}
 
 	@Override
 	protected void checkInternalHttpClient(HttpClient httpClient) {
-		org.asynchttpclient.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
+		com.ning.http.client.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
 	}
 }

@@ -22,55 +22,52 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.apache;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.ning.http.client.AsyncHttpClientConfig;
+import org.apache.http.impl.client.CloseableHttpClient;
 
-import static com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient.defaultAsyncHttpClient;
-import static com.github.mjeanroy.junit.servers.client.impl.ning_async_http_client.NingAsyncHttpClient.newAsyncHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.apache.ApacheHttpClient.defaultApacheHttpClient;
+import static com.github.mjeanroy.junit.servers.client.impl.apache.ApacheHttpClient.newApacheHttpClient;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class NingAsyncHttpClientTest extends BaseHttpClientTest {
+public class ApacheHttpClientTest extends BaseHttpClientTest {
 
-	private com.ning.http.client.AsyncHttpClient internalClient;
+	private CloseableHttpClient internalClient;
 
 	@Override
 	protected void onSetUp() {
-		internalClient = mock(com.ning.http.client.AsyncHttpClient.class);
+		internalClient = mock(CloseableHttpClient.class);
 	}
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
-		return defaultAsyncHttpClient(server);
+		return defaultApacheHttpClient(server);
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
 	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
-		return newAsyncHttpClient(server, internalClient);
+		return newApacheHttpClient(server, internalClient);
 	}
 
 	@Override
 	protected HttpClient createCustomClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
-		return newAsyncHttpClient(configuration, server);
+		return newApacheHttpClient(configuration, server);
 	}
 
 	@Override
 	protected void checkInternalHttpClient(HttpClientConfiguration configuration, HttpClient httpClient) {
-		com.ning.http.client.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
-		AsyncHttpClientConfig config = internalClient.getConfig();
-		assertThat(config.isFollowRedirect()).isEqualTo(configuration.isFollowRedirect());
 	}
 
 	@Override
 	protected void checkInternalHttpClient(HttpClient httpClient) {
-		com.ning.http.client.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
+		CloseableHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
 	}
 }

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.apache;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 

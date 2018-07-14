@@ -22,20 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.impl.apache_http_client;
+package com.github.mjeanroy.junit.servers.client.impl.apache;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
 import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.map;
 import static java.lang.System.nanoTime;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -62,7 +60,6 @@ import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
 import com.github.mjeanroy.junit.servers.commons.Mapper;
-import org.apache.http.util.EntityUtils;
 
 /**
  * Implementation for {@link HttpRequest} that use apache http-client
