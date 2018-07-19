@@ -22,35 +22,36 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
+package com.github.mjeanroy.junit.servers.jetty;
 
-import static org.mockito.Mockito.when;
-
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.rules.ServerRule;
 
 /**
- * This is a mockito {@link Answer} to simulate {@link EmbeddedJetty#isStarted()} method.
+ * Rule that can be used to start and stop embedded jetty server.
  */
-class IsStartedAnswer implements Answer<Void> {
-
-	static IsStartedAnswer isStarted(EmbeddedJetty jetty, boolean isStarted) {
-		return new IsStartedAnswer(jetty, isStarted);
+public class JettyServerJunit4Rule extends ServerRule {
+	/**
+	 * Create rule.
+	 *
+	 * @param jetty Jetty Embedded Server.
+	 */
+	public JettyServerJunit4Rule(EmbeddedJetty jetty) {
+		super(jetty);
 	}
 
-	private final EmbeddedJetty jetty;
-	private final boolean isStarted;
-
-	private IsStartedAnswer(EmbeddedJetty jetty, boolean isStarted) {
-		this.jetty = jetty;
-		this.isStarted = isStarted;
+	/**
+	 * Create rule using jetty as embedded server.
+	 */
+	public JettyServerJunit4Rule() {
+		this(new EmbeddedJetty());
 	}
 
-	@Override
-	public Void answer(InvocationOnMock invocationOnMock) throws Throwable {
-		when(jetty.isStarted()).thenReturn(isStarted);
-		return null;
+	/**
+	 * Create rule.
+	 *
+	 * @param configuration Jetty Configuration.
+	 */
+	public JettyServerJunit4Rule(EmbeddedJettyConfiguration configuration) {
+		this(new EmbeddedJetty(configuration));
 	}
 }

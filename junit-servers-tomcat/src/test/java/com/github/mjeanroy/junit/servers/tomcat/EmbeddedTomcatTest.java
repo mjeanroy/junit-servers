@@ -24,12 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import static com.github.mjeanroy.junit.servers.tests.Fields.readPrivate;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.File;
-import java.net.URL;
-
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.apache.catalina.Container;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleState;
@@ -38,10 +36,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import java.io.File;
+import java.net.URL;
+
+import static com.github.mjeanroy.junit.servers.tomcat.tests.Fields.readPrivate;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmbeddedTomcatTest {
 
@@ -60,7 +59,7 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_start_tomcat() throws Exception {
+	public void it_should_start_tomcat() {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		tomcat.start();
 
@@ -73,7 +72,7 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_stop_tomcat() throws Exception {
+	public void it_should_stop_tomcat() {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		tomcat.start();
 
@@ -94,7 +93,7 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_destroy_context_on_stop() throws Exception {
+	public void it_should_destroy_context_on_stop() {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		assertThat(readPrivate(tomcat, "context")).isNull();
 

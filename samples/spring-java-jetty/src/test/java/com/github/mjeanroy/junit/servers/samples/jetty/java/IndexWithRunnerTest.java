@@ -27,14 +27,14 @@ package com.github.mjeanroy.junit.servers.samples.jetty.java;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.jetty.AbstractJettyJunit4Test;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.utils.AbstractJettyTest;
 import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.samples.jetty.java.TestUtils.createJettyConfiguration;
 import static com.github.mjeanroy.junit.servers.samples.jetty.java.TestUtils.ensureIndexIsOk;
 
-public class IndexWithRunnerTest extends AbstractJettyTest {
+public class IndexWithRunnerTest extends AbstractJettyJunit4Test {
 
 	@TestServerConfiguration
 	private static EmbeddedJettyConfiguration configuration = createJettyConfiguration();

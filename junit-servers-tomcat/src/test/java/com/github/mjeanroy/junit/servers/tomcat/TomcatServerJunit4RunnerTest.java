@@ -22,34 +22,25 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
+package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.rules.ServerRule;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.assertj.core.api.Condition;
 import org.junit.Test;
-import org.junit.rules.TestRule;
-
-import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
-public class JunitServerRunnerTest {
+public class TomcatServerJunit4RunnerTest {
 
 	private static final EmbeddedTomcatConfiguration configuration = defaultConfiguration();
 
 	@Test
 	public void it_should_instantiate_tomcat_with_default_configuration() throws Exception {
-		@SuppressWarnings("deprecation")
-		JunitServerRunner runner = new JunitServerRunner(Foo.class);
+		TomcatServerJunit4Runner runner = new TomcatServerJunit4Runner(Foo.class);
 
 		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
 		assertThat(server)
@@ -65,8 +56,7 @@ public class JunitServerRunnerTest {
 
 	@Test
 	public void it_should_instantiate_tomcat_with_configuration() throws Exception {
-		@SuppressWarnings("deprecation")
-		JunitServerRunner runner = new JunitServerRunner(Bar.class);
+		TomcatServerJunit4Runner runner = new TomcatServerJunit4Runner(Bar.class);
 
 		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
 		assertThat(server)
@@ -78,47 +68,6 @@ public class JunitServerRunnerTest {
 				.isNotNull()
 				.isInstanceOf(EmbeddedTomcatConfiguration.class)
 				.isSameAs(configuration);
-	}
-
-	@Test
-	public void it_should_contain_rules() throws Exception {
-		@SuppressWarnings("deprecation")
-		JunitServerRunner runner = new JunitServerRunner(Foo.class);
-
-		List<TestRule> classRules = runner.classRules();
-		assertThat(classRules)
-				.isNotNull()
-				.isNotEmpty()
-				.areAtLeast(1, new Condition<TestRule>() {
-					@Override
-					public boolean matches(TestRule value) {
-						return value instanceof ServerRule;
-					}
-				})
-				.are(new Condition<TestRule>() {
-					@Override
-					public boolean matches(TestRule value) {
-						return !(value instanceof HandlersRule);
-					}
-				});
-
-		Foo foo = mock(Foo.class);
-		List<TestRule> testRules = runner.getTestRules(foo);
-		assertThat(testRules)
-				.isNotNull()
-				.isNotEmpty()
-				.areAtLeast(1, new Condition<TestRule>() {
-					@Override
-					public boolean matches(TestRule value) {
-						return value instanceof HandlersRule;
-					}
-				})
-				.are(new Condition<TestRule>() {
-					@Override
-					public boolean matches(TestRule value) {
-						return !(value instanceof ServerRule);
-					}
-				});
 	}
 
 	public static class Foo {
@@ -133,7 +82,6 @@ public class JunitServerRunnerTest {
 
 		@Test
 		public void fooTest() {
-
 		}
 	}
 

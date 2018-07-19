@@ -22,25 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
-import org.junit.ClassRule;
-import org.junit.Test;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import org.junit.runner.RunWith;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
+/**
+ * Simple abstraction that define a server rule using jetty as embedded server.
+ */
+@RunWith(JettyServerJunit4Runner.class)
+public abstract class AbstractJettyJunit4Test {
 
-public class IndexWithRulesTest {
+	@TestServer
+	public static EmbeddedJetty server;
 
-	@ClassRule
-	public static TomcatServerJunit4Rule serverRule = new TomcatServerJunit4Rule(
-			new EmbeddedTomcat(createTomcatConfiguration())
-	);
-
-	@Test
-	public void it_should_have_an_index() {
-		ensureIndexIsOk(serverRule.getClient());
-	}
 }

@@ -22,28 +22,33 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils;
+package com.github.mjeanroy.junit.servers.tomcat.tests;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
-import org.junit.Test;
+/**
+ * Static reflection utilities, used in tests only.
+ */
+public final class Fields {
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-
-public class TomcatUtilsTest extends AbstractTomcatTest {
-
-	@TestHttpClient
-	public HttpClient client;
-
-	@Test
-	public void it_should_have_a_server() {
-		assertThat(server).isNotNull();
-		assertThat(server.getPort()).isPositive();
+	// Ensure non instantiation.
+	private Fields() {
 	}
 
-	@Test
-	public void it_should_have_a_client() {
-		assertThat(client).isNotNull();
+	/**
+	 * Read private field on given instance.
+	 *
+	 * @param instance Object instance.
+	 * @param name Name of field.
+	 * @param <T> Type of field value.
+	 * @return The value of the field.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T readPrivate(Object instance, String name) {
+		try {
+			return (T) FieldUtils.readField(instance, name, true);
+		} catch (IllegalAccessException ex) {
+			throw new AssertionError(ex);
+		}
 	}
 }

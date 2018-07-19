@@ -27,15 +27,15 @@ package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Runner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
 import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
 
-@RunWith(JunitServerRunner.class)
+@RunWith(TomcatServerJunit4Runner.class)
 public class IndexWithRunnerTest {
 
 	@TestServerConfiguration

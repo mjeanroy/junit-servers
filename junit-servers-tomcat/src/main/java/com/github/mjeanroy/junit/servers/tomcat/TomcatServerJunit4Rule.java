@@ -22,25 +22,37 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
-import org.junit.ClassRule;
-import org.junit.Test;
+import com.github.mjeanroy.junit.servers.rules.ServerRule;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
+/**
+ * Rule that can be used to start and stop embedded tomcat server.
+ */
+public class TomcatServerJunit4Rule extends ServerRule {
+	/**
+	 * Create rule.
+	 *
+	 * @param tomcat Tomcat Embedded Server.
+	 * @throws NullPointerException If {@code tomcat} is {@code null}.
+	 */
+	public TomcatServerJunit4Rule(EmbeddedTomcat tomcat) {
+		super(tomcat);
+	}
 
-public class IndexWithRulesTest {
+	/**
+	 * Create rule using tomcat as embedded server.
+	 */
+	public TomcatServerJunit4Rule() {
+		this(new EmbeddedTomcat());
+	}
 
-	@ClassRule
-	public static TomcatServerJunit4Rule serverRule = new TomcatServerJunit4Rule(
-			new EmbeddedTomcat(createTomcatConfiguration())
-	);
-
-	@Test
-	public void it_should_have_an_index() {
-		ensureIndexIsOk(serverRule.getClient());
+	/**
+	 * Create rule.
+	 *
+	 * @param configuration Tomcat Configuration.
+	 */
+	public TomcatServerJunit4Rule(EmbeddedTomcatConfiguration configuration) {
+		this(new EmbeddedTomcat(configuration));
 	}
 }

@@ -24,19 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.utils;
 
-import org.junit.runner.RunWith;
-
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.jetty.AbstractJettyJunit4Test;
 
 /**
  * Simple abstraction that define a server rule using jetty as embedded server.
+ *
+ * @deprecated Use {@link AbstractJettyJunit4Test} instead.
  */
-@RunWith(JunitServerRunner.class)
-public abstract class AbstractJettyTest {
-
-	@TestServer
-	public static EmbeddedJetty server;
-
+@Deprecated
+public abstract class AbstractJettyTest extends AbstractJettyJunit4Test {
 }

@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.samples.jetty.java;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
+import com.github.mjeanroy.junit.servers.jetty.JettyServerJunit4Rule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ import static com.github.mjeanroy.junit.servers.samples.jetty.java.TestUtils.ens
 public class IndexWithRulesTest {
 
 	@Rule
-	public JettyServerRule serverRule = new JettyServerRule(
+	public JettyServerJunit4Rule serverRule = new JettyServerJunit4Rule(
 			new EmbeddedJetty(createJettyConfiguration())
 	);
 

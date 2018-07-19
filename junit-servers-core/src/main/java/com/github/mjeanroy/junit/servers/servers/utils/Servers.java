@@ -24,10 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.servers.utils;
 
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticFieldsAnnotatedWith;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.invoke;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -35,10 +35,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticFieldsAnnotatedWith;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.invoke;
 
 /**
  * Static utilities for server instantiation
@@ -195,7 +195,7 @@ public final class Servers {
 	 * @param <T> Type of configuration.
 	 * @return Configuration.
 	 */
-	private static  <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
+	public static  <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
 		// Look for static methods first
 		List<Method> methods = findStaticMethodsAnnotatedWith(klass, TestServerConfiguration.class);
 		if (!methods.isEmpty()) {

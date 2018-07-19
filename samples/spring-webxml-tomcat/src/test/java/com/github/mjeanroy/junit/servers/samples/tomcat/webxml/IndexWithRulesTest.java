@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.
 public class IndexWithRulesTest {
 
 	@ClassRule
-	public static TomcatServerRule serverRule = new TomcatServerRule(
+	public static TomcatServerJunit4Rule serverRule = new TomcatServerJunit4Rule(
 			new EmbeddedTomcat(createTomcatConfiguration())
 	);
 

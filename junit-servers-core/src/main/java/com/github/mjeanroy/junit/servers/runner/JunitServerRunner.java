@@ -75,7 +75,12 @@ import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiat
  * be used if you need to use a custom runner.
  *
  * @see ServerRule
+ * @deprecated This runner use classpath detection to instantiate appropriate server, but it is recommended to use the appropriate
+ *             runner from {@code "junit-servers-jetty} ({@code JettyServerJunit4Runner}) or
+ *             from {@code "junit-servers-tomcat"} ({@code TomcatServerJunit4Runner}) introduced in version 0.8.0.
+ *             Don't worry, this class is marked as deprecated, but it is not planned to be removed.
  */
+@Deprecated
 public class JunitServerRunner extends BlockJUnit4ClassRunner {
 
 	/**
@@ -89,7 +94,14 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 	private final AbstractConfiguration configuration;
 
 	/**
-	 * Create runner.
+	 * Create runner starting an embedded server.
+	 *
+	 * <p/>
+	 *
+	 * <strong>The embedded server implementation is automatically detected using classpath
+	 * detection, so one of {@code junit-servers-jetty} or {@code junit-servers-tomcat} dependency must
+	 * be added to the classpath. In case of a conflict (i.e if both dependency are available in the
+	 * classpath), {@code junit-servers-jetty} will be used.</strong>
 	 *
 	 * @param klass Running class.
 	 * @throws InitializationError If an error occurred while starting embedded server.
@@ -98,6 +110,19 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 		super(klass);
 		this.server = instantiate(klass);
 		this.configuration = this.server.getConfiguration();
+	}
+
+	/**
+	 * Create runner with given embedded server.
+	 *
+	 * @param klass Running class.
+	 * @param server The embedded server to use.
+	 * @throws InitializationError If an error occurred while starting embedded server.
+	 */
+	protected JunitServerRunner(Class<?> klass, EmbeddedServer<?> server) throws InitializationError {
+		super(klass);
+		this.server = server;
+		this.configuration = server.getConfiguration();
 	}
 
 	@Override

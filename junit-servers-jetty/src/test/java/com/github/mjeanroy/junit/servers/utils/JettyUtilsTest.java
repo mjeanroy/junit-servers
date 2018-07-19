@@ -24,13 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
-
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SuppressWarnings("deprecation")
 public class JettyUtilsTest extends AbstractJettyTest {
 
 	@TestHttpClient

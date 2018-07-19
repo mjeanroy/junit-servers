@@ -22,33 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tests;
+package com.github.mjeanroy.junit.servers.tomcat.tests;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+
+import static org.mockito.Mockito.mock;
 
 /**
- * Static reflection utilities, used in tests only.
+ * Builder for mock instances of {@link EmbeddedTomcatConfiguration}.
  */
-public final class Fields {
-
-	// Ensure non instantiation.
-	private Fields() {
-	}
+public class EmbeddedTomcatConfigurationMockBuilder {
 
 	/**
-	 * Read private field on given instance.
+	 * Build mock instance of {@link EmbeddedTomcatConfiguration}.
 	 *
-	 * @param instance Object instance.
-	 * @param name Name of field.
-	 * @param <T> Type of field value.
-	 * @return The value of the field.
+	 * @return The mock instance.
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T readPrivate(Object instance, String name) {
-		try {
-			return (T) FieldUtils.readField(instance, name, true);
-		} catch (IllegalAccessException ex) {
-			throw new AssertionError(ex);
-		}
+	public EmbeddedTomcatConfiguration build() {
+		return mock(EmbeddedTomcatConfiguration.class);
 	}
 }

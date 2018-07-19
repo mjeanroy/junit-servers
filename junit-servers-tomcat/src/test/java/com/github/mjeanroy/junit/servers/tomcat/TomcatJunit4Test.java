@@ -22,25 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
-import org.junit.ClassRule;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class IndexWithRulesTest {
+public class TomcatJunit4Test extends AbstractTomcatJunit4Test {
 
-	@ClassRule
-	public static TomcatServerJunit4Rule serverRule = new TomcatServerJunit4Rule(
-			new EmbeddedTomcat(createTomcatConfiguration())
-	);
+	@TestHttpClient
+	private HttpClient client;
 
 	@Test
-	public void it_should_have_an_index() {
-		ensureIndexIsOk(serverRule.getClient());
+	public void it_should_have_a_server() {
+		assertThat(server).isNotNull();
+		assertThat(server.getPort()).isPositive();
+	}
+
+	@Test
+	public void it_should_have_a_client() {
+		assertThat(client).isNotNull();
 	}
 }

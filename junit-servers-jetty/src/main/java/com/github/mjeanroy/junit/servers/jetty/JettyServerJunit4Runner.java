@@ -22,25 +22,37 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
-import org.junit.ClassRule;
-import org.junit.Test;
+import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import org.junit.runners.model.InitializationError;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.servers.utils.Servers.findConfiguration;
 
-public class IndexWithRulesTest {
+/**
+ * Rule that can be used to start and stop embedded jetty server.
+ */
+@SuppressWarnings("deprecation")
+public class JettyServerJunit4Runner extends JunitServerRunner {
 
-	@ClassRule
-	public static TomcatServerJunit4Rule serverRule = new TomcatServerJunit4Rule(
-			new EmbeddedTomcat(createTomcatConfiguration())
-	);
+	/**
+	 * Create runner.
+	 *
+	 * @param klass Running class.
+	 * @throws InitializationError If an error occurred while starting embedded server.
+	 */
+	public JettyServerJunit4Runner(Class<?> klass) throws InitializationError {
+		super(klass, instantiate(klass));
+	}
 
-	@Test
-	public void it_should_have_an_index() {
-		ensureIndexIsOk(serverRule.getClient());
+	/**
+	 * Instantiate embedded jetty to be used in tests.
+	 *
+	 * @param klass The tested class.
+	 * @return The embedded jetty.
+	 */
+	private static EmbeddedJetty instantiate(Class<?> klass) {
+		EmbeddedJettyConfiguration configuration = findConfiguration(klass);
+		return configuration == null ? new EmbeddedJetty() : new EmbeddedJetty(configuration);
 	}
 }

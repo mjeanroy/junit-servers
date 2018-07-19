@@ -24,13 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.After;
 import org.junit.Test;
 
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ServerRuleTest {
 
@@ -71,7 +70,7 @@ public class ServerRuleTest {
 	}
 
 	@Test
-	public void it_should_start_tomcat_and_get_uri() throws Exception {
+	public void it_should_start_tomcat_and_get_uri() {
 		rule = new ServerRule();
 		rule.start();
 		assertThat(rule.getUrl()).isEqualTo(localUrl(rule.getPort()));

@@ -22,35 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
+package com.github.mjeanroy.junit.servers.jetty.tests;
 
-import static org.mockito.Mockito.when;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import static org.mockito.Mockito.mock;
 
 /**
- * This is a mockito {@link Answer} to simulate {@link EmbeddedTomcat#isStarted()} method.
+ * Builder for mock instances of {@link EmbeddedJettyConfiguration}.
  */
-class IsStartedAnswer implements Answer<Void> {
+public class EmbeddedJettyConfigurationMockBuilder {
 
-	static IsStartedAnswer isStarted(EmbeddedTomcat tomcat, boolean isStarted) {
-		return new IsStartedAnswer(tomcat, isStarted);
-	}
-
-	private final EmbeddedTomcat tomcat;
-	private final boolean isStarted;
-
-	private IsStartedAnswer(EmbeddedTomcat tomcat, boolean isStarted) {
-		this.tomcat = tomcat;
-		this.isStarted = isStarted;
-	}
-
-	@Override
-	public Void answer(InvocationOnMock invocationOnMock) throws Throwable {
-		when(tomcat.isStarted()).thenReturn(isStarted);
-		return null;
+	/**
+	 * Build mock instance of {@link EmbeddedJettyConfiguration}.
+	 *
+	 * @return The mock instance.
+	 */
+	public EmbeddedJettyConfiguration build() {
+		return mock(EmbeddedJettyConfiguration.class);
 	}
 }

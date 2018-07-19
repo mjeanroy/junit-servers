@@ -30,14 +30,14 @@ import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.jetty.JettyServerJunit4Runner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.createJettyConfiguration;
 import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.ensureIndexIsOk;
 
-@RunWith(JunitServerRunner.class)
+@RunWith(JettyServerJunit4Runner.class)
 public class IndexWithRunnerTest {
 
 	@TestServer
