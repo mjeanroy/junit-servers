@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.okhttp3;
 
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseTest;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseImplTest;
 import com.github.mjeanroy.junit.servers.utils.builders.OkHttpResponseBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import okhttp3.Response;
@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OkHttpResponseTest extends AbstractHttpResponseTest<OkHttpResponseBuilder, Response, OkHttpResponse> {
+public class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpResponseBuilder, Response, OkHttpResponse> {
 
 	@Override
 	protected OkHttpResponseBuilder getBuilder() {

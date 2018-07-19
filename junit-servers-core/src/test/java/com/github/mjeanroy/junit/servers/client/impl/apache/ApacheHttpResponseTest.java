@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache;
 
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseTest;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseImplTest;
 import com.github.mjeanroy.junit.servers.utils.builders.ApacheHttpResponseBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.apache.http.HttpResponse;
@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ApacheHttpResponseTest extends AbstractHttpResponseTest<ApacheHttpResponseBuilder, HttpResponse, ApacheHttpResponse> {
+public class ApacheHttpResponseTest extends AbstractHttpResponseImplTest<ApacheHttpResponseBuilder, HttpResponse, ApacheHttpResponse> {
 
 	@Override
 	protected ApacheHttpResponseBuilder getBuilder() {

@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.async;
 
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseTest;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseImplTest;
 import com.github.mjeanroy.junit.servers.utils.builders.AsyncHttpResponseBuilder;
 import com.github.mjeanroy.junit4.runif.RunIf;
 import com.github.mjeanroy.junit4.runif.RunIfRunner;
@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RunIfRunner.class)
 @RunIf(AtLeastJava8Condition.class)
-public class AsyncHttpResponseTest extends AbstractHttpResponseTest<AsyncHttpResponseBuilder, Response, AsyncHttpResponse> {
+public class AsyncHttpResponseTest extends AbstractHttpResponseImplTest<AsyncHttpResponseBuilder, Response, AsyncHttpResponse> {
 
 	@Override
 	protected AsyncHttpResponseBuilder getBuilder() {

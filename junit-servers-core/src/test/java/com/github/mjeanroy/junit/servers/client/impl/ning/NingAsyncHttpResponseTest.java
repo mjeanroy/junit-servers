@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.ning;
 
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseTest;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseImplTest;
 import com.github.mjeanroy.junit.servers.utils.builders.NingHttpResponseBuilder;
 import com.ning.http.client.Response;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NingAsyncHttpResponseTest extends AbstractHttpResponseTest<NingHttpResponseBuilder, Response, NingAsyncHttpResponse> {
+public class NingAsyncHttpResponseTest extends AbstractHttpResponseImplTest<NingHttpResponseBuilder, Response, NingAsyncHttpResponse> {
 
 	@Override
 	protected NingHttpResponseBuilder getBuilder() {
