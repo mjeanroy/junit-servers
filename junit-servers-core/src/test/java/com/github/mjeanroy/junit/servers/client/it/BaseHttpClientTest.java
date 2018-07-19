@@ -1455,7 +1455,7 @@ public abstract class BaseHttpClientTest {
 		long durationNano = rsp.getRequestDuration();
 		long durationMillis = rsp.getRequestDurationInMillis();
 		assertThat(durationNano).isGreaterThan(0);
-		assertThat(durationMillis).isEqualTo(durationNano / 1000);
+		assertThat(durationMillis).isEqualTo(durationNano / 1000 / 1000);
 	}
 
 	@Test

@@ -98,7 +98,7 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 
 	@Override
 	public long getRequestDurationInMillis() {
-		return getRequestDuration() / 1000;
+		return getRequestDuration() / 1000 / 1000;
 	}
 
 	@Override

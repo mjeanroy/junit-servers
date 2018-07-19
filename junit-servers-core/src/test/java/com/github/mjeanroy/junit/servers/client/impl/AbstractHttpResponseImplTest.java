@@ -51,7 +51,7 @@ public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpRespons
 	public void it_should_get_request_duration() {
 		// GIVEN
 		final long durationInMillis = 1L;
-		final long durationInNano = durationInMillis * 1000;
+		final long durationInNano = durationInMillis * 1000 * 1000;
 		final U delegate = getBuilder().build();
 
 		// WHEN
