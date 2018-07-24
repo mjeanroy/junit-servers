@@ -45,46 +45,41 @@ public class EmbeddedJettyTest {
 	@Rule
 	public TemporaryFolder tmp = new TemporaryFolder();
 
-	private EmbeddedJetty jetty;
+	private volatile EmbeddedJetty jetty;
 
 	@After
 	public void tearDown() {
-		if (jetty != null) {
-			jetty.stop();
-		}
+		jetty.stop();
 	}
 
 	@Test
 	public void it_should_start_jetty() {
 		jetty = new EmbeddedJetty();
-		jetty.start();
-
-		assertThat(jetty.isStarted()).isTrue();
-		assertThat(jetty.getPort()).isNotZero();
 		assertThat(jetty.getScheme()).isEqualTo("http");
 		assertThat(jetty.getHost()).isEqualTo("localhost");
 		assertThat(jetty.getPath()).isEqualTo("/");
+
+		jetty.start();
+		assertThat(jetty.isStarted()).isTrue();
+		assertThat(jetty.getPort()).isNotZero();
 		assertThat(jetty.getUrl()).isEqualTo(localUrl(jetty.getPort()));
 	}
 
 	@Test
 	public void it_should_stop_jetty() {
 		jetty = new EmbeddedJetty();
-		jetty.start();
-
-		assertThat(jetty.isStarted()).isTrue();
-		assertThat(jetty.getPort()).isNotZero();
 		assertThat(jetty.getScheme()).isEqualTo("http");
 		assertThat(jetty.getHost()).isEqualTo("localhost");
 		assertThat(jetty.getPath()).isEqualTo("/");
+
+		jetty.start();
+		assertThat(jetty.isStarted()).isTrue();
+		assertThat(jetty.getPort()).isNotZero();
 		assertThat(jetty.getUrl()).isEqualTo(localUrl(jetty.getPort()));
 
 		jetty.stop();
 		assertThat(jetty.isStarted()).isFalse();
 		assertThat(jetty.getPort()).isZero();
-		assertThat(jetty.getScheme()).isEqualTo("http");
-		assertThat(jetty.getHost()).isEqualTo("localhost");
-		assertThat(jetty.getPath()).isEqualTo("/");
 		assertThat(jetty.getUrl()).isEqualTo(localUrl(jetty.getPort()));
 	}
 

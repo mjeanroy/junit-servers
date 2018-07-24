@@ -119,14 +119,14 @@ public class JettyServerJunit4RuleTest {
 	}
 
 	private static void evaluateRule(JettyServerJunit4Rule rule) throws Throwable {
-		Statement statement = mock(Statement.class);
+		final Statement statement = mock(Statement.class);
 		evaluateRule(rule, statement);
 	}
 
 	private static void evaluateRule(JettyServerJunit4Rule rule, Statement statement) throws Throwable {
-		Description description = mock(Description.class);
-		Statement test = rule.apply(statement, description);
-		test.evaluate();
+		final Description description = mock(Description.class);
+		final Statement testStatement = rule.apply(statement, description);
+		testStatement.evaluate();
 	}
 
 	private static class FakeStatement extends Statement {
