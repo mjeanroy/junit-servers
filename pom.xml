@@ -107,11 +107,13 @@
 		<jetty-java7.version>9.2.24.v20180105</jetty-java7.version>
 		<jetty-java8.version>9.4.8.v20180619</jetty-java8.version>
 		<jetty-java9.version>9.4.8.v20180619</jetty-java9.version>
+		<jetty-java10.version>9.4.8.v20180619</jetty-java10.version>
 		<jetty.version>${jetty-java7.version}</jetty.version>
 
 		<tomcat-java7.version>8.5.32</tomcat-java7.version>
 		<tomcat-java8.version>8.5.32</tomcat-java8.version>
 		<tomcat-java9.version>8.5.32</tomcat-java9.version>
+		<tomcat-java10.version>8.5.32</tomcat-java10.version>
 		<tomcat.version>${tomcat-java7.version}</tomcat.version>
 
 		<junit.version>4.12</junit.version><javax.servlet-api.version>3.1.0</javax.servlet-api.version>
