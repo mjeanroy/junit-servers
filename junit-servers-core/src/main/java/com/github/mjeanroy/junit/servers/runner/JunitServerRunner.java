@@ -80,7 +80,6 @@ import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiat
  *             from {@code "junit-servers-tomcat"} ({@code TomcatServerJunit4Runner}) introduced in version 0.8.0.
  *             Don't worry, this class is marked as deprecated, but it is not planned to be removed.
  */
-@Deprecated
 public class JunitServerRunner extends BlockJUnit4ClassRunner {
 
 	/**

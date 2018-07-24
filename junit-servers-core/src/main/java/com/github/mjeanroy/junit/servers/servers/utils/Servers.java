@@ -27,13 +27,14 @@ package com.github.mjeanroy.junit.servers.servers.utils;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceLoader;
 
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticFieldsAnnotatedWith;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
@@ -45,16 +46,6 @@ import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.invoke;
  * and configuration.
  */
 public final class Servers {
-
-	/**
-	 * This is the FQN name for the embedded jetty class name that will be instantiated by reflection.
-	 */
-	private static final String EMBEDDED_JETTY_CLASS = "com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty";
-
-	/**
-	 * This is the FQN name for the embedded tomcat class name that will be instantiated by reflection.
-	 */
-	private static final String EMBEDDED_TOMCAT_CLASS = "com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat";
 
 	// Ensure non instantiation
 	private Servers() {
@@ -102,88 +93,39 @@ public final class Servers {
 	 * @return Embedded server.
 	 */
 	public static EmbeddedServer<?> instantiate(AbstractConfiguration configuration) {
-		// Try Jetty first.
-		EmbeddedServer<? extends AbstractConfiguration> jetty = newJetty(configuration);
-		if (jetty != null) {
-			return jetty;
-		}
+		ServiceLoader<EmbeddedServerProvider> serviceProviders = ServiceLoader.load(EmbeddedServerProvider.class);
 
-		// Ok, jetty is not available, try tomcat.
-		EmbeddedServer<? extends AbstractConfiguration> tomcat = newTomcat(configuration);
-		if (tomcat != null) {
-			return tomcat;
-		}
+		List<EmbeddedServerProvider> coreServerProviders = new ArrayList<>();
+		List<EmbeddedServerProvider> customServerProviders = new ArrayList<>();
 
-		// Can't find a valid implementation.
-		throw new ServerImplMissingException();
-	}
-
-	/**
-	 * Instantiate jetty embedded server.
-	 *
-	 * <p>
-	 *
-	 * Configuration is an optional parameter and can be {@code null}:
-	 * <ul>
-	 *   <li>If {@code configuration} is {@code null}, empty constructor will be used to instantiate embedded server.</li>
-	 *   <li> Otherwise, constructor with one parameter (configuration) will be used.</li>
-	 * </ul>
-	 *
-	 * @param configuration Optional configuration.
-	 * @return Embedded server.
-	 */
-	private static EmbeddedServer<? extends AbstractConfiguration> newJetty(AbstractConfiguration configuration) {
-		return instantiate(EMBEDDED_JETTY_CLASS, configuration);
-	}
-
-	/**
-	 * Instantiate tomcat embedded server.
-	 *
-	 * <p>
-	 *
-	 * Configuration is an optional parameter and can be null.
-	 * <ul>
-	 *   <li>If {@code configuration} is {@code null}, empty constructor will be used to instantiate embedded server.</li>
-	 *   <li> Otherwise, constructor with one parameter (configuration) will be used.</li>
-	 * </ul>
-	 *
-	 * @param configuration Optional configuration.
-	 * @return Embedded server.
-	 */
-	private static EmbeddedServer<? extends AbstractConfiguration> newTomcat(AbstractConfiguration configuration) {
-		return instantiate(EMBEDDED_TOMCAT_CLASS, configuration);
-	}
-
-	/**
-	 * Instantiate embedded server.
-	 *
-	 * <p>
-	 *
-	 * Configuration is an optional parameter and can be null.
-	 * <ul>
-	 *   <li>If {@code configuration} is {@code null}, empty constructor will be used to instantiate embedded server.</li>
-	 *   <li> Otherwise, constructor with one parameter (configuration) will be used.</li>
-	 * </ul>
-	 *
-	 * @param className Class implementation of embedded server.
-	 * @param configuration Optional configuration, may be {@code null}.
-	 * @return Embedded server.
-	 */
-	@SuppressWarnings("unchecked")
-	private static EmbeddedServer<? extends AbstractConfiguration> instantiate(String className, AbstractConfiguration configuration) {
-		try {
-			Class<?> klass = Class.forName(className);
-			if (configuration == null) {
-				return (EmbeddedServer<? extends AbstractConfiguration>) klass.newInstance();
-			}
-			else {
-				Constructor<?> constructor = klass.getConstructor(configuration.getClass());
-				return (EmbeddedServer<? extends AbstractConfiguration>) constructor.newInstance(configuration);
+		for (EmbeddedServerProvider provider : serviceProviders) {
+			if (provider.getClass().getName().startsWith("com.github.mjeanroy.junit.servers")) {
+				coreServerProviders.add(provider);
+			} else {
+				customServerProviders.add(provider);
 			}
 		}
-		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-			return null;
+
+		// No match, fail fast.
+		if (coreServerProviders.isEmpty() && customServerProviders.isEmpty()) {
+			throw new ServerImplMissingException();
 		}
+
+		// Choose the first one available.
+		if (customServerProviders.isEmpty()) {
+			return instantiate(coreServerProviders.get(0), configuration);
+		}
+
+		// Try to instantiate the custom available implementation.
+		if (customServerProviders.size() > 1) {
+			throw new ServerImplMissingException();
+		}
+
+		return instantiate(coreServerProviders.get(0), configuration);
+	}
+
+	private static <T extends AbstractConfiguration> EmbeddedServer<T> instantiate(EmbeddedServerProvider<T> provider, T configuration) {
+		return configuration == null ? provider.instantiate() : provider.instantiate(configuration);
 	}
 
 	/**
