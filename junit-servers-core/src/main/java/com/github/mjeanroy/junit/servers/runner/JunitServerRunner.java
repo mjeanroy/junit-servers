@@ -36,7 +36,7 @@ import java.util.List;
 import static com.github.mjeanroy.junit.servers.runner.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.runner.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.runner.ServerAnnotationHandler.newServerAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
+import static com.github.mjeanroy.junit.servers.servers.Servers.instantiate;
 
 /**
  * Runner that will start and stop embedded server before tests.

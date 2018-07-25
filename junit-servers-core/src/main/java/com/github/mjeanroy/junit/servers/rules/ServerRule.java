@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.rules;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.servers.utils.Servers.instantiate;
+import static com.github.mjeanroy.junit.servers.servers.Servers.instantiate;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
