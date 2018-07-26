@@ -29,6 +29,7 @@ import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +37,6 @@ import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.url;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -52,18 +52,16 @@ public abstract class BaseHttpClientTest {
 
 	@Before
 	public void setUp() {
-		server = mock(EmbeddedServer.class);
-
 		scheme = "http";
 		host = "localhost";
 		port = 8080;
 		path = "/path";
-
-		when(server.getScheme()).thenReturn(scheme);
-		when(server.getHost()).thenReturn(host);
-		when(server.getPort()).thenReturn(port);
-		when(server.getPath()).thenReturn(path);
-		when(server.getUrl()).thenReturn(url(scheme, host, port, path));
+		server = new EmbeddedServerMockBuilder()
+				.withScheme(scheme)
+				.withHost(host)
+				.withPort(port)
+				.withPath(path)
+				.build();
 
 		onSetUp();
 	}

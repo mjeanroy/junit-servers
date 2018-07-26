@@ -35,6 +35,7 @@ import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.commons.Function;
 import com.github.mjeanroy.junit.servers.utils.commons.MapperFunction;
 import com.github.mjeanroy.junit.servers.utils.commons.Pair;
@@ -109,8 +110,6 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(RunIfRunner.class)
 public abstract class BaseHttpClientTest {
@@ -131,16 +130,11 @@ public abstract class BaseHttpClientTest {
 		scheme = "http";
 		host = "localhost";
 		port = wireMockRule.port();
-
-		String path = "/";
-		String url = url(scheme, host, port, path);
-
-		server = mock(EmbeddedServer.class);
-		when(server.getScheme()).thenReturn(scheme);
-		when(server.getHost()).thenReturn(host);
-		when(server.getPort()).thenReturn(port);
-		when(server.getPath()).thenReturn(path);
-		when(server.getUrl()).thenReturn(url);
+		server = new EmbeddedServerMockBuilder()
+				.withScheme(scheme)
+				.withHost(host)
+				.withPort(port)
+				.build();
 	}
 
 	@After

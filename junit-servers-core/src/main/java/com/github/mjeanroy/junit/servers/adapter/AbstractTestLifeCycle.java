@@ -22,45 +22,31 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
-
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-
-import java.lang.reflect.Field;
-
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+package com.github.mjeanroy.junit.servers.adapter;
 
 /**
- * Annotation handler that will set embedded server to a field
- * on a given class instance.
+ * Abstract skeleton for {@link TestLifeCycleAdapter} where every methods are
+ * implemented as a no operation.
  */
-class ServerAnnotationHandler extends AbstractAnnotationHandler {
+class AbstractTestLifeCycle implements TestLifeCycleAdapter {
 
-	/**
-	 * Create new handler.
-	 * @param server Embedded server.
-	 * @return Handler.
-	 * @throws NullPointerException if server is null.
-	 */
-	static AnnotationHandler newServerAnnotationHandler(EmbeddedServer<?> server) {
-		return new ServerAnnotationHandler(notNull(server, "server"));
-	}
-
-	/**
-	 * Embedded server set on class fields.
-	 */
-	private final EmbeddedServer<?> server;
-
-	// Use static factory instead
-	private ServerAnnotationHandler(EmbeddedServer<?> server) {
-		super(TestServer.class);
-		this.server = server;
+	@Override
+	public void beforeAll() {
+		// Should be overridden
 	}
 
 	@Override
-	public void before(Object target, Field field) {
-		setter(target, field, server);
+	public void afterAll() {
+		// Should be overridden
+	}
+
+	@Override
+	public void beforeEach(Object target) {
+		// Should be overridden
+	}
+
+	@Override
+	public void afterEach(Object target) {
+		// Should be overridden
 	}
 }

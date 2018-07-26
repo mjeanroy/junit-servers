@@ -28,11 +28,10 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,22 +42,12 @@ import static org.mockito.Mockito.when;
 
 public class ServerRuleTest {
 
-	private AbstractConfiguration configuration;
 	private EmbeddedServer<?> server;
 	private ServerRule rule;
 
 	@Before
 	public void setUp() {
-		configuration = mock(AbstractConfiguration.class);
-		server = mock(EmbeddedServer.class);
-
-		when(server.getConfiguration()).thenAnswer(new Answer<AbstractConfiguration>() {
-			@Override
-			public AbstractConfiguration answer(InvocationOnMock invocation) {
-				return configuration;
-			}
-		});
-
+		server = new EmbeddedServerMockBuilder().build();
 		rule = new ServerRule(server);
 	}
 

@@ -98,7 +98,7 @@ public class JunitServerRunnerTest {
 				.are(new Condition<TestRule>() {
 					@Override
 					public boolean matches(TestRule value) {
-						return !(value instanceof HandlersRule);
+						return !(value instanceof AnnotationsHandlerRule);
 					}
 				});
 
@@ -110,7 +110,7 @@ public class JunitServerRunnerTest {
 				.areAtLeast(1, new Condition<TestRule>() {
 					@Override
 					public boolean matches(TestRule value) {
-						return value instanceof HandlersRule;
+						return value instanceof AnnotationsHandlerRule;
 					}
 				})
 				.are(new Condition<TestRule>() {

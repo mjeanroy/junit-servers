@@ -22,13 +22,15 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
+package com.github.mjeanroy.junit.servers.adapter;
 
+import com.github.mjeanroy.junit.servers.adapter.HttpClientHolder;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.After;
@@ -38,7 +40,6 @@ import org.junit.Test;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
 
 public class HttpClientHolderTest {
 
@@ -61,7 +62,7 @@ public class HttpClientHolderTest {
 	public void setUp() {
 		this.strategy = HttpClientStrategy.AUTO;
 		this.configuration = new HttpClientConfiguration.Builder().build();
-		this.server = mock(EmbeddedServer.class);
+		this.server = new EmbeddedServerMockBuilder().build();
 	}
 
 	@After

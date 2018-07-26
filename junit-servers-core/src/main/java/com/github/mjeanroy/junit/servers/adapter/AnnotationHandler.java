@@ -22,23 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
+package com.github.mjeanroy.junit.servers.adapter;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
-public class FixtureClass {
+interface AnnotationHandler {
 
-	@TestServer
-	private EmbeddedServer<?> server;
+	/**
+	 * Check that given handler support given annotation.
+	 *
+	 * @param annotation Annotation.
+	 * @return True if handler support annotation, false otherwise.c
+	 */
+	boolean support(Annotation annotation);
 
-	@TestServerConfiguration
-	private AbstractConfiguration configuration;
+	/**
+	 * Execute handler before test invocation.
+	 *
+	 * @param target Test class instance.
+	 * @param field Field.
+	 */
+	void before(Object target, Field field);
 
-	@TestHttpClient
-	private HttpClient client;
+	/**
+	 * Execute handler after test invocation.
+	 *
+	 * @param target Test class instance.
+	 * @param field Field.
+	 */
+	void after(Object target, Field field);
 }

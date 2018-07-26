@@ -24,45 +24,40 @@
 
 package com.github.mjeanroy.junit.servers.runner;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-
-import java.lang.reflect.Field;
-
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
+import com.github.mjeanroy.junit.servers.adapter.AnnotationsHandlerTestLifeCycleAdapter;
 
 /**
- * Annotation handler that will set configuration to a field
- * annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration}
- * on a given class instance.
+ * Create new rule that will execute a list of annotation
+ * handlers before and after test executions.
  */
-class ConfigurationAnnotationHandler extends AbstractAnnotationHandler {
+class AnnotationsHandlerRule extends AbstractRuleInstance {
 
 	/**
-	 * Create new handler.
-	 * @param configuration Server configuration.
-	 * @param <T> Type of configuration instance.
-	 * @return Handler.
-	 * @throws NullPointerException if configuration is null.
+	 * List of handlers.
 	 */
-	static <T extends AbstractConfiguration> AnnotationHandler newConfigurationAnnotationHandler(T configuration) {
-		return new ConfigurationAnnotationHandler(notNull(configuration, "configuration"));
-	}
+	private final AnnotationsHandlerTestLifeCycleAdapter annotationHandlers;
 
 	/**
-	 * Server configuration.
+	 * Create new rules.
+	 *
+	 * @param target Target class (i.e tested class).
+	 * @param server The embedded server used in the tested class instance.
+	 * @param configuration The embedded server configuration.
 	 */
-	private final AbstractConfiguration configuration;
-
-	// Use static factory instead
-	private ConfigurationAnnotationHandler(AbstractConfiguration configuration) {
-		super(TestServerConfiguration.class);
-		this.configuration = configuration;
+	AnnotationsHandlerRule(Object target, EmbeddedServer<?> server, AbstractConfiguration configuration) {
+		super(target);
+		this.annotationHandlers = new AnnotationsHandlerTestLifeCycleAdapter(server, configuration);
 	}
 
 	@Override
-	public void before(Object target, Field field) {
-		setter(target, field, configuration);
+	protected void before() {
+		annotationHandlers.beforeEach(getTarget());
+	}
+
+	@Override
+	protected void after() {
+		annotationHandlers.afterEach(getTarget());
 	}
 }

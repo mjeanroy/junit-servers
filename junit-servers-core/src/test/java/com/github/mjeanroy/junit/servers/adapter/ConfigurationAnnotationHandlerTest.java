@@ -22,42 +22,55 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
+package com.github.mjeanroy.junit.servers.adapter;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.utils.commons.Fields;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.utils.builders.AbstractConfigurationMockBuilder;
+import com.github.mjeanroy.junit.servers.utils.fixtures.FixtureClass;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import static com.github.mjeanroy.junit.servers.runner.ServerAnnotationHandler.newServerAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.adapter.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateField;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class ServerAnnotationHandlerTest {
+public class ConfigurationAnnotationHandlerTest {
 
 	@Test
 	public void it_should_support_server_annotation() {
-		EmbeddedServer<?> server = mock(EmbeddedServer.class);
-		AnnotationHandler handler = newServerAnnotationHandler(server);
+		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
+		final AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
+		final Field field = extractConfigurationField();
+		final Annotation annotation = readAnnotation(field);
 
-		Field field = Fields.getPrivateField(FixtureClass.class, "server");
-		Annotation annotation = field.getAnnotation(TestServer.class);
 		assertThat(handler.support(annotation)).isTrue();
 	}
 
 	@Test
-	public void it_should_set_server_instance() throws Exception {
-		EmbeddedServer<?> server = mock(EmbeddedServer.class);
-		Field field = getPrivateField(FixtureClass.class, "server");
-		FixtureClass fixture = new FixtureClass();
+	public void it_should_set_configuration_instance() {
+		final AbstractConfiguration configuration = mock(AbstractConfiguration.class);
+		final FixtureClass fixture = new FixtureClass();
+		final Field field = extractConfigurationField();
+		final AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 
-		AnnotationHandler handler = newServerAnnotationHandler(server);
+		verifyBeforeTest(configuration, fixture, field, handler);
+	}
+
+	private static void verifyBeforeTest(AbstractConfiguration configuration, FixtureClass fixture, Field field, AnnotationHandler handler) {
 		handler.before(fixture, field);
-		assertThat(readPrivate(fixture, "server")).isSameAs(server);
+		assertThat(readPrivate(fixture, "configuration")).isSameAs(configuration);
+	}
+
+	private static Field extractConfigurationField() {
+		return getPrivateField(FixtureClass.class, "configuration");
+	}
+
+	private static Annotation readAnnotation(Field field) {
+		return field.getAnnotation(TestServerConfiguration.class);
 	}
 }

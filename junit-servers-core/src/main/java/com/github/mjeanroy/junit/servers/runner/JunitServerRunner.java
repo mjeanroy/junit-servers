@@ -33,9 +33,6 @@ import org.junit.runners.model.InitializationError;
 
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.runner.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.runner.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.runner.ServerAnnotationHandler.newServerAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.servers.Servers.instantiate;
 
 /**
@@ -75,10 +72,6 @@ import static com.github.mjeanroy.junit.servers.servers.Servers.instantiate;
  * be used if you need to use a custom runner.
  *
  * @see ServerRule
- * @deprecated This runner use classpath detection to instantiate appropriate server, but it is recommended to use the appropriate
- *             runner from {@code "junit-servers-jetty} ({@code JettyServerJunit4Runner}) or
- *             from {@code "junit-servers-tomcat"} ({@code TomcatServerJunit4Runner}) introduced in version 0.8.0.
- *             Don't worry, this class is marked as deprecated, but it is not planned to be removed.
  */
 public class JunitServerRunner extends BlockJUnit4ClassRunner {
 
@@ -127,24 +120,14 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 	@Override
 	protected List<TestRule> classRules() {
 		List<TestRule> classRules = super.classRules();
-
-		ServerRule classRule = new ServerRule(server);
-		classRules.add(classRule);
-
+		classRules.add(new ServerRule(server));
 		return classRules;
 	}
 
 	@Override
 	protected List<TestRule> getTestRules(Object target) {
 		List<TestRule> testRules = super.getTestRules(target);
-
-		AnnotationHandler h1 = newServerAnnotationHandler(server);
-		AnnotationHandler h2 = newConfigurationAnnotationHandler(configuration);
-		AnnotationHandler h3 = newHttpClientAnnotationHandler(server);
-
-		HandlersRule rule = new HandlersRule(target, h1, h2, h3);
-		testRules.add(rule);
-
+		testRules.add(new AnnotationsHandlerRule(target, server, configuration));
 		return testRules;
 	}
 }

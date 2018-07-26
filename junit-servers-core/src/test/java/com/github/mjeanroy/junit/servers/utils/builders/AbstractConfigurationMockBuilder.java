@@ -22,34 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
+package com.github.mjeanroy.junit.servers.utils.builders;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
-interface AnnotationHandler {
+import static org.mockito.Mockito.mock;
 
-	/**
-	 * Check that given handler support given annotation.
-	 *
-	 * @param annotation Annotation.
-	 * @return True if handler support annotation, false otherwise.c
-	 */
-	boolean support(Annotation annotation);
+/**
+ * Builder for mock instances of {@link AbstractConfiguration}.
+ */
+public class AbstractConfigurationMockBuilder {
 
 	/**
-	 * Execute handler before test invocation.
+	 * Create new mock instance of {@link AbstractConfiguration}.
 	 *
-	 * @param target Test class instance.
-	 * @param field Field.
+	 * @return The mock instance.
 	 */
-	void before(Object target, Field field);
-
-	/**
-	 * Execute handler after test invocation.
-	 *
-	 * @param target Test class instance.
-	 * @param field Field.
-	 */
-	void after(Object target, Field field);
+	public AbstractConfiguration build() {
+		return mock(AbstractConfiguration.class);
+	}
 }

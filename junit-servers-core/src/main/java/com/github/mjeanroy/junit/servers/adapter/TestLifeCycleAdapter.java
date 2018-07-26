@@ -22,42 +22,41 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
+package com.github.mjeanroy.junit.servers.adapter;
 
 /**
- * Abstract skeleton of {@link AnnotationHandler}.
+ * A test lifecycle adapter: this is a class that implements commons test lifecycle hooks (before-all, before, after-all,
+ * after), thus will be able to be used in various test engine:
+ *
+ * <ul>
+ *   <li>JUnit 4 Rules.</li>
+ *   <li>JUnit 4 Runner.</li>
+ *   <li>JUnit Jupiter Extensions.</li>
+ * </ul>
  */
-abstract class AbstractAnnotationHandler implements AnnotationHandler {
+public interface TestLifeCycleAdapter {
 
 	/**
-	 * Annotation class processed by handler.
+	 * Method called before instantiating the test class and any test instance.
 	 */
-	private final Class<? extends Annotation> annotationKlass;
+	void beforeAll();
 
 	/**
-	 * Initialize new abstract handler.
+	 * Method called after all tests have been run.
+	 */
+	void afterAll();
+
+	/**
+	 * Method called before running unit test.
 	 *
-	 * @param annotationKlass Annotation class processed by handler.
+	 * @param target The test class instance.
 	 */
-	AbstractAnnotationHandler(Class<? extends Annotation> annotationKlass) {
-		this.annotationKlass = annotationKlass;
-	}
+	void beforeEach(Object target);
 
-	@Override
-	public boolean support(Annotation annotation) {
-		return annotation.annotationType().equals(annotationKlass);
-	}
-
-	@Override
-	public void before(Object target, Field field) {
-		// Should be overridden
-	}
-
-	@Override
-	public void after(Object target, Field field) {
-		// Should be overridden
-	}
+	/**
+	 * Method called after running unit test.
+	 *
+	 * @param target The test class instance.
+	 */
+	void afterEach(Object target);
 }

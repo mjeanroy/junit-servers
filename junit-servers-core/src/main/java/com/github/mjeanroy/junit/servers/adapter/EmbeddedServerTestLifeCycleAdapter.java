@@ -22,40 +22,36 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
+package com.github.mjeanroy.junit.servers.adapter;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.adapter.EmbeddedServerTestLifeCycleAdapter;
+
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.servers.Servers.instantiate;
 
 /**
- * Rule that can be used to start and stop embedded server.
- * This rule is automatically used if the {@link com.github.mjeanroy.junit.servers.runner.JunitServerRunner} is used.
+ * An adapter that will handle the embedded server lifecycle:
  *
- * <p>
- *
- * This rule should be used as a {@link org.junit.ClassRule} to start embedded container before all tests and shutdown
- * after all tests. Here is an example automatic classpath detection:
- *
- * <pre><code>
- *   public class Test {
- *     &#064;ClassRule
- *     public static serverRule = ServerRule();
- *
- *     &#064;Test
- *     public void it_should_have_a_port() {
- *       assertTrue(serverRule.getPort() &gt; 0).
- *     }
- *   }
- * </code></pre>
+ * <ol>
+ *   <li>Start embedded server before running any tests.</li>
+ *   <li>Stop embedded server after all tests are run.</li>
+ * </ol>
  */
-public class ServerRule extends AbstractRule {
+public final class EmbeddedServerTestLifeCycleAdapter extends AbstractTestLifeCycle implements TestLifeCycleAdapter {
 
 	/**
-	 * The test adapter.
+	 * Embedded server that will be start and stopped.
 	 */
-	private final EmbeddedServerTestLifeCycleAdapter adapter;
+	private final EmbeddedServer<?> server;
+
+	/**
+	 * The HTTP client (will be automatically destroyed in the {@code after} step.
+	 */
+	private final HttpClientHolder client;
 
 	/**
 	 * Create rule with default embedded server.
@@ -63,15 +59,18 @@ public class ServerRule extends AbstractRule {
 	 * <p>
 	 *
 	 * Embedded server implementation is chosen using
-	 * the service provider interface from the JDK.
+	 * classpath detection: jetty or tomcat will be instantiate
+	 * if implementation is available on classpath (it means if
+	 * sub-module is imported, it should be enough to instantiate
+	 * embedded server).
 	 *
 	 * <p>
 	 *
 	 * The server will automatically use the default configuration,
-	 * to specify a custom configuration, use {@link #ServerRule(AbstractConfiguration)} constructor.
+	 * to specify a custom configuration, use {@link #EmbeddedServerTestLifeCycleAdapter(AbstractConfiguration)} constructor.
 	 */
-	public ServerRule() {
-		this.adapter = new EmbeddedServerTestLifeCycleAdapter();
+	public EmbeddedServerTestLifeCycleAdapter() {
+		this((AbstractConfiguration) null);
 	}
 
 	/**
@@ -80,12 +79,15 @@ public class ServerRule extends AbstractRule {
 	 * <p>
 	 *
 	 * Embedded server implementation is chosen using
-	 * the service provider interface from the JDK.
+	 * classpath detection: jetty or tomcat will be instantiate
+	 * if implementation is available on classpath (it means if
+	 * sub-module is imported, it should be enough to instantiate
+	 * embedded server !).
 	 *
 	 * @param configuration Server configuration.
 	 */
-	public ServerRule(AbstractConfiguration configuration) {
-		this.adapter = new EmbeddedServerTestLifeCycleAdapter(configuration);
+	public EmbeddedServerTestLifeCycleAdapter(AbstractConfiguration configuration) {
+		this(instantiate(configuration));
 	}
 
 	/**
@@ -94,18 +96,25 @@ public class ServerRule extends AbstractRule {
 	 * @param server Embedded server, not null.
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
-	public ServerRule(EmbeddedServer<?> server) {
-		this.adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+	public EmbeddedServerTestLifeCycleAdapter(EmbeddedServer<?> server) {
+		this.server = notNull(server, "server");
+		this.client = new HttpClientHolder(HttpClientStrategy.AUTO, HttpClientConfiguration.defaultConfiguration(), server);
 	}
 
+	/**
+	 * Run the BEFORE step of the lifecycle test.
+	 */
 	@Override
-	protected void before() {
-		adapter.beforeAll();
+	public void beforeAll() {
+		start();
 	}
 
+	/**
+	 * Run the AFTER step of the lifecycle test.
+	 */
 	@Override
-	protected void after() {
-		adapter.afterAll();
+	public void afterAll() {
+		stop();
 	}
 
 	/**
@@ -114,7 +123,7 @@ public class ServerRule extends AbstractRule {
 	 * @see EmbeddedServer#start()
 	 */
 	public void start() {
-		adapter.start();
+		server.start();
 	}
 
 	/**
@@ -123,7 +132,8 @@ public class ServerRule extends AbstractRule {
 	 * @see EmbeddedServer#stop()
 	 */
 	public void stop() {
-		adapter.stop();
+		server.stop();
+		client.destroy();
 	}
 
 	/**
@@ -132,7 +142,7 @@ public class ServerRule extends AbstractRule {
 	 * @see EmbeddedServer#restart()
 	 */
 	public void restart() {
-		adapter.restart();
+		server.restart();
 	}
 
 	/**
@@ -142,7 +152,7 @@ public class ServerRule extends AbstractRule {
 	 * @see EmbeddedServer#isStarted()
 	 */
 	public boolean isStarted() {
-		return adapter.isStarted();
+		return server.isStarted();
 	}
 
 	/**
@@ -152,7 +162,7 @@ public class ServerRule extends AbstractRule {
 	 * @see EmbeddedServer#getScheme()
 	 */
 	public String getScheme() {
-		return adapter.getScheme();
+		return server.getScheme();
 	}
 
 	/**
@@ -162,7 +172,7 @@ public class ServerRule extends AbstractRule {
 	 * @see EmbeddedServer#getHost()
 	 */
 	public String getHost() {
-		return adapter.getHost();
+		return server.getHost();
 	}
 
 	/**
@@ -180,7 +190,7 @@ public class ServerRule extends AbstractRule {
 	 * @see EmbeddedServer#getPort()
 	 */
 	public int getPort() {
-		return adapter.getPort();
+		return server.getPort();
 	}
 
 	/**
@@ -190,7 +200,7 @@ public class ServerRule extends AbstractRule {
 	 * @see EmbeddedServer#getPath()
 	 */
 	public String getPath() {
-		return adapter.getPath();
+		return server.getPath();
 	}
 
 	/**
@@ -200,7 +210,7 @@ public class ServerRule extends AbstractRule {
 	 * @see EmbeddedServer#getUrl()
 	 */
 	public String getUrl() {
-		return adapter.getUrl();
+		return server.getUrl();
 	}
 
 	/**
@@ -209,16 +219,16 @@ public class ServerRule extends AbstractRule {
 	 * @return Server.
 	 */
 	public EmbeddedServer<?> getServer() {
-		return adapter.getServer();
+		return server;
 	}
 
 	/**
-	 * Returns HTTP client that can be used against embedded server.
+	 * Returns HTTP client that can be used against {@link #server}.
 	 *
 	 * @return The HTTP client.
 	 * @throws UnsupportedOperationException If the client cannot be returned because of missing implementation.
 	 */
 	public HttpClient getClient() {
-		return adapter.getClient();
+		return client.get();
 	}
 }

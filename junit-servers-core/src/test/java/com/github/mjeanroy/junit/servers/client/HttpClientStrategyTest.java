@@ -29,7 +29,7 @@ import com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 import com.github.mjeanroy.junit4.runif.RunIf;
 import com.github.mjeanroy.junit4.runif.RunIfRunner;
@@ -43,7 +43,6 @@ import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
 
 @RunWith(RunIfRunner.class)
 public class HttpClientStrategyTest {
@@ -58,12 +57,11 @@ public class HttpClientStrategyTest {
 	private static final boolean NING_ASYNC_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, NING_ASYNC_HTTP_FLAG);
 	private static final boolean APACHE_HTTP = Fields.readPrivateStatic(HttpClientStrategy.class, APACHE_HTTP_FLAG);
 
-	private EmbeddedServer<? extends AbstractConfiguration> server;
+	private EmbeddedServer<?> server;
 
 	@Before
-	@SuppressWarnings("unchecked")
 	public void setUp() {
-		server = mock(EmbeddedServer.class);
+		server = new EmbeddedServerMockBuilder().build();
 	}
 
 	@After

@@ -22,24 +22,21 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
+package com.github.mjeanroy.junit.servers.adapter;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import java.lang.reflect.Field;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
- * Annotation handler that will set simple http client implementation
- * in test classes.
+ * Annotation handler that will set embedded server to a field
+ * on a given class instance.
  */
-class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
+class ServerAnnotationHandler extends AbstractAnnotationHandler {
 
 	/**
 	 * Create new handler.
@@ -47,32 +44,23 @@ class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
 	 * @return Handler.
 	 * @throws NullPointerException if server is null.
 	 */
-	static AnnotationHandler newHttpClientAnnotationHandler(EmbeddedServer<?> server) {
-		return new HttpClientAnnotationHandler(notNull(server, "server"));
+	static AnnotationHandler newServerAnnotationHandler(EmbeddedServer<?> server) {
+		return new ServerAnnotationHandler(notNull(server, "server"));
 	}
 
 	/**
-	 * Embedded server that will be used with http client.
+	 * Embedded server set on class fields.
 	 */
 	private final EmbeddedServer<?> server;
 
 	// Use static factory instead
-	private HttpClientAnnotationHandler(EmbeddedServer<?> server) {
-		super(TestHttpClient.class);
+	private ServerAnnotationHandler(EmbeddedServer<?> server) {
+		super(TestServer.class);
 		this.server = server;
 	}
 
 	@Override
 	public void before(Object target, Field field) {
-		TestHttpClient httpClient = field.getAnnotation(TestHttpClient.class);
-		HttpClientStrategy strategy = httpClient.strategy();
-		setter(target, field, strategy.build(server));
-	}
-
-	@Override
-	public void after(Object target, Field field) {
-		HttpClient httpClient = getter(target, field);
-		httpClient.destroy();
-		setter(target, field, null);
+		setter(target, field, server);
 	}
 }
