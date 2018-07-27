@@ -72,6 +72,11 @@
     </dependency>
 
     <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.github.mjeanroy</groupId>
       <artifactId>junit-servers-tomcat</artifactId>
       <version>${project.version}</version>
