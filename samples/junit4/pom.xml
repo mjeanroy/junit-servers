@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>junit-servers-samples</artifactId>
+    <groupId>com.github.mjeanroy</groupId>
+    <version>0.7.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>junit-servers-samples-junit4</artifactId>
+  <version>0.7.1-SNAPSHOT</version>
+  <name>junit-servers-samples-junit4</name>
+  <packaging>pom</packaging>
+  <url>https://github.com/mjeanroy/junit-servers</url>
+
+  <modules>
+    <module>spring-java-jetty</module>
+    <module>spring-java-tomcat</module>
+    <module>spring-webxml-jetty</module>
+    <module>spring-webxml-tomcat</module>
+    <module>spring-webxml-jetty-jsp</module>
+    <module>spring-webxml-tomcat-jsp</module>
+  </modules>
+
+</project>

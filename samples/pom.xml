@@ -41,12 +41,7 @@
   <url>https://github.com/mjeanroy/junit-servers</url>
 
   <modules>
-    <module>spring-java-jetty</module>
-    <module>spring-webxml-jetty</module>
-    <module>spring-webxml-jetty-jsp</module>
-    <module>spring-java-tomcat</module>
-    <module>spring-webxml-tomcat</module>
-    <module>spring-webxml-tomcat-jsp</module>
+    <module>junit4</module>
   </modules>
 
   <properties>
