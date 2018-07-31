@@ -22,101 +22,92 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers;
+package com.github.mjeanroy.junit.servers.utils.impl;
 
-import static org.mockito.Mockito.mock;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import javax.servlet.ServletContext;
 
-/**
- * Fake embedded server implementation used to test {@link AbstractEmbeddedServer} class.
- */
-class FakeEmbeddedServer extends AbstractEmbeddedServer<FakeServer, FakeConfiguration> {
+import static org.mockito.Mockito.mock;
+
+public class FakeEmbeddedServer extends AbstractEmbeddedServer<FakeServer, FakeEmbeddedServerConfiguration> implements EmbeddedServer<FakeEmbeddedServerConfiguration> {
 
 	/**
-	 * Value incremented each time the {@link #doStart()} is called.
+	 * The number of times the fake server has been started.
 	 */
 	private int nbStart;
 
 	/**
-	 * Value incremented each time the {@link #doStop()} is called.
+	 * The number of times the fake server has been stopped.
 	 */
 	private int nbStop;
 
 	/**
 	 * A fake servlet context.
 	 */
-	private final ServletContext servletContext;
+	private ServletContext servletContext;
 
 	/**
-	 * Create fake server with default configuration.
+	 * A fake delegated server.
 	 */
-	FakeEmbeddedServer() {
-		this(new FakeConfiguration.Builder().build());
+	private FakeServer delegate;
+
+	public FakeEmbeddedServer() {
+		this(new FakeEmbeddedServerConfiguration());
 	}
 
-	/**
-	 * Create fake server with custom configuration.
-	 *
-	 * @param configuration Fake configuration.
-	 */
-	FakeEmbeddedServer(FakeConfiguration configuration) {
+	public FakeEmbeddedServer(FakeEmbeddedServerConfiguration configuration) {
 		super(configuration);
-		servletContext = mock(ServletContext.class);
-		nbStart = 0;
-		nbStop = 0;
-	}
-
-	@Override
-	public FakeServer getDelegate() {
-		return mock(FakeServer.class);
+		this.servletContext = mock(ServletContext.class);
+		this.delegate = new FakeServer();
 	}
 
 	@Override
 	protected void doStart() {
-		nbStart++;
-		sleep();
+		this.nbStart++;
 	}
 
 	@Override
 	protected void doStop() {
-		nbStop++;
-		sleep();
-	}
-
-	private static void sleep() {
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	@Override
-	public ServletContext getServletContext() {
-		return isStarted() ? servletContext : null;
+		this.nbStop++;
 	}
 
 	@Override
 	protected int doGetPort() {
-		return 80;
+		return configuration.getPort();
+	}
+
+	@Override
+	public FakeEmbeddedServerConfiguration getConfiguration() {
+		return configuration;
+	}
+
+	@Override
+	public ServletContext getServletContext() {
+		return servletContext;
+	}
+
+	@Override
+	public FakeServer getDelegate() {
+		return delegate;
 	}
 
 	/**
-	 * Get the number of time the {@link #doStart()} method has been called.
+	 * Get {@link #nbStart}
 	 *
-	 * @return Number of time the {@link #doStart()} has been called.
+	 * @return {@link #nbStart}
 	 */
-	int getNbStart() {
+	public int getNbStart() {
 		return nbStart;
 	}
 
 	/**
-	 * Get the number of time the {@link #doStop()} method has been called.
+	 * Get {@link #nbStop}
 	 *
-	 * @return Number of time the {@link #doStop()} has been called.
+	 * @return {@link #nbStop}
 	 */
-	int getNbStop() {
+	public int getNbStop() {
 		return nbStop;
 	}
 }

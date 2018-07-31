@@ -27,6 +27,8 @@ package com.github.mjeanroy.junit.servers.servers.configuration;
 import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.Hook;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -120,14 +122,48 @@ public abstract class AbstractConfiguration {
 	 * @param builder Configuration builder.
 	 */
 	protected AbstractConfiguration(AbstractConfigurationBuilder<?, ?> builder) {
-		this.classpath = builder.getClasspath();
-		this.path = builder.getPath();
-		this.webapp = builder.getWebapp();
-		this.port = builder.getPort();
-		this.envProperties = builder.getEnvProperties();
-		this.hooks = builder.getHooks();
-		this.parentClassLoader = builder.getParentClassLoader();
-		this.overrideDescriptor = builder.getOverrideDescriptor();
+		this(
+				builder.getClasspath(),
+				builder.getPath(),
+				builder.getWebapp(),
+				builder.getPort(),
+				builder.getEnvProperties(),
+				builder.getHooks(),
+				builder.getParentClassLoader(),
+				builder.getOverrideDescriptor()
+		);
+	}
+
+	/**
+	 * Initialize configuration.
+	 *
+	 * @param classpath New {@link #classpath} value.
+	 * @param path New {@link #path} value.
+	 * @param webapp New {@link #webapp} value.
+	 * @param port New {@link #port} value.
+	 * @param envProperties New {@link #envProperties} value.
+	 * @param hooks New {@link #hooks} value.
+	 * @param parentClassLoader New {@link #parentClassLoader} value.
+	 * @param overrideDescriptor New {@link #overrideDescriptor} value.
+	 */
+	protected AbstractConfiguration(
+			String classpath,
+			String path,
+			String webapp,
+			int port,
+			Map<String, String> envProperties,
+			List<Hook> hooks,
+			ClassLoader parentClassLoader,
+			String overrideDescriptor) {
+
+		this.classpath = classpath;
+		this.path = path;
+		this.webapp = webapp;
+		this.port = port;
+		this.envProperties = new LinkedHashMap<>(envProperties);
+		this.hooks = new ArrayList<>(hooks);
+		this.parentClassLoader = parentClassLoader;
+		this.overrideDescriptor = overrideDescriptor;
 	}
 
 	/**

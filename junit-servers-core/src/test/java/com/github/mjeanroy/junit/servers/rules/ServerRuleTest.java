@@ -25,67 +25,89 @@
 package com.github.mjeanroy.junit.servers.rules;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.Before;
+import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfiguration;
+import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfigurationBuilder;
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class ServerRuleTest {
 
-	private EmbeddedServer<?> server;
-	private ServerRule rule;
+	@Test
+	public void it_should_instantiate_server_from_service_loader_with_default_configuration() {
+		final ServerRule rule = new ServerRule();
+		final EmbeddedServer<?> server = rule.getServer();
 
-	@Before
-	public void setUp() {
-		server = new EmbeddedServerMockBuilder().build();
-		rule = new ServerRule(server);
+		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
+		assertThat(server.getConfiguration()).isNotNull();
+	}
+
+	@Test
+	public void it_should_instantiate_server_from_service_loader_with_custom_configuration() {
+		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
+		final ServerRule rule = new ServerRule(configuration);
+		final EmbeddedServer<?> server = rule.getServer();
+
+		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
+		assertThat(server.getConfiguration()).isSameAs(configuration);
 	}
 
 	@Test
 	public void it_should_start_server() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final ServerRule rule = new ServerRule(server);
+
 		rule.before();
+
 		verify(server).start();
 	}
 
 	@Test
 	public void it_should_stop_server() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final ServerRule rule = new ServerRule(server);
+
 		rule.after();
+
 		verify(server).stop();
 	}
 
 	@Test
 	public void it_should_restart_server() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final ServerRule rule = new ServerRule(server);
+
 		rule.restart();
+
 		verify(server).restart();
 	}
 
 	@Test
 	public void it_should_check_if_server_is_started() {
-		boolean started = true;
-		when(server.isStarted()).thenReturn(started);
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final ServerRule rule = new ServerRule(server);
 
-		boolean result = rule.isStarted();
+		assertThat(rule.isStarted()).isFalse();
 
-		assertThat(result).isEqualTo(started);
-		verify(server).isStarted();
+		rule.start();
+
+		assertThat(rule.isStarted()).isTrue();
+
+		verify(server, times(2)).isStarted();
 	}
 
 	@Test
 	public void it_should_get_server_scheme() {
-		String scheme = "http";
-		when(server.getScheme()).thenReturn(scheme);
+		final String scheme = "http";
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().withScheme(scheme).build();
+		final ServerRule rule = new ServerRule(server);
 
-		String result = rule.getScheme();
+		final String result = rule.getScheme();
 
 		assertThat(result).isEqualTo(scheme);
 		verify(server).getScheme();
@@ -93,10 +115,11 @@ public class ServerRuleTest {
 
 	@Test
 	public void it_should_get_server_host() {
-		String host = "http";
-		when(server.getHost()).thenReturn(host);
+		final String host = "http";
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().withHost(host).build();
+		final ServerRule rule = new ServerRule(server);
 
-		String result = rule.getHost();
+		final String result = rule.getHost();
 
 		assertThat(result).isEqualTo(host);
 		verify(server).getHost();
@@ -104,10 +127,11 @@ public class ServerRuleTest {
 
 	@Test
 	public void it_should_get_server_path() {
-		String path = "/foo";
-		when(server.getPath()).thenReturn(path);
+		final String path = "/foo";
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().withPath(path).build();
+		final ServerRule rule = new ServerRule(server);
 
-		String result = rule.getPath();
+		final String result = rule.getPath();
 
 		assertThat(result).isEqualTo(path);
 		verify(server).getPath();
@@ -115,24 +139,35 @@ public class ServerRuleTest {
 
 	@Test
 	public void it_should_get_server_url() {
-		String url = localUrl(8080, "/foo");
-		when(server.getUrl()).thenReturn(url);
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder()
+				.withScheme("http")
+				.withHost("localhost")
+				.withPort(8080)
+				.withPath("/")
+				.build();
 
-		String result = rule.getUrl();
+		final ServerRule rule = new ServerRule(server);
+		final String result = rule.getUrl();
 
-		assertThat(result).isEqualTo(url);
+		assertThat(result).isEqualTo("http://localhost:8080/");
 		verify(server).getUrl();
 	}
 
 	@Test
 	public void it_should_get_server() {
-		EmbeddedServer<?> result = rule.getServer();
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final ServerRule rule = new ServerRule(server);
+		final EmbeddedServer<?> result = rule.getServer();
+
 		assertThat(result).isSameAs(server);
 	}
 
 	@Test
 	public void it_should_get_http_client() {
-		HttpClient client = rule.getClient();
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final ServerRule rule = new ServerRule(server);
+		final HttpClient client = rule.getClient();
+
 		assertThat(client).isNotNull();
 		assertThat(client).isSameAs(rule.getClient());
 		assertThat(client.isDestroyed()).isFalse();
@@ -140,7 +175,10 @@ public class ServerRuleTest {
 
 	@Test
 	public void it_should_get_new_http_client_if_it_has_been_destroyed() {
-		HttpClient client = rule.getClient();
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final ServerRule rule = new ServerRule(server);
+		final HttpClient client = rule.getClient();
+
 		assertThat(client).isNotNull();
 		assertThat(client).isSameAs(rule.getClient());
 		assertThat(client.isDestroyed()).isFalse();
@@ -155,44 +193,14 @@ public class ServerRuleTest {
 
 	@Test
 	public void it_should_destroy_http_client_when_rule_stop() {
-		HttpClient client = rule.getClient();
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final ServerRule rule = new ServerRule(server);
+		final HttpClient client = rule.getClient();
 		assertThat(client).isNotNull();
 		assertThat(client.isDestroyed()).isFalse();
 
 		rule.after();
 
 		assertThat(client.isDestroyed()).isTrue();
-	}
-
-	@Test
-	public void it_should_fail_to_instantiate_server_without_implementations() {
-		assertThatThrownBy(newServerRule())
-				.isExactlyInstanceOf(ServerImplMissingException.class)
-				.hasMessage("Embedded server implementation is missing, please import appropriate sub-module");
-	}
-
-	@Test
-	public void it_should_fail_to_instantiate_server_with_configuration_but_without_implementations() {
-		assertThatThrownBy(newServerRule(mock(AbstractConfiguration.class)))
-				.isExactlyInstanceOf(ServerImplMissingException.class)
-				.hasMessage("Embedded server implementation is missing, please import appropriate sub-module");
-	}
-
-	private static ThrowingCallable newServerRule() {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				new ServerRule();
-			}
-		};
-	}
-
-	private static ThrowingCallable newServerRule(final AbstractConfiguration configuration) {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				new ServerRule(configuration);
-			}
-		};
 	}
 }

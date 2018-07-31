@@ -25,20 +25,36 @@
 package com.github.mjeanroy.junit.servers.adapter;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
-import com.github.mjeanroy.junit.servers.rules.ServerRule;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
-import org.assertj.core.api.ThrowableAssert;
+import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfiguration;
+import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfigurationBuilder;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class EmbeddedServerTestLifeCycleAdapterTest {
+
+	@Test
+	public void it_should_instantiate_server_from_service_loader_with_default_configuration() {
+		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter();
+		final EmbeddedServer<?> server = adapter.getServer();
+
+		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
+		assertThat(server.getConfiguration()).isNotNull();
+	}
+
+	@Test
+	public void it_should_instantiate_server_from_service_loader_with_custom_configuration() {
+		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
+		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(configuration);
+		final EmbeddedServer<?> server = adapter.getServer();
+
+		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
+		assertThat(server.getConfiguration()).isSameAs(configuration);
+	}
 
 	@Test
 	public void it_should_start_server_before_test() {
@@ -156,37 +172,5 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
 		final HttpClient client = adapter.getClient();
 		assertThat(client).isNotNull();
-	}
-
-	@Test
-	public void it_should_fail_to_instantiate_server_without_implementations() {
-		assertThatThrownBy(newServerRule())
-				.isExactlyInstanceOf(ServerImplMissingException.class)
-				.hasMessage("Embedded server implementation is missing, please import appropriate sub-module");
-	}
-
-	@Test
-	public void it_should_fail_to_instantiate_server_with_configuration_but_without_implementations() {
-		assertThatThrownBy(newServerRule(mock(AbstractConfiguration.class)))
-				.isExactlyInstanceOf(ServerImplMissingException.class)
-				.hasMessage("Embedded server implementation is missing, please import appropriate sub-module");
-	}
-
-	private static ThrowableAssert.ThrowingCallable newServerRule() {
-		return new ThrowableAssert.ThrowingCallable() {
-			@Override
-			public void call() {
-				new ServerRule();
-			}
-		};
-	}
-
-	private static ThrowableAssert.ThrowingCallable newServerRule(final AbstractConfiguration configuration) {
-		return new ThrowableAssert.ThrowingCallable() {
-			@Override
-			public void call() {
-				new ServerRule(configuration);
-			}
-		};
 	}
 }

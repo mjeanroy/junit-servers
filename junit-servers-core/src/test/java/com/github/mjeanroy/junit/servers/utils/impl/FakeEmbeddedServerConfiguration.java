@@ -22,36 +22,17 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers;
+package com.github.mjeanroy.junit.servers.utils.impl;
 
 import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
 
-/**
- * Fake configuration used by {@link FakeEmbeddedServer} implementation.
- */
-class FakeConfiguration extends AbstractConfiguration {
+public class FakeEmbeddedServerConfiguration extends AbstractConfiguration {
 
-	// Create the configuration.
-	private FakeConfiguration(Builder builder) {
-		super(builder);
+	public FakeEmbeddedServerConfiguration() {
+		this(new FakeEmbeddedServerConfigurationBuilder());
 	}
 
-	/**
-	 * The builder used to create {@link FakeConfiguration} instances.
-	 */
-	static class Builder extends AbstractConfigurationBuilder<Builder, FakeConfiguration> {
-		Builder() {
-		}
-
-		@Override
-		protected Builder self() {
-			return this;
-		}
-
-		@Override
-		public FakeConfiguration build() {
-			return new FakeConfiguration(this);
-		}
+	public FakeEmbeddedServerConfiguration(FakeEmbeddedServerConfigurationBuilder configurationBuilder) {
+		super(configurationBuilder);
 	}
 }

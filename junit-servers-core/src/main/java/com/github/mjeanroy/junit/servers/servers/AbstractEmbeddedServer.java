@@ -24,16 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.UrlUtils.ensureAbsolutePath;
 import static java.lang.System.clearProperty;
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
  * Partial implementation of an embedded server.
@@ -54,6 +54,8 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	 * The default host returned by {@link AbstractEmbeddedServer#getHost()}.
 	 */
 	private static final String DEFAULT_HOST = "localhost";
+	public static final String SCHEME_SEPARATOR = "://";
+	public static final String PORT_SEPARATOR = ":";
 
 	/**
 	 * Server configuration.
@@ -213,13 +215,18 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 
 	@Override
 	public String getUrl() {
-		return new StringBuilder()
-			.append(getScheme())
-			.append("://")
-			.append(getHost())
-			.append(":")
-			.append(getPort())
-			.append(ensureAbsolutePath(getPath()))
+		final String scheme = getScheme();
+		final String host = getHost();
+		final String port = String.valueOf(getPort());
+		final String path = ensureAbsolutePath(getPath());
+		final int initialSize = scheme.length() + host.length() + port.length() + path.length() + SCHEME_SEPARATOR.length() + PORT_SEPARATOR.length();
+		return new StringBuilder(initialSize)
+			.append(scheme)
+			.append(SCHEME_SEPARATOR)
+			.append(host)
+			.append(PORT_SEPARATOR)
+			.append(port)
+			.append(path)
 			.toString();
 	}
 

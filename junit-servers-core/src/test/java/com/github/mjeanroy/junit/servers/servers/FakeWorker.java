@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
+
 import java.util.concurrent.CountDownLatch;
 
 /**

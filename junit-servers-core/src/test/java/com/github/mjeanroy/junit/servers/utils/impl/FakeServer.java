@@ -22,11 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers;
+package com.github.mjeanroy.junit.servers.utils.impl;
 
-/**
- * A fake "internal" server used by {@link FakeEmbeddedServer} instance.
- */
-class FakeServer {
+public class FakeServer {
 
+	FakeServer() {
+	}
 }
