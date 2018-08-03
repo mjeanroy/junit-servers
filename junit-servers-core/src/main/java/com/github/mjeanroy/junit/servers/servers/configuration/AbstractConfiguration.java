@@ -120,7 +120,9 @@ public abstract class AbstractConfiguration {
 	 * Initialize configuration.
 	 *
 	 * @param builder Configuration builder.
+	 * @deprecated Use {@link #AbstractConfiguration(String, String, String, int, Map, List, ClassLoader, String)} instead.
 	 */
+	@Deprecated
 	protected AbstractConfiguration(AbstractConfigurationBuilder<?, ?> builder) {
 		this(
 				builder.getClasspath(),
