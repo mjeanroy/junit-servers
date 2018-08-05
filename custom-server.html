@@ -1,0 +1,8 @@
+---
+  layout: default
+  permalink: /custom
+  title: Custom Server
+---
+
+{% capture custom %}{% include_relative docs/04-custom-server.md %}{% endcapture %}
+{{ custom  | markdownify }}
