@@ -168,7 +168,7 @@ public class MyTest {
 Using the [JUnit rule](https://github.com/junit-team/junit4/wiki/Rules) is relatively easy:
 
 ```java
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
+import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -180,7 +180,7 @@ import org.junit.Test;
 
 public class MyTest {
   @ClassRule
-  public static final TomcatServerRule tomcatRule = new TomcatServerRule();
+  public static final TomcatServerJunit4Rule tomcatRule = new TomcatServerJunit4Rule();
 
   @Test
   public void should_have_index() {
@@ -197,14 +197,14 @@ public class MyTest {
 ```
 
 What happens here:
-- The `TomcatServerRule` is used as a **class rule**: the server will start **before all** tests, and will stop **after all** (if you want to start/stop server between each test, you can use the rule as a "simple" rule (i.e `@Rule`), but we don't recommend it).
+- The `TomcatServerJunit4Rule` is used as a **class rule**: the server will start **before all** tests, and will stop **after all** (if you want to start/stop server between each test, you can use the rule as a "simple" rule (i.e `@Rule`), but we don't recommend it).
 - The default configuration is used.
 
 Sometimes, you will have to change some configuration option, this is possible using the dedicated builder:
 
 ```java
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -216,7 +216,7 @@ import org.junit.Test;
 
 public class MyTest {
   @ClassRule
-  public static final TomcatServerRule tomcatRule = new TomcatServerRule(EmbeddedTomcatConfiguration.builder()
+  public static final TomcatServerJunit4Rule tomcatRule = new TomcatServerJunit4Rule(EmbeddedTomcatConfiguration.builder()
     .withPath("/app")
     .withPort(8080)
     .withProperty("spring.profiles.active", "test")
@@ -259,8 +259,8 @@ The following options can be customized:
 Here is an example that creates a rule using a configuration object:
 
 ```java
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
 
 import org.junit.ClassRule;
 
@@ -280,7 +280,7 @@ public class MyTest {
     .build());
 
   @ClassRule
-  public static final TomcatServerRule tomcatRule = new TomcatServerRule(configuration);
+  public static final TomcatServerJunit4Rule tomcatRule = new TomcatServerJunit4Rule(configuration);
 
   // Test suite...
 }
@@ -302,9 +302,9 @@ For example, this can be useful:
 The example below use a hook to log server events:
 
 ```java
-import com.github.mjeanroy.junit.servers.rules.TomcatServerRule;
 import com.github.mjeanroy.junit.servers.servers.Hook;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -316,7 +316,7 @@ import org.junit.Test;
 
 public class MyTest {
   @ClassRule
-  public static final TomcatServerRule tomcatRule = new TomcatServerRule(EmbeddedTomcatConfiguration.builder()
+  public static final TomcatServerJunit4Rule tomcatRule = new TomcatServerJunit4Rule(EmbeddedTomcatConfiguration.builder()
     .withHook(new LogHook())
     .build());
 
