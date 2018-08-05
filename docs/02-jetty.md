@@ -168,7 +168,7 @@ public class MyTest {
 Using the [JUnit rule](https://github.com/junit-team/junit4/wiki/Rules) is relatively easy:
 
 ```java
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
+import com.github.mjeanroy.junit.servers.jetty.JettyServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -180,7 +180,7 @@ import org.junit.Test;
 
 public class MyTest {
   @ClassRule
-  public static final JettyServerRule jettyRule = new JettyServerRule();
+  public static final JettyServerJunit4Rule jettyRule = new JettyServerJunit4Rule();
 
   @Test
   public void should_have_index() {
@@ -203,8 +203,8 @@ What happens here:
 Sometimes, you will have to change some configuration option, this is possible using the dedicated builder:
 
 ```java
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.JettyServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -216,7 +216,7 @@ import org.junit.Test;
 
 public class MyTest {
   @ClassRule
-  public static final JettyServerRule jettyRule = new JettyServerRule(EmbeddedJettyConfiguration.builder()
+  public static final JettyServerJunit4Rule jettyRule = new JettyServerJunit4Rule(EmbeddedJettyConfiguration.builder()
     .withPath("/app")
     .withPort(8080)
     .withProperty("spring.profiles.active", "test")
@@ -259,8 +259,8 @@ The following options can be customized:
 Here is an example that creates a rule using a configuration object:
 
 ```java
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.JettyServerJunit4Rule;
 
 import org.junit.ClassRule;
 
@@ -277,7 +277,7 @@ public class MyTest {
     .build());
 
   @ClassRule
-  public static final JettyServerRule jettyRule = new JettyServerRule(configuration);
+  public static final JettyServerJunit4Rule jettyRule = new JettyServerJunit4Rule(configuration);
 
   // Test suite...
 }
@@ -299,9 +299,9 @@ For example, this can be useful:
 The example below use a hook to log server events:
 
 ```java
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
 import com.github.mjeanroy.junit.servers.servers.Hook;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.JettyServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -313,7 +313,7 @@ import org.junit.Test;
 
 public class MyTest {
   @ClassRule
-  public static final JettyServerRule jettyRule = new JettyServerRule(EmbeddedJettyConfiguration.builder()
+  public static final JettyServerJunit4Rule jettyRule = new JettyServerJunit4Rule(EmbeddedJettyConfiguration.builder()
     .withHook(new LogHook())
     .build());
 
