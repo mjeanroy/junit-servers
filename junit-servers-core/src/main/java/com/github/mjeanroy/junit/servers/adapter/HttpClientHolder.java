@@ -27,8 +27,8 @@ package com.github.mjeanroy.junit.servers.adapter;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
  * This goal of this class is to provide a way to create {@link HttpClient} instances in a thread-safe way:

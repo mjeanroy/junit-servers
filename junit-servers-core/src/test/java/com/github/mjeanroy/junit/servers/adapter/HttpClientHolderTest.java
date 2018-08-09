@@ -24,12 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.adapter;
 
-import com.github.mjeanroy.junit.servers.adapter.HttpClientHolder;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;

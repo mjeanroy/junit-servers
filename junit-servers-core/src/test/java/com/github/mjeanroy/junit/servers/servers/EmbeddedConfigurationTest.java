@@ -22,14 +22,17 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers.configuration;
+package com.github.mjeanroy.junit.servers.servers;
 
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedConfigurationBuilderTest;
-
-public class EmbeddedConfigurationBuilderTest extends AbstractEmbeddedConfigurationBuilderTest<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
+public class EmbeddedConfigurationTest extends AbstractEmbeddedConfigurationTest<EmbeddedConfiguration> {
 
 	@Override
-	protected EmbeddedConfigurationBuilder createBuilder() {
-		return new EmbeddedConfigurationBuilder();
+	protected EmbeddedConfiguration createConfiguration() {
+		return new EmbeddedConfiguration();
+	}
+
+	@Override
+	protected Class<EmbeddedConfiguration> getTestedClass() {
+		return EmbeddedConfiguration.class;
 	}
 }

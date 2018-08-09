@@ -26,9 +26,6 @@ package com.github.mjeanroy.junit.servers.servers;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.adapter;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.utils.builders.AbstractConfigurationMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.fixtures.FixtureClass;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;

@@ -24,107 +24,34 @@
 
 package com.github.mjeanroy.junit.servers.servers.configuration;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.Hook;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableMap;
 
 /**
  * Generic configuration that should be extended for
  * each custom embedded server.
+ *
+ * @deprecated Use {@link com.github.mjeanroy.junit.servers.servers.AbstractConfiguration} instead.
  */
-public abstract class AbstractConfiguration {
+@Deprecated
+public abstract class AbstractConfiguration extends com.github.mjeanroy.junit.servers.servers.AbstractConfiguration {
 
 	/**
-	 * Server Path.
-	 * This path is "/" by default, but it can be customized (and path
-	 * suffix will have to be used to query application url).
+	 * Initialize default configuration.
 	 */
-	private final String path;
-
-	/**
-	 * Webapp Path.
-	 *
-	 * By default, the path follow maven convention and is
-	 * set to "src/main/webapp".
-	 *
-	 * Path should be customized if project do not follow maven
-	 * convention or webapp path must be set to maven sub-module.
-	 */
-	private final String webapp;
-
-	/**
-	 * Server port, default is to use a random port.
-	 *
-	 * Use this configuration port to define a specific port, otherwise
-	 * use a random port to be sure application start on an
-	 * available port.
-	 */
-	private final int port;
-
-	/**
-	 * Additional classpath.
-	 *
-	 * The path will be added to application classpath
-	 * before server is started.
-	 *
-	 * This additional classpath entry is useful to start
-	 * application configured with java configuration instead
-	 * of "classic" web.xml file.
-	 */
-	private final String classpath;
-
-   /**
-	 * Additional parent (classloader) classpath.
-	 *
-	 * The path will be added to application parent classloader classpath
-	 * before server is started.
-	 */
-	private final ClassLoader parentClassLoader;
-	
-	/**
-	 * Map of environment properties to set before server start.
-	 *
-	 * These properties could also be set / unset using
-	 * a custom hooks but since it is a common tasks, this is
-	 * supported under the hood.
-	 *
-	 * Note that custom properties will be set before embedded server
-	 * is started and removed after server is stopped.
-	 */
-	private final Map<String, String> envProperties;
-
-	/**
-	 * Execution hooks.
-	 *
-	 * These hooks will be executed during server start and stop
-	 * phases.
-	 *
-	 * Be careful that these hooks should be thread safe.
-	 */
-	private final List<Hook> hooks;
-
-	/**
-	 * The path to the custom descriptor file (a.k.a web.xml).
-	 */
-	private final String overrideDescriptor;
+	protected AbstractConfiguration() {
+		super();
+	}
 
 	/**
 	 * Initialize configuration.
 	 *
 	 * @param builder Configuration builder.
-	 * @deprecated Use {@link #AbstractConfiguration(String, String, String, int, Map, List, ClassLoader, String)} instead.
 	 */
-	@Deprecated
 	protected AbstractConfiguration(AbstractConfigurationBuilder<?, ?> builder) {
-		this(
+		super(
 				builder.getClasspath(),
 				builder.getPath(),
 				builder.getWebapp(),
@@ -158,145 +85,15 @@ public abstract class AbstractConfiguration {
 			ClassLoader parentClassLoader,
 			String overrideDescriptor) {
 
-		this.classpath = classpath;
-		this.path = path;
-		this.webapp = webapp;
-		this.port = port;
-		this.envProperties = new LinkedHashMap<>(envProperties);
-		this.hooks = new ArrayList<>(hooks);
-		this.parentClassLoader = parentClassLoader;
-		this.overrideDescriptor = overrideDescriptor;
-	}
-
-	/**
-	 * Get {@link #path}.
-	 *
-	 * @return {@link #path}
-	 */
-	public String getPath() {
-		return path;
-	}
-
-	/**
-	 * Get {@link #webapp}.
-	 *
-	 * @return {@link #webapp}
-	 */
-	public String getWebapp() {
-		return webapp;
-	}
-
-	/**
-	 * Get {@link #classpath}.
-	 *
-	 * @return {@link #classpath}
-	 */
-	public String getClasspath() {
-		return classpath;
-	}
-
-	/**
-	 * Get {@link #parentClassLoader}, as a non-modifiable collection.
-	 *
-	 * @return {@link #parentClassLoader}
-	 * @deprecated Use {@link #getParentClassLoader()} instead.
-	 */
-	@Deprecated
-	public ClassLoader getParentClasspath() {
-		return parentClassLoader;
-	}
-
-	/**
-	 * Get {@link #parentClassLoader}, as a non-modifiable collection.
-	 *
-	 * @return {@link #parentClassLoader}
-	 */
-	public ClassLoader getParentClassLoader() {
-		return parentClassLoader;
-	}
-
-	/**
-	 * Get {@link #port}.
-	 *
-	 * @return {@link #port}
-	 */
-	public int getPort() {
-		return port;
-	}
-
-	/**
-	 * Get {@link #overrideDescriptor}.
-	 *
-	 * @return {@link #overrideDescriptor}
-	 */
-	public String getOverrideDescriptor() {
-		return overrideDescriptor ;
-	}
-
-	/**
-	 * Get {@link #envProperties} as a non-modifiable map.
-	 *
-	 * @return {@link #envProperties}
-	 */
-	public Map<String, String> getEnvProperties() {
-		return unmodifiableMap(envProperties);
-	}
-
-	/**
-	 * Get {@link #hooks} as a non-modifiable list.
-	 *
-	 * @return {@link #hooks}
-	 */
-	public List<Hook> getHooks() {
-		return unmodifiableList(hooks);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == this) {
-			return true;
-		}
-
-		if (o instanceof AbstractConfiguration) {
-			AbstractConfiguration c = (AbstractConfiguration) o;
-			return c.canEqual(this) &&
-					Objects.equals(port, c.port) &&
-					Objects.equals(path, c.path) &&
-					Objects.equals(webapp, c.webapp) &&
-					Objects.equals(classpath, c.classpath) &&
-					Objects.equals(envProperties, c.envProperties) &&
-					Objects.equals(hooks, c.hooks) &&
-					Objects.equals(overrideDescriptor, c.overrideDescriptor) &&
-					Objects.equals(parentClassLoader, c.parentClassLoader);
-		}
-
-		return false;
-	}
-
-	/**
-	 * Ensure that an object can be equal to the current instance.
-	 *
-	 * @param o The tested object.
-	 * @return {@code true} if {@code o} can be equal to {@code this}, {@code false} otherwise.
-	 */
-	protected boolean canEqual(Object o) {
-		return o instanceof AbstractConfiguration;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(port, path, webapp, classpath, envProperties, hooks, overrideDescriptor, parentClassLoader);
-	}
-
-	@Override
-	public String toString() {
-		return ToStringBuilder.create(getClass())
-			.append("port", port)
-			.append("path", path)
-			.append("webapp", webapp)
-			.append("classpath", classpath)
-			.append("overrideDescriptor", overrideDescriptor)
-			.append("parentClassLoader", parentClassLoader)
-			.build();
+		super(
+			classpath,
+			path,
+			webapp,
+			port,
+			envProperties,
+			hooks,
+			parentClassLoader,
+			overrideDescriptor
+		);
 	}
 }

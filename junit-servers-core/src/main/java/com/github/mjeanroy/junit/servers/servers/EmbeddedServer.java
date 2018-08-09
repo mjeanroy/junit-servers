@@ -26,8 +26,6 @@ package com.github.mjeanroy.junit.servers.servers;
 
 import javax.servlet.ServletContext;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-
 /**
  * Specification of embedded server.
  *

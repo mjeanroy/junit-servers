@@ -24,78 +24,17 @@
 
 package com.github.mjeanroy.junit.servers.servers.configuration;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Before;
-import org.junit.Test;
+import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedConfigurationTest;
 
-import java.net.URL;
-import java.net.URLClassLoader;
+public class EmbeddedConfigurationTest extends AbstractEmbeddedConfigurationTest<EmbeddedConfiguration> {
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-public class EmbeddedConfigurationTest {
-
-	private EmbeddedConfigurationBuilder builder;
-
-	@Before
-	public void setUp() {
-		builder = mock(EmbeddedConfigurationBuilder.class);
-		when(builder.getPath()).thenReturn("/foo");
-		when(builder.getClasspath()).thenReturn("/target/classes");
-		when(builder.getPort()).thenReturn(8080);
-		when(builder.getWebapp()).thenReturn("src/main/webapp");
+	@Override
+	protected EmbeddedConfiguration createConfiguration() {
+		return new EmbeddedConfiguration();
 	}
 
-	@Test
-	public void it_should_build_configuration() {
-		EmbeddedConfiguration result = new EmbeddedConfiguration(builder);
-
-		assertThat(result.getPort()).isEqualTo(builder.getPort());
-		assertThat(result.getPath()).isEqualTo(builder.getPath());
-		assertThat(result.getClasspath()).isEqualTo(builder.getClasspath());
-		assertThat(result.getWebapp()).isEqualTo(builder.getWebapp());
-	}
-
-	@Test
-	public void it_should_have_to_string() {
-		EmbeddedConfiguration result = new EmbeddedConfiguration(builder);
-		assertThat(result.toString()).isEqualTo(
-				"EmbeddedConfiguration{" +
-						"port: 8080, " +
-						"path: \"/foo\", " +
-						"webapp: \"src/main/webapp\", " +
-						"classpath: \"/target/classes\", " +
-						"overrideDescriptor: null, " +
-						"parentClassLoader: null" +
-				"}");
-	}
-
-	@Test
-	public void it_should_implement_equals_hashCode() {
-		ClassLoader red = new URLClassLoader(new URL[0]);
-		ClassLoader black = new URLClassLoader(new URL[0]);
-		EqualsVerifier.forClass(EmbeddedConfiguration.class)
-			.withPrefabValues(ClassLoader.class, red, black)
-			.verify();
-	}
-
-	private static final class EmbeddedConfiguration extends AbstractConfiguration {
-		private EmbeddedConfiguration(EmbeddedConfigurationBuilder builder) {
-			super(builder);
-		}
-	}
-
-	protected static class EmbeddedConfigurationBuilder extends AbstractConfigurationBuilder<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
-		@Override
-		protected EmbeddedConfigurationBuilder self() {
-			return this;
-		}
-
-		@Override
-		public EmbeddedConfiguration build() {
-			return new EmbeddedConfiguration(this);
-		}
+	@Override
+	protected Class<EmbeddedConfiguration> getTestedClass() {
+		return EmbeddedConfiguration.class;
 	}
 }

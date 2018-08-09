@@ -25,8 +25,8 @@
 package com.github.mjeanroy.junit.servers.rules;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.adapter.EmbeddedServerTestLifeCycleAdapter;
 
 /**

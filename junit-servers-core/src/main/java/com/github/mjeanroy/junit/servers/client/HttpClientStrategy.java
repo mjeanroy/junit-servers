@@ -29,8 +29,8 @@ import com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient;
 import com.github.mjeanroy.junit.servers.commons.ClassUtils;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 /**
  * Available strategies that can be used to build

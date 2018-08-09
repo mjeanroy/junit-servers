@@ -24,8 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 

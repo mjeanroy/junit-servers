@@ -24,15 +24,37 @@
 
 package com.github.mjeanroy.junit.servers.utils.impl;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.Hook;
+
+import java.util.List;
+import java.util.Map;
 
 public class FakeEmbeddedServerConfiguration extends AbstractConfiguration {
 
 	public FakeEmbeddedServerConfiguration() {
-		this(new FakeEmbeddedServerConfigurationBuilder());
+		super();
 	}
 
-	public FakeEmbeddedServerConfiguration(FakeEmbeddedServerConfigurationBuilder configurationBuilder) {
-		super(configurationBuilder);
+	FakeEmbeddedServerConfiguration(
+			String classpath,
+			String path,
+			String webapp,
+			int port,
+			Map<String, String> envProperties,
+			List<Hook> hooks,
+			ClassLoader parentClassLoader,
+			String overrideDescriptor) {
+
+		super(
+			classpath,
+			path,
+			webapp,
+			port,
+			envProperties,
+			hooks,
+			parentClassLoader,
+			overrideDescriptor
+		);
 	}
 }

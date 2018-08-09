@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.adapter;
 
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

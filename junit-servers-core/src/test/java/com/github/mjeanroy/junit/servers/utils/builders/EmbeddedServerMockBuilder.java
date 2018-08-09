@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.utils.builders;
 
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 

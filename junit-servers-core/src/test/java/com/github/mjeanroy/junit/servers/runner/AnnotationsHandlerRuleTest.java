@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.runner;
 
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.builders.AbstractConfigurationMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.fixtures.FixtureClass;

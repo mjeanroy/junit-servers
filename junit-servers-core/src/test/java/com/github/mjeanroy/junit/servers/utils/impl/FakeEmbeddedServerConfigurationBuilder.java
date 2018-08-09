@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.utils.impl;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfigurationBuilder;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfigurationBuilder;
 
 public class FakeEmbeddedServerConfigurationBuilder extends AbstractConfigurationBuilder<FakeEmbeddedServerConfigurationBuilder, FakeEmbeddedServerConfiguration> {
 
@@ -39,6 +39,15 @@ public class FakeEmbeddedServerConfigurationBuilder extends AbstractConfiguratio
 
 	@Override
 	public FakeEmbeddedServerConfiguration build() {
-		return new FakeEmbeddedServerConfiguration(this);
+		return new FakeEmbeddedServerConfiguration(
+			getClasspath(),
+			getPath(),
+			getWebapp(),
+			getPort(),
+			getEnvProperties(),
+			getHooks(),
+			getParentClassLoader(),
+			getOverrideDescriptor()
+		);
 	}
 }

@@ -25,8 +25,8 @@
 package com.github.mjeanroy.junit.servers.runner;
 
 import com.github.mjeanroy.junit.servers.rules.ServerRule;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import org.junit.rules.TestRule;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;

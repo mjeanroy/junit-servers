@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.utils.builders;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 
 import static org.mockito.Mockito.mock;
 

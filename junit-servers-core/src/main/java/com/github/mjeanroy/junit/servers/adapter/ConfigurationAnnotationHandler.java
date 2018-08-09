@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.adapter;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 
 import java.lang.reflect.Field;
 

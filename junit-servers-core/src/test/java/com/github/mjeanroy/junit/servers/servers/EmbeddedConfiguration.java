@@ -22,14 +22,54 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers.configuration;
+package com.github.mjeanroy.junit.servers.servers;
 
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedConfigurationBuilderTest;
+import java.util.List;
+import java.util.Map;
 
-public class EmbeddedConfigurationBuilderTest extends AbstractEmbeddedConfigurationBuilderTest<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
+/**
+ * A fake implementation of {@link AbstractConfiguration} to use in unit tests.
+ */
+final class EmbeddedConfiguration extends AbstractConfiguration {
 
-	@Override
-	protected EmbeddedConfigurationBuilder createBuilder() {
-		return new EmbeddedConfigurationBuilder();
+	/**
+	 * Initialize default configuration.
+	 */
+	EmbeddedConfiguration() {
+		super();
+	}
+
+	/**
+	 * Initialize custom configuration.
+	 *
+	 * @param classpath The classpath.
+	 * @param path The path.
+	 * @param webapp The webapp.
+	 * @param port The port.
+	 * @param envProperties Environment properties.
+	 * @param hooks Server hooks.
+	 * @param parentClassLoader The parent classloader, may be {@code null}.
+	 * @param overrideDescriptor The overrided descriptor, may be {@code null}.
+	 */
+	EmbeddedConfiguration(
+		String classpath,
+		String path,
+		String webapp,
+		int port,
+		Map<String, String> envProperties,
+		List<Hook> hooks,
+		ClassLoader parentClassLoader,
+		String overrideDescriptor) {
+
+		super(
+			classpath,
+			path,
+			webapp,
+			port,
+			envProperties,
+			hooks,
+			parentClassLoader,
+			overrideDescriptor
+		);
 	}
 }

@@ -25,7 +25,6 @@
 package com.github.mjeanroy.junit.servers.servers;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfiguration;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfigurationBuilder;

@@ -22,9 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers.configuration;
-
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedConfigurationBuilderTest;
+package com.github.mjeanroy.junit.servers.servers;
 
 public class EmbeddedConfigurationBuilderTest extends AbstractEmbeddedConfigurationBuilderTest<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
 
