@@ -22,57 +22,47 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.adapter;
+package com.github.mjeanroy.junit.servers.engine;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 
 import java.lang.reflect.Field;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
 
 /**
- * Annotation handler that will set simple http client implementation
- * in test classes.
+ * Annotation handler that will set configuration to a field
+ * annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration}
+ * on a given class instance.
  */
-class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
+class ConfigurationAnnotationHandler extends AbstractAnnotationHandler {
 
 	/**
 	 * Create new handler.
-	 * @param server Embedded server.
+	 * @param configuration Server configuration.
+	 * @param <T> Type of configuration instance.
 	 * @return Handler.
-	 * @throws NullPointerException if server is null.
+	 * @throws NullPointerException if configuration is null.
 	 */
-	static AnnotationHandler newHttpClientAnnotationHandler(EmbeddedServer<?> server) {
-		return new HttpClientAnnotationHandler(notNull(server, "server"));
+	static <T extends AbstractConfiguration> AnnotationHandler newConfigurationAnnotationHandler(T configuration) {
+		return new ConfigurationAnnotationHandler(notNull(configuration, "configuration"));
 	}
 
 	/**
-	 * Embedded server that will be used with http client.
+	 * Server configuration.
 	 */
-	private final EmbeddedServer<?> server;
+	private final AbstractConfiguration configuration;
 
 	// Use static factory instead
-	private HttpClientAnnotationHandler(EmbeddedServer<?> server) {
-		super(TestHttpClient.class);
-		this.server = server;
+	private ConfigurationAnnotationHandler(AbstractConfiguration configuration) {
+		super(TestServerConfiguration.class);
+		this.configuration = configuration;
 	}
 
 	@Override
 	public void before(Object target, Field field) {
-		TestHttpClient httpClient = field.getAnnotation(TestHttpClient.class);
-		HttpClientStrategy strategy = httpClient.strategy();
-		setter(target, field, strategy.build(server));
-	}
-
-	@Override
-	public void after(Object target, Field field) {
-		HttpClient httpClient = getter(target, field);
-		httpClient.destroy();
-		setter(target, field, null);
+		setter(target, field, configuration);
 	}
 }

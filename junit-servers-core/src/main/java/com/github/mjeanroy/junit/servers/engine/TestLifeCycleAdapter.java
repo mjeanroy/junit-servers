@@ -22,42 +22,41 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
-
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerTestLifeCycleAdapter;
+package com.github.mjeanroy.junit.servers.engine;
 
 /**
- * Create new rule that will execute a list of annotation
- * handlers before and after test executions.
+ * A test lifecycle engine: this is a class that implements commons test lifecycle hooks (before-all, before, after-all,
+ * after), thus will be able to be used in various test engine:
+ *
+ * <ul>
+ *   <li>JUnit 4 Rules.</li>
+ *   <li>JUnit 4 Runner.</li>
+ *   <li>JUnit Jupiter Extensions.</li>
+ * </ul>
  */
-class AnnotationsHandlerRule extends AbstractRuleInstance {
+public interface TestLifeCycleAdapter {
 
 	/**
-	 * List of handlers.
+	 * Method called before instantiating the test class and any test instance.
 	 */
-	private final AnnotationsHandlerTestLifeCycleAdapter annotationHandlers;
+	void beforeAll();
 
 	/**
-	 * Create new rules.
+	 * Method called after all tests have been run.
+	 */
+	void afterAll();
+
+	/**
+	 * Method called before running unit test.
 	 *
-	 * @param target Target class (i.e tested class).
-	 * @param server The embedded server used in the tested class instance.
-	 * @param configuration The embedded server configuration.
+	 * @param target The test class instance.
 	 */
-	AnnotationsHandlerRule(Object target, EmbeddedServer<?> server, AbstractConfiguration configuration) {
-		super(target);
-		this.annotationHandlers = new AnnotationsHandlerTestLifeCycleAdapter(server, configuration);
-	}
+	void beforeEach(Object target);
 
-	@Override
-	protected void before() {
-		annotationHandlers.beforeEach(getTarget());
-	}
-
-	@Override
-	protected void after() {
-		annotationHandlers.afterEach(getTarget());
-	}
+	/**
+	 * Method called after running unit test.
+	 *
+	 * @param target The test class instance.
+	 */
+	void afterEach(Object target);
 }

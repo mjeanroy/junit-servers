@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.adapter;
+package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -32,13 +32,13 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findAllFields;
-import static com.github.mjeanroy.junit.servers.adapter.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.adapter.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.adapter.ServerAnnotationHandler.newServerAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.engine.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.engine.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
+import static com.github.mjeanroy.junit.servers.engine.ServerAnnotationHandler.newServerAnnotationHandler;
 import static java.util.Arrays.asList;
 
 /**
- * An adapter that will handle various annotations defined by Junit-Servers:
+ * An engine that will handle various annotations defined by Junit-Servers:
  *
  * <ul>
  *   <li>{@link com.github.mjeanroy.junit.servers.annotations.TestServer}</li>
@@ -54,7 +54,7 @@ public class AnnotationsHandlerTestLifeCycleAdapter extends AbstractTestLifeCycl
 	private final List<AnnotationHandler> handlers;
 
 	/**
-	 * Create test lifecycle adapter that will setup following Junit-Servers annotations declared in test class:
+	 * Create test lifecycle engine that will setup following Junit-Servers annotations declared in test class:
 	 *
 	 * <ul>
 	 *   <li>{@link com.github.mjeanroy.junit.servers.annotations.TestServer}</li>

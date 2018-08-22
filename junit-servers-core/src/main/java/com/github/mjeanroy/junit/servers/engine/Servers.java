@@ -22,10 +22,13 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers;
+package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

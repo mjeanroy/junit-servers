@@ -33,7 +33,7 @@ import org.junit.runners.model.InitializationError;
 
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.servers.Servers.instantiate;
+import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
 
 /**
  * Runner that will start and stop embedded server before tests.

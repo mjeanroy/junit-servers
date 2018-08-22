@@ -22,42 +22,45 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.adapter;
+package com.github.mjeanroy.junit.servers.engine;
 
-import java.lang.annotation.Annotation;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+
 import java.lang.reflect.Field;
 
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+
 /**
- * Abstract skeleton of {@link AnnotationHandler}.
+ * Annotation handler that will set embedded server to a field
+ * on a given class instance.
  */
-abstract class AbstractAnnotationHandler implements AnnotationHandler {
+class ServerAnnotationHandler extends AbstractAnnotationHandler {
 
 	/**
-	 * Annotation class processed by handler.
+	 * Create new handler.
+	 * @param server Embedded server.
+	 * @return Handler.
+	 * @throws NullPointerException if server is null.
 	 */
-	private final Class<? extends Annotation> annotationKlass;
-
-	/**
-	 * Initialize new abstract handler.
-	 *
-	 * @param annotationKlass Annotation class processed by handler.
-	 */
-	AbstractAnnotationHandler(Class<? extends Annotation> annotationKlass) {
-		this.annotationKlass = annotationKlass;
+	static AnnotationHandler newServerAnnotationHandler(EmbeddedServer<?> server) {
+		return new ServerAnnotationHandler(notNull(server, "server"));
 	}
 
-	@Override
-	public boolean support(Annotation annotation) {
-		return annotation.annotationType().equals(annotationKlass);
+	/**
+	 * Embedded server set on class fields.
+	 */
+	private final EmbeddedServer<?> server;
+
+	// Use static factory instead
+	private ServerAnnotationHandler(EmbeddedServer<?> server) {
+		super(TestServer.class);
+		this.server = server;
 	}
 
 	@Override
 	public void before(Object target, Field field) {
-		// Should be overridden
-	}
-
-	@Override
-	public void after(Object target, Field field) {
-		// Should be overridden
+		setter(target, field, server);
 	}
 }

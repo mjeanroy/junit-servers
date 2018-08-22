@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.rules;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.adapter.EmbeddedServerTestLifeCycleAdapter;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestLifeCycleAdapter;
 
 /**
  * Rule that can be used to start and stop embedded server.
@@ -53,7 +53,7 @@ import com.github.mjeanroy.junit.servers.adapter.EmbeddedServerTestLifeCycleAdap
 public class ServerRule extends AbstractRule {
 
 	/**
-	 * The test adapter.
+	 * The test engine.
 	 */
 	private final EmbeddedServerTestLifeCycleAdapter adapter;
 

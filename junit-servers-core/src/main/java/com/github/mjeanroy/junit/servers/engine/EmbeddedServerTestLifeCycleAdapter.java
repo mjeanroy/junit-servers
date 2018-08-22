@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.adapter;
+package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
@@ -31,10 +31,10 @@ import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.servers.Servers.instantiate;
+import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
 
 /**
- * An adapter that will handle the embedded server lifecycle:
+ * An engine that will handle the embedded server lifecycle:
  *
  * <ol>
  *   <li>Start embedded server before running any tests.</li>

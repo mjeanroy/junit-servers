@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.jetty;
 import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 import org.junit.runners.model.InitializationError;
 
-import static com.github.mjeanroy.junit.servers.servers.Servers.findConfiguration;
+import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
 /**
  * Rule that can be used to start and stop embedded jetty server.

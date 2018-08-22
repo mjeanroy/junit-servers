@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.adapter;
+package com.github.mjeanroy.junit.servers.engine;
 
 /**
  * Abstract skeleton for {@link TestLifeCycleAdapter} where every methods are

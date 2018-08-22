@@ -22,41 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.adapter;
+package com.github.mjeanroy.junit.servers.engine;
 
-/**
- * A test lifecycle adapter: this is a class that implements commons test lifecycle hooks (before-all, before, after-all,
- * after), thus will be able to be used in various test engine:
- *
- * <ul>
- *   <li>JUnit 4 Rules.</li>
- *   <li>JUnit 4 Runner.</li>
- *   <li>JUnit Jupiter Extensions.</li>
- * </ul>
- */
-public interface TestLifeCycleAdapter {
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+
+interface AnnotationHandler {
 
 	/**
-	 * Method called before instantiating the test class and any test instance.
-	 */
-	void beforeAll();
-
-	/**
-	 * Method called after all tests have been run.
-	 */
-	void afterAll();
-
-	/**
-	 * Method called before running unit test.
+	 * Check that given handler support given annotation.
 	 *
-	 * @param target The test class instance.
+	 * @param annotation Annotation.
+	 * @return True if handler support annotation, false otherwise.c
 	 */
-	void beforeEach(Object target);
+	boolean support(Annotation annotation);
 
 	/**
-	 * Method called after running unit test.
+	 * Execute handler before test invocation.
 	 *
-	 * @param target The test class instance.
+	 * @param target Test class instance.
+	 * @param field Field.
 	 */
-	void afterEach(Object target);
+	void before(Object target, Field field);
+
+	/**
+	 * Execute handler after test invocation.
+	 *
+	 * @param target Test class instance.
+	 * @param field Field.
+	 */
+	void after(Object target, Field field);
 }
