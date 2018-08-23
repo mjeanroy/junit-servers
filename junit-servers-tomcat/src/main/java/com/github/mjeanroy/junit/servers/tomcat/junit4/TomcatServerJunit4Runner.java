@@ -25,8 +25,10 @@
 package com.github.mjeanroy.junit.servers.tomcat.junit4;
 
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.exceptions.IllegalTomcatConfigurationException;
 import org.junit.runners.model.InitializationError;
 
 import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
@@ -53,7 +55,29 @@ public class TomcatServerJunit4Runner extends JunitServerRunner {
 	 * @return The embedded tomcat.
 	 */
 	private static EmbeddedTomcat instantiate(Class<?> klass) {
-		EmbeddedTomcatConfiguration configuration = findConfiguration(klass);
+		EmbeddedTomcatConfiguration configuration = extractConfiguration(klass);
 		return configuration == null ? new EmbeddedTomcat() : new EmbeddedTomcat(configuration);
+	}
+
+	/**
+	 * Try to extract {@link EmbeddedTomcat} configuration from the test class: search for a static
+	 * field/method annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration}).
+	 *
+	 * @param klass The test class.
+	 * @return The {@link EmbeddedTomcat} configuration.
+	 * @throws IllegalTomcatConfigurationException If extracted annotation is not an instance of {@link EmbeddedTomcatConfiguration}.
+	 */
+	private static EmbeddedTomcatConfiguration extractConfiguration(Class<?> klass) {
+		AbstractConfiguration configuration = findConfiguration(klass);
+
+		if (configuration == null) {
+			return null;
+		}
+
+		if (!(configuration instanceof EmbeddedTomcatConfiguration)) {
+			throw new IllegalTomcatConfigurationException();
+		}
+
+		return (EmbeddedTomcatConfiguration) configuration;
 	}
 }

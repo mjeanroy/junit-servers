@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
@@ -172,5 +173,70 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
 		final HttpClient client = adapter.getClient();
 		assertThat(client).isNotNull();
+	}
+
+	@Test
+	public void it_should_get_client_and_returns_previous_one() {
+		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final HttpClient client1 = adapter.getClient();
+		final HttpClient client2 = adapter.getClient();
+
+		assertThat(client1).isNotNull();
+		assertThat(client2).isNotNull();
+		assertThat(client1).isSameAs(client2);
+	}
+
+	@Test
+	public void it_should_get_client_of_given_strategy() {
+		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+		final HttpClient client = adapter.getClient(strategy);
+		assertThat(client).isNotNull();
+	}
+
+	@Test
+	public void it_should_get_client_of_given_strategy_and_returns_previous_one() {
+		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+		final HttpClient client1 = adapter.getClient(strategy);
+		final HttpClient client2 = adapter.getClient(strategy);
+
+		assertThat(client1).isNotNull();
+		assertThat(client2).isNotNull();
+		assertThat(client1).isSameAs(client2);
+	}
+
+	@Test
+	public void it_should_stop_server_and_close_clients() {
+		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final HttpClient client = adapter.getClient();
+
+		assertThat(client).isNotNull();
+		assertThat(client.isDestroyed()).isFalse();
+
+		adapter.stop();
+
+		assertThat(client).isNotNull();
+		assertThat(client.isDestroyed()).isTrue();
+	}
+
+	@Test
+	public void it_should_get_client_of_given_strategy_and_destroy_it_when_server_stop() {
+		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+		final HttpClient client = adapter.getClient(strategy);
+
+		assertThat(client).isNotNull();
+		assertThat(client.isDestroyed()).isFalse();
+
+		adapter.stop();
+
+		assertThat(client).isNotNull();
+		assertThat(client.isDestroyed()).isTrue();
 	}
 }

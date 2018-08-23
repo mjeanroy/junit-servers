@@ -95,7 +95,7 @@ public class EmbeddedTomcatTest {
 	@Test
 	public void it_should_destroy_context_on_stop() {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
-		assertThat(readPrivate(tomcat, "context")).isNull();
+		assertThat((Context) readPrivate(tomcat, "context")).isNull();
 
 		tomcat.start();
 
@@ -104,7 +104,7 @@ public class EmbeddedTomcatTest {
 		assertThat(ctx.getState()).isEqualTo(LifecycleState.STARTED);
 
 		tomcat.stop();
-		assertThat(readPrivate(tomcat, "context")).isNull();
+		assertThat((Context) readPrivate(tomcat, "context")).isNull();
 		assertThat(ctx.getState()).isEqualTo(LifecycleState.DESTROYED);
 	}
 

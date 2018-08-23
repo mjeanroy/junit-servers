@@ -65,7 +65,7 @@ public class HttpClientAnnotationHandlerTest {
 	private static void verifyAfterTest(FixtureClass fixture, Field field, AnnotationHandler handler, HttpClient client) {
 		handler.after(fixture, field);
 
-		assertThat(readPrivate(fixture, "client")).isNull();
+		assertThat((HttpClient) readPrivate(fixture, "client")).isNull();
 		assertThat(client.isDestroyed()).isTrue();
 	}
 

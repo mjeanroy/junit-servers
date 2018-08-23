@@ -101,8 +101,6 @@
 
     <apache-rat-plugin.version>0.11</apache-rat-plugin.version>
     <versions-maven-plugin.version>2.5</versions-maven-plugin.version>
-    <animal-sniffer-maven-plugin.version>1.17</animal-sniffer-maven-plugin.version>
-    <java17-signature.version>1.0</java17-signature.version>
 
     <jetty-java7.version>9.2.24.v20180105</jetty-java7.version>
     <jetty-java8.version>9.4.8.v20180619</jetty-java8.version>
@@ -117,6 +115,7 @@
     <tomcat.version>${tomcat-java7.version}</tomcat.version>
 
     <junit.version>4.12</junit.version>
+    <junit-jupiter.version>5.2.0</junit-jupiter.version>
     <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
     <mockito.version>2.19.0</mockito.version>
     <assertj.version>2.9.1</assertj.version>
@@ -139,6 +138,11 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit-jupiter.version}</version>
       </dependency>
 
       <dependency>
@@ -363,28 +367,6 @@
             <useReleaseProfile>false</useReleaseProfile>
             <arguments>-Prelease</arguments>
           </configuration>
-        </plugin>
-
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>animal-sniffer-maven-plugin</artifactId>
-          <version>${animal-sniffer-maven-plugin.version}</version>
-          <configuration>
-            <signature>
-              <groupId>org.codehaus.mojo.signature</groupId>
-              <artifactId>java17</artifactId>
-              <version>${java17-signature.version}</version>
-            </signature>
-          </configuration>
-          <executions>
-            <execution>
-              <id>check-jdk7-compatibility</id>
-              <phase>test</phase>
-              <goals>
-                <goal>check</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
 
         <plugin>

@@ -30,6 +30,9 @@ import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
 
@@ -49,9 +52,9 @@ public final class EmbeddedServerTestLifeCycleAdapter extends AbstractTestLifeCy
 	private final EmbeddedServer<?> server;
 
 	/**
-	 * The HTTP client (will be automatically destroyed in the {@code after} step.
+	 * The HTTP clients (will be automatically destroyed in the {@code after} step.
 	 */
-	private final HttpClientHolder client;
+	private final Map<HttpClientStrategy, HttpClient> clients;
 
 	/**
 	 * Create rule with default embedded server.
@@ -98,7 +101,7 @@ public final class EmbeddedServerTestLifeCycleAdapter extends AbstractTestLifeCy
 	 */
 	public EmbeddedServerTestLifeCycleAdapter(EmbeddedServer<?> server) {
 		this.server = notNull(server, "server");
-		this.client = new HttpClientHolder(HttpClientStrategy.AUTO, HttpClientConfiguration.defaultConfiguration(), server);
+		this.clients = new HashMap<>();
 	}
 
 	/**
@@ -132,8 +135,24 @@ public final class EmbeddedServerTestLifeCycleAdapter extends AbstractTestLifeCy
 	 * @see EmbeddedServer#stop()
 	 */
 	public void stop() {
+		stopServer();
+		closeOpenedClients();
+	}
+
+	private void stopServer() {
 		server.stop();
-		client.destroy();
+	}
+
+	private void closeOpenedClients() {
+		synchronized (clients) {
+			for (HttpClient client : clients.values()) {
+				if (!client.isDestroyed()) {
+					client.destroy();
+				}
+			}
+
+			clients.clear();
+		}
 	}
 
 	/**
@@ -229,6 +248,28 @@ public final class EmbeddedServerTestLifeCycleAdapter extends AbstractTestLifeCy
 	 * @throws UnsupportedOperationException If the client cannot be returned because of missing implementation.
 	 */
 	public HttpClient getClient() {
-		return client.get();
+		return openClient(HttpClientStrategy.AUTO);
+	}
+
+	/**
+	 * Returns HTTP client that can be used against {@link #server}.
+	 *
+	 * @return The HTTP client.
+	 * @throws UnsupportedOperationException If the client cannot be returned because of missing implementation.
+	 */
+	public HttpClient getClient(HttpClientStrategy strategy) {
+		return openClient(notNull(strategy, "strategy"));
+	}
+
+	private HttpClient openClient(HttpClientStrategy strategy) {
+		synchronized (clients) {
+			if (!clients.containsKey(strategy) || clients.get(strategy).isDestroyed()) {
+				HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
+				HttpClient client = strategy.build(configuration, server);
+				clients.put(strategy, client);
+			}
+
+			return clients.get(strategy);
+		}
 	}
 }

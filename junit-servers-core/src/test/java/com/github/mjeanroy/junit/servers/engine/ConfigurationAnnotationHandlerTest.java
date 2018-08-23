@@ -63,7 +63,7 @@ public class ConfigurationAnnotationHandlerTest {
 
 	private static void verifyBeforeTest(AbstractConfiguration configuration, FixtureClass fixture, Field field, AnnotationHandler handler) {
 		handler.before(fixture, field);
-		assertThat(readPrivate(fixture, "configuration")).isSameAs(configuration);
+		assertThat((AbstractConfiguration) readPrivate(fixture, "configuration")).isSameAs(configuration);
 	}
 
 	private static Field extractConfigurationField() {

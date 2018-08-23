@@ -37,7 +37,10 @@ import java.lang.annotation.Target;
  * client to query embedded server.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD})
+@Target({
+	ElementType.FIELD,
+	ElementType.PARAMETER,
+})
 @Documented
 public @interface TestHttpClient {
 

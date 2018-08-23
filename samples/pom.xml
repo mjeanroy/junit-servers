@@ -39,9 +39,29 @@
   <packaging>pom</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
 
-  <modules>
-    <module>junit4</module>
-  </modules>
+  <profiles>
+    <profile>
+      <id>java8+</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>junit4</module>
+        <module>jupiter</module>
+      </modules>
+    </profile>
+
+    <!-- Skip jupiter samples on Java7 as it requires Java >= 8 -->
+    <profile>
+      <id>java7</id>
+      <activation>
+        <jdk>1.7</jdk>
+      </activation>
+      <modules>
+        <module>junit4</module>
+      </modules>
+    </profile>
+  </profiles>
 
   <properties>
     <maven-war-plugin.version>3.1.0</maven-war-plugin.version>
@@ -58,12 +78,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>com.github.mjeanroy</groupId>
-        <artifactId>junit-servers-jetty</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
@@ -140,5 +154,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

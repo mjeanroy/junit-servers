@@ -62,7 +62,7 @@ public class ServerAnnotationHandlerTest {
 
 	private static void verifyBeforeTest(EmbeddedServer<?> server, Field field, FixtureClass fixture, AnnotationHandler handler) {
 		handler.before(fixture, field);
-		assertThat(readPrivate(fixture, "server")).isSameAs(server);
+		assertThat((EmbeddedServer<?>) readPrivate(fixture, "server")).isSameAs(server);
 	}
 
 	private static Field extractServerField() {

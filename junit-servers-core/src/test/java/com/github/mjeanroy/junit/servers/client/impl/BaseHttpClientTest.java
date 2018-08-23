@@ -95,9 +95,10 @@ public abstract class BaseHttpClientTest {
 			.build();
 
 		HttpClient client = createCustomClient(configuration, server);
-
 		assertThat(client).isNotNull();
-		assertThat(readPrivate(client, "server")).isNotNull().isSameAs(server);
+
+		EmbeddedServer<?> server = readPrivate(client, "server");
+		assertThat(server).isNotNull().isSameAs(this.server);
 		checkInternalHttpClient(configuration, client);
 	}
 
