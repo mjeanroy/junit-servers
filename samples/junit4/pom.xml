@@ -6,11 +6,11 @@
   <parent>
     <artifactId>junit-servers-samples</artifactId>
     <groupId>com.github.mjeanroy</groupId>
-    <version>0.9.0</version>
+    <version>0.9.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>junit-servers-samples-junit4</artifactId>
-  <version>0.9.0</version>
+  <version>0.9.1-SNAPSHOT</version>
   <name>junit-servers-samples-junit4</name>
   <packaging>pom</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
