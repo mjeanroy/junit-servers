@@ -22,123 +22,63 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
+package com.github.mjeanroy.junit.servers.junit4;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.rules.ServerRule;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.assertj.core.api.Condition;
+import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4RunnerTest;
 import org.junit.Test;
-import org.junit.rules.TestRule;
-
-import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
-public class JunitServerRunnerTest {
+public class JunitServerRunnerTest extends TomcatServerJunit4RunnerTest {
 
 	private static final EmbeddedTomcatConfiguration configuration = defaultConfiguration();
 
 	@Test
 	public void it_should_instantiate_tomcat_with_default_configuration() throws Exception {
-		@SuppressWarnings("deprecation")
-		JunitServerRunner runner = new JunitServerRunner(Foo.class);
+		JunitServerRunner runner = new JunitServerRunner(TestClassWithInjectedConfiguration.class);
 
 		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		assertThat(server)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcat.class);
+		assertThat(server).isInstanceOf(EmbeddedTomcat.class);
 
 		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
-		assertThat(conf)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcatConfiguration.class)
-				.isNotSameAs(configuration);
+		assertThat(conf).isNotSameAs(configuration).isEqualTo(configuration);
 	}
 
 	@Test
 	public void it_should_instantiate_tomcat_with_configuration() throws Exception {
-		@SuppressWarnings("deprecation")
-		JunitServerRunner runner = new JunitServerRunner(Bar.class);
+		JunitServerRunner runner = new JunitServerRunner(TestClassWithConfigurationMethod.class);
 
 		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		assertThat(server)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcat.class);
+		assertThat(server).isInstanceOf(EmbeddedTomcat.class);
 
 		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
-		assertThat(conf)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcatConfiguration.class)
-				.isSameAs(configuration);
+		assertThat(conf).isSameAs(configuration);
 	}
 
-	@Test
-	public void it_should_contain_rules() throws Exception {
-		@SuppressWarnings("deprecation")
-		JunitServerRunner runner = new JunitServerRunner(Foo.class);
-
-		List<TestRule> classRules = runner.classRules();
-		assertThat(classRules)
-				.isNotNull()
-				.isNotEmpty()
-				.areAtLeast(1, new Condition<TestRule>() {
-					@Override
-					public boolean matches(TestRule value) {
-						return value instanceof ServerRule;
-					}
-				})
-				.are(new Condition<TestRule>() {
-					@Override
-					public boolean matches(TestRule value) {
-						return !(value instanceof AnnotationsHandlerRule);
-					}
-				});
-
-		Foo foo = mock(Foo.class);
-		List<TestRule> testRules = runner.getTestRules(foo);
-		assertThat(testRules)
-				.isNotNull()
-				.isNotEmpty()
-				.areAtLeast(1, new Condition<TestRule>() {
-					@Override
-					public boolean matches(TestRule value) {
-						return value instanceof AnnotationsHandlerRule;
-					}
-				})
-				.are(new Condition<TestRule>() {
-					@Override
-					public boolean matches(TestRule value) {
-						return !(value instanceof ServerRule);
-					}
-				});
-	}
-
-	public static class Foo {
+	public static class TestClassWithInjectedConfiguration {
 		@TestServer
 		private static EmbeddedServer<?> server;
 
 		@TestServerConfiguration
 		private static EmbeddedTomcatConfiguration configuration;
 
-		public Foo() {
+		public TestClassWithInjectedConfiguration() {
 		}
 
 		@Test
 		public void fooTest() {
-
 		}
 	}
 
-	public static class Bar {
-
+	public static class TestClassWithConfigurationMethod {
 		@TestServer
 		private static EmbeddedServer<?> server;
 
@@ -147,12 +87,11 @@ public class JunitServerRunnerTest {
 			return configuration;
 		}
 
-		public Bar() {
+		public TestClassWithConfigurationMethod() {
 		}
 
 		@Test
 		public void fooTest() {
-
 		}
 	}
 }

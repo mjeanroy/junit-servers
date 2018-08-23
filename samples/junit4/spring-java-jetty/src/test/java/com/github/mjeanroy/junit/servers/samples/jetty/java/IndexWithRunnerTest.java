@@ -27,8 +27,8 @@ package com.github.mjeanroy.junit.servers.samples.jetty.java;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.jetty.AbstractJettyJunit4Test;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.junit4.AbstractJettyJunit4Test;
 import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.samples.jetty.java.TestUtils.createJettyConfiguration;

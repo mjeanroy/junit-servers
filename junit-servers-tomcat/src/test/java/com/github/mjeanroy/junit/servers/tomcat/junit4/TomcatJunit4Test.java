@@ -22,36 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
+package com.github.mjeanroy.junit.servers.tomcat.junit4;
 
-import com.github.mjeanroy.junit.servers.rules.AbstractRule;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import org.junit.Test;
 
-/**
- * Abstract skeleton of rule that will be executed before
- * and after each methods.
- */
-abstract class AbstractRuleInstance extends AbstractRule {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	/**
-	 * Tested class.
-	 */
-	private final Object target;
+public class TomcatJunit4Test extends AbstractTomcatJunit4Test {
 
-	/**
-	 * Create abstract rule.
-	 *
-	 * @param target Tested class.
-	 */
-	AbstractRuleInstance(Object target) {
-		this.target = target;
+	@TestHttpClient
+	private HttpClient client;
+
+	@Test
+	public void it_should_have_a_server() {
+		assertThat(server).isNotNull();
+		assertThat(server.getPort()).isPositive();
 	}
 
-	/**
-	 * Get tested class.
-	 *
-	 * @return Tested class.
-	 */
-	Object getTarget() {
-		return target;
+	@Test
+	public void it_should_have_a_client() {
+		assertThat(client).isNotNull();
 	}
 }

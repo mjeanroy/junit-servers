@@ -22,42 +22,38 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
+package com.github.mjeanroy.junit.servers.jetty.junit4;
 
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerTestLifeCycleAdapter;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
+import org.junit.runners.model.InitializationError;
+
+import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
 /**
- * Create new rule that will execute a list of annotation
- * handlers before and after test executions.
+ * Rule that can be used to start and stop embedded jetty server.
  */
-class AnnotationsHandlerRule extends AbstractRuleInstance {
+public class JettyServerJunit4Runner extends JunitServerRunner {
 
 	/**
-	 * List of handlers.
-	 */
-	private final AnnotationsHandlerTestLifeCycleAdapter annotationHandlers;
-
-	/**
-	 * Create new rules.
+	 * Create runner.
 	 *
-	 * @param target Target class (i.e tested class).
-	 * @param server The embedded server used in the tested class instance.
-	 * @param configuration The embedded server configuration.
+	 * @param klass Running class.
+	 * @throws InitializationError If an error occurred while starting embedded server.
 	 */
-	AnnotationsHandlerRule(Object target, EmbeddedServer<?> server, AbstractConfiguration configuration) {
-		super(target);
-		this.annotationHandlers = new AnnotationsHandlerTestLifeCycleAdapter(server, configuration);
+	public JettyServerJunit4Runner(Class<?> klass) throws InitializationError {
+		super(klass, instantiate(klass));
 	}
 
-	@Override
-	protected void before() {
-		annotationHandlers.beforeEach(getTarget());
-	}
-
-	@Override
-	protected void after() {
-		annotationHandlers.afterEach(getTarget());
+	/**
+	 * Instantiate embedded jetty to be used in tests.
+	 *
+	 * @param klass The tested class.
+	 * @return The embedded jetty.
+	 */
+	private static EmbeddedJetty instantiate(Class<?> klass) {
+		EmbeddedJettyConfiguration configuration = findConfiguration(klass);
+		return configuration == null ? new EmbeddedJetty() : new EmbeddedJetty(configuration);
 	}
 }

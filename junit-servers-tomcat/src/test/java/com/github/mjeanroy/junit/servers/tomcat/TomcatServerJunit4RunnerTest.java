@@ -24,83 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.junit.Test;
+public class TomcatServerJunit4RunnerTest extends com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4RunnerTest {
 
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class TomcatServerJunit4RunnerTest {
-
-	private static final EmbeddedTomcatConfiguration configuration = defaultConfiguration();
-
-	@Test
-	public void it_should_instantiate_tomcat_with_default_configuration() throws Exception {
-		TomcatServerJunit4Runner runner = new TomcatServerJunit4Runner(Foo.class);
-
-		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		assertThat(server)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcat.class);
-
-		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
-		assertThat(conf)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcatConfiguration.class)
-				.isNotSameAs(configuration);
-	}
-
-	@Test
-	public void it_should_instantiate_tomcat_with_configuration() throws Exception {
-		TomcatServerJunit4Runner runner = new TomcatServerJunit4Runner(Bar.class);
-
-		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		assertThat(server)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcat.class);
-
-		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
-		assertThat(conf)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcatConfiguration.class)
-				.isSameAs(configuration);
-	}
-
-	public static class Foo {
-		@TestServer
-		private static EmbeddedServer<?> server;
-
-		@TestServerConfiguration
-		private static EmbeddedTomcatConfiguration configuration;
-
-		public Foo() {
-		}
-
-		@Test
-		public void fooTest() {
-		}
-	}
-
-	public static class Bar {
-
-		@TestServer
-		private static EmbeddedServer<?> server;
-
-		@TestServerConfiguration
-		private static EmbeddedTomcatConfiguration initConfiguration() {
-			return configuration;
-		}
-
-		public Bar() {
-		}
-
-		@Test
-		public void fooTest() {
-
-		}
+	@Override
+	@SuppressWarnings("deprecation")
+	protected TomcatServerJunit4Runner createRunner(Class<?> klass) throws Exception {
+		return new com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Runner(klass);
 	}
 }

@@ -24,16 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 import org.junit.runners.model.InitializationError;
-
-import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
 /**
  * Rule that can be used to start and stop embedded jetty server.
+ *
+ * @deprecated Use {@link com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Runner} instead.
  */
-@SuppressWarnings("deprecation")
-public class JettyServerJunit4Runner extends JunitServerRunner {
+@Deprecated
+public class JettyServerJunit4Runner extends com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Runner {
 
 	/**
 	 * Create runner.
@@ -42,17 +41,6 @@ public class JettyServerJunit4Runner extends JunitServerRunner {
 	 * @throws InitializationError If an error occurred while starting embedded server.
 	 */
 	public JettyServerJunit4Runner(Class<?> klass) throws InitializationError {
-		super(klass, instantiate(klass));
-	}
-
-	/**
-	 * Instantiate embedded jetty to be used in tests.
-	 *
-	 * @param klass The tested class.
-	 * @return The embedded jetty.
-	 */
-	private static EmbeddedJetty instantiate(Class<?> klass) {
-		EmbeddedJettyConfiguration configuration = findConfiguration(klass);
-		return configuration == null ? new EmbeddedJetty() : new EmbeddedJetty(configuration);
+		super(klass);
 	}
 }

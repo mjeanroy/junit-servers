@@ -26,26 +26,25 @@ package com.github.mjeanroy.junit.servers.rules;
 
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4RuleTest;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4RuleTest;
 
 public class TomcatServerRuleTest extends TomcatServerJunit4RuleTest {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	protected TomcatServerJunit4Rule createRule() {
+	protected TomcatServerRule createRule() {
 		return new TomcatServerRule();
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
-	protected TomcatServerJunit4Rule createRule(EmbeddedTomcatConfiguration configuration) {
+	protected TomcatServerRule createRule(EmbeddedTomcatConfiguration configuration) {
 		return new TomcatServerRule(configuration);
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
-	protected TomcatServerJunit4Rule createRule(EmbeddedTomcat tomcat) {
+	protected TomcatServerRule createRule(EmbeddedTomcat tomcat) {
 		return new TomcatServerRule(tomcat);
 	}
 }

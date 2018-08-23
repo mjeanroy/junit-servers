@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 import org.junit.ClassRule;
 import org.junit.Test;
 

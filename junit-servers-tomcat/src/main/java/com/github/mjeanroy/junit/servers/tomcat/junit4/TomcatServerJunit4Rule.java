@@ -22,14 +22,39 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
+package com.github.mjeanroy.junit.servers.tomcat.junit4;
 
-import org.junit.rules.ExternalResource;
-import org.junit.rules.TestRule;
+import com.github.mjeanroy.junit.servers.junit4.ServerRule;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 /**
- * Abstract skeleton of rule that will be executed
- * before and after each methods or test class.
+ * Rule that can be used to start and stop embedded tomcat server.
  */
-public abstract class AbstractRule extends ExternalResource implements TestRule {
+public class TomcatServerJunit4Rule extends ServerRule {
+	/**
+	 * Create rule.
+	 *
+	 * @param tomcat Tomcat Embedded Server.
+	 * @throws NullPointerException If {@code tomcat} is {@code null}.
+	 */
+	public TomcatServerJunit4Rule(EmbeddedTomcat tomcat) {
+		super(tomcat);
+	}
+
+	/**
+	 * Create rule using tomcat as embedded server.
+	 */
+	public TomcatServerJunit4Rule() {
+		this(new EmbeddedTomcat());
+	}
+
+	/**
+	 * Create rule.
+	 *
+	 * @param configuration Tomcat Configuration.
+	 */
+	public TomcatServerJunit4Rule(EmbeddedTomcatConfiguration configuration) {
+		this(new EmbeddedTomcat(configuration));
+	}
 }

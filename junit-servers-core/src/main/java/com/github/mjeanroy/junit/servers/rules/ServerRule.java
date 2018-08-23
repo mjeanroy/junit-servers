@@ -24,10 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.rules;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestLifeCycleAdapter;
 
 /**
  * Rule that can be used to start and stop embedded server.
@@ -49,13 +47,11 @@ import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestLifeCycleAdapt
  *     }
  *   }
  * </code></pre>
+ *
+ * @deprecated Use {@link com.github.mjeanroy.junit.servers.junit4.ServerRule} instead.
  */
-public class ServerRule extends AbstractRule {
-
-	/**
-	 * The test engine.
-	 */
-	private final EmbeddedServerTestLifeCycleAdapter adapter;
+@Deprecated
+public class ServerRule extends com.github.mjeanroy.junit.servers.junit4.ServerRule {
 
 	/**
 	 * Create rule with default embedded server.
@@ -71,7 +67,7 @@ public class ServerRule extends AbstractRule {
 	 * to specify a custom configuration, use {@link #ServerRule(AbstractConfiguration)} constructor.
 	 */
 	public ServerRule() {
-		this.adapter = new EmbeddedServerTestLifeCycleAdapter();
+		super();
 	}
 
 	/**
@@ -85,7 +81,7 @@ public class ServerRule extends AbstractRule {
 	 * @param configuration Server configuration.
 	 */
 	public ServerRule(AbstractConfiguration configuration) {
-		this.adapter = new EmbeddedServerTestLifeCycleAdapter(configuration);
+		super(configuration);
 	}
 
 	/**
@@ -95,130 +91,6 @@ public class ServerRule extends AbstractRule {
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public ServerRule(EmbeddedServer<?> server) {
-		this.adapter = new EmbeddedServerTestLifeCycleAdapter(server);
-	}
-
-	@Override
-	protected void before() {
-		adapter.beforeAll();
-	}
-
-	@Override
-	protected void after() {
-		adapter.afterAll();
-	}
-
-	/**
-	 * Start embedded server.
-	 *
-	 * @see EmbeddedServer#start()
-	 */
-	public void start() {
-		adapter.start();
-	}
-
-	/**
-	 * Stop embedded server.
-	 *
-	 * @see EmbeddedServer#stop()
-	 */
-	public void stop() {
-		adapter.stop();
-	}
-
-	/**
-	 * Restart embedded server.
-	 *
-	 * @see EmbeddedServer#restart()
-	 */
-	public void restart() {
-		adapter.restart();
-	}
-
-	/**
-	 * Check if embedded server is started.
-	 *
-	 * @return {@code true} if embedded server is started, {@code false} otherwise.
-	 * @see EmbeddedServer#isStarted()
-	 */
-	public boolean isStarted() {
-		return adapter.isStarted();
-	}
-
-	/**
-	 * Get embedded server scheme (a.k.a {@code "http"} or {@code "https"}).
-	 *
-	 * @return Scheme.
-	 * @see EmbeddedServer#getScheme()
-	 */
-	public String getScheme() {
-		return adapter.getScheme();
-	}
-
-	/**
-	 * Get embedded server scheme (should be {@code "localhost"}).
-	 *
-	 * @return Host.
-	 * @see EmbeddedServer#getHost()
-	 */
-	public String getHost() {
-		return adapter.getHost();
-	}
-
-	/**
-	 * Get port used by embedded server.
-	 *
-	 * <p>
-	 *
-	 * Note that:
-	 * <ul>
-	 *   <li>If the server is not started, the returned port is the one set in the configuration.</li>
-	 *   <li>Otherwise, the "real" port is returned (the port used by the embedded server)</li>
-	 * </ul>
-	 *
-	 * @return The port.
-	 * @see EmbeddedServer#getPort()
-	 */
-	public int getPort() {
-		return adapter.getPort();
-	}
-
-	/**
-	 * Get path defined on embedded server.
-	 *
-	 * @return Path.
-	 * @see EmbeddedServer#getPath()
-	 */
-	public String getPath() {
-		return adapter.getPath();
-	}
-
-	/**
-	 * Get url used to query embedded server.
-	 *
-	 * @return URL.
-	 * @see EmbeddedServer#getUrl()
-	 */
-	public String getUrl() {
-		return adapter.getUrl();
-	}
-
-	/**
-	 * Get embedded server.
-	 *
-	 * @return Server.
-	 */
-	public EmbeddedServer<?> getServer() {
-		return adapter.getServer();
-	}
-
-	/**
-	 * Returns HTTP client that can be used against embedded server.
-	 *
-	 * @return The HTTP client.
-	 * @throws UnsupportedOperationException If the client cannot be returned because of missing implementation.
-	 */
-	public HttpClient getClient() {
-		return adapter.getClient();
+		super(server);
 	}
 }

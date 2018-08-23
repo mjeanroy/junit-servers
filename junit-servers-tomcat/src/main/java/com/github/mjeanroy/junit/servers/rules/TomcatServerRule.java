@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.rules;
 
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 
 /**
  * Rule that can be used to start and stop embedded tomcat server.

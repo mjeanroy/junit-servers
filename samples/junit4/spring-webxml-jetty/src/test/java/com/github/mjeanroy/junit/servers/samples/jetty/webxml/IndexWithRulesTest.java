@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.samples.jetty.webxml;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.JettyServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Rule;
 import org.junit.ClassRule;
 import org.junit.Test;
 

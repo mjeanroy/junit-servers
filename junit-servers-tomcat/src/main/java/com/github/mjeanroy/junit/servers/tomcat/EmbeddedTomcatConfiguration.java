@@ -114,7 +114,17 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 	 * @param builder Builder object.
 	 */
 	private EmbeddedTomcatConfiguration(Builder builder) {
-		super(builder);
+		super(
+			builder.getClasspath(),
+			builder.getPath(),
+			builder.getWebapp(),
+			builder.getPort(),
+			builder.getEnvProperties(),
+			builder.getHooks(),
+			builder.getParentClassLoader(),
+			builder.getOverrideDescriptor()
+		);
+
 		this.baseDir = builder.getBaseDir();
 		this.keepBaseDir = builder.isKeepBaseDir();
 		this.enableNaming = builder.isEnableNaming();

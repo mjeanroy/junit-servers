@@ -24,82 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.junit.Test;
+public class JettyServerJunit4RunnerTest extends com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4RunnerTest {
 
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class JettyServerJunit4RunnerTest {
-
-	private static final EmbeddedJettyConfiguration configuration = defaultConfiguration();
-
-	@Test
-	public void it_should_instantiate_jetty_with_default_configuration() throws Exception {
-		JettyServerJunit4Runner runner = new JettyServerJunit4Runner(Foo.class);
-
-		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		assertThat(server)
-				.isNotNull()
-				.isInstanceOf(EmbeddedJetty.class);
-
-		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
-		assertThat(conf)
-				.isNotNull()
-				.isInstanceOf(EmbeddedJettyConfiguration.class)
-				.isNotSameAs(configuration);
-	}
-
-	@Test
-	public void it_should_instantiate_jetty_with_configuration() throws Exception {
-		JettyServerJunit4Runner runner = new JettyServerJunit4Runner(Bar.class);
-
-		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		assertThat(server)
-				.isNotNull()
-				.isInstanceOf(EmbeddedJetty.class);
-
-		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
-		assertThat(conf)
-				.isNotNull()
-				.isInstanceOf(EmbeddedJettyConfiguration.class)
-				.isSameAs(configuration);
-	}
-
-	public static class Foo {
-		@TestServer
-		private static EmbeddedServer<?> server;
-
-		@TestServerConfiguration
-		private static EmbeddedJettyConfiguration configuration;
-
-		public Foo() {
-		}
-
-		@Test
-		public void fooTest() {
-		}
-	}
-
-	public static class Bar {
-
-		@TestServer
-		private static EmbeddedServer<?> server;
-
-		@TestServerConfiguration
-		private static EmbeddedJettyConfiguration initConfiguration() {
-			return configuration;
-		}
-
-		public Bar() {
-		}
-
-		@Test
-		public void fooTest() {
-		}
+	@Override
+	@SuppressWarnings("deprecation")
+	protected com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Runner createRunner(Class<?> klass) throws Exception {
+		return new JettyServerJunit4Runner(klass);
 	}
 }

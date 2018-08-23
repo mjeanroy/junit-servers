@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.utils;
 
-import com.github.mjeanroy.junit.servers.tomcat.AbstractTomcatJunit4Test;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test;
 
 /**
  * Simple abstraction that define a server rule using tomcat as embedded server.

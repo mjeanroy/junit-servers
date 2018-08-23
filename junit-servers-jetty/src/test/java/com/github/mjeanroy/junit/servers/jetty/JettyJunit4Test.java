@@ -30,6 +30,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("deprecation")
 public class JettyJunit4Test extends AbstractJettyJunit4Test {
 
 	@TestHttpClient

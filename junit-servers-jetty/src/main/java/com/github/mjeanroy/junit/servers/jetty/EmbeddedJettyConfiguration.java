@@ -106,7 +106,17 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 
 	// Private constructor, use static builder.
 	private EmbeddedJettyConfiguration(Builder builder) {
-		super(builder);
+		super(
+			builder.getClasspath(),
+			builder.getPath(),
+			builder.getWebapp(),
+			builder.getPort(),
+			builder.getEnvProperties(),
+			builder.getHooks(),
+			builder.getParentClassLoader(),
+			builder.getOverrideDescriptor()
+		);
+
 		this.stopTimeout = builder.getStopTimeout();
 		this.stopAtShutdown = builder.isStopAtShutdown();
 		this.baseResource = builder.getBaseResource();

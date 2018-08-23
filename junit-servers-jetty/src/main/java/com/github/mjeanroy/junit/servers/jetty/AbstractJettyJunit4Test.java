@@ -25,12 +25,16 @@
 package com.github.mjeanroy.junit.servers.jetty;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Runner;
 import org.junit.runner.RunWith;
 
 /**
  * Simple abstraction that define a server rule using jetty as embedded server.
+ *
+ * @deprecated Use {@link com.github.mjeanroy.junit.servers.jetty.junit4.AbstractJettyJunit4Test} instead.
  */
 @RunWith(JettyServerJunit4Runner.class)
+@Deprecated
 public abstract class AbstractJettyJunit4Test {
 
 	@TestServer

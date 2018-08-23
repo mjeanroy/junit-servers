@@ -22,15 +22,14 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.rules;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.After;
-import org.junit.Test;
+package com.github.mjeanroy.junit.servers.junit4;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import org.junit.After;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ServerRuleTest {
 
@@ -71,7 +70,7 @@ public class ServerRuleTest {
 	}
 
 	@Test
-	public void it_should_start_jetty_and_get_uri() throws Exception {
+	public void it_should_start_jetty_and_get_uri() {
 		rule = new ServerRule();
 		rule.start();
 		assertThat(rule.getUrl()).isEqualTo(localUrl(rule.getPort()));

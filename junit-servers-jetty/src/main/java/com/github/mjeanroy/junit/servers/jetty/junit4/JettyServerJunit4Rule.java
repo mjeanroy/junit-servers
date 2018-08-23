@@ -22,21 +22,38 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat;
+package com.github.mjeanroy.junit.servers.jetty.junit4;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import org.junit.runner.RunWith;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.junit4.ServerRule;
 
 /**
- * Simple abstraction that define a server rule using tomcat as embedded server.
- *
- * @deprecated Use {@link com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test} instead.
+ * Rule that can be used to start and stop embedded jetty server.
  */
-@RunWith(TomcatServerJunit4Runner.class)
-@Deprecated
-public abstract class AbstractTomcatJunit4Test {
+public class JettyServerJunit4Rule extends ServerRule {
+	/**
+	 * Create rule.
+	 *
+	 * @param jetty Jetty Embedded Server.
+	 */
+	public JettyServerJunit4Rule(EmbeddedJetty jetty) {
+		super(jetty);
+	}
 
-	@TestServer
-	public static EmbeddedTomcat server;
+	/**
+	 * Create rule using jetty as embedded server.
+	 */
+	public JettyServerJunit4Rule() {
+		this(new EmbeddedJetty());
+	}
 
+	/**
+	 * Create rule.
+	 *
+	 * @param configuration Jetty Configuration.
+	 */
+	public JettyServerJunit4Rule(EmbeddedJettyConfiguration configuration) {
+		this(new EmbeddedJetty(configuration));
+	}
 }

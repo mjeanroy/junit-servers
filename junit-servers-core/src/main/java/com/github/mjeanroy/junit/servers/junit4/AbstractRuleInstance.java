@@ -22,21 +22,37 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat;
+package com.github.mjeanroy.junit.servers.junit4;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import org.junit.runner.RunWith;
+import org.junit.rules.ExternalResource;
+import org.junit.rules.TestRule;
 
 /**
- * Simple abstraction that define a server rule using tomcat as embedded server.
- *
- * @deprecated Use {@link com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test} instead.
+ * Abstract skeleton of rule that will be executed before
+ * and after each methods.
  */
-@RunWith(TomcatServerJunit4Runner.class)
-@Deprecated
-public abstract class AbstractTomcatJunit4Test {
+abstract class AbstractRuleInstance extends ExternalResource implements TestRule {
 
-	@TestServer
-	public static EmbeddedTomcat server;
+	/**
+	 * Tested class.
+	 */
+	private final Object target;
 
+	/**
+	 * Create abstract rule.
+	 *
+	 * @param target Tested class.
+	 */
+	AbstractRuleInstance(Object target) {
+		this.target = target;
+	}
+
+	/**
+	 * Get tested class.
+	 *
+	 * @return Tested class.
+	 */
+	Object getTarget() {
+		return target;
+	}
 }

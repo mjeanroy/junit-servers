@@ -28,7 +28,7 @@ import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Runner;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Runner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

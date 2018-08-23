@@ -22,11 +22,17 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.runner;
+package com.github.mjeanroy.junit.servers.junit4;
 
-import com.github.mjeanroy.junit.servers.junit4.ServerRule;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.junit.rules.TestRule;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
+
+import java.util.List;
+
+import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
 
 /**
  * Runner that will start and stop embedded server before tests.
@@ -65,10 +71,18 @@ import org.junit.runners.model.InitializationError;
  * be used if you need to use a custom runner.
  *
  * @see ServerRule
- * @deprecated Use {@link com.github.mjeanroy.junit.servers.junit4.JunitServerRunner} instead.
  */
-@Deprecated
-public class JunitServerRunner extends com.github.mjeanroy.junit.servers.junit4.JunitServerRunner {
+public class JunitServerRunner extends BlockJUnit4ClassRunner {
+
+	/**
+	 * Embedded server defined before and after tests.
+	 */
+	private final EmbeddedServer<?> server;
+
+	/**
+	 * Server configuration.
+	 */
+	private final AbstractConfiguration configuration;
 
 	/**
 	 * Create runner starting an embedded server.
@@ -85,6 +99,8 @@ public class JunitServerRunner extends com.github.mjeanroy.junit.servers.junit4.
 	 */
 	public JunitServerRunner(Class<?> klass) throws InitializationError {
 		super(klass);
+		this.server = instantiate(klass);
+		this.configuration = this.server.getConfiguration();
 	}
 
 	/**
@@ -95,6 +111,22 @@ public class JunitServerRunner extends com.github.mjeanroy.junit.servers.junit4.
 	 * @throws InitializationError If an error occurred while starting embedded server.
 	 */
 	protected JunitServerRunner(Class<?> klass, EmbeddedServer<?> server) throws InitializationError {
-		super(klass, server);
+		super(klass);
+		this.server = server;
+		this.configuration = server.getConfiguration();
+	}
+
+	@Override
+	protected List<TestRule> classRules() {
+		List<TestRule> classRules = super.classRules();
+		classRules.add(new ServerRule(server));
+		return classRules;
+	}
+
+	@Override
+	protected List<TestRule> getTestRules(Object target) {
+		List<TestRule> testRules = super.getTestRules(target);
+		testRules.add(new AnnotationsHandlerRule(target, server, configuration));
+		return testRules;
 	}
 }

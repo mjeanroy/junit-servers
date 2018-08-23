@@ -24,34 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.runner;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
-import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfiguration;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+@SuppressWarnings("deprecation")
 @RunWith(JunitServerRunner.class)
-public class JunitServerRunnerTest {
-
-	@TestServerConfiguration
-	private static FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfiguration();
-
-	@TestServer
-	private static EmbeddedServer server;
-
-	@TestHttpClient
-	private HttpClient client;
-
-	@Test
-	public void it_should_create_runner_with_the_service_loader_implementation() {
-		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
-		assertThat(configuration).isSameAs(server.getConfiguration());
-		assertThat(client).isNotNull();
-	}
+public class JunitServerRunnerTest extends com.github.mjeanroy.junit.servers.junit4.JunitServerRunnerTest {
 }

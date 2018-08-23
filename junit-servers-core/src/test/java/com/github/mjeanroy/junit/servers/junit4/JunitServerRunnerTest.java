@@ -22,21 +22,36 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat;
+package com.github.mjeanroy.junit.servers.junit4;
 
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfiguration;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
-/**
- * Simple abstraction that define a server rule using tomcat as embedded server.
- *
- * @deprecated Use {@link com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test} instead.
- */
-@RunWith(TomcatServerJunit4Runner.class)
-@Deprecated
-public abstract class AbstractTomcatJunit4Test {
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(JunitServerRunner.class)
+public class JunitServerRunnerTest {
+
+	@TestServerConfiguration
+	private static FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfiguration();
 
 	@TestServer
-	public static EmbeddedTomcat server;
+	private static EmbeddedServer server;
 
+	@TestHttpClient
+	private HttpClient client;
+
+	@Test
+	public void it_should_create_runner_with_the_service_loader_implementation() {
+		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
+		assertThat(configuration).isSameAs(server.getConfiguration());
+		assertThat(client).isNotNull();
+	}
 }

@@ -24,16 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 import org.junit.runners.model.InitializationError;
-
-import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
 /**
  * Rule that can be used to start and stop embedded tomcat server.
+ *
+ * @deprecated Use {@link TomcatServerJunit4Runner} instead.
  */
-@SuppressWarnings("deprecation")
-public class TomcatServerJunit4Runner extends JunitServerRunner {
+@Deprecated
+public class TomcatServerJunit4Runner extends com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Runner {
 
 	/**
 	 * Create runner.
@@ -42,17 +41,6 @@ public class TomcatServerJunit4Runner extends JunitServerRunner {
 	 * @throws InitializationError If an error occurred while starting embedded server.
 	 */
 	public TomcatServerJunit4Runner(Class<?> klass) throws InitializationError {
-		super(klass, instantiate(klass));
-	}
-
-	/**
-	 * Instantiate embedded tomcat to be used in tests.
-	 *
-	 * @param klass The tested class.
-	 * @return The embedded tomcat.
-	 */
-	private static EmbeddedTomcat instantiate(Class<?> klass) {
-		EmbeddedTomcatConfiguration configuration = findConfiguration(klass);
-		return configuration == null ? new EmbeddedTomcat() : new EmbeddedTomcat(configuration);
+		super(klass);
 	}
 }

@@ -22,18 +22,16 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat;
+package com.github.mjeanroy.junit.servers.tomcat.junit4;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import org.junit.runner.RunWith;
 
 /**
  * Simple abstraction that define a server rule using tomcat as embedded server.
- *
- * @deprecated Use {@link com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test} instead.
  */
 @RunWith(TomcatServerJunit4Runner.class)
-@Deprecated
 public abstract class AbstractTomcatJunit4Test {
 
 	@TestServer

@@ -22,21 +22,38 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat;
+package com.github.mjeanroy.junit.servers.tomcat.junit4;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import org.junit.runner.RunWith;
+import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import org.junit.runners.model.InitializationError;
+
+import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
 /**
- * Simple abstraction that define a server rule using tomcat as embedded server.
- *
- * @deprecated Use {@link com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test} instead.
+ * Rule that can be used to start and stop embedded tomcat server.
  */
-@RunWith(TomcatServerJunit4Runner.class)
-@Deprecated
-public abstract class AbstractTomcatJunit4Test {
+public class TomcatServerJunit4Runner extends JunitServerRunner {
 
-	@TestServer
-	public static EmbeddedTomcat server;
+	/**
+	 * Create runner.
+	 *
+	 * @param klass Running class.
+	 * @throws InitializationError If an error occurred while starting embedded server.
+	 */
+	public TomcatServerJunit4Runner(Class<?> klass) throws InitializationError {
+		super(klass, instantiate(klass));
+	}
 
+	/**
+	 * Instantiate embedded tomcat to be used in tests.
+	 *
+	 * @param klass The tested class.
+	 * @return The embedded tomcat.
+	 */
+	private static EmbeddedTomcat instantiate(Class<?> klass) {
+		EmbeddedTomcatConfiguration configuration = findConfiguration(klass);
+		return configuration == null ? new EmbeddedTomcat() : new EmbeddedTomcat(configuration);
+	}
 }

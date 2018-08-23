@@ -22,21 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat;
+package com.github.mjeanroy.junit.servers.jetty.junit4;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import org.junit.runner.RunWith;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import org.junit.Test;
 
-/**
- * Simple abstraction that define a server rule using tomcat as embedded server.
- *
- * @deprecated Use {@link com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test} instead.
- */
-@RunWith(TomcatServerJunit4Runner.class)
-@Deprecated
-public abstract class AbstractTomcatJunit4Test {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	@TestServer
-	public static EmbeddedTomcat server;
+public class JettyJunit4Test extends AbstractJettyJunit4Test {
 
+	@TestHttpClient
+	private HttpClient client;
+
+	@Test
+	public void it_should_have_a_server() {
+		assertThat(server).isNotNull();
+		assertThat(server.getPort()).isPositive();
+	}
+
+	@Test
+	public void it_should_have_a_client() {
+		assertThat(client).isNotNull();
+	}
 }

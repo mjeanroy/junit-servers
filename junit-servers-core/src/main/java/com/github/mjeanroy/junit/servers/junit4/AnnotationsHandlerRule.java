@@ -22,21 +22,42 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat;
+package com.github.mjeanroy.junit.servers.junit4;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import org.junit.runner.RunWith;
+import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerTestLifeCycleAdapter;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 /**
- * Simple abstraction that define a server rule using tomcat as embedded server.
- *
- * @deprecated Use {@link com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test} instead.
+ * Create new rule that will execute a list of annotation
+ * handlers before and after test executions.
  */
-@RunWith(TomcatServerJunit4Runner.class)
-@Deprecated
-public abstract class AbstractTomcatJunit4Test {
+class AnnotationsHandlerRule extends AbstractRuleInstance {
 
-	@TestServer
-	public static EmbeddedTomcat server;
+	/**
+	 * List of handlers.
+	 */
+	private final AnnotationsHandlerTestLifeCycleAdapter annotationHandlers;
 
+	/**
+	 * Create new rules.
+	 *
+	 * @param target Target class (i.e tested class).
+	 * @param server The embedded server used in the tested class instance.
+	 * @param configuration The embedded server configuration.
+	 */
+	AnnotationsHandlerRule(Object target, EmbeddedServer<?> server, AbstractConfiguration configuration) {
+		super(target);
+		this.annotationHandlers = new AnnotationsHandlerTestLifeCycleAdapter(server, configuration);
+	}
+
+	@Override
+	protected void before() {
+		annotationHandlers.beforeEach(getTarget());
+	}
+
+	@Override
+	protected void after() {
+		annotationHandlers.afterEach(getTarget());
+	}
 }
