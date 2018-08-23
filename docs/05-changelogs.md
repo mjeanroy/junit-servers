@@ -1,3 +1,37 @@
+##### 0.9.0
+
+- In order to prepare for the Junit-Jupiter extension, API related to Junit4 have been moved
+  to a dedicated package, old classes have been deprecated. Note that you can continue to use it,
+  but it will be removed in a next release. Note that documentation is up to date, and Javadoc should
+  explain what to use instead of the deprecated class.
+
+The following changes should be applied:
+  - Replace `com.github.mjeanroy.junit.servers.runner.JunitServerRunner` with `com.github.mjeanroy.junit.servers.junit4.JunitServerRunner`.
+
+  - Replace `com.github.mjeanroy.junit.servers.jetty.rules.JettyServerRule` with `com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerRule`.
+  - Replace `com.github.mjeanroy.junit.servers.jetty.JettyServerJunit4Runner` with `com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Runner`.
+  - Replace `com.github.mjeanroy.junit.servers.jetty.utils.AbstractJettyTest` with `com.github.mjeanroy.junit.servers.jetty.junit4.AbstractJettyTest`.
+
+  - Replace `com.github.mjeanroy.junit.servers.tomcat.rules.TomcatServerRule` with `com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerRule`.
+  - Replace `com.github.mjeanroy.junit.servers.tomcat.JettyServerJunit4Runner` with `com.github.mjeanroy.junit.servers.tomcat.junit4.JettyServerJunit4Runner`.
+  - Replace `com.github.mjeanroy.junit.servers.tomcat.utils.AbstractTomcatTest` with `com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatTest`.
+
+##### 0.8.0
+
+- The server implementation detection now use the Service Provider API available in the JDK and it should now be
+  easier for anyone to implement and use custom implementation (instead of Jetty/Tomcat).
+- Introduce `com.github.mjeanroy.junit.servers.jetty.JettyServerJunit4Runner` to be able to force
+  jetty without using the service provider API.
+- Introduce `com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Runner` to be able to force
+  jetty without using the service provider API.
+- Some internal refactoring in order to prepare the future junit-jupiter extension.
+
+##### 0.7.0
+
+- Add compatibility for Java 9: some methods have been deprecated as supporting it with Java 9 was
+  impossible (due to changes on classloader API).
+- Various dependency updates, mainly used in unit tests.
+
 ##### 0.6.1
 
 ###### Core

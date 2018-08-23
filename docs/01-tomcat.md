@@ -31,8 +31,8 @@ The simplest way to start is to use the dedicated [JUnit runner](https://github.
 
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -119,9 +119,9 @@ See the example below:
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -168,7 +168,7 @@ public class MyTest {
 Using the [JUnit rule](https://github.com/junit-team/junit4/wiki/Rules) is relatively easy:
 
 ```java
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -204,7 +204,7 @@ Sometimes, you will have to change some configuration option, this is possible u
 
 ```java
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -260,7 +260,7 @@ Here is an example that creates a rule using a configuration object:
 
 ```java
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 
 import org.junit.ClassRule;
 
@@ -304,7 +304,7 @@ The example below use a hook to log server events:
 ```java
 import com.github.mjeanroy.junit.servers.servers.Hook;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

@@ -8,7 +8,7 @@ Here is a simple example that demonstrate how easy it is to test your applicatio
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

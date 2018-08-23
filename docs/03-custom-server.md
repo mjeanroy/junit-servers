@@ -98,7 +98,7 @@ Here is the configuration class:
 ```java
 package com.myapp;
 
-import com.github.mjeanroy.junit.servers.servers.configuration.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 
 public class MyCustomConfiguration extends AbstractConfiguration {
   public MyCustomConfiguration() {
@@ -116,7 +116,7 @@ Here is our unit test:
 package com.myapp;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import org.junit.Assert;

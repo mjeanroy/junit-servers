@@ -87,7 +87,8 @@ import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -131,7 +132,7 @@ You can also retrieve an HTTP client using the class rule:
 ```java
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
+import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerRule;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -168,7 +169,7 @@ Here is an example of a `POST` request sending a JSON body:
 ```java
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.rules.JettyServerRule;
+import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerRule;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
