@@ -41,8 +41,8 @@ With Maven, add explicit dependency:
 For most projects, default configuration will be enough, all you have to do is:
 
 - Use JUnit runner `JettyServerRunner` (recommended).
-- Use JUnit rule `JettyServerRule` to start and stop container in your tests.
-- Extend `AbstractJettyTest` (abstract class that is configured with the `JettyServerRunner` runner).
+- Use JUnit rule `JettyServerJunit4Rule` to start and stop container in your tests.
+- Extend `AbstractJettyJunit4Test` (abstract class that is configured with the `JettyServerRunner` runner).
 
 Default configuration is:
 
@@ -55,7 +55,7 @@ Default configuration is:
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -91,29 +91,24 @@ import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-@RunWith(JunitServerRunner.class)
 public class MyTest {
-  @TestServer
-  public static EmbeddedJetty jetty;
-
-  @TestServerConfiguration
-  public static EmbeddedJettyConfiguration configuration() {
-    return EmbeddedJettyConfiguration.build()
+  @ClassRule
+  public static JettyServerJunit4Rule jetty = new JettyServerJunit4Rule(EmbeddedJettyConfiguration.build()
       .withPath("/app")
       .withPort(8080)
       .withProperty("spring.profiles.active", "test")
-      .build();
-  }
+      .build());
 
   @Test
   public void should_have_index() {
@@ -129,13 +124,12 @@ public class MyTest {
 }
 ```
 
-**Using the abstract class `AbstractJettyTest`:**
+**Using the abstract class `AbstractJettyJunit4Test`:**
 
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.utils.AbstractJettyTest;
+import com.github.mjeanroy.junit.servers.jetty.junit4.AbstractJettyJunit4Test;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -145,7 +139,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-public class MyTest extends AbstractJettyTest {
+public class MyTest extends AbstractJettyJunit4Test {
   @Test
   public void should_have_index() {
     OkHttpClient client = new OkHttpClient();
@@ -169,7 +163,7 @@ For more information about the configuration, see the [documentation](https://mj
 For most projects, default configuration will be enough, all you have to do is:
 
 - Use JUnit runner `JunitServerRunner` (recommended).
-- Use JUnit rule `TomcatServerRule` to start and stop container in your tests.
+- Use JUnit rule `TomcatServerJunit4Rule` to start and stop container in your tests.
 - Extend default `AbstractTomcatTest` that run your test with `JunitServerRunner` runner.
 
 Default configuration is:
@@ -185,8 +179,8 @@ Default configuration is:
 
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -222,29 +216,24 @@ import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-@RunWith(JunitServerRunner.class)
 public class MyTest {
-  @TestServer
-  public static EmbeddedTomcat tomcat;
-
-  @TestServerConfiguration
-  public static EmbeddedTomcatConfiguration configuration() {
-    return EmbeddedTomcatConfiguration.builder()
+  @ClassRule
+  public static TomcatServerJunit4Rule tomcat = new TomcatServerJunit4Rule(EmbeddedTomcatConfiguration.builder()
       .withPath("/app")
       .withPort(8080)
       .withProperty("spring.profiles.active", "test")
-      .build();
-  }
+      .build());
 
   @Test
   public void should_have_index() {
@@ -262,13 +251,10 @@ public class MyTest {
 
 **Using the abstract class `AbstractTomcatTest`:**
 
-You can also use dedicated runner and inject tomcat using @Server annotation:
-
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.runner.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.utils.AbstractTomcatTest;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -278,7 +264,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-public class MyTest extends AbstractTomcatTest {
+public class MyTest extends AbstractTomcatJunit4Test {
   @Test
   public void should_have_index() {
     OkHttpClient client = new OkHttpClient();
