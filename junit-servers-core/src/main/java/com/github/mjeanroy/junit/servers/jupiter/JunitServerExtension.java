@@ -43,7 +43,6 @@ import org.junit.jupiter.api.extension.ExtensionContext.Store;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
-import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
@@ -82,7 +81,7 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
  * For example:
  *
  * <pre><code>
- *   &#064;ExtendWith(JunitServerExtension.class)
+ *  &#064;ExtendWith(JunitServerExtension.class)
  *  public class MyTest {
  *
  *    &#064;Test
@@ -95,8 +94,6 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
  *    }
  *  }
  * </code></pre>
- *
- * Note that this jupiter can also be used using {@link RegisterExtension}.
  */
 public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback, ParameterResolver {
 	/**
