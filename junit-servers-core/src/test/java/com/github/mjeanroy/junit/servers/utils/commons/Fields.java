@@ -48,7 +48,8 @@ public final class Fields {
 	public static Field getPrivateField(Class<?> klass, String name) {
 		try {
 			return klass.getDeclaredField(name);
-		} catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new AssertionError(ex);
 		}
 	}
@@ -63,7 +64,8 @@ public final class Fields {
 	public static Method getPrivateMethod(Class<?> klass, String name) {
 		try {
 			return klass.getDeclaredMethod(name);
-		} catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new AssertionError(ex);
 		}
 	}
@@ -82,7 +84,8 @@ public final class Fields {
 			T value = (T) FieldUtils.readField(instance, name, true);
 
 			return value;
-		} catch (IllegalAccessException ex) {
+		}
+		catch (IllegalAccessException ex) {
 			throw new AssertionError(ex);
 		}
 	}
@@ -104,7 +107,8 @@ public final class Fields {
 			T value = (T) FieldUtils.readStaticField(field, true);
 
 			return value;
-		} catch (IllegalAccessException ex) {
+		}
+		catch (IllegalAccessException ex) {
 			throw new AssertionError(ex);
 		}
 	}
@@ -122,7 +126,8 @@ public final class Fields {
 
 		try {
 			FieldUtils.writeStaticField(field, value, true);
-		} catch (IllegalAccessException ex) {
+		}
+		catch (IllegalAccessException ex) {
 			throw new AssertionError(ex);
 		}
 	}

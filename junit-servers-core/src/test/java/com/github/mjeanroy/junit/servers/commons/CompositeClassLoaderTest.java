@@ -19,8 +19,8 @@ public class CompositeClassLoaderTest {
 		String name2 = "file2.txt";
 		URL file2 = getClass().getResource("/" + name2);
 
-		ClassLoader cl1 = new URLClassLoader(new URL[] {file1});
-		ClassLoader cl2 = new URLClassLoader(new URL[] {file2});
+		ClassLoader cl1 = new URLClassLoader(new URL[] { file1 });
+		ClassLoader cl2 = new URLClassLoader(new URL[] { file2 });
 
 		ClassLoader cl = new CompositeClassLoader(cl1, cl2);
 
@@ -44,8 +44,11 @@ public class CompositeClassLoaderTest {
 		assertThatThrownBy(loadClass(cl, "fake")).isExactlyInstanceOf(ClassNotFoundException.class);
 	}
 
-	private static class Foo {}
-	private static class Bar {}
+	private static class Foo {
+	}
+
+	private static class Bar {
+	}
 
 	private static class FakeClassLoader extends ClassLoader {
 		private final String name;

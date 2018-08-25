@@ -34,7 +34,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Controller
 public class IndexController {
 
-	@RequestMapping(value = {"/", "/index"}, method = GET)
+	@RequestMapping(value = { "/", "/index" }, method = GET)
 	@ResponseBody
 	public String index(@CookieValue(value = "foo", required = false) String value) {
 		String name = value == null ? "World" : value;

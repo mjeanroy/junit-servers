@@ -24,7 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.utils.commons;
 
-import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.singletonList;

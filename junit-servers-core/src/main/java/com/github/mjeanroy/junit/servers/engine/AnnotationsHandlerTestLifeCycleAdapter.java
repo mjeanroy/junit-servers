@@ -67,9 +67,9 @@ public class AnnotationsHandlerTestLifeCycleAdapter extends AbstractTestLifeCycl
 	 */
 	public AnnotationsHandlerTestLifeCycleAdapter(EmbeddedServer<?> server, AbstractConfiguration configuration) {
 		this.handlers = asList(
-				newServerAnnotationHandler(server),
-				newConfigurationAnnotationHandler(configuration),
-				newHttpClientAnnotationHandler(server)
+			newServerAnnotationHandler(server),
+			newConfigurationAnnotationHandler(configuration),
+			newHttpClientAnnotationHandler(server)
 		);
 	}
 
@@ -111,7 +111,8 @@ public class AnnotationsHandlerTestLifeCycleAdapter extends AbstractTestLifeCycl
 			if (handler.support(annotation)) {
 				if (before) {
 					handler.before(target, field);
-				} else {
+				}
+				else {
 					handler.after(target, field);
 				}
 			}

@@ -24,15 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.async;
 
-import static java.lang.System.nanoTime;
-
-import org.asynchttpclient.ListenableFuture;
-import org.asynchttpclient.Request;
-import org.asynchttpclient.RequestBuilder;
-import org.asynchttpclient.Response;
-import org.asynchttpclient.uri.Uri;
-import org.asynchttpclient.util.Utf8UrlEncoder;
-
 import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpHeaders;
@@ -42,6 +33,14 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
+import org.asynchttpclient.ListenableFuture;
+import org.asynchttpclient.Request;
+import org.asynchttpclient.RequestBuilder;
+import org.asynchttpclient.Response;
+import org.asynchttpclient.uri.Uri;
+import org.asynchttpclient.util.Utf8UrlEncoder;
+
+import static java.lang.System.nanoTime;
 
 /**
  * Implementation for {@link HttpRequest} that use async-http-client
@@ -124,7 +123,8 @@ class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 		if (body != null) {
 			handleRequestBody(builder);
-		} else {
+		}
+		else {
 			handleFormParameters(builder);
 		}
 	}

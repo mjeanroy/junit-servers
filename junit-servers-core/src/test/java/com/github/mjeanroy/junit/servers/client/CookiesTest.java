@@ -198,15 +198,15 @@ public class CookiesTest {
 	@Test
 	public void it_should_not_create_cookie_without_name_value() {
 		assertThatThrownBy(read("name; Domain=foo.com; Path=/; Secure; HttpOnly"))
-				.isExactlyInstanceOf(IllegalArgumentException.class)
-				.hasMessage("Cookie must have a valid name and a valid value");
+			.isExactlyInstanceOf(IllegalArgumentException.class)
+			.hasMessage("Cookie must have a valid name and a valid value");
 	}
 
 	@Test
 	public void it_should_not_create_cookie_with_empty_name() {
 		assertThatThrownBy(read("=value; Domain=foo.com; Path=/; Secure; HttpOnly"))
-				.isExactlyInstanceOf(IllegalArgumentException.class)
-				.hasMessage("Cookie must have a valid name");
+			.isExactlyInstanceOf(IllegalArgumentException.class)
+			.hasMessage("Cookie must have a valid name");
 	}
 
 	private static String formatCookie(String name, String value) {

@@ -24,13 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.client.it;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.urlEncode;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+
+import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.urlEncode;
 
 final class HttpTestUtils {
 
@@ -48,7 +48,8 @@ final class HttpTestUtils {
 		try {
 			URI uri = new URI(null, null, path, null);
 			return uri.getRawPath();
-		} catch (URISyntaxException ex) {
+		}
+		catch (URISyntaxException ex) {
 			throw new AssertionError(ex);
 		}
 	}

@@ -36,7 +36,7 @@ public class IndexWithRulesTest {
 
 	@ClassRule
 	public static JettyServerJunit4Rule serverRule = new JettyServerJunit4Rule(
-			new EmbeddedJetty(createJettyConfiguration())
+		new EmbeddedJetty(createJettyConfiguration())
 	);
 
 	@Test

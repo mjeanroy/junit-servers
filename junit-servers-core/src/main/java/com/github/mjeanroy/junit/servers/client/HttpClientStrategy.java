@@ -334,8 +334,7 @@ public enum HttpClientStrategy {
 	void checkSupport() {
 		if (!support()) {
 			throw new UnsupportedOperationException(
-				"HTTP Client cannot be created because it is not supported by the runtime environment, " +
-				"please import " + library
+				"HTTP Client cannot be created because it is not supported by the runtime environment, please import " + library
 			);
 		}
 	}

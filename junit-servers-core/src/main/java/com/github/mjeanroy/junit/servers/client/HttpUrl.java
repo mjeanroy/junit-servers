@@ -24,10 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import static com.github.mjeanroy.junit.servers.commons.ObjectUtils.firstNonNull;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.UrlUtils.ensureAbsolutePath;
-import static java.util.Collections.unmodifiableMap;
+import com.github.mjeanroy.junit.servers.exceptions.UrlException;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -37,7 +34,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import com.github.mjeanroy.junit.servers.exceptions.UrlException;
+import static com.github.mjeanroy.junit.servers.commons.ObjectUtils.firstNonNull;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.UrlUtils.ensureAbsolutePath;
+import static java.util.Collections.unmodifiableMap;
 
 /**
  * URL object without:
@@ -85,7 +85,8 @@ public class HttpUrl {
 				.withPort(port >= 0 ? port : url.getDefaultPort())
 				.withPath(path)
 				.build();
-		} catch (MalformedURLException ex) {
+		}
+		catch (MalformedURLException ex) {
 			throw new IllegalArgumentException(ex);
 		}
 	}
@@ -174,7 +175,8 @@ public class HttpUrl {
 		final String protocol = scheme.getProtocol();
 		try {
 			return new URI(protocol, null, host, port, path, null, null);
-		} catch (URISyntaxException ex) {
+		}
+		catch (URISyntaxException ex) {
 			throw new UrlException(protocol, host, port, path, ex);
 		}
 	}
@@ -200,9 +202,9 @@ public class HttpUrl {
 		if (o instanceof HttpUrl) {
 			HttpUrl u = (HttpUrl) o;
 			return Objects.equals(scheme, u.scheme)
-					&& Objects.equals(host, u.host)
-					&& Objects.equals(port, u.port)
-					&& Objects.equals(path, u.path);
+				&& Objects.equals(host, u.host)
+				&& Objects.equals(port, u.port)
+				&& Objects.equals(path, u.path);
 		}
 
 		return false;

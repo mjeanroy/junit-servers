@@ -46,14 +46,14 @@ public class JettyServerJunit4RunnerTest {
 
 		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
 		assertThat(server)
-				.isNotNull()
-				.isInstanceOf(EmbeddedJetty.class);
+			.isNotNull()
+			.isInstanceOf(EmbeddedJetty.class);
 
 		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 		assertThat(conf)
-				.isNotNull()
-				.isInstanceOf(EmbeddedJettyConfiguration.class)
-				.isNotSameAs(configuration);
+			.isNotNull()
+			.isInstanceOf(EmbeddedJettyConfiguration.class)
+			.isNotSameAs(configuration);
 	}
 
 	@Test
@@ -62,14 +62,14 @@ public class JettyServerJunit4RunnerTest {
 
 		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
 		assertThat(server)
-				.isNotNull()
-				.isInstanceOf(EmbeddedJetty.class);
+			.isNotNull()
+			.isInstanceOf(EmbeddedJetty.class);
 
 		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 		assertThat(conf)
-				.isNotNull()
-				.isInstanceOf(EmbeddedJettyConfiguration.class)
-				.isSameAs(configuration);
+			.isNotNull()
+			.isInstanceOf(EmbeddedJettyConfiguration.class)
+			.isSameAs(configuration);
 	}
 
 	protected JettyServerJunit4Runner createRunner(Class<?> klass) throws Exception {

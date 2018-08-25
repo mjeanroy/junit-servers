@@ -131,10 +131,10 @@ public abstract class BaseHttpClientTest {
 		host = "localhost";
 		port = wireMockRule.port();
 		server = new EmbeddedServerMockBuilder()
-				.withScheme(scheme)
-				.withHost(host)
-				.withPort(port)
-				.build();
+			.withScheme(scheme)
+			.withHost(host)
+			.withPort(port)
+			.build();
 	}
 
 	@After
@@ -193,10 +193,10 @@ public abstract class BaseHttpClientTest {
 		stubGetRequest(endpoint, status, headers, body);
 
 		final HttpResponse rsp = createDefaultClient()
-				.prepareGet(endpoint)
-				.acceptJson()
-				.asXmlHttpRequest()
-				.execute();
+			.prepareGet(endpoint)
+			.acceptJson()
+			.asXmlHttpRequest()
+			.execute();
 
 		String r1 = rsp.body();
 		String r2 = rsp.body();
@@ -214,10 +214,10 @@ public abstract class BaseHttpClientTest {
 		stubGetRequest(endpoint, status, headers, body);
 
 		final HttpResponse rsp = createDefaultClient()
-				.prepareGet(rqUrl)
-				.acceptJson()
-				.asXmlHttpRequest()
-				.execute();
+			.prepareGet(rqUrl)
+			.acceptJson()
+			.asXmlHttpRequest()
+			.execute();
 
 		assertRequest(endpoint, HttpMethod.GET);
 		assertThat(rsp.status()).isEqualTo(status);
@@ -237,10 +237,10 @@ public abstract class BaseHttpClientTest {
 		stubGetRequest(encodedPath, status, headers, body);
 
 		final HttpResponse rsp = createDefaultClient()
-				.prepareGet(endpoint)
-				.acceptJson()
-				.asXmlHttpRequest()
-				.execute();
+			.prepareGet(endpoint)
+			.acceptJson()
+			.asXmlHttpRequest()
+			.execute();
 
 		assertRequest(encodedPath, HttpMethod.GET);
 		assertThat(rsp.status()).isEqualTo(status);
@@ -258,10 +258,10 @@ public abstract class BaseHttpClientTest {
 		stubHeadRequest(endpoint, status, headers);
 
 		final HttpResponse rsp = createDefaultClient()
-				.prepareHead(endpoint)
-				.acceptJson()
-				.asXmlHttpRequest()
-				.execute();
+			.prepareHead(endpoint)
+			.acceptJson()
+			.asXmlHttpRequest()
+			.execute();
 
 		assertRequest(endpoint, HttpMethod.HEAD);
 		assertThat(rsp.status()).isEqualTo(status);
@@ -370,12 +370,12 @@ public abstract class BaseHttpClientTest {
 		stubPatchRequest(endpoint, status, headers, body);
 
 		final HttpResponse rsp = createDefaultClient()
-				.preparePatch(endpoint)
-				.acceptJson()
-				.asJson()
-				.asXmlHttpRequest()
-				.setBody("{\"name\": \"Jane Doe\"}")
-				.execute();
+			.preparePatch(endpoint)
+			.acceptJson()
+			.asJson()
+			.asXmlHttpRequest()
+			.setBody("{\"name\": \"Jane Doe\"}")
+			.execute();
 
 		assertRequest(endpoint, HttpMethod.PATCH);
 		assertThat(rsp.status()).isEqualTo(status);
@@ -784,7 +784,7 @@ public abstract class BaseHttpClientTest {
 	@Test
 	public void testRequest_add_several_query_params() {
 		final String n1 = "firstName";
-		final String v1= "john";
+		final String v1 = "john";
 		final HttpParameter p1 = param(n1, v1);
 
 		final String n2 = "lastName";
@@ -1344,10 +1344,10 @@ public abstract class BaseHttpClientTest {
 		assertThat(header.getLastValue()).isEqualTo(value);
 
 		assertThat(rsp.getHeaders())
-				.extracting("name", "values")
-				.contains(
-						tuple(name, singletonList(value))
-				);
+			.extracting("name", "values")
+			.contains(
+				tuple(name, singletonList(value))
+			);
 	}
 
 	private void testResponseWithSeveralValues(String name, List<String> values, MapperFunction<HttpResponse, HttpHeader> func) {
@@ -1361,9 +1361,9 @@ public abstract class BaseHttpClientTest {
 
 		// WHEN
 		HttpResponse rsp = createDefaultClient()
-				.prepareGet(endpoint)
-				.addAcceptEncoding("identity")
-				.executeJson();
+			.prepareGet(endpoint)
+			.addAcceptEncoding("identity")
+			.executeJson();
 
 		// THEN
 		HttpHeader header = rsp.getHeader(name);
@@ -1376,10 +1376,10 @@ public abstract class BaseHttpClientTest {
 		assertThat(header.getLastValue()).isEqualTo(values.get(values.size() - 1));
 
 		assertThat(rsp.getHeaders())
-				.extracting("name", "values")
-				.contains(
-						tuple(name, values)
-				);
+			.extracting("name", "values")
+			.contains(
+				tuple(name, values)
+			);
 	}
 
 	@Test
@@ -1391,11 +1391,11 @@ public abstract class BaseHttpClientTest {
 		final long maxAge = 3600;
 
 		final String cookieValue = name + "=" + value + "; " +
-				"Domain=" + domain + "; " +
-				"Path=" + path + "; " +
-				"Max-Age=" + maxAge + "; " +
-				"Secure; " +
-				"HttpOnly";
+			"Domain=" + domain + "; " +
+			"Path=" + path + "; " +
+			"Max-Age=" + maxAge + "; " +
+			"Secure; " +
+			"HttpOnly";
 
 		final String endpoint = ENDPOINT;
 		final int status = 200;

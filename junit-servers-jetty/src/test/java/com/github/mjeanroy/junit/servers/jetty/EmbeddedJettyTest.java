@@ -115,13 +115,13 @@ public class EmbeddedJettyTest {
 		URL url = dir.toURI().toURL();
 		String name = tmpFile.getName();
 
-		URLClassLoader urlClassLoader = new URLClassLoader(new URL[]{url});
+		URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { url });
 		assertThat(urlClassLoader.getResource(name)).isNotNull();
 
 		jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
-				.withWebapp(dir)
-				.withParentClasspath(url)
-				.build());
+			.withWebapp(dir)
+			.withParentClasspath(url)
+			.build());
 
 		jetty.start();
 
@@ -140,9 +140,9 @@ public class EmbeddedJettyTest {
 		File descriptor = new File(webXmlPath);
 
 		jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
-				.withWebapp(descriptor.getParentFile())
-				.withOverrideDescriptor(descriptor.getAbsolutePath())
-				.build());
+			.withWebapp(descriptor.getParentFile())
+			.withOverrideDescriptor(descriptor.getAbsolutePath())
+			.build());
 
 		jetty.start();
 

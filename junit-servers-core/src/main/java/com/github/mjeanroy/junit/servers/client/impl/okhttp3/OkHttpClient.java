@@ -24,8 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.okhttp3;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
@@ -33,6 +31,8 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Implementation of {@link HttpClient} using OkHttp library from Square.

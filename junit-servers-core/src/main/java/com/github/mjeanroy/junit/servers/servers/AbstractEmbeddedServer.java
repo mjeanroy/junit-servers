@@ -174,7 +174,8 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 
 			if (oldValue == null) {
 				clearProperty(name);
-			} else {
+			}
+			else {
 				setProperty(name, oldValue);
 			}
 		}
@@ -189,7 +190,8 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 		for (Hook hook : configuration.getHooks()) {
 			if (pre) {
 				hook.pre(this);
-			} else {
+			}
+			else {
 				hook.post(this);
 			}
 		}

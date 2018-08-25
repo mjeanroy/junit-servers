@@ -288,8 +288,8 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 */
 	public T withProperty(String name, String value) {
 		this.envProperties.put(
-				notBlank(name, "name"),
-				notNull(value, "value")
+			notBlank(name, "name"),
+			notNull(value, "value")
 		);
 		return self();
 	}

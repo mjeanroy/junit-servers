@@ -148,8 +148,8 @@ public class HttpClientStrategyTest {
 			"please import AsyncHttpClient";
 
 		assertThatThrownBy(build(HttpClientStrategy.ASYNC_HTTP_CLIENT, server))
-				.isExactlyInstanceOf(UnsupportedOperationException.class)
-				.hasMessage(error);
+			.isExactlyInstanceOf(UnsupportedOperationException.class)
+			.hasMessage(error);
 	}
 
 	@Test
@@ -164,8 +164,8 @@ public class HttpClientStrategyTest {
 			"please import AsyncHttpClient";
 
 		assertThatThrownBy(build(HttpClientStrategy.ASYNC_HTTP_CLIENT, configuration, server))
-				.isExactlyInstanceOf(UnsupportedOperationException.class)
-				.hasMessage(error);
+			.isExactlyInstanceOf(UnsupportedOperationException.class)
+			.hasMessage(error);
 	}
 
 	@Test
@@ -260,8 +260,8 @@ public class HttpClientStrategyTest {
 			"please import " + library;
 
 		assertThatThrownBy(build(strategy, server))
-				.isExactlyInstanceOf(UnsupportedOperationException.class)
-				.hasMessage(error);
+			.isExactlyInstanceOf(UnsupportedOperationException.class)
+			.hasMessage(error);
 	}
 
 	private void testHttpClientWithConfigurationWithoutImpl(HttpClientStrategy strategy, String library) {
@@ -276,8 +276,8 @@ public class HttpClientStrategyTest {
 			"please import " + library;
 
 		assertThatThrownBy(build(strategy, configuration, server))
-				.isExactlyInstanceOf(UnsupportedOperationException.class)
-				.hasMessage(error);
+			.isExactlyInstanceOf(UnsupportedOperationException.class)
+			.hasMessage(error);
 	}
 
 	private static void setDetection(boolean okHttp, boolean asyncHttp, boolean ningAsyncHttp, boolean apacheHttp) {

@@ -47,7 +47,8 @@ public final class Fields {
 	public static <T> T readPrivate(Object instance, String name) {
 		try {
 			return (T) FieldUtils.readField(instance, name, true);
-		} catch (IllegalAccessException ex) {
+		}
+		catch (IllegalAccessException ex) {
 			throw new AssertionError(ex);
 		}
 	}

@@ -59,13 +59,14 @@ class TestUtils {
 			URL urlParentClasspath = new File("target/lib/").toURI().toURL();
 
 			return EmbeddedJettyConfiguration.builder()
-					.withWebapp(absolutePath + "src/main/webapp")
-					.withParentClasspath(urlParentClasspath)
-					.withClasspath(absolutePath + "target/classes")
-					.withContainerJarPattern(".*\\.jar")
-					.build();
+				.withWebapp(absolutePath + "src/main/webapp")
+				.withParentClasspath(urlParentClasspath)
+				.withClasspath(absolutePath + "target/classes")
+				.withContainerJarPattern(".*\\.jar")
+				.build();
 
-		} catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new AssertionError(ex);
 		}
 	}
@@ -77,9 +78,9 @@ class TestUtils {
 	 */
 	static void ensureIndexIsOk(HttpClient client) {
 		String message = client
-				.prepareGet("/")
-				.execute()
-				.body();
+			.prepareGet("/")
+			.execute()
+			.body();
 
 		assertThat(message).isNotEmpty().contains("Hello");
 	}

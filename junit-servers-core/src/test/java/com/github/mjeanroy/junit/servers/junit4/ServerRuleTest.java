@@ -138,11 +138,11 @@ public class ServerRuleTest {
 	@Test
 	public void it_should_get_server_url() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder()
-				.withScheme("http")
-				.withHost("localhost")
-				.withPort(8080)
-				.withPath("/")
-				.build();
+			.withScheme("http")
+			.withHost("localhost")
+			.withPort(8080)
+			.withPath("/")
+			.build();
 
 		final ServerRule rule = createRule(server);
 		final String result = rule.getUrl();

@@ -29,8 +29,8 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import java.lang.reflect.Field;
 
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
 
 /**
  * Annotation handler that will set embedded server to a field

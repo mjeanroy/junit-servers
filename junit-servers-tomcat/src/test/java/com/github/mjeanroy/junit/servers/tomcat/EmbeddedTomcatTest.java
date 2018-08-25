@@ -153,10 +153,10 @@ public class EmbeddedTomcatTest {
 		File metaInf = new File(baseDir, "META-INF");
 
 		tomcat = new EmbeddedTomcat(EmbeddedTomcatConfiguration.builder()
-				.withClasspath(baseDir.getAbsolutePath())
-				.withWebapp(baseDir)
-				.enableForceMetaInf()
-				.build());
+			.withClasspath(baseDir.getAbsolutePath())
+			.withWebapp(baseDir)
+			.enableForceMetaInf()
+			.build());
 
 		assertThat(metaInf).doesNotExist();
 
@@ -170,9 +170,9 @@ public class EmbeddedTomcatTest {
 		File dir = tmpFile.getParentFile();
 
 		tomcat = new EmbeddedTomcat(EmbeddedTomcatConfiguration.builder()
-				.withWebapp(dir)
-				.withParentClasspath(dir.toURI().toURL())
-				.build());
+			.withWebapp(dir)
+			.withParentClasspath(dir.toURI().toURL())
+			.build());
 
 		tomcat.start();
 
@@ -191,8 +191,8 @@ public class EmbeddedTomcatTest {
 		File descriptor = new File(webXmlPath);
 
 		tomcat = new EmbeddedTomcat(defaultConfigurationBuilder()
-				.withOverrideDescriptor(descriptor.getAbsolutePath())
-				.build());
+			.withOverrideDescriptor(descriptor.getAbsolutePath())
+			.build());
 
 		tomcat.start();
 
@@ -222,8 +222,8 @@ public class EmbeddedTomcatTest {
 			String path = current.endsWith(PATH) ? current : current + PATH;
 
 			return EmbeddedTomcatConfiguration.builder()
-					.withWebapp(path + "src/test/resources")
-					.withClasspath(path + "target/classes");
+				.withWebapp(path + "src/test/resources")
+				.withClasspath(path + "target/classes");
 		}
 		catch (Exception ex) {
 			throw new RuntimeException(ex);

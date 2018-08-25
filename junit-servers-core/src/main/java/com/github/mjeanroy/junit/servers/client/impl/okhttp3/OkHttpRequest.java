@@ -24,8 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.okhttp3;
 
-import static com.github.mjeanroy.junit.servers.commons.ObjectUtils.firstNonNull;
-
 import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpHeaders;
@@ -35,13 +33,14 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
-
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static com.github.mjeanroy.junit.servers.commons.ObjectUtils.firstNonNull;
 
 /**
  * Implementation of {@link HttpRequest} using OkHttp library.
@@ -163,7 +162,6 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 		if (body != null && !body.isEmpty()) {
 			rqBody = RequestBody.create(null, body);
 		}
-
 		else if (!formParams.isEmpty()) {
 			FormBody.Builder builder = new FormBody.Builder();
 			for (HttpParameter parameter : formParams.values()) {

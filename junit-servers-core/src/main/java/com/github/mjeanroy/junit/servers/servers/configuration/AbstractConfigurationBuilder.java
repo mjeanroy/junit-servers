@@ -33,7 +33,7 @@ package com.github.mjeanroy.junit.servers.servers.configuration;
  */
 @Deprecated
 public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurationBuilder<T, U>, U extends AbstractConfiguration>
-		extends com.github.mjeanroy.junit.servers.servers.AbstractConfigurationBuilder<T, U> {
+	extends com.github.mjeanroy.junit.servers.servers.AbstractConfigurationBuilder<T, U> {
 
 	/**
 	 * Build default configuration.

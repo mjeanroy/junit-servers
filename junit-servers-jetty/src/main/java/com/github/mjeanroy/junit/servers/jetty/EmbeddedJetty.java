@@ -132,7 +132,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		final String webapp = configuration.getWebapp();
 		final String classpath = configuration.getClasspath();
 		final ClassLoader parentClassLoader = configuration.getParentClassLoader();
-		final String overrideDescriptor = configuration.getOverrideDescriptor ();
+		final String overrideDescriptor = configuration.getOverrideDescriptor();
 		final Resource baseResource = configuration.getBaseResource();
 		final String containerJarPattern = configuration.getContainerJarPattern();
 		final String webInfJarPattern = configuration.getWebInfJarPattern();
@@ -141,7 +141,8 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 
 		if (containerJarPattern != null) {
 			ctx.setAttribute(WebInfConfiguration.CONTAINER_JAR_PATTERN, containerJarPattern);
-		} else if (JavaUtils.isPostJdk9()) {
+		}
+		else if (JavaUtils.isPostJdk9()) {
 			// Fix to make TLD scanning works with Java >= 9
 			ctx.setAttribute(WebInfConfiguration.CONTAINER_JAR_PATTERN, ".*\\.jar");
 		}
@@ -155,7 +156,8 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 
 		if (parentClassLoader != null) {
 			classLoader = new CompositeClassLoader(parentClassLoader, systemClassLoader);
-		} else {
+		}
+		else {
 			classLoader = systemClassLoader;
 		}
 
@@ -165,7 +167,8 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		if (baseResource == null) {
 			// use default base resource
 			ctx.setBaseResource(newResource(webapp));
-		} else {
+		}
+		else {
 			ctx.setBaseResource(baseResource);
 		}
 
@@ -173,13 +176,13 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 			ctx.setOverrideDescriptor(overrideDescriptor);
 		}
 
-		ctx.setConfigurations(new Configuration[]{
-				new WebInfConfiguration(),
-				new WebXmlConfiguration(),
-				new AnnotationConfiguration(),
-				new JettyWebXmlConfiguration(),
-				new MetaInfConfiguration(),
-				new FragmentConfiguration()
+		ctx.setConfigurations(new Configuration[] {
+			new WebInfConfiguration(),
+			new WebXmlConfiguration(),
+			new AnnotationConfiguration(),
+			new JettyWebXmlConfiguration(),
+			new MetaInfConfiguration(),
+			new FragmentConfiguration()
 		});
 
 		if (isNotBlank(classpath)) {

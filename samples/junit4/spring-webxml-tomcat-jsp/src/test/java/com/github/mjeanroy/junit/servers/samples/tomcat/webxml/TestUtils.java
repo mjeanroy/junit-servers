@@ -59,13 +59,14 @@ class TestUtils {
 			URL urlParentClasspath = new File("target/lib/").toURI().toURL();
 
 			return EmbeddedTomcatConfiguration.builder()
-					.withWebapp(absolutePath + "src/main/webapp")
-					.withOverrideDescriptor("src/test/resources/web.xml")
-					.withParentClasspath(urlParentClasspath)
-					.withClasspath(absolutePath + "target/classes")
-					.build();
+				.withWebapp(absolutePath + "src/main/webapp")
+				.withOverrideDescriptor("src/test/resources/web.xml")
+				.withParentClasspath(urlParentClasspath)
+				.withClasspath(absolutePath + "target/classes")
+				.build();
 
-		} catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new AssertionError(ex);
 		}
 	}
@@ -77,9 +78,9 @@ class TestUtils {
 	 */
 	static void ensureIndexIsOk(HttpClient client) {
 		String message = client
-				.prepareGet("/index")
-				.execute()
-				.body();
+			.prepareGet("/index")
+			.execute()
+			.body();
 
 		assertThat(message).isNotEmpty().contains("Hello");
 	}

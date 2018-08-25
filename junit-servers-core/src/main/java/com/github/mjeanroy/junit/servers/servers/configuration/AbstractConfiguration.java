@@ -52,14 +52,14 @@ public abstract class AbstractConfiguration extends com.github.mjeanroy.junit.se
 	 */
 	protected AbstractConfiguration(AbstractConfigurationBuilder<?, ?> builder) {
 		super(
-				builder.getClasspath(),
-				builder.getPath(),
-				builder.getWebapp(),
-				builder.getPort(),
-				builder.getEnvProperties(),
-				builder.getHooks(),
-				builder.getParentClassLoader(),
-				builder.getOverrideDescriptor()
+			builder.getClasspath(),
+			builder.getPath(),
+			builder.getWebapp(),
+			builder.getPort(),
+			builder.getEnvProperties(),
+			builder.getHooks(),
+			builder.getParentClassLoader(),
+			builder.getOverrideDescriptor()
 		);
 	}
 
@@ -76,14 +76,14 @@ public abstract class AbstractConfiguration extends com.github.mjeanroy.junit.se
 	 * @param overrideDescriptor New {@link #overrideDescriptor} value.
 	 */
 	protected AbstractConfiguration(
-			String classpath,
-			String path,
-			String webapp,
-			int port,
-			Map<String, String> envProperties,
-			List<Hook> hooks,
-			ClassLoader parentClassLoader,
-			String overrideDescriptor) {
+		String classpath,
+		String path,
+		String webapp,
+		int port,
+		Map<String, String> envProperties,
+		List<Hook> hooks,
+		ClassLoader parentClassLoader,
+		String overrideDescriptor) {
 
 		super(
 			classpath,

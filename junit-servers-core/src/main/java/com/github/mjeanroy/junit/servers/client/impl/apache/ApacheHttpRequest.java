@@ -24,16 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache;
 
-import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.map;
-import static java.lang.System.nanoTime;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
+import com.github.mjeanroy.junit.servers.client.Cookies;
+import com.github.mjeanroy.junit.servers.client.HttpHeader;
+import com.github.mjeanroy.junit.servers.client.HttpMethod;
+import com.github.mjeanroy.junit.servers.client.HttpParameter;
+import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpResponse;
+import com.github.mjeanroy.junit.servers.client.HttpUrl;
+import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
+import com.github.mjeanroy.junit.servers.commons.Mapper;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -51,15 +50,15 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.github.mjeanroy.junit.servers.client.Cookies;
-import com.github.mjeanroy.junit.servers.client.HttpHeader;
-import com.github.mjeanroy.junit.servers.client.HttpMethod;
-import com.github.mjeanroy.junit.servers.client.HttpParameter;
-import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.client.HttpUrl;
-import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
-import com.github.mjeanroy.junit.servers.commons.Mapper;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
+import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
+import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.map;
+import static java.lang.System.nanoTime;
 
 /**
  * Implementation for {@link HttpRequest} that use apache http-client
@@ -117,7 +116,8 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 			HttpEntityEnclosingRequestBase rq = (HttpEntityEnclosingRequestBase) httpRequest;
 			if (!formParams.isEmpty()) {
 				handleFormParameters(rq);
-			} else if (body != null) {
+			}
+			else if (body != null) {
 				handleRequestBody(rq);
 			}
 		}

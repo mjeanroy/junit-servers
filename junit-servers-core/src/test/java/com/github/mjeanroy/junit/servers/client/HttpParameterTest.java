@@ -24,13 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.urlEncode;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import org.junit.Test;
+
+import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.urlEncode;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpParameterTest {
 

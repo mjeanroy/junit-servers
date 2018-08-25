@@ -48,9 +48,9 @@ public class ReflectionUtilsTest {
 		List<Field> fields = findAllFields(Bar.class);
 
 		assertThat(fields)
-				.isNotNull()
-				.isNotEmpty()
-				.hasSize(4);
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(4);
 	}
 
 	@Test
@@ -58,9 +58,9 @@ public class ReflectionUtilsTest {
 		List<Field> fields = findStaticFieldsAnnotatedWith(Bar.class, FooAnnotation.class);
 
 		assertThat(fields)
-				.isNotNull()
-				.isNotEmpty()
-				.hasSize(1);
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(1);
 	}
 
 	@Test
@@ -68,9 +68,9 @@ public class ReflectionUtilsTest {
 		List<Method> methods = findStaticMethodsAnnotatedWith(Bar.class, FooAnnotation.class);
 
 		assertThat(methods)
-				.isNotNull()
-				.isNotEmpty()
-				.hasSize(1);
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(1);
 	}
 
 	@Test

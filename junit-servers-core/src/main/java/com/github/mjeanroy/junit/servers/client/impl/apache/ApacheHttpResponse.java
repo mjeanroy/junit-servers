@@ -126,9 +126,9 @@ final class ApacheHttpResponse extends AbstractHttpResponse implements HttpRespo
 	@Override
 	public String toString() {
 		return ToStringBuilder.create(getClass())
-				.append("duration", getRequestDuration())
-				.append("response", response)
-				.build();
+			.append("duration", getRequestDuration())
+			.append("response", response)
+			.build();
 	}
 
 	@Override

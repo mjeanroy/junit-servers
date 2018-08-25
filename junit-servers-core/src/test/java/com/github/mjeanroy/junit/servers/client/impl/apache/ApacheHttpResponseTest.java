@@ -46,23 +46,23 @@ public class ApacheHttpResponseTest extends AbstractHttpResponseImplTest<ApacheH
 
 	@Test
 	public void it_should_implement_to_string() {
-		HttpResponse apacheHttpResponse = new ApacheHttpResponseBuilder().build();
+		final HttpResponse apacheHttpResponse = new ApacheHttpResponseBuilder().build();
 		long duration = 1000L;
-		ApacheHttpResponse response = new ApacheHttpResponse(apacheHttpResponse, duration);
+		final ApacheHttpResponse response = new ApacheHttpResponse(apacheHttpResponse, duration);
 
 		assertThat(response.toString()).isEqualTo(
-				"ApacheHttpResponse{" +
-						"duration: 1000, " +
-						"response: HTTP/1.1 200  [] [Chunked: false]" +
-				"}"
+			"ApacheHttpResponse{" +
+				"duration: 1000, " +
+				"response: HTTP/1.1 200  [] [Chunked: false]" +
+			"}"
 		);
 	}
 
 	@Test
 	public void it_should_implement_equal_and_hash_code() {
 		EqualsVerifier.forClass(ApacheHttpResponse.class)
-				.withRedefinedSuperclass()
-				.withIgnoredFields("readResponseBodyLock", "_body")
-				.verify();
+			.withRedefinedSuperclass()
+			.withIgnoredFields("readResponseBodyLock", "_body")
+			.verify();
 	}
 }

@@ -59,7 +59,7 @@ class HttpClientParameterResolverFunction implements ParameterResolverFunction {
 	}
 
 	private static HttpClientStrategy getStrategy(ParameterContext parameterContext) {
-		return parameterContext.isAnnotated(TestHttpClient.class) ? overridedStrategy(parameterContext): defaultStrategy();
+		return parameterContext.isAnnotated(TestHttpClient.class) ? overridedStrategy(parameterContext) : defaultStrategy();
 	}
 
 	private static HttpClientStrategy overridedStrategy(ParameterContext parameter) {

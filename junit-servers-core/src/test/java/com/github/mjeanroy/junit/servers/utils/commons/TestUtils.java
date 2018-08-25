@@ -48,13 +48,13 @@ public final class TestUtils {
 	 */
 	public static String url(String scheme, String host, int port, String path) {
 		return new StringBuilder()
-				.append(scheme)
-				.append("://")
-				.append(host)
-				.append(":")
-				.append(port)
-				.append(path)
-				.toString();
+			.append(scheme)
+			.append("://")
+			.append(host)
+			.append(":")
+			.append(port)
+			.append(path)
+			.toString();
 	}
 
 	/**
@@ -87,7 +87,8 @@ public final class TestUtils {
 	public static String urlEncode(String value) {
 		try {
 			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
-		} catch (UnsupportedEncodingException ex) {
+		}
+		catch (UnsupportedEncodingException ex) {
 			throw new AssertionError(ex);
 		}
 	}

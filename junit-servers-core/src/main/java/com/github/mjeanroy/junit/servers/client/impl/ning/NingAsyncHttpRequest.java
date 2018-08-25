@@ -24,8 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.ning;
 
-import static java.lang.System.nanoTime;
-
 import com.github.mjeanroy.junit.servers.client.Cookies;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpHeaders;
@@ -41,6 +39,8 @@ import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
 import com.ning.http.client.uri.Uri;
 import com.ning.http.util.UTF8UrlEncoder;
+
+import static java.lang.System.nanoTime;
 
 /**
  * Implementation for {@link HttpRequest} that use (ning) async-http-client
@@ -126,7 +126,8 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
 		if (body != null) {
 			handleRequestBody(builder);
-		} else {
+		}
+		else {
 			handleFormParameters(builder);
 		}
 	}

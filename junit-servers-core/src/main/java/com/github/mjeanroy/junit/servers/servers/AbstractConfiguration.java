@@ -104,14 +104,14 @@ public abstract class AbstractConfiguration {
 	 */
 	private final String classpath;
 
-   /**
+	/**
 	 * Additional parent (classloader) classpath.
 	 *
 	 * The path will be added to application parent classloader classpath
 	 * before server is started.
 	 */
 	private final ClassLoader parentClassLoader;
-	
+
 	/**
 	 * Map of environment properties to set before server start.
 	 *
@@ -148,14 +148,14 @@ public abstract class AbstractConfiguration {
 	@Deprecated
 	protected AbstractConfiguration(AbstractConfigurationBuilder<?, ?> builder) {
 		this(
-				builder.getClasspath(),
-				builder.getPath(),
-				builder.getWebapp(),
-				builder.getPort(),
-				builder.getEnvProperties(),
-				builder.getHooks(),
-				builder.getParentClassLoader(),
-				builder.getOverrideDescriptor()
+			builder.getClasspath(),
+			builder.getPath(),
+			builder.getWebapp(),
+			builder.getPort(),
+			builder.getEnvProperties(),
+			builder.getHooks(),
+			builder.getParentClassLoader(),
+			builder.getOverrideDescriptor()
 		);
 	}
 
@@ -186,14 +186,14 @@ public abstract class AbstractConfiguration {
 	 * @param overrideDescriptor New {@link #overrideDescriptor} value.
 	 */
 	protected AbstractConfiguration(
-			String classpath,
-			String path,
-			String webapp,
-			int port,
-			Map<String, String> envProperties,
-			List<Hook> hooks,
-			ClassLoader parentClassLoader,
-			String overrideDescriptor) {
+		String classpath,
+		String path,
+		String webapp,
+		int port,
+		Map<String, String> envProperties,
+		List<Hook> hooks,
+		ClassLoader parentClassLoader,
+		String overrideDescriptor) {
 
 		this.classpath = notNull(classpath, "classpath");
 		this.path = notNull(path, "path");
@@ -267,7 +267,7 @@ public abstract class AbstractConfiguration {
 	 * @return {@link #overrideDescriptor}
 	 */
 	public String getOverrideDescriptor() {
-		return overrideDescriptor ;
+		return overrideDescriptor;
 	}
 
 	/**
@@ -297,14 +297,14 @@ public abstract class AbstractConfiguration {
 		if (o instanceof AbstractConfiguration) {
 			AbstractConfiguration c = (AbstractConfiguration) o;
 			return c.canEqual(this) &&
-					Objects.equals(port, c.port) &&
-					Objects.equals(path, c.path) &&
-					Objects.equals(webapp, c.webapp) &&
-					Objects.equals(classpath, c.classpath) &&
-					Objects.equals(envProperties, c.envProperties) &&
-					Objects.equals(hooks, c.hooks) &&
-					Objects.equals(overrideDescriptor, c.overrideDescriptor) &&
-					Objects.equals(parentClassLoader, c.parentClassLoader);
+				Objects.equals(port, c.port) &&
+				Objects.equals(path, c.path) &&
+				Objects.equals(webapp, c.webapp) &&
+				Objects.equals(classpath, c.classpath) &&
+				Objects.equals(envProperties, c.envProperties) &&
+				Objects.equals(hooks, c.hooks) &&
+				Objects.equals(overrideDescriptor, c.overrideDescriptor) &&
+				Objects.equals(parentClassLoader, c.parentClassLoader);
 		}
 
 		return false;

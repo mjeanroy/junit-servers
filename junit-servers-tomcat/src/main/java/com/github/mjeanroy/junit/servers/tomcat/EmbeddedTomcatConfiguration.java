@@ -192,10 +192,10 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 		if (o instanceof EmbeddedTomcatConfiguration) {
 			EmbeddedTomcatConfiguration c = (EmbeddedTomcatConfiguration) o;
 			return super.equals(c)
-					&& Objects.equals(baseDir, c.baseDir)
-					&& Objects.equals(keepBaseDir, c.keepBaseDir)
-					&& Objects.equals(enableNaming, c.enableNaming)
-					&& Objects.equals(forceMetaInf, c.forceMetaInf);
+				&& Objects.equals(baseDir, c.baseDir)
+				&& Objects.equals(keepBaseDir, c.keepBaseDir)
+				&& Objects.equals(enableNaming, c.enableNaming)
+				&& Objects.equals(forceMetaInf, c.forceMetaInf);
 		}
 
 		return false;

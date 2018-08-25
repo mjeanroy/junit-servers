@@ -59,11 +59,12 @@ class TestUtils {
 			}
 
 			return EmbeddedJettyConfiguration.builder()
-					.withWebapp(absolutePath + "src/main/webapp")
-					.withClasspath(absolutePath + "target/classes")
-					.build();
+				.withWebapp(absolutePath + "src/main/webapp")
+				.withClasspath(absolutePath + "target/classes")
+				.build();
 
-		} catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new AssertionError(ex);
 		}
 	}
@@ -76,9 +77,9 @@ class TestUtils {
 	 */
 	static void ensureIndexIsOk(HttpClient client, EmbeddedServer jetty) {
 		String message = client
-				.prepareGet("/index")
-				.execute()
-				.body();
+			.prepareGet("/index")
+			.execute()
+			.body();
 
 		assertThat(message).isNotEmpty().isEqualTo("Hello World");
 

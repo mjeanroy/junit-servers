@@ -58,11 +58,12 @@ class TestUtils {
 			}
 
 			return EmbeddedJettyConfiguration.builder()
-					.withWebapp(absolutePath + "src/main/webapp")
-					.withClasspath(absolutePath + "target/classes")
-					.build();
+				.withWebapp(absolutePath + "src/main/webapp")
+				.withClasspath(absolutePath + "target/classes")
+				.build();
 
-		} catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new AssertionError(ex);
 		}
 	}
@@ -75,16 +76,16 @@ class TestUtils {
 	 */
 	static void ensureIndexIsOk(HttpClient client, EmbeddedServer jetty) {
 		HttpResponse rsp = client
-				.prepareGet("/index")
-				.addCookie(new Cookie.Builder("foo", "bar")
-						.maxAge(0L)
-						.build())
-				.execute();
+			.prepareGet("/index")
+			.addCookie(new Cookie.Builder("foo", "bar")
+				.maxAge(0L)
+				.build())
+			.execute();
 
 		String message = rsp.body();
 		assertThat(message)
-				.isNotEmpty()
-				.isEqualTo("Hello bar");
+			.isNotEmpty()
+			.isEqualTo("Hello bar");
 
 		// Try to get servlet context
 		ServletContext servletContext = jetty.getServletContext();

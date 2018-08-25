@@ -108,9 +108,11 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 		try {
 			readBodyIfNotAlreadyComputed();
 			return _body;
-		} catch (IOException ex) {
+		}
+		catch (IOException ex) {
 			throw new HttpClientException(ex);
-		} finally {
+		}
+		finally {
 			readResponseBodyLock.unlock();
 		}
 	}

@@ -73,11 +73,11 @@ public class HttpClientParameterResolverFunctionTest {
 		return new FakeParameterContext(parameter);
 	}
 
-	@SuppressWarnings({"unused", "WeakerAccess"})
+	@SuppressWarnings({ "unused", "WeakerAccess" })
 	public void method_without_annotation(HttpClient client) {
 	}
 
-	@SuppressWarnings({"unused", "WeakerAccess"})
+	@SuppressWarnings({ "unused", "WeakerAccess" })
 	public void method_with_annotation(@TestHttpClient(strategy = NING_ASYNC_HTTP_CLIENT) HttpClient client) {
 	}
 }

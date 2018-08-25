@@ -265,23 +265,23 @@ public class JunitServerExtensionTest {
 		return new FakeParameterContext(parameter);
 	}
 
-	@SuppressWarnings({"unused", "WeakerAccess"})
+	@SuppressWarnings({ "unused", "WeakerAccess" })
 	public void method_server(EmbeddedServer<?> server) {
 	}
 
-	@SuppressWarnings({"unused", "WeakerAccess"})
+	@SuppressWarnings({ "unused", "WeakerAccess" })
 	public void method_configuration(AbstractConfiguration configuration) {
 	}
 
-	@SuppressWarnings({"unused", "WeakerAccess"})
+	@SuppressWarnings({ "unused", "WeakerAccess" })
 	public void method_with_fake_embedded_configuration(FakeEmbeddedServerConfiguration configuration) {
 	}
 
-	@SuppressWarnings({"unused", "WeakerAccess"})
+	@SuppressWarnings({ "unused", "WeakerAccess" })
 	public void method_http_client(HttpClient client) {
 	}
 
-	@SuppressWarnings({"unused", "WeakerAccess"})
+	@SuppressWarnings({ "unused", "WeakerAccess" })
 	public void method_http_client_custom(@TestHttpClient(strategy = NING_ASYNC_HTTP_CLIENT) HttpClient client) {
 	}
 }

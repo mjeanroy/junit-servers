@@ -28,7 +28,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.eclipse.jetty.util.resource.Resource;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -40,7 +39,7 @@ public class EmbeddedJettyConfigurationTest {
 
 	@Test
 	public void it_should_build_default_configuration() {
-		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
+		final EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
 
 		assertThat(result.getPort()).isEqualTo(0);
 		assertThat(result.getPath()).isEqualTo("/");
@@ -59,17 +58,17 @@ public class EmbeddedJettyConfigurationTest {
 		final String containerJarPattern = ".*\\.jar";
 		final String webInfJarPattern = ".*";
 
-		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.builder()
-				.withPort(port)
-				.withClasspath(classpath)
-				.withWebapp(webapp)
-				.withPath(path)
-				.withStopTimeout(stopTimeout)
-				.disableStopAtShutdown()
-				.withBaseResource(resource)
-				.withContainerJarPattern(containerJarPattern)
-				.withWebInfJarPattern(webInfJarPattern)
-				.build();
+		final EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.builder()
+			.withPort(port)
+			.withClasspath(classpath)
+			.withWebapp(webapp)
+			.withPath(path)
+			.withStopTimeout(stopTimeout)
+			.disableStopAtShutdown()
+			.withBaseResource(resource)
+			.withContainerJarPattern(containerJarPattern)
+			.withWebInfJarPattern(webInfJarPattern)
+			.build();
 
 		assertThat(result.getPort()).isEqualTo(port);
 		assertThat(result.getPath()).isEqualTo(path);
@@ -84,8 +83,8 @@ public class EmbeddedJettyConfigurationTest {
 
 	@Test
 	public void it_should_implement_equals_hashCode() {
-		ClassLoader red = new URLClassLoader(new URL[0]);
-		ClassLoader black = new URLClassLoader(new URL[0]);
+		final ClassLoader red = new URLClassLoader(new URL[0]);
+		final ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(EmbeddedJettyConfiguration.class)
 			.suppress(Warning.STRICT_INHERITANCE)
 			.withRedefinedSuperclass()
@@ -95,7 +94,7 @@ public class EmbeddedJettyConfigurationTest {
 
 	@Test
 	public void it_should_implement_to_string() {
-		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
+		final EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
 		assertThat(result.toString()).isEqualTo(
 			"EmbeddedJettyConfiguration{" +
 				"port: 0, " +

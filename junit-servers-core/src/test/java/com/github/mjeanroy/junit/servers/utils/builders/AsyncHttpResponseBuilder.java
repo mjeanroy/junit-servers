@@ -70,7 +70,8 @@ public class AsyncHttpResponseBuilder extends AbstractHttpResponseBuilder<Respon
 			ByteBuf buf = Unpooled.copiedBuffer(bodyBytes);
 			HttpResponseBodyPart part = new EagerResponseBodyPart(buf, true);
 			bodyParts = singletonList(part);
-		} else {
+		}
+		else {
 			bodyParts = emptyList();
 		}
 

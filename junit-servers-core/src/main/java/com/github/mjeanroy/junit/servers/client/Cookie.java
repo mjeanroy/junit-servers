@@ -24,9 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import java.util.Objects;
-
 import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+
+import java.util.Objects;
 
 /**
  * Default implementation for cookie object.
@@ -291,13 +291,13 @@ public class Cookie {
 		if (o instanceof Cookie) {
 			Cookie c = (Cookie) o;
 			return Objects.equals(name, c.name) &&
-					Objects.equals(value, c.value) &&
-					Objects.equals(domain, c.domain) &&
-					Objects.equals(path, c.path) &&
-					Objects.equals(expires, c.expires) &&
-					Objects.equals(maxAge, c.maxAge) &&
-					secure == c.secure &&
-					httpOnly == c.httpOnly;
+				Objects.equals(value, c.value) &&
+				Objects.equals(domain, c.domain) &&
+				Objects.equals(path, c.path) &&
+				Objects.equals(expires, c.expires) &&
+				Objects.equals(maxAge, c.maxAge) &&
+				secure == c.secure &&
+				httpOnly == c.httpOnly;
 		}
 
 		return false;
@@ -311,15 +311,15 @@ public class Cookie {
 	@Override
 	public String toString() {
 		return ToStringBuilder.create(getClass())
-				.append("name", name)
-				.append("value", value)
-				.append("domain", domain)
-				.append("path", path)
-				.append("expires", expires)
-				.append("maxAge", maxAge)
-				.append("secure", secure)
-				.append("httpOnly", httpOnly)
-				.build();
+			.append("name", name)
+			.append("value", value)
+			.append("domain", domain)
+			.append("path", path)
+			.append("expires", expires)
+			.append("maxAge", maxAge)
+			.append("secure", secure)
+			.append("httpOnly", httpOnly)
+			.build();
 	}
 
 	/**

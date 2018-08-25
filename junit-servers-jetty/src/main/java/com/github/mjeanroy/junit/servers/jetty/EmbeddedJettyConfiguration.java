@@ -178,12 +178,12 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 		if (o instanceof EmbeddedJettyConfiguration) {
 			EmbeddedJettyConfiguration c = (EmbeddedJettyConfiguration) o;
 			return c.canEqual(this)
-					&& super.equals(c)
-					&& Objects.equals(stopTimeout, c.stopTimeout)
-					&& Objects.equals(stopAtShutdown, c.stopAtShutdown)
-					&& Objects.equals(baseResource, c.baseResource)
-					&& Objects.equals(containerJarPattern, c.containerJarPattern)
-					&& Objects.equals(webInfJarPattern, c.webInfJarPattern);
+				&& super.equals(c)
+				&& Objects.equals(stopTimeout, c.stopTimeout)
+				&& Objects.equals(stopAtShutdown, c.stopAtShutdown)
+				&& Objects.equals(baseResource, c.baseResource)
+				&& Objects.equals(containerJarPattern, c.containerJarPattern)
+				&& Objects.equals(webInfJarPattern, c.webInfJarPattern);
 		}
 
 		return false;

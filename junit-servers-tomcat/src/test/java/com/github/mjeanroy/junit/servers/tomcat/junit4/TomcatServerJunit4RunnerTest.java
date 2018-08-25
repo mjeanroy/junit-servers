@@ -46,14 +46,14 @@ public class TomcatServerJunit4RunnerTest {
 
 		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
 		assertThat(server)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcat.class);
+			.isNotNull()
+			.isInstanceOf(EmbeddedTomcat.class);
 
 		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 		assertThat(conf)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcatConfiguration.class)
-				.isNotSameAs(configuration);
+			.isNotNull()
+			.isInstanceOf(EmbeddedTomcatConfiguration.class)
+			.isNotSameAs(configuration);
 	}
 
 	@Test
@@ -62,14 +62,14 @@ public class TomcatServerJunit4RunnerTest {
 
 		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
 		assertThat(server)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcat.class);
+			.isNotNull()
+			.isInstanceOf(EmbeddedTomcat.class);
 
 		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 		assertThat(conf)
-				.isNotNull()
-				.isInstanceOf(EmbeddedTomcatConfiguration.class)
-				.isSameAs(configuration);
+			.isNotNull()
+			.isInstanceOf(EmbeddedTomcatConfiguration.class)
+			.isSameAs(configuration);
 	}
 
 	protected TomcatServerJunit4Runner createRunner(Class<?> klass) throws Exception {

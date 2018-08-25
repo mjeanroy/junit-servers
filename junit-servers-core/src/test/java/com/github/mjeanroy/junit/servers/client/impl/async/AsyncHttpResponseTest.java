@@ -52,28 +52,28 @@ public class AsyncHttpResponseTest extends AbstractHttpResponseImplTest<AsyncHtt
 
 	@Test
 	public void it_should_implement_to_string() {
-		Response delegate = new AsyncHttpResponseBuilder().build();
-		long duration = 1000L;
-		AsyncHttpResponse response = new AsyncHttpResponse(delegate, duration);
+		final Response delegate = new AsyncHttpResponseBuilder().build();
+		final long duration = 1000L;
+		final AsyncHttpResponse response = new AsyncHttpResponse(delegate, duration);
 
 		assertThat(response.toString()).isEqualTo(
-				"AsyncHttpResponse{" +
-						"duration: 1000, " +
-						"response: NettyResponse {\n" +
-								"	statusCode=200\n" +
-								"	headers=\n" +
-								"	body=\n" +
-								"\n" +
-						"}" +
-				"}"
+			"AsyncHttpResponse{" +
+				"duration: 1000, " +
+				"response: NettyResponse {\n" +
+					"	statusCode=200\n" +
+					"	headers=\n" +
+					"	body=\n" +
+					"\n" +
+				"}" +
+			"}"
 		);
 	}
 
 	@Test
 	public void it_should_implement_equal_and_hash_code() {
 		EqualsVerifier.forClass(AsyncHttpResponse.class)
-				.withRedefinedSuperclass()
-				.withIgnoredFields("readResponseBodyLock", "_body")
-				.verify();
+			.withRedefinedSuperclass()
+			.withIgnoredFields("readResponseBodyLock", "_body")
+			.verify();
 	}
 }

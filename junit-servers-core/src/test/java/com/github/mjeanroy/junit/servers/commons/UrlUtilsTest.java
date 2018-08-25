@@ -24,15 +24,14 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import com.github.mjeanroy.junit.servers.exceptions.UrlException;
+import org.junit.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.junit.Test;
-
-import com.github.mjeanroy.junit.servers.exceptions.UrlException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public class UrlUtilsTest {
 
@@ -75,7 +74,8 @@ public class UrlUtilsTest {
 		try {
 			UrlUtils.createUri(scheme, host, port, path);
 			failBecauseExceptionWasNotThrown(UrlException.class);
-		} catch (UrlException ex) {
+		}
+		catch (UrlException ex) {
 			assertThat(ex.getCause()).isNotNull();
 			assertThat(ex.getCause()).isExactlyInstanceOf(URISyntaxException.class);
 

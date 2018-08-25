@@ -102,12 +102,12 @@ public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpRespons
 
 		// THEN
 		assertThat(headers)
-				.hasSize(2)
-				.extracting("name", "values")
-				.contains(
-						tuple(h1.getName(), h1.getValues()),
-						tuple(h2.getName(), h2.getValues())
-				);
+			.hasSize(2)
+			.extracting("name", "values")
+			.contains(
+				tuple(h1.getName(), h1.getValues()),
+				tuple(h2.getName(), h2.getValues())
+			);
 	}
 
 	@Test
@@ -190,11 +190,11 @@ public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpRespons
 
 		// THEN
 		assertThat(cookies).hasSize(2)
-				.extracting("name", "value")
-				.contains(
-						tuple("hopsi", "5b16593d9933d2325ad89633"),
-						tuple("ABT_force_signin_anonymous", "ON")
-				);
+			.extracting("name", "value")
+			.contains(
+				tuple("hopsi", "5b16593d9933d2325ad89633"),
+				tuple("ABT_force_signin_anonymous", "ON")
+			);
 	}
 
 	@Test
@@ -475,8 +475,8 @@ public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpRespons
 	 */
 	private static HttpHeader givenCookieHeader() {
 		return HttpHeader.header("Set-Cookie", asList(
-				"hopsi=5b16593d9933d2325ad89633; Path=/",
-				"ABT_force_signin_anonymous=ON; Max-Age=15552000; Expires=Thu, 10-Jan-2019 20:55:23 GMT; Path=/"
+			"hopsi=5b16593d9933d2325ad89633; Path=/",
+			"ABT_force_signin_anonymous=ON; Max-Age=15552000; Expires=Thu, 10-Jan-2019 20:55:23 GMT; Path=/"
 		));
 	}
 

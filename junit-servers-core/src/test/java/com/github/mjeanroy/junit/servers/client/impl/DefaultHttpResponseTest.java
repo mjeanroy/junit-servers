@@ -39,36 +39,36 @@ public class DefaultHttpResponseTest {
 
 	@Test
 	public void it_should_create_http_response() {
-		long duration = 1000L;
-		int status = 200;
-		String body = "The response body";
+		final long duration = 1000L;
+		final int status = 200;
+		final String body = "The response body";
 
-		HttpHeader header = header("Content-Type", "text/plain");
-		Set<HttpHeader> headers = singleton(header);
+		final HttpHeader header = header("Content-Type", "text/plain");
+		final Set<HttpHeader> headers = singleton(header);
 
-		DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, body, headers);
+		final DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, body, headers);
 
 		assertThat(response).isNotNull();
 		assertThat(response.getRequestDuration()).isEqualTo(duration);
 		assertThat(response.status()).isEqualTo(status);
 		assertThat(response.body()).isEqualTo(body);
 		assertThat(response.getHeaders())
-				.hasSize(1)
-				.extracting("name", "values")
-				.containsOnly(
-						tuple(header.getName(), header.getValues())
-				);
+			.hasSize(1)
+			.extracting("name", "values")
+			.containsOnly(
+				tuple(header.getName(), header.getValues())
+			);
 	}
 
 	@Test
 	public void it_should_get_header_case_insensitively() {
-		long duration = 1000L;
-		int status = 200;
-		String body = "The response body";
-		HttpHeader header = header("Content-Type", "text/plain");
-		Set<HttpHeader> headers = singleton(header);
+		final long duration = 1000L;
+		final int status = 200;
+		final String body = "The response body";
+		final HttpHeader header = header("Content-Type", "text/plain");
+		final Set<HttpHeader> headers = singleton(header);
 
-		DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, body, headers);
+		final DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, body, headers);
 
 		assertThat(response.getHeader("Content-Type")).isEqualTo(header);
 		assertThat(response.getHeader("content-type")).isEqualTo(header);
@@ -85,16 +85,16 @@ public class DefaultHttpResponseTest {
 
 	@Test
 	public void it_should_implement_to_string() {
-		DefaultHttpResponse response = DefaultHttpResponse.of(1000L, 200, "The response body", singleton(header("Content-Type", "text/plain")));
+		final DefaultHttpResponse response = DefaultHttpResponse.of(1000L, 200, "The response body", singleton(header("Content-Type", "text/plain")));
 		assertThat(response.toString()).isEqualTo(
-				"DefaultHttpResponse{" +
-						"duration: 1000, " +
-						"status: 200, " +
-						"body: \"The response body\", " +
-						"headers: {" +
-								"content-type: HttpHeader{name: \"Content-Type\", values: [\"text/plain\"]}" +
-						"}" +
-				"}"
+			"DefaultHttpResponse{" +
+				"duration: 1000, " +
+				"status: 200, " +
+				"body: \"The response body\", " +
+				"headers: {" +
+					"content-type: HttpHeader{name: \"Content-Type\", values: [\"text/plain\"]}" +
+				"}" +
+			"}"
 		);
 	}
 }

@@ -34,7 +34,7 @@ public class AbstractTest {
 
 	@ClassRule
 	public static TomcatServerJunit4Rule serverRule = new TomcatServerJunit4Rule(
-			new EmbeddedTomcat(createTomcatConfiguration())
+		new EmbeddedTomcat(createTomcatConfiguration())
 	);
 
 }

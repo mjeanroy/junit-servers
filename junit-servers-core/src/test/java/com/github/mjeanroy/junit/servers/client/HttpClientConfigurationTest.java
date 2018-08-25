@@ -40,7 +40,7 @@ public class HttpClientConfigurationTest {
 
 	@Test
 	public void it_should_create_default_configuration() {
-		HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
+		final HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
 		assertThat(configuration).isNotNull();
 		assertThat(configuration.isFollowRedirect()).isTrue();
 		assertThat(configuration.getDefaultCookies()).isNotNull().isEmpty();
@@ -49,10 +49,9 @@ public class HttpClientConfigurationTest {
 
 	@Test
 	public void it_should_create_custom_configuration() {
-		String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
-		String jsessionId = UUID.randomUUID().toString();
-
-		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		final String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
+		final String jsessionId = UUID.randomUUID().toString();
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
 			.addDefaultCookie(COOKIE_NAME, jsessionId)
 			.addDefaultHeader(USER_AGENT_NAME, ua)
@@ -76,7 +75,7 @@ public class HttpClientConfigurationTest {
 
 	@Test
 	public void it_should_create_custom_configuration_with_follow_redirect() {
-		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.enableFollowRedirect()
 			.build();
 
@@ -86,7 +85,7 @@ public class HttpClientConfigurationTest {
 
 	@Test
 	public void it_should_create_custom_configuration_without_follow_redirect() {
-		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
 			.build();
 
@@ -96,9 +95,8 @@ public class HttpClientConfigurationTest {
 
 	@Test
 	public void it_should_create_custom_configuration_with_cookie_name_value() {
-		String jsessionId = UUID.randomUUID().toString();
-
-		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		final String jsessionId = UUID.randomUUID().toString();
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.addDefaultCookie(COOKIE_NAME, jsessionId)
 			.build();
 
@@ -110,10 +108,9 @@ public class HttpClientConfigurationTest {
 
 	@Test
 	public void it_should_create_custom_configuration_with_cookie() {
-		String jsessionId = UUID.randomUUID().toString();
-		Cookie cookie = Cookies.cookie(COOKIE_NAME, jsessionId);
-
-		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		final String jsessionId = UUID.randomUUID().toString();
+		final Cookie cookie = Cookies.cookie(COOKIE_NAME, jsessionId);
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.addDefaultCookie(cookie)
 			.build();
 
@@ -125,9 +122,8 @@ public class HttpClientConfigurationTest {
 
 	@Test
 	public void it_should_create_custom_configuration_with_header_name_value() {
-		String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
-
-		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		final String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.addDefaultHeader(USER_AGENT_NAME, ua)
 			.build();
 
@@ -141,10 +137,9 @@ public class HttpClientConfigurationTest {
 
 	@Test
 	public void it_should_create_custom_configuration_with_header() {
-		String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
-		HttpHeader header = HttpHeader.header(USER_AGENT_NAME, ua);
-
-		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		final String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
+		final HttpHeader header = HttpHeader.header(USER_AGENT_NAME, ua);
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.addDefaultHeader(header)
 			.build();
 
@@ -165,10 +160,9 @@ public class HttpClientConfigurationTest {
 
 	@Test
 	public void it_should_implement_to_string() {
-		String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
-		String jsessionId = UUID.randomUUID().toString();
-
-		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		final String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
+		final String jsessionId = UUID.randomUUID().toString();
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
 			.addDefaultCookie(COOKIE_NAME, jsessionId)
 			.addDefaultHeader(USER_AGENT_NAME, ua)
@@ -183,6 +177,7 @@ public class HttpClientConfigurationTest {
 				"defaultCookies: [" +
 					"Cookie{name: \"JSESSIONID\", value: \"" + jsessionId + "\", domain: null, path: null, expires: null, maxAge: null, secure: false, httpOnly: false}" +
 				"]" +
-			"}");
+			"}"
+		);
 	}
 }

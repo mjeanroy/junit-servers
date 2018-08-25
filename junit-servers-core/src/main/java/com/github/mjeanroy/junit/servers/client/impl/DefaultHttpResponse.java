@@ -106,9 +106,9 @@ public final class DefaultHttpResponse extends AbstractHttpResponse implements H
 		if (o instanceof DefaultHttpResponse) {
 			DefaultHttpResponse r = (DefaultHttpResponse) o;
 			return super.equals(o)
-					&& Objects.equals(status, r.status)
-					&& Objects.equals(body, r.body)
-					&& Objects.equals(headers, r.headers);
+				&& Objects.equals(status, r.status)
+				&& Objects.equals(body, r.body)
+				&& Objects.equals(headers, r.headers);
 		}
 
 		return false;
@@ -122,11 +122,11 @@ public final class DefaultHttpResponse extends AbstractHttpResponse implements H
 	@Override
 	public String toString() {
 		return ToStringBuilder.create(getClass())
-				.append("duration", getRequestDuration())
-				.append("status", status)
-				.append("body", body)
-				.append("headers", headers)
-				.build();
+			.append("duration", getRequestDuration())
+			.append("status", status)
+			.append("body", body)
+			.append("headers", headers)
+			.build();
 	}
 
 	@Override

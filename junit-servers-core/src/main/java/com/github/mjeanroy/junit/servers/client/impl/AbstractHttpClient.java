@@ -24,11 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.impl;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
-import static com.github.mjeanroy.junit.servers.commons.UrlUtils.concatenatePath;
-import static com.github.mjeanroy.junit.servers.commons.UrlUtils.startsWithHttpScheme;
-
 import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
@@ -37,6 +32,11 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
+import static com.github.mjeanroy.junit.servers.commons.UrlUtils.concatenatePath;
+import static com.github.mjeanroy.junit.servers.commons.UrlUtils.startsWithHttpScheme;
 
 /**
  * Abstract skeleton of {@link HttpClient} interface.
@@ -116,7 +116,8 @@ public abstract class AbstractHttpClient implements HttpClient {
 
 		if (startsWithHttpScheme(endpoint)) {
 			requestEndpoint = HttpUrl.parse(endpoint);
-		} else {
+		}
+		else {
 			String serverPath = server.getPath();
 			requestEndpoint = new HttpUrl.Builder()
 				.withScheme(server.getScheme())

@@ -46,15 +46,15 @@ public class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpRespo
 
 	@Test
 	public void it_should_implement_to_string() {
-		Response delegate = new OkHttpResponseBuilder().build();
-		long duration = 1000L;
-		OkHttpResponse response = new OkHttpResponse(delegate, duration);
+		final Response delegate = new OkHttpResponseBuilder().build();
+		final long duration = 1000L;
+		final OkHttpResponse response = new OkHttpResponse(delegate, duration);
 
 		assertThat(response.toString()).isEqualTo(
-				"OkHttpResponse{" +
-						"duration: 1000, " +
-						"response: Response{protocol=http/1.0, code=200, message=OK, url=http://localhost:8080/}" +
-				"}"
+			"OkHttpResponse{" +
+				"duration: 1000, " +
+				"response: Response{protocol=http/1.0, code=200, message=OK, url=http://localhost:8080/}" +
+			"}"
 		);
 	}
 
@@ -64,9 +64,9 @@ public class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpRespo
 		Response black = new OkHttpResponseBuilder().withStatus(400).build();
 
 		EqualsVerifier.forClass(OkHttpResponse.class)
-				.withRedefinedSuperclass()
-				.withIgnoredFields("readResponseBodyLock", "_body")
-				.withPrefabValues(Response.class, red, black)
-				.verify();
+			.withRedefinedSuperclass()
+			.withIgnoredFields("readResponseBodyLock", "_body")
+			.withPrefabValues(Response.class, red, black)
+			.verify();
 	}
 }

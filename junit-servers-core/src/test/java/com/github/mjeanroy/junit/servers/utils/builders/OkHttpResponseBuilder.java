@@ -44,9 +44,9 @@ public class OkHttpResponseBuilder extends AbstractHttpResponseBuilder<Response,
 		Protocol protocol = Protocol.HTTP_1_0;
 
 		Response.Builder builder = new Response.Builder()
-				.request(request)
-				.protocol(protocol)
-				.code(status);
+			.request(request)
+			.protocol(protocol)
+			.code(status);
 
 		if (body != null) {
 			MediaType mediaType = MediaType.parse("plain/text");

@@ -55,8 +55,8 @@ public class HttpUrlTest {
 	public void it_should_fail_with_unknown_scheme() {
 		HttpUrl.Builder builder = new HttpUrl.Builder();
 		assertThatThrownBy(withScheme(builder, "ftp"))
-				.isExactlyInstanceOf(IllegalArgumentException.class)
-				.hasMessage("Unknown scheme: ftp");
+			.isExactlyInstanceOf(IllegalArgumentException.class)
+			.hasMessage("Unknown scheme: ftp");
 	}
 
 	@Test
@@ -71,8 +71,8 @@ public class HttpUrlTest {
 	@Test
 	public void it_should_create_url_and_ensure_absolute_path() {
 		HttpUrl url = new HttpUrl.Builder()
-				.withPath("foo")
-				.build();
+			.withPath("foo")
+			.build();
 
 		assertUrl(url, "http", "localhost", 80, "/foo");
 	}

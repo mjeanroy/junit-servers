@@ -58,7 +58,7 @@ public class CookieTest {
 		final String value = "bar";
 
 		@SuppressWarnings("deprecation")
-		Cookie cookie = Cookie.cookie(name, value);
+		final Cookie cookie = Cookie.cookie(name, value);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -83,7 +83,7 @@ public class CookieTest {
 		final boolean httpOnly = false;
 
 		@SuppressWarnings("deprecation")
-		Cookie cookie = Cookie.cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
+		final Cookie cookie = Cookie.cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -106,7 +106,7 @@ public class CookieTest {
 		final String path = "path";
 
 		@SuppressWarnings("deprecation")
-		Cookie cookie = Cookie.secureCookie(name, value, domain, path, expires, maxAge);
+		final Cookie cookie = Cookie.secureCookie(name, value, domain, path, expires, maxAge);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -127,7 +127,7 @@ public class CookieTest {
 		final String path = "path";
 
 		@SuppressWarnings("deprecation")
-		Cookie cookie = Cookie.sessionCookie(name, value, domain, path);
+		final Cookie cookie = Cookie.sessionCookie(name, value, domain, path);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -143,7 +143,9 @@ public class CookieTest {
 	@Test
 	public void it_should_create_cookie_with_name_and_value() {
 		@SuppressWarnings("deprecation")
-		Cookie cookie = Cookie.read("name=value");
+		final Cookie cookie = Cookie.read(
+			"name=value"
+		);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -159,7 +161,9 @@ public class CookieTest {
 	@Test
 	public void it_should_create_cookie_with_name_value_domain_path_and_flags() {
 		@SuppressWarnings("deprecation")
-		Cookie cookie = Cookie.read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
+		final Cookie cookie = Cookie.read(
+			"name=value; Domain=foo.com; Path=/; Secure; HttpOnly"
+		);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -175,7 +179,9 @@ public class CookieTest {
 	@Test
 	public void it_should_create_cookie_with_name_value_domain_path_expires_max_date_and_flags() {
 		@SuppressWarnings("deprecation")
-		Cookie cookie = Cookie.read("name=value; Domain=foo.com; Expires=Wed, 13-Jan-2021 22:23:01 GMT; max-age=3600; Path=/; Secure; HttpOnly");
+		final Cookie cookie = Cookie.read(
+			"name=value; Domain=foo.com; Expires=Wed, 13-Jan-2021 22:23:01 GMT; max-age=3600; Path=/; Secure; HttpOnly"
+		);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -205,27 +211,29 @@ public class CookieTest {
 	@Test
 	public void it_should_implement_to_string() {
 		@SuppressWarnings("deprecation")
-		Cookie cookie = Cookie.read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
+		final Cookie cookie = Cookie.read(
+			"name=value; Domain=foo.com; Path=/; Secure; HttpOnly"
+		);
 
 		assertThat(cookie.toString()).isEqualTo(
 			"Cookie{" +
-					"name: \"name\", " +
-					"value: \"value\", " +
-					"domain: \"foo.com\", " +
-					"path: \"/\", " +
-					"expires: null, " +
-					"maxAge: 0, " +
-					"secure: true, " +
-					"httpOnly: true" +
+				"name: \"name\", " +
+				"value: \"value\", " +
+				"domain: \"foo.com\", " +
+				"path: \"/\", " +
+				"expires: null, " +
+				"maxAge: 0, " +
+				"secure: true, " +
+				"httpOnly: true" +
 			"}"
 		);
 	}
 
 	@Test
 	public void it_should_create_simple_cookie_with_builder() {
-		String name = "name";
-		String value = "value";
-		Cookie cookie = new Cookie.Builder(name, value).build();
+		final String name = "name";
+		final String value = "value";
+		final Cookie cookie = new Cookie.Builder(name, value).build();
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
 		assertThat(cookie.getValue()).isEqualTo(value);
@@ -233,15 +241,15 @@ public class CookieTest {
 
 	@Test
 	public void it_should_create_complex_cookie_with_builder() {
-		String name = "name";
-		String value = "value";
-		String domain = "domain";
-		String path = "path";
-		boolean secure = true;
-		boolean httpOnly = true;
-		long maxAge = 3600;
+		final String name = "name";
+		final String value = "value";
+		final String domain = "domain";
+		final String path = "path";
+		final boolean secure = true;
+		final boolean httpOnly = true;
+		final long maxAge = 3600;
 
-		Cookie cookie = new Cookie.Builder(name, value)
+		final Cookie cookie = new Cookie.Builder(name, value)
 			.domain(domain)
 			.path(path)
 			.secure(secure)
@@ -262,19 +270,19 @@ public class CookieTest {
 
 	@Test
 	public void it_should_create_complex_cookie_with_expires_date_with_builder() {
-		String name = "name";
-		String value = "value";
-		String domain = "domain";
-		String path = "path";
-		boolean secure = true;
-		boolean httpOnly = true;
-		long maxAge = 3600;
+		final String name = "name";
+		final String value = "value";
+		final String domain = "domain";
+		final String path = "path";
+		final boolean secure = true;
+		final boolean httpOnly = true;
+		final long maxAge = 3600;
 
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) + 1);
 		long expires = cal.getTimeInMillis();
 
-		Cookie cookie = new Cookie.Builder(name, value)
+		final Cookie cookie = new Cookie.Builder(name, value)
 			.domain(domain)
 			.path(path)
 			.secure(secure)

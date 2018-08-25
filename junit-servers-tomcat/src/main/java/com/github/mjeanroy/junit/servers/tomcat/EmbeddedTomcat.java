@@ -138,11 +138,11 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 					String absolutePath = file.getAbsolutePath();
 					StandardRoot root = new StandardRoot(context);
 					root.createWebResourceSet(
-							WebResourceRoot.ResourceSetType.PRE,
-							"/WEB-INF/classes",
-							absolutePath,
-							null,
-							path
+						WebResourceRoot.ResourceSetType.PRE,
+						"/WEB-INF/classes",
+						absolutePath,
+						null,
+						path
 					);
 
 					context.setResources(root);
@@ -166,7 +166,8 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 
 			if (parentClassLoader != null) {
 				tomcatParentClassLoader = new CompositeClassLoader(parentClassLoader, threadCl);
-			} else {
+			}
+			else {
 				tomcatParentClassLoader = threadCl;
 			}
 

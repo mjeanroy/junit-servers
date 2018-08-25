@@ -101,7 +101,8 @@ public final class Servers {
 		for (EmbeddedServerProvider provider : serviceProviders) {
 			if (provider.getClass().getName().startsWith("com.github.mjeanroy.junit.servers")) {
 				coreServerProviders.add(provider);
-			} else {
+			}
+			else {
 				customServerProviders.add(provider);
 			}
 		}
@@ -137,7 +138,7 @@ public final class Servers {
 	 * @param <T> Type of configuration.
 	 * @return Configuration.
 	 */
-	public static  <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
+	public static <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
 		// Look for static methods first
 		List<Method> methods = findStaticMethodsAnnotatedWith(klass, TestServerConfiguration.class);
 		if (!methods.isEmpty()) {

@@ -68,7 +68,7 @@ public class ToStringBuilderTest {
 					"f6: [], " +
 					"f7: val, " +
 					"f8: null" +
-				"}");
+					"}");
 	}
 
 	private static class Value {

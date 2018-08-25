@@ -24,11 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
+import com.github.mjeanroy.junit.servers.exceptions.Utf8EncodingException;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-
-import com.github.mjeanroy.junit.servers.exceptions.Utf8EncodingException;
 
 /**
  * Static IO utilities.
@@ -55,7 +55,8 @@ public final class EncoderUtils {
 	public static String urlEncode(String value) {
 		try {
 			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
-		} catch (UnsupportedEncodingException ex) {
+		}
+		catch (UnsupportedEncodingException ex) {
 			throw new Utf8EncodingException(ex);
 		}
 	}

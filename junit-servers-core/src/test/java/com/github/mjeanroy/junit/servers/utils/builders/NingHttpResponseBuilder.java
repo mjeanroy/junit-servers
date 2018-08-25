@@ -67,7 +67,8 @@ public class NingHttpResponseBuilder extends AbstractHttpResponseBuilder<Respons
 			byte[] bodyBytes = body.getBytes(defaultCharset());
 			HttpResponseBodyPart part = new ResponseBodyPart(bodyBytes, true);
 			bodyParts = singletonList(part);
-		} else {
+		}
+		else {
 			bodyParts = emptyList();
 		}
 
@@ -82,7 +83,8 @@ public class NingHttpResponseBuilder extends AbstractHttpResponseBuilder<Respons
 			when(conn.getResponseCode()).thenReturn(status);
 
 			return conn;
-		} catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new AssertionError(ex);
 		}
 	}

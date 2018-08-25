@@ -68,10 +68,10 @@ public class AbstractEmbeddedServerTest {
 		final int port = 8080;
 		final String webapp = "/foo/bar";
 		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder()
-				.withPath(path)
-				.withPort(port)
-				.withWebapp(webapp)
-				.build();
+			.withPath(path)
+			.withPort(port)
+			.withWebapp(webapp)
+			.build();
 
 		server = new FakeEmbeddedServer(configuration);
 
@@ -244,9 +244,9 @@ public class AbstractEmbeddedServerTest {
 		String newValue2 = "bar1";
 
 		FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder()
-				.withProperty(name1, newValue1)
-				.withProperty(name2, newValue2)
-				.build();
+			.withProperty(name1, newValue1)
+			.withProperty(name2, newValue2)
+			.build();
 
 		server = new FakeEmbeddedServer(configuration);
 
@@ -319,8 +319,8 @@ public class AbstractEmbeddedServerTest {
 	@Test
 	public void it_should_get_custom_path() {
 		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder()
-				.withPath("/foo")
-				.build());
+			.withPath("/foo")
+			.build());
 
 		assertThat(server.getPath()).isEqualTo("/foo");
 	}
@@ -333,8 +333,8 @@ public class AbstractEmbeddedServerTest {
 	@Test
 	public void it_should_get_url_with_custom_path() {
 		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder()
-				.withPath("/foo")
-				.build());
+			.withPath("/foo")
+			.build());
 
 		assertThat(server.getUrl()).isEqualTo(localUrl(server.getPort(), "/foo"));
 	}
@@ -342,8 +342,8 @@ public class AbstractEmbeddedServerTest {
 	@Test
 	public void it_should_get_url_with_custom_path_pre_pending_slash() {
 		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder()
-				.withPath("foo")
-				.build());
+			.withPath("foo")
+			.build());
 
 		assertThat(server.getUrl()).isEqualTo(localUrl(0, "/foo"));
 	}

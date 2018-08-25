@@ -180,7 +180,8 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		try {
 			EmbeddedServerTestLifeCycleAdapter serverAdapter = findEmbeddedServerAdapterInStore(context);
 			serverAdapter.afterAll();
-		} finally {
+		}
+		finally {
 			removeEmbeddedServerAdapterFromStore(context);
 		}
 	}
@@ -203,7 +204,8 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 			Object target = context.getRequiredTestInstance();
 			AnnotationsHandlerTestLifeCycleAdapter annotationsAdapter = findAnnotationsHandlerAdapterInStore(context);
 			annotationsAdapter.afterEach(target);
-		} finally {
+		}
+		finally {
 			removeAnnotationsHandlerAdapterFromStore(context);
 		}
 	}

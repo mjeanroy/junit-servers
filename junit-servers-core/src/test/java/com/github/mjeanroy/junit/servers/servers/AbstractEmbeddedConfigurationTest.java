@@ -47,20 +47,21 @@ public abstract class AbstractEmbeddedConfigurationTest<T extends AbstractConfig
 	public void it_should_have_to_string() {
 		final T result = createConfiguration();
 		assertThat(result.toString()).isEqualTo(
-				getTestedClass().getSimpleName() + "{" +
-						"port: 0, " +
-						"path: \"/\", " +
-						"webapp: \"src/main/webapp\", " +
-						"classpath: \".\", " +
-						"overrideDescriptor: null, " +
-						"parentClassLoader: null" +
-				"}");
+			getTestedClass().getSimpleName() + "{" +
+				"port: 0, " +
+				"path: \"/\", " +
+				"webapp: \"src/main/webapp\", " +
+				"classpath: \".\", " +
+				"overrideDescriptor: null, " +
+				"parentClassLoader: null" +
+			"}"
+		);
 	}
 
 	@Test
 	public void it_should_implement_equals_hashCode() {
-		ClassLoader red = new URLClassLoader(new URL[0]);
-		ClassLoader black = new URLClassLoader(new URL[0]);
+		final ClassLoader red = new URLClassLoader(new URL[0]);
+		final ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(getTestedClass())
 			.withPrefabValues(ClassLoader.class, red, black)
 			.verify();

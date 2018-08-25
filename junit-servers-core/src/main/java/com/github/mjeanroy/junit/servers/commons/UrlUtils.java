@@ -24,10 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
+import com.github.mjeanroy.junit.servers.exceptions.UrlException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import com.github.mjeanroy.junit.servers.exceptions.UrlException;
 
 /**
  * Static URL utilities.
@@ -39,7 +39,7 @@ import com.github.mjeanroy.junit.servers.exceptions.UrlException;
  */
 public final class UrlUtils {
 
-	private static final String[] HTTP_SCHEMES = new String[] {"http://", "https://"};
+	private static final String[] HTTP_SCHEMES = new String[] { "http://", "https://" };
 
 	/**
 	 * The separator used in URL paths.
@@ -63,7 +63,8 @@ public final class UrlUtils {
 	public static URI createUri(String scheme, String host, int port, String path) {
 		try {
 			return new URI(scheme, null, host, port, path, null, null);
-		} catch (URISyntaxException ex) {
+		}
+		catch (URISyntaxException ex) {
 			throw new UrlException(scheme, host, port, path, ex);
 		}
 	}
@@ -102,7 +103,8 @@ public final class UrlUtils {
 
 		if (endpoint.charAt(0) == PATH_SEPARATOR) {
 			sb.append(endpoint.substring(1));
-		} else {
+		}
+		else {
 			sb.append(endpoint);
 		}
 

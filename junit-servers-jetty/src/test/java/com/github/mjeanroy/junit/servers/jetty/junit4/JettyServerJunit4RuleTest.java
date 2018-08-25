@@ -66,7 +66,7 @@ public class JettyServerJunit4RuleTest {
 	}
 
 	@Test
-	public void it_should_create_server_from_configuration() throws Throwable  {
+	public void it_should_create_server_from_configuration() throws Throwable {
 		final EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.defaultConfiguration();
 		final JettyServerJunit4Rule rule = createRule(configuration);
 
@@ -145,7 +145,7 @@ public class JettyServerJunit4RuleTest {
 			assertThat(rule.getPath()).isEqualTo("/");
 			assertThat(rule.getPort()).isGreaterThan(0);
 			assertThat(rule.getUrl()).isEqualTo(
-					rule.getScheme() + "://" + rule.getHost() + ":" + rule.getPort() + rule.getPath()
+				rule.getScheme() + "://" + rule.getHost() + ":" + rule.getPort() + rule.getPath()
 			);
 		}
 	}

@@ -32,10 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
-
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
  * HTTP Client configuration that can be used to configure instances of {@link HttpClient}.

@@ -46,23 +46,23 @@ public class NingAsyncHttpResponseTest extends AbstractHttpResponseImplTest<Ning
 
 	@Test
 	public void it_should_implement_to_string() {
-		Response delegate = new NingHttpResponseBuilder().build();
-		long duration = 1000L;
-		NingAsyncHttpResponse response = new NingAsyncHttpResponse(delegate, duration);
+		final Response delegate = new NingHttpResponseBuilder().build();
+		final long duration = 1000L;
+		final NingAsyncHttpResponse response = new NingAsyncHttpResponse(delegate, duration);
 
 		assertThat(response.toString()).isEqualTo(
-				"NingAsyncHttpResponse{" +
-						"duration: 1000, " +
-						"response: " + delegate.toString() +
-				"}"
+			"NingAsyncHttpResponse{" +
+				"duration: 1000, " +
+				"response: " + delegate.toString() +
+			"}"
 		);
 	}
 
 	@Test
 	public void it_should_implement_equal_and_hash_code() {
 		EqualsVerifier.forClass(NingAsyncHttpResponse.class)
-				.withRedefinedSuperclass()
-				.withIgnoredFields("readResponseBodyLock", "_body")
-				.verify();
+			.withRedefinedSuperclass()
+			.withIgnoredFields("readResponseBodyLock", "_body")
+			.verify();
 	}
 }

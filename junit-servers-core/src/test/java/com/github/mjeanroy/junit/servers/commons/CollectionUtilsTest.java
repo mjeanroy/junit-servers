@@ -24,6 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
+import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import java.util.List;
+
 import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
 import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
 import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.join;
@@ -37,13 +44,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.util.List;
-
-import org.junit.Test;
-import org.mockito.InOrder;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 public class CollectionUtilsTest {
 

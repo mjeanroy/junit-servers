@@ -57,11 +57,11 @@ public abstract class BaseHttpClientTest {
 		port = 8080;
 		path = "/path";
 		server = new EmbeddedServerMockBuilder()
-				.withScheme(scheme)
-				.withHost(host)
-				.withPort(port)
-				.withPath(path)
-				.build();
+			.withScheme(scheme)
+			.withHost(host)
+			.withPort(port)
+			.withPath(path)
+			.build();
 
 		onSetUp();
 	}

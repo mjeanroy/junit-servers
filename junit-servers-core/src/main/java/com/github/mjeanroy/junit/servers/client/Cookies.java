@@ -194,13 +194,15 @@ public final class Cookies {
 
 		if (expiresDate != null) {
 			expires = getTime(expiresDate, "EEE, d MMM yyyy HH:mm:ss Z", "EEE, d-MMM-yyyy HH:mm:ss Z", "EEE, d/MMM/yyyy HH:mm:ss Z");
-		} else {
+		}
+		else {
 			expires = null;
 		}
 
 		if (maxAge == null && expires == null) {
 			maxAge = 0L;
-		} else if (maxAge == null) {
+		}
+		else if (maxAge == null) {
 			maxAge = expires - System.currentTimeMillis();
 		}
 

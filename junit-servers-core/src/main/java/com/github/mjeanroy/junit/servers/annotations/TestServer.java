@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
  * into unit tests.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD})
+@Target({ ElementType.FIELD })
 @Documented
 public @interface TestServer {
 }

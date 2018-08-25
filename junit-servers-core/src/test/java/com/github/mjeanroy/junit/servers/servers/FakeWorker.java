@@ -105,7 +105,8 @@ class FakeWorker implements Runnable {
 			startSignal.await();
 			operation.apply(server);
 			doneSignal.countDown();
-		} catch (InterruptedException ex) {
+		}
+		catch (InterruptedException ex) {
 			throw new AssertionError(ex);
 		}
 	}

@@ -24,12 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import static com.github.mjeanroy.junit.servers.commons.EncoderUtils.urlEncode;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
+import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 
 import java.util.Objects;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import static com.github.mjeanroy.junit.servers.commons.EncoderUtils.urlEncode;
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
 
 /**
  * Parameter object that could be sent in an http request as:

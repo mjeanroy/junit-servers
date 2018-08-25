@@ -24,19 +24,19 @@
 
 package com.github.mjeanroy.junit.servers.commons;
 
-import static com.github.mjeanroy.junit.servers.commons.Dates.format;
-import static com.github.mjeanroy.junit.servers.commons.Dates.formatTime;
-import static com.github.mjeanroy.junit.servers.commons.Dates.getTime;
-import static com.github.mjeanroy.junit.servers.commons.Dates.parse;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static com.github.mjeanroy.junit.servers.commons.Dates.format;
+import static com.github.mjeanroy.junit.servers.commons.Dates.formatTime;
+import static com.github.mjeanroy.junit.servers.commons.Dates.getTime;
+import static com.github.mjeanroy.junit.servers.commons.Dates.parse;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DatesTest {
 
@@ -61,13 +61,13 @@ public class DatesTest {
 		Date date = parse(value, pattern);
 
 		assertThat(date)
-				.isNotNull()
-				.hasYear(2021)
-				.hasMonth(Calendar.JANUARY + 1)
-				.hasDayOfMonth(13)
-				.hasHourOfDay(22)
-				.hasMinute(23)
-				.hasSecond(1);
+			.isNotNull()
+			.hasYear(2021)
+			.hasMonth(Calendar.JANUARY + 1)
+			.hasDayOfMonth(13)
+			.hasHourOfDay(22)
+			.hasMinute(23)
+			.hasSecond(1);
 	}
 
 	@Test
@@ -79,13 +79,13 @@ public class DatesTest {
 		Date date = parse(value, pattern1, pattern2);
 
 		assertThat(date)
-				.isNotNull()
-				.hasYear(2021)
-				.hasMonth(Calendar.JANUARY + 1)
-				.hasDayOfMonth(13)
-				.hasHourOfDay(22)
-				.hasMinute(23)
-				.hasSecond(1);
+			.isNotNull()
+			.hasYear(2021)
+			.hasMonth(Calendar.JANUARY + 1)
+			.hasDayOfMonth(13)
+			.hasHourOfDay(22)
+			.hasMinute(23)
+			.hasSecond(1);
 	}
 
 	@Test
@@ -107,8 +107,8 @@ public class DatesTest {
 		Long time = getTime(value, pattern);
 
 		assertThat(time)
-				.isNotNull()
-				.isEqualTo(1610576581000L);
+			.isNotNull()
+			.isEqualTo(1610576581000L);
 	}
 
 	@Test
@@ -119,8 +119,8 @@ public class DatesTest {
 		String value = formatTime(time, pattern);
 
 		assertThat(value)
-				.isNotNull()
-				.isEqualTo("Wed, 13 Jan 2021 22:23:01 GMT");
+			.isNotNull()
+			.isEqualTo("Wed, 13 Jan 2021 22:23:01 GMT");
 	}
 
 	@Test
@@ -132,7 +132,7 @@ public class DatesTest {
 		String value = format(date, pattern);
 
 		assertThat(value)
-				.isNotNull()
-				.isEqualTo("Wed, 13 Jan 2021 22:23:01 GMT");
+			.isNotNull()
+			.isEqualTo("Wed, 13 Jan 2021 22:23:01 GMT");
 	}
 }

@@ -39,12 +39,12 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
 
 	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer){
+	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
 
 	@Bean
-	public ViewResolver getViewResolver(){
+	public ViewResolver getViewResolver() {
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
 		resolver.setPrefix("/WEB-INF/views/");
 		resolver.setSuffix(".jsp");

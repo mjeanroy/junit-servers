@@ -24,14 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client.impl.apache;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
@@ -40,6 +32,13 @@ import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
  * Implementation of {@link HttpClient} using apache http client
@@ -123,7 +122,8 @@ public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
 		if (destroyed.compareAndSet(false, true)) {
 			try {
 				client.close();
-			} catch (IOException ex) {
+			}
+			catch (IOException ex) {
 				throw new HttpClientException(ex);
 			}
 		}
