@@ -53,7 +53,7 @@ public class AsyncHttpResponseBuilder extends AbstractHttpResponseBuilder<Respon
 
 	@Override
 	public Response build() {
-		Uri uri = new Uri("http", null, "localhost", 8080, "/", "");
+		Uri uri = new Uri("http", null, "localhost", 8080, "/", null, null);
 
 		io.netty.handler.codec.http.HttpResponseStatus rspStatus = io.netty.handler.codec.http.HttpResponseStatus.valueOf(status);
 		HttpResponse httpResponse = new DefaultHttpResponse(HttpVersion.HTTP_1_1, rspStatus);

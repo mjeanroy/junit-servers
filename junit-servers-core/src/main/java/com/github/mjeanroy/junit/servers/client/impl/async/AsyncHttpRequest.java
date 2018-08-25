@@ -78,7 +78,8 @@ class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 		final int port = endpoint.getPort();
 		final String path = Utf8UrlEncoder.encodePath(endpoint.getPath());
 		final String query = null;
-		final Uri uri = new Uri(scheme, userInfo, host, port, path, query);
+		final String fragment = null;
+		final Uri uri = new Uri(scheme, userInfo, host, port, path, query, fragment);
 
 		final String method = getMethod().getVerb();
 		final RequestBuilder builder = new RequestBuilder(method, true).setUri(uri);
