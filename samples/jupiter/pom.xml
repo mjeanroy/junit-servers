@@ -35,11 +35,11 @@
   <parent>
     <artifactId>junit-servers-samples</artifactId>
     <groupId>com.github.mjeanroy</groupId>
-    <version>0.10.0</version>
+    <version>0.10.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>junit-servers-samples-jupiter</artifactId>
-  <version>0.10.0</version>
+  <version>0.10.1-SNAPSHOT</version>
   <name>junit-servers-samples-jupiter</name>
   <packaging>pom</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
