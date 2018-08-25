@@ -68,7 +68,9 @@ class HttpClientParameterResolverFunction implements ParameterResolverFunction {
 					return testHttpClient.strategy();
 				}
 			})
-			.orElse(defaultStrategy());
+			.orElse(
+				defaultStrategy()
+			);
 	}
 
 	private static HttpClientStrategy defaultStrategy() {
