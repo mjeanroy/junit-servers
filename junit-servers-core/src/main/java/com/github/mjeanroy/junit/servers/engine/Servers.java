@@ -92,6 +92,7 @@ public final class Servers {
 	 * @param configuration Optional configuration.
 	 * @return Embedded server.
 	 */
+	@SuppressWarnings("unchecked")
 	public static EmbeddedServer<?> instantiate(AbstractConfiguration configuration) {
 		ServiceLoader<EmbeddedServerProvider> serviceProviders = ServiceLoader.load(EmbeddedServerProvider.class);
 

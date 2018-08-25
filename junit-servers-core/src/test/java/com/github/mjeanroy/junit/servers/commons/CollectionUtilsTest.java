@@ -60,7 +60,7 @@ public class CollectionUtilsTest {
 
 	@Test
 	public void it_should_join_elements() {
-		String separator = ";";
+		final String separator = ";";
 		assertThat(join(null, separator)).isEqualTo(null);
 		assertThat(join(emptyList(), separator)).isEqualTo("");
 		assertThat(join(singleton("foo"), separator)).isEqualTo("foo");
@@ -71,8 +71,8 @@ public class CollectionUtilsTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void it_should_filter_list() {
-		List<Integer> numbers = asList(1, 2, 3, 4, 5, 6);
-		Predicate<Integer> predicate = mock(Predicate.class);
+		final List<Integer> numbers = asList(1, 2, 3, 4, 5, 6);
+		final Predicate<Integer> predicate = mock(Predicate.class);
 
 		when(predicate.apply(anyInt())).thenAnswer(new Answer<Boolean>() {
 			@Override
@@ -82,7 +82,7 @@ public class CollectionUtilsTest {
 			}
 		});
 
-		List<Integer> results = filter(numbers, predicate);
+		final List<Integer> results = filter(numbers, predicate);
 
 		assertThat(results)
 			.isNotNull()
@@ -102,8 +102,8 @@ public class CollectionUtilsTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void it_should_map_collection() {
-		List<Integer> numbers = asList(1, 2, 3);
-		Mapper<Integer, Integer> mapper = mock(Mapper.class);
+		final List<Integer> numbers = asList(1, 2, 3);
+		final Mapper<Integer, Integer> mapper = mock(Mapper.class);
 
 		when(mapper.apply(anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
@@ -113,7 +113,7 @@ public class CollectionUtilsTest {
 			}
 		});
 
-		List<Integer> results = map(numbers, mapper);
+		final List<Integer> results = map(numbers, mapper);
 
 		assertThat(results)
 			.isNotNull()
@@ -128,6 +128,7 @@ public class CollectionUtilsTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void it_should_map_null_to_null() {
 		assertThat(map(null, mock(Mapper.class))).isNull();
 	}

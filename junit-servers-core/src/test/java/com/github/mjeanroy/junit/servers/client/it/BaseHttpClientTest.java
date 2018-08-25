@@ -1063,14 +1063,14 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_with_simple_cookies_method() {
-		String endpoint = ENDPOINT;
+		final String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
-		String n1 = "f1";
-		String v1 = "b1";
+		final String n1 = "f1";
+		final String v1 = "b1";
 
-		String n2 = "f2";
-		String v2 = "b2";
+		final String n2 = "f2";
+		final String v2 = "b2";
 
 		createDefaultClient()
 			.prepareGet(endpoint)
@@ -1078,7 +1078,7 @@ public abstract class BaseHttpClientTest {
 			.addCookie(n2, v2)
 			.executeJson();
 
-		List<Pair> expectedCookies = asList(
+		final List<Pair> expectedCookies = asList(
 			pair(n1, v1),
 			pair(n2, v2)
 		);
@@ -1088,27 +1088,28 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void testRequest_with_complex_cookie() {
-		String endpoint = ENDPOINT;
+		final String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
-		String name = "foo";
-		String value = "bar";
-		String domain = "localhost";
-		String path = server.getPath();
-		boolean secured = true;
-		boolean httpOnly = true;
+		final String name = "foo";
+		final String value = "bar";
+		final String domain = "localhost";
+		final String path = server.getPath();
+		final boolean secured = true;
+		final boolean httpOnly = true;
 
-		Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		Date maxAgeUtc = utcDate(
+		final Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		final Date maxAgeUtc = utcDate(
 			now.get(Calendar.YEAR) + 1,
 			now.get(Calendar.MONTH),
 			now.get(Calendar.DAY_OF_MONTH),
 			now.get(Calendar.HOUR_OF_DAY),
 			now.get(Calendar.MINUTE),
-			now.get(Calendar.MILLISECOND));
+			now.get(Calendar.MILLISECOND)
+		);
 
-		long maxAge = maxAgeUtc.getTime();
-		Long expires = null;
+		final long maxAge = maxAgeUtc.getTime();
+		final Long expires = null;
 
 		createDefaultClient()
 			.prepareGet(endpoint)
@@ -1128,11 +1129,11 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
+		final HttpResponse rsp = createDefaultClient()
 			.prepareGet(endpoint)
 			.executeJson();
 
-		List<String> testedHeaders = asList(
+		final List<String> testedHeaders = asList(
 			ETAG,
 			LOCATION,
 			LAST_MODIFIED,

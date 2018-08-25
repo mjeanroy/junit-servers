@@ -65,6 +65,9 @@ public class HttpUrl {
 	 */
 	private static final String DEFAULT_PATH = "/";
 
+	private static final String SCHEME_SEPARATOR = "://";
+	private static final String PORT_SEPARATOR = ":";
+
 	/**
 	 * Parse URL string to create new {@link HttpUrl} instance.
 	 *
@@ -183,11 +186,20 @@ public class HttpUrl {
 
 	@Override
 	public String toString() {
-		return new StringBuilder()
-			.append(scheme.getProtocol())
-			.append("://")
+		final String protocol = scheme.getProtocol();
+		final String port = String.valueOf(this.port);
+		final int size = protocol.length()
+			+ host.length()
+			+ port.length()
+			+ path.length()
+			+ SCHEME_SEPARATOR.length()
+			+ PORT_SEPARATOR.length();
+
+		return new StringBuilder(size)
+			.append(protocol)
+			.append(SCHEME_SEPARATOR)
 			.append(host)
-			.append(":")
+			.append(PORT_SEPARATOR)
 			.append(port)
 			.append(path)
 			.toString();

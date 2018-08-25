@@ -26,26 +26,26 @@ package com.github.mjeanroy.junit.servers.commons;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ToStringBuilderTest {
 
 	@Test
 	public void it_should_create_to_string_value() {
-		String f1 = "v1";
-		String f2 = null;
-		int f3 = 10;
-		boolean f4 = true;
-		List<String> f5 = Arrays.asList("foo", "bar");
-		List<String> f6 = Collections.emptyList();
-		Value f7 = new Value("val");
-		Value f8 = null;
+		final String f1 = "v1";
+		final String f2 = null;
+		final int f3 = 10;
+		final boolean f4 = true;
+		final List<String> f5 = asList("foo", "bar");
+		final List<String> f6 = emptyList();
+		final Value f7 = new Value("val");
+		final Value f8 = null;
 
-		String toString = ToStringBuilder.create(ToStringBuilderTest.class)
+		final String toString = ToStringBuilder.create(ToStringBuilderTest.class)
 			.append("f1", f1)
 			.append("f2", f2)
 			.append("f3", f3)
@@ -68,7 +68,8 @@ public class ToStringBuilderTest {
 					"f6: [], " +
 					"f7: val, " +
 					"f8: null" +
-					"}");
+				"}"
+			);
 	}
 
 	private static class Value {

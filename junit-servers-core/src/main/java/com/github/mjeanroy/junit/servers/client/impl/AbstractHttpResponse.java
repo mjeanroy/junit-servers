@@ -264,6 +264,6 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 	 * @return The flag.
 	 */
 	protected boolean canEqual(AbstractHttpResponse o) {
-		return o instanceof AbstractHttpResponse;
+		return true;
 	}
 }

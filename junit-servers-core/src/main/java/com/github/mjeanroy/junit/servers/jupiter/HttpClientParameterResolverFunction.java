@@ -29,6 +29,8 @@ import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestLifeCycleAdapter;
 import org.junit.jupiter.api.extension.ParameterContext;
 
+import java.util.function.Function;
+
 /**
  * Resolve {@link com.github.mjeanroy.junit.servers.client.HttpClient} parameter.
  */
@@ -59,11 +61,14 @@ class HttpClientParameterResolverFunction implements ParameterResolverFunction {
 	}
 
 	private static HttpClientStrategy getStrategy(ParameterContext parameterContext) {
-		return parameterContext.isAnnotated(TestHttpClient.class) ? overridedStrategy(parameterContext) : defaultStrategy();
-	}
-
-	private static HttpClientStrategy overridedStrategy(ParameterContext parameter) {
-		return parameter.findAnnotation(TestHttpClient.class).get().strategy();
+		return parameterContext.findAnnotation(TestHttpClient.class)
+			.map(new Function<TestHttpClient, HttpClientStrategy>() {
+				@Override
+				public HttpClientStrategy apply(TestHttpClient testHttpClient) {
+					return testHttpClient.strategy();
+				}
+			})
+			.orElse(defaultStrategy());
 	}
 
 	private static HttpClientStrategy defaultStrategy() {

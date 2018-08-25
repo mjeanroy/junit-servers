@@ -33,6 +33,7 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
+import io.netty.handler.codec.http.cookie.Cookie;
 import org.asynchttpclient.ListenableFuture;
 import org.asynchttpclient.Request;
 import org.asynchttpclient.RequestBuilder;
@@ -167,7 +168,7 @@ class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * Add cookies to the final HTTP request.
 	 *
 	 * @param builder The pending HTTP request.
-	 * @see RequestBuilder#addCookie(org.asynchttpclient.cookie.Cookie)
+	 * @see RequestBuilder#addCookie(Cookie)
 	 */
 	private void handleCookies(RequestBuilder builder) {
 		if (!cookies.isEmpty()) {

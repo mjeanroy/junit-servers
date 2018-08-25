@@ -30,6 +30,7 @@ import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
 import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
 import okhttp3.Headers;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,7 +69,12 @@ final class OkHttpResponse extends AbstractHttpResponse implements HttpResponse 
 
 	@Override
 	protected String readResponseBody() throws IOException {
-		return response.body().string();
+		final ResponseBody body = response.body();
+		if (body == null) {
+			return null;
+		}
+
+		return body.string();
 	}
 
 	@Override
