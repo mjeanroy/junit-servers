@@ -1,3 +1,7 @@
+##### 0.10.0
+
+- Add JUnit Jupiter integration through the `JunitServerExtension`.
+
 ##### 0.9.0
 
 - In order to prepare for the Junit-Jupiter extension, API related to Junit4 have been moved
