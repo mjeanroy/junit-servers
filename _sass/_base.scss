@@ -2,10 +2,16 @@
 
 $black: #222;
 $bg: darken(#fff, 2%);
+$headerHeight: 50px;
+$bottomHeight: 20px;
 
 html, body {
   background-color: $bg;
   font-size: 14px;
+}
+
+html {
+  overflow-y: scroll;
 }
 
 h5 {
@@ -52,8 +58,22 @@ pre.highlight {
   background-color: #fff;
 }
 
+.navbar {
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.content {
+  margin-top: $headerHeight;
+  margin-bottom: $bottomHeight + 20px;
+}
+
 .main-content {
   padding: 20px 0;
+}
+
+.sticky-offset {
+  top: $headerHeight + 10px;
 }
 
 footer {
@@ -61,4 +81,10 @@ footer {
   border-top: 1px solid #ccc;
   padding: 10px 0;
   text-align: center;
+}
+
+.nav-link {
+  &.active {
+    font-weight: bold;
+  }
 }
