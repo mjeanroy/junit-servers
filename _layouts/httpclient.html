@@ -1,0 +1,25 @@
+---
+layout: default
+---
+
+<div class="row">
+  <div class="col-2">
+    <ul class="nav flex-column sticky-top sticky-offset">
+      <li class="nav-item">
+        <a class="nav-link {% if page.url == '/httpclient/introduction' or page.url == '/httpclient' %}active{% endif %}" href="{{ '/httpclient/introduction' | prepend: site.baseurl }}">Introduction</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if page.url == '/httpclient/jupiter' %}active{% endif %}" href="{{ '/httpclient/jupiter' | prepend: site.baseurl }}">JUnit Jupiter</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if page.url == '/httpclient/junit4' %}active{% endif %}" href="{{ '/httpclient/junit4' | prepend: site.baseurl }}">JUnit 4</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if page.url == '/httpclient/api' %}active{% endif %}" href="{{ '/httpclient/api' | prepend: site.baseurl }}">API</a>
+      </li>
+    </ul>
+  </div>
+  <div class="col">
+    {{ content }}
+  </div>
+</div>

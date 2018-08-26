@@ -46,7 +46,7 @@ What happens here:
 - The default configuration is used.
 - Note that:
   - I use [OkHttp](http://square.github.io/okhttp/) as HTTP client, but you are free to use your favorite library.
-  - You may want to try the HTTP Client API documented [here]({{ '/httpclient' | prepend: site.baseurl }}).
+  - You may want to try the HTTP Client API documented [here]({{ '/httpclient/jupiter' | prepend: site.baseurl }}).
 
 The previous example use the default configuration but you can also provide the server configuration using the `TestServerConfiguration` annotation. The extension will scan the tested class to see if this annotation is present and:
 - If the annotation is present on a static method, the method is executed and the result is used as the configuration.
