@@ -102,6 +102,8 @@
     <apache-rat-plugin.version>0.11</apache-rat-plugin.version>
     <versions-maven-plugin.version>2.5</versions-maven-plugin.version>
 
+    <java-module-name>com.github.mjeanroy.junit.servers</java-module-name>
+
     <jetty-java7.version>9.2.24.v20180105</jetty-java7.version>
     <jetty-java8.version>9.4.8.v20180619</jetty-java8.version>
     <jetty-java9.version>9.4.8.v20180619</jetty-java9.version>
@@ -308,11 +310,6 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>${maven-jar-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <version>${maven-resources-plugin.version}</version>
         </plugin>
@@ -339,6 +336,19 @@
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${maven-jar-plugin.version}</version>
+          <configuration>
+            <archive>
+              <manifestEntries>
+                <Automatic-Module-Name>${java-module-name}</Automatic-Module-Name>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>${maven-enforcer-plugin.version}</version>
           <executions>
@@ -357,6 +367,7 @@
             </execution>
           </executions>
         </plugin>
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>

@@ -40,6 +40,10 @@
   <packaging>jar</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
 
+  <properties>
+    <java-module-name>com.github.mjeanroy.junit.servers.core</java-module-name>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
