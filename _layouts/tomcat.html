@@ -1,0 +1,28 @@
+---
+layout: default
+---
+
+<div class="row">
+  <div class="col-2">
+    <ul class="nav flex-column sticky-top sticky-offset">
+      <li class="nav-item">
+        <a class="nav-link {% if page.url == '/tomcat/installation' or page.url == '/tomcat' %}active{% endif %}" href="{{ '/tomcat/installation' | prepend: site.baseurl }}">Installation</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if page.url == '/tomcat/jupiter' %}active{% endif %}" href="{{ '/tomcat/jupiter' | prepend: site.baseurl }}">JUnit Jupiter</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if page.url == '/tomcat/junit4' %}active{% endif %}" href="{{ '/tomcat/junit4' | prepend: site.baseurl }}">JUnit 4</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if page.url == '/tomcat/configuration' %}active{% endif %}" href="{{ '/tomcat/configuration' | prepend: site.baseurl }}">Configuration</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if page.url == '/tomcat/hooks' %}active{% endif %}" href="{{ '/tomcat/hooks' | prepend: site.baseurl }}">Hooks</a>
+      </li>
+    </ul>
+  </div>
+  <div class="col">
+    {{ content }}
+  </div>
+</div>

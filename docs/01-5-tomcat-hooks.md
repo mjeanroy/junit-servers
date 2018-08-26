@@ -14,10 +14,10 @@ For example, this can be useful:
 The example below (using [JUnit Jupiter](https://junit.org/junit5/docs/current/user-guide/) API) use a hook to log server events:
 
 ```java
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.Hook;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 import javax.servlet.ServletContext;
 
@@ -32,16 +32,16 @@ class MyTest {
 
   @RegisterExtension
   static final JunitServerExtension extension = new JunitServerExtension(
-    EmbeddedJettyConfiguration.builder()
+    EmbeddedTomcatConfiguration.builder()
       .withHook(new LogHook())
       .build()
   );
 
   @Test
-  void should_have_index(EmbeddedJetty jetty) {
+  void should_have_index(EmbeddedTomcat tomcat) {
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(jetty.getUrl())
+      .url(tomcat.getUrl())
       .build();
 
     Response response = client.newCall(request).execute();

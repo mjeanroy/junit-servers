@@ -4,8 +4,8 @@ The simplest way to start is to use the dedicated [JUnit runner](https://github.
 
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -19,13 +19,13 @@ import org.junit.runner.RunWith;
 public class MyTest {
 
   @TestServer
-  static EmbeddedJetty jetty;
+  static EmbeddedTomcat tomcat;
 
   @Test
   public void should_have_index() {
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(jetty.getUrl())
+      .url(tomcat.getUrl())
       .build();
 
     Response response = client.newCall(request).execute();
@@ -37,7 +37,7 @@ public class MyTest {
 
 What happens here:
 - The `JunitServerRunner` runner will automatically:
-  - Start the embedded server **before all** test.
+  - Start the embedded server **before all** test,
   - Shutdown the server **after all** test.
 - The runner can inject the server instance using the `TestServer` annotation. This can be useful to get the URL to query or the chosen port.
 - The default configuration is used.
@@ -55,9 +55,9 @@ See the example below:
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -72,20 +72,20 @@ public class MyTest {
 
   // The server configuration that will be used.
   @TestServerConfiguration
-  static EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.build()
+  static EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
     .withPath("/app")
     .withPort(8080)
     .withProperty("spring.profiles.active", "test")
     .build();
 
   @TestServer
-  static EmbeddedJetty jetty;
+  static EmbeddedTomcat tomcat;
 
   @Test
   public void should_have_index() {
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(jetty.getUrl())
+      .url(tomcat.getUrl())
       .build();
 
     Response response = client.newCall(request).execute();
@@ -95,7 +95,7 @@ public class MyTest {
 }
 ```
 
-*Note: available options are documented [here]({{ '/jetty/configuration' | prepend: site.baseurl }}).*
+*Note: available options are documented [here]({{ '/tomcat/configuration' | prepend: site.baseurl }}).*
 
 *We recommend using the JUnit runner since it is easy to use and a "classic way" to extend JUnit. But, since JUnit does not allow more than one runner, you may need to use the class rules describe in the next section: this will allow you to use a second runner (`Parameterized`, `MockitoJUnitRunner`, etc.).*
 
@@ -104,7 +104,7 @@ public class MyTest {
 Using the [JUnit rule](https://github.com/junit-team/junit4/wiki/Rules) is relatively easy:
 
 ```java
-import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -117,13 +117,13 @@ import org.junit.Test;
 public class MyTest {
 
   @ClassRule
-  public static final JettyServerJunit4Rule jettyRule = new JettyServerJunit4Rule();
+  public static final TomcatServerJunit4Rule tomcatRule = new TomcatServerJunit4Rule();
 
   @Test
   public void should_have_index() {
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(jettyRule.getUrl())
+      .url(tomcatRule.getUrl())
       .build();
 
     Response response = client.newCall(request).execute();
@@ -134,7 +134,7 @@ public class MyTest {
 ```
 
 What happens here:
-- The `JettyServerRule` is used as a **class rule**:
+- The `TomcatServerJunit4Rule` is used as a **class rule**:
   - The server will be started **before all** tests.
   - The server will be stopped **after all**.
   - If you want to start/stop server between each test, you can use the rule as a "simple" rule (i.e `@Rule`), but we don't recommend it.
@@ -143,8 +143,8 @@ What happens here:
 Sometimes, you will have to change some configuration option, this is possible using the dedicated builder:
 
 ```java
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -157,8 +157,8 @@ import org.junit.Test;
 public class MyTest {
 
   @ClassRule
-  public static final JettyServerJunit4Rule jettyRule = new JettyServerJunit4Rule(
-    EmbeddedJettyConfiguration.builder()
+  public static final TomcatServerJunit4Rule tomcatRule = new TomcatServerJunit4Rule(
+    EmbeddedTomcatConfiguration.builder()
       .withPath("/app")
       .withPort(8080)
       .withProperty("spring.profiles.active", "test")
@@ -169,7 +169,7 @@ public class MyTest {
   public void should_have_index() {
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(jettyRule.getUrl())
+      .url(tomcatRule.getUrl())
       .build();
 
     Response response = client.newCall(request).execute();
@@ -179,4 +179,4 @@ public class MyTest {
 }
 ```
 
-*Note: available options are documented [here]({{ '/jetty/configuration' | prepend: site.baseurl }}).*
+*Note: available options are documented [here]({{ '/tomcat/configuration' | prepend: site.baseurl }}).*

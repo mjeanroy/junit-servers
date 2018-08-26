@@ -3,9 +3,9 @@
 Since version `0.10.0`, an extension for [JUnit Jupiter](https://junit.org/junit5/docs/current/user-guide) has been added:
 
 ```java
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -19,13 +19,13 @@ import org.junit.jupiter.api.Test;
 class MyTest {
 
   @Test
-  void should_have_index(EmbeddedJetty jetty, EmbeddedJettyConfiguration configuration) {
+  void should_have_index(EmbeddedTomcat tomcat, EmbeddedTomcatConfiguration configuration) {
     // Note how the tomcat embedded server has been injected as a parameter of the test method.
     // Note also how the configuration can be injected.
-
+  
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(jetty.getUrl())
+      .url(tomcat.getUrl())
       .build();
 
     Response response = client.newCall(request).execute();
@@ -40,9 +40,9 @@ What happens here:
 
 - The `JunitServerExtension` extension:
   - Will automatically start the embedded server **before all** test and shutdown the server **after all** test.
-  - Automatically inject `EmbeddedJetty` parameter into the test method (also works with `BeforeEach` methods, etc.). The extension can also inject
+  - Automatically inject `EmbeddedTomcat` parameter into the test method (also works with `BeforeEach` methods, etc.). The extension can also inject
     the server instance using the `TestServer` annotation, but it is recommended to use the parameter injection instead.
-  - Note that the configuration can also be injected into test methods, exactly like the `EmbeddedJetty` parameter in the previous example.
+  - Note that the configuration can also be injected into test methods, exactly like the `EmbeddedTomcat` parameter in the previous example.
 - The default configuration is used.
 - Note that:
   - I use [OkHttp](http://square.github.io/okhttp/) as HTTP client, but you are free to use your favorite library.
@@ -57,9 +57,9 @@ See the example below:
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -72,19 +72,19 @@ import org.junit.jupiter.api.Test;
 @ExtendWith(JunitServerExtension.class)
 class MyTest {
 
-  // The custom configuration that will be used to start the embedded jetty server.
+  // The custom configuration that will be used to start the embedded tomcat server.
   @TestServerConfiguration
-  static EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.build()
+  static EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.build()
     .withPath("/app")
     .withPort(8080)
     .withProperty("spring.profiles.active", "test")
     .build();
 
   @Test
-  void should_have_index(EmbeddedJetty jetty) {
+  void should_have_index(EmbeddedTomcat tomcat) {
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(jetty.getUrl())
+      .url(tomcat.getUrl())
       .build();
 
     Response response = client.newCall(request).execute();
@@ -99,9 +99,9 @@ Alternatively, you can use the `RegisterExtension` [API](https://junit.org/junit
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -112,9 +112,10 @@ import org.junit.jupiter.api.RegisterExtension;
 import org.junit.jupiter.api.Test;
 
 class MyTest {
+
   @RegisterExtension
   static JunitServerExtension extension = new JunitServerExtension(
-    EmbeddedJettyConfiguration.build()
+    EmbeddedTomcatConfiguration.build()
       .withPath("/app")
       .withPort(8080)
       .withProperty("spring.profiles.active", "test")
@@ -122,10 +123,10 @@ class MyTest {
   );
 
   @Test
-  void should_have_index(EmbeddedJetty jetty) {
+  void should_have_index(EmbeddedTomcat tomcat) {
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(jetty.getUrl())
+      .url(tomcat.getUrl())
       .build();
 
     Response response = client.newCall(request).execute();
@@ -135,4 +136,4 @@ class MyTest {
 }
 ```
 
-*Note: available options are documented [here]({{ '/jetty/configuration' | prepend: site.baseurl }}).*
+*Note: available options are documented [here]({{ '/tomcat/configuration' | prepend: site.baseurl }}).*
