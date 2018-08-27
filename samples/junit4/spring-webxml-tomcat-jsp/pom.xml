@@ -23,11 +23,11 @@
   <parent>
     <artifactId>junit-servers-samples-junit4</artifactId>
     <groupId>com.github.mjeanroy</groupId>
-    <version>0.10.1-SNAPSHOT</version>
+    <version>0.11.0</version>
   </parent>
 
   <artifactId>spring-webxml-tomcat-jsp</artifactId>
-  <version>0.10.1-SNAPSHOT</version>
+  <version>0.11.0</version>
   <name>junit-servers-spring-webxml-tomcat-jsp</name>
   <packaging>war</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
