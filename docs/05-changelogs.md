@@ -1,3 +1,11 @@
+##### 0.11.0
+
+- Add automatic module name (for Java 9 module), following module names are used:
+  - For `junit-server-core`: `com.github.mjeanroy.junit.servers.core`
+  - For `junit-server-jetty`: `com.github.mjeanroy.junit.servers.jetty`
+  - For `junit-server-tomcat`: `com.github.mjeanroy.junit.servers.tomcat`
+- Fix a bug when JUnit Jupiter extension was used with `RegisterExtension` but was not declared as `static`
+
 ##### 0.10.0
 
 - Add JUnit Jupiter integration through the `JunitServerExtension`.
