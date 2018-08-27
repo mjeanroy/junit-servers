@@ -43,6 +43,7 @@ import org.junit.jupiter.api.extension.ExtensionContext.Store;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
@@ -90,9 +91,44 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
  *        .acceptJson()
  *        .execute();
  *
- *      Assert.assertTrue(rsp.status() == 200);
+ *      Assertions.assertTrue(rsp.status() == 200);
  *    }
  *  }
+ * </code></pre>
+ *
+ * The extension may also be used with {@link RegisterExtension}, in this case you can use it in two ways:
+ *
+ * <ul>
+ *   <li>
+ *     If the extension is declared as {@code static}, the server will be started <strong>before all</strong> tests
+ *     and stopped <strong>after all</strong> tests (the recommended way).
+ *   </li>
+ *   <li>
+ *     If the extension is not declared as {@code static}, the server will be started <strong>before each</strong> test
+ *     and <strong>stopped after</strong> each test.
+ *   </li>
+ * </ul>
+ *
+ * For example:
+ *
+ * <pre><code>
+ * public class MyTest {
+ *
+ *   // The `static` here means that the server will be started before all tests
+ *   // and stopped after all tests.
+ *   // Remove the `static` keyword to start/stop server before/after each test (not recommended).
+ *   &#064;RegisterExtension
+ *   static JunitServerExtension extension = new JunitServerExtension();
+ *
+ *   &#064;Test
+ *   void testGET(HttpClient client) {
+ *     HttpResponse rsp = client.prepareGet("/path")
+ *       .acceptJson()
+ *       .execute();
+ *
+ *     Assertions.assertTrue(rsp.status() == 200);
+ *   }
+ * }
  * </code></pre>
  */
 public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback, ParameterResolver {
@@ -105,6 +141,11 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * The name of the {@link EmbeddedServerTestLifeCycleAdapter} instance in the internal store.
 	 */
 	private static final String SERVER_ADAPTER_KEY = "serverAdapter";
+
+	/**
+	 * The name of the {@link EmbeddedServerTestLifeCycleAdapter} start mode flag in the internal store.
+	 */
+	private static final String SERVER_ADAPTER_STATIC_MODE = "serverAdapterMode";
 
 	/**
 	 * The name of the {@link AnnotationsHandlerTestLifeCycleAdapter} instance in the internal store.
@@ -163,29 +204,22 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 
 	@Override
 	public void beforeAll(ExtensionContext context) {
-		Class<?> testClass = context.getRequiredTestClass();
-		EmbeddedServer<?> server = this.server == null ? instantiateServer(testClass, configuration) : this.server;
-
-		EmbeddedServerTestLifeCycleAdapter serverAdapter = new EmbeddedServerTestLifeCycleAdapter(server);
-		serverAdapter.beforeAll();
-
-		putEmbeddedServerAdapterInStore(context, serverAdapter);
+		registerEmbeddedServer(context, true);
 	}
 
 	@Override
 	public void afterAll(ExtensionContext context) {
-		try {
-			EmbeddedServerTestLifeCycleAdapter serverAdapter = findEmbeddedServerAdapterInStore(context);
-			serverAdapter.afterAll();
-		}
-		finally {
-			removeEmbeddedServerAdapterFromStore(context);
-		}
+		unregisterEmbeddedServer(context, true);
 	}
 
 	@Override
 	public void beforeEach(ExtensionContext context) {
 		EmbeddedServerTestLifeCycleAdapter serverAdapter = findEmbeddedServerAdapterInStore(context);
+
+		// The extension was not declared as a static extension.
+		if (serverAdapter == null) {
+			serverAdapter = registerEmbeddedServer(context, false);
+		}
 
 		EmbeddedServer<?> server = serverAdapter.getServer();
 		AbstractConfiguration configuration = server.getConfiguration();
@@ -203,6 +237,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 			annotationsAdapter.afterEach(target);
 		}
 		finally {
+			unregisterEmbeddedServer(context, false);
 			removeAnnotationsHandlerAdapterFromStore(context);
 		}
 	}
@@ -261,6 +296,52 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	}
 
 	/**
+	 * Start and register the embedded server.
+	 *
+	 * The embedded server may be used in two modes:
+	 *
+	 * <ul>
+	 *   <li>Started before all tests, and stopped after all tests, this is the static mode (the extension has been used as a static extension).</li>
+	 *   <li>Started before eacg tests, and stopped after eacg tests, this is the non static mode (the extension has not been used as a static extension).</li>
+	 * </ul>
+	 *
+	 * @param context The test context.
+	 * @param staticMode {@code true} if the extension has been registered as a static extension, {@code false} otherwise.
+	 * @return The registered adapter.
+	 */
+	private EmbeddedServerTestLifeCycleAdapter registerEmbeddedServer(ExtensionContext context, boolean staticMode) {
+		Class<?> testClass = context.getRequiredTestClass();
+		EmbeddedServer<?> server = this.server == null ? instantiateServer(testClass, configuration) : this.server;
+
+		EmbeddedServerTestLifeCycleAdapter serverAdapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		serverAdapter.beforeAll();
+
+		putEmbeddedServerAdapterInStore(context, serverAdapter, staticMode);
+
+		return serverAdapter;
+	}
+
+	/**
+	 * Stop and remove from the store the started embedded server.
+	 *
+	 * @param context The test context.
+	 * @param staticMode {@code true} if the extension has been registered as a static extension, {@code false} otherwise.
+	 * @see #registerEmbeddedServer(ExtensionContext, boolean)
+	 */
+	private void unregisterEmbeddedServer(ExtensionContext context, boolean staticMode) {
+		boolean registeredAsStatic = findInStore(context, SERVER_ADAPTER_STATIC_MODE);
+		if (registeredAsStatic == staticMode) {
+			try {
+				EmbeddedServerTestLifeCycleAdapter serverAdapter = findEmbeddedServerAdapterInStore(context);
+				serverAdapter.afterAll();
+			}
+			finally {
+				removeEmbeddedServerAdapterFromStore(context);
+			}
+		}
+	}
+
+	/**
 	 * Find {@link EmbeddedServerTestLifeCycleAdapter} instance in the test context store.
 	 *
 	 * @param context The Junit-Jupiter test context.
@@ -276,8 +357,9 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @param context The Junit-Jupiter test context.
 	 * @param serverAdapter The instance to store.
 	 */
-	private static void putEmbeddedServerAdapterInStore(ExtensionContext context, EmbeddedServerTestLifeCycleAdapter serverAdapter) {
+	private static void putEmbeddedServerAdapterInStore(ExtensionContext context, EmbeddedServerTestLifeCycleAdapter serverAdapter, boolean staticMode) {
 		putInStore(context, SERVER_ADAPTER_KEY, serverAdapter);
+		putInStore(context, SERVER_ADAPTER_STATIC_MODE, staticMode);
 	}
 
 	/**
@@ -287,6 +369,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 */
 	private static void removeEmbeddedServerAdapterFromStore(ExtensionContext context) {
 		removeFromStore(context, SERVER_ADAPTER_KEY);
+		removeFromStore(context, SERVER_ADAPTER_STATIC_MODE);
 	}
 
 	/**

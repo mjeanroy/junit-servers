@@ -115,6 +115,62 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
+	public void it_should_start_server_before_each_tests() {
+		final JunitServerExtension extension = new JunitServerExtension();
+		final FixtureClass testInstance = new FixtureClass();
+		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
+
+		extension.beforeEach(context);
+
+		final FakeStore store = context.getSingleStore();
+		final EmbeddedServerTestLifeCycleAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestLifeCycleAdapter.class);
+
+		assertThat(serverAdapter).isNotNull();
+		assertThat(serverAdapter.getServer()).isNotNull();
+		assertThat(serverAdapter.getServer().isStarted()).isTrue();
+	}
+
+	@Test
+	public void it_should_stop_server_after_each_tests() {
+		final JunitServerExtension extension = new JunitServerExtension();
+		final FixtureClass testInstance = new FixtureClass();
+		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
+
+		extension.beforeEach(context);
+
+		final FakeStore store = context.getSingleStore();
+		final EmbeddedServerTestLifeCycleAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestLifeCycleAdapter.class);
+
+		extension.afterEach(context);
+
+		assertThat(store.isEmpty()).isTrue();
+		assertThat(serverAdapter.getServer().isStarted()).isFalse();
+	}
+
+	@Test
+	public void it_should_detect_if_server_must_be_started_and_stopped_after_all_tests() {
+		final JunitServerExtension extension = new JunitServerExtension();
+		final FixtureClass testInstance = new FixtureClass();
+		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
+
+		extension.beforeAll(context);
+		extension.beforeEach(context);
+
+		final FakeStore store = context.getSingleStore();
+		final EmbeddedServerTestLifeCycleAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestLifeCycleAdapter.class);
+
+		extension.afterEach(context);
+
+		assertThat(store.isEmpty()).isFalse();
+		assertThat(serverAdapter.getServer().isStarted()).isTrue();
+
+		extension.afterAll(context);
+
+		assertThat(store.isEmpty()).isTrue();
+		assertThat(serverAdapter.getServer().isStarted()).isFalse();
+	}
+
+	@Test
 	public void it_should_inject_annotated_field_before_each_test() {
 		final JunitServerExtension extension = new JunitServerExtension();
 		final FixtureClass testInstance = new FixtureClass();
@@ -149,7 +205,6 @@ public class JunitServerExtensionTest {
 
 		extension.afterEach(context);
 
-		assertThat(store.size()).isEqualTo(1);
 		assertThat(store.get("annotationsAdapter")).isNull();
 		assertThat(testInstance.client).isNull();
 		assertThat(client.isDestroyed()).isTrue();
