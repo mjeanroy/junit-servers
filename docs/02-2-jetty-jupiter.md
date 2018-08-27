@@ -96,6 +96,10 @@ class MyTest {
 
 Alternatively, you can use the `RegisterExtension` [API](https://junit.org/junit5/docs/current/user-guide/#extensions-registration) to provide a custom configuration:
 
+Note that:
+- The extension, if used with `static`, will start/stop server before all/after all tests (recommended).
+- The extension, if not used with `static`, will start/stop server before each/after each tests.
+
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
@@ -112,6 +116,9 @@ import org.junit.jupiter.api.RegisterExtension;
 import org.junit.jupiter.api.Test;
 
 class MyTest {
+
+  // The extension is used with `static`.
+  // Remove it to start/stop server before each/after each test (not recommended).
   @RegisterExtension
   static JunitServerExtension extension = new JunitServerExtension(
     EmbeddedJettyConfiguration.build()
