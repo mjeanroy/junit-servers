@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.engine;
 
 /**
- * A test lifecycle engine: this is a class that implements commons test lifecycle hooks (before-all, before, after-all,
+ * A test adapter: this is a class that implements commons test lifecycle hooks (before-all, before, after-all,
  * after), thus will be able to be used in various test engine:
  *
  * <ul>
@@ -34,7 +34,7 @@ package com.github.mjeanroy.junit.servers.engine;
  *   <li>JUnit Jupiter Extensions.</li>
  * </ul>
  */
-public interface TestLifeCycleAdapter {
+public interface TestAdapter {
 
 	/**
 	 * Method called before instantiating the test class and any test instance.

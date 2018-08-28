@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.jupiter;
 
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestLifeCycleAdapter;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
 import org.junit.jupiter.api.extension.ParameterContext;
 
 /**
@@ -51,7 +51,7 @@ class EmbeddedServerParameterResolverFunction implements ParameterResolverFuncti
 	}
 
 	@Override
-	public Object resolve(ParameterContext parameterContext, EmbeddedServerTestLifeCycleAdapter serverAdapter) {
+	public Object resolve(ParameterContext parameterContext, EmbeddedServerTestAdapter serverAdapter) {
 		return serverAdapter.getServer();
 	}
 }

@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.jetty.jupiter;
 
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestLifeCycleAdapter;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jetty.tests.EmbeddedJettyMockBuilder;
@@ -44,7 +44,7 @@ public class JettyServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestLifeCycleAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestLifeCycleAdapter.class);
+		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isSameAs(jetty);
@@ -61,7 +61,7 @@ public class JettyServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestLifeCycleAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestLifeCycleAdapter.class);
+		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull().isExactlyInstanceOf(EmbeddedJetty.class);
@@ -78,7 +78,7 @@ public class JettyServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestLifeCycleAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestLifeCycleAdapter.class);
+		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull().isExactlyInstanceOf(EmbeddedJetty.class);

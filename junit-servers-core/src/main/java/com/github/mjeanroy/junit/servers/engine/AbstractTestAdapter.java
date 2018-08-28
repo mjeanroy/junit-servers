@@ -25,10 +25,10 @@
 package com.github.mjeanroy.junit.servers.engine;
 
 /**
- * Abstract skeleton for {@link TestLifeCycleAdapter} where every methods are
+ * Abstract skeleton for {@link TestAdapter} where every methods are
  * implemented as a no operation.
  */
-class AbstractTestLifeCycle implements TestLifeCycleAdapter {
+class AbstractTestAdapter implements TestAdapter {
 
 	@Override
 	public void beforeAll() {

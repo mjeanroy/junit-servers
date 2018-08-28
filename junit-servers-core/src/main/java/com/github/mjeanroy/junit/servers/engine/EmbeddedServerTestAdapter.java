@@ -44,7 +44,7 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
  *   <li>Stop embedded server after all tests are run.</li>
  * </ol>
  */
-public final class EmbeddedServerTestLifeCycleAdapter extends AbstractTestLifeCycle implements TestLifeCycleAdapter {
+public final class EmbeddedServerTestAdapter extends AbstractTestAdapter implements TestAdapter {
 
 	/**
 	 * Embedded server that will be start and stopped.
@@ -70,9 +70,9 @@ public final class EmbeddedServerTestLifeCycleAdapter extends AbstractTestLifeCy
 	 * <p>
 	 *
 	 * The server will automatically use the default configuration,
-	 * to specify a custom configuration, use {@link #EmbeddedServerTestLifeCycleAdapter(AbstractConfiguration)} constructor.
+	 * to specify a custom configuration, use {@link #EmbeddedServerTestAdapter(AbstractConfiguration)} constructor.
 	 */
-	public EmbeddedServerTestLifeCycleAdapter() {
+	public EmbeddedServerTestAdapter() {
 		this((AbstractConfiguration) null);
 	}
 
@@ -89,7 +89,7 @@ public final class EmbeddedServerTestLifeCycleAdapter extends AbstractTestLifeCy
 	 *
 	 * @param configuration Server configuration.
 	 */
-	public EmbeddedServerTestLifeCycleAdapter(AbstractConfiguration configuration) {
+	public EmbeddedServerTestAdapter(AbstractConfiguration configuration) {
 		this(instantiate(configuration));
 	}
 
@@ -99,7 +99,7 @@ public final class EmbeddedServerTestLifeCycleAdapter extends AbstractTestLifeCy
 	 * @param server Embedded server, not null.
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
-	public EmbeddedServerTestLifeCycleAdapter(EmbeddedServer<?> server) {
+	public EmbeddedServerTestAdapter(EmbeddedServer<?> server) {
 		this.server = notNull(server, "server");
 		this.clients = new HashMap<>();
 	}

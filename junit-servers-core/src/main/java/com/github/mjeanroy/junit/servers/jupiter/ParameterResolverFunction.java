@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.jupiter;
 
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestLifeCycleAdapter;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
 import org.junit.jupiter.api.extension.ParameterContext;
 
 /**
@@ -39,5 +39,5 @@ interface ParameterResolverFunction {
 	 * @param serverAdapter The server that is already configured/started.
 	 * @return The parameter value.
 	 */
-	Object resolve(ParameterContext parameterContext, EmbeddedServerTestLifeCycleAdapter serverAdapter);
+	Object resolve(ParameterContext parameterContext, EmbeddedServerTestAdapter serverAdapter);
 }

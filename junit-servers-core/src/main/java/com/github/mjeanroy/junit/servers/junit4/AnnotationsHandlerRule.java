@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.junit4;
 
-import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerTestLifeCycleAdapter;
+import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerTestAdapter;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
@@ -37,7 +37,7 @@ class AnnotationsHandlerRule extends AbstractRuleInstance {
 	/**
 	 * List of handlers.
 	 */
-	private final AnnotationsHandlerTestLifeCycleAdapter annotationHandlers;
+	private final AnnotationsHandlerTestAdapter annotationHandlers;
 
 	/**
 	 * Create new rules.
@@ -48,7 +48,7 @@ class AnnotationsHandlerRule extends AbstractRuleInstance {
 	 */
 	AnnotationsHandlerRule(Object target, EmbeddedServer<?> server, AbstractConfiguration configuration) {
 		super(target);
-		this.annotationHandlers = new AnnotationsHandlerTestLifeCycleAdapter(server, configuration);
+		this.annotationHandlers = new AnnotationsHandlerTestAdapter(server, configuration);
 	}
 
 	@Override

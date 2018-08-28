@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.tomcat.jupiter;
 
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestLifeCycleAdapter;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.tests.EmbeddedTomcatMockBuilder;
@@ -44,7 +44,7 @@ public class TomcatServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestLifeCycleAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestLifeCycleAdapter.class);
+		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isSameAs(tomcat);
@@ -61,7 +61,7 @@ public class TomcatServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestLifeCycleAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestLifeCycleAdapter.class);
+		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull().isExactlyInstanceOf(EmbeddedTomcat.class);
@@ -78,7 +78,7 @@ public class TomcatServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestLifeCycleAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestLifeCycleAdapter.class);
+		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull().isExactlyInstanceOf(EmbeddedTomcat.class);

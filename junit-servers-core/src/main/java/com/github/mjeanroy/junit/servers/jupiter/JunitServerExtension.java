@@ -28,8 +28,8 @@ import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerTestLifeCycleAdapter;
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestLifeCycleAdapter;
+import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerTestAdapter;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
 import com.github.mjeanroy.junit.servers.engine.Servers;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -138,17 +138,17 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	private static final Namespace NAMESPACE = Namespace.create(JunitServerExtension.class.getName());
 
 	/**
-	 * The name of the {@link EmbeddedServerTestLifeCycleAdapter} instance in the internal store.
+	 * The name of the {@link EmbeddedServerTestAdapter} instance in the internal store.
 	 */
 	private static final String SERVER_ADAPTER_KEY = "serverAdapter";
 
 	/**
-	 * The name of the {@link EmbeddedServerTestLifeCycleAdapter} start mode flag in the internal store.
+	 * The name of the {@link EmbeddedServerTestAdapter} start mode flag in the internal store.
 	 */
 	private static final String SERVER_ADAPTER_STATIC_MODE = "serverAdapterMode";
 
 	/**
-	 * The name of the {@link AnnotationsHandlerTestLifeCycleAdapter} instance in the internal store.
+	 * The name of the {@link AnnotationsHandlerTestAdapter} instance in the internal store.
 	 */
 	private static final String ANNOTATIONS_ADAPTER_KEY = "annotationsAdapter";
 
@@ -214,7 +214,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 
 	@Override
 	public void beforeEach(ExtensionContext context) {
-		EmbeddedServerTestLifeCycleAdapter serverAdapter = findEmbeddedServerAdapterInStore(context);
+		EmbeddedServerTestAdapter serverAdapter = findEmbeddedServerAdapterInStore(context);
 
 		// The extension was not declared as a static extension.
 		if (serverAdapter == null) {
@@ -223,7 +223,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 
 		EmbeddedServer<?> server = serverAdapter.getServer();
 		AbstractConfiguration configuration = server.getConfiguration();
-		AnnotationsHandlerTestLifeCycleAdapter annotationsAdapter = new AnnotationsHandlerTestLifeCycleAdapter(server, configuration);
+		AnnotationsHandlerTestAdapter annotationsAdapter = new AnnotationsHandlerTestAdapter(server, configuration);
 		annotationsAdapter.beforeEach(context.getRequiredTestInstance());
 
 		putAnnotationsHandlerAdapterInStore(context, annotationsAdapter);
@@ -233,7 +233,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	public void afterEach(ExtensionContext context) {
 		try {
 			Object target = context.getRequiredTestInstance();
-			AnnotationsHandlerTestLifeCycleAdapter annotationsAdapter = findAnnotationsHandlerAdapterInStore(context);
+			AnnotationsHandlerTestAdapter annotationsAdapter = findAnnotationsHandlerAdapterInStore(context);
 			annotationsAdapter.afterEach(target);
 		}
 		finally {
@@ -265,7 +265,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
 		final Parameter parameter = parameterContext.getParameter();
 		final Class<?> parameterClass = parameter.getType();
-		final EmbeddedServerTestLifeCycleAdapter serverAdapter = findEmbeddedServerAdapterInStore(extensionContext);
+		final EmbeddedServerTestAdapter serverAdapter = findEmbeddedServerAdapterInStore(extensionContext);
 
 		// Fast case: a perfect match.
 		if (RESOLVERS.containsKey(parameterClass)) {
@@ -309,11 +309,11 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @param staticMode {@code true} if the extension has been registered as a static extension, {@code false} otherwise.
 	 * @return The registered adapter.
 	 */
-	private EmbeddedServerTestLifeCycleAdapter registerEmbeddedServer(ExtensionContext context, boolean staticMode) {
+	private EmbeddedServerTestAdapter registerEmbeddedServer(ExtensionContext context, boolean staticMode) {
 		Class<?> testClass = context.getRequiredTestClass();
 		EmbeddedServer<?> server = this.server == null ? instantiateServer(testClass, configuration) : this.server;
 
-		EmbeddedServerTestLifeCycleAdapter serverAdapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		EmbeddedServerTestAdapter serverAdapter = new EmbeddedServerTestAdapter(server);
 		serverAdapter.beforeAll();
 
 		putEmbeddedServerAdapterInStore(context, serverAdapter, staticMode);
@@ -332,7 +332,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		boolean registeredAsStatic = findInStore(context, SERVER_ADAPTER_STATIC_MODE);
 		if (registeredAsStatic == staticMode) {
 			try {
-				EmbeddedServerTestLifeCycleAdapter serverAdapter = findEmbeddedServerAdapterInStore(context);
+				EmbeddedServerTestAdapter serverAdapter = findEmbeddedServerAdapterInStore(context);
 				serverAdapter.afterAll();
 			}
 			finally {
@@ -342,28 +342,28 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	}
 
 	/**
-	 * Find {@link EmbeddedServerTestLifeCycleAdapter} instance in the test context store.
+	 * Find {@link EmbeddedServerTestAdapter} instance in the test context store.
 	 *
 	 * @param context The Junit-Jupiter test context.
 	 * @return The current stored adapter.
 	 */
-	private static EmbeddedServerTestLifeCycleAdapter findEmbeddedServerAdapterInStore(ExtensionContext context) {
-		return (EmbeddedServerTestLifeCycleAdapter) findInStore(context, SERVER_ADAPTER_KEY);
+	private static EmbeddedServerTestAdapter findEmbeddedServerAdapterInStore(ExtensionContext context) {
+		return (EmbeddedServerTestAdapter) findInStore(context, SERVER_ADAPTER_KEY);
 	}
 
 	/**
-	 * Put {@link EmbeddedServerTestLifeCycleAdapter} instance in the test context store.
+	 * Put {@link EmbeddedServerTestAdapter} instance in the test context store.
 	 *
 	 * @param context The Junit-Jupiter test context.
 	 * @param serverAdapter The instance to store.
 	 */
-	private static void putEmbeddedServerAdapterInStore(ExtensionContext context, EmbeddedServerTestLifeCycleAdapter serverAdapter, boolean staticMode) {
+	private static void putEmbeddedServerAdapterInStore(ExtensionContext context, EmbeddedServerTestAdapter serverAdapter, boolean staticMode) {
 		putInStore(context, SERVER_ADAPTER_KEY, serverAdapter);
 		putInStore(context, SERVER_ADAPTER_STATIC_MODE, staticMode);
 	}
 
 	/**
-	 * Remove {@link EmbeddedServerTestLifeCycleAdapter} instance from the test context store.
+	 * Remove {@link EmbeddedServerTestAdapter} instance from the test context store.
 	 *
 	 * @param context The Junit-Jupiter test context.
 	 */
@@ -373,27 +373,27 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	}
 
 	/**
-	 * Find {@link AnnotationsHandlerTestLifeCycleAdapter} instance in the test context store.
+	 * Find {@link AnnotationsHandlerTestAdapter} instance in the test context store.
 	 *
 	 * @param context The Junit-Jupiter test context.
 	 * @return The current stored adapter.
 	 */
-	private static AnnotationsHandlerTestLifeCycleAdapter findAnnotationsHandlerAdapterInStore(ExtensionContext context) {
+	private static AnnotationsHandlerTestAdapter findAnnotationsHandlerAdapterInStore(ExtensionContext context) {
 		return findInStore(context, ANNOTATIONS_ADAPTER_KEY);
 	}
 
 	/**
-	 * Put {@link AnnotationsHandlerTestLifeCycleAdapter} instance in the test context store.
+	 * Put {@link AnnotationsHandlerTestAdapter} instance in the test context store.
 	 *
 	 * @param context The Junit-Jupiter test context.
 	 * @param annotationsHandlerAdapter The instance to store.
 	 */
-	private static void putAnnotationsHandlerAdapterInStore(ExtensionContext context, AnnotationsHandlerTestLifeCycleAdapter annotationsHandlerAdapter) {
+	private static void putAnnotationsHandlerAdapterInStore(ExtensionContext context, AnnotationsHandlerTestAdapter annotationsHandlerAdapter) {
 		putInStore(context, ANNOTATIONS_ADAPTER_KEY, annotationsHandlerAdapter);
 	}
 
 	/**
-	 * Remove {@link AnnotationsHandlerTestLifeCycleAdapter} instance from the test context store.
+	 * Remove {@link AnnotationsHandlerTestAdapter} instance from the test context store.
 	 *
 	 * @param context The Junit-Jupiter test context.
 	 */

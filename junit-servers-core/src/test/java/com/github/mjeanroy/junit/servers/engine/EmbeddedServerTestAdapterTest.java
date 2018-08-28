@@ -36,11 +36,11 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
-public class EmbeddedServerTestLifeCycleAdapterTest {
+public class EmbeddedServerTestAdapterTest {
 
 	@Test
 	public void it_should_instantiate_server_from_service_loader_with_default_configuration() {
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter();
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter();
 		final EmbeddedServer<?> server = adapter.getServer();
 
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
@@ -50,7 +50,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_instantiate_server_from_service_loader_with_custom_configuration() {
 		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(configuration);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(configuration);
 		final EmbeddedServer<?> server = adapter.getServer();
 
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
@@ -60,7 +60,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_start_server_before_test() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 
 		adapter.beforeAll();
 
@@ -70,7 +70,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_stop_server_after_test() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 
 		adapter.afterAll();
 
@@ -80,7 +80,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_start_server() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 
 		adapter.start();
 
@@ -90,7 +90,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_stop_server() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 
 		adapter.stop();
 
@@ -100,7 +100,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_restart_server() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 
 		adapter.restart();
 
@@ -110,7 +110,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_check_if_server_is_started() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 
 		adapter.start();
 		assertThat(adapter.isStarted()).isTrue();
@@ -122,7 +122,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_server_scheme() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final String scheme = adapter.getScheme();
 		assertThat(scheme).isNotNull().isEqualTo(server.getScheme());
 	}
@@ -130,7 +130,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_server_host() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final String host = adapter.getHost();
 		assertThat(host).isNotNull().isEqualTo(server.getHost());
 	}
@@ -138,7 +138,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_server_path() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final String path = adapter.getPath();
 		assertThat(path).isNotNull().isEqualTo(server.getPath());
 	}
@@ -146,7 +146,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_server_port() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final int port = adapter.getPort();
 		assertThat(port).isNotNull().isEqualTo(server.getPort());
 	}
@@ -154,7 +154,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_url() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final String url = adapter.getUrl();
 		assertThat(url).isNotNull().isEqualTo(server.getUrl());
 	}
@@ -162,7 +162,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_server() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final EmbeddedServer result = adapter.getServer();
 		assertThat(result).isNotNull().isSameAs(server);
 	}
@@ -170,7 +170,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_client() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final HttpClient client = adapter.getClient();
 		assertThat(client).isNotNull();
 	}
@@ -178,7 +178,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_client_and_returns_previous_one() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final HttpClient client1 = adapter.getClient();
 		final HttpClient client2 = adapter.getClient();
 
@@ -190,7 +190,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_client_of_given_strategy() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
 		final HttpClient client = adapter.getClient(strategy);
 		assertThat(client).isNotNull();
@@ -199,7 +199,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_client_of_given_strategy_and_returns_previous_one() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
 		final HttpClient client1 = adapter.getClient(strategy);
 		final HttpClient client2 = adapter.getClient(strategy);
@@ -212,7 +212,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_stop_server_and_close_clients() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final HttpClient client = adapter.getClient();
 
 		assertThat(client).isNotNull();
@@ -227,7 +227,7 @@ public class EmbeddedServerTestLifeCycleAdapterTest {
 	@Test
 	public void it_should_get_client_of_given_strategy_and_destroy_it_when_server_stop() {
 		final EmbeddedServer server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerTestLifeCycleAdapter adapter = new EmbeddedServerTestLifeCycleAdapter(server);
+		final EmbeddedServerTestAdapter adapter = new EmbeddedServerTestAdapter(server);
 		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
 		final HttpClient client = adapter.getClient(strategy);
 
