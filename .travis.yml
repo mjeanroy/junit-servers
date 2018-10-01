@@ -39,6 +39,8 @@ matrix:
       jdk: oraclejdk9
     - name: "Oracle JDK 10"
       jdk: oraclejdk10
+    - name: "OpenJDK 11"
+      jdk: openjdk11
 
 addons:
   # https://github.com/travis-ci/travis-ci/issues/5914
