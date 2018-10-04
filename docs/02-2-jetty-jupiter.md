@@ -74,7 +74,7 @@ class MyTest {
 
   // The custom configuration that will be used to start the embedded jetty server.
   @TestServerConfiguration
-  static EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.build()
+  static EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
     .withPath("/app")
     .withPort(8080)
     .withProperty("spring.profiles.active", "test")
@@ -121,7 +121,7 @@ class MyTest {
   // Remove it to start/stop server before each/after each test (not recommended).
   @RegisterExtension
   static JunitServerExtension extension = new JunitServerExtension(
-    EmbeddedJettyConfiguration.build()
+    EmbeddedJettyConfiguration.builder()
       .withPath("/app")
       .withPort(8080)
       .withProperty("spring.profiles.active", "test")
