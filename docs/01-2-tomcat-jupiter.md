@@ -74,7 +74,7 @@ class MyTest {
 
   // The custom configuration that will be used to start the embedded tomcat server.
   @TestServerConfiguration
-  static EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.build()
+  static EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
     .withPath("/app")
     .withPort(8080)
     .withProperty("spring.profiles.active", "test")
@@ -121,7 +121,7 @@ class MyTest {
   // Remove it to start/stop server before each/after each test (not recommended).
   @RegisterExtension
   static JunitServerExtension extension = new JunitServerExtension(
-    EmbeddedTomcatConfiguration.build()
+    EmbeddedTomcatConfiguration.builder()
       .withPath("/app")
       .withPort(8080)
       .withProperty("spring.profiles.active", "test")
