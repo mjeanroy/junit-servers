@@ -37,8 +37,8 @@ matrix:
       jdk: oraclejdk8
     - name: "Oracle JDK 9"
       jdk: oraclejdk9
-    - name: "Oracle JDK 10"
-      jdk: oraclejdk10
+    - name: "OpenJDK 10"
+      jdk: openjdk10
     - name: "OpenJDK 11"
       jdk: openjdk11
 
