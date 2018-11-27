@@ -99,7 +99,7 @@
     <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
     <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
 
-    <apache-rat-plugin.version>0.12</apache-rat-plugin.version>
+    <apache-rat-plugin.version>0.13</apache-rat-plugin.version>
     <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
 
     <java-module-name>com.github.mjeanroy.junit.servers</java-module-name>
