@@ -52,7 +52,7 @@ import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration
 import static org.eclipse.jetty.util.resource.Resource.newResource;
 
 /**
- * Jetty Embedded Server.
+ * Jetty Embedded Server.mv
  */
 public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyConfiguration> {
 

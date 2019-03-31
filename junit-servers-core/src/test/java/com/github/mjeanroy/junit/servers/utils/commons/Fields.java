@@ -112,23 +112,4 @@ public final class Fields {
 			throw new AssertionError(ex);
 		}
 	}
-
-	/**
-	 * Write value on given static final field.
-	 *
-	 * @param klass The class.
-	 * @param name The field name.
-	 * @param value The new field value.
-	 */
-	public static void writeStaticFinal(Class<?> klass, String name, Object value) {
-		Field field = FieldUtils.getDeclaredField(klass, name, true);
-		FieldUtils.removeFinalModifier(field);
-
-		try {
-			FieldUtils.writeStaticField(field, value, true);
-		}
-		catch (IllegalAccessException ex) {
-			throw new AssertionError(ex);
-		}
-	}
 }
