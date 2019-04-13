@@ -31,8 +31,8 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jetty.junit4.AbstractJettyJunit4Test;
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.samples.jetty.java.TestUtils.createJettyConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.jetty.java.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.JettyTestUtils.createJettyConfiguration;
 
 public class IndexWithRunnerTest extends AbstractJettyJunit4Test {
 
@@ -44,6 +44,6 @@ public class IndexWithRunnerTest extends AbstractJettyJunit4Test {
 
 	@Test
 	public void it_should_have_an_index() {
-		ensureIndexIsOk(client, server);
+		ensureWebAppIsOk(client, server);
 	}
 }

@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2018 <mickael.jeanroy@gmail.com>
+ * Copyright (c) 2015-2019 <mickael.jeanroy@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,66 +22,66 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.jetty.webxml;
+package com.github.mjeanroy.junit.servers.samples.utils;
 
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 import java.io.File;
 import java.net.URL;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
- * Static Test Utilities.
+ * Static Tomcat Utilities for various samples.
  */
-class TestUtils {
+public final class TomcatTestUtils {
 
 	// Ensure non instantiation.
-	private TestUtils() {
+	private TomcatTestUtils() {
 	}
 
 	/**
-	 * Create the Jetty Embedded configuration to use in unit tests.
+	 * Create configuration for Embedded Tomcat in Unit Test.
 	 *
-	 * @return The Jetty Embedded Configuration.
-	 * @throws AssertionError If an error occurred while creation the configuration object.
+	 * @return The configuration.
+	 * @throws AssertionError If an error occurred while creating configuration.
 	 */
-	static EmbeddedJettyConfiguration createJettyConfiguration() {
-		try {
+	public static EmbeddedTomcatConfiguration createTomcatConfiguration() {
+		return createBasicConfiguration().build();
+	}
 
+	/**
+	 * Create configuration for Embedded Tomcat in Unit Test.
+	 *
+	 * @return The configuration.
+	 * @throws AssertionError If an error occurred while creating configuration.
+	 */
+	public static EmbeddedTomcatConfiguration createTomcatConfigurationWithWebXml() {
+		return createBasicConfiguration()
+			.withOverrideDescriptor("src/test/resources/web.xml")
+			.build();
+	}
+
+	private static EmbeddedTomcatConfiguration.Builder createBasicConfiguration() {
+		try {
 			String absolutePath = new File(".").getCanonicalPath();
 			if (!absolutePath.endsWith("/")) {
 				absolutePath += "/";
 			}
 
-			// note use of maven plugin to copy a maven dependency to this directory
-			URL urlParentClasspath = new File("target/lib/").toURI().toURL();
-
-			return EmbeddedJettyConfiguration.builder()
+			EmbeddedTomcatConfiguration.Builder builder = EmbeddedTomcatConfiguration.builder()
 				.withWebapp(absolutePath + "src/main/webapp")
-				.withParentClasspath(urlParentClasspath)
-				.withClasspath(absolutePath + "target/classes")
-				.withContainerJarPattern(".*\\.jar")
-				.build();
+				.withClasspath(absolutePath + "target/classes");
 
+			// note use of maven plugin to copy a maven dependency to this directory
+			File lib = new File("target/lib/");
+			if (lib.exists()) {
+				URL parentClasspath = lib.toURI().toURL();
+				builder.withParentClasspath(parentClasspath);
+			}
+
+			return builder;
 		}
 		catch (Exception ex) {
 			throw new AssertionError(ex);
 		}
-	}
-
-	/**
-	 * Ensure the index page is rendered with expected message.
-	 *
-	 * @param client The HTTP client to use.
-	 */
-	static void ensureIndexIsOk(HttpClient client) {
-		String message = client
-			.prepareGet("/")
-			.execute()
-			.body();
-
-		assertThat(message).isNotEmpty().contains("Hello");
 	}
 }

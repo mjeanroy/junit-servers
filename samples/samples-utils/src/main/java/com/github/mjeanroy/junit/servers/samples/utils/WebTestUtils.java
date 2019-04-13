@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 <mickael.jeanroy@gmail.com>, <fernando.ney@gmail.com>
+ * Copyright (c) 2015-2019 <mickael.jeanroy@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,53 +22,19 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
+package com.github.mjeanroy.junit.servers.samples.utils;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-
-import java.io.File;
-import java.net.URL;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Static Test Utilities.
+ * Static Web Utilities for various samples.
  */
-class TestUtils {
+final class WebTestUtils {
 
 	// Ensure non instantiation.
-	private TestUtils() {
-	}
-
-	/**
-	 * Create configuration for Embedded Tomcat in Unit Test.
-	 *
-	 * @return The configuration.
-	 * @throws AssertionError If an error occurred while creating configuration.
-	 */
-	static EmbeddedTomcatConfiguration createTomcatConfiguration() {
-		try {
-
-			String absolutePath = new File(".").getCanonicalPath();
-			if (!absolutePath.endsWith("/")) {
-				absolutePath += "/";
-			}
-
-			// note use of maven plugin to copy a maven dependency to this directory
-			URL urlParentClasspath = new File("target/lib/").toURI().toURL();
-
-			return EmbeddedTomcatConfiguration.builder()
-				.withWebapp(absolutePath + "src/main/webapp")
-				.withOverrideDescriptor("src/test/resources/web.xml")
-				.withParentClasspath(urlParentClasspath)
-				.withClasspath(absolutePath + "target/classes")
-				.build();
-
-		}
-		catch (Exception ex) {
-			throw new AssertionError(ex);
-		}
+	private WebTestUtils() {
 	}
 
 	/**
@@ -77,11 +43,7 @@ class TestUtils {
 	 * @param client The HTTP client.
 	 */
 	static void ensureIndexIsOk(HttpClient client) {
-		String message = client
-			.prepareGet("/index")
-			.execute()
-			.body();
-
-		assertThat(message).isNotEmpty().contains("Hello");
+		String message = client.prepareGet("/index").execute().body();
+		assertThat(message).isNotEmpty().contains("Hello World");
 	}
 }

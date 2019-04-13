@@ -37,7 +37,7 @@ public class IndexController {
 	@RequestMapping(value = { "/", "/index" }, method = GET)
 	@ResponseBody
 	public ModelAndView index() {
-		String message = "Hello";
+		String message = "Hello World";
 		ModelAndView view = new ModelAndView("welcome");
 		view.addObject("message", message);
 		return view;

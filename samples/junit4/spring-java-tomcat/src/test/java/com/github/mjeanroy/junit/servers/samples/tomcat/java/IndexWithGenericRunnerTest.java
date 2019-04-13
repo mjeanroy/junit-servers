@@ -34,8 +34,8 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.java.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.java.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.TomcatTestUtils.createTomcatConfiguration;
 
 @RunWith(JunitServerRunner.class)
 public class IndexWithGenericRunnerTest {
@@ -51,6 +51,6 @@ public class IndexWithGenericRunnerTest {
 
 	@Test
 	public void it_should_have_an_index() {
-		ensureIndexIsOk(client, tomcat);
+		ensureWebAppIsOk(client, tomcat);
 	}
 }

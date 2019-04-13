@@ -25,27 +25,32 @@
 package com.github.mjeanroy.junit.servers.samples.tomcat.webxml;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Runner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.TomcatTestUtils.createTomcatConfigurationWithWebXml;
 
 @RunWith(TomcatServerJunit4Runner.class)
 public class IndexWithRunnerTest {
 
 	@TestServerConfiguration
-	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();
+	private static EmbeddedTomcatConfiguration configuration = createTomcatConfigurationWithWebXml();
 
 	@TestHttpClient
 	private HttpClient client;
 
+	@TestServer
+	private EmbeddedTomcat tomcat;
+
 	@Test
 	public void it_should_have_an_index() {
-		ensureIndexIsOk(client);
+		ensureWebAppIsOk(client, tomcat);
 	}
 }

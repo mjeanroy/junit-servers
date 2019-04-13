@@ -28,7 +28,7 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 import org.junit.ClassRule;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.java.TestUtils.createTomcatConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.utils.TomcatTestUtils.createTomcatConfiguration;
 
 public class AbstractTest {
 

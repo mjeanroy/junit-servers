@@ -29,18 +29,18 @@ import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.webxml.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.TomcatTestUtils.createTomcatConfigurationWithWebXml;
 
 public class IndexWithRulesTest {
 
 	@ClassRule
 	public static TomcatServerJunit4Rule serverRule = new TomcatServerJunit4Rule(
-		new EmbeddedTomcat(createTomcatConfiguration())
+		new EmbeddedTomcat(createTomcatConfigurationWithWebXml())
 	);
 
 	@Test
 	public void it_should_have_an_index() {
-		ensureIndexIsOk(serverRule.getClient());
+		ensureWebAppIsOk(serverRule.getClient(), serverRule.getServer());
 	}
 }

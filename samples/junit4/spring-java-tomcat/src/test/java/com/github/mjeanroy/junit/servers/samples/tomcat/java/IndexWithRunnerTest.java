@@ -33,13 +33,13 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test;
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.java.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.java.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.TomcatTestUtils.createTomcatConfiguration;
 
 public class IndexWithRunnerTest extends AbstractTomcatJunit4Test {
 
 	@TestServerConfiguration
-	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();
+	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();;
 
 	@TestServer
 	private static EmbeddedTomcat tomcat;
@@ -49,6 +49,6 @@ public class IndexWithRunnerTest extends AbstractTomcatJunit4Test {
 
 	@Test
 	public void it_should_have_an_index() {
-		ensureIndexIsOk(client, tomcat);
+		ensureWebAppIsOk(client, tomcat);
 	}
 }

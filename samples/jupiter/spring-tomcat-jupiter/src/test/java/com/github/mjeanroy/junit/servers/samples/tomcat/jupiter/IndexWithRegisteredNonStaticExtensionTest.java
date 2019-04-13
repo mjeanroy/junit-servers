@@ -30,8 +30,8 @@ import com.github.mjeanroy.junit.servers.tomcat.jupiter.TomcatServerExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.jupiter.TestUtils.createTomcatConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.tomcat.jupiter.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.TomcatTestUtils.createTomcatConfiguration;
 
 class IndexWithRegisteredNonStaticExtensionTest {
 
@@ -42,6 +42,6 @@ class IndexWithRegisteredNonStaticExtensionTest {
 
 	@Test
 	void it_should_have_an_index(HttpClient client, EmbeddedTomcat tomcat) {
-		ensureIndexIsOk(client, tomcat);
+		ensureWebAppIsOk(client, tomcat);
 	}
 }

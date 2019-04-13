@@ -26,12 +26,12 @@ package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.samples.tomcat.java.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
 
 public class IndexWithRulesWithParent01Test extends AbstractTest {
 
 	@Test
 	public void it_should_have_an_index() {
-		ensureIndexIsOk(serverRule.getClient(), serverRule.getServer());
+		ensureWebAppIsOk(serverRule.getClient(), serverRule.getServer());
 	}
 }

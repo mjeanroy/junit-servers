@@ -29,8 +29,8 @@ import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Rule;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.createJettyConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.jetty.webxml.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.JettyTestUtils.createJettyConfiguration;
 
 public class IndexWithRulesTest {
 
@@ -41,6 +41,6 @@ public class IndexWithRulesTest {
 
 	@Test
 	public void it_should_have_an_index() {
-		ensureIndexIsOk(serverRule.getClient());
+		ensureWebAppIsOk(serverRule.getClient(), serverRule.getServer());
 	}
 }

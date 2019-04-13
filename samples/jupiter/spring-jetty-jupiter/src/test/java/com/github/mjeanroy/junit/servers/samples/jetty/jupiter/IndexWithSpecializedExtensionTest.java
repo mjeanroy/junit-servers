@@ -32,8 +32,8 @@ import com.github.mjeanroy.junit.servers.jetty.jupiter.JettyServerExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.github.mjeanroy.junit.servers.samples.jetty.jupiter.TestUtils.createJettyConfiguration;
-import static com.github.mjeanroy.junit.servers.samples.jetty.jupiter.TestUtils.ensureIndexIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.JettyTestUtils.createJettyConfiguration;
 
 @ExtendWith(JettyServerExtension.class)
 class IndexWithSpecializedExtensionTest {
@@ -43,6 +43,6 @@ class IndexWithSpecializedExtensionTest {
 
 	@Test
 	void it_should_have_an_index(HttpClient client, EmbeddedJetty jetty) {
-		ensureIndexIsOk(client, jetty);
+		ensureWebAppIsOk(client, jetty);
 	}
 }

@@ -3,7 +3,7 @@
 <!--
  The MIT License (MIT)
 
- Copyright (c) 2014-2018 <mickael.jeanroy@gmail.com>
+ Copyright (c) 2014-2019 <mickael.jeanroy@gmail.com>
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,77 +24,52 @@
  THE SOFTWARE.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>junit-servers-samples-junit4</artifactId>
+    <artifactId>junit-servers-samples</artifactId>
     <groupId>com.github.mjeanroy</groupId>
     <version>0.11.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>spring-webxml-jetty</artifactId>
+  <artifactId>junit-servers-samples-utils</artifactId>
   <version>0.11.1-SNAPSHOT</version>
-  <name>junit-servers-spring-webxml-jetty</name>
-  <packaging>war</packaging>
+  <name>junit-servers-samples-utils</name>
+  <packaging>jar</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
 
   <dependencies>
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
+      <groupId>com.github.mjeanroy</groupId>
+      <artifactId>junit-servers-tomcat</artifactId>
+      <version>${project.version}</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.github.mjeanroy</groupId>
       <artifactId>junit-servers-jetty</artifactId>
       <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.mjeanroy</groupId>
-      <artifactId>junit-servers-samples-utils</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <scope>test</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <scope>test</scope>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <optional>true</optional>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2018 <mickael.jeanroy@gmail.com>
+ * Copyright (c) 2015-2019 <mickael.jeanroy@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,20 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.jetty.jupiter;
+package com.github.mjeanroy.junit.servers.samples.utils;
 
-import com.github.mjeanroy.junit.servers.client.Cookie;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
 import java.io.File;
+import java.net.URL;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-class TestUtils {
+/**
+ * Static Jetty Utilities for various samples.
+ */
+public class JettyTestUtils {
 
 	// Ensure non instantiation.
-	private TestUtils() {
+	private JettyTestUtils() {
 	}
 
 	/**
@@ -49,50 +44,29 @@ class TestUtils {
 	 * @return The Jetty Embedded Configuration.
 	 * @throws AssertionError If an error occurred while creation the configuration object.
 	 */
-	static EmbeddedJettyConfiguration createJettyConfiguration() {
+	public static EmbeddedJettyConfiguration createJettyConfiguration() {
 		try {
-
 			String absolutePath = new File(".").getCanonicalPath();
 			if (!absolutePath.endsWith("/")) {
 				absolutePath += "/";
 			}
 
-			return EmbeddedJettyConfiguration.builder()
+			EmbeddedJettyConfiguration.Builder builder = EmbeddedJettyConfiguration.builder()
 				.withWebapp(absolutePath + "src/main/webapp")
 				.withClasspath(absolutePath + "target/classes")
-				.build();
+				.withContainerJarPattern(".*\\.jar");
 
+			// Note use of maven plugin to copy a maven dependency to this directory
+			File file = new File("target/lib/");
+			if (file.exists()) {
+				URL parentClasspath = file.toURI().toURL();
+				builder.withParentClasspath(parentClasspath);
+			}
+
+			return builder.build();
 		}
 		catch (Exception ex) {
 			throw new AssertionError(ex);
 		}
-	}
-
-	/**
-	 * Ensure the index page is rendered with expected message.
-	 *
-	 * @param client The HTTP client to use.
-	 * @param jetty The embedded jetty.
-	 */
-	static void ensureIndexIsOk(HttpClient client, EmbeddedServer jetty) {
-		HttpResponse rsp = client
-			.prepareGet("/index")
-			.addCookie(new Cookie.Builder("foo", "bar")
-				.maxAge(0L)
-				.build())
-			.execute();
-
-		String message = rsp.body();
-		assertThat(message)
-			.isNotEmpty()
-			.isEqualTo("Hello bar");
-
-		// Try to get servlet context
-		ServletContext servletContext = jetty.getServletContext();
-		assertThat(servletContext).isNotNull();
-
-		// Try to retrieve spring webApplicationContext
-		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		assertThat(webApplicationContext).isNotNull();
 	}
 }

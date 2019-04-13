@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 <mickael.jeanroy@gmail.com>, <fernando.ney@gmail.com>
+ * Copyright (c) 2015-2019 <mickael.jeanroy@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.java;
+package com.github.mjeanroy.junit.servers.samples.utils;
 
-import org.junit.Test;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
-import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.SpringWebTestUtils.verifySpringWebContext;
+import static com.github.mjeanroy.junit.servers.samples.utils.WebTestUtils.ensureIndexIsOk;
 
-public class IndexWithRulesWithParent03Test extends AbstractTest {
+/**
+ * Static Embedded WebApp Utilities for various samples.
+ */
+public final class EmbeddedWebAppTestUtils {
 
-	@Test
-	public void it_should_have_an_index() {
-		ensureWebAppIsOk(serverRule.getClient(), serverRule.getServer());
+	// Ensure non instantiation.
+	private EmbeddedWebAppTestUtils() {
+	}
+
+	/**
+	 * Ensure that:
+	 * <ul>
+	 *   <li>Index view is OK.</li>
+	 *   <li>Web Application is correctly started and spring web-context can be retrieved.</li>
+	 * </ul>
+	 *
+	 * @param client The HTTP client used to query embedded server.
+	 * @param server The embedded server.
+	 */
+	public static void ensureWebAppIsOk(HttpClient client, EmbeddedServer server) {
+		ensureIndexIsOk(client);
+		verifySpringWebContext(server);
 	}
 }
