@@ -39,7 +39,7 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.net.URL;
 
-import static com.github.mjeanroy.junit.servers.tomcat.tests.Fields.readPrivate;
+import static com.github.mjeanroy.junit.servers.tomcat.tests.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmbeddedTomcatTest {

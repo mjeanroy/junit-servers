@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.tomcat.jupiter;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.tests.EmbeddedTomcatMockBuilder;
+import com.github.mjeanroy.junit.servers.tomcat.tests.builders.EmbeddedTomcatMockBuilder;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

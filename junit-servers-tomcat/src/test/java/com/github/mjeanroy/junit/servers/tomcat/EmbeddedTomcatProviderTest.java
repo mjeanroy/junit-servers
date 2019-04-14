@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.tomcat.tests.EmbeddedTomcatConfigurationMockBuilder;
+import com.github.mjeanroy.junit.servers.tomcat.tests.builders.EmbeddedTomcatConfigurationMockBuilder;
 import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;

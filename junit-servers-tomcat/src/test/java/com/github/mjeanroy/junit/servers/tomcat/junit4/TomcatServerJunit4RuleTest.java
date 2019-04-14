@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.tomcat.junit4;
 
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.tests.EmbeddedTomcatMockBuilder;
+import com.github.mjeanroy.junit.servers.tomcat.tests.builders.EmbeddedTomcatMockBuilder;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
