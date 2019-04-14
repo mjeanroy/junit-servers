@@ -24,17 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
-/**
- * Exception thrown when embedded server implementation detections returns more
- * than one eligible "custom" implementation.
- */
-@SuppressWarnings("serial")
-public class ServerImplConflictException extends AbstractEmbeddedServerException {
+public class DuplicateConfigurationException extends AbstractEmbeddedServerException {
 
-	/**
-	 * Create exception.
-	 */
-	public ServerImplConflictException() {
-		super("More than one embedded server implementation has been found in the classpath, please fix your dependencies");
+	public DuplicateConfigurationException(String message) {
+		super(message);
 	}
 }

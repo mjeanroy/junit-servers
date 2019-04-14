@@ -25,6 +25,8 @@
 package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.commons.Strings;
+import com.github.mjeanroy.junit.servers.exceptions.DuplicateConfigurationException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -40,6 +42,7 @@ import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStat
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
 import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.invoke;
+import static java.lang.System.lineSeparator;
 
 /**
  * Static utilities for server instantiation
@@ -142,16 +145,40 @@ public final class Servers {
 	public static <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
 		// Look for static methods first
 		List<Method> methods = findStaticMethodsAnnotatedWith(klass, TestServerConfiguration.class);
+		List<Field> fields = findStaticFieldsAnnotatedWith(klass, TestServerConfiguration.class);
+		int nbOfConfigurations = methods.size() + fields.size();
+
+		if (nbOfConfigurations > 1) {
+			failBecauseOfDuplicateConfiguration(klass, methods, fields);
+		}
+
 		if (!methods.isEmpty()) {
 			return invoke(methods.get(0));
 		}
 
 		// Then, look for static field
-		List<Field> fields = findStaticFieldsAnnotatedWith(klass, TestServerConfiguration.class);
 		if (!fields.isEmpty()) {
 			return getter(fields.get(0));
 		}
 
 		return null;
+	}
+
+	private static void failBecauseOfDuplicateConfiguration(Class<?> klass, List<Method> methods, List<Field> fields) {
+		List<String> lines = new ArrayList<>(1 + methods.size() + fields.size());
+
+		lines.add("It looks like multiple fields may be used to extract configuration: found:");
+
+		for (Method method : methods) {
+			lines.add("- " + klass.getName() + "#" + method.getName() + "()");
+		}
+
+		for (Field field : fields) {
+			lines.add("- " + klass.getName() + "#" + field.getName());
+		}
+
+		throw new DuplicateConfigurationException(
+			Strings.join(lineSeparator(), lines)
+		);
 	}
 }

@@ -26,6 +26,9 @@ package com.github.mjeanroy.junit.servers.commons;
 
 import org.junit.Test;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StringsTest {
@@ -62,5 +65,12 @@ public class StringsTest {
 		assertThat(Strings.removePrefix("foo", "foobar")).isEqualTo("foo");
 		assertThat(Strings.removePrefix("/foo", "/")).isEqualTo("foo");
 		assertThat(Strings.removePrefix("/foo", "/foo")).isEqualTo("");
+	}
+
+	@Test
+	public void it_should_join_strings() {
+		assertThat(Strings.join("//", emptyList())).isEqualTo("");
+		assertThat(Strings.join("//", singleton("test"))).isEqualTo("test");
+		assertThat(Strings.join(" -- ", asList("test1", "test2"))).isEqualTo("test1 -- test2");
 	}
 }
