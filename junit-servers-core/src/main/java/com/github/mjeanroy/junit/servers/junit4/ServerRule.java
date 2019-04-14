@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.junit4;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
@@ -55,7 +55,7 @@ public class ServerRule extends AbstractRule {
 	/**
 	 * The test engine.
 	 */
-	private final EmbeddedServerTestAdapter adapter;
+	private final EmbeddedServerRunner adapter;
 
 	/**
 	 * Create rule with default embedded server.
@@ -71,7 +71,7 @@ public class ServerRule extends AbstractRule {
 	 * to specify a custom configuration, use {@link #ServerRule(AbstractConfiguration)} constructor.
 	 */
 	public ServerRule() {
-		this.adapter = new EmbeddedServerTestAdapter();
+		this.adapter = new EmbeddedServerRunner();
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class ServerRule extends AbstractRule {
 	 * @param configuration Server configuration.
 	 */
 	public ServerRule(AbstractConfiguration configuration) {
-		this.adapter = new EmbeddedServerTestAdapter(configuration);
+		this.adapter = new EmbeddedServerRunner(configuration);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class ServerRule extends AbstractRule {
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public ServerRule(EmbeddedServer<?> server) {
-		this.adapter = new EmbeddedServerTestAdapter(server);
+		this.adapter = new EmbeddedServerRunner(server);
 	}
 
 	@Override

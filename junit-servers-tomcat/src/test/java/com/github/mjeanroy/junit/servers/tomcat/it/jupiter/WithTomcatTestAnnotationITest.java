@@ -22,22 +22,19 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jupiter;
+package com.github.mjeanroy.junit.servers.tomcat.it.jupiter;
 
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
-import org.junit.jupiter.api.extension.ParameterContext;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.jupiter.TomcatTest;
+import org.junit.jupiter.api.Test;
 
-/**
- * A parameter resolver, used by {@link JunitServerExtension}.
- */
-interface ParameterResolverFunction {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	/**
-	 * Resolve parameter value.
-	 *
-	 * @param parameterContext The parameter context.
-	 * @param serverAdapter The server that is already configured/started.
-	 * @return The parameter value.
-	 */
-	Object resolve(ParameterContext parameterContext, EmbeddedServerRunner serverAdapter);
+@TomcatTest
+class WithTomcatTestAnnotationITest {
+
+	@Test
+	void it_should_be_started(EmbeddedTomcat tomcat) {
+		assertThat(tomcat.isStarted()).isTrue();
+	}
 }

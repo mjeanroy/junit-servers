@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.jupiter;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import org.junit.jupiter.api.extension.ParameterContext;
 
 import java.util.function.Function;
@@ -55,7 +55,7 @@ class HttpClientParameterResolverFunction implements ParameterResolverFunction {
 	}
 
 	@Override
-	public Object resolve(ParameterContext parameterContext, EmbeddedServerTestAdapter serverAdapter) {
+	public Object resolve(ParameterContext parameterContext, EmbeddedServerRunner serverAdapter) {
 		HttpClientStrategy strategy = getStrategy(parameterContext);
 		return serverAdapter.getClient(strategy);
 	}

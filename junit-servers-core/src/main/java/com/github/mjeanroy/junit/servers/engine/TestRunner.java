@@ -22,22 +22,41 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jupiter;
-
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
-import org.junit.jupiter.api.extension.ParameterContext;
+package com.github.mjeanroy.junit.servers.engine;
 
 /**
- * A parameter resolver, used by {@link JunitServerExtension}.
+ * A test adapter: this is a class that implements commons test lifecycle hooks (before-all, before, after-all,
+ * after), thus will be able to be used in various test engine:
+ *
+ * <ul>
+ *   <li>JUnit 4 Rules.</li>
+ *   <li>JUnit 4 Runner.</li>
+ *   <li>JUnit Jupiter Extensions.</li>
+ * </ul>
  */
-interface ParameterResolverFunction {
+public interface TestRunner {
 
 	/**
-	 * Resolve parameter value.
-	 *
-	 * @param parameterContext The parameter context.
-	 * @param serverAdapter The server that is already configured/started.
-	 * @return The parameter value.
+	 * Method called before instantiating the test class and any test instance.
 	 */
-	Object resolve(ParameterContext parameterContext, EmbeddedServerRunner serverAdapter);
+	void beforeAll();
+
+	/**
+	 * Method called after all tests have been run.
+	 */
+	void afterAll();
+
+	/**
+	 * Method called before running unit test.
+	 *
+	 * @param target The test class instance.
+	 */
+	void beforeEach(Object target);
+
+	/**
+	 * Method called after running unit test.
+	 *
+	 * @param target The test class instance.
+	 */
+	void afterEach(Object target);
 }

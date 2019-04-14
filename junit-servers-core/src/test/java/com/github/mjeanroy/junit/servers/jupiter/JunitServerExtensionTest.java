@@ -27,8 +27,8 @@ package com.github.mjeanroy.junit.servers.jupiter;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient;
-import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerTestAdapter;
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
+import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerRunner;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
@@ -56,7 +56,7 @@ public class JunitServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
+		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull().isInstanceOf(FakeEmbeddedServer.class);
@@ -74,7 +74,7 @@ public class JunitServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
+		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isSameAs(server);
@@ -90,7 +90,7 @@ public class JunitServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
+		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull();
@@ -106,7 +106,7 @@ public class JunitServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
+		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		extension.afterAll(context);
 
@@ -123,7 +123,7 @@ public class JunitServerExtensionTest {
 		extension.beforeEach(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
+		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull();
@@ -139,7 +139,7 @@ public class JunitServerExtensionTest {
 		extension.beforeEach(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
+		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		extension.afterEach(context);
 
@@ -157,7 +157,7 @@ public class JunitServerExtensionTest {
 		extension.beforeEach(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
+		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		extension.afterEach(context);
 
@@ -179,11 +179,11 @@ public class JunitServerExtensionTest {
 		extension.beforeAll(context);
 
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
+		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		extension.beforeEach(context);
 
-		final AnnotationsHandlerTestAdapter annotationsAdapter = store.get("annotationsAdapter", AnnotationsHandlerTestAdapter.class);
+		final AnnotationsHandlerRunner annotationsAdapter = store.get("annotationsAdapter", AnnotationsHandlerRunner.class);
 
 		assertThat(annotationsAdapter).isNotNull();
 		assertThat(testInstance.server).isNotNull().isSameAs(serverAdapter.getServer());
@@ -250,7 +250,7 @@ public class JunitServerExtensionTest {
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
 		final JunitServerExtension extension = initializeExtension(context);
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
+		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 		final ParameterContext parameterContext = createParameterContext("method_server", EmbeddedServer.class);
 
 		final Object result = extension.resolveParameter(parameterContext, context);
@@ -264,7 +264,7 @@ public class JunitServerExtensionTest {
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
 		final JunitServerExtension extension = initializeExtension(context);
 		final FakeStore store = context.getSingleStore();
-		final EmbeddedServerTestAdapter serverAdapter = store.get("serverAdapter", EmbeddedServerTestAdapter.class);
+		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 		final ParameterContext parameterContext = createParameterContext("method_configuration", AbstractConfiguration.class);
 
 		final Object result = extension.resolveParameter(parameterContext, context);

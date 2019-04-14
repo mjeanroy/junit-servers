@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.jupiter;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient;
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,13 +41,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpClientParameterResolverFunctionTest {
 
-	private EmbeddedServerTestAdapter adapter;
+	private EmbeddedServerRunner adapter;
 	private HttpClientParameterResolverFunction resolver;
 
 	@Before
 	public void setUp() {
 		resolver = HttpClientParameterResolverFunction.getInstance();
-		adapter = new EmbeddedServerTestAdapter(new EmbeddedServerMockBuilder().build());
+		adapter = new EmbeddedServerRunner(new EmbeddedServerMockBuilder().build());
 	}
 
 	@Test

@@ -33,20 +33,20 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AnnotationsHandlerTestAdapterTest {
+public class AnnotationsHandlerRunnerTest {
 
 	@Test
 	public void it_should_process_handlers() {
 		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
 		final EmbeddedServer embeddedServer = new EmbeddedServerMockBuilder().build();
 		final FixtureClass target = new FixtureClass();
-		final AnnotationsHandlerTestAdapter adapter = new AnnotationsHandlerTestAdapter(embeddedServer, configuration);
+		final AnnotationsHandlerRunner adapter = new AnnotationsHandlerRunner(embeddedServer, configuration);
 
 		verifyBeforeTest(configuration, embeddedServer, target, adapter);
 		verifyAfterTest(configuration, embeddedServer, target, adapter);
 	}
 
-	private static void verifyAfterTest(AbstractConfiguration configuration, EmbeddedServer embeddedServer, FixtureClass target, AnnotationsHandlerTestAdapter adapter) {
+	private static void verifyAfterTest(AbstractConfiguration configuration, EmbeddedServer embeddedServer, FixtureClass target, AnnotationsHandlerRunner adapter) {
 		adapter.afterEach(target);
 
 		assertThat(target.server).isSameAs(embeddedServer);
@@ -54,7 +54,7 @@ public class AnnotationsHandlerTestAdapterTest {
 		assertThat(target.client).isNull();
 	}
 
-	private static void verifyBeforeTest(AbstractConfiguration configuration, EmbeddedServer embeddedServer, FixtureClass target, AnnotationsHandlerTestAdapter adapter) {
+	private static void verifyBeforeTest(AbstractConfiguration configuration, EmbeddedServer embeddedServer, FixtureClass target, AnnotationsHandlerRunner adapter) {
 		adapter.beforeEach(target);
 
 		assertThat(target.server).isSameAs(embeddedServer);

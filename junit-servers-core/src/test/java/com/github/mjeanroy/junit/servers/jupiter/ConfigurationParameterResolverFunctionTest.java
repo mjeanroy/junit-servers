@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.jupiter;
 
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerTestAdapter;
+import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
@@ -40,14 +40,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ConfigurationParameterResolverFunctionTest {
 
 	private EmbeddedServer<?> server;
-	private EmbeddedServerTestAdapter adapter;
+	private EmbeddedServerRunner adapter;
 	private ConfigurationResolverFunction resolver;
 
 	@Before
 	public void setUp() {
 		resolver = ConfigurationResolverFunction.getInstance();
 		server = new EmbeddedServerMockBuilder().build();
-		adapter = new EmbeddedServerTestAdapter(server);
+		adapter = new EmbeddedServerRunner(server);
 	}
 
 	@Test

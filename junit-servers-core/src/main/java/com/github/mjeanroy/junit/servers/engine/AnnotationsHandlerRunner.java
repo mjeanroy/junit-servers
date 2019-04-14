@@ -46,7 +46,7 @@ import static java.util.Arrays.asList;
  *   <li>{@link com.github.mjeanroy.junit.servers.annotations.TestHttpClient}</li>
  * </ul>
  */
-public class AnnotationsHandlerTestAdapter extends AbstractTestAdapter implements TestAdapter {
+public class AnnotationsHandlerRunner extends AbstractTestRunner implements TestRunner {
 
 	/**
 	 * List of handlers.
@@ -65,7 +65,7 @@ public class AnnotationsHandlerTestAdapter extends AbstractTestAdapter implement
 	 * @param server The embedded server used in the tested class instance.
 	 * @param configuration The embedded server configuration.
 	 */
-	public AnnotationsHandlerTestAdapter(EmbeddedServer<?> server, AbstractConfiguration configuration) {
+	public AnnotationsHandlerRunner(EmbeddedServer<?> server, AbstractConfiguration configuration) {
 		this.handlers = asList(
 			newServerAnnotationHandler(server),
 			newConfigurationAnnotationHandler(configuration),

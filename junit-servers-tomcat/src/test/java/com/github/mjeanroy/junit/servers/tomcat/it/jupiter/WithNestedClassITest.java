@@ -22,41 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.engine;
+package com.github.mjeanroy.junit.servers.tomcat.it.jupiter;
 
-/**
- * A test adapter: this is a class that implements commons test lifecycle hooks (before-all, before, after-all,
- * after), thus will be able to be used in various test engine:
- *
- * <ul>
- *   <li>JUnit 4 Rules.</li>
- *   <li>JUnit 4 Runner.</li>
- *   <li>JUnit Jupiter Extensions.</li>
- * </ul>
- */
-public interface TestAdapter {
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat.jupiter.TomcatTest;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
-	/**
-	 * Method called before instantiating the test class and any test instance.
-	 */
-	void beforeAll();
+import static org.assertj.core.api.Assertions.assertThat;
 
-	/**
-	 * Method called after all tests have been run.
-	 */
-	void afterAll();
+class WithNestedClassITest {
 
-	/**
-	 * Method called before running unit test.
-	 *
-	 * @param target The test class instance.
-	 */
-	void beforeEach(Object target);
-
-	/**
-	 * Method called after running unit test.
-	 *
-	 * @param target The test class instance.
-	 */
-	void afterEach(Object target);
+	@Nested
+	@TomcatTest
+	class InWebContainer {
+		@Test
+		void it_should_be_started(EmbeddedTomcat tomcat) {
+			assertThat(tomcat.isStarted()).isTrue();
+		}
+	}
 }
