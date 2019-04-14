@@ -62,14 +62,9 @@ public final class TomcatTestUtils {
 
 	private static EmbeddedTomcatConfiguration.Builder createBasicConfiguration() {
 		try {
-			String absolutePath = new File(".").getCanonicalPath();
-			if (!absolutePath.endsWith("/")) {
-				absolutePath += "/";
-			}
-
 			EmbeddedTomcatConfiguration.Builder builder = EmbeddedTomcatConfiguration.builder()
-				.withWebapp(absolutePath + "src/main/webapp")
-				.withClasspath(absolutePath + "target/classes");
+				.withWebapp("src/main/webapp")
+				.withClasspath("target/classes");
 
 			// note use of maven plugin to copy a maven dependency to this directory
 			File lib = new File("target/lib/");

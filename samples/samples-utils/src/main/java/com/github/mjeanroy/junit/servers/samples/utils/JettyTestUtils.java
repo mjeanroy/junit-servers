@@ -46,14 +46,9 @@ public class JettyTestUtils {
 	 */
 	public static EmbeddedJettyConfiguration createJettyConfiguration() {
 		try {
-			String absolutePath = new File(".").getCanonicalPath();
-			if (!absolutePath.endsWith("/")) {
-				absolutePath += "/";
-			}
-
 			EmbeddedJettyConfiguration.Builder builder = EmbeddedJettyConfiguration.builder()
-				.withWebapp(absolutePath + "src/main/webapp")
-				.withClasspath(absolutePath + "target/classes")
+				.withWebapp("src/main/webapp")
+				.withClasspath("target/classes")
 				.withContainerJarPattern(".*\\.jar");
 
 			// Note use of maven plugin to copy a maven dependency to this directory
