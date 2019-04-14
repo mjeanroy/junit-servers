@@ -92,7 +92,7 @@ public abstract class AbstractHttpResponseBuilder<T, U> {
 	@SuppressWarnings("unchecked")
 	public U withHeader(String name, String value) {
 		if (!headers.containsKey(name)) {
-			headers.put(name, new ArrayList<>());
+			headers.put(name, new ArrayList<String>());
 		}
 
 		headers.get(name).add(value);

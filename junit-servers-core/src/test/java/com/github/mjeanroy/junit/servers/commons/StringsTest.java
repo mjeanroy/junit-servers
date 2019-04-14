@@ -26,6 +26,8 @@ package com.github.mjeanroy.junit.servers.commons;
 
 import org.junit.Test;
 
+import java.util.Collection;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
@@ -69,8 +71,12 @@ public class StringsTest {
 
 	@Test
 	public void it_should_join_strings() {
-		assertThat(Strings.join("//", emptyList())).isEqualTo("");
-		assertThat(Strings.join("//", singleton("test"))).isEqualTo("test");
-		assertThat(Strings.join(" -- ", asList("test1", "test2"))).isEqualTo("test1 -- test2");
+		Collection<String> emptyList = emptyList();
+		Collection<String> singletonList = singleton("test");
+		Collection<String> list = asList("test1", "test2");
+
+		assertThat(Strings.join("//", emptyList)).isEqualTo("");
+		assertThat(Strings.join("//", singletonList)).isEqualTo("test");
+		assertThat(Strings.join(" -- ", list)).isEqualTo("test1 -- test2");
 	}
 }
