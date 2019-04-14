@@ -39,7 +39,7 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 
 	/**
-	 * The default value for {@link Builder#classpath}.
+	 * The default value for {@link Builder#getClasspath()}.
 	 */
 	private static final String DEFAULT_CLASSPATH = "./target/classes";
 

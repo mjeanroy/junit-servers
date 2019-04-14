@@ -66,14 +66,14 @@ public abstract class AbstractConfiguration extends com.github.mjeanroy.junit.se
 	/**
 	 * Initialize configuration.
 	 *
-	 * @param classpath New {@link #classpath} value.
-	 * @param path New {@link #path} value.
-	 * @param webapp New {@link #webapp} value.
-	 * @param port New {@link #port} value.
-	 * @param envProperties New {@link #envProperties} value.
-	 * @param hooks New {@link #hooks} value.
-	 * @param parentClassLoader New {@link #parentClassLoader} value.
-	 * @param overrideDescriptor New {@link #overrideDescriptor} value.
+	 * @param classpath New {@link #getClasspath()} value.
+	 * @param path New {@link #getPath()} value.
+	 * @param webapp New {@link #getWebapp()} value.
+	 * @param port New {@link #getPort()} value.
+	 * @param envProperties New {@link #getEnvProperties()} value.
+	 * @param hooks New {@link #getHooks()} value.
+	 * @param parentClassLoader New {@link #getParentClassLoader()} value.
+	 * @param overrideDescriptor New {@link #getOverrideDescriptor()} value.
 	 */
 	protected AbstractConfiguration(
 		String classpath,

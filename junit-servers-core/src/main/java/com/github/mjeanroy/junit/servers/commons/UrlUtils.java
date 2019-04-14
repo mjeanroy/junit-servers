@@ -80,7 +80,7 @@ public final class UrlUtils {
 			return String.valueOf(PATH_SEPARATOR);
 		}
 
-		return path.charAt(0) == PATH_SEPARATOR ? path : String.valueOf(PATH_SEPARATOR) + path;
+		return path.charAt(0) == PATH_SEPARATOR ? path : PATH_SEPARATOR + path;
 	}
 
 	/**

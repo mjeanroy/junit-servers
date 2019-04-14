@@ -56,54 +56,56 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	/**
 	 * Path value.
 	 *
-	 * @see AbstractConfiguration#path
+	 * @see AbstractConfiguration#getPath()
 	 */
 	private String path;
 
 	/**
 	 * Webapp value.
 	 *
-	 * @see AbstractConfiguration#webapp
+	 * @see AbstractConfiguration#getWebapp()
 	 */
 	private String webapp;
 
 	/**
 	 * Port value.
 	 *
-	 * @see AbstractConfiguration#port
+	 * @see AbstractConfiguration#getPort()
 	 */
 	private int port;
 
 	/**
 	 * Classpath value.
 	 *
-	 * @see AbstractConfiguration#classpath
+	 * @see AbstractConfiguration#getClasspath()
 	 */
 	private String classpath;
 
 	/**
 	 * Parent classloader.
 	 *
-	 * @see AbstractConfiguration#parentClassLoader
+	 * @see AbstractConfiguration#getParentClassLoader()
 	 */
 	private ClassLoader parentClassLoader;
 
 	/**
 	 * Map of properties.
 	 *
-	 * @see AbstractConfiguration#envProperties
+	 * @see AbstractConfiguration#getEnvProperties()
 	 */
 	private final Map<String, String> envProperties;
 
 	/**
 	 * List of executable hooks.
 	 *
-	 * @see AbstractConfiguration#hooks
+	 * @see AbstractConfiguration#getHooks()
 	 */
 	private final List<Hook> hooks;
 
 	/**
 	 * The path of the custom web.xml descriptor.
+	 *
+	 * @see AbstractConfiguration#getOverrideDescriptor()
 	 */
 	private String overrideDescriptor;
 

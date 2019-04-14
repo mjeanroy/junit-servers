@@ -58,7 +58,7 @@ import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
  *
  * <ul>
  *   <li>Inject an embedded server <strong>before all</strong> tests and stop it <strong>after all</strong> tests.</li>
- *   <li>Read server configuration annotated wiith {@link TestServerConfiguration}</li>
+ *   <li>Read server configuration annotated with {@link TestServerConfiguration}</li>
  *   <li>
  *     Resolve parameters of type (or any parameters inheriting from):
  *     <ul>
@@ -302,7 +302,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 *
 	 * <ul>
 	 *   <li>Started before all tests, and stopped after all tests, this is the static mode (the extension has been used as a static extension).</li>
-	 *   <li>Started before eacg tests, and stopped after eacg tests, this is the non static mode (the extension has not been used as a static extension).</li>
+	 *   <li>Started before each tests, and stopped after eacg tests, this is the non static mode (the extension has not been used as a static extension).</li>
 	 * </ul>
 	 *
 	 * @param context The test context.

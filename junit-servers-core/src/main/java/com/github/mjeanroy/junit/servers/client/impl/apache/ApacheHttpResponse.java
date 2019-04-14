@@ -45,7 +45,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
 /**
- * Implementation of {@link HttpResponse} delegating calls to origina {@link org.apache.http.HttpResponse}
+ * Implementation of {@link HttpResponse} delegating calls to original {@link org.apache.http.HttpResponse}
  * instance.
  */
 final class ApacheHttpResponse extends AbstractHttpResponse implements HttpResponse {

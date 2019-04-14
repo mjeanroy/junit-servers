@@ -52,7 +52,7 @@ final class EmbeddedConfiguration extends AbstractConfiguration {
 	 * @param envProperties Environment properties.
 	 * @param hooks Server hooks.
 	 * @param parentClassLoader The parent classloader, may be {@code null}.
-	 * @param overrideDescriptor The overrided descriptor, may be {@code null}.
+	 * @param overrideDescriptor The overridden descriptor, may be {@code null}.
 	 */
 	EmbeddedConfiguration(
 		String classpath,

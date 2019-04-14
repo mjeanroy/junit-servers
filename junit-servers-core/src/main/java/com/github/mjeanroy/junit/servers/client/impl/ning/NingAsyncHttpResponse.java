@@ -41,7 +41,7 @@ import java.util.Objects;
 import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
 
 /**
- * Implementation of {@link HttpResponse} delegating calls to origina {@link Response}
+ * Implementation of {@link HttpResponse} delegating calls to original {@link Response}
  * instance.
  */
 final class NingAsyncHttpResponse extends AbstractHttpResponse implements HttpResponse {
