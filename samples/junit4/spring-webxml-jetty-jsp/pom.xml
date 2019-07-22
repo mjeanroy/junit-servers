@@ -33,7 +33,7 @@
   <url>https://github.com/mjeanroy/junit-servers</url>
 
   <properties>
-    <owasp-xss-encoder.version>1.2.1</owasp-xss-encoder.version>
+    <owasp-xss-encoder.version>1.2.2</owasp-xss-encoder.version>
     <owasp-html-sanitizer.version>r239</owasp-html-sanitizer.version>
     <jetty.version>${jetty-java8.version}</jetty.version>
   </properties>
