@@ -108,7 +108,7 @@
     <jetty-java8.version>9.4.8.v20180619</jetty-java8.version>
     <jetty-java9.version>9.4.8.v20180619</jetty-java9.version>
     <jetty-java10.version>9.4.8.v20180619</jetty-java10.version>
-    <jetty.version>${jetty-java7.version}</jetty.version>
+    <jetty.version>9.4.20.v20190813</jetty.version>
 
     <tomcat-java7.version>8.5.40</tomcat-java7.version>
     <tomcat-java8.version>8.5.40</tomcat-java8.version>
