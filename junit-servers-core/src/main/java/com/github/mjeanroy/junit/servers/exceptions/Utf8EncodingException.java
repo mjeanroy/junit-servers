@@ -31,6 +31,7 @@ package com.github.mjeanroy.junit.servers.exceptions;
  * available (see <a href="http://docs.oracle.com/javase/6/docs/technotes/guides/intl/encoding.doc.html">here</a> for
  * the list of supported encoding).
  */
+@SuppressWarnings("serial")
 public class Utf8EncodingException extends AbstractException {
 
 	/**

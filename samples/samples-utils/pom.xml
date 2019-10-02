@@ -37,7 +37,6 @@
   </parent>
 
   <artifactId>junit-servers-samples-utils</artifactId>
-  <version>0.11.1-SNAPSHOT</version>
   <name>junit-servers-samples-utils</name>
   <packaging>jar</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>

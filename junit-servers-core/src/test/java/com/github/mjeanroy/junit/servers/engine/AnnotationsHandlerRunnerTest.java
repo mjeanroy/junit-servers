@@ -38,7 +38,7 @@ public class AnnotationsHandlerRunnerTest {
 	@Test
 	public void it_should_process_handlers() {
 		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
-		final EmbeddedServer embeddedServer = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
 		final FixtureClass target = new FixtureClass();
 		final AnnotationsHandlerRunner adapter = new AnnotationsHandlerRunner(embeddedServer, configuration);
 
@@ -46,7 +46,7 @@ public class AnnotationsHandlerRunnerTest {
 		verifyAfterTest(configuration, embeddedServer, target, adapter);
 	}
 
-	private static void verifyAfterTest(AbstractConfiguration configuration, EmbeddedServer embeddedServer, FixtureClass target, AnnotationsHandlerRunner adapter) {
+	private static void verifyAfterTest(AbstractConfiguration configuration, EmbeddedServer<?> embeddedServer, FixtureClass target, AnnotationsHandlerRunner adapter) {
 		adapter.afterEach(target);
 
 		assertThat(target.server).isSameAs(embeddedServer);
@@ -54,7 +54,7 @@ public class AnnotationsHandlerRunnerTest {
 		assertThat(target.client).isNull();
 	}
 
-	private static void verifyBeforeTest(AbstractConfiguration configuration, EmbeddedServer embeddedServer, FixtureClass target, AnnotationsHandlerRunner adapter) {
+	private static void verifyBeforeTest(AbstractConfiguration configuration, EmbeddedServer<?> embeddedServer, FixtureClass target, AnnotationsHandlerRunner adapter) {
 		adapter.beforeEach(target);
 
 		assertThat(target.server).isSameAs(embeddedServer);

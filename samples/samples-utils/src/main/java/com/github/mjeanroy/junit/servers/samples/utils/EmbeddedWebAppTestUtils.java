@@ -49,7 +49,7 @@ public final class EmbeddedWebAppTestUtils {
 	 * @param client The HTTP client used to query embedded server.
 	 * @param server The embedded server.
 	 */
-	public static void ensureWebAppIsOk(HttpClient client, EmbeddedServer server) {
+	public static void ensureWebAppIsOk(HttpClient client, EmbeddedServer<?> server) {
 		ensureIndexIsOk(client);
 		verifySpringWebContext(server);
 	}

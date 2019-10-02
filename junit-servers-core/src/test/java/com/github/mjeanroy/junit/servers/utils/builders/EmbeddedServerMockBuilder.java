@@ -135,9 +135,16 @@ public class EmbeddedServerMockBuilder {
 	 *
 	 * @return The mock instance.
 	 */
-	public EmbeddedServer build() {
-		EmbeddedServer server = mock(EmbeddedServer.class);
-		when(server.getConfiguration()).thenReturn(configuration);
+	public EmbeddedServer<?> build() {
+		EmbeddedServer<?> server = mock(EmbeddedServer.class);
+
+		when(server.getConfiguration()).thenAnswer(new Answer<AbstractConfiguration>() {
+			@Override
+			public AbstractConfiguration answer(InvocationOnMock invocation) throws Throwable {
+				return configuration;
+			}
+		});
+
 		when(server.getScheme()).thenReturn(scheme);
 		when(server.getHost()).thenReturn(host);
 		when(server.getPort()).thenReturn(port);
@@ -151,10 +158,10 @@ public class EmbeddedServerMockBuilder {
 	}
 
 	private static class IsStartedAnswer implements Answer<Object> {
-		private final EmbeddedServer server;
+		private final EmbeddedServer<?> server;
 		private final boolean started;
 
-		private IsStartedAnswer(EmbeddedServer server, boolean started) {
+		private IsStartedAnswer(EmbeddedServer<?> server, boolean started) {
 			this.server = server;
 			this.started = started;
 		}

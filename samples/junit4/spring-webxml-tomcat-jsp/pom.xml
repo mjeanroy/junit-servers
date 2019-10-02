@@ -27,7 +27,6 @@
   </parent>
 
   <artifactId>spring-webxml-tomcat-jsp</artifactId>
-  <version>0.11.1-SNAPSHOT</version>
   <name>junit-servers-spring-webxml-tomcat-jsp</name>
   <packaging>war</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>

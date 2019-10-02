@@ -39,7 +39,6 @@
   </parent>
 
   <artifactId>junit-servers-samples-jupiter</artifactId>
-  <version>0.11.1-SNAPSHOT</version>
   <name>junit-servers-samples-jupiter</name>
   <packaging>pom</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>

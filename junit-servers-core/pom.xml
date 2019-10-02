@@ -35,7 +35,6 @@
   </parent>
 
   <artifactId>junit-servers-core</artifactId>
-  <version>0.11.1-SNAPSHOT</version>
   <name>junit-servers-core</name>
   <packaging>jar</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>

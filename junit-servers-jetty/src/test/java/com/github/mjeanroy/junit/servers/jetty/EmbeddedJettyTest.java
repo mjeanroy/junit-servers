@@ -115,22 +115,23 @@ public class EmbeddedJettyTest {
 		URL url = dir.toURI().toURL();
 		String name = tmpFile.getName();
 
-		URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { url });
-		assertThat(urlClassLoader.getResource(name)).isNotNull();
-
-		jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
-			.withWebapp(dir)
-			.withParentClasspath(url)
-			.build());
-
-		jetty.start();
-
-		WebAppContext ctx = (WebAppContext) jetty.getDelegate().getHandler();
-		ClassLoader cl = ctx.getClassLoader();
-
-		assertThat(cl).isNotNull();
-		assertThat(cl.getResource("custom-web.xml")).isNotNull();
-		assertThat(cl.getResource(name)).isNotNull();
+		try (URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { url })) {
+			assertThat(urlClassLoader.getResource(name)).isNotNull();
+	
+			jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
+				.withWebapp(dir)
+				.withParentClasspath(url)
+				.build());
+	
+			jetty.start();
+	
+			WebAppContext ctx = (WebAppContext) jetty.getDelegate().getHandler();
+			ClassLoader cl = ctx.getClassLoader();
+	
+			assertThat(cl).isNotNull();
+			assertThat(cl.getResource("custom-web.xml")).isNotNull();
+			assertThat(cl.getResource(name)).isNotNull();
+		}
 	}
 
 	@Test

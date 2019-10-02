@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.jetty.exceptions;
 import com.github.mjeanroy.junit.servers.exceptions.IllegalConfigurationException;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
+@SuppressWarnings("serial")
 public class IllegalJettyConfigurationException extends IllegalConfigurationException {
 
 	public IllegalJettyConfigurationException() {

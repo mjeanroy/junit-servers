@@ -373,10 +373,15 @@ public class HttpUrl {
 			return protocol;
 		}
 
-		private static final Map<String, HttpScheme> VALUES = unmodifiableMap(new HashMap<String, HttpScheme>() {{
-			put(HttpScheme.HTTP.getProtocol(), HttpScheme.HTTP);
-			put(HttpScheme.HTTPS.getProtocol(), HttpScheme.HTTPS);
-		}});
+		private static final Map<String, HttpScheme> VALUES;
+
+		static {
+			Map<String, HttpScheme> values = new HashMap<>();
+			values.put(HttpScheme.HTTP.getProtocol(), HttpScheme.HTTP);
+			values.put(HttpScheme.HTTPS.getProtocol(), HttpScheme.HTTPS);
+
+			VALUES = unmodifiableMap(values);
+		}
 
 		/**
 		 * Parse protocol to get the corresponding scheme.

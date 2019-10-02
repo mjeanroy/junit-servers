@@ -41,7 +41,7 @@ import static com.github.mjeanroy.junit.servers.samples.utils.JettyTestUtils.cre
 public class IndexWithRunnerTest {
 
 	@TestServer
-	private static EmbeddedServer jetty;
+	private static EmbeddedServer<?> jetty;
 
 	@TestServerConfiguration
 	private static EmbeddedJettyConfiguration configuration = createJettyConfiguration();

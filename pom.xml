@@ -425,7 +425,6 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <version>${apache-rat-plugin.version}</version>
       </plugin>
 
       <plugin>

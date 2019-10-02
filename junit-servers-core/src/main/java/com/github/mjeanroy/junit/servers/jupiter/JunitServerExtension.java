@@ -155,11 +155,13 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	/**
 	 * The list of parameter resolvers.
 	 */
-	private static final Map<Class<?>, ParameterResolverFunction> RESOLVERS = new HashMap<Class<?>, ParameterResolverFunction>() {{
-		put(EmbeddedServer.class, EmbeddedServerParameterResolverFunction.getInstance());
-		put(AbstractConfiguration.class, ConfigurationResolverFunction.getInstance());
-		put(HttpClient.class, HttpClientParameterResolverFunction.getInstance());
-	}};
+	private static final Map<Class<?>, ParameterResolverFunction> RESOLVERS = new HashMap<Class<?>, ParameterResolverFunction>();
+
+	static {
+		RESOLVERS.put(EmbeddedServer.class, EmbeddedServerParameterResolverFunction.getInstance());
+		RESOLVERS.put(AbstractConfiguration.class, ConfigurationResolverFunction.getInstance());
+		RESOLVERS.put(HttpClient.class, HttpClientParameterResolverFunction.getInstance());
+	}
 
 	/**
 	 * The embedded server to use.
@@ -409,7 +411,6 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @param value The value to store.
 	 * @param <T> The type of the value to look for.
 	 */
-	@SuppressWarnings("unchecked")
 	private static <T> void putInStore(ExtensionContext context, String name, T value) {
 		getStore(context).put(name, value);
 	}

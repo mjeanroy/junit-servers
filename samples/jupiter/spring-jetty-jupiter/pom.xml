@@ -33,7 +33,6 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>spring-jetty-jupiter</artifactId>
-  <version>0.11.1-SNAPSHOT</version>
   <name>junit-servers-spring-jetty-jupiter</name>
   <packaging>war</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
@@ -64,7 +63,6 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit-jupiter.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

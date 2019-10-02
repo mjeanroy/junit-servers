@@ -47,7 +47,7 @@ final class SpringWebTestUtils {
 	 *
 	 * @param server The embedded server.
 	 */
-	static void verifySpringWebContext(EmbeddedServer server) {
+	static void verifySpringWebContext(EmbeddedServer<?> server) {
 		// Try to get servlet context
 		ServletContext servletContext = server.getServletContext();
 		assertThat(servletContext).isNotNull();

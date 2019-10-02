@@ -96,13 +96,13 @@ public final class Servers {
 	 * @return Embedded server.
 	 */
 	@SuppressWarnings("unchecked")
-	public static EmbeddedServer<?> instantiate(AbstractConfiguration configuration) {
+	public static <T extends AbstractConfiguration> EmbeddedServer<T> instantiate(T configuration) {
 		ServiceLoader<EmbeddedServerProvider> serviceProviders = ServiceLoader.load(EmbeddedServerProvider.class);
 
-		List<EmbeddedServerProvider> coreServerProviders = new ArrayList<>();
-		List<EmbeddedServerProvider> customServerProviders = new ArrayList<>();
+		List<EmbeddedServerProvider<T>> coreServerProviders = new ArrayList<>();
+		List<EmbeddedServerProvider<T>> customServerProviders = new ArrayList<>();
 
-		for (EmbeddedServerProvider provider : serviceProviders) {
+		for (EmbeddedServerProvider<T> provider : serviceProviders) {
 			if (provider.getClass().getName().startsWith("com.github.mjeanroy.junit.servers")) {
 				coreServerProviders.add(provider);
 			}

@@ -38,7 +38,7 @@ public class AnnotationsHandlerRuleTest {
 	@Test
 	public void it_should_process_handlers() {
 		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
-		final EmbeddedServer embeddedServer = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
 		final FixtureClass target = new FixtureClass();
 		final AnnotationsHandlerRule rule = new AnnotationsHandlerRule(target, embeddedServer, configuration);
 
@@ -46,7 +46,7 @@ public class AnnotationsHandlerRuleTest {
 		verifyAfterTest(configuration, embeddedServer, target, rule);
 	}
 
-	private static void verifyAfterTest(AbstractConfiguration configuration, EmbeddedServer embeddedServer, FixtureClass target, AnnotationsHandlerRule rule) {
+	private static void verifyAfterTest(AbstractConfiguration configuration, EmbeddedServer<?> embeddedServer, FixtureClass target, AnnotationsHandlerRule rule) {
 		rule.after();
 
 		assertThat(target.server).isSameAs(embeddedServer);
@@ -54,7 +54,7 @@ public class AnnotationsHandlerRuleTest {
 		assertThat(target.client).isNull();
 	}
 
-	private static void verifyBeforeTest(AbstractConfiguration configuration, EmbeddedServer embeddedServer, FixtureClass target, AnnotationsHandlerRule rule) {
+	private static void verifyBeforeTest(AbstractConfiguration configuration, EmbeddedServer<?> embeddedServer, FixtureClass target, AnnotationsHandlerRule rule) {
 		rule.before();
 
 		assertThat(target.server).isSameAs(embeddedServer);

@@ -44,7 +44,7 @@ public class IndexWithRunnerTest {
 	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();
 
 	@TestServer
-	private static EmbeddedServer tomcat;
+	private static EmbeddedServer<?> tomcat;
 
 	@TestHttpClient
 	private HttpClient client;

@@ -63,7 +63,6 @@ public class EmbeddedServerParameterResolverFunctionTest {
 		return new FakeParameterContext(parameter);
 	}
 
-	@SuppressWarnings({ "unused", "WeakerAccess" })
 	public void method(EmbeddedServer<?> server) {
 	}
 }

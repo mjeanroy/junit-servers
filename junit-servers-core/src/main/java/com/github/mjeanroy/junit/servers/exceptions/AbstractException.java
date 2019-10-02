@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.exceptions;
 /**
  * Abstract generic exception.
  */
+@SuppressWarnings("serial")
 abstract class AbstractException extends RuntimeException {
 
 	/**

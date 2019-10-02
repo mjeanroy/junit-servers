@@ -64,7 +64,6 @@ public class ConfigurationParameterResolverFunctionTest {
 		return new FakeParameterContext(parameter);
 	}
 
-	@SuppressWarnings({ "unused", "WeakerAccess" })
 	public void method(AbstractConfiguration configuration) {
 	}
 }

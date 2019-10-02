@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
+@SuppressWarnings("serial")
 public class IllegalConfigurationException extends AbstractException {
 
 	public IllegalConfigurationException(String message) {

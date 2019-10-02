@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
+@SuppressWarnings("serial")
 public class DuplicateConfigurationException extends AbstractEmbeddedServerException {
 
 	public DuplicateConfigurationException(String message) {

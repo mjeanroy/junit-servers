@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.exceptions;
 /**
  * Exception thrown when URL cannot be built because of syntax error.
  */
+@SuppressWarnings("serial")
 public class UrlException extends AbstractException {
 
 	/**

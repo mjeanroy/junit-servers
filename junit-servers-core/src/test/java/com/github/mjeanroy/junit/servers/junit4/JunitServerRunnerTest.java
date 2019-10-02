@@ -43,7 +43,7 @@ public class JunitServerRunnerTest {
 	private static FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfiguration();
 
 	@TestServer
-	private static EmbeddedServer server;
+	private static EmbeddedServer<?> server;
 
 	@TestHttpClient
 	private HttpClient client;
