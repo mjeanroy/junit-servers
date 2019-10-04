@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.lang;
 
 import java.util.Map;
 

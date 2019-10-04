@@ -31,9 +31,9 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import java.lang.reflect.Field;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.getter;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.setter;
 
 /**
  * Annotation handler that will set simple http client implementation

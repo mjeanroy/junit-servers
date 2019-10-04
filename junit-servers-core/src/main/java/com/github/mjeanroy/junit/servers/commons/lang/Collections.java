@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.lang;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,10 +36,10 @@ import java.util.List;
  * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
  * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
-public final class CollectionUtils {
+public final class Collections {
 
 	// Ensure non instantiation
-	private CollectionUtils() {
+	private Collections() {
 	}
 
 	/**
@@ -116,7 +116,7 @@ public final class CollectionUtils {
 	 * @param <T> Type of elements.
 	 * @return Filtered outputs.
 	 */
-	static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
+	public static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
 		List<T> results = new ArrayList<>(list.size());
 
 		for (T current : list) {

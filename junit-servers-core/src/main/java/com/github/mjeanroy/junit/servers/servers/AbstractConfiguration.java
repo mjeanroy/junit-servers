@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.positive;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableList;

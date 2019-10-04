@@ -22,53 +22,53 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.core;
+
+import java.net.URL;
+
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
 /**
- * Static Java Utilities.
+ * A composite classloader is a classloader that has:
+ * <ul>
+ *   <li>A parent classloader.</li>
+ *   <li>A fallback classloader.</li>
+ * </ul>
+ *
+ * When resolving classes or resources, the parent classloader is consulted first,
+ * and if that classloader cannot find the class (or resource), the fallback classloader
+ * is tried.
+ *
+ * <p>
  *
  * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
  * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
-public final class JavaUtils {
+public class CompositeClassLoader extends ClassLoader {
 
-	// Ensure non instantiation.
-	private JavaUtils() {
+	/**
+	 * Fallback classloader that will be tried after parent classloader.
+	 */
+	private final ClassLoader fallback;
+
+	/**
+	 * Create the classloader.
+	 *
+	 * @param parent Parent classloader.
+	 * @param fallback Fallback classloader.
+	 */
+	public CompositeClassLoader(ClassLoader parent, ClassLoader fallback) {
+		super(parent);
+		this.fallback = notNull(fallback, "Fallback classloader");
 	}
 
-	/**
-	 * The system property name that will be read to get Java version.
-	 */
-	private static final String JAVA_SPECIFICATION_VERSION_PROP = "java.specification.version";
-
-	/**
-	 * The Java Specification version.
-	 */
-	private static final String JAVA_SPECIFICATION_VERSION = System.getProperty(JAVA_SPECIFICATION_VERSION_PROP);
-
-	/**
-	 * The parsed Java Version.
-	 */
-	private static final int JAVA_MAJOR_VERSION = parseJavaVersion();
-
-	/**
-	 * Check if runtime java version is at least Java 9.
-	 *
-	 * @return {@code true} if current Java version is at least Java 9, {@code false} otherwise.
-	 */
-	public static boolean isPostJdk9() {
-		return JAVA_MAJOR_VERSION >= 9;
+	@Override
+	protected Class<?> findClass(String name) throws ClassNotFoundException {
+		return fallback.loadClass(name);
 	}
 
-	/**
-	 * Parse java version.
-	 *
-	 * @return The JAVA Version.
-	 */
-	private static int parseJavaVersion() {
-		String[] parts = JAVA_SPECIFICATION_VERSION.split("\\.");
-		int nbParts = parts.length;
-		int majorIndex = nbParts > 1 ? 1 : 0;
-		return Integer.parseInt(parts[majorIndex]);
+	@Override
+	protected URL findResource(String name) {
+		return fallback.getResource(name);
 	}
 }

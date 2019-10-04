@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.lang;
 
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -31,41 +31,33 @@ import org.mockito.stubbing.Answer;
 
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.isEmpty;
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.join;
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.map;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singleton;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-public class CollectionUtilsTest {
+public class CollectionsTest {
 
 	@Test
 	public void it_should_return_true_if_collection_is_null_or_empty() {
-		assertThat(isEmpty(null)).isTrue();
-		assertThat(isEmpty(emptyList())).isTrue();
+		assertThat(Collections.isEmpty(null)).isTrue();
+		assertThat(Collections.isEmpty(emptyList())).isTrue();
 	}
 
 	@Test
 	public void it_should_return_false_if_collection_is_not_null_and_not_empty() {
-		assertThat(isEmpty(singletonList("foo"))).isFalse();
+		assertThat(Collections.isEmpty(singletonList("foo"))).isFalse();
 	}
 
 	@Test
 	public void it_should_join_elements() {
 		final String separator = ";";
-		assertThat(join(null, separator)).isEqualTo(null);
-		assertThat(join(emptyList(), separator)).isEqualTo("");
-		assertThat(join(singleton("foo"), separator)).isEqualTo("foo");
-		assertThat(join(asList("foo", "bar"), separator)).isEqualTo("foo;bar");
-		assertThat(join(asList("foo", "bar"), null)).isEqualTo("foobar");
+		assertThat(Collections.join(null, separator)).isEqualTo(null);
+		assertThat(Collections.join(emptyList(), separator)).isEqualTo("");
+		assertThat(Collections.join(singleton("foo"), separator)).isEqualTo("foo");
+		assertThat(Collections.join(asList("foo", "bar"), separator)).isEqualTo("foo;bar");
+		assertThat(Collections.join(asList("foo", "bar"), null)).isEqualTo("foobar");
 	}
 
 	@Test
@@ -82,7 +74,7 @@ public class CollectionUtilsTest {
 			}
 		});
 
-		final List<Integer> results = filter(numbers, predicate);
+		final List<Integer> results = Collections.filter(numbers, predicate);
 
 		assertThat(results)
 			.isNotNull()
@@ -113,7 +105,7 @@ public class CollectionUtilsTest {
 			}
 		});
 
-		final List<Integer> results = map(numbers, mapper);
+		final List<Integer> results = Collections.map(numbers, mapper);
 
 		assertThat(results)
 			.isNotNull()
@@ -130,6 +122,6 @@ public class CollectionUtilsTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void it_should_map_null_to_null() {
-		assertThat(map(null, mock(Mapper.class))).isNull();
+		assertThat(Collections.map(null, mock(Mapper.class))).isNull();
 	}
 }

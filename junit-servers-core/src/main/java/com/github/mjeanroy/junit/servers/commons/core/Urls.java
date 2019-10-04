@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.core;
 
 import com.github.mjeanroy.junit.servers.exceptions.UrlException;
 
@@ -37,7 +37,7 @@ import java.net.URISyntaxException;
  * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
  * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
-public final class UrlUtils {
+public final class Urls {
 
 	private static final String[] HTTP_SCHEMES = new String[] { "http://", "https://" };
 
@@ -47,7 +47,7 @@ public final class UrlUtils {
 	private static final char PATH_SEPARATOR = '/';
 
 	// Ensure non instantiation
-	private UrlUtils() {
+	private Urls() {
 	}
 
 	/**
@@ -60,7 +60,7 @@ public final class UrlUtils {
 	 * @return The final URI.
 	 * @throws UrlException If URI cannot be built because of an invalid parameter.
 	 */
-	public static URI createUri(String scheme, String host, int port, String path) {
+	static URI createUri(String scheme, String host, int port, String path) {
 		try {
 			return new URI(scheme, null, host, port, path, null, null);
 		}

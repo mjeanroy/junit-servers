@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.client.impl;
 
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;

@@ -33,7 +33,7 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
 
 /**

@@ -63,9 +63,9 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_HTTP_METHOD
 import static com.github.mjeanroy.junit.servers.client.HttpMethod.DELETE;
 import static com.github.mjeanroy.junit.servers.client.HttpMethod.PUT;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
-import static com.github.mjeanroy.junit.servers.commons.Dates.format;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Dates.format;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
 /**
  * Abstract skeleton of {@link HttpRequest} interface.

@@ -22,17 +22,30 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.lang;
 
-import org.junit.Test;
+/**
+ * Mapper interface.
+ *
+ * <p>
+ *
+ * Implementation must override apply method and will return the mapped value.
+ *
+ * <p>
+ *
+ * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
+ * or have their access level decreased from public to protected, package, or private in future versions without notice.
+ *
+ * @param <T> Input type.
+ * @param <U> Output type.
+ */
+public interface Mapper<T, U> {
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class ClassUtilsTest {
-
-	@Test
-	public void it_should_check_if_class_is_present() {
-		assertThat(ClassUtils.isPresent(ClassUtilsTest.class.getName())).isTrue();
-		assertThat(ClassUtils.isPresent("foo")).isFalse();
-	}
+	/**
+	 * Mapper method.
+	 *
+	 * @param object Object to map.
+	 * @return Mapped value.
+	 */
+	U apply(T object);
 }

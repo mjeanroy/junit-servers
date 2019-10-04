@@ -31,7 +31,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findAllFields;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.findAllFields;
 import static com.github.mjeanroy.junit.servers.engine.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.engine.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
 import static com.github.mjeanroy.junit.servers.engine.ServerAnnotationHandler.newServerAnnotationHandler;

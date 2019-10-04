@@ -33,10 +33,10 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.Strings.removePrefix;
-import static com.github.mjeanroy.junit.servers.commons.UrlUtils.concatenatePath;
-import static com.github.mjeanroy.junit.servers.commons.UrlUtils.startsWithHttpScheme;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Strings.removePrefix;
+import static com.github.mjeanroy.junit.servers.commons.core.Urls.concatenatePath;
+import static com.github.mjeanroy.junit.servers.commons.core.Urls.startsWithHttpScheme;
 
 /**
  * Abstract skeleton of {@link HttpClient} interface.

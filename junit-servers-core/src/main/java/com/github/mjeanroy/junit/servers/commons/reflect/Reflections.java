@@ -22,8 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.reflect;
 
+import com.github.mjeanroy.junit.servers.commons.lang.Predicate;
 import com.github.mjeanroy.junit.servers.exceptions.ReflectionException;
 
 import java.lang.annotation.Annotation;
@@ -33,7 +34,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.filter;
+import static com.github.mjeanroy.junit.servers.commons.lang.Collections.filter;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Arrays.asList;
 import static java.util.Collections.addAll;
@@ -46,10 +47,10 @@ import static java.util.Collections.addAll;
  * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
  * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
-public final class ReflectionUtils {
+public final class Reflections {
 
 	// Ensure non instantiation.
-	private ReflectionUtils() {
+	private Reflections() {
 	}
 
 	/**

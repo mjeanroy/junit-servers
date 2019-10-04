@@ -32,7 +32,7 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
-import com.github.mjeanroy.junit.servers.commons.Mapper;
+import com.github.mjeanroy.junit.servers.commons.lang.Mapper;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -57,7 +57,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
-import static com.github.mjeanroy.junit.servers.commons.CollectionUtils.map;
+import static com.github.mjeanroy.junit.servers.commons.lang.Collections.map;
 import static java.lang.System.nanoTime;
 
 /**

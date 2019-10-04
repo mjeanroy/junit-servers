@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.client.impl.async;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import io.netty.handler.codec.http.HttpHeaders;
 import org.asynchttpclient.Response;
 
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
 /**
  * Implementation of {@link HttpResponse} delegating calls to original {@link Response}

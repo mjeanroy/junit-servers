@@ -24,18 +24,18 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.commons.CollectionUtils;
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.commons.lang.Collections;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notEmpty;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.Strings.toLowerCase;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notEmpty;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Strings.toLowerCase;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 
@@ -157,7 +157,7 @@ public class HttpHeader {
 	 * @return Header values serialized as a string.
 	 */
 	public String serializeValues() {
-		return CollectionUtils.join(values, HEADER_SEPARATOR);
+		return Collections.join(values, HEADER_SEPARATOR);
 	}
 
 	@Override

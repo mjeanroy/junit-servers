@@ -28,7 +28,7 @@ import com.github.mjeanroy.junit.servers.client.impl.apache.ApacheHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient;
-import com.github.mjeanroy.junit.servers.commons.ClassUtils;
+import com.github.mjeanroy.junit.servers.commons.reflect.Classes;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
@@ -209,7 +209,7 @@ public enum HttpClientStrategy {
 	 *
 	 * @see HttpClientStrategy#COMPLETABLE_FUTURE_CLASS
 	 */
-	private static final boolean SUPPORT_JAVA_8 = ClassUtils.isPresent(COMPLETABLE_FUTURE_CLASS);
+	private static final boolean SUPPORT_JAVA_8 = Classes.isPresent(COMPLETABLE_FUTURE_CLASS);
 
 	/**
 	 * The FQN entry point for the async-http-client library.
@@ -231,7 +231,7 @@ public enum HttpClientStrategy {
 	 * @see <a href="https://github.com/AsyncHttpClient/async-http-client">https://github.com/AsyncHttpClient/async-http-client</a>
 	 * @see <a href="http://www.javadoc.io/doc/org.asynchttpclient/async-http-client">http://www.javadoc.io/doc/org.asynchttpclient/async-http-client</a>
 	 */
-	private static final boolean SUPPORT_ASYNC_HTTP_CLIENT = SUPPORT_JAVA_8 && ClassUtils.isPresent(ASYNC_HTTP_CLIENT_CLASS);
+	private static final boolean SUPPORT_ASYNC_HTTP_CLIENT = SUPPORT_JAVA_8 && Classes.isPresent(ASYNC_HTTP_CLIENT_CLASS);
 
 	/**
 	 * The FQN entry point for the (ning) async-http-client library.
@@ -249,7 +249,7 @@ public enum HttpClientStrategy {
 	 * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
 	 * @see <a href="http://www.javadoc.io/doc/com.ning/async-http-client">http://www.javadoc.io/doc/com.ning/async-http-client</a>
 	 */
-	private static final boolean SUPPORT_NING_ASYNC_HTTP_CLIENT = ClassUtils.isPresent(NING_ASYNC_HTTP_CLIENT_CLASS);
+	private static final boolean SUPPORT_NING_ASYNC_HTTP_CLIENT = Classes.isPresent(NING_ASYNC_HTTP_CLIENT_CLASS);
 
 	/**
 	 * The FQN entry point for the apache http-component library.
@@ -267,7 +267,7 @@ public enum HttpClientStrategy {
 	 * @see <a href="https://hc.apache.org/">https://hc.apache.org/</a>
 	 * @see <a href="http://www.javadoc.io/doc/org.apache.httpcomponents/httpclient">http://www.javadoc.io/doc/org.apache.httpcomponents/httpclient</a>
 	 */
-	private static final boolean SUPPORT_APACHE_HTTP_CLIENT = ClassUtils.isPresent(APACHE_HTTP_CLIENT_CLASS);
+	private static final boolean SUPPORT_APACHE_HTTP_CLIENT = Classes.isPresent(APACHE_HTTP_CLIENT_CLASS);
 
 	/**
 	 * The FQN entry point for the square okhttp library.
@@ -285,7 +285,7 @@ public enum HttpClientStrategy {
 	 * @see <a href="http://square.github.io/okhttp/">http://square.github.io/okhttp/</a>
 	 * @see <a href="http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1>http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1</a>
 	 */
-	private static final boolean SUPPORT_OK_HTTP3_CLIENT = ClassUtils.isPresent(OK_HTTP3_CLIENT_CLASS);
+	private static final boolean SUPPORT_OK_HTTP3_CLIENT = Classes.isPresent(OK_HTTP3_CLIENT_CLASS);
 
 	/**
 	 * The name of the underlying library.

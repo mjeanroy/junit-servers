@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.core;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.Test;

@@ -34,9 +34,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.github.mjeanroy.junit.servers.commons.ObjectUtils.firstNonNull;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.UrlUtils.ensureAbsolutePath;
+import static com.github.mjeanroy.junit.servers.commons.lang.Objects.firstNonNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.core.Urls.ensureAbsolutePath;
 import static java.util.Collections.unmodifiableMap;
 
 /**

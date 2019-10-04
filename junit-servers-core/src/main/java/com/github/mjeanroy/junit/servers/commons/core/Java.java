@@ -22,30 +22,53 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.core;
 
 /**
- * Mapper interface.
- *
- * <p>
- *
- * Implementation must override apply method and will return the mapped value.
- *
- * <p>
+ * Static Java Utilities.
  *
  * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
  * or have their access level decreased from public to protected, package, or private in future versions without notice.
- *
- * @param <T> Input type.
- * @param <U> Output type.
  */
-public interface Mapper<T, U> {
+public final class Java {
+
+	// Ensure non instantiation.
+	private Java() {
+	}
 
 	/**
-	 * Mapper method.
-	 *
-	 * @param object Object to map.
-	 * @return Mapped value.
+	 * The system property name that will be read to get Java version.
 	 */
-	U apply(T object);
+	private static final String JAVA_SPECIFICATION_VERSION_PROP = "java.specification.version";
+
+	/**
+	 * The Java Specification version.
+	 */
+	private static final String JAVA_SPECIFICATION_VERSION = System.getProperty(JAVA_SPECIFICATION_VERSION_PROP);
+
+	/**
+	 * The parsed Java Version.
+	 */
+	private static final int JAVA_MAJOR_VERSION = parseJavaVersion();
+
+	/**
+	 * Check if runtime java version is at least Java 9.
+	 *
+	 * @return {@code true} if current Java version is at least Java 9, {@code false} otherwise.
+	 */
+	public static boolean isPostJdk9() {
+		return JAVA_MAJOR_VERSION >= 9;
+	}
+
+	/**
+	 * Parse java version.
+	 *
+	 * @return The JAVA Version.
+	 */
+	private static int parseJavaVersion() {
+		String[] parts = JAVA_SPECIFICATION_VERSION.split("\\.");
+		int nbParts = parts.length;
+		int majorIndex = nbParts > 1 ? 1 : 0;
+		return Integer.parseInt(parts[majorIndex]);
+	}
 }

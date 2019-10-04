@@ -34,7 +34,7 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
 /**
  * Implementation of {@link HttpClient} using (Ning) async-http-client

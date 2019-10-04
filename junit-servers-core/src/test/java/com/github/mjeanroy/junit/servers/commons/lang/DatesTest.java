@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.lang;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,10 +32,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import static com.github.mjeanroy.junit.servers.commons.Dates.format;
-import static com.github.mjeanroy.junit.servers.commons.Dates.formatTime;
-import static com.github.mjeanroy.junit.servers.commons.Dates.getTime;
-import static com.github.mjeanroy.junit.servers.commons.Dates.parse;
+import static com.github.mjeanroy.junit.servers.commons.lang.Dates.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DatesTest {

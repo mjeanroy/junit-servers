@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 
 import java.util.Objects;
 

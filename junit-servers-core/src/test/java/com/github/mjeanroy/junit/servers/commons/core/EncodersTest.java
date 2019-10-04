@@ -22,17 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.core;
 
-/**
- * Static Object Utilities.
- */
-public final class ObjectUtils {
+import org.junit.Test;
 
-	private ObjectUtils() {
-	}
+import static org.assertj.core.api.Assertions.assertThat;
 
-	public static <T> T firstNonNull(T o1, T o2) {
-		return o1 == null ? o2 : o1;
+public class EncodersTest {
+
+	@Test
+	public void it_should_url_encode_value() {
+		String value = "test avec +";
+		String encoded = Encoders.urlEncode(value);
+		assertThat(encoded).isEqualTo("test+avec+%2B");
 	}
 }

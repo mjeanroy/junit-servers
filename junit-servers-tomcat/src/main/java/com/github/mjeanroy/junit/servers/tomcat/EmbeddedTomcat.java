@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.commons.CompositeClassLoader;
+import com.github.mjeanroy.junit.servers.commons.core.CompositeClassLoader;
 import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
@@ -39,7 +39,7 @@ import org.apache.tomcat.util.scan.StandardJarScanner;
 import javax.servlet.ServletContext;
 import java.io.File;
 
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 
 /**

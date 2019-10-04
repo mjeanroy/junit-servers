@@ -22,53 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
-
-import java.net.URL;
-
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+package com.github.mjeanroy.junit.servers.commons.reflect;
 
 /**
- * A composite classloader is a classloader that has:
- * <ul>
- *   <li>A parent classloader.</li>
- *   <li>A fallback classloader.</li>
- * </ul>
- *
- * When resolving classes or resources, the parent classloader is consulted first,
- * and if that classloader cannot find the class (or resource), the fallback classloader
- * is tried.
+ * Static class utilities.
  *
  * <p>
  *
  * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
  * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
-public class CompositeClassLoader extends ClassLoader {
+public final class Classes {
+
+	// Ensure non instantiation
+	private Classes() {
+	}
 
 	/**
-	 * Fallback classloader that will be tried after parent classloader.
-	 */
-	private final ClassLoader fallback;
-
-	/**
-	 * Create the classloader.
+	 * Check if a given class is available in classpath.
 	 *
-	 * @param parent Parent classloader.
-	 * @param fallback Fallback classloader.
+	 * @param className Fully qualified name of class to test.
+	 * @return {@code true} if class is available, {@code false} otherwise.
 	 */
-	public CompositeClassLoader(ClassLoader parent, ClassLoader fallback) {
-		super(parent);
-		this.fallback = notNull(fallback, "Fallback classloader");
-	}
-
-	@Override
-	protected Class<?> findClass(String name) throws ClassNotFoundException {
-		return fallback.loadClass(name);
-	}
-
-	@Override
-	protected URL findResource(String name) {
-		return fallback.getResource(name);
+	public static boolean isPresent(String className) {
+		try {
+			Class.forName(className);
+			return true;
+		}
+		catch (Exception ex) {
+			return false;
+		}
 	}
 }

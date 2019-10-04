@@ -38,7 +38,7 @@ import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 
 import java.io.IOException;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
 /**
  * Implementation of {@link HttpClient} using async-http-client

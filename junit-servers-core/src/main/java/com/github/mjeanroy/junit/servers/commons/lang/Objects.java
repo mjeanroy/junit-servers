@@ -22,18 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.lang;
 
-import org.junit.Test;
+/**
+ * Static Object Utilities.
+ */
+public final class Objects {
 
-import static org.assertj.core.api.Assertions.assertThat;
+	// Ensure non instantiation.
+	private Objects() {
+	}
 
-public class EncoderUtilsTest {
-
-	@Test
-	public void it_should_url_encode_value() {
-		String value = "test avec +";
-		String encoded = EncoderUtils.urlEncode(value);
-		assertThat(encoded).isEqualTo("test+avec+%2B");
+	/**
+	 * Get first object that is not {@code null}, may returns {@code null}
+	 * if both parameter are.
+	 *
+	 * @param o1 First object.
+	 * @param o2 Second object.
+	 * @param <T> Type of both parameter.
+	 * @return The first non {@code null} parameter.
+	 */
+	public static <T> T firstNonNull(T o1, T o2) {
+		return o1 == null ? o2 : o1;
 	}
 }

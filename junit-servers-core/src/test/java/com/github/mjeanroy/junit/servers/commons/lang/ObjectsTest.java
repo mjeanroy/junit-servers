@@ -22,28 +22,19 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.lang;
 
-/**
- * Predicate interface.
- *
- * <p>
- *
- * Implementation must override apply method and will return {@code true} if object
- * match predicate, {@code false} otherwise.
- *
- * <p>
- *
- * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
- * or have their access level decreased from public to protected, package, or private in future versions without notice.
- */
-public interface Predicate<T> {
+import org.junit.Test;
 
-	/**
-	 * Predicate method.
-	 *
-	 * @param object Object to check.
-	 * @return {@code true} if parameter match predicate, {@code false} otherwise.
-	 */
-	boolean apply(T object);
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ObjectsTest {
+
+    @Test
+    public void it_should_get_first_non_null_object() {
+        assertThat(Objects.firstNonNull(null, null)).isNull();
+        assertThat(Objects.firstNonNull(1, null)).isEqualTo(1);
+        assertThat(Objects.firstNonNull(null, 1)).isEqualTo(1);
+        assertThat(Objects.firstNonNull(1, 2)).isEqualTo(1);
+    }
 }

@@ -22,42 +22,28 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
-
-import com.github.mjeanroy.junit.servers.exceptions.Utf8EncodingException;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+package com.github.mjeanroy.junit.servers.commons.lang;
 
 /**
- * Static IO utilities.
+ * Predicate interface.
+ *
+ * <p>
+ *
+ * Implementation must override apply method and will return {@code true} if object
+ * match predicate, {@code false} otherwise.
  *
  * <p>
  *
  * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
  * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
-public final class EncoderUtils {
-
-	// Ensure non instantiation.
-	private EncoderUtils() {
-	}
+public interface Predicate<T> {
 
 	/**
-	 * Translates a string into {@code application/x-www-form-urlencoded}
-	 * format using UTF-8 encoding.
+	 * Predicate method.
 	 *
-	 * @param value The string value.
-	 * @return The encoded value.
-	 * @throws Utf8EncodingException If, for some weird reason, UTF-8 encoding is not supported.
+	 * @param object Object to check.
+	 * @return {@code true} if parameter match predicate, {@code false} otherwise.
 	 */
-	public static String urlEncode(String value) {
-		try {
-			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
-		}
-		catch (UnsupportedEncodingException ex) {
-			throw new Utf8EncodingException(ex);
-		}
-	}
+	boolean apply(T object);
 }

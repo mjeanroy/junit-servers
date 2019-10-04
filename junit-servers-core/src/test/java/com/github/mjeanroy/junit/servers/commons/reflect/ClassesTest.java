@@ -22,45 +22,17 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.engine;
+package com.github.mjeanroy.junit.servers.commons.reflect;
 
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.junit.Test;
 
-import java.lang.reflect.Field;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.setter;
+public class ClassesTest {
 
-/**
- * Annotation handler that will set embedded server to a field
- * on a given class instance.
- */
-class ServerAnnotationHandler extends AbstractAnnotationHandler {
-
-	/**
-	 * Create new handler.
-	 * @param server Embedded server.
-	 * @return Handler.
-	 * @throws NullPointerException if server is null.
-	 */
-	static AnnotationHandler newServerAnnotationHandler(EmbeddedServer<?> server) {
-		return new ServerAnnotationHandler(notNull(server, "server"));
-	}
-
-	/**
-	 * Embedded server set on class fields.
-	 */
-	private final EmbeddedServer<?> server;
-
-	// Use static factory instead
-	private ServerAnnotationHandler(EmbeddedServer<?> server) {
-		super(TestServer.class);
-		this.server = server;
-	}
-
-	@Override
-	public void before(Object target, Field field) {
-		setter(target, field, server);
+	@Test
+	public void it_should_check_if_class_is_present() {
+		assertThat(Classes.isPresent(ClassesTest.class.getName())).isTrue();
+		assertThat(Classes.isPresent("foo")).isFalse();
 	}
 }

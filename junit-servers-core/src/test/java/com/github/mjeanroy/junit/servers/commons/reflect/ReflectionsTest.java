@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.reflect;
 
 import com.github.mjeanroy.junit.servers.commons.fixtures.Bar;
 import com.github.mjeanroy.junit.servers.commons.fixtures.FooAnnotation;
@@ -33,15 +33,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findAllFields;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticFieldsAnnotatedWith;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.invoke;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.setter;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ReflectionUtilsTest {
+public class ReflectionsTest {
 
 	@Test
 	public void it_should_find_all_fields() {

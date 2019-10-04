@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons;
+package com.github.mjeanroy.junit.servers.commons.core;
 
 import com.github.mjeanroy.junit.servers.exceptions.UrlException;
 import org.junit.Test;
@@ -33,15 +33,15 @@ import java.net.URISyntaxException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
-public class UrlUtilsTest {
+public class UrlsTest {
 
 	@Test
 	public void it_should_ensure_absolute_path() {
-		assertThat(UrlUtils.ensureAbsolutePath(null)).isEqualTo("/");
-		assertThat(UrlUtils.ensureAbsolutePath("")).isEqualTo("/");
-		assertThat(UrlUtils.ensureAbsolutePath("/")).isEqualTo("/");
-		assertThat(UrlUtils.ensureAbsolutePath("/foo")).isEqualTo("/foo");
-		assertThat(UrlUtils.ensureAbsolutePath("foo")).isEqualTo("/foo");
+		assertThat(Urls.ensureAbsolutePath(null)).isEqualTo("/");
+		assertThat(Urls.ensureAbsolutePath("")).isEqualTo("/");
+		assertThat(Urls.ensureAbsolutePath("/")).isEqualTo("/");
+		assertThat(Urls.ensureAbsolutePath("/foo")).isEqualTo("/foo");
+		assertThat(Urls.ensureAbsolutePath("foo")).isEqualTo("/foo");
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class UrlUtilsTest {
 		final int port = 80;
 		final String path = "/foo";
 
-		URI uri = UrlUtils.createUri(scheme, host, port, path);
+		URI uri = Urls.createUri(scheme, host, port, path);
 
 		assertThat(uri).isNotNull();
 		assertThat(uri.getScheme()).isEqualTo(scheme);
@@ -72,7 +72,7 @@ public class UrlUtilsTest {
 		final String path = "foo";
 
 		try {
-			UrlUtils.createUri(scheme, host, port, path);
+			Urls.createUri(scheme, host, port, path);
 			failBecauseExceptionWasNotThrown(UrlException.class);
 		}
 		catch (UrlException ex) {
@@ -88,26 +88,26 @@ public class UrlUtilsTest {
 
 	@Test
 	public void it_should_concatenate_path() {
-		assertThat(UrlUtils.concatenatePath(null, null)).isEqualTo("/");
-		assertThat(UrlUtils.concatenatePath("", "")).isEqualTo("/");
-		assertThat(UrlUtils.concatenatePath("/", null)).isEqualTo("/");
-		assertThat(UrlUtils.concatenatePath("/", "")).isEqualTo("/");
+		assertThat(Urls.concatenatePath(null, null)).isEqualTo("/");
+		assertThat(Urls.concatenatePath("", "")).isEqualTo("/");
+		assertThat(Urls.concatenatePath("/", null)).isEqualTo("/");
+		assertThat(Urls.concatenatePath("/", "")).isEqualTo("/");
 
-		assertThat(UrlUtils.concatenatePath("/", "/foo")).isEqualTo("/foo");
-		assertThat(UrlUtils.concatenatePath("/foo", "/bar")).isEqualTo("/foo/bar");
-		assertThat(UrlUtils.concatenatePath("/foo/", "/bar")).isEqualTo("/foo/bar");
-		assertThat(UrlUtils.concatenatePath("foo", "bar")).isEqualTo("/foo/bar");
+		assertThat(Urls.concatenatePath("/", "/foo")).isEqualTo("/foo");
+		assertThat(Urls.concatenatePath("/foo", "/bar")).isEqualTo("/foo/bar");
+		assertThat(Urls.concatenatePath("/foo/", "/bar")).isEqualTo("/foo/bar");
+		assertThat(Urls.concatenatePath("foo", "bar")).isEqualTo("/foo/bar");
 	}
 
 	@Test
 	public void it_should_ensure_that_url_starts_with_http_scheme() {
-		assertThat(UrlUtils.startsWithHttpScheme("http://localhost")).isTrue();
-		assertThat(UrlUtils.startsWithHttpScheme("HTTP://LOCALHOST")).isTrue();
-		assertThat(UrlUtils.startsWithHttpScheme("https://localhost")).isTrue();
-		assertThat(UrlUtils.startsWithHttpScheme("HTTPS://LOCALHOST")).isTrue();
+		assertThat(Urls.startsWithHttpScheme("http://localhost")).isTrue();
+		assertThat(Urls.startsWithHttpScheme("HTTP://LOCALHOST")).isTrue();
+		assertThat(Urls.startsWithHttpScheme("https://localhost")).isTrue();
+		assertThat(Urls.startsWithHttpScheme("HTTPS://LOCALHOST")).isTrue();
 
-		assertThat(UrlUtils.startsWithHttpScheme(null)).isFalse();
-		assertThat(UrlUtils.startsWithHttpScheme("")).isFalse();
-		assertThat(UrlUtils.startsWithHttpScheme("ftp://localhost")).isFalse();
+		assertThat(Urls.startsWithHttpScheme(null)).isFalse();
+		assertThat(Urls.startsWithHttpScheme("")).isFalse();
+		assertThat(Urls.startsWithHttpScheme("ftp://localhost")).isFalse();
 	}
 }

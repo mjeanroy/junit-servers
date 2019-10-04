@@ -27,8 +27,8 @@ package com.github.mjeanroy.junit.servers.servers;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.UrlUtils.ensureAbsolutePath;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.core.Urls.ensureAbsolutePath;
 import static java.lang.System.clearProperty;
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;

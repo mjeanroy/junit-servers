@@ -40,7 +40,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.github.mjeanroy.junit.servers.commons.ObjectUtils.firstNonNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Objects.firstNonNull;
 
 /**
  * Implementation of {@link HttpRequest} using OkHttp library.

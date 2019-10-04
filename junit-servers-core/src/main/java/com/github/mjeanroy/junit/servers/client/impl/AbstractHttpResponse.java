@@ -50,8 +50,8 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CONTENT_SEC
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_CONTENT_TYPE_OPTIONS;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_WEBKIT_CSP;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_XSS_PROTECTION;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.positive;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 

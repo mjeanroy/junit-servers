@@ -37,9 +37,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.positive;
 import static com.github.mjeanroy.junit.servers.servers.AbstractConfiguration.DEFAULT_CLASSPATH;
 import static com.github.mjeanroy.junit.servers.servers.AbstractConfiguration.DEFAULT_PATH;
 import static com.github.mjeanroy.junit.servers.servers.AbstractConfiguration.DEFAULT_PORT;

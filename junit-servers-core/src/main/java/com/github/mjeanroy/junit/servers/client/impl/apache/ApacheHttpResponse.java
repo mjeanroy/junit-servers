@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.client.impl.apache;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.util.EntityUtils;
@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 

@@ -27,8 +27,8 @@ package com.github.mjeanroy.junit.servers.client;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.mjeanroy.junit.servers.commons.Dates.getTime;
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.lang.Dates.getTime;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
 
 /**
  * Static cookie utilities.

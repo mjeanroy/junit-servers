@@ -24,14 +24,14 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.commons.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfigurationBuilder;
 import org.eclipse.jetty.util.resource.Resource;
 
 import java.util.Objects;
 
-import static com.github.mjeanroy.junit.servers.commons.Preconditions.positive;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.positive;
 
 /**
  * Jetty configuration settings.

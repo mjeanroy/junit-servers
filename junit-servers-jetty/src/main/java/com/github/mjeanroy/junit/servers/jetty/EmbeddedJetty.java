@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.commons.CompositeClassLoader;
-import com.github.mjeanroy.junit.servers.commons.JavaUtils;
+import com.github.mjeanroy.junit.servers.commons.core.CompositeClassLoader;
+import com.github.mjeanroy.junit.servers.commons.core.Java;
 import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
@@ -47,7 +47,7 @@ import org.eclipse.jetty.webapp.WebXmlConfiguration;
 import javax.servlet.ServletContext;
 import java.io.File;
 
-import static com.github.mjeanroy.junit.servers.commons.Strings.isNotBlank;
+import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
 import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 import static org.eclipse.jetty.util.resource.Resource.newResource;
 
@@ -142,7 +142,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		if (containerJarPattern != null) {
 			ctx.setAttribute(WebInfConfiguration.CONTAINER_JAR_PATTERN, containerJarPattern);
 		}
-		else if (JavaUtils.isPostJdk9()) {
+		else if (Java.isPostJdk9()) {
 			// Fix to make TLD scanning works with Java >= 9
 			ctx.setAttribute(WebInfConfiguration.CONTAINER_JAR_PATTERN, ".*\\.jar");
 		}

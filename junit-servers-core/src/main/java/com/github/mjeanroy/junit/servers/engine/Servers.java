@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.commons.Strings;
+import com.github.mjeanroy.junit.servers.commons.lang.Strings;
 import com.github.mjeanroy.junit.servers.exceptions.DuplicateConfigurationException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
@@ -38,10 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
 
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticFieldsAnnotatedWith;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.findStaticMethodsAnnotatedWith;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.getter;
-import static com.github.mjeanroy.junit.servers.commons.ReflectionUtils.invoke;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.findStaticFieldsAnnotatedWith;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.findStaticMethodsAnnotatedWith;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.getter;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.invoke;
 import static java.lang.System.lineSeparator;
 
 /**
