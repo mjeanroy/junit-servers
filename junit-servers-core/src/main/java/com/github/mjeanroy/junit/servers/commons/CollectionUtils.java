@@ -108,22 +108,6 @@ public final class CollectionUtils {
 	}
 
 	/**
-	 * Concat new value to existing inputs and returns new outputs.
-	 * Note that input is not modified.
-	 *
-	 * @param inputs Input list.
-	 * @param newValue The new value to add.
-	 * @param <T> The type of object.
-	 * @return The outputs.
-	 */
-	public static <T> List<T> concat(List<T> inputs, T newValue) {
-		List<T> outputs = new ArrayList<>(inputs.size() + 1);
-		outputs.addAll(inputs);
-		outputs.add(newValue);
-		return outputs;
-	}
-
-	/**
 	 * Filter input by using given predicate and return
 	 * filtered outputs.
 	 *
@@ -133,12 +117,14 @@ public final class CollectionUtils {
 	 * @return Filtered outputs.
 	 */
 	static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
-		List<T> results = new ArrayList<>();
+		List<T> results = new ArrayList<>(list.size());
+
 		for (T current : list) {
 			if (predicate.apply(current)) {
 				results.add(current);
 			}
 		}
+
 		return results;
 	}
 }
