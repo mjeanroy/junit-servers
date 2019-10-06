@@ -25,6 +25,8 @@
 package com.github.mjeanroy.junit.servers.tomcat.jupiter;
 
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
@@ -33,6 +35,7 @@ import com.github.mjeanroy.junit.servers.tomcat.exceptions.IllegalTomcatConfigur
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
+import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfigurationUtils.checkConfiguration;
 
 /**
  * A specialized {@link JunitServerExtension} that will instantiate an {@link EmbeddedTomcat}
@@ -44,6 +47,11 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration
  * @see JunitServerExtension
  */
 public class TomcatServerExtension extends JunitServerExtension {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(TomcatServerExtension.class);
 
 	/**
 	 * Create the jupiter with default behavior.
@@ -74,7 +82,8 @@ public class TomcatServerExtension extends JunitServerExtension {
 	}
 
 	@Override
-	protected EmbeddedServer<?> instantiateServer(Class<?> testClass, AbstractConfiguration configuration) {
+	protected EmbeddedServer instantiateServer(Class<?> testClass, AbstractConfiguration configuration) {
+		log.debug("Instantiating embedded tomcat for test class: {}", testClass);
 		final EmbeddedTomcatConfiguration tomcatConfiguration = extractConfiguration(testClass, configuration);
 		return tomcatConfiguration == null ? new EmbeddedTomcat() : new EmbeddedTomcat(tomcatConfiguration);
 	}
@@ -92,16 +101,13 @@ public class TomcatServerExtension extends JunitServerExtension {
 	 * @throws IllegalTomcatConfigurationException If extracted {@code configuration} is not an instance of {@link EmbeddedTomcatConfiguration}.
 	 */
 	private EmbeddedTomcatConfiguration extractConfiguration(Class<?> testClass, AbstractConfiguration configuration) {
-		final AbstractConfiguration configurationToUse = configuration == null ? findConfiguration(testClass) : configuration;
-
-		if (configurationToUse == null) {
-			return null;
+		if (configuration != null) {
+			log.debug("Returning provided configuration instance: {}", configuration);
+			return checkConfiguration(configuration);
 		}
 
-		if (!(configurationToUse instanceof EmbeddedTomcatConfiguration)) {
-			throw new IllegalTomcatConfigurationException();
-		}
-
-		return (EmbeddedTomcatConfiguration) configurationToUse;
+		log.debug("Extracting configuration from given test class: {}", testClass);
+		final AbstractConfiguration configurationToUse = findConfiguration(testClass);
+		return configurationToUse == null ? null : checkConfiguration(configurationToUse);
 	}
 }

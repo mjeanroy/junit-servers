@@ -119,4 +119,9 @@ class Log4jLogger implements Logger {
 	public void error(String message, Object p1, Object p2) {
 		log.error(message, p1, p2);
 	}
+
+	@Override
+	public void error(String message, Throwable exception) {
+		log.error(message, exception);
+	}
 }

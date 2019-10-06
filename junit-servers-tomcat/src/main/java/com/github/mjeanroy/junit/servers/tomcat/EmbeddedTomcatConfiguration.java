@@ -371,11 +371,23 @@ public class EmbeddedTomcatConfiguration extends AbstractConfiguration {
 			return toggleMetaInf(false);
 		}
 
+		/**
+		 * Toggle {@link #enableNaming} to a new value.
+		 *
+		 * @param enableNaming New {@link #enableNaming}
+		 * @return this.
+		 */
 		private Builder toggleNaming(boolean enableNaming) {
 			this.enableNaming = enableNaming;
 			return self();
 		}
 
+		/**
+		 * Toggle {@link #forceMetaInf} to a new value.
+		 *
+		 * @param forceMetaInf New {@link #forceMetaInf}
+		 * @return this.
+		 */
 		private Builder toggleMetaInf(boolean forceMetaInf) {
 			this.forceMetaInf = forceMetaInf;
 			return self();

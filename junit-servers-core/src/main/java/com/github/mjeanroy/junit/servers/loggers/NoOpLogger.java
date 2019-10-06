@@ -91,4 +91,8 @@ class NoOpLogger implements Logger {
 	@Override
 	public void error(String message, Object p1, Object p2) {
 	}
+
+	@Override
+	public void error(String message, Throwable exception) {
+	}
 }

@@ -28,6 +28,8 @@ import com.github.mjeanroy.junit.servers.commons.core.CompositeClassLoader;
 import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 import org.apache.catalina.Context;
 import org.apache.catalina.WebResourceRoot;
@@ -46,6 +48,11 @@ import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfigurati
  * Embedded server using tomcat as implementation.
  */
 public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomcatConfiguration> {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(EmbeddedTomcat.class);
 
 	/**
 	 * Tomcat instance.
@@ -75,6 +82,8 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 	}
 
 	private Tomcat initServer() {
+		log.debug("Initializing tomcat instance using configuration: {}", configuration);
+
 		Tomcat tomcat = new Tomcat();
 		tomcat.setBaseDir(configuration.getBaseDir());
 		tomcat.setPort(configuration.getPort());
@@ -91,9 +100,11 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 
 	private Context initContext() {
 		try {
+			log.debug("Creating embedded tomcat context");
 			return createContext();
 		}
 		catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
 			throw new ServerInitializationException(ex);
 		}
 	}
@@ -108,7 +119,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 	 */
 	@Deprecated
 	protected Context createContext() throws Exception {
-		Context context = null;
+		final Context context;
 
 		final String webapp = configuration.getWebapp();
 		final String path = configuration.getPath();
@@ -117,34 +128,42 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 		final ClassLoader parentClassLoader = configuration.getParentClasspath();
 		final String descriptor = configuration.getOverrideDescriptor();
 
-		File webappDirectory = new File(webapp);
+		final File webappDirectory = new File(webapp);
+
+		log.debug("Use tomcat webapp directory: {}", webappDirectory);
+
 		if (webappDirectory.exists()) {
-			String webappAbsolutePath = webappDirectory.getAbsolutePath();
+			final String webappAbsolutePath = webappDirectory.getAbsolutePath();
+
+			log.debug("Setting tomcat app base: {}", webappAbsolutePath);
 			tomcat.getHost().setAppBase(webappAbsolutePath);
+
+			log.debug("Adding tomcat webapp using contextPath={} and docBase={}", path, webappAbsolutePath);
 			context = tomcat.addWebapp(path, webappAbsolutePath);
 
 			// Add additional classpath entry
 			if (isNotBlank(classpath)) {
-				File file = new File(classpath);
+				final File file = new File(classpath);
 				if (file.exists()) {
-
 					// Check that additional classpath entry contains META-INF directory
-					File metaInf = new File(file, "META-INF");
+					final File metaInf = new File(file, "META-INF");
 					if (!metaInf.exists() && forceMetaInf) {
-						metaInf.mkdir();
+						log.debug("Creating missing META-INF directory");
+						if (!metaInf.mkdir()) {
+							log.warn("Directory {} has not been created", metaInf);
+						}
 					}
 
 					// == Tomcat 8
-					String absolutePath = file.getAbsolutePath();
-					StandardRoot root = new StandardRoot(context);
-					root.createWebResourceSet(
-						WebResourceRoot.ResourceSetType.PRE,
-						"/WEB-INF/classes",
-						absolutePath,
-						null,
-						path
-					);
+					final String absolutePath = file.getAbsolutePath();
+					final String webAppMount = "/WEB-INF/classes";
+					final String archivePath = null;
+					final StandardRoot root = new StandardRoot(context);
 
+					log.debug("Creating tomcat web resource set using base={} and internalPath={}", absolutePath, path);
+					root.createWebResourceSet(WebResourceRoot.ResourceSetType.PRE, webAppMount, absolutePath, archivePath, path);
+
+					log.debug("Set tomcat context resources: {}", root);
 					context.setResources(root);
 
 					// == Tomcat 8
@@ -156,7 +175,10 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 
 					// Used to scan additional classpath directory
 					// https://issues.apache.org/bugzilla/show_bug.cgi?id=52853
+					log.debug("Set tomcat jar scanner flag to scan all directories");
 					((StandardJarScanner) context.getJarScanner()).setScanAllDirectories(true);
+				} else {
+					log.warn("Specified classpath {} does not exist, or cannot be read", classpath);
 				}
 			}
 
@@ -165,9 +187,11 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 			final ClassLoader tomcatParentClassLoader;
 
 			if (parentClassLoader != null) {
+				log.debug("Overriding tomcat parent classloader");
 				tomcatParentClassLoader = new CompositeClassLoader(parentClassLoader, threadCl);
 			}
 			else {
+				log.debug("Using current thread classload as tomcat parent classloader");
 				tomcatParentClassLoader = threadCl;
 			}
 
@@ -185,8 +209,12 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 
 			// Override web.xml path
 			if (descriptor != null) {
+				log.debug("Using web.xml descriptor: {}", descriptor);
 				context.setAltDDName(descriptor);
 			}
+		} else {
+			log.warn("Webapp directory {} does not exist or cannot be read", webappDirectory);
+			context = null;
 		}
 
 		return context;
@@ -200,10 +228,14 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 	@Override
 	protected void doStart() {
 		try {
+			log.debug("Initializing tomcat context");
 			context = initContext();
+
+			log.debug("Starting tomcat");
 			tomcat.start();
 		}
 		catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
 			throw new ServerStartException(ex);
 		}
 	}
@@ -211,19 +243,23 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 	@Override
 	protected void doStop() {
 		try {
+			log.debug("Stopping tomcat");
 			tomcat.stop();
 
 			// Do not forget to destroy context
 			if (context != null) {
+				log.debug("Destroying tomcat context");
 				context.destroy();
 				context = null;
 			}
 
 			if (!configuration.isKeepBaseDir()) {
+				log.debug("Deleting tomcat base directory: {}", configuration.getBaseDir());
 				deleteDirectory(configuration.getBaseDir());
 			}
 		}
 		catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
 			throw new ServerStopException(ex);
 		}
 	}
@@ -261,11 +297,15 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 						deleteDirectory(f.getAbsolutePath());
 					}
 
-					f.delete();
+					if (!f.delete()) {
+						log.warn("Directory {} has not been deleted", f);
+					}
 				}
 			}
 
-			file.delete();
+			if (!file.delete()) {
+				log.warn("File {} has not been deleted", file);
+			}
 		}
 	}
 }

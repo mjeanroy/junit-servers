@@ -158,4 +158,12 @@ public interface Logger {
 	 * @param p2 First message dynamic parameter.
 	 */
 	void error(String message, Object p1, Object p2);
+
+	/**
+	 * Log message with {@code "ERROR"} level and print given exception stacktrace.
+	 *
+	 * @param message Message to log.
+	 * @param exception The exception.
+	 */
+	void error(String message, Throwable exception);
 }
