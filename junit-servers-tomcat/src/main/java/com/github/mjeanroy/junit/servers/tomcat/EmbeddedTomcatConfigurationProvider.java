@@ -22,21 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat.jupiter;
+package com.github.mjeanroy.junit.servers.tomcat;
 
-import org.junit.jupiter.api.extension.ExtendWith;
+/**
+ * A {@link EmbeddedTomcatConfiguration} provider.
+ */
+public interface EmbeddedTomcatConfigurationProvider {
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@ExtendWith(TomcatServerExtension.class)
-@Documented
-@Inherited
-public @interface TomcatTest {
+	/**
+	 * Create {@link EmbeddedTomcatConfiguration} for given test class.
+	 *
+	 * @param testClass The test class.
+	 * @return The embedded tomcat configuration.
+	 */
+	EmbeddedTomcatConfiguration build(Class<?> testClass);
 }

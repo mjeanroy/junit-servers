@@ -35,4 +35,24 @@ public class ClassesTest {
 		assertThat(Classes.isPresent(ClassesTest.class.getName())).isTrue();
 		assertThat(Classes.isPresent("foo")).isFalse();
 	}
+
+	@Test
+	public void it_should_instantiate_class_using_empty_constructor() {
+		ClassWithoutConstructor instance = Classes.instantiate(ClassWithoutConstructor.class);
+		assertThat(instance).isNotNull();
+	}
+
+	@Test
+	public void it_should_instantiate_class_using_private_empty_constructor() {
+		ClassWithPrivateEmptyConstructor instance = Classes.instantiate(ClassWithPrivateEmptyConstructor.class);
+		assertThat(instance).isNotNull();
+	}
+
+	private static class ClassWithoutConstructor {
+	}
+
+	private static class ClassWithPrivateEmptyConstructor {
+		private ClassWithPrivateEmptyConstructor() {
+		}
+	}
 }

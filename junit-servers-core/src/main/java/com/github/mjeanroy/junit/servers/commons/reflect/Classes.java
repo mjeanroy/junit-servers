@@ -24,6 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.commons.reflect;
 
+import com.github.mjeanroy.junit.servers.exceptions.ReflectionException;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Static class utilities.
  *
@@ -33,6 +40,11 @@ package com.github.mjeanroy.junit.servers.commons.reflect;
  * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
 public final class Classes {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(Classes.class);
 
 	// Ensure non instantiation
 	private Classes() {
@@ -51,6 +63,38 @@ public final class Classes {
 		}
 		catch (Exception ex) {
 			return false;
+		}
+	}
+
+	/**
+	 * Instantie new class instance using its empty constructor (may be a private constructor).
+	 *
+	 * @param klass The class.
+	 * @param <T> The new instance type.
+	 * @return The new instance.
+	 */
+	public static <T> T instantiate(Class<T> klass) {
+		boolean wasAccessible = true;
+		Constructor<T> ctor = null;
+
+		try {
+			ctor = klass.getDeclaredConstructor();
+			wasAccessible = ctor.isAccessible();
+
+			if (!wasAccessible) {
+				ctor.setAccessible(true);
+			}
+
+			return ctor.newInstance();
+		}
+		catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+			log.error(ex.getMessage(), ex);
+			throw new ReflectionException(ex);
+		}
+		finally {
+			if (!wasAccessible) {
+				ctor.setAccessible(false);
+			}
 		}
 	}
 }

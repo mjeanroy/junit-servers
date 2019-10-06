@@ -29,6 +29,8 @@ import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.exceptions.IllegalTomcatConfigurationException;
 
+import static com.github.mjeanroy.junit.servers.commons.reflect.Annotations.findAnnotation;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Classes.instantiate;
 import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
 /**
@@ -87,12 +89,28 @@ public final class EmbeddedTomcatFactory {
 			return checkConfiguration(configuration);
 		}
 
+		TomcatConfiguration configurationAnnotation = findAnnotation(testClass, TomcatConfiguration.class);
+		if (configurationAnnotation != null) {
+			return buildEmbeddedTomcatConfiguration(testClass, configurationAnnotation);
+		}
+
 		log.debug("Extracting configuration from given test class: {}", testClass);
-		return checkConfiguration(
-			findConfiguration(testClass)
-		);
+		return checkConfiguration(findConfiguration(testClass));
 	}
 
+	/**
+	 * Create configuration using {@link TomcatConfiguration} annotation.
+	 *
+	 * @param testClass The annotation.
+	 * @param configurationAnnotation The test class.
+	 * @return The configuration.
+	 */
+	private static EmbeddedTomcatConfiguration buildEmbeddedTomcatConfiguration(Class<?> testClass, TomcatConfiguration configurationAnnotation) {
+		log.debug("Returning configuration provided by @TomcatConfiguration annotation");
+		Class<? extends EmbeddedTomcatConfigurationProvider> providerClass = configurationAnnotation.providedBy();
+		EmbeddedTomcatConfigurationProvider provider = instantiate(providerClass);
+		return provider.build(testClass);
+	}
 
 	/**
 	 * Ensure that given {@code configuration} parameter is an instance of {@link EmbeddedTomcatConfiguration} and returns it,

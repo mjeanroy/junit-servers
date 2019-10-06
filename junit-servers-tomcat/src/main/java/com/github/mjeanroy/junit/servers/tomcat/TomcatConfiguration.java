@@ -22,9 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat.jupiter;
-
-import org.junit.jupiter.api.extension.ExtendWith;
+package com.github.mjeanroy.junit.servers.tomcat;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -33,10 +31,20 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation that can be used to specify {@link EmbeddedTomcatConfiguration} provider that will be used
+ * to create new {@link EmbeddedTomcatConfiguration} and use it for the test suite.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@ExtendWith(TomcatServerExtension.class)
 @Documented
 @Inherited
-public @interface TomcatTest {
+public @interface TomcatConfiguration {
+
+	/**
+	 * The configuration provider.
+	 *
+	 * @return The configuration provider class.
+	 */
+	Class<? extends EmbeddedTomcatConfigurationProvider> providedBy();
 }

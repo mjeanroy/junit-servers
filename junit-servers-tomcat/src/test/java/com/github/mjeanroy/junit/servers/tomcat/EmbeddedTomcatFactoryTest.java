@@ -44,14 +44,18 @@ public class EmbeddedTomcatFactoryTest {
 
 	@Test
 	public void it_should_create_embedded_tomcat_from_class_using_provided_configuration() {
-		final EmbeddedTomcatConfiguration providedConfiguration = EmbeddedTomcatConfiguration.builder()
-			.withPath("/test")
-			.build();
-
+		final EmbeddedTomcatConfiguration providedConfiguration = EmbeddedTomcatConfiguration.builder().withPath("/test").build();
 		final EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassUsingDefaultConfiguration.class, providedConfiguration);
 
 		assertThat(tomcat).isNotNull();
 		assertThat(tomcat.getConfiguration()).isEqualTo(providedConfiguration);
+	}
+
+	@Test
+	public void it_should_create_embedded_tomcat_from_class_using_configuration_provider() {
+		final EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassAnnotatedWithConfigurationProvider.class);
+		assertThat(tomcat).isNotNull();
+		assertThat(tomcat.getConfiguration()).isSameAs(DefaultEmbeddedTomcatConfigurationProvider.CONFIGURATION);
 	}
 
 	@Test
@@ -82,6 +86,10 @@ public class EmbeddedTomcatFactoryTest {
 	private static class ClassUsingDefaultConfiguration {
 	}
 
+	@TomcatConfiguration(providedBy = DefaultEmbeddedTomcatConfigurationProvider.class)
+	private static class ClassAnnotatedWithConfigurationProvider {
+	}
+
 	private static class ClassUsingCustomConfiguration {
 		@TestServerConfiguration
 		private static EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
@@ -95,5 +103,14 @@ public class EmbeddedTomcatFactoryTest {
 	}
 
 	private static class CustomConfiguration extends AbstractConfiguration {
+	}
+
+	private static class DefaultEmbeddedTomcatConfigurationProvider implements EmbeddedTomcatConfigurationProvider {
+		private static final EmbeddedTomcatConfiguration CONFIGURATION = EmbeddedTomcatConfiguration.builder().build();
+
+		@Override
+		public EmbeddedTomcatConfiguration build(Class<?> testClass) {
+			return CONFIGURATION;
+		}
 	}
 }

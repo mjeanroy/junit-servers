@@ -29,6 +29,8 @@ import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 
+import static com.github.mjeanroy.junit.servers.commons.reflect.Annotations.findAnnotation;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Classes.instantiate;
 import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
 /**
@@ -87,10 +89,27 @@ public final class EmbeddedJettyFactory extends AbstractConfiguration {
 			return checkConfiguration(configuration);
 		}
 
+		JettyConfiguration configurationAnnotation = findAnnotation(testClass, JettyConfiguration.class);
+		if (configurationAnnotation != null) {
+			return buildEmbeddedJettyConfiguration(testClass, configurationAnnotation);
+		}
+
 		log.debug("Extracting configuration from given test class: {}", testClass);
-		return checkConfiguration(
-			findConfiguration(testClass)
-		);
+		return checkConfiguration(findConfiguration(testClass));
+	}
+
+	/**
+	 * Create configuration using {@link JettyConfiguration} annotation.
+	 *
+	 * @param testClass The annotation.
+	 * @param configurationAnnotation The test class.
+	 * @return The configuration.
+	 */
+	private static EmbeddedJettyConfiguration buildEmbeddedJettyConfiguration(Class<?> testClass, JettyConfiguration configurationAnnotation) {
+		log.debug("Returning configuration provided by @JettyConfiguration annotation");
+		Class<? extends EmbeddedJettyConfigurationProvider> providerClass = configurationAnnotation.providedBy();
+		EmbeddedJettyConfigurationProvider provider = instantiate(providerClass);
+		return provider.build(testClass);
 	}
 
 	/**

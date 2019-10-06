@@ -44,14 +44,18 @@ public class EmbeddedJettyFactoryTest {
 
 	@Test
 	public void it_should_create_embedded_jetty_from_class_using_provided_configuration() {
-		final EmbeddedJettyConfiguration providedConfiguration = EmbeddedJettyConfiguration.builder()
-			.withPath("/test")
-			.build();
-
+		final EmbeddedJettyConfiguration providedConfiguration = EmbeddedJettyConfiguration.builder().withPath("/test").build();
 		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingDefaultConfiguration.class, providedConfiguration);
 
 		assertThat(jetty).isNotNull();
 		assertThat(jetty.getConfiguration()).isEqualTo(providedConfiguration);
+	}
+
+	@Test
+	public void it_should_create_embedded_tomcat_from_class_using_configuration_provider() {
+		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassAnnotatedWithConfigurationProvider.class);
+		assertThat(jetty).isNotNull();
+		assertThat(jetty.getConfiguration()).isSameAs(DefaultEmbeddedJettyConfigurationProvider.CONFIGURATION);
 	}
 
 	@Test
@@ -82,6 +86,10 @@ public class EmbeddedJettyFactoryTest {
 	private static class ClassUsingDefaultConfiguration {
 	}
 
+	@JettyConfiguration(providedBy = DefaultEmbeddedJettyConfigurationProvider.class)
+	private static class ClassAnnotatedWithConfigurationProvider {
+	}
+
 	private static class ClassUsingCustomConfiguration {
 		@TestServerConfiguration
 		private static EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
@@ -95,5 +103,14 @@ public class EmbeddedJettyFactoryTest {
 	}
 
 	private static class CustomConfiguration extends AbstractConfiguration {
+	}
+
+	private static class DefaultEmbeddedJettyConfigurationProvider implements EmbeddedJettyConfigurationProvider {
+		private static final EmbeddedJettyConfiguration CONFIGURATION = EmbeddedJettyConfiguration.builder().build();
+
+		@Override
+		public EmbeddedJettyConfiguration build(Class<?> testClass) {
+			return CONFIGURATION;
+		}
 	}
 }

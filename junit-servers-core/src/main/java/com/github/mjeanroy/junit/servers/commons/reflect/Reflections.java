@@ -37,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Collections.filter;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Annotations.isAnnotationPresent;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Arrays.asList;
 import static java.util.Collections.addAll;
@@ -250,7 +251,7 @@ public final class Reflections {
 
 		@Override
 		public boolean apply(Field field) {
-			return field.isAnnotationPresent(annotationKlass);
+			return isAnnotationPresent(field, annotationKlass);
 		}
 	}
 
@@ -276,7 +277,7 @@ public final class Reflections {
 
 		@Override
 		public boolean apply(Method method) {
-			return method.isAnnotationPresent(annotationKlass);
+			return isAnnotationPresent(method, annotationKlass);
 		}
 	}
 
