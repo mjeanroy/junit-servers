@@ -31,11 +31,8 @@ import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.exceptions.IllegalTomcatConfigurationException;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatFactory;
 import org.junit.jupiter.api.extension.RegisterExtension;
-
-import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfigurationUtils.checkConfiguration;
 
 /**
  * A specialized {@link JunitServerExtension} that will instantiate an {@link EmbeddedTomcat}
@@ -84,30 +81,6 @@ public class TomcatServerExtension extends JunitServerExtension {
 	@Override
 	protected EmbeddedServer instantiateServer(Class<?> testClass, AbstractConfiguration configuration) {
 		log.debug("Instantiating embedded tomcat for test class: {}", testClass);
-		final EmbeddedTomcatConfiguration tomcatConfiguration = extractConfiguration(testClass, configuration);
-		return tomcatConfiguration == null ? new EmbeddedTomcat() : new EmbeddedTomcat(tomcatConfiguration);
-	}
-
-	/**
-	 * Try to extract {@link EmbeddedTomcat} configuration from:
-	 * <ul>
-	 *   <li>The given {@code configuration} if it is not {@code null}.</li>
-	 *   <li>A class field/method annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} on given {@code testClass} otherwise.</li>
-	 * </ul>
-	 *
-	 * @param testClass The test class to analyze.
-	 * @param configuration The configuration to use if not {@code null}.
-	 * @return The {@link EmbeddedTomcat} configuration.
-	 * @throws IllegalTomcatConfigurationException If extracted {@code configuration} is not an instance of {@link EmbeddedTomcatConfiguration}.
-	 */
-	private EmbeddedTomcatConfiguration extractConfiguration(Class<?> testClass, AbstractConfiguration configuration) {
-		if (configuration != null) {
-			log.debug("Returning provided configuration instance: {}", configuration);
-			return checkConfiguration(configuration);
-		}
-
-		log.debug("Extracting configuration from given test class: {}", testClass);
-		final AbstractConfiguration configurationToUse = findConfiguration(testClass);
-		return configurationToUse == null ? null : checkConfiguration(configurationToUse);
+		return EmbeddedTomcatFactory.createFrom(testClass, configuration);
 	}
 }

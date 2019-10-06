@@ -25,18 +25,21 @@
 package com.github.mjeanroy.junit.servers.jetty.junit4;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.exceptions.IllegalJettyConfigurationException;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyFactory;
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import org.junit.runners.model.InitializationError;
-
-import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
 /**
  * Rule that can be used to start and stop embedded jetty server.
  */
 public class JettyServerJunit4Runner extends JunitServerRunner {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(JettyServerJunit4Runner.class);
 
 	/**
 	 * Create runner.
@@ -55,29 +58,7 @@ public class JettyServerJunit4Runner extends JunitServerRunner {
 	 * @return The embedded jetty.
 	 */
 	private static EmbeddedJetty instantiate(Class<?> klass) {
-		final EmbeddedJettyConfiguration configuration = extractConfiguration(klass);
-		return configuration == null ? new EmbeddedJetty() : new EmbeddedJetty(configuration);
-	}
-
-	/**
-	 * Try to extract {@link EmbeddedJetty} configuration from the test class: search for a static
-	 * field/method annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration}).
-	 *
-	 * @param klass The test class.
-	 * @return The {@link EmbeddedJetty} configuration.
-	 * @throws IllegalJettyConfigurationException If extracted annotation is not an instance of {@link EmbeddedJetty}.
-	 */
-	private static EmbeddedJettyConfiguration extractConfiguration(Class<?> klass) {
-		final AbstractConfiguration configuration = findConfiguration(klass);
-
-		if (configuration == null) {
-			return null;
-		}
-
-		if (!(configuration instanceof EmbeddedJettyConfiguration)) {
-			throw new IllegalJettyConfigurationException();
-		}
-
-		return (EmbeddedJettyConfiguration) configuration;
+		log.debug("Instantiate embedded jetty for class: {}", klass);
+		return EmbeddedJettyFactory.createFrom(klass);
 	}
 }

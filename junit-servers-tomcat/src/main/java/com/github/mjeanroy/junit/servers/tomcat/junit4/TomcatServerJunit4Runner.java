@@ -27,14 +27,9 @@ package com.github.mjeanroy.junit.servers.tomcat.junit4;
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.exceptions.IllegalTomcatConfigurationException;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatFactory;
 import org.junit.runners.model.InitializationError;
-
-import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfigurationUtils.checkConfiguration;
 
 /**
  * Rule that can be used to start and stop embedded tomcat server.
@@ -64,21 +59,6 @@ public class TomcatServerJunit4Runner extends JunitServerRunner {
 	 */
 	private static EmbeddedTomcat instantiate(Class<?> klass) {
 		log.debug("Instantiating embedded tomcat for class: {}", klass);
-		EmbeddedTomcatConfiguration configuration = extractConfiguration(klass);
-		return configuration == null ? new EmbeddedTomcat() : new EmbeddedTomcat(configuration);
-	}
-
-	/**
-	 * Try to extract {@link EmbeddedTomcat} configuration from the test class: search for a static
-	 * field/method annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration}).
-	 *
-	 * @param klass The test class.
-	 * @return The {@link EmbeddedTomcat} configuration.
-	 * @throws IllegalTomcatConfigurationException If extracted annotation is not an instance of {@link EmbeddedTomcatConfiguration}.
-	 */
-	private static EmbeddedTomcatConfiguration extractConfiguration(Class<?> klass) {
-		log.debug("Extracting configuration from given class: {}", klass);
-		AbstractConfiguration configuration = findConfiguration(klass);
-		return configuration == null ? null : checkConfiguration(configuration);
+		return EmbeddedTomcatFactory.createFrom(klass);
 	}
 }

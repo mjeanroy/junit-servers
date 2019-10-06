@@ -1,0 +1,99 @@
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2019 <mickael.jeanroy@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+package com.github.mjeanroy.junit.servers.jetty;
+
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.exceptions.IllegalJettyConfigurationException;
+import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+public class EmbeddedJettyFactoryTest {
+
+	@Test
+	public void it_should_create_embedded_jetty_from_class_using_default_configuration() {
+		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingDefaultConfiguration.class);
+		assertThat(jetty).isNotNull();
+		assertThat(jetty.getConfiguration()).isEqualTo(EmbeddedJettyConfiguration.defaultConfiguration());
+	}
+
+	@Test
+	public void it_should_create_embedded_jetty_from_class_using_provided_configuration() {
+		final EmbeddedJettyConfiguration providedConfiguration = EmbeddedJettyConfiguration.builder()
+			.withPath("/test")
+			.build();
+
+		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingDefaultConfiguration.class, providedConfiguration);
+
+		assertThat(jetty).isNotNull();
+		assertThat(jetty.getConfiguration()).isEqualTo(providedConfiguration);
+	}
+
+	@Test
+	public void it_should_create_embedded_jetty_from_class_using_custom_configuration() {
+		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingCustomConfiguration.class);
+		assertThat(jetty).isNotNull();
+		assertThat(jetty.getConfiguration()).isSameAs(ClassUsingCustomConfiguration.configuration);
+	}
+
+	@Test
+	public void it_should_fail_to_create_embedded_jetty_from_class_using_non_valid_configuration() {
+		assertThatThrownBy(createFrom())
+			.isInstanceOf(IllegalJettyConfigurationException.class)
+			.hasMessage(
+				"Embedded jetty server requires a configuration that is an instance of com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration, please fix it."
+			);
+	}
+
+	private static ThrowingCallable createFrom() {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				EmbeddedJettyFactory.createFrom(ClassUsingNonJettyConfiguration.class);
+			}
+		};
+	}
+
+	private static class ClassUsingDefaultConfiguration {
+	}
+
+	private static class ClassUsingCustomConfiguration {
+		@TestServerConfiguration
+		private static EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
+			.withStopTimeout(100)
+			.build();
+	}
+
+	private static class ClassUsingNonJettyConfiguration {
+		@TestServerConfiguration
+		private static CustomConfiguration configuration = new CustomConfiguration();
+	}
+
+	private static class CustomConfiguration extends AbstractConfiguration {
+	}
+}

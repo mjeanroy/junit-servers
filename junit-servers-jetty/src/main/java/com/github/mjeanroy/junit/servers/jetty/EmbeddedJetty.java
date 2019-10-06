@@ -29,6 +29,8 @@ import com.github.mjeanroy.junit.servers.commons.core.Java;
 import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
@@ -55,6 +57,11 @@ import static org.eclipse.jetty.util.resource.Resource.newResource;
  * Jetty Embedded Server.mv
  */
 public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyConfiguration> {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(EmbeddedJetty.class);
 
 	/**
 	 * Instance of Jetty Server.
@@ -89,6 +96,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 	}
 
 	private Server initServer() {
+		log.debug("Initialize jetty server");
 		Server server = new Server(configuration.getPort());
 		server.setStopAtShutdown(configuration.isStopAtShutdown());
 		server.setStopTimeout(configuration.getStopTimeout());
@@ -97,9 +105,11 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 
 	private WebAppContext initContext() {
 		try {
+			log.debug("Initialize jetty webapp context");
 			return createdWebAppContext();
 		}
 		catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
 			throw new ServerInitializationException(ex);
 		}
 	}
@@ -112,11 +122,17 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 	@Override
 	protected void doStart() {
 		try {
+			log.debug("Initializing embedded jetty context");
 			webAppContext = initContext();
+
+			log.debug("Starting embedded jetty");
 			server.start();
+
+			log.debug("Looking for embedded jetty server connector");
 			connector = findConnector();
 		}
 		catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
 			throw new ServerStartException(ex);
 		}
 	}
@@ -137,17 +153,20 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		final String containerJarPattern = configuration.getContainerJarPattern();
 		final String webInfJarPattern = configuration.getWebInfJarPattern();
 
-		WebAppContext ctx = new WebAppContext();
+		final WebAppContext ctx = new WebAppContext();
 
 		if (containerJarPattern != null) {
+			log.debug("Setting jetty 'containerJarPattern' attribute: {}", containerJarPattern);
 			ctx.setAttribute(WebInfConfiguration.CONTAINER_JAR_PATTERN, containerJarPattern);
 		}
 		else if (Java.isPostJdk9()) {
 			// Fix to make TLD scanning works with Java >= 9
+			log.debug("Setting default jetty 'containerJarPattern' for JRE >= 9: {}");
 			ctx.setAttribute(WebInfConfiguration.CONTAINER_JAR_PATTERN, ".*\\.jar");
 		}
 
 		if (webInfJarPattern != null) {
+			log.debug("Setting jetty 'WebInfJarPattern' attribute: {}", webInfJarPattern);
 			ctx.setAttribute(WebInfConfiguration.WEBINF_JAR_PATTERN, webInfJarPattern);
 		}
 
@@ -155,27 +174,36 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		final ClassLoader classLoader;
 
 		if (parentClassLoader != null) {
+			log.debug("Overriding jetty parent classloader");
 			classLoader = new CompositeClassLoader(parentClassLoader, systemClassLoader);
 		}
 		else {
+			log.debug("Using current thread classloader as jetty parent classloader");
 			classLoader = systemClassLoader;
 		}
 
+		log.debug("Set jetty classloader");
 		ctx.setClassLoader(classLoader);
+
+		log.debug("Set jetty context path to: {}", path);
 		ctx.setContextPath(path);
 
 		if (baseResource == null) {
 			// use default base resource
+			log.debug("Initializing default jetty base resource from: {}", webapp);
 			ctx.setBaseResource(newResource(webapp));
 		}
 		else {
+			log.debug("Initializing jetty base resource from: {}", baseResource);
 			ctx.setBaseResource(baseResource);
 		}
 
 		if (overrideDescriptor != null) {
+			log.debug("Set jetty descriptor: {}", overrideDescriptor);
 			ctx.setOverrideDescriptor(overrideDescriptor);
 		}
 
+		log.debug("Initializing jetty configuration classes");
 		ctx.setConfigurations(new Configuration[] {
 			new WebInfConfiguration(),
 			new WebXmlConfiguration(),
@@ -186,12 +214,14 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 		});
 
 		if (isNotBlank(classpath)) {
+			log.debug("Adding jetty container resource: {}", classpath);
+
 			// Fix to scan Spring WebApplicationInitializer
 			// This will add compiled classes to jetty classpath
 			// See: http://stackoverflow.com/questions/13222071/spring-3-1-webapplicationinitializer-embedded-jetty-8-annotationconfiguration
 			// And more precisely: http://stackoverflow.com/a/18449506/1215828
-			File classes = new File(classpath);
-			PathResource containerResources = new PathResource(classes.toURI());
+			final File classes = new File(classpath);
+			final PathResource containerResources = new PathResource(classes.toURI());
 			ctx.getMetaData().addContainerResource(containerResources);
 		}
 
@@ -208,8 +238,13 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 	@Override
 	protected void doStop() {
 		try {
+			log.debug("Stopping embedded jettu");
 			server.stop();
+
+			log.debug("Clearing jetty webapp context");
 			webAppContext = null;
+
+			log.debug("Clearing jetty server connector");
 			connector = null;
 		}
 		catch (Exception ex) {
@@ -233,11 +268,14 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 	}
 
 	private ServerConnector findConnector() {
+		log.debug("Extracting jetty server connector");
 		for (Connector connector : server.getConnectors()) {
 			if (connector instanceof ServerConnector) {
 				return (ServerConnector) connector;
 			}
 		}
+
+		log.warn("Cannot find jetty server connector");
 		return null;
 	}
 }

@@ -348,6 +348,12 @@ public class EmbeddedJettyConfiguration extends AbstractConfiguration {
 			return toggleStopAtShutdown(true);
 		}
 
+		/**
+		 * Toggle {@link #stopAtShutdown}.
+		 *
+		 * @param stopAtShutdown New {@link #stopAtShutdown} value.
+		 * @return this
+		 */
 		private Builder toggleStopAtShutdown(boolean stopAtShutdown) {
 			this.stopAtShutdown = stopAtShutdown;
 			return this;

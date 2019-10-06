@@ -26,12 +26,12 @@ package com.github.mjeanroy.junit.servers.jetty.jupiter;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.exceptions.IllegalJettyConfigurationException;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyFactory;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-
-import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
 /**
  * A specialized {@link JunitServerExtension} that will instantiate an {@link EmbeddedJetty}
@@ -43,6 +43,11 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration
  * @see JunitServerExtension
  */
 public class JettyServerExtension extends JunitServerExtension {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(JettyServerExtension.class);
 
 	/**
 	 * Create the jupiter with default behavior.
@@ -74,33 +79,7 @@ public class JettyServerExtension extends JunitServerExtension {
 
 	@Override
 	protected EmbeddedServer<?> instantiateServer(Class<?> testClass, AbstractConfiguration configuration) {
-		final EmbeddedJettyConfiguration configurationToUse = extractConfiguration(testClass, configuration);
-		return configurationToUse == null ? new EmbeddedJetty() : new EmbeddedJetty(configurationToUse);
-	}
-
-	/**
-	 * Try to extract {@link EmbeddedJetty} configuration from:
-	 * <ul>
-	 *   <li>The given {@code configuration} if it is not {@code null}.</li>
-	 *   <li>A class field/method annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} on given {@code testClass} otherwise.</li>
-	 * </ul>
-	 *
-	 * @param testClass The test class to analyze.
-	 * @param configuration The configuration to use if not {@code null}.
-	 * @return The {@link EmbeddedJetty} configuration.
-	 * @throws IllegalJettyConfigurationException If extracted {@code configuration} is not an instance of {@link EmbeddedJettyConfiguration}.
-	 */
-	private static EmbeddedJettyConfiguration extractConfiguration(Class<?> testClass, AbstractConfiguration configuration) {
-		final AbstractConfiguration configurationToUse = configuration == null ? findConfiguration(testClass) : configuration;
-
-		if (configurationToUse == null) {
-			return null;
-		}
-
-		if (!(configurationToUse instanceof EmbeddedJettyConfiguration)) {
-			throw new IllegalJettyConfigurationException();
-		}
-
-		return (EmbeddedJettyConfiguration) configurationToUse;
+		log.debug("Instantiating embedded jetty for test class: {}", testClass);
+		return EmbeddedJettyFactory.createFrom(testClass, configuration);
 	}
 }
