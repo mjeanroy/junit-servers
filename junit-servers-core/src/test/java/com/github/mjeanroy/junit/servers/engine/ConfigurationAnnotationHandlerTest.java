@@ -37,7 +37,6 @@ import static com.github.mjeanroy.junit.servers.engine.ConfigurationAnnotationHa
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateField;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 public class ConfigurationAnnotationHandlerTest {
 
@@ -53,12 +52,25 @@ public class ConfigurationAnnotationHandlerTest {
 
 	@Test
 	public void it_should_set_configuration_instance() {
-		final AbstractConfiguration configuration = mock(AbstractConfiguration.class);
+		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
 		final FixtureClass fixture = new FixtureClass();
 		final Field field = extractConfigurationField();
 		final AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 
 		verifyBeforeTest(configuration, fixture, field, handler);
+	}
+
+	@Test
+	public void it_should_implement_to_string() {
+		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
+		final AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
+
+		assertThat(handler).hasToString(
+			"ConfigurationAnnotationHandler{" +
+				"annotationKlass: interface com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration, " +
+				"configuration: MockAbstractConfiguration" +
+			"}"
+		);
 	}
 
 	private static void verifyBeforeTest(AbstractConfiguration configuration, FixtureClass fixture, Field field, AnnotationHandler handler) {

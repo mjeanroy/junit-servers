@@ -202,6 +202,21 @@ public class ServerRuleTest {
 		assertThat(client.isDestroyed()).isTrue();
 	}
 
+	@Test
+	public void it_should_implement_to_string() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final ServerRule rule = createRule(server);
+
+		assertThat(rule).hasToString(
+			"ServerRule{" +
+				"adapter: EmbeddedServerRunner{" +
+					"server: MockEmbeddedServer, " +
+					"clients: {}" +
+				"}" +
+			"}"
+		);
+	}
+
 	protected ServerRule createRule() {
 		return new ServerRule();
 	}

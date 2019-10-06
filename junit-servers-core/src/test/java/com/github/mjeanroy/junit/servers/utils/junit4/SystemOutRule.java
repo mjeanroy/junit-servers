@@ -22,28 +22,61 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils.fixtures;
+package com.github.mjeanroy.junit.servers.utils.junit4;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.junit.rules.ExternalResource;
 
-public class FixtureClass {
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 
-	@TestServer
-	public EmbeddedServer<?> server;
+/**
+ * Catch System.out logging and store in a buffer.
+ */
+public class SystemOutRule extends ExternalResource {
 
-	@TestServerConfiguration
-	public AbstractConfiguration configuration;
+	/**
+	 * Original out stream.
+	 * Will be initialized before each tests.
+	 * Will be restored after each tests.
+	 */
+	private PrintStream originalOut;
 
-	@TestHttpClient
-	public HttpClient client;
+	/**
+	 * Custom out stream.
+	 * Will be initialized before each tests.
+	 * Will be flushed after each tests.
+	 */
+	private ByteArrayOutputStream out;
 
 	@Override
-	public String toString() {
-		return FixtureClass.class.getSimpleName();
+	public void before() {
+		originalOut = System.out;
+		out = new ByteArrayOutputStream();
+
+		System.setOut(new PrintStream(out));
+	}
+
+	@Override
+	public void after() {
+		try {
+			out.reset();
+			out.flush();
+		}
+		catch (IOException ex) {
+			ex.printStackTrace();
+			// No worries
+		}
+
+		// Restore original out stream
+		System.setOut(originalOut);
+	}
+
+	public String getOut() {
+		if (out == null) {
+			return null;
+		}
+
+		return out.toString();
 	}
 }

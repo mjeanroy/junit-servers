@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.junit4;
 
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.rules.TestRule;
@@ -75,6 +77,11 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
 public class JunitServerRunner extends BlockJUnit4ClassRunner {
 
 	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(JunitServerRunner.class);
+
+	/**
 	 * Embedded server defined before and after tests.
 	 */
 	private final EmbeddedServer<?> server;
@@ -118,15 +125,21 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 
 	@Override
 	protected List<TestRule> classRules() {
+		ServerRule serverRule = new ServerRule(server);
+
+		log.debug("Injecting {} to class rules", serverRule);
 		List<TestRule> classRules = super.classRules();
-		classRules.add(new ServerRule(server));
+		classRules.add(serverRule);
 		return classRules;
 	}
 
 	@Override
 	protected List<TestRule> getTestRules(Object target) {
+		AnnotationsHandlerRule rule = new AnnotationsHandlerRule(target, server, configuration);
+
+		log.debug("Injecting {} to test rules", rule);
 		List<TestRule> testRules = super.getTestRules(target);
-		testRules.add(new AnnotationsHandlerRule(target, server, configuration));
+		testRules.add(rule);
 		return testRules;
 	}
 }

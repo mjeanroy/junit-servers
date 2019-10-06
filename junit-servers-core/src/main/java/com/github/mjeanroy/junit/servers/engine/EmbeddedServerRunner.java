@@ -27,6 +27,9 @@ package com.github.mjeanroy.junit.servers.engine;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
@@ -45,6 +48,11 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
  * </ol>
  */
 public final class EmbeddedServerRunner extends AbstractTestRunner implements TestRunner {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(EmbeddedServerRunner.class);
 
 	/**
 	 * Embedded server that will be start and stopped.
@@ -126,6 +134,7 @@ public final class EmbeddedServerRunner extends AbstractTestRunner implements Te
 	 * @see EmbeddedServer#start()
 	 */
 	public void start() {
+		log.debug("Starting embedded server");
 		server.start();
 	}
 
@@ -140,10 +149,13 @@ public final class EmbeddedServerRunner extends AbstractTestRunner implements Te
 	}
 
 	private void stopServer() {
+		log.debug("Stopping embedded server");
 		server.stop();
 	}
 
 	private void closeOpenedClients() {
+		log.debug("Closing embedded server HTTP clients");
+
 		synchronized (clients) {
 			for (HttpClient client : clients.values()) {
 				if (!client.isDestroyed()) {
@@ -161,6 +173,7 @@ public final class EmbeddedServerRunner extends AbstractTestRunner implements Te
 	 * @see EmbeddedServer#restart()
 	 */
 	public void restart() {
+		log.debug("Restarting embedded server");
 		server.restart();
 	}
 
@@ -262,6 +275,8 @@ public final class EmbeddedServerRunner extends AbstractTestRunner implements Te
 	}
 
 	private HttpClient openClient(HttpClientStrategy strategy) {
+		log.debug("Opening HTTP client using strategy: {}", strategy);
+
 		synchronized (clients) {
 			if (!clients.containsKey(strategy) || clients.get(strategy).isDestroyed()) {
 				HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
@@ -271,5 +286,13 @@ public final class EmbeddedServerRunner extends AbstractTestRunner implements Te
 
 			return clients.get(strategy);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("server", server)
+			.append("clients", clients)
+			.build();
 	}
 }

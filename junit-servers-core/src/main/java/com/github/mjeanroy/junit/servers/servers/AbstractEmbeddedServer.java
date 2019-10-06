@@ -24,14 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.core.Urls.ensureAbsolutePath;
-import static java.lang.System.clearProperty;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static java.lang.System.getProperty;
-import static java.lang.System.setProperty;
 
 /**
  * Partial implementation of an embedded server.
@@ -44,6 +45,11 @@ import static java.lang.System.setProperty;
 public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration> implements EmbeddedServer<T> {
 
 	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(AbstractEmbeddedServer.class);
+
+	/**
 	 * The default scheme returned by {@link AbstractEmbeddedServer#getScheme()}.
 	 */
 	private static final String DEFAULT_SCHEME = "http";
@@ -52,8 +58,10 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	 * The default host returned by {@link AbstractEmbeddedServer#getHost()}.
 	 */
 	private static final String DEFAULT_HOST = "localhost";
-	public static final String SCHEME_SEPARATOR = "://";
-	public static final String PORT_SEPARATOR = ":";
+
+	private static final String SCHEME_SEPARATOR = "://";
+
+	private static final String PORT_SEPARATOR = ":";
 
 	/**
 	 * Server configuration.
@@ -91,8 +99,10 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 
 	@Override
 	public void start() {
+		log.debug("Attempt to start embedded server (current status is: {})", status);
 		if (status != ServerStatus.STARTED) {
 			synchronized (lock) {
+				log.debug("Lock acquired, starting server (current status is: {})", status);
 				if (status != ServerStatus.STARTED) {
 					status = ServerStatus.STARTING;
 					initEnvironment();
@@ -104,13 +114,17 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 					onStarted();
 				}
 			}
+
+			log.debug("Lock released, current status is now: {}", status);
 		}
 	}
 
 	@Override
 	public void stop() {
+		log.debug("Attempt to stop embedded server (current status is: {})", status);
 		if (status != ServerStatus.STOPPED) {
 			synchronized (lock) {
+				log.debug("Lock acquired, stopping server (current status is: {})", status);
 				if (status != ServerStatus.STOPPED) {
 					status = ServerStatus.STOPPING;
 					execHooks(false);
@@ -119,6 +133,8 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 					status = ServerStatus.STOPPED;
 				}
 			}
+
+			log.debug("Lock released, current status is now: {}", status);
 		}
 	}
 
@@ -129,6 +145,7 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 
 	@Override
 	public void restart() {
+		log.debug("Restarting embedded server");
 		stop();
 		start();
 	}
@@ -149,6 +166,7 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	 * and will be restore later.
 	 */
 	private void initEnvironment() {
+		log.debug("Initialize environment properties");
 		for (Map.Entry<String, String> property : configuration.getEnvProperties().entrySet()) {
 			String name = property.getKey();
 			String newValue = property.getValue();
@@ -156,7 +174,8 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 			String oldValue = getProperty(property.getKey());
 			oldProperties.put(name, oldValue);
 
-			setProperty(name, newValue);
+			log.trace("Setting environment property: {} --> {}", name, newValue);
+			System.setProperty(name, newValue);
 		}
 	}
 
@@ -166,6 +185,7 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	 * or clear.
 	 */
 	private void destroyEnvironment() {
+		log.debug("Resetting environment properties");
 		for (Map.Entry<String, String> property : configuration.getEnvProperties().entrySet()) {
 			String name = property.getKey();
 
@@ -173,10 +193,12 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 			oldProperties.remove(name);
 
 			if (oldValue == null) {
-				clearProperty(name);
+				log.trace("Clear environment property: {}", name);
+				System.clearProperty(name);
 			}
 			else {
-				setProperty(name, oldValue);
+				log.trace("Setting environment property: {}", name);
+				System.setProperty(name, oldValue);
 			}
 		}
 	}
@@ -187,6 +209,7 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	 * @param pre Phase to execute (true => pre ; false => post).
 	 */
 	private void execHooks(boolean pre) {
+		log.debug("Executing embedded server lifecycle hooks (pre = {})", pre);
 		for (Hook hook : configuration.getHooks()) {
 			if (pre) {
 				hook.pre(this);
@@ -198,6 +221,7 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	}
 
 	private void onStarted() {
+		log.error("Executing `onStarted` embedded server lifecycle hooks");
 		for (Hook hook : configuration.getHooks()) {
 			hook.onStarted(this, getServletContext());
 		}

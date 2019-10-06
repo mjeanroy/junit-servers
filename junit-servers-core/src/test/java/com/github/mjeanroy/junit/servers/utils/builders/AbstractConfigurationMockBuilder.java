@@ -39,6 +39,6 @@ public class AbstractConfigurationMockBuilder {
 	 * @return The mock instance.
 	 */
 	public AbstractConfiguration build() {
-		return mock(AbstractConfiguration.class);
+		return mock(AbstractConfiguration.class, "MockAbstractConfiguration");
 	}
 }

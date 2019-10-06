@@ -27,6 +27,9 @@ package com.github.mjeanroy.junit.servers.engine;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import java.lang.reflect.Field;
@@ -40,6 +43,11 @@ import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.sett
  * in test classes.
  */
 class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(HttpClientAnnotationHandler.class);
 
 	/**
 	 * Create new handler.
@@ -64,6 +72,7 @@ class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
 
 	@Override
 	public void before(Object target, Field field) {
+		log.debug("Inject HTTP client to {} # {}", target, field);
 		TestHttpClient httpClient = field.getAnnotation(TestHttpClient.class);
 		HttpClientStrategy strategy = httpClient.strategy();
 		setter(target, field, strategy.build(server));
@@ -71,8 +80,17 @@ class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
 
 	@Override
 	public void after(Object target, Field field) {
+		log.debug("Clearing HTTP client to {} # {}", target, field);
 		HttpClient httpClient = getter(target, field);
 		httpClient.destroy();
 		setter(target, field, null);
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("annotationKlass", getAnnotationKlass())
+			.append("server", server)
+			.build();
 	}
 }

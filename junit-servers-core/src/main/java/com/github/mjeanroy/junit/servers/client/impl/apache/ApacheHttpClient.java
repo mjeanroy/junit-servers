@@ -30,12 +30,11 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
@@ -118,19 +117,24 @@ public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
 	}
 
 	@Override
-	public void destroy() {
+	public void doDestroy() throws Exception {
 		if (destroyed.compareAndSet(false, true)) {
-			try {
-				client.close();
-			}
-			catch (IOException ex) {
-				throw new HttpClientException(ex);
-			}
+			client.close();
 		}
 	}
 
 	@Override
 	public boolean isDestroyed() {
 		return destroyed.get();
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("configuration", getConfiguration())
+			.append("server", getServer())
+			.append("client", client)
+			.append("destroyed", destroyed)
+			.build();
 	}
 }

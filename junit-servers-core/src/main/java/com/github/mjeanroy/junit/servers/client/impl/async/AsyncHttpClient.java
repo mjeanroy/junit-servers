@@ -30,13 +30,11 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
-import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.asynchttpclient.AsyncHttpClientConfig;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
-
-import java.io.IOException;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
@@ -109,17 +107,21 @@ public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
 	}
 
 	@Override
-	public void destroy() {
-		try {
-			client.close();
-		}
-		catch (IOException ex) {
-			throw new HttpClientException(ex);
-		}
+	public void doDestroy() throws Exception {
+		client.close();
 	}
 
 	@Override
 	public boolean isDestroyed() {
 		return client.isClosed();
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("configuration", getConfiguration())
+			.append("server", getServer())
+			.append("client", client)
+			.build();
 	}
 }

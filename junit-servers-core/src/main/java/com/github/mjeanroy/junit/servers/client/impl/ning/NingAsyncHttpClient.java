@@ -30,6 +30,7 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
@@ -113,12 +114,21 @@ public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClien
 	}
 
 	@Override
-	public void destroy() {
+	protected void doDestroy() {
 		client.close();
 	}
 
 	@Override
 	public boolean isDestroyed() {
 		return client.isClosed();
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("configuration", getConfiguration())
+			.append("server", getServer())
+			.append("client", client)
+			.build();
 	}
 }

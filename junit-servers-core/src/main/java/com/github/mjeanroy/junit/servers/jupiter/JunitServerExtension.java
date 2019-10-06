@@ -31,6 +31,8 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerRunner;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.engine.Servers;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.jupiter.api.extension.AfterAllCallback;
@@ -132,6 +134,12 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
  * </code></pre>
  */
 public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback, ParameterResolver {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(JunitServerExtension.class);
+
 	/**
 	 * The namespace where each jupiter variable will be stored.
 	 */
@@ -294,6 +302,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @return The embedded server.
 	 */
 	protected EmbeddedServer<?> instantiateServer(Class<?> testClass, AbstractConfiguration configuration) {
+		log.debug("Instantiating embedded server for test class: {}", testClass);
 		return configuration == null ? Servers.instantiate(testClass) : Servers.instantiate(configuration);
 	}
 
@@ -312,6 +321,8 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @return The registered adapter.
 	 */
 	private EmbeddedServerRunner registerEmbeddedServer(ExtensionContext context, boolean staticMode) {
+		log.debug("Register embedded server to junit extension context");
+
 		Class<?> testClass = context.getRequiredTestClass();
 		EmbeddedServer<?> server = this.server == null ? instantiateServer(testClass, configuration) : this.server;
 
@@ -331,6 +342,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @see #registerEmbeddedServer(ExtensionContext, boolean)
 	 */
 	private void unregisterEmbeddedServer(ExtensionContext context, boolean staticMode) {
+		log.debug("Attempt to unregister embedded server to junit extension context");
 		boolean registeredAsStatic = findInStore(context, SERVER_RUNNER_STATIC_MODE);
 		if (registeredAsStatic == staticMode) {
 			try {
@@ -360,6 +372,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @param serverAdapter The instance to store.
 	 */
 	private static void putEmbeddedServerAdapterInStore(ExtensionContext context, EmbeddedServerRunner serverAdapter, boolean staticMode) {
+		log.debug("Store embedded server to junit extension context");
 		putInStore(context, SERVER_RUNNER_KEY, serverAdapter);
 		putInStore(context, SERVER_RUNNER_STATIC_MODE, staticMode);
 	}
@@ -370,6 +383,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @param context The Junit-Jupiter test context.
 	 */
 	private static void removeEmbeddedServerAdapterFromStore(ExtensionContext context) {
+		log.debug("Clearing junit extension context");
 		removeFromStore(context, SERVER_RUNNER_KEY);
 		removeFromStore(context, SERVER_RUNNER_STATIC_MODE);
 	}
@@ -412,6 +426,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @param <T> The type of the value to look for.
 	 */
 	private static <T> void putInStore(ExtensionContext context, String name, T value) {
+		log.trace("Put to junit extension context: {} -> {}", name, value);
 		getStore(context).put(name, value);
 	}
 
@@ -425,6 +440,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T> T findInStore(ExtensionContext context, String name) {
+		log.trace("Looking for {} entry in junit extension context", name);
 		return (T) getStore(context).get(name);
 	}
 
@@ -435,6 +451,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @param name The entry name to remove.
 	 */
 	private static void removeFromStore(ExtensionContext context, String name) {
+		log.trace("Remove to junit extension context: {}", name);
 		getStore(context).remove(name);
 	}
 

@@ -28,10 +28,12 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit4.runif.RunIf;
 import com.github.mjeanroy.junit4.runif.RunIfRunner;
 import com.github.mjeanroy.junit4.runif.conditions.AtLeastJava8Condition;
 import org.asynchttpclient.AsyncHttpClientConfig;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient.defaultAsyncHttpClient;
@@ -78,5 +80,23 @@ public class AsyncHttpClientTest extends BaseHttpClientTest {
 	protected void checkInternalHttpClient(HttpClient httpClient) {
 		org.asynchttpclient.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
+	}
+
+	@Test
+	public void it_should_implement_to_string() {
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		HttpClient client = createDefaultClient(server);
+		org.asynchttpclient.AsyncHttpClient internalClient = readPrivate(client, "client");
+		assertThat(client).hasToString(
+			"AsyncHttpClient{" +
+				"configuration: HttpClientConfiguration{" +
+					"followRedirect: true, " +
+					"defaultHeaders: {}, " +
+					"defaultCookies: []" +
+				"}, " +
+				"server: MockEmbeddedServer, " +
+				"client: " + internalClient.toString() +
+			"}"
+		);
 	}
 }

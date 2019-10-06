@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.junit4;
 
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerRunner;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -59,5 +60,13 @@ class AnnotationsHandlerRule extends AbstractRuleInstance {
 	@Override
 	protected void after() {
 		annotationHandlers.afterEach(getTarget());
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("target", getTarget())
+			.append("annotationHandlers", annotationHandlers)
+			.build();
 	}
 }

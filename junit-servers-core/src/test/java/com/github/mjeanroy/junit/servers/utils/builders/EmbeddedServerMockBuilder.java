@@ -136,7 +136,7 @@ public class EmbeddedServerMockBuilder {
 	 * @return The mock instance.
 	 */
 	public EmbeddedServer<?> build() {
-		EmbeddedServer<?> server = mock(EmbeddedServer.class);
+		EmbeddedServer<?> server = mock(EmbeddedServer.class, "MockEmbeddedServer");
 
 		when(server.getConfiguration()).thenAnswer(new Answer<AbstractConfiguration>() {
 			@Override

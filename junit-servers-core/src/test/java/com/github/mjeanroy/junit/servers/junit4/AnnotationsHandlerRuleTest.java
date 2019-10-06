@@ -46,6 +46,36 @@ public class AnnotationsHandlerRuleTest {
 		verifyAfterTest(configuration, embeddedServer, target, rule);
 	}
 
+	@Test
+	public void it_should_implement_to_string() {
+		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
+		final EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
+		final FixtureClass target = new FixtureClass();
+		final AnnotationsHandlerRule rule = new AnnotationsHandlerRule(target, embeddedServer, configuration);
+
+		assertThat(rule).hasToString(
+			"AnnotationsHandlerRule{" +
+				"target: FixtureClass, " +
+				"annotationHandlers: AnnotationsHandlerRunner{" +
+					"handlers: [" +
+						"ServerAnnotationHandler{" +
+							"annotationKlass: interface com.github.mjeanroy.junit.servers.annotations.TestServer, " +
+							"server: MockEmbeddedServer" +
+						"}, " +
+						"ConfigurationAnnotationHandler{" +
+							"annotationKlass: interface com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration, " +
+							"configuration: MockAbstractConfiguration" +
+						"}, " +
+						"HttpClientAnnotationHandler{" +
+							"annotationKlass: interface com.github.mjeanroy.junit.servers.annotations.TestHttpClient, " +
+							"server: MockEmbeddedServer" +
+						"}" +
+					"]" +
+				"}" +
+			"}"
+		);
+	}
+
 	private static void verifyAfterTest(AbstractConfiguration configuration, EmbeddedServer<?> embeddedServer, FixtureClass target, AnnotationsHandlerRule rule) {
 		rule.after();
 

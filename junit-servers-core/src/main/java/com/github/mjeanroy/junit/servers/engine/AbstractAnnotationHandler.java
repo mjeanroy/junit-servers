@@ -60,4 +60,13 @@ abstract class AbstractAnnotationHandler implements AnnotationHandler {
 	public void after(Object target, Field field) {
 		// Should be overridden
 	}
+
+	/**
+	 * Get {@link #annotationKlass}
+	 *
+	 * @return {@link #annotationKlass}
+	 */
+	Class<? extends Annotation> getAnnotationKlass() {
+		return annotationKlass;
+	}
 }

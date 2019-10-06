@@ -22,28 +22,44 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils.fixtures;
+package com.github.mjeanroy.junit.servers.loggers;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.commons.reflect.Classes;
 
-public class FixtureClass {
+/**
+ * Static Logger Factory.
+ */
+public final class LoggerFactory {
 
-	@TestServer
-	public EmbeddedServer<?> server;
+	/**
+	 * A flag indicating if SL4J is available in the classpath.
+	 */
+	private static final boolean SLF4J_AVAILABLE = Classes.isPresent("org.slf4j.LoggerFactory");
 
-	@TestServerConfiguration
-	public AbstractConfiguration configuration;
+	/**
+	 * A flag indicating if LOG4J2 is available in the classpath.
+	 */
+	private static final boolean LOG4J2_AVAILABLE = Classes.isPresent("org.apache.logging.log4j.Logger");
 
-	@TestHttpClient
-	public HttpClient client;
+	// Ensure no instantiation.
+	private LoggerFactory() {
+	}
 
-	@Override
-	public String toString() {
-		return FixtureClass.class.getSimpleName();
+	/**
+	 * Create logger from given class (class name will be used as logger name).
+	 *
+	 * @param klass Class name.
+	 * @return The logger.
+	 */
+	public static Logger getLogger(Class<?> klass) {
+		if (SLF4J_AVAILABLE) {
+			return new Slf4jLogger(klass);
+		}
+
+		if (LOG4J2_AVAILABLE) {
+			return new Log4jLogger(klass);
+		}
+
+		return new NoOpLogger();
 	}
 }

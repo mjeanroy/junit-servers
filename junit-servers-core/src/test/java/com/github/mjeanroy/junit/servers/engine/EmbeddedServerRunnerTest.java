@@ -239,4 +239,17 @@ public class EmbeddedServerRunnerTest {
 		assertThat(client).isNotNull();
 		assertThat(client.isDestroyed()).isTrue();
 	}
+
+	@Test
+	public void it_should_implement_to_string() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+
+		assertThat(adapter).hasToString(
+			"EmbeddedServerRunner{" +
+				"server: MockEmbeddedServer, " +
+				"clients: {}" +
+			"}"
+		);
+	}
 }

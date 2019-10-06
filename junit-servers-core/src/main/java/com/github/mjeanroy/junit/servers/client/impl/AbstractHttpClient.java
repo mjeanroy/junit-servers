@@ -31,12 +31,15 @@ import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
-import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
-import static com.github.mjeanroy.junit.servers.commons.lang.Strings.removePrefix;
 import static com.github.mjeanroy.junit.servers.commons.core.Urls.concatenatePath;
 import static com.github.mjeanroy.junit.servers.commons.core.Urls.startsWithHttpScheme;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.commons.lang.Strings.removePrefix;
 
 /**
  * Abstract skeleton of {@link HttpClient} interface.
@@ -46,6 +49,11 @@ import static com.github.mjeanroy.junit.servers.commons.core.Urls.startsWithHttp
  * <strong>This abstract class is not part of the public API and should not be used publicly.</strong>
  */
 public abstract class AbstractHttpClient implements HttpClient {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(AbstractHttpClient.class);
 
 	/**
 	 * The client configuration.
@@ -106,9 +114,12 @@ public abstract class AbstractHttpClient implements HttpClient {
 
 	@Override
 	public HttpRequest prepareRequest(HttpMethod httpMethod, String endpoint) {
+		log.debug("Preparing HTTP request: {} -- {}", httpMethod, endpoint);
+
 		notNull(endpoint, "endpoint");
 
 		if (isDestroyed()) {
+			log.error("Attempt to create HTTP request but HTTP client has already been destroyed");
 			throw new IllegalStateException("Cannot create request from a destroyed client");
 		}
 
@@ -130,16 +141,33 @@ public abstract class AbstractHttpClient implements HttpClient {
 		HttpRequest rq = buildRequest(httpMethod, requestEndpoint);
 
 		// Add default headers.
+		log.debug("Adding default headers");
 		for (HttpHeader header : configuration.getDefaultHeaders().values()) {
+			log.trace("Adding default header: {}", header);
 			rq = rq.addHeader(header);
 		}
 
 		// Add default cookies.
+		log.debug("Adding default cookies");
 		for (Cookie cookie : configuration.getDefaultCookies()) {
+			log.trace("Adding default cookie: {}", cookie);
 			rq = rq.addCookie(cookie);
 		}
 
 		return rq;
+	}
+
+	@Override
+	public void destroy() {
+		log.debug("Destroying HTTP client");
+
+		try {
+			doDestroy();
+		}
+		catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			throw new HttpClientException(ex);
+		}
 	}
 
 	/**
@@ -150,6 +178,20 @@ public abstract class AbstractHttpClient implements HttpClient {
 	 * @return Http request.
 	 */
 	protected abstract HttpRequest buildRequest(HttpMethod httpMethod, HttpUrl endpoint);
+
+	/**
+	 * Effectively destroy HTTP Client.
+	 */
+	protected abstract void doDestroy() throws Exception;
+
+	/**
+	 * Get {@link #server}
+	 *
+	 * @return {@link #server}
+	 */
+	protected EmbeddedServer<?> getServer() {
+		return server;
+	}
 
 	// Ensure that the client is properly destroyed when garbage collected.
 	// This is a just a simple "security" if the caller forget to destroy the client: the caller should always destroy

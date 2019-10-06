@@ -22,28 +22,16 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils.fixtures;
+package com.github.mjeanroy.junit.servers.loggers;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.junit.Test;
 
-public class FixtureClass {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	@TestServer
-	public EmbeddedServer<?> server;
+public class LoggerFactoryTest {
 
-	@TestServerConfiguration
-	public AbstractConfiguration configuration;
-
-	@TestHttpClient
-	public HttpClient client;
-
-	@Override
-	public String toString() {
-		return FixtureClass.class.getSimpleName();
+	@Test
+	public void it_should_get_logger() {
+		assertThat(LoggerFactory.getLogger(getClass())).isNotNull();
 	}
 }

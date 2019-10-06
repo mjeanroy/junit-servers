@@ -24,6 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.engine;
 
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
@@ -47,6 +50,11 @@ import static java.util.Arrays.asList;
  * </ul>
  */
 public class AnnotationsHandlerRunner extends AbstractTestRunner implements TestRunner {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(AnnotationsHandlerRunner.class);
 
 	/**
 	 * List of handlers.
@@ -75,12 +83,21 @@ public class AnnotationsHandlerRunner extends AbstractTestRunner implements Test
 
 	@Override
 	public void beforeEach(Object target) {
+		log.debug("Injecting to test class instance: {}", target);
 		process(target, true);
 	}
 
 	@Override
 	public void afterEach(Object target) {
+		log.debug("Clearing test class instance: {}", target);
 		process(target, false);
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("handlers", handlers)
+			.build();
 	}
 
 	/**

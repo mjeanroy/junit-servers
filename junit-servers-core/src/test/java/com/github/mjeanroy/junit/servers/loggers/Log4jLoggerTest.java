@@ -22,28 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils.fixtures;
+package com.github.mjeanroy.junit.servers.loggers;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import org.apache.logging.log4j.Level;
 
-public class FixtureClass {
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 
-	@TestServer
-	public EmbeddedServer<?> server;
-
-	@TestServerConfiguration
-	public AbstractConfiguration configuration;
-
-	@TestHttpClient
-	public HttpClient client;
+public class Log4jLoggerTest extends AbstractLoggerTest {
 
 	@Override
-	public String toString() {
-		return FixtureClass.class.getSimpleName();
+	Logger createLogger() {
+		Log4jLogger log = new Log4jLogger(getClass());
+
+		org.apache.logging.log4j.core.Logger log4j = readPrivate(log, "log");
+		log4j.setAdditive(true);
+		log4j.setLevel(Level.TRACE);
+
+		return log;
 	}
 }

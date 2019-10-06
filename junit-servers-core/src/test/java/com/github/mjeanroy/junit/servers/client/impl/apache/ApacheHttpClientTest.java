@@ -28,7 +28,9 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.client.impl.apache.ApacheHttpClient.defaultApacheHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.apache.ApacheHttpClient.newApacheHttpClient;
@@ -69,5 +71,24 @@ public class ApacheHttpClientTest extends BaseHttpClientTest {
 	protected void checkInternalHttpClient(HttpClient httpClient) {
 		CloseableHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
+	}
+
+	@Test
+	public void it_should_implement_to_string() {
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		HttpClient client = createDefaultClient(server);
+		CloseableHttpClient internalClient = readPrivate(client, "client");
+		assertThat(client).hasToString(
+			"ApacheHttpClient{" +
+				"configuration: HttpClientConfiguration{" +
+					"followRedirect: true, " +
+					"defaultHeaders: {}, " +
+					"defaultCookies: []" +
+				"}, " +
+				"server: MockEmbeddedServer, " +
+				"client: " + internalClient.toString() + ", " +
+				"destroyed: false" +
+			"}"
+		);
 	}
 }

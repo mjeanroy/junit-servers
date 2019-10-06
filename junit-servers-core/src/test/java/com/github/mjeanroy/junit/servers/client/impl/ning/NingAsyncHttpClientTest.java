@@ -28,7 +28,10 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
+import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
+import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient.defaultAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient.newAsyncHttpClient;
@@ -38,11 +41,11 @@ import static org.mockito.Mockito.mock;
 
 public class NingAsyncHttpClientTest extends BaseHttpClientTest {
 
-	private com.ning.http.client.AsyncHttpClient internalClient;
+	private AsyncHttpClient internalClient;
 
 	@Override
 	protected void onSetUp() {
-		internalClient = mock(com.ning.http.client.AsyncHttpClient.class);
+		internalClient = mock(AsyncHttpClient.class);
 	}
 
 	@Override
@@ -63,14 +66,32 @@ public class NingAsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected void checkInternalHttpClient(HttpClientConfiguration configuration, HttpClient httpClient) {
-		com.ning.http.client.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
+		AsyncHttpClient internalClient = readPrivate(httpClient, "client");
 		AsyncHttpClientConfig config = internalClient.getConfig();
 		assertThat(config.isFollowRedirect()).isEqualTo(configuration.isFollowRedirect());
 	}
 
 	@Override
 	protected void checkInternalHttpClient(HttpClient httpClient) {
-		com.ning.http.client.AsyncHttpClient internalClient = readPrivate(httpClient, "client");
+		AsyncHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
+	}
+
+	@Test
+	public void it_should_implement_to_string() {
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		HttpClient client = createDefaultClient(server);
+		AsyncHttpClient internalClient = readPrivate(client, "client");
+		assertThat(client).hasToString(
+			"NingAsyncHttpClient{" +
+				"configuration: HttpClientConfiguration{" +
+					"followRedirect: true, " +
+					"defaultHeaders: {}, " +
+					"defaultCookies: []" +
+				"}, " +
+				"server: MockEmbeddedServer, " +
+				"client: " + internalClient.toString() +
+			"}"
+		);
 	}
 }

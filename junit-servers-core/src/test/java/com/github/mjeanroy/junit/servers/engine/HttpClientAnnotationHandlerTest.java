@@ -62,6 +62,19 @@ public class HttpClientAnnotationHandlerTest {
 		verifyAfterTest(fixture, field, handler, client);
 	}
 
+	@Test
+	public void it_should_implement_to_string() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
+
+		assertThat(handler).hasToString(
+			"HttpClientAnnotationHandler{" +
+				"annotationKlass: interface com.github.mjeanroy.junit.servers.annotations.TestHttpClient, " +
+				"server: MockEmbeddedServer" +
+			"}"
+		);
+	}
+
 	private static void verifyAfterTest(FixtureClass fixture, Field field, AnnotationHandler handler, HttpClient client) {
 		handler.after(fixture, field);
 

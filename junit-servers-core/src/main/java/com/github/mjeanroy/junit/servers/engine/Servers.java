@@ -28,6 +28,8 @@ import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.commons.lang.Strings;
 import com.github.mjeanroy.junit.servers.exceptions.DuplicateConfigurationException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
@@ -49,6 +51,11 @@ import static java.lang.System.lineSeparator;
  * and configuration.
  */
 public final class Servers {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(Servers.class);
 
 	// Ensure non instantiation
 	private Servers() {
@@ -97,13 +104,19 @@ public final class Servers {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends AbstractConfiguration> EmbeddedServer<T> instantiate(T configuration) {
+		log.debug("Instantiating embedded server using configuration: {}", configuration);
+
 		ServiceLoader<EmbeddedServerProvider> serviceProviders = ServiceLoader.load(EmbeddedServerProvider.class);
 
 		List<EmbeddedServerProvider<T>> coreServerProviders = new ArrayList<>();
 		List<EmbeddedServerProvider<T>> customServerProviders = new ArrayList<>();
 
 		for (EmbeddedServerProvider<T> provider : serviceProviders) {
-			if (provider.getClass().getName().startsWith("com.github.mjeanroy.junit.servers")) {
+			Class<? extends EmbeddedServerProvider> providerClass = provider.getClass();
+
+			log.debug("Found provider {}", providerClass);
+
+			if (providerClass.getName().startsWith("com.github.mjeanroy.junit.servers")) {
 				coreServerProviders.add(provider);
 			}
 			else {
@@ -113,6 +126,10 @@ public final class Servers {
 
 		// No match, fail fast.
 		if (coreServerProviders.isEmpty() && customServerProviders.isEmpty()) {
+			log.error(
+				"Cannot find embedded server implementation, please add `junit-servers-tomcat` or `junit-server-jetty` dependency or provide your own service loader."
+			);
+
 			throw new ServerImplMissingException();
 		}
 
@@ -126,10 +143,11 @@ public final class Servers {
 			throw new ServerImplMissingException();
 		}
 
-		return instantiate(coreServerProviders.get(0), configuration);
+		return instantiate(customServerProviders.get(0), configuration);
 	}
 
 	private static <T extends AbstractConfiguration> EmbeddedServer<T> instantiate(EmbeddedServerProvider<T> provider, T configuration) {
+		log.debug("Instantiate embedded server using provider: {}", provider);
 		return configuration == null ? provider.instantiate() : provider.instantiate(configuration);
 	}
 
@@ -143,21 +161,26 @@ public final class Servers {
 	 * @return Configuration.
 	 */
 	public static <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
+		log.debug("Extract configuration from class: {}", klass);
+
 		// Look for static methods first
 		List<Method> methods = findStaticMethodsAnnotatedWith(klass, TestServerConfiguration.class);
 		List<Field> fields = findStaticFieldsAnnotatedWith(klass, TestServerConfiguration.class);
 		int nbOfConfigurations = methods.size() + fields.size();
 
 		if (nbOfConfigurations > 1) {
+			log.error("Found {} eligible configuration, fail", nbOfConfigurations);
 			failBecauseOfDuplicateConfiguration(klass, methods, fields);
 		}
 
 		if (!methods.isEmpty()) {
+			log.debug("Extracting configuration from method {}", methods.get(0));
 			return invoke(methods.get(0));
 		}
 
 		// Then, look for static field
 		if (!fields.isEmpty()) {
+			log.debug("Extracting configuration from field {}", fields.get(0));
 			return getter(fields.get(0));
 		}
 

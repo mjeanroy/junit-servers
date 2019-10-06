@@ -26,6 +26,8 @@ package com.github.mjeanroy.junit.servers.commons.reflect;
 
 import com.github.mjeanroy.junit.servers.commons.lang.Predicate;
 import com.github.mjeanroy.junit.servers.exceptions.ReflectionException;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -48,6 +50,11 @@ import static java.util.Collections.addAll;
  * or have their access level decreased from public to protected, package, or private in future versions without notice.
  */
 public final class Reflections {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(Reflections.class);
 
 	// Ensure non instantiation.
 	private Reflections() {
@@ -101,6 +108,7 @@ public final class Reflections {
 	 * @return Fields.
 	 */
 	public static List<Field> findStaticFieldsAnnotatedWith(Class<?> type, Class<? extends Annotation> klass) {
+		log.trace("Find static fields of {} annotated with {}", type, klass);
 		List<Field> fields = findStaticFields(type);
 		return filter(fields, new FieldAnnotatedWithPredicate(klass));
 	}
@@ -114,6 +122,7 @@ public final class Reflections {
 	 * @return Fields.
 	 */
 	public static List<Method> findStaticMethodsAnnotatedWith(Class<?> type, Class<? extends Annotation> klass) {
+		log.trace("Extract static methods of class {} annotated with {}", type, klass);
 		List<Method> methods = findStaticMethods(type);
 		return filter(methods, new MethodAnnotatedWithPredicate(klass));
 	}

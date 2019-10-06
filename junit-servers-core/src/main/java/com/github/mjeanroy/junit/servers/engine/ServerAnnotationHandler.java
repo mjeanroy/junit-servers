@@ -25,6 +25,9 @@
 package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import java.lang.reflect.Field;
@@ -37,6 +40,11 @@ import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.sett
  * on a given class instance.
  */
 class ServerAnnotationHandler extends AbstractAnnotationHandler {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(ServerAnnotationHandler.class);
 
 	/**
 	 * Create new handler.
@@ -61,6 +69,15 @@ class ServerAnnotationHandler extends AbstractAnnotationHandler {
 
 	@Override
 	public void before(Object target, Field field) {
+		log.debug("Injecting embedded server to {} # {}", target, field);
 		setter(target, field, server);
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("annotationKlass", getAnnotationKlass())
+			.append("server", server)
+			.build();
 	}
 }

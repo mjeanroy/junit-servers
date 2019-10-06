@@ -30,6 +30,7 @@ import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpClient;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -113,7 +114,7 @@ public class OkHttpClient extends AbstractHttpClient implements HttpClient {
 	}
 
 	@Override
-	public void destroy() {
+	protected void doDestroy() {
 		if (destroyed.compareAndSet(false, true)) {
 			client.dispatcher().executorService().shutdown();
 			client.connectionPool().evictAll();
@@ -123,5 +124,15 @@ public class OkHttpClient extends AbstractHttpClient implements HttpClient {
 	@Override
 	public boolean isDestroyed() {
 		return destroyed.get();
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("configuration", getConfiguration())
+			.append("server", getServer())
+			.append("client", client)
+			.append("destroyed", destroyed)
+			.build();
 	}
 }

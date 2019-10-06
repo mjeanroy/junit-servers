@@ -25,12 +25,19 @@
 package com.github.mjeanroy.junit.servers.jupiter;
 
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import org.junit.jupiter.api.extension.ParameterContext;
 
 /**
  * Resolve {@link com.github.mjeanroy.junit.servers.servers.EmbeddedServer} parameter.
  */
 class EmbeddedServerParameterResolverFunction implements ParameterResolverFunction {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(EmbeddedServerParameterResolverFunction.class);
 
 	/**
 	 * The singleton instance.
@@ -52,6 +59,7 @@ class EmbeddedServerParameterResolverFunction implements ParameterResolverFuncti
 
 	@Override
 	public Object resolve(ParameterContext parameterContext, EmbeddedServerRunner serverAdapter) {
+		log.debug("Resolving embedded server for parameter: {}", parameterContext);
 		return serverAdapter.getServer();
 	}
 }

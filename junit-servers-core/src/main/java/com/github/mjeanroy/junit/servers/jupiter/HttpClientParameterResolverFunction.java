@@ -27,6 +27,8 @@ package com.github.mjeanroy.junit.servers.jupiter;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import org.junit.jupiter.api.extension.ParameterContext;
 
 import java.util.function.Function;
@@ -35,6 +37,11 @@ import java.util.function.Function;
  * Resolve {@link com.github.mjeanroy.junit.servers.client.HttpClient} parameter.
  */
 class HttpClientParameterResolverFunction implements ParameterResolverFunction {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(HttpClientParameterResolverFunction.class);
 
 	/**
 	 * The singleton instance.
@@ -56,6 +63,7 @@ class HttpClientParameterResolverFunction implements ParameterResolverFunction {
 
 	@Override
 	public Object resolve(ParameterContext parameterContext, EmbeddedServerRunner serverAdapter) {
+		log.debug("Resolving HTTP Client for parameter: {}", parameterContext);
 		HttpClientStrategy strategy = getStrategy(parameterContext);
 		return serverAdapter.getClient(strategy);
 	}

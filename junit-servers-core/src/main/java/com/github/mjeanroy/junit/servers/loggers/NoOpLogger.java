@@ -22,28 +22,73 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils.fixtures;
+package com.github.mjeanroy.junit.servers.loggers;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+/**
+ * A logger that does nothing.
+ */
+class NoOpLogger implements Logger {
 
-public class FixtureClass {
-
-	@TestServer
-	public EmbeddedServer<?> server;
-
-	@TestServerConfiguration
-	public AbstractConfiguration configuration;
-
-	@TestHttpClient
-	public HttpClient client;
+	NoOpLogger() {
+	}
 
 	@Override
-	public String toString() {
-		return FixtureClass.class.getSimpleName();
+	public void trace(String message) {
+	}
+
+	@Override
+	public void trace(String message, Object parameter) {
+	}
+
+	@Override
+	public void trace(String message, Object p1, Object p2) {
+	}
+
+	@Override
+	public void debug(String message) {
+	}
+
+	@Override
+	public void debug(String message, Object parameter) {
+	}
+
+	@Override
+	public void debug(String message, Object p1, Object p2) {
+	}
+
+	@Override
+	public void info(String message) {
+	}
+
+	@Override
+	public void info(String message, Object parameter) {
+	}
+
+	@Override
+	public void info(String message, Object p1, Object p2) {
+	}
+
+	@Override
+	public void warn(String message) {
+	}
+
+	@Override
+	public void warn(String message, Object parameter) {
+	}
+
+	@Override
+	public void warn(String message, Object p1, Object p2) {
+	}
+
+	@Override
+	public void error(String message) {
+	}
+
+	@Override
+	public void error(String message, Object parameter) {
+	}
+
+	@Override
+	public void error(String message, Object p1, Object p2) {
 	}
 }

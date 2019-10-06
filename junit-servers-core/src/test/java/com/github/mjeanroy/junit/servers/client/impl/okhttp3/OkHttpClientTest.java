@@ -28,6 +28,8 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
+import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient.defaultOkHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient.newOkHttpClient;
@@ -70,5 +72,24 @@ public class OkHttpClientTest extends BaseHttpClientTest {
 	protected void checkInternalHttpClient(HttpClient httpClient) {
 		okhttp3.OkHttpClient internalClient = readPrivate(httpClient, "client");
 		assertThat(internalClient).isNotNull();
+	}
+
+	@Test
+	public void it_should_implement_to_string() {
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		HttpClient client = createDefaultClient(server);
+		okhttp3.OkHttpClient internalClient = readPrivate(client, "client");
+		assertThat(client).hasToString(
+			"OkHttpClient{" +
+				"configuration: HttpClientConfiguration{" +
+					"followRedirect: true, " +
+					"defaultHeaders: {}, " +
+					"defaultCookies: []" +
+				"}, " +
+				"server: MockEmbeddedServer, " +
+				"client: " + internalClient.toString() + ", " +
+				"destroyed: false" +
+			"}"
+		);
 	}
 }

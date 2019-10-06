@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.junit4;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -220,5 +221,12 @@ public class ServerRule extends AbstractRule {
 	 */
 	public HttpClient getClient() {
 		return adapter.getClient();
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("adapter", adapter)
+			.build();
 	}
 }

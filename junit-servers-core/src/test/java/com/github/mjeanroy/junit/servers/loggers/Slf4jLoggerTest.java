@@ -22,28 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils.fixtures;
+package com.github.mjeanroy.junit.servers.loggers;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import ch.qos.logback.classic.Level;
 
-public class FixtureClass {
+import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 
-	@TestServer
-	public EmbeddedServer<?> server;
-
-	@TestServerConfiguration
-	public AbstractConfiguration configuration;
-
-	@TestHttpClient
-	public HttpClient client;
+public class Slf4jLoggerTest extends AbstractLoggerTest {
 
 	@Override
-	public String toString() {
-		return FixtureClass.class.getSimpleName();
+	Logger createLogger() {
+		Slf4jLogger log = new Slf4jLogger(getClass());
+
+		ch.qos.logback.classic.Logger logback = readPrivate(log, "log");
+		logback.setLevel(Level.TRACE);
+		logback.setAdditive(true);
+
+		return log;
 	}
 }
