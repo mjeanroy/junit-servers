@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.utils;
+package com.github.mjeanroy.junit.servers.samples.utils.tomcat;
 
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 

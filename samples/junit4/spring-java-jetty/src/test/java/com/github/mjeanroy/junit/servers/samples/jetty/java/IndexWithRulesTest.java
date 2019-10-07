@@ -30,7 +30,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
-import static com.github.mjeanroy.junit.servers.samples.utils.JettyTestUtils.createJettyConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.utils.jetty.JettyTestUtils.createJettyConfiguration;
 
 public class IndexWithRulesTest {
 

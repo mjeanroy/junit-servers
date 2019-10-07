@@ -32,7 +32,7 @@ import com.github.mjeanroy.junit.servers.tomcat.jupiter.TomcatTest;
 import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
-import static com.github.mjeanroy.junit.servers.samples.utils.TomcatTestUtils.createTomcatConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.utils.tomcat.TomcatTestUtils.createTomcatConfiguration;
 
 @TomcatTest
 class IndexWithAnnotationTest {

@@ -30,7 +30,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
-import static com.github.mjeanroy.junit.servers.samples.utils.TomcatTestUtils.createTomcatConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.utils.tomcat.TomcatTestUtils.createTomcatConfiguration;
 
 public class IndexWithRulesTest {
 

@@ -35,7 +35,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
-import static com.github.mjeanroy.junit.servers.samples.utils.TomcatTestUtils.createTomcatConfigurationWithWebXml;
+import static com.github.mjeanroy.junit.servers.samples.utils.tomcat.TomcatTestUtils.createTomcatConfigurationWithWebXml;
 
 @RunWith(TomcatServerJunit4Runner.class)
 public class IndexWithRunnerTest {

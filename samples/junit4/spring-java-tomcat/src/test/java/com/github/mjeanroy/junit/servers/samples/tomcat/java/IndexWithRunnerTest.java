@@ -34,7 +34,7 @@ import com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test;
 import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
-import static com.github.mjeanroy.junit.servers.samples.utils.TomcatTestUtils.createTomcatConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.utils.tomcat.TomcatTestUtils.createTomcatConfiguration;
 
 public class IndexWithRunnerTest extends AbstractTomcatJunit4Test {
 

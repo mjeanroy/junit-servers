@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.utils;
+package com.github.mjeanroy.junit.servers.samples.utils.tomcat;
 
 import org.apache.juli.logging.Log;
 import org.slf4j.Logger;

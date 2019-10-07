@@ -22,4 +22,4 @@
 # THE SOFTWARE.
 ##
 
-com.github.mjeanroy.junit.servers.samples.utils.TomcatLogger
+com.github.mjeanroy.junit.servers.samples.utils.tomcat.TomcatLogger

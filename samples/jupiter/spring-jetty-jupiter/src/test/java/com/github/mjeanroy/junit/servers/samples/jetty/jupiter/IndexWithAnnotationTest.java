@@ -32,7 +32,7 @@ import com.github.mjeanroy.junit.servers.jetty.jupiter.JettyTest;
 import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
-import static com.github.mjeanroy.junit.servers.samples.utils.JettyTestUtils.createJettyConfiguration;
+import static com.github.mjeanroy.junit.servers.samples.utils.jetty.JettyTestUtils.createJettyConfiguration;
 
 @JettyTest
 class IndexWithAnnotationTest {
