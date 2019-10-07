@@ -105,9 +105,11 @@
     <java-module-name>com.github.mjeanroy.junit.servers</java-module-name>
 
     <jetty-java7.version>9.2.24.v20180105</jetty-java7.version>
-    <jetty-java8.version>9.4.8.v20180619</jetty-java8.version>
-    <jetty-java9.version>9.4.8.v20180619</jetty-java9.version>
-    <jetty-java10.version>9.4.8.v20180619</jetty-java10.version>
+    <jetty-java8.version>9.4.21.v20190926</jetty-java8.version>
+    <jetty-java9.version>9.4.21.v20190926</jetty-java9.version>
+    <jetty-java10.version>9.4.21.v20190926</jetty-java10.version>
+    <jetty-java11.version>9.4.21.v20190926</jetty-java11.version>
+    <jetty-java12.version>9.4.21.v20190926</jetty-java12.version>
     <jetty.version>${jetty-java7.version}</jetty.version>
 
     <tomcat-java7.version>8.5.46</tomcat-java7.version>
