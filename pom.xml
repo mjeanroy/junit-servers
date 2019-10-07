@@ -116,7 +116,7 @@
     <tomcat-java10.version>8.5.46</tomcat-java10.version>
     <tomcat-java11.version>8.5.46</tomcat-java11.version>
     <tomcat-java12.version>8.5.46</tomcat-java12.version>
-    <tomcat.version>${tomcat-java7.version}</tomcat.version>
+    <tomcat.version>9.0.26</tomcat.version>
 
     <junit.version>4.12</junit.version>
     <junit-jupiter.version>5.5.0</junit-jupiter.version>
