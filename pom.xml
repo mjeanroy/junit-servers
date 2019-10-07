@@ -133,7 +133,7 @@
     <commons-io.version>2.6</commons-io.version>
     <wiremock.version>2.23.2</wiremock.version>
     <equalsverifier.version>2.5.2</equalsverifier.version>
-    <slf4j.version>1.7.25</slf4j.version>
+    <slf4j.version>1.7.28</slf4j.version>
     <log4j.version>2.11.2</log4j.version>
     <logback.version>1.2.3</logback.version>
     <junit-runif.version>0.2.0</junit-runif.version>
