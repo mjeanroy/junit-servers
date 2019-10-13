@@ -90,7 +90,7 @@
     <maven-javadoc-plugin>3.1.1</maven-javadoc-plugin>
     <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
     <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-    <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+    <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
     <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
     <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
