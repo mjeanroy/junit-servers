@@ -24,7 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * HTTP request.
@@ -98,7 +100,9 @@ public interface HttpRequest {
 	 * @param value Parameter value.
 	 * @return Http request that can be used for chaining.
 	 * @throws UnsupportedOperationException If request method does not allow body (i.e {@code GET}, {@code HEAD} or {@code DELETE}).
+	 * @deprecated Use {@link #setBody(HttpRequestBody)} with {@link HttpRequestBodies#formUrlEncodedBody(Map)} or {@link HttpRequestBodies#formUrlEncodedBody(Collection)} or {@link HttpRequestBodies#formBuilder()} instead.
 	 */
+	@Deprecated
 	HttpRequest addFormParam(String name, String value);
 
 	/**
@@ -110,7 +114,9 @@ public interface HttpRequest {
 	 * @param parameters Optional next parameters.
 	 * @return Http request that can be used for chaining.
 	 * @throws UnsupportedOperationException If request method does not allow body (i.e {@code GET}, {@code HEAD} or {@code DELETE}).
+	 * @deprecated Use {@link #setBody(HttpRequestBody)} with {@link HttpRequestBodies#formUrlEncodedBody(Map)} or {@link HttpRequestBodies#formUrlEncodedBody(Collection)} or {@link HttpRequestBodies#formBuilder()} instead.
 	 */
+	@Deprecated
 	HttpRequest addFormParams(HttpParameter parameter, HttpParameter... parameters);
 
 	/**
@@ -121,8 +127,21 @@ public interface HttpRequest {
 	 * @param body Body request.
 	 * @return Http request that can be used for chaining.
 	 * @throws UnsupportedOperationException If request method does not allow body (i.e {@code GET}, {@code HEAD} or {@code DELETE}).
+	 * @deprecated Use {@link #setBody(HttpRequestBody)} with {@link HttpRequestBodies#requestBody(String)} instead.
 	 */
+	@Deprecated
 	HttpRequest setBody(String body);
+
+	/**
+	 * Set request body.
+	 * This method should be used for {@code "POST"}, {@code "PUT"} or {@code "PATCH"} request only, otherwise
+	 * it will throw {@link UnsupportedOperationException} exception.
+	 *
+	 * @param body Body request.
+	 * @return Http request that can be used for chaining.
+	 * @throws UnsupportedOperationException If request method does not allow body (i.e {@code GET}, {@code HEAD} or {@code DELETE}).
+	 */
+	HttpRequest setBody(HttpRequestBody body);
 
 	/**
 	 * Most library (such as jQuery) add automatically header
@@ -141,7 +160,7 @@ public interface HttpRequest {
 	 * is {@code "application/x-www-form-urlencoded"}.
 	 *
 	 * @return Http request that can be used for chaining.
-	 * @see HttpHeaders#APPLICATION_FORM_URL_ENCODED
+	 * @see MediaType#APPLICATION_FORM_URL_ENCODED
 	 * @see <a href="https://tools.ietf.org/html/draft-hoehrmann-urlencoded-01">https://tools.ietf.org/html/draft-hoehrmann-urlencoded-01</a>
 	 */
 	HttpRequest asFormUrlEncoded();
@@ -151,7 +170,7 @@ public interface HttpRequest {
 	 * is {@code "multipart/form-data"}.
 	 *
 	 * @return Http request that can be used for chaining.
-	 * @see HttpHeaders#MULTIPART_FORM_DATA
+	 * @see MediaType#MULTIPART_FORM_DATA
 	 * @see <a href="https://www.ietf.org/rfc/rfc1867.txt">https://www.ietf.org/rfc/rfc1867.txt</a>
 	 */
 	HttpRequest asMultipartFormData();
@@ -162,7 +181,7 @@ public interface HttpRequest {
 	 *
 	 * @return Http request that can be used for chaining.
 	 * @see HttpHeaders#CONTENT_TYPE
-	 * @see HttpHeaders#APPLICATION_JSON
+	 * @see MediaType#APPLICATION_JSON
 	 * @see <a href="https://www.w3.org/Protocols/rfc1341/4_Content-Type.html">https://www.w3.org/Protocols/rfc1341/4_Content-Type.html</a>
 	 */
 	HttpRequest asJson();
@@ -173,7 +192,7 @@ public interface HttpRequest {
 	 *
 	 * @return Http request that can be used for chaining.
 	 * @see HttpHeaders#CONTENT_TYPE
-	 * @see HttpHeaders#APPLICATION_XML
+	 * @see MediaType#APPLICATION_XML
 	 * @see <a href="https://www.w3.org/Protocols/rfc1341/4_Content-Type.html">https://www.w3.org/Protocols/rfc1341/4_Content-Type.html</a>
 	 */
 	HttpRequest asXml();
@@ -184,7 +203,7 @@ public interface HttpRequest {
 	 *
 	 * @return Http request that can be used for chaining.
 	 * @see HttpHeaders#ACCEPT
-	 * @see HttpHeaders#APPLICATION_JSON
+	 * @see MediaType#APPLICATION_JSON
 	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-5.3.2">https://tools.ietf.org/html/rfc7231#section-5.3.2</a>
 	 */
 	HttpRequest acceptJson();
@@ -195,7 +214,7 @@ public interface HttpRequest {
 	 *
 	 * @return Http request that can be used for chaining.
 	 * @see HttpHeaders#ACCEPT
-	 * @see HttpHeaders#APPLICATION_XML
+	 * @see MediaType#APPLICATION_XML
 	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-5.3.2">https://tools.ietf.org/html/rfc7231#section-5.3.2</a>
 	 */
 	HttpRequest acceptXml();

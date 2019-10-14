@@ -60,6 +60,16 @@ public interface HttpClient {
 	HttpRequest preparePost(String endpoint);
 
 	/**
+	 * Create {@code POST} request.
+	 *
+	 * @param endpoint URL, full url or path relative to server url.
+	 * @param body Request body.
+	 * @return POST request.
+	 * @see #prepareRequest(HttpMethod, String)
+	 */
+	HttpRequest preparePost(String endpoint, HttpRequestBody body);
+
+	/**
 	 * Create {@code PUT} request.
 	 *
 	 * @param url URL, full url or path relative to server url.
@@ -67,6 +77,16 @@ public interface HttpClient {
 	 * @see #prepareRequest(HttpMethod, String)
 	 */
 	HttpRequest preparePut(String url);
+
+	/**
+	 * Create {@code PUT} request.
+	 *
+	 * @param url URL, full url or path relative to server url.
+	 * @param body Request body.
+	 * @return PUT request.
+	 * @see #prepareRequest(HttpMethod, String)
+	 */
+	HttpRequest preparePut(String url, HttpRequestBody body);
 
 	/**
 	 * Create {@code DELETE} request.
@@ -85,6 +105,16 @@ public interface HttpClient {
 	 * @see #prepareRequest(HttpMethod, String)
 	 */
 	HttpRequest preparePatch(String endpoint);
+
+	/**
+	 * Create {@code PATCH} request.
+	 *
+	 * @param endpoint URL, full url or path relative to server url.
+	 * @param body Request body.
+	 * @return PATCH request.
+	 * @see #prepareRequest(HttpMethod, String)
+	 */
+	HttpRequest preparePatch(String endpoint, HttpRequestBody body);
 
 	/**
 	 * Create {@code HEAD} request.

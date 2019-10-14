@@ -33,14 +33,14 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static com.github.mjeanroy.junit.servers.commons.lang.Objects.firstNonNull;
 
 /**
  * Implementation of {@link HttpRequest} using OkHttp library.
@@ -49,6 +49,11 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Objects.firstNonNul
  * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
  */
 class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(OkHttpRequest.class);
 
 	/**
 	 * The native OkHttp client.
@@ -82,9 +87,9 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 		}
 
 		final Request.Builder builder = new Request.Builder().url(httpUrlBuilder.build());
+		handleBody(builder);
 		handleCookies(builder);
 		handleHeaders(builder);
-		handleBody(builder);
 
 		final Call call = client.newCall(builder.build());
 
@@ -103,7 +108,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 */
 	private void handleHeaders(Request.Builder builder) {
 		for (HttpHeader h : headers.values()) {
-			builder.addHeader(h.getName(), h.serializeValues());
+			builder.header(h.getName(), h.serializeValues());
 		}
 	}
 
@@ -120,60 +125,50 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	}
 
 	/**
-	 * Add request body if appropriate:
-	 * <ul>
-	 *   <li>Add request body if {@link #body} is defined.</li>
-	 *   <li>Add form parameters ({@link #formParams} otherwise if it is not empty.</li>
-	 * </ul>
+	 * Add request body if appropriate.
 	 *
 	 * @param builder The native OkHttp request builder.
 	 * @see Request.Builder#method(String, RequestBody)
 	 * @see RequestBody
 	 */
 	private void handleBody(Request.Builder builder) {
-		HttpMethod method = getMethod();
-		RequestBody body = hasBody() ? createBody() : null;
+		log.debug("Adding request body");
+
+		RequestBody okhttpRequestBody = hasBody() ? createBody() : null;
+
+		log.debug("Created body: {}", okhttpRequestBody);
 
 		// Force an empty body, as POST & PUT methods requires
 		// a body element.
-		if (body == null && method.isBodyAllowed()) {
-			body = createEmptyBody();
+		HttpMethod method = getMethod();
+		if (okhttpRequestBody == null && method.isBodyAllowed()) {
+			log.debug("Request method {} requires a body, but no one found, adding empty request body)", method);
+			okhttpRequestBody = createEmptyBody();
 		}
 
-		builder.method(method.getVerb(), body);
+		builder.method(method.getVerb(), okhttpRequestBody);
+
+		if (body != null && body.getContentType() != null) {
+			builder.header("Content-Type", body.getContentType());
+		}
 	}
 
 	/**
-	 * Create the OkHttp request body:
-	 * <ul>
-	 *   <li>Create body from {@link #body} value if it is defined.</li>
-	 *   <li>Create {@link FormBody} from {@link #formParams} otherwise if it is not empty.</li>
-	 *   <li>Returns {@code null} otherwise.</li>
-	 * </ul>
+	 * Create the OkHttp request body.
 	 *
 	 * @return OkHttp {@link RequestBody} instance.
 	 * @see RequestBody#create(MediaType, String)
 	 * @see FormBody
 	 */
 	private RequestBody createBody() {
-		RequestBody rqBody = null;
-
-		// Try request body first.
-		if (body != null && !body.isEmpty()) {
-			rqBody = RequestBody.create(null, body);
-		}
-		else if (!formParams.isEmpty()) {
-			FormBody.Builder builder = new FormBody.Builder();
-			for (HttpParameter parameter : formParams.values()) {
-				String encodedName = parameter.getEncodedName();
-				String encodedValue = firstNonNull(parameter.getEncodedValue(), "");
-				builder.addEncoded(encodedName, encodedValue);
-			}
-
-			rqBody = builder.build();
+		if (body == null) {
+			return null;
 		}
 
-		return rqBody;
+		log.debug("Creating OkHTTP request body from: {}", body);
+		String rawContentType = body.getContentType();
+		MediaType mediaType = rawContentType == null ? null : MediaType.parse(rawContentType);
+		return RequestBody.create(mediaType, body.getBody());
 	}
 
 	/**

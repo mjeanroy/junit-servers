@@ -33,6 +33,8 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
@@ -50,6 +52,11 @@ import static java.lang.System.nanoTime;
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
  */
 class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
+
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(NingAsyncHttpRequest.class);
 
 	/**
 	 * Original http client, will be used to execute http request.
@@ -108,12 +115,7 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	}
 
 	/**
-	 * Add request body:
-	 *
-	 * <ul>
-	 *   <li>Set request body if {@link #body} is defined.</li>
-	 *   <li>Add form parameters ({@link #formParams}) otherwise if it is not empty.</li>
-	 * </ul>
+	 * Add request body.
 	 *
 	 * @param builder The pending HTTP request.
 	 * @see RequestBuilder#addFormParam(String, String)
@@ -121,37 +123,16 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 */
 	private void handleBody(RequestBuilder builder) {
 		if (!hasBody()) {
+			log.debug("HTTP Request does not have body, skip.");
 			return;
 		}
 
-		if (body != null) {
-			handleRequestBody(builder);
-		}
-		else {
-			handleFormParameters(builder);
-		}
-	}
+		log.debug("Set body to current request builder using: {}", body);
+		builder.setBody(body.getBody());
 
-	/**
-	 * Add form parameters to the final HTTP request.
-	 *
-	 * @param builder The pending HTTP request.
-	 * @see RequestBuilder#addFormParam(String, String)
-	 */
-	private void handleFormParameters(RequestBuilder builder) {
-		for (HttpParameter p : formParams.values()) {
-			builder.addFormParam(p.getName(), p.getValue());
+		if (body.getContentType() != null) {
+			builder.setHeader("Content-Type", body.getContentType());
 		}
-	}
-
-	/**
-	 * Set request body value.
-	 *
-	 * @param builder The pending HTTP request.
-	 * @see RequestBuilder#setBody(String)
-	 */
-	private void handleRequestBody(RequestBuilder builder) {
-		builder.setBody(body);
 	}
 
 	/**
@@ -174,7 +155,7 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 */
 	private void handleHeaders(RequestBuilder builder) {
 		for (HttpHeader header : headers.values()) {
-			builder.addHeader(header.getName(), header.serializeValues());
+			builder.setHeader(header.getName(), header.serializeValues());
 		}
 	}
 }

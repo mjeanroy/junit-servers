@@ -56,6 +56,9 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static com.github.mjeanroy.junit.servers.client.HttpRequestBodies.formUrlEncodedBody;
+import static com.github.mjeanroy.junit.servers.client.HttpRequestBodies.jsonBody;
+import static com.github.mjeanroy.junit.servers.client.HttpRequestBodies.requestBody;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.ACCEPT;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.ACCEPT_ENCODING;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.ACCEPT_LANGUAGE;
@@ -282,6 +285,30 @@ public abstract class BaseHttpClientTest {
 		final HttpResponse rsp = createDefaultClient()
 			.preparePost(endpoint)
 			.acceptJson()
+			.asXmlHttpRequest()
+			.setBody(jsonBody("{\"name\": \"Jane Doe\"}"))
+			.execute();
+
+		assertRequest(endpoint, HttpMethod.POST);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEqualTo(body);
+		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
+	@SuppressWarnings("deprecation")
+	public void testPostWithRawBodyString() {
+		final String endpoint = ENDPOINT;
+		final int status = 201;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
+		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
+
+		stubPostRequest(endpoint, status, headers, body);
+
+		final HttpResponse rsp = createDefaultClient()
+			.preparePost(endpoint)
+			.acceptJson()
 			.asJson()
 			.asXmlHttpRequest()
 			.setBody("{\"name\": \"Jane Doe\"}")
@@ -295,7 +322,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPostWithBodyElement() {
+	public void testPostWithoutBodyElement() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -318,7 +345,49 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testPreparePostWithBodyElement() {
+		final String endpoint = ENDPOINT;
+		final int status = 201;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
+		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
+
+		stubPostRequest(endpoint, status, headers, body);
+
+		final HttpResponse rsp = createDefaultClient()
+			.preparePost(endpoint, jsonBody(body))
+			.execute();
+
+		assertRequest(endpoint, HttpMethod.POST);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEqualTo(body);
+		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
 	public void testPut() {
+		final String endpoint = ENDPOINT + "/1";
+		final int status = 204;
+		final Collection<Pair> headers = emptyList();
+
+		stubPutRequest(endpoint, status, headers);
+
+		final HttpResponse rsp = createDefaultClient()
+			.preparePut(endpoint)
+			.acceptJson()
+			.asXmlHttpRequest()
+			.setBody(jsonBody("{\"id\": 1, \"name\": \"Jane Doe\"}"))
+			.execute();
+
+		assertRequest(endpoint, HttpMethod.PUT);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEmpty();
+		assertThat(rsp.getContentType()).isNull();
+	}
+
+	@Test
+	@SuppressWarnings("deprecation")
+	public void testPutWithRawBodyString() {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
 		final Collection<Pair> headers = emptyList();
@@ -361,7 +430,50 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testPreparePutWithBody() {
+		final String endpoint = ENDPOINT + "/1";
+		final int status = 204;
+		final Collection<Pair> headers = emptyList();
+		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
+
+		stubPutRequest(endpoint, status, headers);
+
+		final HttpResponse rsp = createDefaultClient()
+			.preparePut(endpoint, jsonBody(body))
+			.execute();
+
+		assertRequest(endpoint, HttpMethod.PUT);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEmpty();
+		assertThat(rsp.getContentType()).isNull();
+	}
+
+	@Test
 	public void testPatch() {
+		final String endpoint = ENDPOINT;
+		final int status = 201;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
+		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
+
+		stubPatchRequest(endpoint, status, headers, body);
+
+		final HttpResponse rsp = createDefaultClient()
+			.preparePatch(endpoint)
+			.acceptJson()
+			.asXmlHttpRequest()
+			.setBody(jsonBody("{\"name\": \"Jane Doe\"}"))
+			.execute();
+
+		assertRequest(endpoint, HttpMethod.PATCH);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEqualTo(body);
+		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
+	@SuppressWarnings("deprecation")
+	public void testPatchWithRawBody() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -382,6 +494,24 @@ public abstract class BaseHttpClientTest {
 		assertThat(rsp.body()).isEqualTo(body);
 		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
 		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
+	public void testPreparePatchWithBody() {
+		final String endpoint = ENDPOINT + "/1";
+		final int status = 204;
+		final Collection<Pair> headers = emptyList();
+		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
+
+		stubPatchRequest(endpoint, status, headers, body);
+
+		final HttpResponse rsp = createDefaultClient()
+			.preparePatch(endpoint, jsonBody(body))
+			.execute();
+
+		assertRequest(endpoint, HttpMethod.PATCH);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEmpty();
 	}
 
 	@Test
@@ -824,6 +954,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void testRequest_add_form_param() {
 		final String name = "firstName";
 		final String value = "john";
@@ -837,6 +968,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void testRequest_add_form_param_without_value() {
 		final String name = "flag";
 		final String value = "";
@@ -850,6 +982,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void testRequest_add_several_form_params() {
 		final String n1 = "firstName";
 		final String v1 = "John";
@@ -870,6 +1003,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void testRequest_add_non_escaped_form_param_name() {
 		final String name = "first name";
 		final String value = "john";
@@ -883,6 +1017,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void testRequest_add_non_escaped_form_param_value() {
 		final String name = "name";
 		final String value = "john doe";
@@ -896,12 +1031,44 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_set_body() {
+	@SuppressWarnings("deprecation")
+	public void testRequest_set_raw_body() {
 		final String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
 		testRequestBody(body, new Function<HttpRequest>() {
 			@Override
 			public void apply(HttpRequest rq) {
 				rq.setBody(body);
+			}
+		});
+	}
+
+	@Test
+	public void testRequest_set_body() {
+		final String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
+		testRequestBody(body, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+				rq.setBody(requestBody(body));
+			}
+		});
+	}
+
+	@Test
+	public void testRequest_add_body_form() {
+		final String n1 = "firstName";
+		final String v1 = "John";
+		final HttpParameter p1 = param(n1, v1);
+
+		final String n2 = "lastName";
+		final String v2 = "Doe";
+		final HttpParameter p2 = param(n2, v2);
+
+		final String expectedBody = encodeFormParam(n1, v1) + "&" + encodeFormParam(n2, v2);
+
+		testRequestBody(expectedBody, new Function<HttpRequest>() {
+			@Override
+			public void apply(HttpRequest rq) {
+				rq.setBody(formUrlEncodedBody(p1, p2));
 			}
 		});
 	}
@@ -1518,6 +1685,7 @@ public abstract class BaseHttpClientTest {
 		};
 	}
 
+	@SuppressWarnings("deprecation")
 	private static ThrowingCallable addFormParam(final HttpRequest request, final String name, final String value) {
 		return new ThrowingCallable() {
 			@Override
@@ -1527,6 +1695,7 @@ public abstract class BaseHttpClientTest {
 		};
 	}
 
+	@SuppressWarnings("deprecation")
 	private static ThrowingCallable setRequestBody(final HttpRequest request, final String body) {
 		return new ThrowingCallable() {
 			@Override

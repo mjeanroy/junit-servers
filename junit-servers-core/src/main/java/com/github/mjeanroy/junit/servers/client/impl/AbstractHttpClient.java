@@ -30,6 +30,7 @@ import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpRequestBody;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
@@ -98,13 +99,33 @@ public abstract class AbstractHttpClient implements HttpClient {
 	}
 
 	@Override
+	public HttpRequest preparePost(String endpoint, HttpRequestBody body) {
+		return preparePost(endpoint).setBody(body);
+	}
+
+	@Override
+	public boolean isDestroyed() {
+		return false;
+	}
+
+	@Override
 	public HttpRequest preparePut(String url) {
 		return prepareRequest(HttpMethod.PUT, url);
 	}
 
 	@Override
+	public HttpRequest preparePut(String url, HttpRequestBody body) {
+		return preparePut(url).setBody(body);
+	}
+
+	@Override
 	public HttpRequest preparePatch(String endpoint) {
 		return prepareRequest(HttpMethod.PATCH, endpoint);
+	}
+
+	@Override
+	public HttpRequest preparePatch(String endpoint, HttpRequestBody body) {
+		return preparePatch(endpoint).setBody(body);
 	}
 
 	@Override

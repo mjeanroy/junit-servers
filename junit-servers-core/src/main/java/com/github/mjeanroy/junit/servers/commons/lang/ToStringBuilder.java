@@ -145,8 +145,14 @@ public final class ToStringBuilder {
 	 */
 	public ToStringBuilder append(String name, Map<?, ?> map) {
 		StringBuilder sb = new StringBuilder(START_OBJ);
+		boolean first = true;
 		for (Map.Entry<?, ?> entry : map.entrySet()) {
+			if (!first) {
+				sb.append(SEPARATOR);
+			}
+
 			sb.append(entry.getKey()).append(FIELD_VALUE_SEPARATOR).append(formatValue(entry.getValue()));
+			first = false;
 		}
 
 		sb.append(END_OBJ);

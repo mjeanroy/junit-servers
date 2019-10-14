@@ -32,12 +32,10 @@ import com.github.mjeanroy.junit.servers.client.HttpRequest;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpRequest;
-import com.github.mjeanroy.junit.servers.commons.lang.Mapper;
+import com.github.mjeanroy.junit.servers.loggers.Logger;
+import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
@@ -47,17 +45,14 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.ContentType;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
-import static com.github.mjeanroy.junit.servers.commons.lang.Collections.map;
 import static java.lang.System.nanoTime;
 
 /**
@@ -69,6 +64,14 @@ import static java.lang.System.nanoTime;
  */
 class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 
+	/**
+	 * Class Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(ApacheHttpRequest.class);
+
+	/**
+	 * A factory that creates {@link HttpRequestBase} from given {@link HttpMethod}.
+	 */
 	private static final ApacheHttpRequestFactory FACTORY = new ApacheHttpRequestFactory();
 
 	/**
@@ -95,9 +98,9 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 		final HttpRequestBase httpRequest = FACTORY.create(method);
 
 		httpRequest.setURI(createRequestURI());
+		handleBody(httpRequest);
 		handleHeaders(httpRequest);
 		handleCookies(httpRequest);
-		handleBody(httpRequest);
 
 		final long start = nanoTime();
 		final org.apache.http.HttpResponse httpResponse = client.execute(httpRequest);
@@ -112,14 +115,21 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @param httpRequest The HTTP request.
 	 */
 	private void handleBody(HttpRequestBase httpRequest) {
-		if (hasBody()) {
-			HttpEntityEnclosingRequestBase rq = (HttpEntityEnclosingRequestBase) httpRequest;
-			if (!formParams.isEmpty()) {
-				handleFormParameters(rq);
-			}
-			else if (body != null) {
-				handleRequestBody(rq);
-			}
+		if (!hasBody()) {
+			log.debug("HTTP Request does not have body, skip.");
+			return;
+		}
+
+		log.debug("Set HTTP Entity from given body: {}", body);
+
+		ContentType contentType = ContentType.getByMimeType(body.getContentType());
+		ByteArrayEntity entity = new ByteArrayEntity(body.getBody(), contentType);
+
+		log.debug("Found contentType={} and entity={}", contentType, entity);
+		((HttpEntityEnclosingRequestBase) httpRequest).setEntity(entity);
+
+		if (body.getContentType() != null) {
+			httpRequest.setHeader("Content-Type", body.getContentType());
 		}
 	}
 
@@ -149,31 +159,8 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 */
 	private void handleHeaders(HttpRequestBase httpRequest) {
 		for (HttpHeader header : headers.values()) {
-			httpRequest.addHeader(header.getName(), header.serializeValues());
+			httpRequest.setHeader(header.getName(), header.serializeValues());
 		}
-	}
-
-	/**
-	 * Add parameters as form url encoded content.
-	 * Each parameter is set as a key value entry to request
-	 * body.
-	 *
-	 * @param httpRequest Http request in creation.
-	 */
-	private void handleFormParameters(HttpEntityEnclosingRequestBase httpRequest) {
-		List<NameValuePair> pairs = map(formParams.values(), PARAM_MAPPER);
-		HttpEntity entity = new UrlEncodedFormEntity(pairs, Charset.defaultCharset());
-		httpRequest.setEntity(entity);
-	}
-
-	/**
-	 * Set request body value to http request.
-	 *
-	 * @param httpRequest Http request in creation.
-	 */
-	private void handleRequestBody(HttpEntityEnclosingRequestBase httpRequest) {
-		HttpEntity entity = new StringEntity(body, Charset.defaultCharset());
-		httpRequest.setEntity(entity);
 	}
 
 	/**
@@ -217,11 +204,4 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 			throw new UnsupportedOperationException("Method " + httpMethod + " is not supported by apache http-client");
 		}
 	}
-
-	private static final Mapper<HttpParameter, NameValuePair> PARAM_MAPPER = new Mapper<HttpParameter, NameValuePair>() {
-		@Override
-		public NameValuePair apply(HttpParameter parameter) {
-			return new BasicNameValuePair(parameter.getName(), parameter.getValue());
-		}
-	};
 }

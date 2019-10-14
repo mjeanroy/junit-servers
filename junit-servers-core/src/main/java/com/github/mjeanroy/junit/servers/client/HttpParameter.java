@@ -30,15 +30,29 @@ import java.util.Objects;
 
 import static com.github.mjeanroy.junit.servers.commons.core.Encoders.urlEncode;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.lang.Strings.nullToEmpty;
 
 /**
  * Parameter object that could be sent in an http request as:
  * <ul>
  *   <li>Query parameters (following {@code ?} character in URL.</li>
- *   <li>Form parameters (such as HTML forms, with {@link HttpHeaders#APPLICATION_FORM_URL_ENCODED} media type).</li>
+ *   <li>Form parameters (such as HTML forms, with {@link MediaType#APPLICATION_FORM_URL_ENCODED} media type).</li>
  * </ul>
  */
 public class HttpParameter {
+
+	/**
+	 * Create new parameter object.
+	 *
+	 * @param name Parameter name.
+	 * @param value Parameter value.
+	 * @return Parameter object.
+	 * @throws NullPointerException if {@code name} is {@code null}.
+	 * @throws IllegalArgumentException if {@code name} is empty or blank.
+	 */
+	public static HttpParameter of(String name, String value) {
+		return param(name, value);
+	}
 
 	/**
 	 * Create new parameter object.
@@ -104,6 +118,14 @@ public class HttpParameter {
 	 */
 	public String getEncodedValue() {
 		return value == null ? null : urlEncode(value);
+	}
+
+	public String asString() {
+		return name + "=" + nullToEmpty(value);
+	}
+
+	public String asEncodedString() {
+		return urlEncode(name) + "=" + urlEncode(nullToEmpty(value));
 	}
 
 	@Override

@@ -1,0 +1,107 @@
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2019 <mickael.jeanroy@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+package com.github.mjeanroy.junit.servers.client;
+
+import com.github.mjeanroy.junit.servers.commons.lang.Strings;
+import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+
+import static java.util.Collections.unmodifiableList;
+
+/**
+ * An builder of {@link HttpRequestBody} for form url-encoded request bodies.
+ */
+public final class HttpRequestBodyForm implements HttpRequestBody {
+
+	/**
+	 * Form parameters.
+	 */
+	private final List<HttpParameter> parameters;
+
+	/**
+	 * Create request body from given parameters.
+	 *
+	 * @param parameters Form parameters.
+	 */
+	HttpRequestBodyForm(Collection<HttpParameter> parameters) {
+		this.parameters = unmodifiableList(new ArrayList<>(parameters));
+	}
+
+	@Override
+	public String getContentType() {
+		return MediaType.APPLICATION_FORM_URL_ENCODED;
+	}
+
+	@Override
+	public byte[] getBody() {
+		List<String> rawParameters = new ArrayList<>(parameters.size());
+		for (HttpParameter parameter : parameters) {
+			rawParameters.add(parameter.asEncodedString());
+		}
+
+		String rawBody = Strings.join("&", rawParameters);
+		return rawBody.getBytes(Charset.defaultCharset());
+	}
+
+	/**
+	 * Get {@link #parameters}
+	 *
+	 * @return {@link #parameters}
+	 */
+	public Collection<HttpParameter> getParameters() {
+		return parameters;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.create(getClass())
+			.append("parameters", parameters)
+			.build();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
+
+		if (o instanceof HttpRequestBodyForm) {
+			HttpRequestBodyForm b = (HttpRequestBodyForm) o;
+			return Objects.equals(parameters, b.parameters);
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(parameters);
+	}
+}

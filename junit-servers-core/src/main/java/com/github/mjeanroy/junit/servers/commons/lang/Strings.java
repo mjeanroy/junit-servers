@@ -40,6 +40,17 @@ public final class Strings {
 	}
 
 	/**
+	 * Returns empty string if {@code value} is {@code null}, returns {@code value}
+	 * otherwise.
+	 *
+	 * @param value Given value.
+	 * @return The non null value.
+	 */
+	public static String nullToEmpty(String value) {
+		return value == null ? "" : value;
+	}
+
+	/**
 	 * Check that given string is blank.
 	 *
 	 * @param value String to check.

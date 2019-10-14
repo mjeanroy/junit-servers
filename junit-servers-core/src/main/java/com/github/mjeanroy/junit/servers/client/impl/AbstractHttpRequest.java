@@ -30,8 +30,13 @@ import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
+import com.github.mjeanroy.junit.servers.client.HttpRequestBodies;
+import com.github.mjeanroy.junit.servers.client.HttpRequestBody;
+import com.github.mjeanroy.junit.servers.client.HttpRequestBodyForm;
+import com.github.mjeanroy.junit.servers.client.HttpRequestBodyFormBuilder;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
+import com.github.mjeanroy.junit.servers.client.MediaType;
 import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 
 import java.util.ArrayList;
@@ -44,15 +49,11 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT_ENCODING;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ACCEPT_LANGUAGE;
-import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_FORM_URL_ENCODED;
-import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_JSON;
-import static com.github.mjeanroy.junit.servers.client.HttpHeaders.APPLICATION_XML;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.CONTENT_TYPE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_MATCH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_MODIFIED_SINCE;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_NONE_MATCH;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.IF_UNMODIFIED_SINCE;
-import static com.github.mjeanroy.junit.servers.client.HttpHeaders.MULTIPART_FORM_DATA;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.ORIGIN;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REFERER;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.REQUESTED_WITH;
@@ -63,6 +64,7 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_HTTP_METHOD
 import static com.github.mjeanroy.junit.servers.client.HttpMethod.DELETE;
 import static com.github.mjeanroy.junit.servers.client.HttpMethod.PUT;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
+import static com.github.mjeanroy.junit.servers.client.HttpRequestBodies.requestBody;
 import static com.github.mjeanroy.junit.servers.commons.lang.Dates.format;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
@@ -93,14 +95,9 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	protected final Map<String, HttpParameter> queryParams;
 
 	/**
-	 * Form parameters, typically sent using a "classic" HTML form.
-	 */
-	protected final Map<String, HttpParameter> formParams;
-
-	/**
 	 * The request body.
 	 */
-	protected String body;
+	protected HttpRequestBody body;
 
 	/**
 	 * Cookie elements.
@@ -117,7 +114,6 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 		this.method = notNull(method, "method");
 
 		this.queryParams = new LinkedHashMap<>();
-		this.formParams = new LinkedHashMap<>();
 		this.headers = new LinkedHashMap<>();
 		this.cookies = new ArrayList<>(10);
 	}
@@ -205,22 +201,22 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	public HttpRequest asJson() {
-		return addHeader(CONTENT_TYPE, APPLICATION_JSON);
+		return addHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON);
 	}
 
 	@Override
 	public HttpRequest asXml() {
-		return addHeader(CONTENT_TYPE, APPLICATION_XML);
+		return addHeader(CONTENT_TYPE, MediaType.APPLICATION_XML);
 	}
 
 	@Override
 	public HttpRequest asFormUrlEncoded() {
-		return addHeader(CONTENT_TYPE, APPLICATION_FORM_URL_ENCODED);
+		return addHeader(CONTENT_TYPE, MediaType.APPLICATION_FORM_URL_ENCODED);
 	}
 
 	@Override
 	public HttpRequest asMultipartFormData() {
-		return addHeader(CONTENT_TYPE, MULTIPART_FORM_DATA);
+		return addHeader(CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA);
 	}
 
 	@Override
@@ -261,19 +257,26 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 		}
 
 		// Ensure a body has not been previously set.
-		if (body != null) {
-			throw new IllegalStateException("Cannot add form parameter if a request body is already defined");
+		if (body != null && !(body instanceof HttpRequestBodyForm)) {
+			throw new IllegalStateException("Cannot change request if it is already defined");
 		}
 
 		// Add first parameter.
-		formParams.put(parameter.getName(), parameter);
+		HttpRequestBodyFormBuilder builder = HttpRequestBodies.formBuilder();
+
+		if (body != null) {
+			builder.addAll(((HttpRequestBodyForm) body).getParameters());
+		}
+
+		builder.add(parameter);
 
 		if (parameters != null) {
 			for (HttpParameter p : parameters) {
-				notNull(p, "parameter");
-				formParams.put(p.getName(), p);
+				builder.add(p);
 			}
 		}
+
+		this.body = builder.build();
 
 		return asFormUrlEncoded();
 	}
@@ -287,25 +290,37 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 			throw new UnsupportedOperationException("Http method " + getMethod() + " does not support request body");
 		}
 
-		// Ensure form parameters have not been previously set.
-		if (!formParams.isEmpty()) {
-			throw new IllegalStateException("Cannot add request body if form parameters are already defined");
+		if (this.body != null) {
+			throw new IllegalStateException("Cannot change request body if it has already been defined");
 		}
 
 		// Set the request body.
-		this.body = body;
+		this.body = requestBody(body);
 
 		return this;
 	}
 
 	@Override
+	public HttpRequest setBody(HttpRequestBody body) {
+		notNull(body, "body");
+
+		// Ensure request body is allowed.
+		if (!getMethod().isBodyAllowed()) {
+			throw new UnsupportedOperationException("Http method " + getMethod() + " does not support request body");
+		}
+
+		this.body = body;
+		return this;
+	}
+
+	@Override
 	public HttpRequest acceptJson() {
-		return addHeader(ACCEPT, APPLICATION_JSON);
+		return addHeader(ACCEPT, MediaType.APPLICATION_JSON);
 	}
 
 	@Override
 	public HttpRequest acceptXml() {
-		return addHeader(ACCEPT, APPLICATION_XML);
+		return addHeader(ACCEPT, MediaType.APPLICATION_XML);
 	}
 
 	@Override
@@ -368,7 +383,7 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	 * @return {@code true} if request has a body, {@code false} otherwise.
 	 */
 	protected boolean hasBody() {
-		return body != null || !formParams.isEmpty();
+		return body != null;
 	}
 
 	/**

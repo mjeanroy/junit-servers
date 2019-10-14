@@ -217,24 +217,32 @@ public final class HttpHeaders {
 	/**
 	 * The JSON media type.
 	 * @see <a href="https://tools.ietf.org/html/rfc4627">https://tools.ietf.org/html/rfc4627</a>
+	 * @deprecated Use {@link MediaType#APPLICATION_JSON} instead.
 	 */
-	public static final String APPLICATION_JSON = "application/json";
+	@Deprecated
+	public static final String APPLICATION_JSON = MediaType.APPLICATION_JSON;
 
 	/**
 	 * The XML media type.
 	 * @see <a href="https://tools.ietf.org/html/rfc7303">https://tools.ietf.org/html/rfc7303</a>
+	 * @deprecated Use {@link MediaType#APPLICATION_XML} instead.
 	 */
-	public static final String APPLICATION_XML = "application/xml";
+	@Deprecated
+	public static final String APPLICATION_XML = MediaType.APPLICATION_XML;
 
 	/**
 	 * The media type for HTML forms.
 	 * @see <a href="https://tools.ietf.org/html/draft-hoehrmann-urlencoded-01">https://tools.ietf.org/html/draft-hoehrmann-urlencoded-01</a>
+	 * @deprecated Use {@link MediaType#APPLICATION_FORM_URL_ENCODED} instead.
 	 */
-	public static final String APPLICATION_FORM_URL_ENCODED = "application/x-www-form-urlencoded";
+	@Deprecated
+	public static final String APPLICATION_FORM_URL_ENCODED = MediaType.APPLICATION_FORM_URL_ENCODED;
 
 	/**
 	 * The media type for file upload.
 	 * @see <a href="https://www.ietf.org/rfc/rfc1867.txt">https://www.ietf.org/rfc/rfc1867.txt</a>
+	 * @deprecated Use {@link MediaType#MULTIPART_FORM_DATA} instead.
 	 */
-	public static final String MULTIPART_FORM_DATA = "multipart/form-data";
+	@Deprecated
+	public static final String MULTIPART_FORM_DATA = MediaType.MULTIPART_FORM_DATA;
 }

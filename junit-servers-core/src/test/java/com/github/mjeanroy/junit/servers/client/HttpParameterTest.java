@@ -24,11 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import com.github.mjeanroy.junit.servers.utils.commons.TestUtils;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.urlEncode;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpParameterTest {
@@ -45,6 +45,17 @@ public class HttpParameterTest {
 	}
 
 	@Test
+	public void it_should_create_http_parameter_of_given_values() {
+		final String name = "foo";
+		final String value = "bar";
+
+		final HttpParameter parameter = HttpParameter.of(name, value);
+
+		assertThat(parameter.getName()).isEqualTo(name);
+		assertThat(parameter.getValue()).isEqualTo(value);
+	}
+
+	@Test
 	public void it_should_get_url_encoded_name() {
 		final String name = "foo bar";
 		final String value = "bar";
@@ -52,7 +63,7 @@ public class HttpParameterTest {
 		final HttpParameter parameter = HttpParameter.param(name, value);
 
 		assertThat(parameter.getName()).isEqualTo(name);
-		assertThat(parameter.getEncodedName()).isEqualTo(urlEncode(name));
+		assertThat(parameter.getEncodedName()).isEqualTo(TestUtils.urlEncode(name));
 	}
 
 	@Test
@@ -63,7 +74,7 @@ public class HttpParameterTest {
 		final HttpParameter parameter = HttpParameter.param(name, value);
 
 		assertThat(parameter.getValue()).isEqualTo(value);
-		assertThat(parameter.getEncodedValue()).isEqualTo(urlEncode(value));
+		assertThat(parameter.getEncodedValue()).isEqualTo(TestUtils.urlEncode(value));
 	}
 
 	@Test
