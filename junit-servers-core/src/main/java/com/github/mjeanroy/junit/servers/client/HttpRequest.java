@@ -172,7 +172,9 @@ public interface HttpRequest {
 	 * @return Http request that can be used for chaining.
 	 * @see MediaType#MULTIPART_FORM_DATA
 	 * @see <a href="https://www.ietf.org/rfc/rfc1867.txt">https://www.ietf.org/rfc/rfc1867.txt</a>
+	 * @deprecated Use {@link #setBody(HttpRequestBody)} with {@link HttpRequestBodies#multipartBuilder()}
 	 */
+	@Deprecated
 	HttpRequest asMultipartFormData();
 
 	/**

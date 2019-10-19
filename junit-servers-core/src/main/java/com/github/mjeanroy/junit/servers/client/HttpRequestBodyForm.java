@@ -24,10 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import com.github.mjeanroy.junit.servers.commons.io.Ios;
 import com.github.mjeanroy.junit.servers.commons.lang.Strings;
 import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,7 +36,7 @@ import java.util.Objects;
 import static java.util.Collections.unmodifiableList;
 
 /**
- * An builder of {@link HttpRequestBody} for form url-encoded request bodies.
+ * An implementation of {@link HttpRequestBody} for form url-encoded request bodies.
  */
 public final class HttpRequestBodyForm implements HttpRequestBody {
 
@@ -67,7 +67,7 @@ public final class HttpRequestBodyForm implements HttpRequestBody {
 		}
 
 		String rawBody = Strings.join("&", rawParameters);
-		return rawBody.getBytes(Charset.defaultCharset());
+		return Ios.toUtf8Bytes(rawBody);
 	}
 
 	/**

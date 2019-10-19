@@ -33,11 +33,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.doesNotContainNull;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static java.util.Collections.singleton;
 
 /**
- * An builder of {@link HttpRequestBody} for form url-encoded request bodies.
+ * A builder for {@link HttpRequestBodyForm}.
  */
 public final class HttpRequestBodyFormBuilder {
 
@@ -92,6 +93,7 @@ public final class HttpRequestBodyFormBuilder {
 	 */
 	public HttpRequestBodyFormBuilder addAll(Map<String, String> parameters) {
 		List<HttpParameter> params = new ArrayList<>(parameters.size());
+
 		for (Map.Entry<String, String> parameter : parameters.entrySet()) {
 			params.add(
 				HttpParameter.of(parameter.getKey(), parameter.getValue())
@@ -120,8 +122,9 @@ public final class HttpRequestBodyFormBuilder {
 	 * @throws NullPointerException If one of given parameters {@code null}
 	 */
 	private HttpRequestBodyFormBuilder doAddAll(Collection<HttpParameter> parameters) {
+		doesNotContainNull(parameters, "parameters");
+
 		for (HttpParameter parameter : parameters) {
-			notNull(parameter, "Request parameter must not be null");
 			this.parameters.put(parameter.getName(), parameter);
 		}
 

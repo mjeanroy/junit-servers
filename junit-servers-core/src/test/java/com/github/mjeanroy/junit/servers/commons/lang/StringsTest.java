@@ -36,6 +36,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StringsTest {
 
 	@Test
+	public void it_should_check_if_string_is_not_empty() {
+		assertThat(Strings.isNotEmpty(null)).isFalse();
+		assertThat(Strings.isNotEmpty("")).isFalse();
+		assertThat(Strings.isNotEmpty(" ")).isTrue();
+		assertThat(Strings.isNotEmpty("foo")).isTrue();
+	}
+
+	@Test
 	public void it_should_turn_string_to_lower_case() {
 		assertThat(Strings.toLowerCase(null)).isNull();
 		assertThat(Strings.toLowerCase("")).isEqualTo("");

@@ -26,16 +26,21 @@ package com.github.mjeanroy.junit.servers.client.it;
 
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.utils.commons.Pair;
+import com.github.mjeanroy.junit.servers.utils.commons.TestUtils;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.HttpHeader;
 import com.github.tomakehurst.wiremock.http.HttpHeaders;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
+import com.github.tomakehurst.wiremock.matching.BinaryEqualToPattern;
+import com.github.tomakehurst.wiremock.matching.MultipartValuePatternBuilder;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.matching.UrlPattern;
 
+import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.APPLICATION_JSON;
@@ -145,6 +150,16 @@ final class WireMockTestUtils {
 	}
 
 	/**
+	 * Stub File Upload Request.
+	 *
+	 * @param endpoint Request endpoint.
+	 * @param status Response HTTP status code.
+	 */
+	static void stubUploadRequest(String endpoint, int status) {
+		stubRequest(POST, endpoint, status, Collections.<Pair>emptyList());
+	}
+
+	/**
 	 * Verify that a given request has been triggered.
 	 *
 	 * @param endpoint Request endpoint.
@@ -154,6 +169,24 @@ final class WireMockTestUtils {
 		UrlPattern urlPattern = urlEqualTo(endpoint);
 		RequestMethod rqMethod = new RequestMethod(method.name());
 		RequestPatternBuilder rq = new RequestPatternBuilder(rqMethod, urlPattern);
+		WireMock.verify(1, rq);
+	}
+
+	/**
+	 * Verify that a given request has been triggered.
+	 *
+	 * @param endpoint Request endpoint.
+	 * @param method Request method.
+	 */
+	static void assertUploadRequest(String endpoint, HttpMethod method, File file) {
+		UrlPattern urlPattern = urlEqualTo(endpoint);
+		RequestMethod rqMethod = new RequestMethod(method.name());
+		RequestPatternBuilder rq = new RequestPatternBuilder(rqMethod, urlPattern)
+			.withAllRequestBodyParts(new MultipartValuePatternBuilder()
+				.withName(file.getName())
+				.withBody(new BinaryEqualToPattern(TestUtils.readFile(file)))
+			);
+
 		WireMock.verify(1, rq);
 	}
 

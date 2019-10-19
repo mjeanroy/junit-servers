@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import java.io.IOException;
+
 /**
  * HTTP Request Body.
  */
@@ -41,5 +43,5 @@ public interface HttpRequestBody {
 	 *
 	 * @return Request body.
 	 */
-	byte[] getBody();
+	byte[] getBody() throws IOException;
 }

@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.commons.lang;
 
+import java.nio.file.Path;
 import java.util.Map;
 
 /**
@@ -193,6 +194,17 @@ public final class ToStringBuilder {
 		}
 
 		return appendFormattedValue(name, pending.append(CLOSE_ARRAY).toString());
+	}
+
+	/**
+	 * Append new {@link Path} value.
+	 *
+	 * @param name The name of the field.
+	 * @param path The path value.* @param <T> Type of elements in collection.
+	 * @return The current builder (for chaining).
+	 */
+	public ToStringBuilder append(String name, Path path) {
+		return appendFormattedValue(name, formatValue(path));
 	}
 
 	/**

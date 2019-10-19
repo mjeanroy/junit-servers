@@ -46,6 +46,12 @@ public final class HttpHeaders {
 	public static final String CONTENT_TYPE = "Content-Type";
 
 	/**
+	 * The {@code Content-Disposition} header name.
+	 * @see <a href="https://tools.ietf.org/html/rfc6266">https://tools.ietf.org/html/rfc6266</a>
+	 */
+	public static final String CONTENT_DISPOSITION = "Content-Disposition";
+
+	/**
 	 * The {@code Content-Encoding} header name.
 	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-3.1.2.2">https://tools.ietf.org/html/rfc7231#section-3.1.2.2</a>
 	 */

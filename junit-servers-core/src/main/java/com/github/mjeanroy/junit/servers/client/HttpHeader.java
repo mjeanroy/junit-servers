@@ -49,7 +49,7 @@ import static java.util.Collections.unmodifiableList;
  *   <li>A value, or a list of values.</li>
  * </ul>
  */
-public class HttpHeader {
+public final class HttpHeader {
 
 	/**
 	 * The separator for header values.
@@ -66,7 +66,7 @@ public class HttpHeader {
 	 * @throws IllegalArgumentException If {@code name} is blank.
 	 */
 	public static HttpHeader header(String name, String value) {
-		return new HttpHeader(name, singletonList(value));
+		return HttpHeader.of(name, value);
 	}
 
 	/**
@@ -79,6 +79,32 @@ public class HttpHeader {
 	 * @throws IllegalArgumentException If {@code name} is blank.
 	 */
 	public static HttpHeader header(String name, Collection<String> values) {
+		return HttpHeader.of(name, values);
+	}
+
+	/**
+	 * Create a header with a single value.
+	 *
+	 * @param name Header name, must not be blank.
+	 * @param value Header value.
+	 * @return Header.
+	 * @throws NullPointerException If {@code name} or {@code value} are {@code null}.
+	 * @throws IllegalArgumentException If {@code name} is blank.
+	 */
+	public static HttpHeader of(String name, String value) {
+		return new HttpHeader(name, singletonList(value));
+	}
+
+	/**
+	 * Create a header with multiple values.
+	 *
+	 * @param name Header name.
+	 * @param values Header values, must not be empty.
+	 * @return Header.
+	 * @throws NullPointerException If {@code name} or one of {@code values} are {@code null}.
+	 * @throws IllegalArgumentException If {@code name} is blank.
+	 */
+	public static HttpHeader of(String name, Collection<String> values) {
 		return new HttpHeader(name, values);
 	}
 
@@ -104,7 +130,7 @@ public class HttpHeader {
 
 	// Use static factories
 	private HttpHeader(String name, Collection<String> values) {
-		this.name = notBlank(name, "name");
+		this.name = notBlank(name, "name").trim();
 		this.values = new ArrayList<>(values.size());
 
 		for (String val : notEmpty(values, "values")) {
@@ -158,6 +184,15 @@ public class HttpHeader {
 	 */
 	public String serializeValues() {
 		return Collections.join(values, HEADER_SEPARATOR);
+	}
+
+	/**
+	 * Serialize header as it should appear in raw HTTP request.
+	 *
+	 * @return The serialized header.
+	 */
+	public String serialize() {
+		return name + ": " + serializeValues();
 	}
 
 	@Override

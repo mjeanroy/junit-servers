@@ -79,6 +79,11 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
 public abstract class AbstractHttpRequest implements HttpRequest {
 
 	/**
+	 * The default boundaries that will be used if no one is defined.
+	 */
+	private static final String DEFAULT_BOUNDARIES = "---------------------------974767299852498929531610575";
+
+	/**
 	 * The request URL.
 	 */
 	private final HttpUrl endpoint;
@@ -216,7 +221,7 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 
 	@Override
 	public HttpRequest asMultipartFormData() {
-		return addHeader(CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA);
+		return addHeader(CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=" + DEFAULT_BOUNDARIES);
 	}
 
 	@Override

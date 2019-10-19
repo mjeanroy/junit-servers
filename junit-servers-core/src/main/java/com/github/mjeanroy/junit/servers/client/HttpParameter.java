@@ -120,10 +120,12 @@ public class HttpParameter {
 		return value == null ? null : urlEncode(value);
 	}
 
-	public String asString() {
-		return name + "=" + nullToEmpty(value);
-	}
-
+	/**
+	 * Serialize parameter to the {@code key=value} format, and url encode
+	 * name and value.
+	 *
+	 * @return The encoded serialization.
+	 */
 	public String asEncodedString() {
 		return urlEncode(name) + "=" + urlEncode(nullToEmpty(value));
 	}

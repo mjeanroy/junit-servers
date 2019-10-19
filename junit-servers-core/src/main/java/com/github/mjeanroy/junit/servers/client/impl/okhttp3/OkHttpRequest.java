@@ -42,6 +42,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import java.io.IOException;
+
 /**
  * Implementation of {@link HttpRequest} using OkHttp library.
  *
@@ -131,7 +133,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @see Request.Builder#method(String, RequestBody)
 	 * @see RequestBody
 	 */
-	private void handleBody(Request.Builder builder) {
+	private void handleBody(Request.Builder builder) throws IOException {
 		log.debug("Adding request body");
 
 		RequestBody okhttpRequestBody = hasBody() ? createBody() : null;
@@ -160,7 +162,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @see RequestBody#create(MediaType, String)
 	 * @see FormBody
 	 */
-	private RequestBody createBody() {
+	private RequestBody createBody() throws IOException {
 		if (body == null) {
 			return null;
 		}

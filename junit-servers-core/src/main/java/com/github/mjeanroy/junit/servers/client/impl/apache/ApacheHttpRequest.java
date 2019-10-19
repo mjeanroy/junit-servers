@@ -48,6 +48,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -114,7 +115,7 @@ class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 *
 	 * @param httpRequest The HTTP request.
 	 */
-	private void handleBody(HttpRequestBase httpRequest) {
+	private void handleBody(HttpRequestBase httpRequest) throws IOException {
 		if (!hasBody()) {
 			log.debug("HTTP Request does not have body, skip.");
 			return;

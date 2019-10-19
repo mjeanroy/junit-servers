@@ -42,6 +42,8 @@ import com.ning.http.client.Response;
 import com.ning.http.client.uri.Uri;
 import com.ning.http.util.UTF8UrlEncoder;
 
+import java.io.IOException;
+
 import static java.lang.System.nanoTime;
 
 /**
@@ -121,7 +123,7 @@ class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @see RequestBuilder#addFormParam(String, String)
 	 * @see RequestBuilder#setBody(String)
 	 */
-	private void handleBody(RequestBuilder builder) {
+	private void handleBody(RequestBuilder builder) throws IOException {
 		if (!hasBody()) {
 			log.debug("HTTP Request does not have body, skip.");
 			return;

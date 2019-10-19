@@ -24,6 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,9 +39,10 @@ public class HttpRequestBodies {
 	 *
 	 * @param body The body string.
 	 * @return The request body.
+	 * @throws NullPointerException If {@code body} is {@code null}
 	 */
 	public static HttpRequestBody requestBody(String body) {
-		return new HttpRequestBodyString(null, body);
+		return HttpRequestBodyString.of(body);
 	}
 
 	/**
@@ -47,9 +50,10 @@ public class HttpRequestBodies {
 	 *
 	 * @param body The JSON body string.
 	 * @return The request body.
+	 * @throws NullPointerException If {@code body} is {@code null}
 	 */
 	public static HttpRequestBody jsonBody(String body) {
-		return new HttpRequestBodyString(MediaType.APPLICATION_JSON, body);
+		return HttpRequestBodyString.of(body, MediaType.APPLICATION_JSON);
 	}
 
 	/**
@@ -57,9 +61,10 @@ public class HttpRequestBodies {
 	 *
 	 * @param body The XML body string.
 	 * @return The request body.
+	 * @throws NullPointerException If {@code body} is {@code null}
 	 */
 	public static HttpRequestBody xmlBody(String body) {
-		return new HttpRequestBodyString(MediaType.APPLICATION_XML, body);
+		return HttpRequestBodyString.of(body, MediaType.APPLICATION_XML);
 	}
 
 	/**
@@ -67,9 +72,124 @@ public class HttpRequestBodies {
 	 *
 	 * @param body The body string.
 	 * @return The request body.
+	 * @throws NullPointerException If {@code body} is {@code null}
 	 */
 	public static HttpRequestBody textBody(String body) {
-		return new HttpRequestBodyString(MediaType.TEXT_PLAIN, body);
+		return HttpRequestBodyString.of(body, MediaType.TEXT_PLAIN);
+	}
+
+	/**
+	 * Create request body from given {@code file}.
+	 *
+	 * @param file The body file.
+	 * @return The request body.
+	 * @throws NullPointerException If {@code file} is {@code null}
+	 */
+	public static HttpRequestBody fileBody(File file) {
+		return HttpRequestBodyFile.of(file);
+	}
+
+	/**
+	 * Create request body from given {@code file}, defined with {@code "image/jpeg"} content type.
+	 *
+	 * @param file The body file.
+	 * @return The request body.
+	 * @throws NullPointerException If {@code file} is {@code null}
+	 */
+	public static HttpRequestBody jpeg(File file) {
+		return HttpRequestBodyFile.of(file, MediaType.IMAGE_JPG);
+	}
+
+	/**
+	 * Create request body from given {@code path}, defined with {@code "image/jpeg"} content type.
+	 *
+	 * @param path The body path.
+	 * @return The request body.
+	 * @throws NullPointerException If {@code file} is {@code null}
+	 */
+	public static HttpRequestBody jpeg(Path path) {
+		return HttpRequestBodyFile.of(path, MediaType.IMAGE_JPG);
+	}
+
+	/**
+	 * Create request body from given {@code file}, defined with {@code "image/png"} content type.
+	 *
+	 * @param file The body file.
+	 * @return The request body.
+	 * @throws NullPointerException If {@code file} is {@code null}
+	 */
+	public static HttpRequestBody png(File file) {
+		return HttpRequestBodyFile.of(file, MediaType.IMAGE_PNG);
+	}
+
+	/**
+	 * Create request body from given {@code path}, defined with {@code "image/png"} content type.
+	 *
+	 * @param path The body file.
+	 * @return The request body.
+	 * @throws NullPointerException If {@code file} is {@code null}
+	 */
+	public static HttpRequestBody png(Path path) {
+		return HttpRequestBodyFile.of(path, MediaType.IMAGE_PNG);
+	}
+
+	/**
+	 * Create request body from given {@code file}, defined with {@code "application/pdf"} content type.
+	 *
+	 * @param file The body file.
+	 * @return The request body.
+	 * @throws NullPointerException If {@code file} is {@code null}
+	 */
+	public static HttpRequestBody pdf(File file) {
+		return HttpRequestBodyFile.of(file, MediaType.APPLICATION_PDF);
+	}
+
+	/**
+	 * Create request body from given {@code path}, defined with {@code "application/pdf"} content type.
+	 *
+	 * @param path The body file.
+	 * @return The request body.
+	 * @throws NullPointerException If {@code file} is {@code null}
+	 */
+	public static HttpRequestBody pdf(Path path) {
+		return HttpRequestBodyFile.of(path, MediaType.APPLICATION_PDF);
+	}
+
+	/**
+	 * Create request body from given {@code file}.
+	 *
+	 * @param file The body file.
+	 * @param contentType The content type.
+	 * @return The request body.
+	 * @throws NullPointerException If {@code file} or {@code contentType} are {@code null}
+	 * @throws IllegalArgumentException If {@code contentType} is empty or blank.
+	 */
+	public static HttpRequestBody fileBody(File file, String contentType) {
+		return HttpRequestBodyFile.of(file, contentType);
+	}
+
+	/**
+	 * Create request body from given {@code file}.
+	 *
+	 * @param path The body file.
+	 * @return The request body.
+	 * @throws NullPointerException If {@code path} is {@code null}
+	 */
+	public static HttpRequestBody fileBody(Path path) {
+		return HttpRequestBodyFile.of(path);
+	}
+
+	/**
+	 * Create request body from given {@code file}.
+	 *
+	 * @param path The body file.
+	 * @param contentType The content type.
+	 * @return The request body.
+	 * @throws NullPointerException If {@code path} or {@code contentType} are {@code null}
+	 * @throws IllegalArgumentException If {@code contentType} is empty or blank.
+	 */
+	public static HttpRequestBody fileBody(Path path, String contentType) {
+		return HttpRequestBodyFile.of(path, contentType);
 	}
 
 	/**
@@ -111,5 +231,14 @@ public class HttpRequestBodies {
 	 */
 	public static HttpRequestBodyFormBuilder formBuilder() {
 		return new HttpRequestBodyFormBuilder();
+	}
+
+	/**
+	 * Create builder that can be used to create multipart request body.
+	 *
+	 * @return The builder.
+	 */
+	public static HttpRequestBodyMultipartBuilder multipartBuilder() {
+		return new HttpRequestBodyMultipartBuilder();
 	}
 }

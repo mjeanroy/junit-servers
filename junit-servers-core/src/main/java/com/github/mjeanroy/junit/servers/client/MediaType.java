@@ -62,4 +62,52 @@ public final class MediaType {
 	 * @see <a href="https://www.ietf.org/rfc/rfc1867.txt">https://www.ietf.org/rfc/rfc1867.txt</a>
 	 */
 	public static final String MULTIPART_FORM_DATA = "multipart/form-data";
+
+	/**
+	 * A media type for multipart request.
+	 * @see <a href="https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html.txt">https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html</a>
+	 */
+	public static final String MULTIPART_MIXED = "multipart/mixed";
+
+	/**
+	 * A media type for multipart request.
+	 * @see <a href="https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html.txt">https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html</a>
+	 */
+	public static final String MULTIPART_ALTERNATIVE = "multipart/alternative";
+
+	/**
+	 * A media type for multipart request.
+	 * @see <a href="https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html.txt">https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html</a>
+	 */
+	public static final String MULTIPART_DIGEST = "multipart/digest";
+
+	/**
+	 * A media type for multipart request.
+	 * @see <a href="https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html.txt">https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html</a>
+	 */
+	public static final String MULTIPART_PARALLEL = "multipart/parallel";
+
+	/**
+	 * The media type for JPEG Images.
+	 * @see <a href="https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types</a>
+	 */
+	public static final String IMAGE_JPG = "image/jpeg";
+
+	/**
+	 * The media type for PNG Images.
+	 * @see <a href="https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types</a>
+	 */
+	public static final String IMAGE_PNG = "image/png";
+
+	/**
+	 * The media type for PDF Documents.
+	 * @see <a href="https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types</a>
+	 */
+	public static final String APPLICATION_PDF = "application/pdf";
+
+	/**
+	 * The media type for binary data.
+	 * @see <a href="https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types</a>
+	 */
+	public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
 }

@@ -28,6 +28,7 @@ import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.Test;
 
 import java.util.Collection;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -38,63 +39,150 @@ public class PreconditionsTest {
 
 	@Test
 	public void it_should_throw_exception_if_value_is_null() {
-		assertThatThrownBy(notNull(null, "foo"))
+		final String input = null;
+		final String name = "foo";
+		final ThrowingCallable notNull = new ThrowingCallable() {
+			@Override
+			public void call() {
+				Preconditions.notNull(input, name);
+			}
+		};
+
+		assertThatThrownBy(notNull)
 			.isExactlyInstanceOf(NullPointerException.class)
 			.hasMessage("foo must not be null");
 	}
 
 	@Test
+	public void it_should_throw_exception_if_one_value_is_null() {
+		final List<String> inputs = asList("1", null, "3");
+		final ThrowingCallable doesNotContainNull = new ThrowingCallable() {
+			@Override
+			public void call() {
+				Preconditions.doesNotContainNull(inputs, "inputs");
+			}
+		};
+
+		assertThatThrownBy(doesNotContainNull)
+			.isExactlyInstanceOf(NullPointerException.class)
+			.hasMessage("inputs[1] must not be null");
+	}
+
+	@Test
+	public void it_should_return_iterable_if_no_value_are_null() {
+		final List<String> inputs = asList("1", "2", "3");
+		final String name = "inputs";
+		final Iterable<String> outputs = Preconditions.doesNotContainNull(inputs, name);
+		assertThat(outputs).isSameAs(inputs);
+	}
+
+	@Test
 	public void it_should_throw_exception_if_collection_is_empty() {
-		assertThatThrownBy(notEmpty(emptyList(), "foo"))
+		final List<Object> inputs = emptyList();
+		final String name = "foo";
+		final ThrowingCallable notEmpty = new ThrowingCallable() {
+			@Override
+			public void call() {
+				Preconditions.notEmpty(inputs, name);
+			}
+		};
+
+		assertThatThrownBy(notEmpty)
 			.isExactlyInstanceOf(IllegalArgumentException.class)
 			.hasMessage("foo must not be empty");
 	}
 
 	@Test
 	public void it_should_throw_exception_if_collection_is_null() {
-		assertThatThrownBy(notEmpty(null, "foo"))
+		final Collection<String> inputs = null;
+		final String name = "foo";
+		final ThrowingCallable notEmpty = new ThrowingCallable() {
+			@Override
+			public void call() {
+				Preconditions.notEmpty(inputs, name);
+			}
+		};
+
+		assertThatThrownBy(notEmpty)
 			.isExactlyInstanceOf(NullPointerException.class)
 			.hasMessage("foo must not be null");
 	}
 
 	@Test
 	public void it_should_not_throw_exception_if_collection_is_not_empty() {
-		Collection<String> list = asList("foo", "bar");
-		Collection<String> result = Preconditions.notEmpty(list, "foo");
+		final Collection<String> list = asList("foo", "bar");
+		final String name = "foo";
+		final Collection<String> result = Preconditions.notEmpty(list, name);
 		assertThat(result).isNotNull().isSameAs(list);
 	}
 
 	@Test
 	public void it_should_throw_exception_if_string_is_null() {
-		assertThatThrownBy(notBlank(null, "foo"))
+		final String value = null;
+		final String name = "foo";
+		final ThrowingCallable notBlank = new ThrowingCallable() {
+			@Override
+			public void call() {
+				Preconditions.notBlank(value, name);
+			}
+		};
+
+		assertThatThrownBy(notBlank)
 			.isExactlyInstanceOf(NullPointerException.class)
 			.hasMessage("foo must not be null");
 	}
 
 	@Test
 	public void it_should_throw_exception_if_string_is_empty() {
-		assertThatThrownBy(notBlank("", "foo"))
+		final String value = "";
+		final String name = "foo";
+		final ThrowingCallable notBlank = new ThrowingCallable() {
+			@Override
+			public void call() {
+				Preconditions.notBlank(value, name);
+			}
+		};
+
+		assertThatThrownBy(notBlank)
 			.isExactlyInstanceOf(IllegalArgumentException.class)
 			.hasMessage("foo must not be blank");
 	}
 
 	@Test
 	public void it_should_throw_exception_if_string_is_blank() {
-		assertThatThrownBy(notBlank("   ", "foo"))
+		final String value = "   ";
+		final String name = "foo";
+		final ThrowingCallable notBlank = new ThrowingCallable() {
+			@Override
+			public void call() {
+				Preconditions.notBlank(value, name);
+			}
+		};
+
+		assertThatThrownBy(notBlank)
 			.isExactlyInstanceOf(IllegalArgumentException.class)
 			.hasMessage("foo must not be blank");
 	}
 
 	@Test
 	public void it_should_not_throw_exception_if_string_is_not_blank() {
-		String input = "  foo  ";
-		String output = Preconditions.notBlank(input, "foo");
+		final String input = "  foo  ";
+		final String output = Preconditions.notBlank(input, "foo");
 		assertThat(output).isEqualTo(input);
 	}
 
 	@Test
 	public void it_should_throw_exception_if_int_is_negative() {
-		assertThatThrownBy(positive(-1, "foo"))
+		final int value = -1;
+		final String name = "foo";
+		final ThrowingCallable positive = new ThrowingCallable() {
+			@Override
+			public void call() {
+				Preconditions.positive(value, name);
+			}
+		};
+
+		assertThatThrownBy(positive)
 			.isExactlyInstanceOf(IllegalArgumentException.class)
 			.hasMessage("foo must be positive");
 	}
@@ -107,7 +195,16 @@ public class PreconditionsTest {
 
 	@Test
 	public void it_should_throw_exception_if_long_is_negative() {
-		assertThatThrownBy(positive(-1L, "foo"))
+		final long value = -1L;
+		final String name = "foo";
+		final ThrowingCallable positive = new ThrowingCallable() {
+			@Override
+			public void call() {
+				Preconditions.positive(value, name);
+			}
+		};
+
+		assertThatThrownBy(positive)
 			.isExactlyInstanceOf(IllegalArgumentException.class)
 			.hasMessage("foo must be positive");
 	}
@@ -116,50 +213,5 @@ public class PreconditionsTest {
 	public void it_should_not_throw_exception_if_long_is_zero_or_positive() {
 		assertThat(Preconditions.positive(0L, "foo")).isZero();
 		assertThat(Preconditions.positive(1L, "foo")).isEqualTo(1L);
-	}
-
-	private static ThrowingCallable notNull(final Object value, final String message) {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				Preconditions.notNull(value, message);
-			}
-		};
-	}
-
-	private static <T> ThrowingCallable notEmpty(final Collection<T> value, final String message) {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				Preconditions.notEmpty(value, message);
-			}
-		};
-	}
-
-	private static ThrowingCallable notBlank(final String value, final String message) {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				Preconditions.notBlank(value, message);
-			}
-		};
-	}
-
-	private static ThrowingCallable positive(final int value, final String message) {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				Preconditions.positive(value, message);
-			}
-		};
-	}
-
-	private static ThrowingCallable positive(final long value, final String message) {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				Preconditions.positive(value, message);
-			}
-		};
 	}
 }

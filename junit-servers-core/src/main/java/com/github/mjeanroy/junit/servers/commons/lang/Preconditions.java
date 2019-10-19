@@ -60,6 +60,33 @@ public final class Preconditions {
 	}
 
 	/**
+	 * Check that given iterable does not contain any {@code null} values.
+	 * It throws a {@link NullPointerException} exception if at least one value is {@code null} or returned the
+	 * original iterable.
+	 *
+	 * @param values Values to check.
+	 * @param name Name of parameter, it will produce an error message such as "{name[i]} must not be null"
+	 * @param <T> Type of value.
+	 * @return First parameter if it is not null.
+	 * @throws NullPointerException If {@code value} is {@code null}.
+	 */
+	public static <T> Iterable<T> doesNotContainNull(Iterable<T> values, String name) {
+		notNull(values, "name");
+
+		int i = 0;
+
+		for (T value  : values) {
+			if (value == null) {
+				throw new NullPointerException(String.format("%s[%s] must not be null", name, i));
+			}
+
+			++i;
+		}
+
+		return values;
+	}
+
+	/**
 	 * Check that given collection is not empty (i.e null or with a size equal to zero).
 	 * It throws a {@link IllegalArgumentException} exception if collection is empty or
 	 * returned original collection otherwise.

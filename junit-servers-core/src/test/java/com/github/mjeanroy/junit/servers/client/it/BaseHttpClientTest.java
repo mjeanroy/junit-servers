@@ -48,6 +48,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -58,6 +59,7 @@ import java.util.UUID;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
 import static com.github.mjeanroy.junit.servers.client.HttpRequestBodies.formUrlEncodedBody;
 import static com.github.mjeanroy.junit.servers.client.HttpRequestBodies.jsonBody;
+import static com.github.mjeanroy.junit.servers.client.HttpRequestBodies.multipartBuilder;
 import static com.github.mjeanroy.junit.servers.client.HttpRequestBodies.requestBody;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.ACCEPT;
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.ACCEPT_ENCODING;
@@ -97,6 +99,7 @@ import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.asse
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.assertRequestWithCookie;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.assertRequestWithCookies;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.assertRequestWithHeader;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.assertUploadRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stubDefaultRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stubDeleteRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stubGetRequest;
@@ -104,7 +107,9 @@ import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stub
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stubPatchRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stubPostRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stubPutRequest;
+import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stubUploadRequest;
 import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
+import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathFile;
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.url;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -536,6 +541,27 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	public void testUploadWithMultipartRequest() {
+		final String endpoint = ENDPOINT;
+		final int status = 201;
+		final File file = classpathFile("/img1.jpg");
+
+		stubUploadRequest(endpoint, status);
+
+		final HttpResponse rsp = createDefaultClient()
+			.preparePost(endpoint)
+			.acceptJson()
+			.asXmlHttpRequest()
+			.setBody(multipartBuilder()
+				.addFormDataPart(file, "image")
+				.build())
+			.execute();
+
+		assertUploadRequest(endpoint, HttpMethod.POST, file);
+		assertThat(rsp.status()).isEqualTo(status);
+	}
+
+	@Test
 	public void testRequestWithDefaultHeader() {
 		final String name = "X-Custom-Header";
 		final String value = "FooBar";
@@ -759,8 +785,11 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void testRequest_as_multipart_form_data() {
-		testRequestHeader(CONTENT_TYPE, MULTIPART_FORM_DATA, new Function<HttpRequest>() {
+		final String boundary = "---------------------------974767299852498929531610575";
+		final String expectedHeader = MULTIPART_FORM_DATA + "; boundary=" + boundary;
+		testRequestHeader(CONTENT_TYPE, expectedHeader, new Function<HttpRequest>() {
 			@Override
 			public void apply(HttpRequest rq) {
 				rq.asMultipartFormData();

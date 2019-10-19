@@ -24,9 +24,13 @@
 
 package com.github.mjeanroy.junit.servers.utils.commons;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Static Test Utilities.
@@ -35,6 +39,26 @@ public final class TestUtils {
 
 	// Ensure non instantiation.
 	private TestUtils() {
+	}
+
+	/**
+	 * Get file from classpath.
+	 *
+	 * @param path File path (relative to root classpath).
+	 * @return The file.
+	 */
+	public static File classpathFile(String path) {
+		return new File(TestUtils.class.getResource(path).getFile());
+	}
+
+	/**
+	 * Get file from classpath.
+	 *
+	 * @param path File path (relative to root classpath).
+	 * @return The file.
+	 */
+	public static Path classpathPath(String path) {
+		return classpathFile(path).toPath();
 	}
 
 	/**
@@ -89,6 +113,31 @@ public final class TestUtils {
 			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
 		}
 		catch (UnsupportedEncodingException ex) {
+			throw new AssertionError(ex);
+		}
+	}
+
+	/**
+	 * Translate array of bytes to a string using UTF-8 encoding.
+	 *
+	 * @param bytes Array of bytes.
+	 * @return The result string.
+	 */
+	public static String toUtf8String(byte[] bytes) {
+		return new String(bytes, StandardCharsets.UTF_8);
+	}
+
+	/**
+	 * Read given file to an array of bytes.
+	 *
+	 * @param file The file to read.
+	 * @return The result.
+	 */
+	public static byte[] readFile(File file) {
+		try {
+			return Files.readAllBytes(file.toPath());
+		}
+		catch (IOException ex) {
 			throw new AssertionError(ex);
 		}
 	}

@@ -43,6 +43,8 @@ import org.asynchttpclient.Response;
 import org.asynchttpclient.uri.Uri;
 import org.asynchttpclient.util.Utf8UrlEncoder;
 
+import java.io.IOException;
+
 import static java.lang.System.nanoTime;
 
 /**
@@ -125,7 +127,7 @@ class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @see RequestBuilder#addFormParam(String, String)
 	 * @see RequestBuilder#setBody(String)
 	 */
-	private void handleBody(RequestBuilder builder) {
+	private void handleBody(RequestBuilder builder) throws IOException {
 		if (!hasBody()) {
 			log.debug("HTTP Request does not have body, skip.");
 			return;

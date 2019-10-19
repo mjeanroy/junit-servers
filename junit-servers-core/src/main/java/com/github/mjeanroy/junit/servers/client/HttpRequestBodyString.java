@@ -24,17 +24,44 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
+import com.github.mjeanroy.junit.servers.commons.io.Ios;
 import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 
-import java.nio.charset.Charset;
 import java.util.Objects;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
+import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
 /**
  * A simple {@link HttpRequestBody} using a raw string as request body.
  */
 final class HttpRequestBodyString implements HttpRequestBody {
+
+	/**
+	 * Create {@link HttpRequestBodyString} with a body and without any content-type.
+	 *
+	 * @param body Request body.
+	 * @return The body.
+	 * @throws NullPointerException If {@code body} is {@code null}
+	 */
+	static HttpRequestBodyString of(String body) {
+		notNull(body, "body");
+		return new HttpRequestBodyString(null, body);
+	}
+
+	/**
+	 * Create {@link HttpRequestBodyString} with a body and with a content-type.
+	 *
+	 * @param body Request body.
+	 * @return The body.
+	 * @throws NullPointerException If {@code body} or {@code contentType} are {@code null}
+	 * @throws IllegalArgumentException If {@code contentType} is empty or blank.
+	 */
+	static HttpRequestBodyString of(String body, String contentType) {
+		notNull(body, "body");
+		notBlank(contentType, "contentType");
+		return new HttpRequestBodyString(contentType, body);
+	}
 
 	/**
 	 * The body content type.
@@ -52,9 +79,9 @@ final class HttpRequestBodyString implements HttpRequestBody {
 	 * @param contentType The body content type.
 	 * @param body The body as a raw string.
 	 */
-	HttpRequestBodyString(String contentType, String body) {
+	private HttpRequestBodyString(String contentType, String body) {
 		this.contentType = contentType;
-		this.body = notBlank(body, "HTTP Request body must not be empty");
+		this.body = body;
 	}
 
 	@Override
@@ -64,7 +91,16 @@ final class HttpRequestBodyString implements HttpRequestBody {
 
 	@Override
 	public byte[] getBody() {
-		return body.getBytes(Charset.defaultCharset());
+		return Ios.toUtf8Bytes(body);
+	}
+
+	/**
+	 * Get {@link #body}
+	 *
+	 * @return {@link #body}
+	 */
+	String getBodyString() {
+		return body;
 	}
 
 	@Override
