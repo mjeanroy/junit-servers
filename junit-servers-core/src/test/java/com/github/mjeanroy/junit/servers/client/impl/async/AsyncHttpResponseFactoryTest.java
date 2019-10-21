@@ -26,21 +26,15 @@ package com.github.mjeanroy.junit.servers.client.impl.async;
 
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.utils.builders.AsyncHttpResponseBuilder;
-import com.github.mjeanroy.junit4.runif.RunIf;
-import com.github.mjeanroy.junit4.runif.RunIfRunner;
-import com.github.mjeanroy.junit4.runif.conditions.AtLeastJava8Condition;
 import org.asynchttpclient.Response;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RunIfRunner.class)
-@RunIf(AtLeastJava8Condition.class)
-public class AsyncHttpResponseFactoryTest {
+class AsyncHttpResponseFactoryTest {
 
 	@Test
-	public void it_should_create_http_response() {
+	void it_should_create_http_response() {
 		Response delegate = new AsyncHttpResponseBuilder().build();
 		long duration = 1000L;
 		HttpResponse response = AsyncHttpResponseFactory.of(delegate, duration);

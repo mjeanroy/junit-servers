@@ -24,10 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.util.List;
@@ -38,13 +36,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.entry;
 import static org.mockito.Mockito.mock;
 
-public class EmbeddedConfigurationBuilderTest {
-
-	@Rule
-	public TemporaryFolder folder = new TemporaryFolder();
+class EmbeddedConfigurationBuilderTest {
 
 	@Test
-	public void it_should_change_port() {
+	void it_should_change_port() {
 		final EmbeddedConfigurationBuilder builder = createBuilder();
 		final int oldPort = builder.getPort();
 		final int newPort = oldPort + 10;
@@ -56,7 +51,7 @@ public class EmbeddedConfigurationBuilderTest {
 	}
 
 	@Test
-	public void it_should_change_path() {
+	void it_should_change_path() {
 		final EmbeddedConfigurationBuilder builder = createBuilder();
 		final String oldPath = builder.getPath();
 		final String newPath = oldPath + "foo";
@@ -68,7 +63,7 @@ public class EmbeddedConfigurationBuilderTest {
 	}
 
 	@Test
-	public void it_should_change_webapp_path() {
+	void it_should_change_webapp_path() {
 		final EmbeddedConfigurationBuilder builder = createBuilder();
 		final String oldWebapp = builder.getWebapp();
 		final String newWebapp = oldWebapp + "foo";
@@ -80,20 +75,19 @@ public class EmbeddedConfigurationBuilderTest {
 	}
 
 	@Test
-	public void it_should_change_webapp_path_with_file() throws Exception {
+	void it_should_change_webapp_path_with_file(@TempDir File tempDir) {
 		final EmbeddedConfigurationBuilder builder = createBuilder();
 		final String oldWebapp = builder.getWebapp();
-		final File file = folder.newFile("foo");
-		final String newWebapp = file.getAbsolutePath();
+		final String newWebapp = tempDir.getAbsolutePath();
 
-		final EmbeddedConfigurationBuilder result = builder.withWebapp(file);
+		final EmbeddedConfigurationBuilder result = builder.withWebapp(tempDir);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
 	}
 
 	@Test
-	public void it_should_override_descriptor_file() {
+	void it_should_override_descriptor_file() {
 		final EmbeddedConfigurationBuilder builder = createBuilder();
 		final String newDescriptor = "src/test/resources/web.xml";
 		final String oldDescriptor = builder.getOverrideDescriptor();
@@ -104,17 +98,17 @@ public class EmbeddedConfigurationBuilderTest {
 	}
 
 	@Test
-	public void it_should_fail_to_override_classloader_with_null_class() {
+	void it_should_fail_to_override_classloader_with_null_class() {
 		final EmbeddedConfigurationBuilder builder = createBuilder();
 		final Class<?> klass = null;
 
-		assertThatThrownBy(withParentClassLoader(builder, klass))
+		assertThatThrownBy(() -> builder.withParentClassLoader(klass))
 			.isExactlyInstanceOf(NullPointerException.class)
 			.hasMessage("Base class must not be null");
 	}
 
 	@Test
-	public void it_should_add_property() {
+	void it_should_add_property() {
 		final EmbeddedConfigurationBuilder builder = createBuilder();
 		final Map<String, String> oldProperties = builder.getEnvProperties();
 		assertThat(oldProperties).isEmpty();
@@ -129,7 +123,7 @@ public class EmbeddedConfigurationBuilderTest {
 	}
 
 	@Test
-	public void it_should_add_hook() {
+	void it_should_add_hook() {
 		final Hook hook = mock(Hook.class);
 		final EmbeddedConfigurationBuilder builder = createBuilder();
 		final List<Hook> oldHooks = builder.getHooks();
@@ -144,14 +138,5 @@ public class EmbeddedConfigurationBuilderTest {
 
 	private static EmbeddedConfigurationBuilder createBuilder() {
 		return new EmbeddedConfigurationBuilder();
-	}
-
-	private ThrowingCallable withParentClassLoader(final EmbeddedConfigurationBuilder builder, final Class<?> klass) {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				builder.withParentClassLoader(klass);
-			}
-		};
 	}
 }

@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.commons.lang;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
@@ -33,10 +33,10 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StringsTest {
+class StringsTest {
 
 	@Test
-	public void it_should_check_if_string_is_not_empty() {
+	void it_should_check_if_string_is_not_empty() {
 		assertThat(Strings.isNotEmpty(null)).isFalse();
 		assertThat(Strings.isNotEmpty("")).isFalse();
 		assertThat(Strings.isNotEmpty(" ")).isTrue();
@@ -44,7 +44,7 @@ public class StringsTest {
 	}
 
 	@Test
-	public void it_should_turn_string_to_lower_case() {
+	void it_should_turn_string_to_lower_case() {
 		assertThat(Strings.toLowerCase(null)).isNull();
 		assertThat(Strings.toLowerCase("")).isEqualTo("");
 		assertThat(Strings.toLowerCase("FOO")).isEqualTo("foo");
@@ -52,7 +52,7 @@ public class StringsTest {
 	}
 
 	@Test
-	public void it_should_check_if_string_is_not_blank() {
+	void it_should_check_if_string_is_not_blank() {
 		assertThat(Strings.isNotBlank(null)).isFalse();
 		assertThat(Strings.isNotBlank("")).isFalse();
 		assertThat(Strings.isNotBlank("   ")).isFalse();
@@ -60,7 +60,7 @@ public class StringsTest {
 	}
 
 	@Test
-	public void it_should_check_if_string_is_blank() {
+	void it_should_check_if_string_is_blank() {
 		assertThat(Strings.isBlank(null)).isTrue();
 		assertThat(Strings.isBlank("")).isTrue();
 		assertThat(Strings.isBlank("   ")).isTrue();
@@ -68,7 +68,7 @@ public class StringsTest {
 	}
 
 	@Test
-	public void it_should_remove_string_prefix() {
+	void it_should_remove_string_prefix() {
 		assertThat(Strings.removePrefix(null, null)).isNull();
 		assertThat(Strings.removePrefix("", "")).isEqualTo("");
 		assertThat(Strings.removePrefix("foo", "bar")).isEqualTo("foo");
@@ -78,10 +78,10 @@ public class StringsTest {
 	}
 
 	@Test
-	public void it_should_join_strings() {
-		Collection<String> emptyList = emptyList();
-		Collection<String> singletonList = singleton("test");
-		Collection<String> list = asList("test1", "test2");
+	void it_should_join_strings() {
+		final Collection<String> emptyList = emptyList();
+		final Collection<String> singletonList = singleton("test");
+		final Collection<String> list = asList("test1", "test2");
 
 		assertThat(Strings.join("//", emptyList)).isEqualTo("");
 		assertThat(Strings.join("//", singletonList)).isEqualTo("test");

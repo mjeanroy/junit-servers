@@ -25,8 +25,7 @@
 package com.github.mjeanroy.junit.servers.client;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -38,10 +37,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
 
-public class HttpRequestBodyPartBuilderTest {
+class HttpRequestBodyPartBuilderTest {
 
 	@Test
-	public void it_should_create_part_from_raw_value() {
+	void it_should_create_part_from_raw_value() {
 		final String rawValue = "123";
 		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(rawValue).build();
 
@@ -49,13 +48,13 @@ public class HttpRequestBodyPartBuilderTest {
 		assertThat(part.getHeaders()).isEmpty();
 		assertThat(part.getBody()).isInstanceOf(HttpRequestBodyString.class);
 
-		HttpRequestBodyString bodyString = (HttpRequestBodyString) part.getBody();
+		final HttpRequestBodyString bodyString = (HttpRequestBodyString) part.getBody();
 		assertThat(bodyString.getContentType()).isNull();
 		assertThat(bodyString.getBodyString()).isEqualTo(rawValue);
 	}
 
 	@Test
-	public void it_should_create_part_from_file_and_guess_content_type() {
+	void it_should_create_part_from_file_and_guess_content_type() {
 		final File file = classpathFile("/file1.txt");
 		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(file).build();
 
@@ -63,13 +62,13 @@ public class HttpRequestBodyPartBuilderTest {
 		assertThat(part.getHeaders()).isEmpty();
 		assertThat(part.getBody()).isInstanceOf(HttpRequestBodyFile.class);
 
-		HttpRequestBodyFile bodyString = (HttpRequestBodyFile) part.getBody();
+		final HttpRequestBodyFile bodyString = (HttpRequestBodyFile) part.getBody();
 		assertThat(bodyString.getContentType()).isEqualTo("text/plain");
 		assertThat(bodyString.getPath()).isEqualTo(file.toPath());
 	}
 
 	@Test
-	public void it_should_create_part_from_path_and_guess_content_type() {
+	void it_should_create_part_from_path_and_guess_content_type() {
 		final Path path = classpathPath("/file1.txt");
 		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(path).build();
 
@@ -77,13 +76,13 @@ public class HttpRequestBodyPartBuilderTest {
 		assertThat(part.getHeaders()).isEmpty();
 		assertThat(part.getBody()).isInstanceOf(HttpRequestBodyFile.class);
 
-		HttpRequestBodyFile bodyString = (HttpRequestBodyFile) part.getBody();
+		final HttpRequestBodyFile bodyString = (HttpRequestBodyFile) part.getBody();
 		assertThat(bodyString.getContentType()).isEqualTo("text/plain");
 		assertThat(bodyString.getPath()).isEqualTo(path);
 	}
 
 	@Test
-	public void it_should_create_part_from_given_request_body() {
+	void it_should_create_part_from_given_request_body() {
 		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
 		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).build();
 
@@ -93,7 +92,7 @@ public class HttpRequestBodyPartBuilderTest {
 	}
 
 	@Test
-	public void it_should_create_part_with_header() {
+	void it_should_create_part_with_header() {
 		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
 		final String headerName = "Content-Disposition";
 		final String headerValue = "form-data; name=\"foo\"";
@@ -109,7 +108,7 @@ public class HttpRequestBodyPartBuilderTest {
 	}
 
 	@Test
-	public void it_should_create_part_with_header_object() {
+	void it_should_create_part_with_header_object() {
 		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
 		final String headerName = "Content-Disposition";
 		final String headerValue = "form-data; name=\"foo\"";
@@ -126,7 +125,7 @@ public class HttpRequestBodyPartBuilderTest {
 	}
 
 	@Test
-	public void it_should_set_part_to_form_data_part_with_given_name() {
+	void it_should_set_part_to_form_data_part_with_given_name() {
 		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
 		final String name = "foo";
 		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).asFormData(name).build();
@@ -141,7 +140,7 @@ public class HttpRequestBodyPartBuilderTest {
 	}
 
 	@Test
-	public void it_should_set_part_to_form_data_part_with_given_name_and_filename() {
+	void it_should_set_part_to_form_data_part_with_given_name_and_filename() {
 		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
 		final String name = "foo";
 		final String filename = "request.json";
@@ -157,7 +156,7 @@ public class HttpRequestBodyPartBuilderTest {
 	}
 
 	@Test
-	public void it_should_set_part_to_form_data_part_with_given_name_being_escaped() {
+	void it_should_set_part_to_form_data_part_with_given_name_being_escaped() {
 		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
 		final String name = "foo\nbar\r\"quix\"";
 		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).asFormData(name).build();
@@ -172,23 +171,17 @@ public class HttpRequestBodyPartBuilderTest {
 	}
 
 	@Test
-	public void it_should_fail_to_create_part_with_content_type_header() {
+	void it_should_fail_to_create_part_with_content_type_header() {
 		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
 		final HttpRequestBodyPartBuilder builder = HttpRequestBodyPartBuilder.of(body);
-		final ThrowingCallable addHeader = new ThrowingCallable() {
-			@Override
-			public void call() {
-				builder.addHeader("Content-Type", "application/json");
-			}
-		};
 
-		assertThatThrownBy(addHeader)
+		assertThatThrownBy(() -> builder.addHeader("Content-Type", "application/json"))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage("Header 'Content-Type' is forbidden, please specify Content-Type wuth request body");
 	}
 
 	@Test
-	public void it_should_set_part_to_form_data_part_with_given_name_and_filename_being_escaped() {
+	void it_should_set_part_to_form_data_part_with_given_name_and_filename_being_escaped() {
 		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
 		final String name = "foo\rbar\n\"quix\"";
 		final String filename = "request\r.\n\"json";
@@ -204,25 +197,19 @@ public class HttpRequestBodyPartBuilderTest {
 	}
 
 	@Test
-	public void it_should_fail_to_create_part_with_header_added_twice() {
+	void it_should_fail_to_create_part_with_header_added_twice() {
 		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
 		final String headerName = "Content-Disposition";
 		final String headerValue = "form-data; name=\"foo\"";
 		final HttpRequestBodyPartBuilder builder = HttpRequestBodyPartBuilder.of(body).addHeader(headerName, headerValue);
-		final ThrowingCallable addHeader = new ThrowingCallable() {
-			@Override
-			public void call() {
-				builder.addHeader(headerName, headerValue);
-			}
-		};
 
-		assertThatThrownBy(addHeader)
+		assertThatThrownBy(() -> builder.addHeader(headerName, headerValue))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage("Header 'Content-Disposition' is already defined");
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final String rawValue = "123";
 		final HttpRequestBodyPartBuilder builder = HttpRequestBodyPartBuilder.of(rawValue).addHeader("Content-Transfer-Encoding", "binary");
 
@@ -240,7 +227,7 @@ public class HttpRequestBodyPartBuilderTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_hash_code() {
+	void it_should_implement_equals_hash_code() {
 		EqualsVerifier.forClass(HttpRequestBodyPartBuilder.class).verify();
 	}
 }

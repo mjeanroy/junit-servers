@@ -24,17 +24,17 @@
 
 package com.github.mjeanroy.junit.servers.commons.lang;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ObjectsTest {
+class ObjectsTest {
 
-    @Test
-    public void it_should_get_first_non_null_object() {
-        assertThat(Objects.firstNonNull((String) null, (String) null)).isNull();
-        assertThat(Objects.firstNonNull(1, null)).isEqualTo(1);
-        assertThat(Objects.firstNonNull(null, 1)).isEqualTo(1);
-        assertThat(Objects.firstNonNull(1, 2)).isEqualTo(1);
-    }
+	@Test
+	void it_should_get_first_non_null_object() {
+		assertThat(Objects.firstNonNull((String) null, (String) null)).isNull();
+		assertThat(Objects.firstNonNull(1, null)).isEqualTo(1);
+		assertThat(Objects.firstNonNull(null, 1)).isEqualTo(1);
+		assertThat(Objects.firstNonNull(1, 2)).isEqualTo(1);
+	}
 }

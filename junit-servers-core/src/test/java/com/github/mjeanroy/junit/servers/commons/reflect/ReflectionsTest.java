@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.commons.reflect;
 import com.github.mjeanroy.junit.servers.commons.fixtures.Bar;
 import com.github.mjeanroy.junit.servers.commons.fixtures.FooAnnotation;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -36,44 +36,32 @@ import java.util.List;
 import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ReflectionsTest {
+class ReflectionsTest {
 
 	@Test
-	public void it_should_find_all_fields() {
-		List<Field> fields = findAllFields(Bar.class);
-
-		assertThat(fields)
-			.isNotNull()
-			.isNotEmpty()
-			.hasSize(4);
+	void it_should_find_all_fields() {
+		final List<Field> fields = findAllFields(Bar.class);
+		assertThat(fields).hasSize(4);
 	}
 
 	@Test
-	public void it_should_find_all_static_fields_with_annotations() {
-		List<Field> fields = findStaticFieldsAnnotatedWith(Bar.class, FooAnnotation.class);
-
-		assertThat(fields)
-			.isNotNull()
-			.isNotEmpty()
-			.hasSize(1);
+	void it_should_find_all_static_fields_with_annotations() {
+		final List<Field> fields = findStaticFieldsAnnotatedWith(Bar.class, FooAnnotation.class);
+		assertThat(fields).hasSize(1);
 	}
 
 	@Test
-	public void it_should_find_all_static_methods_with_annotations() {
-		List<Method> methods = findStaticMethodsAnnotatedWith(Bar.class, FooAnnotation.class);
-
-		assertThat(methods)
-			.isNotNull()
-			.isNotEmpty()
-			.hasSize(1);
+	void it_should_find_all_static_methods_with_annotations() {
+		final List<Method> methods = findStaticMethodsAnnotatedWith(Bar.class, FooAnnotation.class);
+		assertThat(methods).hasSize(1);
 	}
 
 	@Test
-	public void it_should_set_value_on_private_field() throws Exception {
-		Bar bar = new Bar(1, "foo");
-		String newValue = "bar";
+	void it_should_set_value_on_private_field() {
+		final Bar bar = new Bar(1, "foo");
+		final String newValue = "bar";
 
-		Field field = Fields.getPrivateField(Bar.class, "name");
+		final Field field = Fields.getPrivateField(Bar.class, "name");
 
 		assertThat(field.isAccessible()).isFalse();
 		assertThat(bar.getName()).isEqualTo("foo");
@@ -85,38 +73,38 @@ public class ReflectionsTest {
 	}
 
 	@Test
-	public void it_should_get_value_on_private_field() throws Exception {
-		String actualValue = "foo";
-		Bar bar = new Bar(1, actualValue);
-		Field field = Fields.getPrivateField(Bar.class, "name");
+	void it_should_get_value_on_private_field() {
+		final String actualValue = "foo";
+		final Bar bar = new Bar(1, actualValue);
+		final Field field = Fields.getPrivateField(Bar.class, "name");
 
 		assertThat(field.isAccessible()).isFalse();
 
-		String value = getter(bar, field);
+		final String value = getter(bar, field);
 
 		assertThat(field.isAccessible()).isFalse();
 		assertThat(value).isEqualTo(actualValue);
 	}
 
 	@Test
-	public void it_should_get_value_on_static_private_field() throws Exception {
-		Field field = Fields.getPrivateField(Bar.class, "staticField");
+	void it_should_get_value_on_static_private_field() {
+		final Field field = Fields.getPrivateField(Bar.class, "staticField");
 
 		assertThat(field.isAccessible()).isFalse();
 
-		String value = getter(field);
+		final String value = getter(field);
 
 		assertThat(field.isAccessible()).isFalse();
 		assertThat(value).isEqualTo("foo");
 	}
 
 	@Test
-	public void it_should_get_value_on_static_private_method() throws Exception {
-		Method method = Fields.getPrivateMethod(Bar.class, "getStaticPrivateMethod");
+	void it_should_get_value_on_static_private_method() {
+		final Method method = Fields.getPrivateMethod(Bar.class, "getStaticPrivateMethod");
 
 		assertThat(method.isAccessible()).isFalse();
 
-		int value = invoke(method);
+		final int value = invoke(method);
 
 		assertThat(method.isAccessible()).isFalse();
 		assertThat(value).isEqualTo(0);

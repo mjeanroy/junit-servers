@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.client;
 
 import com.github.mjeanroy.junit.servers.commons.lang.Strings;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -38,10 +38,10 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HttpRequestBodiesTest {
+class HttpRequestBodiesTest {
 
 	@Test
-	public void it_should_create_request_body() throws Exception {
+	void it_should_create_request_body() throws Exception {
 		final String rawBody = "{}";
 		final HttpRequestBody body = HttpRequestBodies.requestBody(rawBody);
 		assertThat(body).isNotNull();
@@ -50,7 +50,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_json_raw_body() throws Exception {
+	void it_should_create_json_raw_body() throws Exception {
 		final String rawBody = "{}";
 		final HttpRequestBody body = HttpRequestBodies.jsonBody(rawBody);
 		assertThat(body).isNotNull();
@@ -59,7 +59,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_xml_raw_body() throws Exception {
+	void it_should_create_xml_raw_body() throws Exception {
 		final String rawBody = "<person></person>";
 		final HttpRequestBody body = HttpRequestBodies.xmlBody(rawBody);
 		assertThat(body).isNotNull();
@@ -68,7 +68,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_text_raw_body() throws Exception {
+	void it_should_create_text_raw_body() throws Exception {
 		final String rawBody = "test";
 		final HttpRequestBody body = HttpRequestBodies.textBody(rawBody);
 		assertThat(body).isNotNull();
@@ -77,7 +77,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_and_guess_content_type() throws Exception {
+	void it_should_create_body_file_and_guess_content_type() throws Exception {
 		final File file = classpathFile("/file1.txt");
 		final HttpRequestBody body = HttpRequestBodies.fileBody(file);
 		assertThat(body).isNotNull();
@@ -88,7 +88,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_with_content_type() throws Exception {
+	void it_should_create_body_file_with_content_type() throws Exception {
 		final File file = classpathFile("/file1.txt");
 		final String contentType = "text/plain";
 		final HttpRequestBody body = HttpRequestBodies.fileBody(file, contentType);
@@ -100,7 +100,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_from_path_and_guess_content_type() throws Exception {
+	void it_should_create_body_file_from_path_and_guess_content_type() throws Exception {
 		final Path path = classpathPath("/file1.txt");
 		final HttpRequestBody body = HttpRequestBodies.fileBody(path);
 		assertThat(body).isNotNull();
@@ -111,7 +111,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_from_path_with_content_type() throws Exception {
+	void it_should_create_body_file_from_path_with_content_type() throws Exception {
 		final Path path = classpathPath("/file1.txt");
 		final String contentType = "text/plain";
 		final HttpRequestBody body = HttpRequestBodies.fileBody(path, contentType);
@@ -123,7 +123,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_with_jpeg_content_type() throws Exception {
+	void it_should_create_body_file_with_jpeg_content_type() throws Exception {
 		final File file = classpathFile("/img1.jpg");
 		final HttpRequestBody body = HttpRequestBodies.jpeg(file);
 		assertThat(body).isNotNull();
@@ -132,7 +132,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_with_png_content_type() throws Exception {
+	void it_should_create_body_file_with_png_content_type() throws Exception {
 		final File file = classpathFile("/img2.png");
 		final HttpRequestBody body = HttpRequestBodies.png(file);
 		assertThat(body).isNotNull();
@@ -141,7 +141,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_from_path_with_png_content_type() throws Exception {
+	void it_should_create_body_file_from_path_with_png_content_type() throws Exception {
 		final Path path = classpathPath("/img2.png");
 		final HttpRequestBody body = HttpRequestBodies.png(path);
 		assertThat(body).isNotNull();
@@ -151,7 +151,7 @@ public class HttpRequestBodiesTest {
 
 
 	@Test
-	public void it_should_create_body_file_with_pdf_content_type() throws Exception {
+	void it_should_create_body_file_with_pdf_content_type() throws Exception {
 		final File file = classpathFile("/file1.pdf");
 		final HttpRequestBody body = HttpRequestBodies.pdf(file);
 		assertThat(body).isNotNull();
@@ -160,7 +160,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_from_path_with_pdf_content_type() throws Exception {
+	void it_should_create_body_file_from_path_with_pdf_content_type() throws Exception {
 		final Path path = classpathPath("/file1.pdf");
 		final HttpRequestBody body = HttpRequestBodies.pdf(path);
 		assertThat(body).isNotNull();
@@ -169,7 +169,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_form_body_from_parameters() throws Exception {
+	void it_should_create_form_body_from_parameters() throws Exception {
 		final HttpRequestBody body = HttpRequestBodies.formUrlEncodedBody(asList(
 			HttpParameter.of("id", "1"),
 			HttpParameter.of("firstName", "John"),
@@ -182,7 +182,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_form_body_from_parameter_map() throws Exception {
+	void it_should_create_form_body_from_parameter_map() throws Exception {
 		final HttpRequestBody body = HttpRequestBodies.formUrlEncodedBody(singletonMap(
 			"id", "1"
 		));
@@ -193,7 +193,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_form_body_builder() throws Exception {
+	void it_should_create_form_body_builder() throws Exception {
 		final HttpRequestBody body = HttpRequestBodies.formBuilder()
 			.add("id", "1")
 			.add("firstName", "John")
@@ -206,7 +206,7 @@ public class HttpRequestBodiesTest {
 	}
 
 	@Test
-	public void it_should_create_multipart_body_builder() throws Exception {
+	void it_should_create_multipart_body_builder() throws Exception {
 		final HttpRequestBody body = HttpRequestBodies.multipartBuilder()
 			.addFormDataPart("id", "1")
 			.addFormDataPart("firstName", "John")

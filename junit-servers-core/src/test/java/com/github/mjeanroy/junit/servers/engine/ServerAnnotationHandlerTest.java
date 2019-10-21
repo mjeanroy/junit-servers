@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.engine;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -37,10 +37,10 @@ import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateF
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ServerAnnotationHandlerTest {
+class ServerAnnotationHandlerTest {
 
 	@Test
-	public void it_should_support_server_annotation() {
+	void it_should_support_server_annotation() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final Field field = extractServerField();
 		final AnnotationHandler handler = newServerAnnotationHandler(server);
@@ -50,7 +50,7 @@ public class ServerAnnotationHandlerTest {
 	}
 
 	@Test
-	public void it_should_set_server_instance() {
+	void it_should_set_server_instance() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final Field field = extractServerField();
 		final TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
@@ -60,7 +60,7 @@ public class ServerAnnotationHandlerTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final AnnotationHandler handler = newServerAnnotationHandler(server);
 

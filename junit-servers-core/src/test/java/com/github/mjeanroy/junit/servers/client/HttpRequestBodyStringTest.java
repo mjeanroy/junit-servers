@@ -25,16 +25,16 @@
 package com.github.mjeanroy.junit.servers.client;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HttpRequestBodyStringTest {
+class HttpRequestBodyStringTest {
 
 	@Test
-	public void it_should_create_body_string_without_content_type() {
+	void it_should_create_body_string_without_content_type() {
 		final String rawBody = "{}";
 		final HttpRequestBodyString bodyString = HttpRequestBodyString.of(rawBody);
 
@@ -43,7 +43,7 @@ public class HttpRequestBodyStringTest {
 	}
 
 	@Test
-	public void it_should_create_body_with_content_type() {
+	void it_should_create_body_with_content_type() {
 		final String contentType = "application/json";
 		final String rawBody = "{}";
 		final HttpRequestBodyString bodyString = HttpRequestBodyString.of(rawBody, contentType);
@@ -53,12 +53,12 @@ public class HttpRequestBodyStringTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_and_hash_code() {
+	void it_should_implement_equals_and_hash_code() {
 		EqualsVerifier.forClass(HttpRequestBodyString.class).verify();
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final String body = "{\"id\": 1}";
 		final String contentType = "application/json";
 		final HttpRequestBodyString bodyString = HttpRequestBodyString.of(body, contentType);

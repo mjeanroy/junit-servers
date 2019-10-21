@@ -24,9 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.commons.lang;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -35,45 +35,27 @@ import java.util.TimeZone;
 import static com.github.mjeanroy.junit.servers.commons.lang.Dates.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DatesTest {
+class DatesTest {
 
 	private TimeZone tz;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		tz = TimeZone.getDefault();
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 	}
 
-	@After
-	public void tearDown() {
+	@AfterEach
+	void tearDown() {
 		TimeZone.setDefault(tz);
 	}
 
 	@Test
-	public void it_should_parse_date() {
-		String value = "Wed, 13 Jan 2021 22:23:01 GMT";
-		String pattern = "EEE, d MMM yyyy HH:mm:ss Z";
+	void it_should_parse_date() {
+		final String value = "Wed, 13 Jan 2021 22:23:01 GMT";
+		final String pattern = "EEE, d MMM yyyy HH:mm:ss Z";
 
-		Date date = parse(value, pattern);
-
-		assertThat(date)
-			.isNotNull()
-			.hasYear(2021)
-			.hasMonth(Calendar.JANUARY + 1)
-			.hasDayOfMonth(13)
-			.hasHourOfDay(22)
-			.hasMinute(23)
-			.hasSecond(1);
-	}
-
-	@Test
-	public void it_should_parse_date_using_appropriate_pattern() {
-		String value = "Wed, 13-Jan-2021 22:23:01 GMT";
-		String pattern1 = "EEE, d MMM yyyy HH:mm:ss Z";
-		String pattern2 = "EEE, d-MMM-yyyy HH:mm:ss Z";
-
-		Date date = parse(value, pattern1, pattern2);
+		final Date date = parse(value, pattern);
 
 		assertThat(date)
 			.isNotNull()
@@ -86,22 +68,40 @@ public class DatesTest {
 	}
 
 	@Test
-	public void it_should_parse_date_and_return_null_without_matching_pattern() {
-		String value = "2021-01-01";
-		String pattern1 = "EEE, d MMM yyyy HH:mm:ss Z";
-		String pattern2 = "EEE, d-MMM-yyyy HH:mm:ss Z";
+	void it_should_parse_date_using_appropriate_pattern() {
+		final String value = "Wed, 13-Jan-2021 22:23:01 GMT";
+		final String pattern1 = "EEE, d MMM yyyy HH:mm:ss Z";
+		final String pattern2 = "EEE, d-MMM-yyyy HH:mm:ss Z";
 
-		Date date = parse(value, pattern1, pattern2);
+		final Date date = parse(value, pattern1, pattern2);
+
+		assertThat(date)
+			.isNotNull()
+			.hasYear(2021)
+			.hasMonth(Calendar.JANUARY + 1)
+			.hasDayOfMonth(13)
+			.hasHourOfDay(22)
+			.hasMinute(23)
+			.hasSecond(1);
+	}
+
+	@Test
+	void it_should_parse_date_and_return_null_without_matching_pattern() {
+		final String value = "2021-01-01";
+		final String pattern1 = "EEE, d MMM yyyy HH:mm:ss Z";
+		final String pattern2 = "EEE, d-MMM-yyyy HH:mm:ss Z";
+
+		final Date date = parse(value, pattern1, pattern2);
 
 		assertThat(date).isNull();
 	}
 
 	@Test
-	public void it_should_parse_date_and_get_time() {
-		String value = "Wed, 13 Jan 2021 22:23:01 GMT";
-		String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
+	void it_should_parse_date_and_get_time() {
+		final String value = "Wed, 13 Jan 2021 22:23:01 GMT";
+		final String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
-		Long time = getTime(value, pattern);
+		final Long time = getTime(value, pattern);
 
 		assertThat(time)
 			.isNotNull()
@@ -109,11 +109,11 @@ public class DatesTest {
 	}
 
 	@Test
-	public void it_should_format_time() {
-		long time = 1610576581000L;
-		String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
+	void it_should_format_time() {
+		final long time = 1610576581000L;
+		final String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
-		String value = formatTime(time, pattern);
+		final String value = formatTime(time, pattern);
 
 		assertThat(value)
 			.isNotNull()
@@ -121,12 +121,12 @@ public class DatesTest {
 	}
 
 	@Test
-	public void it_should_format_date() {
-		String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
-		Date date = new Date();
+	void it_should_format_date() {
+		final String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
+		final Date date = new Date();
 		date.setTime(1610576581000L);
 
-		String value = format(date, pattern);
+		final String value = format(date, pattern);
 
 		assertThat(value)
 			.isNotNull()

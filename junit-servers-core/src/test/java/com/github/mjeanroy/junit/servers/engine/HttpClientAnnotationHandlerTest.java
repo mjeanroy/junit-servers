@@ -30,7 +30,7 @@ import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
@@ -45,10 +45,10 @@ import static com.github.mjeanroy.junit.servers.engine.HttpClientAnnotationHandl
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HttpClientAnnotationHandlerTest {
+class HttpClientAnnotationHandlerTest {
 
 	@Test
-	public void it_should_support_server_annotation() {
+	void it_should_support_server_annotation() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
 		final Field field = extractClientField(TestClassWithAnnotatedField.class);
@@ -58,7 +58,7 @@ public class HttpClientAnnotationHandlerTest {
 	}
 
 	@Test
-	public void it_should_set_client_instance() {
+	void it_should_set_client_instance() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
 		final Field field = extractClientField(TestClassWithAnnotatedField.class);
@@ -70,7 +70,7 @@ public class HttpClientAnnotationHandlerTest {
 	}
 
 	@Test
-	public void it_should_set_client_instance_on_super_class() {
+	void it_should_set_client_instance_on_super_class() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final TestInheritedClassWithAnnotatedField target = new TestInheritedClassWithAnnotatedField();
 		final Field field = extractClientField(TestInheritedClassWithAnnotatedField.class);
@@ -82,7 +82,7 @@ public class HttpClientAnnotationHandlerTest {
 	}
 
 	@Test
-	public void it_should_set_client_instance_on_meta_annotated_field() {
+	void it_should_set_client_instance_on_meta_annotated_field() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final TestClassWithMetaAnnotationField target = new TestClassWithMetaAnnotationField();
 		final Field field = extractClientField(TestClassWithMetaAnnotationField.class);
@@ -95,7 +95,7 @@ public class HttpClientAnnotationHandlerTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
 

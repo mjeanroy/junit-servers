@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.commons.core;
 
 import com.github.mjeanroy.junit.servers.exceptions.UrlException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -33,10 +33,10 @@ import java.net.URISyntaxException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
-public class UrlsTest {
+class UrlsTest {
 
 	@Test
-	public void it_should_ensure_absolute_path() {
+	void it_should_ensure_absolute_path() {
 		assertThat(Urls.ensureAbsolutePath(null)).isEqualTo("/");
 		assertThat(Urls.ensureAbsolutePath("")).isEqualTo("/");
 		assertThat(Urls.ensureAbsolutePath("/")).isEqualTo("/");
@@ -45,13 +45,13 @@ public class UrlsTest {
 	}
 
 	@Test
-	public void it_should_create_uri_object() {
+	void it_should_create_uri_object() {
 		final String scheme = "http";
 		final String host = "localhost";
 		final int port = 80;
 		final String path = "/foo";
 
-		URI uri = Urls.createUri(scheme, host, port, path);
+		final URI uri = Urls.createUri(scheme, host, port, path);
 
 		assertThat(uri).isNotNull();
 		assertThat(uri.getScheme()).isEqualTo(scheme);
@@ -65,7 +65,7 @@ public class UrlsTest {
 	}
 
 	@Test
-	public void it_should_fail_to_create_malformed_uri() {
+	void it_should_fail_to_create_malformed_uri() {
 		final String scheme = "http";
 		final String host = "localhost";
 		final int port = 80;
@@ -87,7 +87,7 @@ public class UrlsTest {
 	}
 
 	@Test
-	public void it_should_concatenate_path() {
+	void it_should_concatenate_path() {
 		assertThat(Urls.concatenatePath(null, null)).isEqualTo("/");
 		assertThat(Urls.concatenatePath("", "")).isEqualTo("/");
 		assertThat(Urls.concatenatePath("/", null)).isEqualTo("/");
@@ -100,7 +100,7 @@ public class UrlsTest {
 	}
 
 	@Test
-	public void it_should_ensure_that_url_starts_with_http_scheme() {
+	void it_should_ensure_that_url_starts_with_http_scheme() {
 		assertThat(Urls.startsWithHttpScheme("http://localhost")).isTrue();
 		assertThat(Urls.startsWithHttpScheme("HTTP://LOCALHOST")).isTrue();
 		assertThat(Urls.startsWithHttpScheme("https://localhost")).isTrue();

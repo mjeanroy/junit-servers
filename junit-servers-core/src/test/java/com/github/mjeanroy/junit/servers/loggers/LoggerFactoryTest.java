@@ -24,14 +24,14 @@
 
 package com.github.mjeanroy.junit.servers.loggers;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LoggerFactoryTest {
+class LoggerFactoryTest {
 
 	@Test
-	public void it_should_get_logger() {
+	void it_should_get_logger() {
 		assertThat(LoggerFactory.getLogger(getClass())).isNotNull();
 	}
 }

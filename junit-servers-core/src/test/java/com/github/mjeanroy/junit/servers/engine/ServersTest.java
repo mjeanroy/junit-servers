@@ -30,28 +30,28 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfiguration;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfigurationBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ServersTest {
+class ServersTest {
 
 	@Test
-	public void it_should_instantiate_server_using_service_loader() {
+	void it_should_instantiate_server_using_service_loader() {
 		final EmbeddedServer<?> server = Servers.instantiate(FixtureClass.class);
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
 		assertThat(server.getConfiguration()).isNotNull();
 	}
 
 	@Test
-	public void it_should_instantiate_server_using_service_loader_with_custom_configuration() {
+	void it_should_instantiate_server_using_service_loader_with_custom_configuration() {
 		final EmbeddedServer<?> server = Servers.instantiate(FixtureClassWithConfiguration.class);
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
 		assertThat(server.getConfiguration()).isNotNull().isSameAs(FixtureClassWithConfiguration.configuration);
 	}
 
 	@Test
-	public void it_should_instantiate_server_with_configuration() {
+	void it_should_instantiate_server_with_configuration() {
 		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
 		final EmbeddedServer<?> server = Servers.instantiate(configuration);
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
@@ -59,13 +59,13 @@ public class ServersTest {
 	}
 
 	@Test
-	public void it_should_return_null_without_configuration_field() {
+	void it_should_return_null_without_configuration_field() {
 		final AbstractConfiguration configuration = Servers.findConfiguration(FixtureClass.class);
 		assertThat(configuration).isNull();
 	}
 
 	@Test
-	public void it_should_return_configuration_as_result_of_method() {
+	void it_should_return_configuration_as_result_of_method() {
 		final AbstractConfiguration configuration = Servers.findConfiguration(FixtureClassWithConfigurationAsMethod.class);
 		assertThat(configuration).isNotNull();
 	}

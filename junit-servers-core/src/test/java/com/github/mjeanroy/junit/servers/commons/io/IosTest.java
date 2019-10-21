@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.commons.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -32,16 +32,16 @@ import java.nio.file.Path;
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathPath;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IosTest {
+class IosTest {
 
 	@Test
-	public void it_should_expose_cr_lf() {
+	void it_should_expose_cr_lf() {
 		final String strOutput = new String(Ios.CRLF, StandardCharsets.UTF_8);
 		assertThat(strOutput).isEqualTo("\r\n");
 	}
 
 	@Test
-	public void it_should_serialize_string_to_byte_array() {
+	void it_should_serialize_string_to_byte_array() {
 		final String input = "test";
 		final byte[] output = Ios.toUtf8Bytes(input);
 		final String strOutput = new String(output, StandardCharsets.UTF_8);
@@ -49,7 +49,7 @@ public class IosTest {
 	}
 
 	@Test
-	public void it_should_serialize_null_string_to_empty_byte_array() {
+	void it_should_serialize_null_string_to_empty_byte_array() {
 		final String input = null;
 		final byte[] output = Ios.toUtf8Bytes(input);
 		final String strOutput = new String(output, StandardCharsets.UTF_8);
@@ -57,7 +57,7 @@ public class IosTest {
 	}
 
 	@Test
-	public void it_should_serialize_file_to_byte_array() throws Exception {
+	void it_should_serialize_file_to_byte_array() throws Exception {
 		final Path path = classpathPath("/file1.txt");
 		final byte[] output = Ios.toBytes(path);
 		final String strOutput = new String(output, StandardCharsets.UTF_8);
@@ -65,7 +65,7 @@ public class IosTest {
 	}
 
 	@Test
-	public void it_should_guess_content_type_files() {
+	void it_should_guess_content_type_files() {
 		assertThat(Ios.guessContentType(null)).isNull();
 		assertThat(Ios.guessContentType(classpathPath("/file1.txt"))).isEqualTo("text/plain");
 		assertThat(Ios.guessContentType(classpathPath("/img1.jpg"))).isEqualTo("image/jpeg");

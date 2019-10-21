@@ -24,126 +24,124 @@
 
 package com.github.mjeanroy.junit.servers.loggers;
 
-import com.github.mjeanroy.junit.servers.utils.junit4.SystemOutRule;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import com.github.mjeanroy.junit.servers.utils.jupiter.CaptureSystemOut;
+import com.github.mjeanroy.junit.servers.utils.jupiter.CaptureSystemOutTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class AbstractLoggerTest {
-
-	@Rule
-	public SystemOutRule systemOutRule = new SystemOutRule();
+@CaptureSystemOutTest
+abstract class AbstractLoggerTest {
 
 	private Logger log;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		log = createLogger();
 	}
 
 	@Test
-	public void it_should_log_trace_message_with_one_argument() {
+	void it_should_log_trace_message_with_one_argument(CaptureSystemOut sysout) {
 		log.trace("Message with placeholder: {}", "arg1");
-		verifyOutput("TRACE", "Message with placeholder: arg1");
+		verifyOutput(sysout, "TRACE", "Message with placeholder: arg1");
 	}
 
 	@Test
-	public void it_should_log_trace_message_with_two_arguments() {
+	void it_should_log_trace_message_with_two_arguments(CaptureSystemOut sysout) {
 		log.trace("Message with placeholder: {} {}", "arg1", "arg2");
-		verifyOutput("TRACE", "Message with placeholder: arg1 arg2");
+		verifyOutput(sysout, "TRACE", "Message with placeholder: arg1 arg2");
 	}
 
 	@Test
-	public void it_should_log_trace_message_without_argument() {
+	void it_should_log_trace_message_without_argument(CaptureSystemOut sysout) {
 		log.trace("Message with placeholder");
-		verifyOutput("TRACE", "Message with placeholder");
+		verifyOutput(sysout, "TRACE", "Message with placeholder");
 	}
 
 	@Test
-	public void it_should_log_debug_message_with_one_argument() {
+	void it_should_log_debug_message_with_one_argument(CaptureSystemOut sysout) {
 		log.debug("Message with placeholder: {}", "arg1");
-		verifyOutput("DEBUG", "Message with placeholder: arg1");
+		verifyOutput(sysout, "DEBUG", "Message with placeholder: arg1");
 	}
 
 	@Test
-	public void it_should_log_debug_message_with_two_arguments() {
+	void it_should_log_debug_message_with_two_arguments(CaptureSystemOut sysout) {
 		log.debug("Message with placeholder: {} {}", "arg1", "arg2");
-		verifyOutput("DEBUG", "Message with placeholder: arg1 arg2");
+		verifyOutput(sysout, "DEBUG", "Message with placeholder: arg1 arg2");
 	}
 
 	@Test
-	public void it_should_log_debug_message_without_argument() {
+	void it_should_log_debug_message_without_argument(CaptureSystemOut sysout) {
 		log.debug("Message with placeholder");
-		verifyOutput("DEBUG", "Message with placeholder");
+		verifyOutput(sysout, "DEBUG", "Message with placeholder");
 	}
 
 	@Test
-	public void it_should_log_info_message_with_one_argument() {
+	void it_should_log_info_message_with_one_argument(CaptureSystemOut sysout) {
 		log.info("Message with placeholder: {}", "arg1");
-		verifyOutput("INFO", "Message with placeholder: arg1");
+		verifyOutput(sysout, "INFO", "Message with placeholder: arg1");
 	}
 
 	@Test
-	public void it_should_log_info_message_with_two_arguments() {
+	void it_should_log_info_message_with_two_arguments(CaptureSystemOut sysout) {
 		log.info("Message with placeholder: {} {}", "arg1", "arg2");
-		verifyOutput("INFO", "Message with placeholder: arg1 arg2");
+		verifyOutput(sysout, "INFO", "Message with placeholder: arg1 arg2");
 	}
 
 	@Test
-	public void it_should_log_info_message_without_argument() {
+	void it_should_log_info_message_without_argument(CaptureSystemOut sysout) {
 		log.info("Message with placeholder");
-		verifyOutput("INFO", "Message with placeholder");
+		verifyOutput(sysout, "INFO", "Message with placeholder");
 	}
 
 	@Test
-	public void it_should_log_warn_message_with_one_argument() {
+	void it_should_log_warn_message_with_one_argument(CaptureSystemOut sysout) {
 		log.warn("Message with placeholder: {}", "arg1");
-		verifyOutput("WARN", "Message with placeholder: arg1");
+		verifyOutput(sysout, "WARN", "Message with placeholder: arg1");
 	}
 
 	@Test
-	public void it_should_log_warn_message_with_two_arguments() {
+	void it_should_log_warn_message_with_two_arguments(CaptureSystemOut sysout) {
 		log.warn("Message with placeholder: {} {}", "arg1", "arg2");
-		verifyOutput("WARN", "Message with placeholder: arg1 arg2");
+		verifyOutput(sysout, "WARN", "Message with placeholder: arg1 arg2");
 	}
 
 	@Test
-	public void it_should_log_warn_message_without_argument() {
+	void it_should_log_warn_message_without_argument(CaptureSystemOut sysout) {
 		log.warn("Message with placeholder");
-		verifyOutput("WARN", "Message with placeholder");
+		verifyOutput(sysout, "WARN", "Message with placeholder");
 	}
 
 	@Test
-	public void it_should_log_error_message_with_one_argument() {
+	void it_should_log_error_message_with_one_argument(CaptureSystemOut sysout) {
 		log.error("Message with placeholder: {}", "arg1");
-		verifyOutput("ERROR", "Message with placeholder: arg1");
+		verifyOutput(sysout, "ERROR", "Message with placeholder: arg1");
 	}
 
 	@Test
-	public void it_should_log_error_message_with_two_arguments() {
+	void it_should_log_error_message_with_two_arguments(CaptureSystemOut sysout) {
 		log.error("Message with placeholder: {} {}", "arg1", "arg2");
-		verifyOutput("ERROR", "Message with placeholder: arg1 arg2");
+		verifyOutput(sysout, "ERROR", "Message with placeholder: arg1 arg2");
 	}
 
 	@Test
-	public void it_should_log_error_message_without_argument() {
+	void it_should_log_error_message_without_argument(CaptureSystemOut sysout) {
 		log.error("Message with placeholder");
-		verifyOutput("ERROR", "Message with placeholder");
+		verifyOutput(sysout, "ERROR", "Message with placeholder");
 	}
 
 	@Test
-	public void it_should_log_throwable() {
+	void it_should_log_throwable(CaptureSystemOut sysout) {
 		Exception ex = new RuntimeException("A runtime exception");
 		String message = "error message";
 		log.error(message, ex);
 
-		verifyOutput("ERROR", ex.getMessage());
+		verifyOutput(sysout, "ERROR", ex.getMessage());
 	}
 
-	private void verifyOutput(String logLevel, String message) {
-		String out = systemOutRule.getOut();
+	private void verifyOutput(CaptureSystemOut sysout, String logLevel, String message) {
+		final String out = sysout.getOut();
 		assertThat(out).contains(logLevel);
 		assertThat(out).contains(message);
 	}

@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.client;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -34,10 +34,10 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HttpRequestBodyFormTest {
+class HttpRequestBodyFormTest {
 
 	@Test
-	public void it_should_create_form_body() {
+	void it_should_create_form_body() {
 		final List<HttpParameter> parameters = asList(
 			HttpParameter.of("id", "1"),
 			HttpParameter.of("name", "JohnDoe")
@@ -51,7 +51,7 @@ public class HttpRequestBodyFormTest {
 	}
 
 	@Test
-	public void it_should_create_form_body_with_url_encoded_param() {
+	void it_should_create_form_body_with_url_encoded_param() {
 		final List<HttpParameter> parameters = asList(
 			HttpParameter.of("id", "1"),
 			HttpParameter.of("full name", "John Doe")
@@ -65,12 +65,12 @@ public class HttpRequestBodyFormTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_and_hash_code() {
+	void it_should_implement_equals_and_hash_code() {
 		EqualsVerifier.forClass(HttpRequestBodyForm.class).verify();
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final List<HttpParameter> parameters = singletonList(
 			HttpParameter.of("id", "1")
 		);

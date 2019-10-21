@@ -31,22 +31,14 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient.defaultAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient.newAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
-public class NingAsyncHttpClientTest extends BaseHttpClientTest {
-
-	private AsyncHttpClient internalClient;
-
-	@Override
-	protected void onSetUp() {
-		internalClient = mock(AsyncHttpClient.class);
-	}
+class NingAsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
@@ -72,10 +64,11 @@ public class NingAsyncHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
-		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		HttpClient client = createDefaultClient(server);
-		AsyncHttpClient internalClient = readPrivate(client, "client");
+	void it_should_implement_to_string() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final HttpClient client = createDefaultClient(server);
+		final AsyncHttpClient internalClient = readPrivate(client, "client");
+
 		assertThat(client).hasToString(
 			"NingAsyncHttpClient{" +
 				"configuration: HttpClientConfiguration{" +

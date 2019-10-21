@@ -33,19 +33,9 @@ import java.util.concurrent.CountDownLatch;
  */
 class FakeWorker implements Runnable {
 
-	private static final Operation START_OP = new Operation() {
-		@Override
-		public void apply(FakeEmbeddedServer server) {
-			server.start();
-		}
-	};
+	private static final Operation START_OP = AbstractEmbeddedServer::start;
 
-	private static final Operation STOP_OP = new Operation() {
-		@Override
-		public void apply(FakeEmbeddedServer server) {
-			server.stop();
-		}
-	};
+	private static final Operation STOP_OP = AbstractEmbeddedServer::stop;
 
 	/**
 	 * Create worker that will start {@code server} (i.e call {@code server.start()}.

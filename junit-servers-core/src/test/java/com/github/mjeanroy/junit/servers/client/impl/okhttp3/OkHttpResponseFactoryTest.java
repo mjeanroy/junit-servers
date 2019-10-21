@@ -27,17 +27,17 @@ package com.github.mjeanroy.junit.servers.client.impl.okhttp3;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.utils.builders.OkHttpResponseBuilder;
 import okhttp3.Response;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OkHttpResponseFactoryTest {
+class OkHttpResponseFactoryTest {
 
 	@Test
-	public void it_should_create_http_response() {
-		Response delegate = new OkHttpResponseBuilder().build();
-		long duration = 1000L;
-		HttpResponse response = OkHttpResponseFactory.of(delegate, duration);
+	void it_should_create_http_response() {
+		final Response delegate = new OkHttpResponseBuilder().build();
+		final long duration = 1000L;
+		final HttpResponse response = OkHttpResponseFactory.of(delegate, duration);
 
 		assertThat(response).isNotNull().isExactlyInstanceOf(OkHttpResponse.class);
 		assertThat(response.getRequestDuration()).isEqualTo(duration);

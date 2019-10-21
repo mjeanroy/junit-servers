@@ -26,19 +26,13 @@ package com.github.mjeanroy.junit.servers.client.impl.async;
 
 import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseImplTest;
 import com.github.mjeanroy.junit.servers.utils.builders.AsyncHttpResponseBuilder;
-import com.github.mjeanroy.junit4.runif.RunIf;
-import com.github.mjeanroy.junit4.runif.RunIfRunner;
-import com.github.mjeanroy.junit4.runif.conditions.AtLeastJava8Condition;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.asynchttpclient.Response;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RunIfRunner.class)
-@RunIf(AtLeastJava8Condition.class)
-public class AsyncHttpResponseTest extends AbstractHttpResponseImplTest<AsyncHttpResponseBuilder, Response, AsyncHttpResponse> {
+class AsyncHttpResponseTest extends AbstractHttpResponseImplTest<AsyncHttpResponseBuilder, Response, AsyncHttpResponse> {
 
 	@Override
 	protected AsyncHttpResponseBuilder getBuilder() {
@@ -51,7 +45,7 @@ public class AsyncHttpResponseTest extends AbstractHttpResponseImplTest<AsyncHtt
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final Response delegate = new AsyncHttpResponseBuilder().build();
 		final long duration = 1000L;
 		final AsyncHttpResponse response = new AsyncHttpResponse(delegate, duration);
@@ -70,7 +64,7 @@ public class AsyncHttpResponseTest extends AbstractHttpResponseImplTest<AsyncHtt
 	}
 
 	@Test
-	public void it_should_implement_equal_and_hash_code() {
+	void it_should_implement_equal_and_hash_code() {
 		EqualsVerifier.forClass(AsyncHttpResponse.class)
 			.withRedefinedSuperclass()
 			.withIgnoredFields("readResponseBodyLock", "_body")

@@ -24,23 +24,22 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class CookiesTest {
+class CookiesTest {
 
 	@Test
-	public void it_should_serialize_single_cookie() {
-		String name = "foo";
-		String value = "bar";
-		Cookie cookie = Cookies.cookie(name, value);
+	void it_should_serialize_single_cookie() {
+		final String name = "foo";
+		final String value = "bar";
+		final Cookie cookie = Cookies.cookie(name, value);
 
-		String result = Cookies.serialize(singleton(cookie));
+		final String result = Cookies.serialize(singleton(cookie));
 
 		assertThat(result)
 			.isNotNull()
@@ -49,16 +48,16 @@ public class CookiesTest {
 	}
 
 	@Test
-	public void it_should_serialize_list_of_cookies() {
-		String n1 = "f1";
-		String v1 = "b1";
-		Cookie c1 = Cookies.cookie(n1, v1);
+	void it_should_serialize_list_of_cookies() {
+		final String n1 = "f1";
+		final String v1 = "b1";
+		final Cookie c1 = Cookies.cookie(n1, v1);
 
-		String n2 = "f2";
-		String v2 = "b2";
-		Cookie c2 = Cookies.cookie(n2, v2);
+		final String n2 = "f2";
+		final String v2 = "b2";
+		final Cookie c2 = Cookies.cookie(n2, v2);
 
-		String result = Cookies.serialize(asList(c1, c2));
+		final String result = Cookies.serialize(asList(c1, c2));
 
 		assertThat(result)
 			.isNotNull()
@@ -67,11 +66,11 @@ public class CookiesTest {
 	}
 
 	@Test
-	public void it_should_default_create_cookie() {
+	void it_should_default_create_cookie() {
 		final String name = "foo";
 		final String value = "bar";
 
-		Cookie cookie = Cookies.cookie(name, value);
+		final Cookie cookie = Cookies.cookie(name, value);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -85,7 +84,7 @@ public class CookiesTest {
 	}
 
 	@Test
-	public void it_should_create_cookie() {
+	void it_should_create_cookie() {
 		final String name = "foo";
 		final String value = "bar";
 		final long expires = 0;
@@ -95,7 +94,7 @@ public class CookiesTest {
 		final boolean secure = true;
 		final boolean httpOnly = false;
 
-		Cookie cookie = Cookies.cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
+		final Cookie cookie = Cookies.cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -109,7 +108,7 @@ public class CookiesTest {
 	}
 
 	@Test
-	public void it_should_create_secure_cookie() {
+	void it_should_create_secure_cookie() {
 		final String name = "foo";
 		final String value = "bar";
 		final long expires = 0;
@@ -117,7 +116,7 @@ public class CookiesTest {
 		final String domain = "domain";
 		final String path = "path";
 
-		Cookie cookie = Cookies.secureCookie(name, value, domain, path, expires, maxAge);
+		final Cookie cookie = Cookies.secureCookie(name, value, domain, path, expires, maxAge);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -131,13 +130,13 @@ public class CookiesTest {
 	}
 
 	@Test
-	public void it_should_create_session_cookie() {
+	void it_should_create_session_cookie() {
 		final String name = "foo";
 		final String value = "bar";
 		final String domain = "domain";
 		final String path = "path";
 
-		Cookie cookie = Cookies.sessionCookie(name, value, domain, path);
+		final Cookie cookie = Cookies.sessionCookie(name, value, domain, path);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -151,8 +150,8 @@ public class CookiesTest {
 	}
 
 	@Test
-	public void it_should_create_cookie_with_name_and_value() {
-		Cookie cookie = Cookies.read("name=value");
+	void it_should_create_cookie_with_name_and_value() {
+		final Cookie cookie = Cookies.read("name=value");
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -166,8 +165,8 @@ public class CookiesTest {
 	}
 
 	@Test
-	public void it_should_create_cookie_with_name_value_domain_path_and_flags() {
-		Cookie cookie = Cookies.read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
+	void it_should_create_cookie_with_name_value_domain_path_and_flags() {
+		final Cookie cookie = Cookies.read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -181,8 +180,8 @@ public class CookiesTest {
 	}
 
 	@Test
-	public void it_should_create_cookie_with_name_value_domain_path_expires_max_date_and_flags() {
-		Cookie cookie = Cookies.read("name=value; Domain=foo.com; Expires=Wed, 13-Jan-2021 22:23:01 GMT; max-age=3600; Path=/; Secure; HttpOnly");
+	void it_should_create_cookie_with_name_value_domain_path_expires_max_date_and_flags() {
+		final Cookie cookie = Cookies.read("name=value; Domain=foo.com; Expires=Wed, 13-Jan-2021 22:23:01 GMT; max-age=3600; Path=/; Secure; HttpOnly");
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -196,29 +195,20 @@ public class CookiesTest {
 	}
 
 	@Test
-	public void it_should_not_create_cookie_without_name_value() {
-		assertThatThrownBy(read("name; Domain=foo.com; Path=/; Secure; HttpOnly"))
+	void it_should_not_create_cookie_without_name_value() {
+		assertThatThrownBy(() -> Cookies.read("name; Domain=foo.com; Path=/; Secure; HttpOnly"))
 			.isExactlyInstanceOf(IllegalArgumentException.class)
 			.hasMessage("Cookie must have a valid name and a valid value");
 	}
 
 	@Test
-	public void it_should_not_create_cookie_with_empty_name() {
-		assertThatThrownBy(read("=value; Domain=foo.com; Path=/; Secure; HttpOnly"))
+	void it_should_not_create_cookie_with_empty_name() {
+		assertThatThrownBy(() -> Cookies.read("=value; Domain=foo.com; Path=/; Secure; HttpOnly"))
 			.isExactlyInstanceOf(IllegalArgumentException.class)
 			.hasMessage("Cookie must have a valid name");
 	}
 
 	private static String formatCookie(String name, String value) {
 		return name + "=" + value;
-	}
-
-	private static ThrowingCallable read(final String rawValue) {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				Cookies.read(rawValue);
-			}
-		};
 	}
 }

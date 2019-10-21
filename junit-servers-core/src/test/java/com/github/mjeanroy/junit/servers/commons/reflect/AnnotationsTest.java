@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.commons.reflect;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
@@ -40,10 +40,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AnnotationsTest {
+class AnnotationsTest {
 
 	@Test
-	public void it_should_find_annotation_on_class() {
+	void it_should_find_annotation_on_class() {
 		final Class<TestClassWithAnnotation> klass = TestClassWithAnnotation.class;
 		final TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
 
@@ -52,7 +52,7 @@ public class AnnotationsTest {
 	}
 
 	@Test
-	public void it_should_find_annotation_on_super_class() {
+	void it_should_find_annotation_on_super_class() {
 		final Class<TestChildClassWithAnnotation> klass = TestChildClassWithAnnotation.class;
 		final TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
 
@@ -61,7 +61,7 @@ public class AnnotationsTest {
 	}
 
 	@Test
-	public void it_should_find_annotation_on_interface() {
+	void it_should_find_annotation_on_interface() {
 		final Class<TestClassImplementingAnnotatedInterface> klass = TestClassImplementingAnnotatedInterface.class;
 		final TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
 
@@ -70,7 +70,7 @@ public class AnnotationsTest {
 	}
 
 	@Test
-	public void it_should_find_annotation_on_meta_annotation() {
+	void it_should_find_annotation_on_meta_annotation() {
 		final Class<TestClassWithMetaAnnotation> klass = TestClassWithMetaAnnotation.class;
 		final TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
 
@@ -79,7 +79,7 @@ public class AnnotationsTest {
 	}
 
 	@Test
-	public void it_should_check_if_annotation_is_present_on_field() {
+	void it_should_check_if_annotation_is_present_on_field() {
 		assertThat(Annotations.isAnnotationPresent((Field) null, TestAnnotation.class)).isFalse();
 		assertThat(Annotations.isAnnotationPresent(field("field1"), TestAnnotation.class)).isTrue();
 		assertThat(Annotations.isAnnotationPresent(field("field2"), TestAnnotation.class)).isFalse();
@@ -87,7 +87,7 @@ public class AnnotationsTest {
 	}
 
 	@Test
-	public void it_should_check_if_annotation_is_present_on_method() {
+	void it_should_check_if_annotation_is_present_on_method() {
 		assertThat(Annotations.isAnnotationPresent((Method) null, TestAnnotation.class)).isFalse();
 		assertThat(Annotations.isAnnotationPresent(method("method1"), TestAnnotation.class)).isTrue();
 		assertThat(Annotations.isAnnotationPresent(method("method2"), TestAnnotation.class)).isFalse();

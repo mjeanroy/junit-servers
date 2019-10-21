@@ -25,16 +25,16 @@
 package com.github.mjeanroy.junit.servers.client;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HttpHeaderTest {
+class HttpHeaderTest {
 
 	@Test
-	public void it_should_create_http_header_of_single_value() {
+	void it_should_create_http_header_of_single_value() {
 		final String name = "foo1";
 		final String value = "bar1";
 		final HttpHeader header = HttpHeader.of(name, value);
@@ -43,7 +43,7 @@ public class HttpHeaderTest {
 	}
 
 	@Test
-	public void it_should_create_http_header_off_several_value() {
+	void it_should_create_http_header_off_several_value() {
 		final String name = "foo1";
 		final String v1 = "bar11";
 		final String v2 = "bar12";
@@ -53,7 +53,7 @@ public class HttpHeaderTest {
 	}
 
 	@Test
-	public void it_should_create_http_header_with_single_value() {
+	void it_should_create_http_header_with_single_value() {
 		final String name = "foo2";
 		final String value = "bar2";
 		final HttpHeader header = HttpHeader.header(name, value);
@@ -62,7 +62,7 @@ public class HttpHeaderTest {
 	}
 
 	@Test
-	public void it_should_create_http_header_with_several_value() {
+	void it_should_create_http_header_with_several_value() {
 		final String name = "foo2";
 		final String v1 = "bar21";
 		final String v2 = "bar22";
@@ -72,7 +72,7 @@ public class HttpHeaderTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string_with_single_value() {
+	void it_should_implement_to_string_with_single_value() {
 		final String name = "foo";
 		final String value = "bar";
 		final HttpHeader parameter = HttpHeader.header(name, value);
@@ -86,7 +86,7 @@ public class HttpHeaderTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string_with_several_value() {
+	void it_should_implement_to_string_with_several_value() {
 		final String name = "foo";
 		final String v1 = "bar1";
 		final String v2 = "bar2";
@@ -101,7 +101,7 @@ public class HttpHeaderTest {
 	}
 
 	@Test
-	public void it_should_implement_equals() {
+	void it_should_implement_equals() {
 		EqualsVerifier.forClass(HttpHeader.class).verify();
 	}
 

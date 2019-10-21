@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.engine;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.builders.AbstractConfigurationMockBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -37,10 +37,10 @@ import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateF
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConfigurationAnnotationHandlerTest {
+class ConfigurationAnnotationHandlerTest {
 
 	@Test
-	public void it_should_support_server_annotation() {
+	void it_should_support_server_annotation() {
 		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
 		final AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 		final Field field = extractConfigurationField();
@@ -50,7 +50,7 @@ public class ConfigurationAnnotationHandlerTest {
 	}
 
 	@Test
-	public void it_should_set_configuration_instance() {
+	void it_should_set_configuration_instance() {
 		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
 		final TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
 		final Field field = extractConfigurationField();
@@ -60,7 +60,7 @@ public class ConfigurationAnnotationHandlerTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
 		final AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 

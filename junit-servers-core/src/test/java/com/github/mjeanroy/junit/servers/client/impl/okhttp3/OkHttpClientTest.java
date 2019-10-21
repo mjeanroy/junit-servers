@@ -29,22 +29,14 @@ import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient.defaultOkHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient.newOkHttpClient;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
-public class OkHttpClientTest extends BaseHttpClientTest {
-
-	private okhttp3.OkHttpClient internalClient;
-
-	@Override
-	protected void onSetUp() {
-		internalClient = mock(okhttp3.OkHttpClient.class);
-	}
+class OkHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
@@ -69,10 +61,11 @@ public class OkHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
-		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		HttpClient client = createDefaultClient(server);
-		okhttp3.OkHttpClient internalClient = readPrivate(client, "client");
+	void it_should_implement_to_string() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final HttpClient client = createDefaultClient(server);
+		final okhttp3.OkHttpClient internalClient = readPrivate(client, "client");
+
 		assertThat(client).hasToString(
 			"OkHttpClient{" +
 				"configuration: HttpClientConfiguration{" +

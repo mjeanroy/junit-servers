@@ -31,8 +31,8 @@ import com.github.mjeanroy.junit.servers.client.HttpClientConfigurationFactory;
 import com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ParameterContext;
 
 import java.lang.annotation.Documented;
@@ -47,19 +47,19 @@ import java.lang.reflect.Parameter;
 import static com.github.mjeanroy.junit.servers.client.HttpClientStrategy.NING_ASYNC_HTTP_CLIENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HttpClientParameterResolverFunctionTest {
+class HttpClientParameterResolverFunctionTest {
 
 	private EmbeddedServerRunner adapter;
 	private HttpClientParameterResolverFunction resolver;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		resolver = HttpClientParameterResolverFunction.getInstance();
 		adapter = new EmbeddedServerRunner(new EmbeddedServerMockBuilder().build());
 	}
 
 	@Test
-	public void it_should_resolve_http_client_with_default_strategy() throws Exception {
+	void it_should_resolve_http_client_with_default_strategy() throws Exception {
 		final ParameterContext parameterContext = extractParameterContext("method_without_annotation");
 		final Object result = resolver.resolve(parameterContext, adapter);
 
@@ -67,7 +67,7 @@ public class HttpClientParameterResolverFunctionTest {
 	}
 
 	@Test
-	public void it_should_resolve_http_client_with_given_strategy() throws Exception {
+	void it_should_resolve_http_client_with_given_strategy() throws Exception {
 		final ParameterContext parameterContext = extractParameterContext("method_with_annotation");
 		final Object result = resolver.resolve(parameterContext, adapter);
 

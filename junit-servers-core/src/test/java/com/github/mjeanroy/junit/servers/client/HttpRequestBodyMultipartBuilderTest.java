@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.client;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -37,45 +37,45 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-public class HttpRequestBodyMultipartBuilderTest {
+class HttpRequestBodyMultipartBuilderTest {
 
 	@Test
-	public void it_should_build_multipart_body_with_multipart_form_data_content_type() {
+	void it_should_build_multipart_body_with_multipart_form_data_content_type() {
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().asMultipartFormData().build();
 		assertThat(requestBody).isInstanceOf(HttpRequestBodyMultipart.class);
 		assertThat(((HttpRequestBodyMultipart) requestBody).getContentType()).isEqualTo("multipart/form-data; boundary=---------------------------974767299852498929531610575");
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_multipart_mixed_content_type() {
+	void it_should_build_multipart_body_with_multipart_mixed_content_type() {
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().asMultipartMixed().build();
 		assertThat(requestBody).isInstanceOf(HttpRequestBodyMultipart.class);
 		assertThat(((HttpRequestBodyMultipart) requestBody).getContentType()).isEqualTo("multipart/mixed; boundary=---------------------------974767299852498929531610575");
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_multipart_alternative_content_type() {
+	void it_should_build_multipart_body_with_multipart_alternative_content_type() {
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().asMultipartAlternative().build();
 		assertThat(requestBody).isInstanceOf(HttpRequestBodyMultipart.class);
 		assertThat(((HttpRequestBodyMultipart) requestBody).getContentType()).isEqualTo("multipart/alternative; boundary=---------------------------974767299852498929531610575");
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_multipart_digest_content_type() {
+	void it_should_build_multipart_body_with_multipart_digest_content_type() {
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().asMultipartDigest().build();
 		assertThat(requestBody).isInstanceOf(HttpRequestBodyMultipart.class);
 		assertThat(((HttpRequestBodyMultipart) requestBody).getContentType()).isEqualTo("multipart/digest; boundary=---------------------------974767299852498929531610575");
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_multipart_parallel_content_type() {
+	void it_should_build_multipart_body_with_multipart_parallel_content_type() {
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().asMultipartParallel().build();
 		assertThat(requestBody).isInstanceOf(HttpRequestBodyMultipart.class);
 		assertThat(((HttpRequestBodyMultipart) requestBody).getContentType()).isEqualTo("multipart/parallel; boundary=---------------------------974767299852498929531610575");
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_boundaries() {
+	void it_should_build_multipart_body_with_boundaries() {
 		final String boundaries = "123456789";
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().withBoundaries(boundaries).build();
 		assertThat(requestBody).isInstanceOf(HttpRequestBodyMultipart.class);
@@ -86,7 +86,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_default_boundaries() {
+	void it_should_build_multipart_body_with_default_boundaries() {
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().build();
 		assertThat(requestBody).isInstanceOf(HttpRequestBodyMultipart.class);
 
@@ -96,7 +96,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_build_multipart_with_given_part() {
+	void it_should_build_multipart_with_given_part() {
 		final HttpRequestBody body = HttpRequestBodyString.of("request_body");
 		final HttpRequestBodyPart part = HttpRequestBodyPart.of(body);
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().addPart(part).build();
@@ -107,7 +107,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_given_file() {
+	void it_should_build_multipart_body_with_given_file() {
 		final String name = "file";
 		final String filename = "file1.txt";
 		final File file = classpathFile("/" + filename);
@@ -117,7 +117,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_given_file_and_custom_file_name() {
+	void it_should_build_multipart_body_with_given_file_and_custom_file_name() {
 		final String name = "file";
 		final File file = classpathFile("/file1.txt");
 		final String filename = "foo.txt";
@@ -127,7 +127,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_given_path() {
+	void it_should_build_multipart_body_with_given_path() {
 		final String name = "path";
 		final String filename = "file1.txt";
 		final Path path = classpathPath("/" + filename);
@@ -137,7 +137,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_given_path_and_custom_file_name() {
+	void it_should_build_multipart_body_with_given_path_and_custom_file_name() {
 		final String name = "path";
 		final Path path = classpathPath("/file1.txt");
 		final String filename = "foo.txt";
@@ -147,7 +147,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_given_raw_value() {
+	void it_should_build_multipart_body_with_given_raw_value() {
 		final String name = "id";
 		final String value = "1";
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().addFormDataPart(name, value).build();
@@ -156,7 +156,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_given_body() {
+	void it_should_build_multipart_body_with_given_body() {
 		final String name = "name";
 		final String rawBody = "John Doe";
 		final HttpRequestBodyString partBody = HttpRequestBodyString.of(rawBody);
@@ -166,7 +166,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_given_body_file() {
+	void it_should_build_multipart_body_with_given_body_file() {
 		final String name = "name";
 		final String filename = "file1.txt";
 		final File file = classpathFile("/" + filename);
@@ -177,7 +177,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_build_multipart_body_with_given_body_file_and_custom_filename() {
+	void it_should_build_multipart_body_with_given_body_file_and_custom_filename() {
 		final String name = "name";
 		final String filename = "foo.txt";
 		final File file = classpathFile("/file1.txt");
@@ -188,7 +188,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final String boundaries = "123456789";
 		final HttpRequestBodyMultipartBuilder requestBodyBuilder = new HttpRequestBodyMultipartBuilder()
 			.addFormDataPart("id", "1")
@@ -211,7 +211,7 @@ public class HttpRequestBodyMultipartBuilderTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_hash_code() {
+	void it_should_implement_equals_hash_code() {
 		EqualsVerifier.forClass(HttpRequestBodyMultipartBuilder.class)
 			.suppress(Warning.NONFINAL_FIELDS)
 			.verify();

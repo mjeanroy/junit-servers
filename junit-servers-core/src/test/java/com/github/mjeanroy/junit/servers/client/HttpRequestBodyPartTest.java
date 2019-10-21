@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.client;
 
 import com.github.mjeanroy.junit.servers.commons.lang.Strings;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -37,10 +37,10 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class HttpRequestBodyPartTest {
+class HttpRequestBodyPartTest {
 
 	@Test
-	public void it_should_create_body_part() {
+	void it_should_create_body_part() {
 		final HttpRequestBody bodyString = HttpRequestBodyString.of("1");
 		final HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString);
 
@@ -50,7 +50,7 @@ public class HttpRequestBodyPartTest {
 	}
 
 	@Test
-	public void it_should_create_body_part_with_headers() {
+	void it_should_create_body_part_with_headers() {
 		final HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
 		final List<HttpHeader> httpHeaders = singletonList(header);
 		final HttpRequestBody bodyString = HttpRequestBodyString.of("1");
@@ -63,7 +63,7 @@ public class HttpRequestBodyPartTest {
 	}
 
 	@Test
-	public void it_should_create_body_part_with_single_header() {
+	void it_should_create_body_part_with_single_header() {
 		final HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
 		final HttpRequestBody bodyString = HttpRequestBodyString.of("1");
 
@@ -75,7 +75,7 @@ public class HttpRequestBodyPartTest {
 	}
 
 	@Test
-	public void it_should_serialize_part() throws Exception {
+	void it_should_serialize_part() throws Exception {
 		final HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
 		final List<HttpHeader> httpHeaders = singletonList(header);
 		final HttpRequestBody bodyString = HttpRequestBodyString.of("1");
@@ -91,7 +91,7 @@ public class HttpRequestBodyPartTest {
 	}
 
 	@Test
-	public void it_should_serialize_part_with_a_content_type() throws Exception {
+	void it_should_serialize_part_with_a_content_type() throws Exception {
 		final HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
 		final List<HttpHeader> httpHeaders = singletonList(header);
 		final String contentType = "text/plain";
@@ -110,7 +110,7 @@ public class HttpRequestBodyPartTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final HttpRequestBody body = mock(HttpRequestBody.class, "MockHttpRequestBody");
 		final HttpHeader header = HttpHeader.header("Content-Type", "text/plain");
 		final HttpRequestBodyPart part = HttpRequestBodyPart.of(body, singleton(header));
@@ -125,7 +125,7 @@ public class HttpRequestBodyPartTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_hash_code() {
+	void it_should_implement_equals_hash_code() {
 		EqualsVerifier.forClass(HttpRequestBodyPart.class).verify();
 	}
 }

@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.client;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -35,10 +35,10 @@ import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpat
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.toUtf8String;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HttpRequestBodyFileTest {
+class HttpRequestBodyFileTest {
 
 	@Test
-	public void it_should_create_body_file_from_file_and_guess_content_type() {
+	void it_should_create_body_file_from_file_and_guess_content_type() {
 		final File file = classpathFile("/file1.txt");
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(file);
 
@@ -49,7 +49,7 @@ public class HttpRequestBodyFileTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_from_file_with_content_type() {
+	void it_should_create_body_file_from_file_with_content_type() {
 		final File file = classpathFile("/file1.txt");
 		final String contentType = "text/plain";
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(file, contentType);
@@ -61,7 +61,7 @@ public class HttpRequestBodyFileTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_from_path_and_guess_content_type() {
+	void it_should_create_body_file_from_path_and_guess_content_type() {
 		final Path path = classpathPath("/file1.txt");
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
 
@@ -72,7 +72,7 @@ public class HttpRequestBodyFileTest {
 	}
 
 	@Test
-	public void it_should_create_body_file_from_path_with_content_type() {
+	void it_should_create_body_file_from_path_with_content_type() {
 		final Path path = classpathPath("/file1.txt");
 		final String contentType = "text/plain";
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path, contentType);
@@ -84,7 +84,7 @@ public class HttpRequestBodyFileTest {
 	}
 
 	@Test
-	public void it_should_serialize_body() throws Exception {
+	void it_should_serialize_body() throws Exception {
 		final Path path = classpathPath("/file1.txt");
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
 
@@ -94,7 +94,7 @@ public class HttpRequestBodyFileTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final Path path = classpathPath("/file1.txt");
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
 		assertThat(bodyFile).hasToString(
@@ -106,7 +106,7 @@ public class HttpRequestBodyFileTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_hash_code() {
+	void it_should_implement_equals_hash_code() {
 		EqualsVerifier.forClass(HttpRequestBodyFile.class).verify();
 	}
 }

@@ -29,14 +29,14 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.AbstractConfigurationMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.fixtures.FixtureClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AnnotationsHandlerRuleTest {
+class AnnotationsHandlerRuleTest {
 
 	@Test
-	public void it_should_process_handlers() {
+	void it_should_process_handlers() {
 		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
 		final EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
 		final FixtureClass target = new FixtureClass();
@@ -47,7 +47,7 @@ public class AnnotationsHandlerRuleTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
 		final EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
 		final FixtureClass target = new FixtureClass();

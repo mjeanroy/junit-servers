@@ -24,34 +24,37 @@
 
 package com.github.mjeanroy.junit.servers.commons.lang;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class CollectionsTest {
+class CollectionsTest {
 
 	@Test
-	public void it_should_return_true_if_collection_is_null_or_empty() {
+	void it_should_return_true_if_collection_is_null_or_empty() {
 		assertThat(Collections.isEmpty(null)).isTrue();
 		assertThat(Collections.isEmpty(emptyList())).isTrue();
 	}
 
 	@Test
-	public void it_should_return_false_if_collection_is_not_null_and_not_empty() {
+	void it_should_return_false_if_collection_is_not_null_and_not_empty() {
 		assertThat(Collections.isEmpty(singletonList("foo"))).isFalse();
 	}
 
 	@Test
-	public void it_should_join_elements() {
+	void it_should_join_elements() {
 		final String separator = ";";
 		assertThat(Collections.join(null, separator)).isEqualTo(null);
 		assertThat(Collections.join(emptyList(), separator)).isEqualTo("");
@@ -62,16 +65,13 @@ public class CollectionsTest {
 
 	@Test
 	@SuppressWarnings("unchecked")
-	public void it_should_filter_list() {
+	void it_should_filter_list() {
 		final List<Integer> numbers = asList(1, 2, 3, 4, 5, 6);
 		final Predicate<Integer> predicate = mock(Predicate.class);
 
-		when(predicate.apply(anyInt())).thenAnswer(new Answer<Boolean>() {
-			@Override
-			public Boolean answer(InvocationOnMock invocation) throws Throwable {
-				int arg = invocation.getArgument(0);
-				return arg % 2 == 0;
-			}
+		when(predicate.apply(anyInt())).thenAnswer((Answer<Boolean>) invocation -> {
+			int arg = invocation.getArgument(0);
+			return arg % 2 == 0;
 		});
 
 		final List<Integer> results = Collections.filter(numbers, predicate);
@@ -93,16 +93,13 @@ public class CollectionsTest {
 
 	@Test
 	@SuppressWarnings("unchecked")
-	public void it_should_map_collection() {
+	void it_should_map_collection() {
 		final List<Integer> numbers = asList(1, 2, 3);
 		final Mapper<Integer, Integer> mapper = mock(Mapper.class);
 
-		when(mapper.apply(anyInt())).thenAnswer(new Answer<Integer>() {
-			@Override
-			public Integer answer(InvocationOnMock invocation) throws Throwable {
-				int arg = invocation.getArgument(0);
-				return arg * arg;
-			}
+		when(mapper.apply(anyInt())).thenAnswer((Answer<Integer>) invocation -> {
+			int arg = invocation.getArgument(0);
+			return arg * arg;
 		});
 
 		final List<Integer> results = Collections.map(numbers, mapper);
@@ -121,7 +118,7 @@ public class CollectionsTest {
 
 	@Test
 	@SuppressWarnings("unchecked")
-	public void it_should_map_null_to_null() {
+	void it_should_map_null_to_null() {
 		assertThat(Collections.map(null, mock(Mapper.class))).isNull();
 	}
 }

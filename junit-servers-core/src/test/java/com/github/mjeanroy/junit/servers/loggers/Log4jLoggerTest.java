@@ -28,7 +28,7 @@ import org.apache.logging.log4j.Level;
 
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 
-public class Log4jLoggerTest extends AbstractLoggerTest {
+class Log4jLoggerTest extends AbstractLoggerTest {
 
 	@Override
 	Logger createLogger() {

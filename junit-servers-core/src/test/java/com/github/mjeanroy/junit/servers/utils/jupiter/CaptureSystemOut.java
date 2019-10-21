@@ -22,37 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.commons.reflect;
+package com.github.mjeanroy.junit.servers.utils.jupiter;
 
-import org.junit.jupiter.api.Test;
+import java.io.ByteArrayOutputStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
+/**
+ * A wrapper around out stream, that allow to retrieve it as a string.
+ */
+public class CaptureSystemOut {
 
-class ClassesTest {
+	/**
+	 * The out stream.
+	 */
+	private final ByteArrayOutputStream out;
 
-	@Test
-	void it_should_check_if_class_is_present() {
-		assertThat(Classes.isPresent(ClassesTest.class.getName())).isTrue();
-		assertThat(Classes.isPresent("foo")).isFalse();
+	/**
+	 * Create the out stream wrapper.
+	 *
+	 * @param out The out stream.
+	 */
+	CaptureSystemOut(ByteArrayOutputStream out) {
+		this.out = out;
 	}
 
-	@Test
-	void it_should_instantiate_class_using_empty_constructor() {
-		final ClassWithoutConstructor instance = Classes.instantiate(ClassWithoutConstructor.class);
-		assertThat(instance).isNotNull();
-	}
-
-	@Test
-	void it_should_instantiate_class_using_private_empty_constructor() {
-		final ClassWithPrivateEmptyConstructor instance = Classes.instantiate(ClassWithPrivateEmptyConstructor.class);
-		assertThat(instance).isNotNull();
-	}
-
-	private static class ClassWithoutConstructor {
-	}
-
-	private static class ClassWithPrivateEmptyConstructor {
-		private ClassWithPrivateEmptyConstructor() {
-		}
+	/**
+	 * Get out stream as a string.
+	 *
+	 * @return The out string.
+	 */
+	public String getOut() {
+		return out.toString();
 	}
 }

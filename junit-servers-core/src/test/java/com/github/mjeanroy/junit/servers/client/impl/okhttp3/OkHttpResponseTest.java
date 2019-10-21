@@ -28,11 +28,11 @@ import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseImplTes
 import com.github.mjeanroy.junit.servers.utils.builders.OkHttpResponseBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import okhttp3.Response;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpResponseBuilder, Response, OkHttpResponse> {
+class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpResponseBuilder, Response, OkHttpResponse> {
 
 	@Override
 	protected OkHttpResponseBuilder getBuilder() {
@@ -45,7 +45,7 @@ public class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpRespo
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final Response delegate = new OkHttpResponseBuilder().build();
 		final long duration = 1000L;
 		final OkHttpResponse response = new OkHttpResponse(delegate, duration);
@@ -59,9 +59,9 @@ public class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpRespo
 	}
 
 	@Test
-	public void it_should_implement_equal_and_hash_code() {
-		Response red = new OkHttpResponseBuilder().withStatus(200).build();
-		Response black = new OkHttpResponseBuilder().withStatus(400).build();
+	void it_should_implement_equal_and_hash_code() {
+		final Response red = new OkHttpResponseBuilder().withStatus(200).build();
+		final Response black = new OkHttpResponseBuilder().withStatus(400).build();
 
 		EqualsVerifier.forClass(OkHttpResponse.class)
 			.withRedefinedSuperclass()

@@ -26,32 +26,32 @@ package com.github.mjeanroy.junit.servers.client;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CookieTest {
+class CookieTest {
 
 	private TimeZone tz;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		tz = TimeZone.getDefault();
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 	}
 
-	@After
-	public void tearDown() {
+	@AfterEach
+	void tearDown() {
 		TimeZone.setDefault(tz);
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final String name = "name";
 		final String value = "value";
 		final String domain = "foo.com";
@@ -82,17 +82,18 @@ public class CookieTest {
 	}
 
 	@Test
-	public void it_should_create_simple_cookie_with_builder() {
+	void it_should_create_simple_cookie_with_builder() {
 		final String name = "name";
 		final String value = "value";
 		final Cookie cookie = new Cookie.Builder(name, value).build();
+
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
 		assertThat(cookie.getValue()).isEqualTo(value);
 	}
 
 	@Test
-	public void it_should_create_complex_cookie_with_builder() {
+	void it_should_create_complex_cookie_with_builder() {
 		final String name = "name";
 		final String value = "value";
 		final String domain = "domain";
@@ -121,7 +122,7 @@ public class CookieTest {
 	}
 
 	@Test
-	public void it_should_create_complex_cookie_with_expires_date_with_builder() {
+	void it_should_create_complex_cookie_with_expires_date_with_builder() {
 		final String name = "name";
 		final String value = "value";
 		final String domain = "domain";
@@ -130,9 +131,9 @@ public class CookieTest {
 		final boolean httpOnly = true;
 		final long maxAge = 3600;
 
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) + 1);
-		long expires = cal.getTimeInMillis();
+		final long expires = cal.getTimeInMillis();
 
 		final Cookie cookie = new Cookie.Builder(name, value)
 			.domain(domain)
@@ -155,7 +156,7 @@ public class CookieTest {
 	}
 
 	@Test
-	public void it_should_implement_equals() {
+	void it_should_implement_equals() {
 		EqualsVerifier.forClass(Cookie.class)
 			.suppress(Warning.STRICT_INHERITANCE)
 			.verify();

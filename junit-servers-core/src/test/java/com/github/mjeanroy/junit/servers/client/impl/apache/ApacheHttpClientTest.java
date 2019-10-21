@@ -30,22 +30,14 @@ import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.client.impl.apache.ApacheHttpClient.defaultApacheHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.apache.ApacheHttpClient.newApacheHttpClient;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
-public class ApacheHttpClientTest extends BaseHttpClientTest {
-
-	private CloseableHttpClient internalClient;
-
-	@Override
-	protected void onSetUp() {
-		internalClient = mock(CloseableHttpClient.class);
-	}
+class ApacheHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
@@ -68,10 +60,11 @@ public class ApacheHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
-		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		HttpClient client = createDefaultClient(server);
-		CloseableHttpClient internalClient = readPrivate(client, "client");
+	void it_should_implement_to_string() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final HttpClient client = createDefaultClient(server);
+		final CloseableHttpClient internalClient = readPrivate(client, "client");
+
 		assertThat(client).hasToString(
 			"ApacheHttpClient{" +
 				"configuration: HttpClientConfiguration{" +

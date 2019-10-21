@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.client.impl;
 
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
@@ -35,10 +35,10 @@ import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-public class DefaultHttpResponseTest {
+class DefaultHttpResponseTest {
 
 	@Test
-	public void it_should_create_http_response() {
+	void it_should_create_http_response() {
 		final long duration = 1000L;
 		final int status = 200;
 		final String body = "The response body";
@@ -61,7 +61,7 @@ public class DefaultHttpResponseTest {
 	}
 
 	@Test
-	public void it_should_get_header_case_insensitively() {
+	void it_should_get_header_case_insensitively() {
 		final long duration = 1000L;
 		final int status = 200;
 		final String body = "The response body";
@@ -76,7 +76,7 @@ public class DefaultHttpResponseTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_hash_code() {
+	void it_should_implement_equals_hash_code() {
 		EqualsVerifier.forClass(DefaultHttpResponse.class)
 			.withRedefinedSuperclass()
 			.withIgnoredFields("readResponseBodyLock", "_body")
@@ -84,9 +84,14 @@ public class DefaultHttpResponseTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
-		final DefaultHttpResponse response = DefaultHttpResponse.of(1000L, 200, "The response body", singleton(header("Content-Type", "text/plain")));
-		assertThat(response.toString()).isEqualTo(
+	void it_should_implement_to_string() {
+		long duration = 1000L;
+		int status = 200;
+		final String responseBody = "The response body";
+		final Set<HttpHeader> headers = singleton(header("Content-Type", "text/plain"));
+		final DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, responseBody, headers);
+
+		assertThat(response).hasToString(
 			"DefaultHttpResponse{" +
 				"duration: 1000, " +
 				"status: 200, " +

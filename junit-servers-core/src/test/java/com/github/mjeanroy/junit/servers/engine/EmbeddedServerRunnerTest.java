@@ -33,15 +33,15 @@ import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilde
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfiguration;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfigurationBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
-public class EmbeddedServerRunnerTest {
+class EmbeddedServerRunnerTest {
 
 	@Test
-	public void it_should_instantiate_server_from_service_loader_with_default_configuration() {
+	void it_should_instantiate_server_from_service_loader_with_default_configuration() {
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner();
 		final EmbeddedServer<?> server = adapter.getServer();
 
@@ -50,7 +50,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_instantiate_server_from_service_loader_with_custom_configuration() {
+	void it_should_instantiate_server_from_service_loader_with_custom_configuration() {
 		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(configuration);
 		final EmbeddedServer<?> server = adapter.getServer();
@@ -60,7 +60,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_start_server_before_test() {
+	void it_should_start_server_before_test() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
@@ -70,7 +70,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_stop_server_after_test() {
+	void it_should_stop_server_after_test() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
@@ -80,7 +80,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_start_server() {
+	void it_should_start_server() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
@@ -90,7 +90,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_stop_server() {
+	void it_should_stop_server() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
@@ -100,7 +100,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_restart_server() {
+	void it_should_restart_server() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
@@ -110,7 +110,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_check_if_server_is_started() {
+	void it_should_check_if_server_is_started() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
@@ -122,7 +122,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_server_scheme() {
+	void it_should_get_server_scheme() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final String scheme = adapter.getScheme();
@@ -130,7 +130,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_server_host() {
+	void it_should_get_server_host() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final String host = adapter.getHost();
@@ -138,7 +138,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_server_path() {
+	void it_should_get_server_path() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final String path = adapter.getPath();
@@ -146,7 +146,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_server_port() {
+	void it_should_get_server_port() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final int port = adapter.getPort();
@@ -154,7 +154,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_url() {
+	void it_should_get_url() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final String url = adapter.getUrl();
@@ -162,7 +162,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_server() {
+	void it_should_get_server() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final EmbeddedServer<?> result = adapter.getServer();
@@ -170,7 +170,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_client() {
+	void it_should_get_client() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final HttpClient client = adapter.getClient();
@@ -178,7 +178,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_client_and_returns_previous_one() {
+	void it_should_get_client_and_returns_previous_one() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final HttpClient client1 = adapter.getClient();
@@ -190,7 +190,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_client_of_given_strategy() {
+	void it_should_get_client_of_given_strategy() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
@@ -199,7 +199,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_client_of_given_strategy_and_returns_previous_one() {
+	void it_should_get_client_of_given_strategy_and_returns_previous_one() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
@@ -299,7 +299,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_stop_server_and_close_clients() {
+	void it_should_stop_server_and_close_clients() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final HttpClient client = adapter.getClient();
@@ -314,7 +314,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_get_client_of_given_strategy_and_destroy_it_when_server_stop() {
+	void it_should_get_client_of_given_strategy_and_destroy_it_when_server_stop() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
@@ -330,7 +330,7 @@ public class EmbeddedServerRunnerTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 

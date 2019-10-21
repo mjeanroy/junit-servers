@@ -28,8 +28,8 @@ import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ParameterContext;
 
 import java.lang.reflect.Method;
@@ -37,21 +37,21 @@ import java.lang.reflect.Parameter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConfigurationParameterResolverFunctionTest {
+class ConfigurationParameterResolverFunctionTest {
 
 	private EmbeddedServer<?> server;
 	private EmbeddedServerRunner adapter;
 	private ConfigurationResolverFunction resolver;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		resolver = ConfigurationResolverFunction.getInstance();
 		server = new EmbeddedServerMockBuilder().build();
 		adapter = new EmbeddedServerRunner(server);
 	}
 
 	@Test
-	public void it_should_resolve_configuration() throws Exception {
+	void it_should_resolve_configuration() throws Exception {
 		final ParameterContext parameterContext = createParameterContext();
 		final Object result = resolver.resolve(parameterContext, adapter);
 

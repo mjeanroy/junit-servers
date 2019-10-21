@@ -22,61 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils.junit4;
+package com.github.mjeanroy.junit.servers.utils.jupiter;
 
-import org.junit.rules.ExternalResource;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Catch System.out logging and store in a buffer.
+ * An annotation to capture {@code System.out} stream during test, and allow to retrieve what
+ * has been printed by injecting {@link CaptureSystemOut} into tests.
  */
-public class SystemOutRule extends ExternalResource {
-
-	/**
-	 * Original out stream.
-	 * Will be initialized before each tests.
-	 * Will be restored after each tests.
-	 */
-	private PrintStream originalOut;
-
-	/**
-	 * Custom out stream.
-	 * Will be initialized before each tests.
-	 * Will be flushed after each tests.
-	 */
-	private ByteArrayOutputStream out;
-
-	@Override
-	public void before() {
-		originalOut = System.out;
-		out = new ByteArrayOutputStream();
-
-		System.setOut(new PrintStream(out));
-	}
-
-	@Override
-	public void after() {
-		try {
-			out.reset();
-			out.flush();
-		}
-		catch (IOException ex) {
-			ex.printStackTrace();
-			// No worries
-		}
-
-		// Restore original out stream
-		System.setOut(originalOut);
-	}
-
-	public String getOut() {
-		if (out == null) {
-			return null;
-		}
-
-		return out.toString();
-	}
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@ExtendWith(CaptureSystemOutExtension.class)
+@Documented
+public @interface CaptureSystemOutTest {
 }

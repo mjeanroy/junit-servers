@@ -24,16 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.commons.core;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EncodersTest {
+class EncodersTest {
 
 	@Test
-	public void it_should_url_encode_value() {
-		String value = "test avec +";
-		String encoded = Encoders.urlEncode(value);
+	void it_should_url_encode_value() {
+		final String value = "test avec +";
+		final String encoded = Encoders.urlEncode(value);
 		assertThat(encoded).isEqualTo("test+avec+%2B");
 	}
 }

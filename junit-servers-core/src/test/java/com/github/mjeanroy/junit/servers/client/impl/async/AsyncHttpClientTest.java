@@ -29,29 +29,15 @@ import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.impl.BaseHttpClientTest;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
-import com.github.mjeanroy.junit4.runif.RunIf;
-import com.github.mjeanroy.junit4.runif.RunIfRunner;
-import com.github.mjeanroy.junit4.runif.conditions.AtLeastJava8Condition;
 import org.asynchttpclient.AsyncHttpClientConfig;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient.defaultAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient.newAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
-@RunWith(RunIfRunner.class)
-@RunIf(AtLeastJava8Condition.class)
-public class AsyncHttpClientTest extends BaseHttpClientTest {
-
-	private org.asynchttpclient.AsyncHttpClient internalClient;
-
-	@Override
-	protected void onSetUp() {
-		internalClient = mock(org.asynchttpclient.AsyncHttpClient.class);
-	}
+class AsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClient createDefaultClient(EmbeddedServer<?> server) {
@@ -77,7 +63,7 @@ public class AsyncHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		HttpClient client = createDefaultClient(server);
 		org.asynchttpclient.AsyncHttpClient internalClient = readPrivate(client, "client");

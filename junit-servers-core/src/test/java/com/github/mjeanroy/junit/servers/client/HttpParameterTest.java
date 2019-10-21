@@ -27,14 +27,14 @@ package com.github.mjeanroy.junit.servers.client;
 import com.github.mjeanroy.junit.servers.utils.commons.TestUtils;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HttpParameterTest {
+class HttpParameterTest {
 
 	@Test
-	public void it_should_create_http_parameter() {
+	void it_should_create_http_parameter() {
 		final String name = "foo";
 		final String value = "bar";
 
@@ -45,7 +45,7 @@ public class HttpParameterTest {
 	}
 
 	@Test
-	public void it_should_create_http_parameter_of_given_values() {
+	void it_should_create_http_parameter_of_given_values() {
 		final String name = "foo";
 		final String value = "bar";
 
@@ -56,7 +56,7 @@ public class HttpParameterTest {
 	}
 
 	@Test
-	public void it_should_get_url_encoded_name() {
+	void it_should_get_url_encoded_name() {
 		final String name = "foo bar";
 		final String value = "bar";
 
@@ -67,7 +67,7 @@ public class HttpParameterTest {
 	}
 
 	@Test
-	public void it_should_get_url_encoded_value() {
+	void it_should_get_url_encoded_value() {
 		final String name = "foo";
 		final String value = "foo bar";
 
@@ -78,7 +78,7 @@ public class HttpParameterTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final String name = "foo";
 		final String value = "bar";
 		final HttpParameter parameter = HttpParameter.param(name, value);
@@ -86,7 +86,7 @@ public class HttpParameterTest {
 	}
 
 	@Test
-	public void it_should_implement_equals() {
+	void it_should_implement_equals() {
 		EqualsVerifier.forClass(HttpParameter.class)
 			.suppress(Warning.STRICT_INHERITANCE)
 			.verify();

@@ -28,7 +28,7 @@ import com.github.mjeanroy.junit.servers.client.Cookie;
 import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.utils.builders.AbstractHttpResponseBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,59 +48,47 @@ import static org.assertj.core.api.Assertions.tuple;
 public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpResponseBuilder<U, T>, U, V extends AbstractHttpResponse> {
 
 	@Test
-	public void it_should_get_request_duration() {
-		// GIVEN
+	void it_should_get_request_duration() {
 		final long durationInMillis = 1L;
 		final long durationInNano = durationInMillis * 1000 * 1000;
 		final U delegate = getBuilder().build();
 
-		// WHEN
 		final V response = createHttpResponse(delegate, durationInNano);
 
-		// THEN
 		assertThat(response.getRequestDuration()).isEqualTo(durationInNano);
 		assertThat(response.getRequestDurationInMillis()).isEqualTo(durationInMillis);
 	}
 
 	@Test
-	public void it_should_get_status() {
-		// GIVEN
+	void it_should_get_status() {
 		final long duration = 1000L;
 		final int status = 204;
 		final U delegate = getBuilder().withStatus(status).build();
 
-		// WHEN
 		final V response = createHttpResponse(delegate, duration);
 
-		// THEN
 		assertThat(response.status()).isEqualTo(status);
 	}
 
 	@Test
-	public void it_should_get_response_body() {
-		// GIVEN
+	void it_should_get_response_body() {
 		final long duration = 1000L;
 		final String body = "Hello World";
 		final U delegate = getBuilder().withBody(body).build();
 
-		// WHEN
 		final V response = createHttpResponse(delegate, duration);
 
-		// THEN
 		assertThat(response.body()).isEqualTo(body);
 	}
 
 	@Test
-	public void it_should_get_all_headers() {
-		// GIVEN
+	void it_should_get_all_headers() {
 		final HttpHeader h1 = HttpHeader.header("Content-Type", "text/html; charset=utf-8");
 		final HttpHeader h2 = HttpHeader.header("Status", "200");
 		final V response = createHttpResponseWithHeaders(h1, h2);
 
-		// WHEN
 		final Collection<HttpHeader> headers = response.getHeaders();
 
-		// THEN
 		assertThat(headers)
 			.hasSize(2)
 			.extracting("name", "values")
@@ -111,84 +99,66 @@ public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpRespons
 	}
 
 	@Test
-	public void it_should_get_all_headers_and_returns_empty_list_without_any_headers() {
-		// GIVEN
+	void it_should_get_all_headers_and_returns_empty_list_without_any_headers() {
 		final V response = createHttpResponseWithHeaders();
 
-		// WHEN
 		final Collection<HttpHeader> headers = response.getHeaders();
 
-		// THEN
 		assertThat(headers).isNotNull().isEmpty();
 	}
 
 	@Test
-	public void it_should_get_header() {
-		// GIVEN
+	void it_should_get_header() {
 		final HttpHeader h1 = HttpHeader.header("Content-Type", "text/html; charset=utf-8");
 		final HttpHeader h2 = HttpHeader.header("Status", "200");
 		final V response = createHttpResponseWithHeaders(h1, h2);
 
-		// WHEN
 		final HttpHeader header = response.getHeader(h1.getName());
 
-		// THEN
 		assertHeader(header, h1.getName(), h1.getValues());
 	}
 
 	@Test
-	public void it_should_get_header_case_insensitively() {
-		// GIVEN
+	void it_should_get_header_case_insensitively() {
 		final HttpHeader h1 = HttpHeader.header("Content-Type", "text/html; charset=utf-8");
 		final HttpHeader h2 = HttpHeader.header("Status", "200");
 		final V response = createHttpResponseWithHeaders(h1, h2);
 
-		// WHEN
 		final HttpHeader header = response.getHeader(h1.getName());
 
-		// THEN
 		assertThat(response.getHeader(h1.getName().toLowerCase())).isEqualTo(header);
 		assertThat(response.getHeader(h1.getName().toUpperCase())).isEqualTo(header);
 	}
 
 	@Test
-	public void it_should_get_header_and_return_null_if_header_is_not_set() {
-		// GIVEN
+	void it_should_get_header_and_return_null_if_header_is_not_set() {
 		final HttpHeader h1 = HttpHeader.header("Content-Type", "text/html; charset=utf-8");
 		final HttpHeader h2 = HttpHeader.header("Status", "200");
 		final V response = createHttpResponseWithHeaders(h1, h2);
 
-		// WHEN
 		final HttpHeader header = response.getHeader("FooBar");
 
-		// THEN
 		assertThat(header).isNull();
 	}
 
 	@Test
-	public void it_should_check_if_response_contains_header_case_insensitively() {
-		// GIVEN
+	void it_should_check_if_response_contains_header_case_insensitively() {
 		final HttpHeader h1 = HttpHeader.header("Content-Type", "text/html; charset=utf-8");
 		final HttpHeader h2 = HttpHeader.header("Status", "200");
 
-		// WHEN
 		final V response = createHttpResponseWithHeaders(h1, h2);
 
-		// THEN
 		assertThat(response.containsHeader(h1.getName())).isTrue();
 		assertThat(response.containsHeader(h1.getName().toUpperCase())).isTrue();
 		assertThat(response.containsHeader(h1.getName().toLowerCase())).isTrue();
 	}
 
 	@Test
-	public void it_get_all_cookies() {
-		// GIVEN
+	void it_get_all_cookies() {
 		final V response = createHttpResponseWithHeaders(givenCookieHeader());
 
-		// WHEN
 		List<Cookie> cookies = response.getCookies();
 
-		// THEN
 		assertThat(cookies).hasSize(2)
 			.extracting("name", "value")
 			.contains(
@@ -198,26 +168,20 @@ public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpRespons
 	}
 
 	@Test
-	public void it_get_all_cookies_and_returns_empty_list_without_set_cookie_header() {
-		// GIVEN
+	void it_get_all_cookies_and_returns_empty_list_without_set_cookie_header() {
 		final V response = createHttpResponseWithHeaders();
 
-		// WHEN
 		final List<Cookie> cookies = response.getCookies();
 
-		// THEN
 		assertThat(cookies).isNotNull().isEmpty();
 	}
 
 	@Test
-	public void it_get_given_cookie() {
-		// GIVEN
+	void it_get_given_cookie() {
 		final V response = createHttpResponseWithHeaders(givenCookieHeader());
 
-		// WHEN
 		final Cookie cookie = response.getCookie("ABT_force_signin_anonymous");
 
-		// THEN
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("ABT_force_signin_anonymous");
 		assertThat(cookie.getValue()).isEqualTo("ON");
@@ -227,194 +191,152 @@ public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpRespons
 	}
 
 	@Test
-	public void it_get_given_cookie_and_return_null_without_cookie() {
-		// GIVEN
+	void it_get_given_cookie_and_return_null_without_cookie() {
 		final V response = createHttpResponseWithHeaders(givenCookieHeader());
 
-		// WHEN
 		final Cookie cookie = response.getCookie("fake_cookie");
 
-		// THEN
 		assertThat(cookie).isNull();
 	}
 
 	@Test
-	public void it_get_given_cookie_and_return_null_without_any_cookie() {
-		// GIVEN
+	void it_get_given_cookie_and_return_null_without_any_cookie() {
 		final V response = createHttpResponseWithHeaders();
 
-		// WHEN
 		final Cookie cookie = response.getCookie("fake_cookie");
 
-		// THEN
 		assertThat(cookie).isNull();
 	}
 
 	@Test
-	public void it_should_get_content_type_header() {
-		// GIVEN
+	void it_should_get_content_type_header() {
 		final String name = "Content-Type";
 		final String value = "text/html; charset=utf-8";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getContentType();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_cache_control_header() {
-		// GIVEN
+	void it_should_get_cache_control_header() {
 		final String name = "Cache-Control";
 		final String value = "nocache";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getCacheControl();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_content_encoding_header() {
-		// GIVEN
+	void it_should_get_content_encoding_header() {
 		final String name = "Content-Encoding";
 		final String value = "gzip";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		HttpHeader header = response.getContentEncoding();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_etag_header() {
-		// GIVEN
+	void it_should_get_etag_header() {
 		final String name = "ETag";
 		final String value = UUID.randomUUID().toString();
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getETag();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_location_header() {
-		// GIVEN
+	void it_should_get_location_header() {
 		final String name = "Location";
 		final String value = "http://localhost:8080";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getLocation();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_strict_transport_security_header() {
-		// GIVEN
+	void it_should_get_strict_transport_security_header() {
 		final String name = "Strict-Transport-Security";
 		final String value = "max-age=3600; includeSubDomains; preload";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getStrictTransportSecurity();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_x_xss_protection_header() {
-		// GIVEN
+	void it_should_get_x_xss_protection_header() {
 		final String name = "X-XSS-Protection";
 		final String value = "0";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getXXSSProtection();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_content_security_policy_header() {
-		// GIVEN
+	void it_should_get_content_security_policy_header() {
 		final String name = "Content-Security-Policy";
 		final String value = "default-src 'self'";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getContentSecurityPolicy();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_x_content_security_policy_header() {
-		// GIVEN
+	void it_should_get_x_content_security_policy_header() {
 		final String name = "X-Content-Security-Policy";
 		final String value = "default-src 'self'";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getXContentSecurityPolicy();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_x_webkit_csp_header() {
-		// GIVEN
+	void it_should_get_x_webkit_csp_header() {
 		final String name = "X-Webkit-CSP";
 		final String value = "default-src 'self'";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getXWebkitCSP();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_x_content_type_options_header() {
-		// GIVEN
+	void it_should_get_x_content_type_options_header() {
 		final String name = "X-Content-Type-Options";
 		final String value = "nosniff";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getXContentTypeOptions();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 
 	@Test
-	public void it_should_get_last_modified_header() {
-		// GIVEN
+	void it_should_get_last_modified_header() {
 		final String name = "Last-Modified";
 		final String value = "Wed, 21 Oct 2015 07:28:00 GMT";
 		final V response = createHttpResponseWithHeader(name, value);
 
-		// WHEN
 		final HttpHeader header = response.getLastModified();
 
-		// THEN
 		assertHeader(header, name, value);
 	}
 

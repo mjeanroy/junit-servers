@@ -25,17 +25,17 @@
 package com.github.mjeanroy.junit.servers.client;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-public class HttpRequestBodyFormBuilderTest {
+class HttpRequestBodyFormBuilderTest {
 
 	@Test
-	public void it_should_create_form_body_from_single_parameter() {
+	void it_should_create_form_body_from_single_parameter() {
 		final HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().add("id", "1").build();
 		assertThat(bodyForm).isInstanceOf(HttpRequestBodyForm.class);
 		assertThat(((HttpRequestBodyForm) bodyForm).getParameters()).hasSize(1)
@@ -46,7 +46,7 @@ public class HttpRequestBodyFormBuilderTest {
 	}
 
 	@Test
-	public void it_should_create_form_body_from_single_parameter_object() {
+	void it_should_create_form_body_from_single_parameter_object() {
 		final HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().add(HttpParameter.of("id", "1")).build();
 		assertThat(bodyForm).isInstanceOf(HttpRequestBodyForm.class);
 		assertThat(((HttpRequestBodyForm) bodyForm).getParameters()).hasSize(1)
@@ -57,7 +57,7 @@ public class HttpRequestBodyFormBuilderTest {
 	}
 
 	@Test
-	public void it_should_create_form_body_from_parameter_map() {
+	void it_should_create_form_body_from_parameter_map() {
 		final HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().addAll(singletonMap("id", "1")).build();
 		assertThat(bodyForm).isInstanceOf(HttpRequestBodyForm.class);
 		assertThat(((HttpRequestBodyForm) bodyForm).getParameters()).hasSize(1)
@@ -68,7 +68,7 @@ public class HttpRequestBodyFormBuilderTest {
 	}
 
 	@Test
-	public void it_should_create_form_body_from_parameters() {
+	void it_should_create_form_body_from_parameters() {
 		final HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().addAll(singleton(HttpParameter.of("id", "1"))).build();
 		assertThat(bodyForm).isInstanceOf(HttpRequestBodyForm.class);
 		assertThat(((HttpRequestBodyForm) bodyForm).getParameters()).hasSize(1)
@@ -79,12 +79,12 @@ public class HttpRequestBodyFormBuilderTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_and_hash_code() {
+	void it_should_implement_equals_and_hash_code() {
 		EqualsVerifier.forClass(HttpRequestBodyFormBuilder.class).verify();
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final HttpRequestBodyFormBuilder builder = new HttpRequestBodyFormBuilder()
 			.add("id", "1")
 			.add("name", "John Doe");

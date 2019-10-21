@@ -27,17 +27,17 @@ package com.github.mjeanroy.junit.servers.client.impl.ning;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.utils.builders.NingHttpResponseBuilder;
 import com.ning.http.client.Response;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NingAsyncHttpResponseFactoryTest {
+class NingAsyncHttpResponseFactoryTest {
 
 	@Test
-	public void it_should_create_http_response() {
-		Response delegate = new NingHttpResponseBuilder().build();
-		long duration = 1000L;
-		HttpResponse response = NingAsyncHttpResponseFactory.of(delegate, duration);
+	void it_should_create_http_response() {
+		final Response delegate = new NingHttpResponseBuilder().build();
+		final long duration = 1000L;
+		final HttpResponse response = NingAsyncHttpResponseFactory.of(delegate, duration);
 
 		assertThat(response).isNotNull().isExactlyInstanceOf(NingAsyncHttpResponse.class);
 		assertThat(response.getRequestDuration()).isEqualTo(duration);

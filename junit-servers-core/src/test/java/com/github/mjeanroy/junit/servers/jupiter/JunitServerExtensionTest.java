@@ -35,7 +35,7 @@ import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilde
 import com.github.mjeanroy.junit.servers.utils.fixtures.FixtureClass;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ParameterContext;
 
 import java.lang.reflect.Method;
@@ -44,10 +44,10 @@ import java.lang.reflect.Parameter;
 import static com.github.mjeanroy.junit.servers.client.HttpClientStrategy.NING_ASYNC_HTTP_CLIENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JunitServerExtensionTest {
+class JunitServerExtensionTest {
 
 	@Test
-	public void it_should_initialize_extension_with_given_configuration_and_start_given_server_before_all_tests() {
+	void it_should_initialize_extension_with_given_configuration_and_start_given_server_before_all_tests() {
 		final AbstractConfiguration configuration = new FakeEmbeddedServerConfiguration();
 		final JunitServerExtension extension = new JunitServerExtension(configuration);
 		final FixtureClass testInstance = new FixtureClass();
@@ -65,7 +65,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_initialize_extension_with_given_server_and_start_given_server_before_all_tests() {
+	void it_should_initialize_extension_with_given_server_and_start_given_server_before_all_tests() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final JunitServerExtension extension = new JunitServerExtension(server);
 		final FixtureClass testInstance = new FixtureClass();
@@ -82,7 +82,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_start_server_before_all_tests() {
+	void it_should_start_server_before_all_tests() {
 		final JunitServerExtension extension = new JunitServerExtension();
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
@@ -98,7 +98,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_stop_server_after_all_tests() {
+	void it_should_stop_server_after_all_tests() {
 		final JunitServerExtension extension = new JunitServerExtension();
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
@@ -115,7 +115,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_start_server_before_each_tests() {
+	void it_should_start_server_before_each_tests() {
 		final JunitServerExtension extension = new JunitServerExtension();
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
@@ -131,7 +131,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_stop_server_after_each_tests() {
+	void it_should_stop_server_after_each_tests() {
 		final JunitServerExtension extension = new JunitServerExtension();
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
@@ -148,7 +148,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_detect_if_server_must_be_started_and_stopped_after_all_tests() {
+	void it_should_detect_if_server_must_be_started_and_stopped_after_all_tests() {
 		final JunitServerExtension extension = new JunitServerExtension();
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
@@ -171,7 +171,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_inject_annotated_field_before_each_test() {
+	void it_should_inject_annotated_field_before_each_test() {
 		final JunitServerExtension extension = new JunitServerExtension();
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
@@ -192,7 +192,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_reset_injected_http_client_after_each_test() {
+	void it_should_reset_injected_http_client_after_each_test() {
 		final JunitServerExtension extension = new JunitServerExtension();
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
@@ -211,22 +211,22 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_support_resolution_of_embedded_server_parameter() throws Exception {
+	void it_should_support_resolution_of_embedded_server_parameter() throws Exception {
 		verifySupportsParameter("method_server", EmbeddedServer.class);
 	}
 
 	@Test
-	public void it_should_support_resolution_of_configuration_parameter() throws Exception {
+	void it_should_support_resolution_of_configuration_parameter() throws Exception {
 		verifySupportsParameter("method_configuration", AbstractConfiguration.class);
 	}
 
 	@Test
-	public void it_should_support_resolution_of_http_client() throws Exception {
+	void it_should_support_resolution_of_http_client() throws Exception {
 		verifySupportsParameter("method_http_client", HttpClient.class);
 	}
 
 	@Test
-	public void it_should_support_resolution_of_extended_parameter() throws Exception {
+	void it_should_support_resolution_of_extended_parameter() throws Exception {
 		verifySupportsParameter("method_with_fake_embedded_configuration", FakeEmbeddedServerConfiguration.class);
 	}
 
@@ -245,7 +245,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_resolve_embedded_server_parameter() throws Exception {
+	void it_should_resolve_embedded_server_parameter() throws Exception {
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
 		final JunitServerExtension extension = initializeExtension(context);
@@ -259,7 +259,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_resolve_configuration_parameter() throws Exception {
+	void it_should_resolve_configuration_parameter() throws Exception {
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
 		final JunitServerExtension extension = initializeExtension(context);
@@ -273,7 +273,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_resolve_http_client_parameter_with_auto_strategy() throws Exception {
+	void it_should_resolve_http_client_parameter_with_auto_strategy() throws Exception {
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
 		final JunitServerExtension extension = initializeExtension(context);
@@ -285,7 +285,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_resolve_http_client_parameter_with_custom_strategy() throws Exception {
+	void it_should_resolve_http_client_parameter_with_custom_strategy() throws Exception {
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
 		final JunitServerExtension extension = initializeExtension(context);
@@ -297,7 +297,7 @@ public class JunitServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_resolve_extended_parameter() throws Exception {
+	void it_should_resolve_extended_parameter() throws Exception {
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
 		final JunitServerExtension extension = initializeExtension(context);

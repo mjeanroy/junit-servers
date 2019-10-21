@@ -26,17 +26,17 @@ package com.github.mjeanroy.junit.servers.client.impl.apache;
 
 import com.github.mjeanroy.junit.servers.utils.builders.ApacheHttpResponseBuilder;
 import org.apache.http.HttpResponse;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ApacheHttpResponseFactoryTest {
+class ApacheHttpResponseFactoryTest {
 
 	@Test
-	public void it_should_create_http_response() {
-		HttpResponse delegate = new ApacheHttpResponseBuilder().build();
-		long duration = 1000L;
-		com.github.mjeanroy.junit.servers.client.HttpResponse response = ApacheHttpResponseFactory.of(delegate, duration);
+	void it_should_create_http_response() {
+		final HttpResponse delegate = new ApacheHttpResponseBuilder().build();
+		final long duration = 1000L;
+		final com.github.mjeanroy.junit.servers.client.HttpResponse response = ApacheHttpResponseFactory.of(delegate, duration);
 
 		assertThat(response).isNotNull().isExactlyInstanceOf(ApacheHttpResponse.class);
 		assertThat(response.getRequestDuration()).isEqualTo(duration);

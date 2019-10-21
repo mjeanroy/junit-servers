@@ -28,11 +28,11 @@ import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseImplTes
 import com.github.mjeanroy.junit.servers.utils.builders.NingHttpResponseBuilder;
 import com.ning.http.client.Response;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NingAsyncHttpResponseTest extends AbstractHttpResponseImplTest<NingHttpResponseBuilder, Response, NingAsyncHttpResponse> {
+class NingAsyncHttpResponseTest extends AbstractHttpResponseImplTest<NingHttpResponseBuilder, Response, NingAsyncHttpResponse> {
 
 	@Override
 	protected NingHttpResponseBuilder getBuilder() {
@@ -45,7 +45,7 @@ public class NingAsyncHttpResponseTest extends AbstractHttpResponseImplTest<Ning
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final Response delegate = new NingHttpResponseBuilder().build();
 		final long duration = 1000L;
 		final NingAsyncHttpResponse response = new NingAsyncHttpResponse(delegate, duration);
@@ -59,7 +59,7 @@ public class NingAsyncHttpResponseTest extends AbstractHttpResponseImplTest<Ning
 	}
 
 	@Test
-	public void it_should_implement_equal_and_hash_code() {
+	void it_should_implement_equal_and_hash_code() {
 		EqualsVerifier.forClass(NingAsyncHttpResponse.class)
 			.withRedefinedSuperclass()
 			.withIgnoredFields("readResponseBodyLock", "_body")

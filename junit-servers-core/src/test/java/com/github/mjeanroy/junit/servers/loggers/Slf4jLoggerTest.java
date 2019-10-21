@@ -28,7 +28,7 @@ import ch.qos.logback.classic.Level;
 
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
 
-public class Slf4jLoggerTest extends AbstractLoggerTest {
+class Slf4jLoggerTest extends AbstractLoggerTest {
 
 	@Override
 	Logger createLogger() {

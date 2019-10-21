@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.commons.lang;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -32,10 +32,10 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ToStringBuilderTest {
+class ToStringBuilderTest {
 
 	@Test
-	public void it_should_create_to_string_value() {
+	void it_should_create_to_string_value() {
 		final String f1 = "v1";
 		final String f2 = null;
 		final int f3 = 10;

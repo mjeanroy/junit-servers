@@ -25,17 +25,17 @@
 package com.github.mjeanroy.junit.servers.servers;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmbeddedConfigurationTest {
+class EmbeddedConfigurationTest {
 
 	@Test
-	public void it_should_build_configuration() {
+	void it_should_build_configuration() {
 		final EmbeddedConfiguration result = createConfiguration();
 		assertThat(result.getPort()).isEqualTo(0);
 		assertThat(result.getPath()).isEqualTo("/");
@@ -44,7 +44,7 @@ public class EmbeddedConfigurationTest {
 	}
 
 	@Test
-	public void it_should_have_to_string() {
+	void it_should_have_to_string() {
 		final EmbeddedConfiguration result = createConfiguration();
 		assertThat(result.toString()).isEqualTo(
 			EmbeddedConfiguration.class.getSimpleName() + "{" +
@@ -59,7 +59,7 @@ public class EmbeddedConfigurationTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_hashCode() {
+	void it_should_implement_equals_hashCode() {
 		final ClassLoader red = new URLClassLoader(new URL[0]);
 		final ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(EmbeddedConfiguration.class)

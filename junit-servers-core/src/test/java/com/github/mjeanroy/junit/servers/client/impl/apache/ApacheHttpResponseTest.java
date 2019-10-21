@@ -28,11 +28,11 @@ import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseImplTes
 import com.github.mjeanroy.junit.servers.utils.builders.ApacheHttpResponseBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.apache.http.HttpResponse;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ApacheHttpResponseTest extends AbstractHttpResponseImplTest<ApacheHttpResponseBuilder, HttpResponse, ApacheHttpResponse> {
+class ApacheHttpResponseTest extends AbstractHttpResponseImplTest<ApacheHttpResponseBuilder, HttpResponse, ApacheHttpResponse> {
 
 	@Override
 	protected ApacheHttpResponseBuilder getBuilder() {
@@ -45,7 +45,7 @@ public class ApacheHttpResponseTest extends AbstractHttpResponseImplTest<ApacheH
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final HttpResponse apacheHttpResponse = new ApacheHttpResponseBuilder().build();
 		long duration = 1000L;
 		final ApacheHttpResponse response = new ApacheHttpResponse(apacheHttpResponse, duration);
@@ -59,7 +59,7 @@ public class ApacheHttpResponseTest extends AbstractHttpResponseImplTest<ApacheH
 	}
 
 	@Test
-	public void it_should_implement_equal_and_hash_code() {
+	void it_should_implement_equal_and_hash_code() {
 		EqualsVerifier.forClass(ApacheHttpResponse.class)
 			.withRedefinedSuperclass()
 			.withIgnoredFields("readResponseBodyLock", "_body")
