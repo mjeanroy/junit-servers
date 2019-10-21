@@ -35,7 +35,7 @@
   <parent>
     <artifactId>junit-servers-samples</artifactId>
     <groupId>com.github.mjeanroy</groupId>
-    <version>0.12.0</version>
+    <version>0.12.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>junit-servers-samples-jupiter</artifactId>
