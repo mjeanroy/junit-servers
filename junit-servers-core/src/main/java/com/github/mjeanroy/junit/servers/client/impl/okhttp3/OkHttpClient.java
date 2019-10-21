@@ -73,21 +73,6 @@ public class OkHttpClient extends AbstractHttpClient implements HttpClient {
 	}
 
 	/**
-	 * Create new http client using custom internal
-	 * http client from ok-http library.
-	 *
-	 * @param server Embedded server.
-	 * @param client The custom client.
-	 * @return Http client.
-	 * @throws NullPointerException If {@code server} or {@code client} are {@code null}.
-	 * @deprecated Use {@link OkHttpClient#newOkHttpClient(HttpClientConfiguration, EmbeddedServer)}
-	 */
-	@Deprecated
-	public static OkHttpClient newOkHttpClient(EmbeddedServer<?> server, okhttp3.OkHttpClient client) {
-		return new OkHttpClient(HttpClientConfiguration.defaultConfiguration(), server, client);
-	}
-
-	/**
 	 * Flag to ensure that the http client has been destroyed or not.
 	 */
 	private final AtomicBoolean destroyed;

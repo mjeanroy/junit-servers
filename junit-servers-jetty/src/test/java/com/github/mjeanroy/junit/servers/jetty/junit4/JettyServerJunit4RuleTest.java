@@ -82,32 +82,15 @@ public class JettyServerJunit4RuleTest {
 		assertRule(rule);
 	}
 
-	/**
-	 * Create the rule to be tested.
-	 *
-	 * @return The rule to be tested.
-	 */
-	protected JettyServerJunit4Rule createRule() {
+	private static JettyServerJunit4Rule createRule() {
 		return new JettyServerJunit4Rule();
 	}
 
-	/**
-	 * Create the rule to be tested.
-	 *
-	 * @param configuration The internal configuration.
-	 * @return The rule to be tested.
-	 */
-	protected JettyServerJunit4Rule createRule(EmbeddedJettyConfiguration configuration) {
+	private static JettyServerJunit4Rule createRule(EmbeddedJettyConfiguration configuration) {
 		return new JettyServerJunit4Rule(configuration);
 	}
 
-	/**
-	 * Create the rule to be tested.
-	 *
-	 * @param jetty The internal embedded server.
-	 * @return The rule to be tested.
-	 */
-	protected JettyServerJunit4Rule createRule(EmbeddedJetty jetty) {
+	private static JettyServerJunit4Rule createRule(EmbeddedJetty jetty) {
 		return new JettyServerJunit4Rule(jetty);
 	}
 

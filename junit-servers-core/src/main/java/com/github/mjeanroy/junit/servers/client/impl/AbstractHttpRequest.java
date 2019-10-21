@@ -30,10 +30,7 @@ import com.github.mjeanroy.junit.servers.client.HttpHeader;
 import com.github.mjeanroy.junit.servers.client.HttpMethod;
 import com.github.mjeanroy.junit.servers.client.HttpParameter;
 import com.github.mjeanroy.junit.servers.client.HttpRequest;
-import com.github.mjeanroy.junit.servers.client.HttpRequestBodies;
 import com.github.mjeanroy.junit.servers.client.HttpRequestBody;
-import com.github.mjeanroy.junit.servers.client.HttpRequestBodyForm;
-import com.github.mjeanroy.junit.servers.client.HttpRequestBodyFormBuilder;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.HttpUrl;
 import com.github.mjeanroy.junit.servers.client.MediaType;
@@ -64,7 +61,6 @@ import static com.github.mjeanroy.junit.servers.client.HttpHeaders.X_HTTP_METHOD
 import static com.github.mjeanroy.junit.servers.client.HttpMethod.DELETE;
 import static com.github.mjeanroy.junit.servers.client.HttpMethod.PUT;
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
-import static com.github.mjeanroy.junit.servers.client.HttpRequestBodies.requestBody;
 import static com.github.mjeanroy.junit.servers.commons.lang.Dates.format;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
@@ -220,11 +216,6 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	}
 
 	@Override
-	public HttpRequest asMultipartFormData() {
-		return addHeader(CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=" + DEFAULT_BOUNDARIES);
-	}
-
-	@Override
 	public HttpRequest addQueryParam(String name, String value) {
 		return addQueryParams(param(name, value));
 	}
@@ -243,64 +234,6 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 				queryParams.put(p.getName(), p);
 			}
 		}
-
-		return this;
-	}
-
-	@Override
-	public HttpRequest addFormParam(String name, String value) {
-		return addFormParams(param(name, value));
-	}
-
-	@Override
-	public HttpRequest addFormParams(HttpParameter parameter, HttpParameter... parameters) {
-		notNull(parameter, "parameter");
-
-		// Ensure request method allow body.
-		if (!getMethod().isBodyAllowed()) {
-			throw new UnsupportedOperationException("Http method " + getMethod() + " does not support body parameters");
-		}
-
-		// Ensure a body has not been previously set.
-		if (body != null && !(body instanceof HttpRequestBodyForm)) {
-			throw new IllegalStateException("Cannot change request if it is already defined");
-		}
-
-		// Add first parameter.
-		HttpRequestBodyFormBuilder builder = HttpRequestBodies.formBuilder();
-
-		if (body != null) {
-			builder.addAll(((HttpRequestBodyForm) body).getParameters());
-		}
-
-		builder.add(parameter);
-
-		if (parameters != null) {
-			for (HttpParameter p : parameters) {
-				builder.add(p);
-			}
-		}
-
-		this.body = builder.build();
-
-		return asFormUrlEncoded();
-	}
-
-	@Override
-	public HttpRequest setBody(String body) {
-		notNull(body, "body");
-
-		// Ensure request body is allowed.
-		if (!getMethod().isBodyAllowed()) {
-			throw new UnsupportedOperationException("Http method " + getMethod() + " does not support request body");
-		}
-
-		if (this.body != null) {
-			throw new IllegalStateException("Cannot change request body if it has already been defined");
-		}
-
-		// Set the request body.
-		this.body = requestBody(body);
 
 		return this;
 	}

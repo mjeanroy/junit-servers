@@ -30,14 +30,13 @@ import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.TomcatServerJunit4RunnerTest;
 import org.junit.Test;
 
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JunitServerRunnerTest extends TomcatServerJunit4RunnerTest {
+public class JunitServerRunnerTest {
 
 	private static final EmbeddedTomcatConfiguration configuration = defaultConfiguration();
 

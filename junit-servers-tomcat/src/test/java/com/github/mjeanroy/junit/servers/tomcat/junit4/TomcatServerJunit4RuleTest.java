@@ -91,32 +91,15 @@ public class TomcatServerJunit4RuleTest {
 		assertRule(rule);
 	}
 
-	/**
-	 * Create the rule to be tested.
-	 *
-	 * @return The rule to be tested.
-	 */
-	protected TomcatServerJunit4Rule createRule() {
+	private static TomcatServerJunit4Rule createRule() {
 		return new TomcatServerJunit4Rule();
 	}
 
-	/**
-	 * Create the rule to be tested.
-	 *
-	 * @param configuration The internal configuration.
-	 * @return The rule to be tested.
-	 */
-	protected TomcatServerJunit4Rule createRule(EmbeddedTomcatConfiguration configuration) {
+	private static TomcatServerJunit4Rule createRule(EmbeddedTomcatConfiguration configuration) {
 		return new TomcatServerJunit4Rule(configuration);
 	}
 
-	/**
-	 * Create the rule to be tested.
-	 *
-	 * @param tomcat The internal embedded server.
-	 * @return The rule to be tested.
-	 */
-	protected TomcatServerJunit4Rule createRule(EmbeddedTomcat tomcat) {
+	private static TomcatServerJunit4Rule createRule(EmbeddedTomcat tomcat) {
 		return new TomcatServerJunit4Rule(tomcat);
 	}
 

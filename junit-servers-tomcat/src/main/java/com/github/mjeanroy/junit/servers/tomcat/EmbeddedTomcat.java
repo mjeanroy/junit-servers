@@ -125,7 +125,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 		final String path = configuration.getPath();
 		final String classpath = configuration.getClasspath();
 		final boolean forceMetaInf = configuration.isForceMetaInf();
-		final ClassLoader parentClassLoader = configuration.getParentClasspath();
+		final ClassLoader parentClassLoader = configuration.getParentClassLoader();
 		final String descriptor = configuration.getOverrideDescriptor();
 
 		final File webappDirectory = new File(webapp);

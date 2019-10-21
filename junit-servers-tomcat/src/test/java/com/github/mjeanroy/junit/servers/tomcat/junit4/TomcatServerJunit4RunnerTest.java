@@ -72,7 +72,7 @@ public class TomcatServerJunit4RunnerTest {
 			.isSameAs(configuration);
 	}
 
-	protected TomcatServerJunit4Runner createRunner(Class<?> klass) throws Exception {
+	private static TomcatServerJunit4Runner createRunner(Class<?> klass) throws Exception {
 		return new TomcatServerJunit4Runner(klass);
 	}
 

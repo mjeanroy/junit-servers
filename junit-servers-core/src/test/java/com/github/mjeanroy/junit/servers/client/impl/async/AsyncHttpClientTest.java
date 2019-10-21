@@ -59,12 +59,6 @@ public class AsyncHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
-		return newAsyncHttpClient(server, internalClient);
-	}
-
-	@Override
 	protected HttpClient createCustomClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
 		return newAsyncHttpClient(configuration, server);
 	}

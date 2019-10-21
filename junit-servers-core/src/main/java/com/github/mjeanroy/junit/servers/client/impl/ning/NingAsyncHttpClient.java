@@ -47,20 +47,6 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
 public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClient {
 
 	/**
-	 * Create new http client using custom internal http client.
-	 *
-	 * @param server Embedded server.
-	 * @param client Internal http client
-	 * @return Http client.
-	 * @throws NullPointerException If {@code server} or {@code client} are {@code null}.
-	 * @deprecated Use {@link NingAsyncHttpClient#newAsyncHttpClient(HttpClientConfiguration, EmbeddedServer)}
-	 */
-	@Deprecated
-	public static NingAsyncHttpClient newAsyncHttpClient(EmbeddedServer<?> server, com.ning.http.client.AsyncHttpClient client) {
-		return new NingAsyncHttpClient(HttpClientConfiguration.defaultConfiguration(), server, client);
-	}
-
-	/**
 	 * Create new http client using internal
 	 * http client from async-http-client library.
 	 * An instance of {com.ning.http.client.NingAsyncHttpClient} will be automatically

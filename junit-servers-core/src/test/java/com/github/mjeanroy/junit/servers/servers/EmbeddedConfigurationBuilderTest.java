@@ -24,10 +24,134 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-public class EmbeddedConfigurationBuilderTest extends AbstractEmbeddedConfigurationBuilderTest<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
-	@Override
-	protected EmbeddedConfigurationBuilder createBuilder() {
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.entry;
+import static org.mockito.Mockito.mock;
+
+public class EmbeddedConfigurationBuilderTest {
+
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
+
+	@Test
+	public void it_should_change_port() {
+		final EmbeddedConfigurationBuilder builder = createBuilder();
+		final int oldPort = builder.getPort();
+		final int newPort = oldPort + 10;
+
+		final EmbeddedConfigurationBuilder result = builder.withPort(newPort);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getPort()).isNotEqualTo(oldPort).isEqualTo(newPort);
+	}
+
+	@Test
+	public void it_should_change_path() {
+		final EmbeddedConfigurationBuilder builder = createBuilder();
+		final String oldPath = builder.getPath();
+		final String newPath = oldPath + "foo";
+
+		final EmbeddedConfigurationBuilder result = builder.withPath(newPath);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getPath()).isNotEqualTo(oldPath).isEqualTo(newPath);
+	}
+
+	@Test
+	public void it_should_change_webapp_path() {
+		final EmbeddedConfigurationBuilder builder = createBuilder();
+		final String oldWebapp = builder.getWebapp();
+		final String newWebapp = oldWebapp + "foo";
+
+		final EmbeddedConfigurationBuilder result = builder.withWebapp(newWebapp);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
+	}
+
+	@Test
+	public void it_should_change_webapp_path_with_file() throws Exception {
+		final EmbeddedConfigurationBuilder builder = createBuilder();
+		final String oldWebapp = builder.getWebapp();
+		final File file = folder.newFile("foo");
+		final String newWebapp = file.getAbsolutePath();
+
+		final EmbeddedConfigurationBuilder result = builder.withWebapp(file);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
+	}
+
+	@Test
+	public void it_should_override_descriptor_file() {
+		final EmbeddedConfigurationBuilder builder = createBuilder();
+		final String newDescriptor = "src/test/resources/web.xml";
+		final String oldDescriptor = builder.getOverrideDescriptor();
+		final EmbeddedConfigurationBuilder result = builder.withOverrideDescriptor(newDescriptor);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getOverrideDescriptor()).isNotEqualTo(oldDescriptor).isEqualTo(newDescriptor);
+	}
+
+	@Test
+	public void it_should_fail_to_override_classloader_with_null_class() {
+		final EmbeddedConfigurationBuilder builder = createBuilder();
+		final Class<?> klass = null;
+
+		assertThatThrownBy(withParentClassLoader(builder, klass))
+			.isExactlyInstanceOf(NullPointerException.class)
+			.hasMessage("Base class must not be null");
+	}
+
+	@Test
+	public void it_should_add_property() {
+		final EmbeddedConfigurationBuilder builder = createBuilder();
+		final Map<String, String> oldProperties = builder.getEnvProperties();
+		assertThat(oldProperties).isEmpty();
+
+		final String name = "foo";
+		final String value = "bar";
+		final EmbeddedConfigurationBuilder result = builder.withProperty(name, value);
+		assertThat(result).isSameAs(builder);
+
+		final Map<String, String> newProperties = result.getEnvProperties();
+		assertThat(newProperties).hasSize(1).containsOnly(entry(name, value));
+	}
+
+	@Test
+	public void it_should_add_hook() {
+		final Hook hook = mock(Hook.class);
+		final EmbeddedConfigurationBuilder builder = createBuilder();
+		final List<Hook> oldHooks = builder.getHooks();
+		assertThat(oldHooks).isEmpty();
+
+		final EmbeddedConfigurationBuilder result = builder.withHook(hook);
+		assertThat(result).isSameAs(builder);
+
+		final List<Hook> newHooks = result.getHooks();
+		assertThat(newHooks).hasSize(1).containsOnly(hook);
+	}
+
+	private static EmbeddedConfigurationBuilder createBuilder() {
 		return new EmbeddedConfigurationBuilder();
+	}
+
+	private ThrowingCallable withParentClassLoader(final EmbeddedConfigurationBuilder builder, final Class<?> klass) {
+		return new ThrowingCallable() {
+			@Override
+			public void call() {
+				builder.withParentClassLoader(klass);
+			}
+		};
 	}
 }

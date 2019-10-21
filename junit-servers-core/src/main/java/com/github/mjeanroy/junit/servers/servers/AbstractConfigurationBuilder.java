@@ -25,7 +25,6 @@
 package com.github.mjeanroy.junit.servers.servers;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -194,17 +193,6 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * Get current {@link #parentClassLoader}.
 	 *
 	 * @return {@link #parentClassLoader}.
-	 * @deprecated Use {@link #getParentClassLoader()} instead.
-	 */
-	@Deprecated
-	public ClassLoader getParentClasspath() {
-		return getParentClassLoader();
-	}
-
-	/**
-	 * Get current {@link #parentClassLoader}.
-	 *
-	 * @return {@link #parentClassLoader}.
 	 */
 	public ClassLoader getParentClassLoader() {
 		return parentClassLoader;
@@ -306,32 +294,6 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	public T withHook(Hook hook) {
 		this.hooks.add(notNull(hook, "hook"));
 		return self();
-	}
-
-	/**
-	 * Change {@link #parentClassLoader} value.
-	 *
-	 * @param cls The class that will be used to get classloader.
-	 * @param filter The file filter.
-	 * @return this
-	 * @deprecated The {@code filter} parameter will be useless in the next release for JDK9 compatibility, please use {@link #withParentClassLoader(Class)} instead.
-	 */
-	@Deprecated
-	public T withParentClasspath(Class<?> cls, FileFilter filter) {
-		return withParentClassLoader(cls);
-	}
-
-	/**
-	 * Change {@link #parentClassLoader} value.
-	 *
-	 * @param cls The class that will be used to get classloader.
-	 * @return this
-	 * @deprecated Use {@link #withParentClassLoader(Class)} instead.
-	 */
-	@Deprecated
-	public T withParentClasspath(Class<?> cls) {
-		notNull(cls, "Base class");
-		return withParentClassLoader(cls.getClassLoader());
 	}
 
 	/**

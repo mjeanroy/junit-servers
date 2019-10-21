@@ -48,20 +48,6 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
 public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
 
 	/**
-	 * Create new http client using custom internal http client.
-	 *
-	 * @param server Embedded server.
-	 * @param client Internal http client
-	 * @return Http client.
-	 * @throws NullPointerException If {@code server} or {@code client} are {@code null}.
-	 * @deprecated Use {@link AsyncHttpClient#newAsyncHttpClient(HttpClientConfiguration, EmbeddedServer)}
-	 */
-	@Deprecated
-	public static AsyncHttpClient newAsyncHttpClient(EmbeddedServer<?> server, org.asynchttpclient.AsyncHttpClient client) {
-		return new AsyncHttpClient(HttpClientConfiguration.defaultConfiguration(), server, client);
-	}
-
-	/**
 	 * Create new http client using default internal http client.
 	 *
 	 * @param server Embedded server.

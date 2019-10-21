@@ -24,9 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * HTTP request.
@@ -92,47 +90,6 @@ public interface HttpRequest {
 	HttpRequest addQueryParams(HttpParameter parameter, HttpParameter... parameters);
 
 	/**
-	 * Add form parameters.
-	 * This method should be used for POST or PUT request only, otherwise
-	 * it will throw {@link UnsupportedOperationException} exception.
-	 *
-	 * @param name Parameter name.
-	 * @param value Parameter value.
-	 * @return Http request that can be used for chaining.
-	 * @throws UnsupportedOperationException If request method does not allow body (i.e {@code GET}, {@code HEAD} or {@code DELETE}).
-	 * @deprecated Use {@link #setBody(HttpRequestBody)} with {@link HttpRequestBodies#formUrlEncodedBody(Map)} or {@link HttpRequestBodies#formUrlEncodedBody(Collection)} or {@link HttpRequestBodies#formBuilder()} instead.
-	 */
-	@Deprecated
-	HttpRequest addFormParam(String name, String value);
-
-	/**
-	 * Add collection of parameters.
-	 * This method should be used for POST or PUT request only, otherwise
-	 * it will throw {@link UnsupportedOperationException} exception.
-	 *
-	 * @param parameter Parameter.
-	 * @param parameters Optional next parameters.
-	 * @return Http request that can be used for chaining.
-	 * @throws UnsupportedOperationException If request method does not allow body (i.e {@code GET}, {@code HEAD} or {@code DELETE}).
-	 * @deprecated Use {@link #setBody(HttpRequestBody)} with {@link HttpRequestBodies#formUrlEncodedBody(Map)} or {@link HttpRequestBodies#formUrlEncodedBody(Collection)} or {@link HttpRequestBodies#formBuilder()} instead.
-	 */
-	@Deprecated
-	HttpRequest addFormParams(HttpParameter parameter, HttpParameter... parameters);
-
-	/**
-	 * Set request body.
-	 * This method should be used for POST or PUT request only, otherwise
-	 * it will throw {@link UnsupportedOperationException} exception.
-	 *
-	 * @param body Body request.
-	 * @return Http request that can be used for chaining.
-	 * @throws UnsupportedOperationException If request method does not allow body (i.e {@code GET}, {@code HEAD} or {@code DELETE}).
-	 * @deprecated Use {@link #setBody(HttpRequestBody)} with {@link HttpRequestBodies#requestBody(String)} instead.
-	 */
-	@Deprecated
-	HttpRequest setBody(String body);
-
-	/**
 	 * Set request body.
 	 * This method should be used for {@code "POST"}, {@code "PUT"} or {@code "PATCH"} request only, otherwise
 	 * it will throw {@link UnsupportedOperationException} exception.
@@ -164,18 +121,6 @@ public interface HttpRequest {
 	 * @see <a href="https://tools.ietf.org/html/draft-hoehrmann-urlencoded-01">https://tools.ietf.org/html/draft-hoehrmann-urlencoded-01</a>
 	 */
 	HttpRequest asFormUrlEncoded();
-
-	/**
-	 * Add header to specify that content type
-	 * is {@code "multipart/form-data"}.
-	 *
-	 * @return Http request that can be used for chaining.
-	 * @see MediaType#MULTIPART_FORM_DATA
-	 * @see <a href="https://www.ietf.org/rfc/rfc1867.txt">https://www.ietf.org/rfc/rfc1867.txt</a>
-	 * @deprecated Use {@link #setBody(HttpRequestBody)} with {@link HttpRequestBodies#multipartBuilder()}
-	 */
-	@Deprecated
-	HttpRequest asMultipartFormData();
 
 	/**
 	 * Add header to specify that content type

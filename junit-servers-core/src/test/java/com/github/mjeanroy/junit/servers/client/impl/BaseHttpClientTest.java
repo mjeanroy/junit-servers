@@ -78,17 +78,6 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_create_custom_client() {
-		HttpClient client = createCustomClient(server);
-		assertThat(client).isNotNull();
-
-		EmbeddedServer<?> internalServer = readPrivate(client, "server");
-		assertThat(internalServer).isNotNull().isSameAs(server);
-
-		checkInternalHttpClient(client);
-	}
-
-	@Test
 	public void it_should_create_client_with_custom_configuration() {
 		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
@@ -104,7 +93,7 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void it_should_create_request() {
-		HttpClient client = createCustomClient(server);
+		HttpClient client = createDefaultClient(server);
 
 		String endpoint = "/foo";
 		HttpMethod httpMethod = HttpMethod.POST;
@@ -122,7 +111,7 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void it_should_create_request_and_do_not_prepend_server_path() {
-		HttpClient client = createCustomClient(server);
+		HttpClient client = createDefaultClient(server);
 
 		String endpoint = "/foo";
 		String fullPath = server.getPath() + endpoint;
@@ -141,7 +130,7 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void it_should_create_request_and_do_not_prepend_server_url() {
-		HttpClient client = createCustomClient(server);
+		HttpClient client = createDefaultClient(server);
 
 		String endpoint = "/foo";
 		String absoluteUrl = server.getUrl() + endpoint;
@@ -165,7 +154,7 @@ public abstract class BaseHttpClientTest {
 		when(server.getUrl()).thenReturn(serverUrl);
 		when(server.getPath()).thenReturn("/");
 
-		final HttpClient client = createCustomClient(server);
+		final HttpClient client = createDefaultClient(server);
 		final String path = "/foo";
 		final HttpMethod httpMethod = HttpMethod.GET;
 
@@ -186,7 +175,7 @@ public abstract class BaseHttpClientTest {
 		when(server.getUrl()).thenReturn(serverUrl);
 		when(server.getPath()).thenReturn(path);
 
-		final HttpClient client = createCustomClient(server);
+		final HttpClient client = createDefaultClient(server);
 		final HttpMethod httpMethod = HttpMethod.GET;
 
 		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
@@ -201,29 +190,29 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	public void it_should_create_get_request() {
-		HttpClient client = createCustomClient(server);
-		HttpRequest httpRequest = client.prepareGet("/foo");
+		final HttpClient client = createDefaultClient(server);
+		final HttpRequest httpRequest = client.prepareGet("/foo");
 		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
 	}
 
 	@Test
 	public void it_should_create_post_request() {
-		HttpClient client = createCustomClient(server);
-		HttpRequest httpRequest = client.preparePost("/foo");
+		final HttpClient client = createDefaultClient(server);
+		final HttpRequest httpRequest = client.preparePost("/foo");
 		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST);
 	}
 
 	@Test
 	public void it_should_create_put_request() {
-		HttpClient client = createCustomClient(server);
-		HttpRequest httpRequest = client.preparePut("/foo");
+		final HttpClient client = createDefaultClient(server);
+		final HttpRequest httpRequest = client.preparePut("/foo");
 		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.PUT);
 	}
 
 	@Test
 	public void it_should_create_delete_request() {
-		HttpClient client = createCustomClient(server);
-		HttpRequest httpRequest = client.prepareDelete("/foo");
+		final HttpClient client = createDefaultClient(server);
+		final HttpRequest httpRequest = client.prepareDelete("/foo");
 		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.DELETE);
 	}
 
@@ -239,14 +228,6 @@ public abstract class BaseHttpClientTest {
 	 * @return Default http client.
 	 */
 	protected abstract HttpClient createDefaultClient(EmbeddedServer<?> server);
-
-	/**
-	 * Should create a custom http client.
-	 *
-	 * @param server Fake embedded server.
-	 * @return Default http client.
-	 */
-	protected abstract HttpClient createCustomClient(EmbeddedServer<?> server);
 
 	/**
 	 * Should create a custom http client.

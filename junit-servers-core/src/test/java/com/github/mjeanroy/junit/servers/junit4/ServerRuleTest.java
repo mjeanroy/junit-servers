@@ -217,15 +217,15 @@ public class ServerRuleTest {
 		);
 	}
 
-	protected ServerRule createRule() {
+	private static ServerRule createRule() {
 		return new ServerRule();
 	}
 
-	protected ServerRule createRule(AbstractConfiguration configuration) {
+	private static ServerRule createRule(AbstractConfiguration configuration) {
 		return new ServerRule(configuration);
 	}
 
-	protected ServerRule createRule(EmbeddedServer<?> server) {
+	private static ServerRule createRule(EmbeddedServer<?> server) {
 		return new ServerRule(server);
 	}
 }

@@ -140,26 +140,6 @@ public abstract class AbstractConfiguration {
 	private final String overrideDescriptor;
 
 	/**
-	 * Initialize configuration.
-	 *
-	 * @param builder Configuration builder.
-	 * @deprecated Use {@link #AbstractConfiguration(String, String, String, int, Map, List, ClassLoader, String)} instead.
-	 */
-	@Deprecated
-	protected AbstractConfiguration(AbstractConfigurationBuilder<?, ?> builder) {
-		this(
-			builder.getClasspath(),
-			builder.getPath(),
-			builder.getWebapp(),
-			builder.getPort(),
-			builder.getEnvProperties(),
-			builder.getHooks(),
-			builder.getParentClassLoader(),
-			builder.getOverrideDescriptor()
-		);
-	}
-
-	/**
 	 * Initialize configuration with default values.
 	 */
 	protected AbstractConfiguration() {
@@ -230,17 +210,6 @@ public abstract class AbstractConfiguration {
 	 */
 	public String getClasspath() {
 		return classpath;
-	}
-
-	/**
-	 * Get {@link #parentClassLoader}, as a non-modifiable collection.
-	 *
-	 * @return {@link #parentClassLoader}
-	 * @deprecated Use {@link #getParentClassLoader()} instead.
-	 */
-	@Deprecated
-	public ClassLoader getParentClasspath() {
-		return parentClassLoader;
 	}
 
 	/**

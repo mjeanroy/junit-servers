@@ -49,20 +49,6 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
 public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
 
 	/**
-	 * Create new http client using internal with custom internal client.
-	 *
-	 * @param server Embedded server.
-	 * @param client Internal http client
-	 * @return Http client.
-	 * @throws NullPointerException If {@code server} of {@code client} are {@code null}.
-	 * @deprecated Use {@link ApacheHttpClient#newApacheHttpClient(HttpClientConfiguration, EmbeddedServer)}
-	 */
-	@Deprecated
-	public static ApacheHttpClient newApacheHttpClient(EmbeddedServer<?> server, CloseableHttpClient client) {
-		return new ApacheHttpClient(HttpClientConfiguration.defaultConfiguration(), server, client);
-	}
-
-	/**
 	 * Create new http client using default internal client.
 	 *
 	 * @param server Embedded server.

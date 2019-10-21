@@ -72,7 +72,7 @@ public class JettyServerJunit4RunnerTest {
 			.isSameAs(configuration);
 	}
 
-	protected JettyServerJunit4Runner createRunner(Class<?> klass) throws Exception {
+	private static JettyServerJunit4Runner createRunner(Class<?> klass) throws Exception {
 		return new JettyServerJunit4Runner(klass);
 	}
 

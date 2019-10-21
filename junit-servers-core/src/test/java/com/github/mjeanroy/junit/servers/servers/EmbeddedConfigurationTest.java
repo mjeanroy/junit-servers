@@ -24,15 +24,50 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-public class EmbeddedConfigurationTest extends AbstractEmbeddedConfigurationTest<EmbeddedConfiguration> {
+import nl.jqno.equalsverifier.EqualsVerifier;
+import org.junit.Test;
 
-	@Override
-	protected EmbeddedConfiguration createConfiguration() {
-		return new EmbeddedConfiguration();
+import java.net.URL;
+import java.net.URLClassLoader;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class EmbeddedConfigurationTest {
+
+	@Test
+	public void it_should_build_configuration() {
+		final EmbeddedConfiguration result = createConfiguration();
+		assertThat(result.getPort()).isEqualTo(0);
+		assertThat(result.getPath()).isEqualTo("/");
+		assertThat(result.getClasspath()).isEqualTo(".");
+		assertThat(result.getWebapp()).isEqualTo("src/main/webapp");
 	}
 
-	@Override
-	protected Class<EmbeddedConfiguration> getTestedClass() {
-		return EmbeddedConfiguration.class;
+	@Test
+	public void it_should_have_to_string() {
+		final EmbeddedConfiguration result = createConfiguration();
+		assertThat(result.toString()).isEqualTo(
+			EmbeddedConfiguration.class.getSimpleName() + "{" +
+				"port: 0, " +
+				"path: \"/\", " +
+				"webapp: \"src/main/webapp\", " +
+				"classpath: \".\", " +
+				"overrideDescriptor: null, " +
+				"parentClassLoader: null" +
+			"}"
+		);
+	}
+
+	@Test
+	public void it_should_implement_equals_hashCode() {
+		final ClassLoader red = new URLClassLoader(new URL[0]);
+		final ClassLoader black = new URLClassLoader(new URL[0]);
+		EqualsVerifier.forClass(EmbeddedConfiguration.class)
+			.withPrefabValues(ClassLoader.class, red, black)
+			.verify();
+	}
+
+	private static EmbeddedConfiguration createConfiguration() {
+		return new EmbeddedConfiguration();
 	}
 }

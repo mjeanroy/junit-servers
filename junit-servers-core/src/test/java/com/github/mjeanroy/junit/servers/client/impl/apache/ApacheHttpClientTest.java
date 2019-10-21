@@ -53,12 +53,6 @@ public class ApacheHttpClientTest extends BaseHttpClientTest {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	protected HttpClient createCustomClient(EmbeddedServer<?> server) {
-		return newApacheHttpClient(server, internalClient);
-	}
-
-	@Override
 	protected HttpClient createCustomClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
 		return newApacheHttpClient(configuration, server);
 	}
