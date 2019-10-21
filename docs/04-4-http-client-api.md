@@ -10,6 +10,7 @@ Here is an example of a `POST` request sending a JSON body:
 
 ```java
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpRequestBodies;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
 
@@ -24,8 +25,7 @@ class MyTest {
   void should_have_index(HttpClient client) {
     HttpResponse response = client
       .preparePost("/people")
-      .setBody("{\"firstName\": \"John\", \"lastName\": \"Doe\"}")
-      .asJson()     // Automatically send the `Content-Type` header to `application/json`
+      .setBody(HttpRequestBodies.jsonBody("{\"firstName\": \"John\", \"lastName\": \"Doe\"}"))
       .acceptJson() // Automatically send the `Accept` header to `application/json`
       .addHeader("X-Auth-Token", TOKEN_VALUE)
       .addCookie("X-Auth-Token", TOKEN_VALUE)
