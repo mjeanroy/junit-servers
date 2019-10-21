@@ -179,43 +179,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>JDK7</id>
-      <activation>
-        <jdk>1.7</jdk>
-      </activation>
-      <properties>
-        <jetty.version>${jetty-java7.version}</jetty.version>
-      </properties>
-    </profile>
-    <profile>
-      <id>JDK8</id>
-      <activation>
-        <jdk>1.8</jdk>
-      </activation>
-      <properties>
-        <jetty.version>${jetty-java8.version}</jetty.version>
-      </properties>
-    </profile>
-    <profile>
-      <id>JDK9</id>
-      <activation>
-        <jdk>9</jdk>
-      </activation>
-      <properties>
-        <jetty.version>${jetty-java9.version}</jetty.version>
-      </properties>
-    </profile>
-    <profile>
-      <id>JDK10</id>
-      <activation>
-        <jdk>10</jdk>
-      </activation>
-      <properties>
-        <jetty.version>${jetty-java10.version}</jetty.version>
-      </properties>
-    </profile>
-  </profiles>
 </project>

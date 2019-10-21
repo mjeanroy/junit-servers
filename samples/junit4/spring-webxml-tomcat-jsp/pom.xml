@@ -122,34 +122,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>JDK7</id>
-      <activation>
-        <jdk>1.7</jdk>
-      </activation>
-      <properties>
-        <tomcat.version>${tomcat-java7.version}</tomcat.version>
-      </properties>
-    </profile>
-    <profile>
-      <id>JDK8</id>
-      <activation>
-        <jdk>1.8</jdk>
-      </activation>
-      <properties>
-        <tomcat.version>${tomcat-java8.version}</tomcat.version>
-      </properties>
-    </profile>
-    <profile>
-      <id>JDK9</id>
-      <activation>
-        <jdk>9</jdk>
-      </activation>
-      <properties>
-        <tomcat.version>${tomcat-java7.version}</tomcat.version>
-      </properties>
-    </profile>
-  </profiles>
 </project>

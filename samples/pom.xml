@@ -39,31 +39,11 @@
   <packaging>pom</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
 
-  <profiles>
-    <profile>
-      <id>java8+</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>samples-utils</module>
-        <module>junit4</module>
-        <module>jupiter</module>
-      </modules>
-    </profile>
-
-    <!-- Skip jupiter samples on Java7 as it requires Java >= 8 -->
-    <profile>
-      <id>java7</id>
-      <activation>
-        <jdk>1.7</jdk>
-      </activation>
-      <modules>
-        <module>samples-utils</module>
-        <module>junit4</module>
-      </modules>
-    </profile>
-  </profiles>
+  <modules>
+    <module>samples-utils</module>
+    <module>junit4</module>
+    <module>jupiter</module>
+  </modules>
 
   <properties>
     <maven-war-plugin.version>3.2.3</maven-war-plugin.version>

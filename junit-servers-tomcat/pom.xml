@@ -148,34 +148,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>java7</id>
-      <activation>
-        <jdk>1.7</jdk>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <source>${maven.compiler.source}</source>
-              <target>${maven.compiler.target}</target>
-              <encoding>${project.build.sourceEncoding}</encoding>
-
-              <!-- These classes uses Java 8 API such as Optional due to junit jupiter API, skip it when testing on Java 7 -->
-              <excludes>
-                <exclude>com/github/mjeanroy/junit/servers/tomcat/jupiter/*</exclude>
-              </excludes>
-              <testExcludes>
-                <exclude>com/github/mjeanroy/junit/servers/tomcat/jupiter/*</exclude>
-              </testExcludes>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>

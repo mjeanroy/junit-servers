@@ -31,8 +31,6 @@ os:
 
 matrix:
   include:
-    - name: "OpenJDK 7"
-      jdk: openjdk7
     - name: "Oracle JDK 8"
       jdk: oraclejdk8
     - name: "Oracle JDK 9"
