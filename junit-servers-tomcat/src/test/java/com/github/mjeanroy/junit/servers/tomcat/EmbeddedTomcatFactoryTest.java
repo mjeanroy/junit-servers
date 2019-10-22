@@ -27,23 +27,22 @@ package com.github.mjeanroy.junit.servers.tomcat;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.exceptions.IllegalTomcatConfigurationException;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class EmbeddedTomcatFactoryTest {
+class EmbeddedTomcatFactoryTest {
 
 	@Test
-	public void it_should_create_embedded_tomcat_from_class_using_default_configuration() {
+	void it_should_create_embedded_tomcat_from_class_using_default_configuration() {
 		final EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassUsingDefaultConfiguration.class);
 		assertThat(tomcat).isNotNull();
 		assertThat(tomcat.getConfiguration()).isEqualTo(EmbeddedTomcatConfiguration.defaultConfiguration());
 	}
 
 	@Test
-	public void it_should_create_embedded_tomcat_from_class_using_provided_configuration() {
+	void it_should_create_embedded_tomcat_from_class_using_provided_configuration() {
 		final EmbeddedTomcatConfiguration providedConfiguration = EmbeddedTomcatConfiguration.builder().withPath("/test").build();
 		final EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassUsingDefaultConfiguration.class, providedConfiguration);
 
@@ -52,35 +51,26 @@ public class EmbeddedTomcatFactoryTest {
 	}
 
 	@Test
-	public void it_should_create_embedded_tomcat_from_class_using_configuration_provider() {
+	void it_should_create_embedded_tomcat_from_class_using_configuration_provider() {
 		final EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassAnnotatedWithConfigurationProvider.class);
 		assertThat(tomcat).isNotNull();
 		assertThat(tomcat.getConfiguration()).isSameAs(DefaultEmbeddedTomcatConfigurationProvider.CONFIGURATION);
 	}
 
 	@Test
-	public void it_should_create_embedded_tomcat_from_class_using_custom_configuration() {
+	void it_should_create_embedded_tomcat_from_class_using_custom_configuration() {
 		final EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassUsingCustomConfiguration.class);
 		assertThat(tomcat).isNotNull();
 		assertThat(tomcat.getConfiguration()).isSameAs(ClassUsingCustomConfiguration.configuration);
 	}
 
 	@Test
-	public void it_should_fail_to_create_embedded_tomcat_from_class_using_non_valid_configuration() {
-		assertThatThrownBy(createFrom())
+	void it_should_fail_to_create_embedded_tomcat_from_class_using_non_valid_configuration() {
+		assertThatThrownBy(() -> EmbeddedTomcatFactory.createFrom(ClassUsingNonTomcatConfiguration.class))
 			.isInstanceOf(IllegalTomcatConfigurationException.class)
 			.hasMessage(
 				"Embedded tomcat server requires a configuration that is an instance of com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration, please fix it."
 			);
-	}
-
-	private static ThrowingCallable createFrom() {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				EmbeddedTomcatFactory.createFrom(ClassUsingNonTomcatConfiguration.class);
-			}
-		};
 	}
 
 	private static class ClassUsingDefaultConfiguration {

@@ -29,31 +29,29 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmbeddedJettyTest {
-
-	@Rule
-	public TemporaryFolder tmp = new TemporaryFolder();
+class EmbeddedJettyTest {
 
 	private volatile EmbeddedJetty jetty;
 
-	@After
-	public void tearDown() {
+	@AfterEach
+	void tearDown() {
 		jetty.stop();
 	}
 
 	@Test
-	public void it_should_start_jetty() {
+	void it_should_start_jetty() {
 		jetty = new EmbeddedJetty();
 		assertThat(jetty.getScheme()).isEqualTo("http");
 		assertThat(jetty.getHost()).isEqualTo("localhost");
@@ -66,7 +64,7 @@ public class EmbeddedJettyTest {
 	}
 
 	@Test
-	public void it_should_stop_jetty() {
+	void it_should_stop_jetty() {
 		jetty = new EmbeddedJetty();
 		assertThat(jetty.getScheme()).isEqualTo("http");
 		assertThat(jetty.getHost()).isEqualTo("localhost");
@@ -84,7 +82,7 @@ public class EmbeddedJettyTest {
 	}
 
 	@Test
-	public void it_should_get_configuration_port_until_jetty_is_started() {
+	void it_should_get_configuration_port_until_jetty_is_started() {
 		jetty = new EmbeddedJetty();
 		assertThat(jetty.getPort()).isZero();
 
@@ -96,24 +94,24 @@ public class EmbeddedJettyTest {
 	}
 
 	@Test
-	public void it_should_get_servlet_context() {
+	void it_should_get_servlet_context() {
 		jetty = new EmbeddedJetty();
 		jetty.start();
 		assertThat(jetty.getServletContext()).isNotNull();
 	}
 
 	@Test
-	public void it_should_get_original_jetty() {
+	void it_should_get_original_jetty() {
 		jetty = new EmbeddedJetty();
 		assertThat(jetty.getDelegate()).isNotNull();
 	}
 
 	@Test
-	public void it_should_add_parent_classloader() throws Exception {
-		File tmpFile = tmp.newFile();
-		File dir = tmpFile.getParentFile();
-		URL url = dir.toURI().toURL();
-		String name = tmpFile.getName();
+	void it_should_add_parent_classloader(@TempDir Path tmp) throws Exception {
+		final File tmpFile = Files.createTempFile(tmp, null, null).toFile();
+		final File dir = tmpFile.getParentFile();
+		final URL url = dir.toURI().toURL();
+		final String name = tmpFile.getName();
 
 		try (URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { url })) {
 			assertThat(urlClassLoader.getResource(name)).isNotNull();
@@ -135,10 +133,10 @@ public class EmbeddedJettyTest {
 	}
 
 	@Test
-	public void it_should_override_web_xml() throws Exception {
-		URL resource = getClass().getResource("/custom-web.xml");
-		String webXmlPath = resource.getFile();
-		File descriptor = new File(webXmlPath);
+	void it_should_override_web_xml() throws Exception {
+		final URL resource = getClass().getResource("/custom-web.xml");
+		final String webXmlPath = resource.getFile();
+		final File descriptor = new File(webXmlPath);
 
 		jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
 			.withWebapp(descriptor.getParentFile())

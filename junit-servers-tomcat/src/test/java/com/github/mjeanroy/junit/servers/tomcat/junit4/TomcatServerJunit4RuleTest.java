@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.tomcat.junit4;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.tests.builders.EmbeddedTomcatMockBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.mockito.InOrder;
@@ -39,10 +39,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-public class TomcatServerJunit4RuleTest {
+class TomcatServerJunit4RuleTest {
 
 	@Test
-	public void it_should_create_rule_with_server() throws Throwable {
+	void it_should_create_rule_with_server() throws Throwable {
 		final EmbeddedTomcatConfiguration config = mock(EmbeddedTomcatConfiguration.class);
 		final EmbeddedTomcat tomcat = new EmbeddedTomcatMockBuilder().withConfiguration(config).build();
 		final TomcatServerJunit4Rule rule = createRule(tomcat);
@@ -65,7 +65,7 @@ public class TomcatServerJunit4RuleTest {
 	}
 
 	@Test
-	public void it_should_create_server_from_configuration() throws Throwable {
+	void it_should_create_server_from_configuration() throws Throwable {
 		final EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.defaultConfiguration();
 		final TomcatServerJunit4Rule rule = createRule(configuration);
 
@@ -79,7 +79,7 @@ public class TomcatServerJunit4RuleTest {
 	}
 
 	@Test
-	public void it_should_create_server_with_default_configuration() throws Throwable {
+	void it_should_create_server_with_default_configuration() throws Throwable {
 		final TomcatServerJunit4Rule rule = createRule();
 
 		assertThat(rule.getServer()).isNotNull();

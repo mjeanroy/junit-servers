@@ -26,32 +26,32 @@ package com.github.mjeanroy.junit.servers.junit4;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ServerRuleTest {
+class ServerRuleTest {
 
 	private ServerRule rule;
 
-	@After
-	public void tearDown() {
+	@AfterEach
+	void tearDown() {
 		if (rule != null) {
 			rule.stop();
 		}
 	}
 
 	@Test
-	public void it_should_start_jetty_because_of_classpath_detection() {
+	void it_should_start_jetty_because_of_classpath_detection() {
 		rule = new ServerRule();
 		assertThat(rule.getServer()).isExactlyInstanceOf(EmbeddedJetty.class);
 		assertThat(rule.getServer().getConfiguration()).isEqualTo(EmbeddedJettyConfiguration.defaultConfiguration());
 	}
 
 	@Test
-	public void it_should_start_jetty_with_custom_configuration_because_of_classpath_detection() {
-		EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
+	void it_should_start_jetty_with_custom_configuration_because_of_classpath_detection() {
+		final EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
 			.withPort(9000)
 			.build();
 
@@ -61,7 +61,7 @@ public class ServerRuleTest {
 	}
 
 	@Test
-	public void it_should_start_jetty_and_get_real_port() {
+	void it_should_start_jetty_and_get_real_port() {
 		rule = new ServerRule();
 		assertThat(rule.getPort()).isZero();
 
@@ -70,7 +70,7 @@ public class ServerRuleTest {
 	}
 
 	@Test
-	public void it_should_start_jetty_and_get_uri() {
+	void it_should_start_jetty_and_get_uri() {
 		rule = new ServerRule();
 		rule.start();
 		assertThat(rule.getUrl()).isEqualTo(localUrl(rule.getPort()));

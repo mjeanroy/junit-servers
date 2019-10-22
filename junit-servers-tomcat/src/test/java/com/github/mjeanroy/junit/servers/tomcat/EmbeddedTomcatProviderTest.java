@@ -25,15 +25,15 @@
 package com.github.mjeanroy.junit.servers.tomcat;
 
 import com.github.mjeanroy.junit.servers.tomcat.tests.builders.EmbeddedTomcatConfigurationMockBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmbeddedTomcatProviderTest {
+class EmbeddedTomcatProviderTest {
 
 	@Test
-	public void it_should_instantiate_jetty_with_default_configuration() {
+	void it_should_instantiate_jetty_with_default_configuration() {
 		final EmbeddedTomcatProvider provider = new EmbeddedTomcatProvider();
 		final EmbeddedTomcat tomcat = provider.instantiate();
 
@@ -42,7 +42,7 @@ public class EmbeddedTomcatProviderTest {
 	}
 
 	@Test
-	public void it_should_instantiate_jetty_with_custom_configuration() {
+	void it_should_instantiate_jetty_with_custom_configuration() {
 		final EmbeddedTomcatProvider provider = new EmbeddedTomcatProvider();
 		final EmbeddedTomcatConfiguration configuration = new EmbeddedTomcatConfigurationMockBuilder().build();
 		final EmbeddedTomcat tomcat = provider.instantiate(configuration);

@@ -30,68 +30,57 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import org.junit.Test;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JettyServerJunit4RunnerTest {
+class JettyServerJunit4RunnerTest {
 
 	private static final EmbeddedJettyConfiguration configuration = defaultConfiguration();
 
 	@Test
-	public void it_should_instantiate_jetty_with_default_configuration() throws Exception {
-		JettyServerJunit4Runner runner = createRunner(Foo.class);
+	void it_should_instantiate_jetty_with_default_configuration() throws Exception {
+		final JettyServerJunit4Runner runner = createRunner(TestClassWithConfiguration.class);
+		final EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
+		final AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 
-		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		assertThat(server)
-			.isNotNull()
-			.isInstanceOf(EmbeddedJetty.class);
-
-		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
-		assertThat(conf)
-			.isNotNull()
-			.isInstanceOf(EmbeddedJettyConfiguration.class)
-			.isNotSameAs(configuration);
+		assertThat(server).isInstanceOf(EmbeddedJetty.class);
+		assertThat(conf).isInstanceOf(EmbeddedJettyConfiguration.class).isNotSameAs(configuration);
 	}
 
 	@Test
-	public void it_should_instantiate_jetty_with_configuration() throws Exception {
-		JettyServerJunit4Runner runner = createRunner(Bar.class);
+	void it_should_instantiate_jetty_with_configuration() throws Exception {
+		final JettyServerJunit4Runner runner = createRunner(TestClassWithConfigurationInitializer.class);
+		final EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
+		final AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 
-		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		assertThat(server)
-			.isNotNull()
-			.isInstanceOf(EmbeddedJetty.class);
-
-		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
-		assertThat(conf)
-			.isNotNull()
-			.isInstanceOf(EmbeddedJettyConfiguration.class)
-			.isSameAs(configuration);
+		assertThat(server).isInstanceOf(EmbeddedJetty.class);
+		assertThat(conf).isInstanceOf(EmbeddedJettyConfiguration.class).isSameAs(configuration);
 	}
 
 	private static JettyServerJunit4Runner createRunner(Class<?> klass) throws Exception {
 		return new JettyServerJunit4Runner(klass);
 	}
 
-	public static class Foo {
+	@Ignore
+	public static class TestClassWithConfiguration {
+
 		@TestServer
 		private static EmbeddedServer<?> server;
 
 		@TestServerConfiguration
 		private static EmbeddedJettyConfiguration configuration;
 
-		public Foo() {
-		}
-
-		@Test
+		@org.junit.Test
 		public void fooTest() {
 		}
 	}
 
-	public static class Bar {
+	@Ignore
+	public static class TestClassWithConfigurationInitializer {
 
 		@TestServer
 		private static EmbeddedServer<?> server;
@@ -101,10 +90,7 @@ public class JettyServerJunit4RunnerTest {
 			return configuration;
 		}
 
-		public Bar() {
-		}
-
-		@Test
+		@org.junit.Test
 		public void fooTest() {
 		}
 	}

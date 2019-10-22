@@ -25,15 +25,15 @@
 package com.github.mjeanroy.junit.servers.jetty;
 
 import com.github.mjeanroy.junit.servers.jetty.tests.EmbeddedJettyConfigurationMockBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmbeddedJettyProviderTest {
+class EmbeddedJettyProviderTest {
 
 	@Test
-	public void it_should_instantiate_jetty_with_default_configuration() {
+	void it_should_instantiate_jetty_with_default_configuration() {
 		final EmbeddedJettyProvider provider = new EmbeddedJettyProvider();
 		final EmbeddedJetty jetty = provider.instantiate();
 
@@ -42,7 +42,7 @@ public class EmbeddedJettyProviderTest {
 	}
 
 	@Test
-	public void it_should_instantiate_jetty_with_custom_configuration() {
+	void it_should_instantiate_jetty_with_custom_configuration() {
 		final EmbeddedJettyProvider provider = new EmbeddedJettyProvider();
 		final EmbeddedJettyConfiguration configuration = new EmbeddedJettyConfigurationMockBuilder().build();
 		final EmbeddedJetty jetty = provider.instantiate(configuration);

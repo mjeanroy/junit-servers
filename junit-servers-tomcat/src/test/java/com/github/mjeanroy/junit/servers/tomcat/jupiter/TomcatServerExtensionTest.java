@@ -28,14 +28,14 @@ import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.tests.builders.EmbeddedTomcatMockBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TomcatServerExtensionTest {
+class TomcatServerExtensionTest {
 
 	@Test
-	public void it_should_start_given_tomcat_server_before_all_tests() {
+	void it_should_start_given_tomcat_server_before_all_tests() {
 		final EmbeddedTomcat tomcat = new EmbeddedTomcatMockBuilder().build();
 		final TomcatServerExtension extension = new TomcatServerExtension(tomcat);
 		final FixtureClass testInstance = new FixtureClass();
@@ -52,7 +52,7 @@ public class TomcatServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_start_tomcat_server_using_given_configuration_before_all_tests() {
+	void it_should_start_tomcat_server_using_given_configuration_before_all_tests() {
 		final EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.defaultConfiguration();
 		final TomcatServerExtension extension = new TomcatServerExtension(configuration);
 		final FixtureClass testInstance = new FixtureClass();
@@ -70,7 +70,7 @@ public class TomcatServerExtensionTest {
 	}
 
 	@Test
-	public void it_should_start_server_with_default_configuration_before_all_tests() {
+	void it_should_start_server_with_default_configuration_before_all_tests() {
 		final TomcatServerExtension extension = new TomcatServerExtension();
 		final FixtureClass testInstance = new FixtureClass();
 		final FakeExtensionContext context = new FakeExtensionContext(testInstance);

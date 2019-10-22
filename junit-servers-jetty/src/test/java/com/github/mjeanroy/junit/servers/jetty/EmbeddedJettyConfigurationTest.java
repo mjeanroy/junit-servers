@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.jetty;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.eclipse.jetty.util.resource.Resource;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -35,10 +35,10 @@ import java.net.URLClassLoader;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class EmbeddedJettyConfigurationTest {
+class EmbeddedJettyConfigurationTest {
 
 	@Test
-	public void it_should_build_default_configuration() {
+	void it_should_build_default_configuration() {
 		final EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
 
 		assertThat(result.getPort()).isEqualTo(0);
@@ -48,7 +48,7 @@ public class EmbeddedJettyConfigurationTest {
 	}
 
 	@Test
-	public void it_should_build_configuration() {
+	void it_should_build_configuration() {
 		final int port = 8080;
 		final String path = "/foo";
 		final String webapp = "foo";
@@ -82,7 +82,7 @@ public class EmbeddedJettyConfigurationTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_hashCode() {
+	void it_should_implement_equals_hashCode() {
 		final ClassLoader red = new URLClassLoader(new URL[0]);
 		final ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(EmbeddedJettyConfiguration.class)
@@ -93,7 +93,7 @@ public class EmbeddedJettyConfigurationTest {
 	}
 
 	@Test
-	public void it_should_implement_to_string() {
+	void it_should_implement_to_string() {
 		final EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
 		assertThat(result.toString()).isEqualTo(
 			"EmbeddedJettyConfiguration{" +

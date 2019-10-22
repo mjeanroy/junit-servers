@@ -24,112 +24,107 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmbeddedJettyConfigurationBuilderTest {
-
-	@Rule
-	public TemporaryFolder folder = new TemporaryFolder();
+class EmbeddedJettyConfigurationBuilderTest {
 
 	private EmbeddedJettyConfiguration.Builder builder;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		builder = EmbeddedJettyConfiguration.builder();
 	}
 
 	@Test
-	public void it_should_have_default_values() {
+	void it_should_have_default_values() {
 		assertThat(builder.getPath()).isEqualTo("/");
 		assertThat(builder.getPort()).isZero();
 		assertThat(builder.getClasspath()).isEqualTo(".");
 	}
 
 	@Test
-	public void it_should_change_port() {
-		int oldPort = builder.getPort();
-		int newPort = oldPort + 10;
+	void it_should_change_port() {
+		final int oldPort = builder.getPort();
+		final int newPort = oldPort + 10;
 
-		EmbeddedJettyConfiguration.Builder result = builder.withPort(newPort);
+		final EmbeddedJettyConfiguration.Builder result = builder.withPort(newPort);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getPort()).isNotEqualTo(oldPort).isEqualTo(newPort);
 	}
 
 	@Test
-	public void it_should_change_path() {
-		String oldPath = builder.getPath();
-		String newPath = oldPath + "foo";
+	void it_should_change_path() {
+		final String oldPath = builder.getPath();
+		final String newPath = oldPath + "foo";
 
-		EmbeddedJettyConfiguration.Builder result = builder.withPath(newPath);
+		final EmbeddedJettyConfiguration.Builder result = builder.withPath(newPath);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getPath()).isNotEqualTo(oldPath).isEqualTo(newPath);
 	}
 
 	@Test
-	public void it_should_change_webapp_path() {
-		String oldWebapp = builder.getWebapp();
-		String newWebapp = oldWebapp + "foo";
+	void it_should_change_webapp_path() {
+		final String oldWebapp = builder.getWebapp();
+		final String newWebapp = oldWebapp + "foo";
 
-		EmbeddedJettyConfiguration.Builder result = builder.withWebapp(newWebapp);
-
-		assertThat(result).isSameAs(builder);
-		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
-	}
-
-	@Test
-	public void it_should_change_webapp_path_with_file() throws Exception {
-		String oldWebapp = builder.getWebapp();
-		File file = folder.newFile("foo");
-		String newWebapp = file.getAbsolutePath();
-
-		EmbeddedJettyConfiguration.Builder result = builder.withWebapp(file);
+		final EmbeddedJettyConfiguration.Builder result = builder.withWebapp(newWebapp);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
 	}
 
 	@Test
-	public void it_should_change_classpath_entry() {
-		String oldClasspath = builder.getClasspath();
-		String newClasspath = oldClasspath + "foo";
+	void it_should_change_webapp_path_with_file(@TempDir File file) {
+		final String oldWebapp = builder.getWebapp();
+		final String newWebapp = file.getAbsolutePath();
 
-		EmbeddedJettyConfiguration.Builder result = builder.withClasspath(newClasspath);
+		final EmbeddedJettyConfiguration.Builder result = builder.withWebapp(file);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
+	}
+
+	@Test
+	void it_should_change_classpath_entry() {
+		final String oldClasspath = builder.getClasspath();
+		final String newClasspath = oldClasspath + "foo";
+
+		final EmbeddedJettyConfiguration.Builder result = builder.withClasspath(newClasspath);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getClasspath()).isNotEqualTo(oldClasspath).isEqualTo(newClasspath);
 	}
 
 	@Test
-	public void it_should_change_stop_timeout() {
-		int oldStopTimeout = builder.getStopTimeout();
-		int newStopTimeout = oldStopTimeout + 10;
+	void it_should_change_stop_timeout() {
+		final int oldStopTimeout = builder.getStopTimeout();
+		final int newStopTimeout = oldStopTimeout + 10;
 
-		EmbeddedJettyConfiguration.Builder result = builder.withStopTimeout(newStopTimeout);
+		final EmbeddedJettyConfiguration.Builder result = builder.withStopTimeout(newStopTimeout);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getStopTimeout()).isNotEqualTo(oldStopTimeout).isEqualTo(newStopTimeout);
 	}
 
 	@Test
-	public void it_should_enable_stop_at_shutdown() {
-		EmbeddedJettyConfiguration.Builder result = builder.enableStopAtShutdown();
+	void it_should_enable_stop_at_shutdown() {
+		final EmbeddedJettyConfiguration.Builder result = builder.enableStopAtShutdown();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isStopAtShutdown()).isTrue();
 	}
 
 	@Test
-	public void it_should_disable_stop_at_shutdown() {
-		EmbeddedJettyConfiguration.Builder result = builder.disableStopAtShutdown();
+	void it_should_disable_stop_at_shutdown() {
+		final EmbeddedJettyConfiguration.Builder result = builder.disableStopAtShutdown();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isStopAtShutdown()).isFalse();

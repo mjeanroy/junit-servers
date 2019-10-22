@@ -27,23 +27,22 @@ package com.github.mjeanroy.junit.servers.jetty;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.jetty.exceptions.IllegalJettyConfigurationException;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class EmbeddedJettyFactoryTest {
+class EmbeddedJettyFactoryTest {
 
 	@Test
-	public void it_should_create_embedded_jetty_from_class_using_default_configuration() {
+	void it_should_create_embedded_jetty_from_class_using_default_configuration() {
 		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingDefaultConfiguration.class);
 		assertThat(jetty).isNotNull();
 		assertThat(jetty.getConfiguration()).isEqualTo(EmbeddedJettyConfiguration.defaultConfiguration());
 	}
 
 	@Test
-	public void it_should_create_embedded_jetty_from_class_using_provided_configuration() {
+	void it_should_create_embedded_jetty_from_class_using_provided_configuration() {
 		final EmbeddedJettyConfiguration providedConfiguration = EmbeddedJettyConfiguration.builder().withPath("/test").build();
 		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingDefaultConfiguration.class, providedConfiguration);
 
@@ -52,35 +51,26 @@ public class EmbeddedJettyFactoryTest {
 	}
 
 	@Test
-	public void it_should_create_embedded_tomcat_from_class_using_configuration_provider() {
+	void it_should_create_embedded_tomcat_from_class_using_configuration_provider() {
 		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassAnnotatedWithConfigurationProvider.class);
 		assertThat(jetty).isNotNull();
 		assertThat(jetty.getConfiguration()).isSameAs(DefaultEmbeddedJettyConfigurationProvider.CONFIGURATION);
 	}
 
 	@Test
-	public void it_should_create_embedded_jetty_from_class_using_custom_configuration() {
+	void it_should_create_embedded_jetty_from_class_using_custom_configuration() {
 		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingCustomConfiguration.class);
 		assertThat(jetty).isNotNull();
 		assertThat(jetty.getConfiguration()).isSameAs(ClassUsingCustomConfiguration.configuration);
 	}
 
 	@Test
-	public void it_should_fail_to_create_embedded_jetty_from_class_using_non_valid_configuration() {
-		assertThatThrownBy(createFrom())
+	void it_should_fail_to_create_embedded_jetty_from_class_using_non_valid_configuration() {
+		assertThatThrownBy(() -> EmbeddedJettyFactory.createFrom(ClassUsingNonJettyConfiguration.class))
 			.isInstanceOf(IllegalJettyConfigurationException.class)
 			.hasMessage(
 				"Embedded jetty server requires a configuration that is an instance of com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration, please fix it."
 			);
-	}
-
-	private static ThrowingCallable createFrom() {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				EmbeddedJettyFactory.createFrom(ClassUsingNonJettyConfiguration.class);
-			}
-		};
 	}
 
 	private static class ClassUsingDefaultConfiguration {

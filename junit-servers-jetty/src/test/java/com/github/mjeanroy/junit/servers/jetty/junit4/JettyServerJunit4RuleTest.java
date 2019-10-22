@@ -28,7 +28,7 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jetty.tests.EmbeddedJettyConfigurationMockBuilder;
 import com.github.mjeanroy.junit.servers.jetty.tests.EmbeddedJettyMockBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.mockito.InOrder;
@@ -40,10 +40,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-public class JettyServerJunit4RuleTest {
+class JettyServerJunit4RuleTest {
 
 	@Test
-	public void it_should_create_rule_with_server() throws Throwable {
+	void it_should_create_rule_with_server() throws Throwable {
 		final EmbeddedJettyConfiguration config = new EmbeddedJettyConfigurationMockBuilder().build();
 		final EmbeddedJetty jetty = new EmbeddedJettyMockBuilder().withConfiguration(config).build();
 		final JettyServerJunit4Rule rule = createRule(jetty);
@@ -66,7 +66,7 @@ public class JettyServerJunit4RuleTest {
 	}
 
 	@Test
-	public void it_should_create_server_from_configuration() throws Throwable {
+	void it_should_create_server_from_configuration() throws Throwable {
 		final EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.defaultConfiguration();
 		final JettyServerJunit4Rule rule = createRule(configuration);
 
@@ -75,7 +75,7 @@ public class JettyServerJunit4RuleTest {
 	}
 
 	@Test
-	public void it_should_create_server_with_default_configuration() throws Throwable {
+	void it_should_create_server_with_default_configuration() throws Throwable {
 		final JettyServerJunit4Rule rule = createRule();
 
 		assertThat(rule.getPort()).isZero(); // not started

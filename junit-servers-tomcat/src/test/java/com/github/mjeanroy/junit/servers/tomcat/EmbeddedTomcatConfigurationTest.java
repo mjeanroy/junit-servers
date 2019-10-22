@@ -26,17 +26,17 @@ package com.github.mjeanroy.junit.servers.tomcat;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmbeddedTomcatConfigurationTest {
+class EmbeddedTomcatConfigurationTest {
 
 	@Test
-	public void it_should_build_default_configuration() {
+	void it_should_build_default_configuration() {
 		final EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.defaultConfiguration();
 
 		assertThat(result.getPort()).isEqualTo(0);
@@ -49,7 +49,7 @@ public class EmbeddedTomcatConfigurationTest {
 	}
 
 	@Test
-	public void it_should_build_configuration() {
+	void it_should_build_configuration() {
 		final int port = 8080;
 		final String path = "/foo";
 		final String webapp = "foo";
@@ -75,7 +75,7 @@ public class EmbeddedTomcatConfigurationTest {
 	}
 
 	@Test
-	public void it_should_implement_equals_hashCode() {
+	void it_should_implement_equals_hashCode() {
 		final ClassLoader red = new URLClassLoader(new URL[0]);
 		final ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(EmbeddedTomcatConfiguration.class)
@@ -86,9 +86,9 @@ public class EmbeddedTomcatConfigurationTest {
 	}
 
 	@Test
-	public void it_should_have_to_string() {
+	void it_should_have_to_string() {
 		final EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.defaultConfiguration();
-		assertThat(result.toString()).isEqualTo(
+		assertThat(result).hasToString(
 			"EmbeddedTomcatConfiguration{" +
 				"port: 0, " +
 				"path: \"/\", " +

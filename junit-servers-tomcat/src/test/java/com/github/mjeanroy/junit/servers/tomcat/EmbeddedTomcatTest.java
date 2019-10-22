@@ -31,35 +31,32 @@ import okhttp3.ResponseBody;
 import org.apache.catalina.Container;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleState;
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
 
 import static com.github.mjeanroy.junit.servers.tomcat.tests.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmbeddedTomcatTest {
+class EmbeddedTomcatTest {
 
 	private static final String PATH = "junit-servers-tomcat/";
 
-	@Rule
-	public TemporaryFolder tmp = new TemporaryFolder();
-
 	private EmbeddedTomcat tomcat;
 
-	@After
-	public void tearDown() {
+	@AfterEach
+	void tearDown() {
 		if (tomcat != null) {
 			tomcat.stop();
 		}
 	}
 
 	@Test
-	public void it_should_start_tomcat() {
+	void it_should_start_tomcat() {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		tomcat.start();
 
@@ -72,7 +69,7 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_stop_tomcat() {
+	void it_should_stop_tomcat() {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		tomcat.start();
 
@@ -93,7 +90,7 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_destroy_context_on_stop() {
+	void it_should_destroy_context_on_stop() {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		assertThat((Context) readPrivate(tomcat, "context")).isNull();
 
@@ -109,7 +106,7 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_delete_base_dir_on_stop() {
+	void it_should_delete_base_dir_on_stop() {
 		tomcat = new EmbeddedTomcat(defaultConfigurationBuilder().deleteBaseDir().build());
 		File baseDir = new File(tomcat.getConfiguration().getBaseDir());
 
@@ -122,7 +119,7 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_keep_base_dir_on_stop() {
+	void it_should_keep_base_dir_on_stop() {
 		tomcat = new EmbeddedTomcat(defaultConfigurationBuilder().keepBaseDir().build());
 		File baseDir = new File(tomcat.getConfiguration().getBaseDir());
 
@@ -135,22 +132,21 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_get_servlet_context() {
+	void it_should_get_servlet_context() {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		tomcat.start();
 		assertThat(tomcat.getServletContext()).isNotNull();
 	}
 
 	@Test
-	public void it_should_get_original_tomcat() {
+	void it_should_get_original_tomcat() {
 		tomcat = new EmbeddedTomcat();
 		assertThat(tomcat.getDelegate()).isNotNull();
 	}
 
 	@Test
-	public void it_should_create_meta_inf_directory_if_it_does_not_exist() throws Exception {
-		File baseDir = tmp.newFolder();
-		File metaInf = new File(baseDir, "META-INF");
+	void it_should_create_meta_inf_directory_if_it_does_not_exist(@TempDir File baseDir) throws Exception {
+		final File metaInf = new File(baseDir, "META-INF");
 
 		tomcat = new EmbeddedTomcat(EmbeddedTomcatConfiguration.builder()
 			.withClasspath(baseDir.getAbsolutePath())
@@ -165,9 +161,9 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_add_parent_classloader() throws Exception {
-		File tmpFile = tmp.newFile();
-		File dir = tmpFile.getParentFile();
+	void it_should_add_parent_classloader(@TempDir File tmpDir) throws Exception {
+		final File tmpFile = Files.createTempFile(tmpDir.toPath(), null, null).toFile();
+		final File dir = tmpFile.getParentFile();
 
 		tomcat = new EmbeddedTomcat(EmbeddedTomcatConfiguration.builder()
 			.withWebapp(dir)
@@ -176,8 +172,8 @@ public class EmbeddedTomcatTest {
 
 		tomcat.start();
 
-		Container[] containers = tomcat.getDelegate().getHost().findChildren();
-		ClassLoader cl = containers[0].getParentClassLoader();
+		final Container[] containers = tomcat.getDelegate().getHost().findChildren();
+		final ClassLoader cl = containers[0].getParentClassLoader();
 
 		assertThat(cl).isNotNull();
 		assertThat(cl.getResource("hello-world.html")).isNotNull();
@@ -185,10 +181,10 @@ public class EmbeddedTomcatTest {
 	}
 
 	@Test
-	public void it_should_override_web_xml() throws Exception {
-		URL resource = getClass().getResource("/custom-web.xml");
-		String webXmlPath = resource.getFile();
-		File descriptor = new File(webXmlPath);
+	void it_should_override_web_xml() throws Exception {
+		final URL resource = getClass().getResource("/custom-web.xml");
+		final String webXmlPath = resource.getFile();
+		final File descriptor = new File(webXmlPath);
 
 		tomcat = new EmbeddedTomcat(defaultConfigurationBuilder()
 			.withOverrideDescriptor(descriptor.getAbsolutePath())
@@ -196,14 +192,14 @@ public class EmbeddedTomcatTest {
 
 		tomcat.start();
 
-		OkHttpClient client = new OkHttpClient();
-		Request rq = new Request.Builder().url(tomcat.getUrl()).build();
-		Response rsp = client.newCall(rq).execute();
+		final OkHttpClient client = new OkHttpClient();
+		final Request rq = new Request.Builder().url(tomcat.getUrl()).build();
+		final Response rsp = client.newCall(rq).execute();
 
 		assertThat(rsp).isNotNull();
 		assertThat(rsp.code()).isEqualTo(200);
 
-		ResponseBody body = rsp.body();
+		final ResponseBody body = rsp.body();
 		String content = body == null ? null : body.string();
 		assertThat(content).isNotEmpty().contains("Hello World");
 	}

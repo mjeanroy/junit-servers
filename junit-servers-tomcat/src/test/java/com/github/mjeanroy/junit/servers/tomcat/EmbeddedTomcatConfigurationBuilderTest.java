@@ -24,29 +24,26 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.nio.file.Files;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmbeddedTomcatConfigurationBuilderTest {
-
-	@Rule
-	public TemporaryFolder folder = new TemporaryFolder();
+class EmbeddedTomcatConfigurationBuilderTest {
 
 	private EmbeddedTomcatConfiguration.Builder builder;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		builder = EmbeddedTomcatConfiguration.builder();
 	}
 
 	@Test
-	public void it_should_have_default_values() {
+	void it_should_have_default_values() {
 		assertThat(builder.getPath()).isEqualTo("/");
 		assertThat(builder.getPort()).isZero();
 		assertThat(builder.isEnableNaming()).isTrue();
@@ -57,115 +54,115 @@ public class EmbeddedTomcatConfigurationBuilderTest {
 	}
 
 	@Test
-	public void it_should_change_port() {
-		int oldPort = builder.getPort();
-		int newPort = oldPort + 10;
+	void it_should_change_port() {
+		final int oldPort = builder.getPort();
+		final int newPort = oldPort + 10;
 
-		EmbeddedTomcatConfiguration.Builder result = builder.withPort(newPort);
+		final EmbeddedTomcatConfiguration.Builder result = builder.withPort(newPort);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getPort()).isNotEqualTo(oldPort).isEqualTo(newPort);
 	}
 
 	@Test
-	public void it_should_change_path() {
-		String oldPath = builder.getPath();
-		String newPath = oldPath + "foo";
+	void it_should_change_path() {
+		final String oldPath = builder.getPath();
+		final String newPath = oldPath + "foo";
 
-		EmbeddedTomcatConfiguration.Builder result = builder.withPath(newPath);
+		final EmbeddedTomcatConfiguration.Builder result = builder.withPath(newPath);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getPath()).isNotEqualTo(oldPath).isEqualTo(newPath);
 	}
 
 	@Test
-	public void it_should_change_webapp_path() {
-		String oldWebapp = builder.getWebapp();
-		String newWebapp = oldWebapp + "foo";
+	void it_should_change_webapp_path() {
+		final String oldWebapp = builder.getWebapp();
+		final String newWebapp = oldWebapp + "foo";
 
-		EmbeddedTomcatConfiguration.Builder result = builder.withWebapp(newWebapp);
-
-		assertThat(result).isSameAs(builder);
-		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
-	}
-
-	@Test
-	public void it_should_change_webapp_path_with_file() throws Exception {
-		String oldWebapp = builder.getWebapp();
-		File file = folder.newFile("foo");
-		String newWebapp = file.getAbsolutePath();
-
-		EmbeddedTomcatConfiguration.Builder result = builder.withWebapp(file);
+		final EmbeddedTomcatConfiguration.Builder result = builder.withWebapp(newWebapp);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
 	}
 
 	@Test
-	public void it_should_change_classpath_entry() {
-		String oldClasspath = builder.getClasspath();
-		String newClasspath = oldClasspath + "foo";
+	void it_should_change_webapp_path_with_file(@TempDir File dir) throws Exception {
+		final String oldWebapp = builder.getWebapp();
+		final File file = Files.createTempFile(dir.toPath(), null, null).toFile();
+		final String newWebapp = file.getAbsolutePath();
 
-		EmbeddedTomcatConfiguration.Builder result = builder.withClasspath(newClasspath);
+		final EmbeddedTomcatConfiguration.Builder result = builder.withWebapp(file);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
+	}
+
+	@Test
+	void it_should_change_classpath_entry() {
+		final String oldClasspath = builder.getClasspath();
+		final String newClasspath = oldClasspath + "foo";
+
+		final EmbeddedTomcatConfiguration.Builder result = builder.withClasspath(newClasspath);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getClasspath()).isNotEqualTo(oldClasspath).isEqualTo(newClasspath);
 	}
 
 	@Test
-	public void it_should_change_base_dir() {
-		String oldBaseDir = builder.getBaseDir();
-		String newBaseDir = oldBaseDir + "foo";
+	void it_should_change_base_dir() {
+		final String oldBaseDir = builder.getBaseDir();
+		final String newBaseDir = oldBaseDir + "foo";
 
-		EmbeddedTomcatConfiguration.Builder result = builder.withBaseDir(newBaseDir);
+		final EmbeddedTomcatConfiguration.Builder result = builder.withBaseDir(newBaseDir);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getBaseDir()).isNotEqualTo(oldBaseDir).isEqualTo(newBaseDir);
 	}
 
 	@Test
-	public void it_should_keep_base_dir() {
-		EmbeddedTomcatConfiguration.Builder result = builder.keepBaseDir();
+	void it_should_keep_base_dir() {
+		final EmbeddedTomcatConfiguration.Builder result = builder.keepBaseDir();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isKeepBaseDir()).isTrue();
 	}
 
 	@Test
-	public void it_should_delete_base_dir() {
-		EmbeddedTomcatConfiguration.Builder result = builder.deleteBaseDir();
+	void it_should_delete_base_dir() {
+		final EmbeddedTomcatConfiguration.Builder result = builder.deleteBaseDir();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isKeepBaseDir()).isFalse();
 	}
 
 	@Test
-	public void it_should_enable_naming() {
-		EmbeddedTomcatConfiguration.Builder result = builder.enableNaming();
+	void it_should_enable_naming() {
+		final EmbeddedTomcatConfiguration.Builder result = builder.enableNaming();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isEnableNaming()).isTrue();
 	}
 
 	@Test
-	public void it_should_disable_naming() {
-		EmbeddedTomcatConfiguration.Builder result = builder.disableNaming();
+	void it_should_disable_naming() {
+		final EmbeddedTomcatConfiguration.Builder result = builder.disableNaming();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isEnableNaming()).isFalse();
 	}
 
 	@Test
-	public void it_should_enable_metaInf_creation() {
-		EmbeddedTomcatConfiguration.Builder result = builder.enableForceMetaInf();
+	void it_should_enable_metaInf_creation() {
+		final EmbeddedTomcatConfiguration.Builder result = builder.enableForceMetaInf();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isForceMetaInf()).isTrue();
 	}
 
 	@Test
-	public void it_should_disable_metaInf_creation() {
-		EmbeddedTomcatConfiguration.Builder result = builder.disableForceMetaInf();
+	void it_should_disable_metaInf_creation() {
+		final EmbeddedTomcatConfiguration.Builder result = builder.disableForceMetaInf();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isForceMetaInf()).isFalse();
