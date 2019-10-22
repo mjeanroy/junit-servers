@@ -30,53 +30,52 @@ import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.junit.Test;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JunitServerRunnerTest {
+class JunitServerRunnerTest {
 
 	private static final EmbeddedTomcatConfiguration configuration = defaultConfiguration();
 
 	@Test
-	public void it_should_instantiate_tomcat_with_default_configuration() throws Exception {
-		JunitServerRunner runner = new JunitServerRunner(TestClassWithInjectedConfiguration.class);
+	void it_should_instantiate_tomcat_with_default_configuration() throws Exception {
+		final JunitServerRunner runner = new JunitServerRunner(TestClassWithInjectedConfiguration.class);
+		final EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
+		final AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 
-		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
 		assertThat(server).isInstanceOf(EmbeddedTomcat.class);
-
-		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 		assertThat(conf).isNotSameAs(configuration).isEqualTo(configuration);
 	}
 
 	@Test
-	public void it_should_instantiate_tomcat_with_configuration() throws Exception {
-		JunitServerRunner runner = new JunitServerRunner(TestClassWithConfigurationMethod.class);
+	void it_should_instantiate_tomcat_with_configuration() throws Exception {
+		final JunitServerRunner runner = new JunitServerRunner(TestClassWithConfigurationMethod.class);
+		final EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
+		final AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 
-		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
 		assertThat(server).isInstanceOf(EmbeddedTomcat.class);
-
-		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 		assertThat(conf).isSameAs(configuration);
 	}
 
+	@Ignore
 	public static class TestClassWithInjectedConfiguration {
+
 		@TestServer
 		private static EmbeddedServer<?> server;
 
 		@TestServerConfiguration
 		private static EmbeddedTomcatConfiguration configuration;
 
-		public TestClassWithInjectedConfiguration() {
-		}
-
-		@Test
+		@org.junit.Test
 		public void fooTest() {
 		}
 	}
 
+	@Ignore
 	public static class TestClassWithConfigurationMethod {
 		@TestServer
 		private static EmbeddedServer<?> server;
@@ -86,10 +85,7 @@ public class JunitServerRunnerTest {
 			return configuration;
 		}
 
-		public TestClassWithConfigurationMethod() {
-		}
-
-		@Test
+		@org.junit.Test
 		public void fooTest() {
 		}
 	}
