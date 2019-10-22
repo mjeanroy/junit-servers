@@ -123,11 +123,6 @@
       <artifactId>logback-classic</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.github.mjeanroy</groupId>
-      <artifactId>junit-runif</artifactId>
-      <scope>test</scope>
-    </dependency>
 
     <dependency>
       <groupId>com.ning</groupId>

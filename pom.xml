@@ -137,7 +137,6 @@
     <slf4j.version>1.7.28</slf4j.version>
     <log4j.version>2.11.2</log4j.version>
     <logback.version>1.2.3</logback.version>
-    <junit-runif.version>0.2.0</junit-runif.version>
   </properties>
 
   <dependencyManagement>
@@ -316,11 +315,6 @@
         <groupId>nl.jqno.equalsverifier</groupId>
         <artifactId>equalsverifier</artifactId>
         <version>${equalsverifier.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.github.mjeanroy</groupId>
-        <artifactId>junit-runif</artifactId>
-        <version>${junit-runif.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
