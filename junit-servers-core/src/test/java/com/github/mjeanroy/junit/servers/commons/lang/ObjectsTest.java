@@ -32,7 +32,7 @@ class ObjectsTest {
 
 	@Test
 	void it_should_get_first_non_null_object() {
-		assertThat(Objects.firstNonNull((String) null, (String) null)).isNull();
+		assertThat(Objects.firstNonNull((String) null, null)).isNull();
 		assertThat(Objects.firstNonNull(1, null)).isEqualTo(1);
 		assertThat(Objects.firstNonNull(null, 1)).isEqualTo(1);
 		assertThat(Objects.firstNonNull(1, 2)).isEqualTo(1);

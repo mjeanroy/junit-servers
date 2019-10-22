@@ -24,7 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.commons.lang.Strings;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +82,7 @@ class HttpRequestBodyPartTest {
 
 		final String result = new String(part.serialize(), StandardCharsets.UTF_8);
 
-		assertThat(result).isEqualTo(Strings.join("\r\n", asList(
+		assertThat(result).isEqualTo(String.join("\r\n", asList(
 			"Content-Disposition: form-data; name=\"file\"",
 			"",
 			"1"
@@ -101,7 +100,7 @@ class HttpRequestBodyPartTest {
 
 		final String result = new String(part.serialize(), StandardCharsets.UTF_8);
 
-		assertThat(result).isEqualTo(Strings.join("\r\n", asList(
+		assertThat(result).isEqualTo(String.join("\r\n", asList(
 			"Content-Disposition: form-data; name=\"file\"",
 			"Content-Type: text/plain",
 			"",

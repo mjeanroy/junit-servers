@@ -24,7 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.commons.lang.Collections;
 import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 
 import java.util.ArrayList;
@@ -183,7 +182,7 @@ public final class HttpHeader {
 	 * @return Header values serialized as a string.
 	 */
 	public String serializeValues() {
-		return Collections.join(values, HEADER_SEPARATOR);
+		return String.join(HEADER_SEPARATOR, values);
 	}
 
 	/**

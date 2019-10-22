@@ -24,7 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.commons.lang.Strings;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
@@ -129,7 +128,7 @@ class HttpRequestBodyMultipartTest {
 		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
 		final String result = new String(requestBody.getBody(), StandardCharsets.UTF_8);
 
-		assertThat(result).isEqualTo(Strings.join("\r\n", asList(
+		assertThat(result).isEqualTo(String.join("\r\n", asList(
 			"--123456789",
 			"Content-Disposition: form-data; name=\"part1\"",
 			"Content-Type: text/plain",
@@ -157,7 +156,7 @@ class HttpRequestBodyMultipartTest {
 		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
 		final String result = toUtf8String(requestBody.getBody());
 
-		assertThat(result).isEqualToNormalizingNewlines(Strings.join("\r\n", asList(
+		assertThat(result).isEqualToNormalizingNewlines(String.join("\r\n", asList(
 			"--123456789",
 			"Content-Disposition: form-data; name=\"param\"",
 			"Content-Type: text/plain",

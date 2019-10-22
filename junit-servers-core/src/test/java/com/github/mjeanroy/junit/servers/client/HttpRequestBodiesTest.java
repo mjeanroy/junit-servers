@@ -24,7 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.commons.lang.Strings;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -215,7 +214,7 @@ class HttpRequestBodiesTest {
 
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("multipart/form-data; boundary=---------------------------974767299852498929531610575");
-		assertThat(toUtf8String(body.getBody())).isEqualTo(Strings.join("\r\n", asList(
+		assertThat(toUtf8String(body.getBody())).isEqualTo(String.join("\r\n", asList(
 			"-----------------------------974767299852498929531610575",
 			"Content-Disposition: form-data; name=\"id\"",
 			"",

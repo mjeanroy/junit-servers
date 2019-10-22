@@ -25,7 +25,6 @@
 package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.commons.lang.Strings;
 import com.github.mjeanroy.junit.servers.exceptions.DuplicateConfigurationException;
 import com.github.mjeanroy.junit.servers.exceptions.ServerImplMissingException;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
@@ -201,7 +200,7 @@ public final class Servers {
 		}
 
 		throw new DuplicateConfigurationException(
-			Strings.join(lineSeparator(), lines)
+			String.join(lineSeparator(), lines)
 		);
 	}
 }

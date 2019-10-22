@@ -24,7 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.commons.reflect;
 
-import com.github.mjeanroy.junit.servers.commons.lang.Predicate;
 import com.github.mjeanroy.junit.servers.exceptions.ReflectionException;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
@@ -33,13 +32,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static com.github.mjeanroy.junit.servers.commons.lang.Collections.filter;
 import static com.github.mjeanroy.junit.servers.commons.reflect.Annotations.isAnnotationPresent;
 import static java.lang.reflect.Modifier.isStatic;
-import static java.util.Arrays.asList;
 import static java.util.Collections.addAll;
 
 /**
@@ -86,8 +86,8 @@ public final class Reflections {
 	 * @param type Class to inspect.
 	 * @return Fields.
 	 */
-	private static List<Field> findStaticFields(Class<?> type) {
-		return filter(asList(type.getDeclaredFields()), STATIC_FIELD_PREDICATE);
+	private static Stream<Field> findStaticFields(Class<?> type) {
+		return Arrays.stream(type.getDeclaredFields()).filter(field -> isStatic(field.getModifiers()));
 	}
 
 	/**
@@ -96,8 +96,8 @@ public final class Reflections {
 	 * @param type Class to inspect.
 	 * @return Fields.
 	 */
-	private static List<Method> findStaticMethods(Class<?> type) {
-		return filter(asList(type.getDeclaredMethods()), STATIC_METHOD_PREDICATE);
+	private static Stream<Method> findStaticMethods(Class<?> type) {
+		return Arrays.stream(type.getDeclaredMethods()).filter(method -> isStatic(method.getModifiers()));
 	}
 
 	/**
@@ -105,13 +105,12 @@ public final class Reflections {
 	 * annotated with given annotation.
 	 *
 	 * @param type Class to inspect.
-	 * @param klass Annotation class.
+	 * @param annotationClass Annotation class.
 	 * @return Fields.
 	 */
-	public static List<Field> findStaticFieldsAnnotatedWith(Class<?> type, Class<? extends Annotation> klass) {
-		log.trace("Find static fields of {} annotated with {}", type, klass);
-		List<Field> fields = findStaticFields(type);
-		return filter(fields, new FieldAnnotatedWithPredicate(klass));
+	public static List<Field> findStaticFieldsAnnotatedWith(Class<?> type, Class<? extends Annotation> annotationClass) {
+		log.trace("Find static fields of {} annotated with {}", type, annotationClass);
+		return findStaticFields(type).filter(field -> isAnnotationPresent(field, annotationClass)).collect(Collectors.toList());
 	}
 
 	/**
@@ -119,13 +118,12 @@ public final class Reflections {
 	 * annotated with given annotation.
 	 *
 	 * @param type Class to inspect.
-	 * @param klass Annotation class.
+	 * @param annotationClass Annotation class.
 	 * @return Fields.
 	 */
-	public static List<Method> findStaticMethodsAnnotatedWith(Class<?> type, Class<? extends Annotation> klass) {
-		log.trace("Extract static methods of class {} annotated with {}", type, klass);
-		List<Method> methods = findStaticMethods(type);
-		return filter(methods, new MethodAnnotatedWithPredicate(klass));
+	public static List<Method> findStaticMethodsAnnotatedWith(Class<?> type, Class<? extends Annotation> annotationClass) {
+		log.trace("Extract static methods of class {} annotated with {}", type, annotationClass);
+		return findStaticMethods(type).filter(method -> isAnnotationPresent(method, annotationClass)).collect(Collectors.toList());
 	}
 
 	/**
@@ -228,76 +226,4 @@ public final class Reflections {
 			}
 		}
 	}
-
-	/**
-	 * Predicate that will return {@code true} if the field in parameter is annotated with a
-	 * given {@link Annotation}.
-	 */
-	private static class FieldAnnotatedWithPredicate implements Predicate<Field> {
-
-		/**
-		 * The annotation to check.
-		 */
-		private final Class<? extends Annotation> annotationKlass;
-
-		/**
-		 * Create the predicate.
-		 *
-		 * @param annotationKlass The annotation to check.
-		 */
-		private FieldAnnotatedWithPredicate(Class<? extends Annotation> annotationKlass) {
-			this.annotationKlass = annotationKlass;
-		}
-
-		@Override
-		public boolean apply(Field field) {
-			return isAnnotationPresent(field, annotationKlass);
-		}
-	}
-
-	/**
-	 * Predicate that will return {@code true} if the method in parameter is annotated with a
-	 * given {@link Annotation}.
-	 */
-	private static class MethodAnnotatedWithPredicate implements Predicate<Method> {
-
-		/**
-		 * The annotation to check.
-		 */
-		private final Class<? extends Annotation> annotationKlass;
-
-		/**
-		 * Create the predicate.
-		 *
-		 * @param annotationKlass The annotation to check.
-		 */
-		private MethodAnnotatedWithPredicate(Class<? extends Annotation> annotationKlass) {
-			this.annotationKlass = annotationKlass;
-		}
-
-		@Override
-		public boolean apply(Method method) {
-			return isAnnotationPresent(method, annotationKlass);
-		}
-	}
-
-	/**
-	 * Predicate that will return {@code true} if the field in parameter is a static field.
-	 */
-	private static final Predicate<Field> STATIC_FIELD_PREDICATE = new Predicate<Field>() {
-		@Override
-		public boolean apply(Field field) {
-			return isStatic(field.getModifiers());
-		}
-	};
-
-	/**
-	 * Predicate that will return {@code true} if the method in parameter is a static method.
-	 */
-	private static final Predicate<Method> STATIC_METHOD_PREDICATE = new Predicate<Method>() {
-		@Override
-		public boolean apply(Method object) {
-			return isStatic(object.getModifiers());
-		}
-	};
 }

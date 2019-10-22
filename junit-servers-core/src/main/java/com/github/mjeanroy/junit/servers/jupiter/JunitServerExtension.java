@@ -163,7 +163,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	/**
 	 * The list of parameter resolvers.
 	 */
-	private static final Map<Class<?>, ParameterResolverFunction> RESOLVERS = new HashMap<Class<?>, ParameterResolverFunction>();
+	private static final Map<Class<?>, ParameterResolverFunction> RESOLVERS = new HashMap<>();
 
 	static {
 		RESOLVERS.put(EmbeddedServer.class, EmbeddedServerParameterResolverFunction.getInstance());

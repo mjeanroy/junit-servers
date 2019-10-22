@@ -40,7 +40,6 @@ import com.github.tomakehurst.wiremock.matching.UrlPattern;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.client.it.HeaderTestUtils.APPLICATION_JSON;
@@ -51,6 +50,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.request;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 
 final class WireMockTestUtils {
@@ -156,7 +156,7 @@ final class WireMockTestUtils {
 	 * @param status Response HTTP status code.
 	 */
 	static void stubUploadRequest(String endpoint, int status) {
-		stubRequest(POST, endpoint, status, Collections.<Pair>emptyList());
+		stubRequest(POST, endpoint, status, emptyList());
 	}
 
 	/**

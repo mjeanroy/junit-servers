@@ -33,7 +33,6 @@ import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -41,6 +40,7 @@ import java.util.Objects;
 import static com.github.mjeanroy.junit.servers.client.HttpHeader.header;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.doesNotContainNull;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 import static java.util.Collections.unmodifiableMap;
 
@@ -62,7 +62,7 @@ public final class HttpRequestBodyPart {
 	 */
 	static HttpRequestBodyPart of(HttpRequestBody body) {
 		notNull(body, "body");
-		return new HttpRequestBodyPart(body, Collections.<HttpHeader>emptyList());
+		return new HttpRequestBodyPart(body, emptyList());
 	}
 
 	/**

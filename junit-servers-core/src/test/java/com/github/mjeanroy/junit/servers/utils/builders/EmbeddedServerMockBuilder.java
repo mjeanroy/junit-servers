@@ -138,12 +138,7 @@ public class EmbeddedServerMockBuilder {
 	public EmbeddedServer<?> build() {
 		EmbeddedServer<?> server = mock(EmbeddedServer.class, "MockEmbeddedServer");
 
-		when(server.getConfiguration()).thenAnswer(new Answer<AbstractConfiguration>() {
-			@Override
-			public AbstractConfiguration answer(InvocationOnMock invocation) throws Throwable {
-				return configuration;
-			}
-		});
+		when(server.getConfiguration()).thenAnswer((Answer<AbstractConfiguration>) invocation -> configuration);
 
 		when(server.getScheme()).thenReturn(scheme);
 		when(server.getHost()).thenReturn(host);

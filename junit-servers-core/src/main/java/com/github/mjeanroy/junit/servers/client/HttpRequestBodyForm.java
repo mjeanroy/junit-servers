@@ -25,7 +25,6 @@
 package com.github.mjeanroy.junit.servers.client;
 
 import com.github.mjeanroy.junit.servers.commons.io.Ios;
-import com.github.mjeanroy.junit.servers.commons.lang.Strings;
 import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public final class HttpRequestBodyForm implements HttpRequestBody {
 			rawParameters.add(parameter.asEncodedString());
 		}
 
-		String rawBody = Strings.join("&", rawParameters);
+		String rawBody = String.join("&", rawParameters);
 		return Ios.toUtf8Bytes(rawBody);
 	}
 

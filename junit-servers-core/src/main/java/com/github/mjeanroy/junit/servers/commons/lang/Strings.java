@@ -24,8 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.commons.lang;
 
-import java.util.Collection;
-
 /**
  * Static string utilities.
  *
@@ -118,28 +116,5 @@ public final class Strings {
 	 */
 	public static String toLowerCase(String value) {
 		return value == null ? null : value.toLowerCase();
-	}
-
-	/**
-	 * Join all strings to a single one using given separator.
-	 *
-	 * @param separator String separator.
-	 * @param values All string to join.
-	 * @return The final string.
-	 */
-	public static String join(String separator, Collection<String> values) {
-		StringBuilder builder = new StringBuilder();
-		boolean first = true;
-
-		for (String value : values) {
-			if (!first) {
-				builder.append(separator);
-			}
-
-			builder.append(value);
-			first = false;
-		}
-
-		return builder.toString();
 	}
 }

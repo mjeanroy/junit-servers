@@ -24,7 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-import com.github.mjeanroy.junit.servers.commons.lang.Strings;
 import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
@@ -266,7 +265,7 @@ final class HttpRequestBodyPartBuilder {
 			parts.add("filename=\"" + toEscapedString(filename) + "\"");
 		}
 
-		return Strings.join("; ", parts);
+		return String.join("; ", parts);
 	}
 
 	/**
