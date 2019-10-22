@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.client.it.impl;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.client.it.BaseHttpClientTest;
 
-public class NingAsyncHttpClientTest extends BaseHttpClientTest {
+class NingAsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClientStrategy strategy() {

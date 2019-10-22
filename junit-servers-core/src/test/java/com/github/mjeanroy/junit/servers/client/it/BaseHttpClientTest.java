@@ -40,14 +40,11 @@ import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilde
 import com.github.mjeanroy.junit.servers.utils.commons.Function;
 import com.github.mjeanroy.junit.servers.utils.commons.MapperFunction;
 import com.github.mjeanroy.junit.servers.utils.commons.Pair;
-import com.github.mjeanroy.junit4.runif.RunIfRunner;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.github.mjeanroy.junit.servers.utils.jupiter.WireMockTest;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Calendar;
@@ -121,13 +118,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
 
-@RunWith(RunIfRunner.class)
+@WireMockTest
 public abstract class BaseHttpClientTest {
 
 	private static final String ENDPOINT = "/people";
-
-	@Rule
-	public WireMockRule wireMockRule = new WireMockRule();
 
 	private EmbeddedServer<?> server;
 	private String scheme;
@@ -135,11 +129,11 @@ public abstract class BaseHttpClientTest {
 	private int port;
 	private HttpClient client;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp(WireMockServer wireMockServer) {
 		scheme = "http";
 		host = "localhost";
-		port = wireMockRule.port();
+		port = wireMockServer.port();
 		server = new EmbeddedServerMockBuilder()
 			.withScheme(scheme)
 			.withHost(host)
@@ -147,15 +141,15 @@ public abstract class BaseHttpClientTest {
 			.build();
 	}
 
-	@After
-	public void tearDown() {
+	@AfterEach
+	void tearDown() {
 		if (client != null) {
 			client.destroy();
 		}
 	}
 
 	@Test
-	public void testRequestUrl() {
+	void testRequestUrl() {
 		final String endpoint = ENDPOINT;
 		final HttpRequest rq = createDefaultClient()
 			.prepareGet(endpoint)
@@ -172,7 +166,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testGet() {
+	void testGet() {
 		final String endpoint = ENDPOINT;
 		final int status = 200;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -194,7 +188,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testGetReadingBodyTwice() {
+	void testGetReadingBodyTwice() {
 		final String endpoint = ENDPOINT;
 		final int status = 200;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -208,13 +202,13 @@ public abstract class BaseHttpClientTest {
 			.asXmlHttpRequest()
 			.execute();
 
-		String r1 = rsp.body();
-		String r2 = rsp.body();
+		final String r1 = rsp.body();
+		final String r2 = rsp.body();
 		assertThat(r1).isEqualTo(r2);
 	}
 
 	@Test
-	public void testGetWithFullEndpoint() {
+	void testGetWithFullEndpoint() {
 		final String endpoint = ENDPOINT;
 		final String rqUrl = url(scheme, host, port, endpoint);
 		final int status = 200;
@@ -237,7 +231,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testGetWithNonEncodedPath() {
+	void testGetWithNonEncodedPath() {
 		final String endpoint = ENDPOINT + "/john doe";
 		final String encodedPath = encodePath(endpoint);
 		final int status = 200;
@@ -260,7 +254,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testHead() {
+	void testHead() {
 		final String endpoint = ENDPOINT;
 		final int status = 200;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -281,7 +275,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPost() {
+	void testPost() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -304,7 +298,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPostWithJsonBodyString() {
+	void testPostWithJsonBodyString() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final String rawBody = "{\"id\": 1, \"name\": \"Jane Doe\"}";
@@ -328,7 +322,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPostWithoutBodyElement() {
+	void testPostWithoutBodyElement() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -351,7 +345,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPreparePostWithBodyElement() {
+	void testPreparePostWithBodyElement() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -371,7 +365,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPut() {
+	void testPut() {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
 		final Collection<Pair> headers = emptyList();
@@ -392,7 +386,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPutWithJsonBodyString() {
+	void testPutWithJsonBodyString() {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
 		final Collection<Pair> headers = emptyList();
@@ -415,7 +409,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPutWithoutBody() {
+	void testPutWithoutBody() {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
 		final Collection<Pair> headers = emptyList();
@@ -436,7 +430,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPreparePutWithBody() {
+	void testPreparePutWithBody() {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
 		final Collection<Pair> headers = emptyList();
@@ -455,7 +449,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPatch() {
+	void testPatch() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -480,7 +474,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPatchWithRawBody() {
+	void testPatchWithRawBody() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -506,7 +500,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testPreparePatchWithBody() {
+	void testPreparePatchWithBody() {
 		final String endpoint = ENDPOINT + "/1";
 		final int status = 204;
 		final Collection<Pair> headers = emptyList();
@@ -524,7 +518,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testDelete() {
+	void testDelete() {
 		final int status = 204;
 		final Collection<Pair> headers = emptyList();
 		final String endpoint = ENDPOINT + "/1";
@@ -545,7 +539,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testUploadWithMultipartRequest() {
+	void testUploadWithMultipartRequest() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
 		final File file = classpathFile("/img1.jpg");
@@ -566,7 +560,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequestWithDefaultHeader() {
+	void testRequestWithDefaultHeader() {
 		final String name = "X-Custom-Header";
 		final String value = "FooBar";
 		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
@@ -575,15 +569,11 @@ public abstract class BaseHttpClientTest {
 
 		stubDefaultRequest(ENDPOINT);
 
-		testRequestHeader(createCustomClient(configuration), name, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-			}
-		});
+		testRequestHeader(createCustomClient(configuration), name, value, rq -> {});
 	}
 
 	@Test
-	public void testRequestWithDefaultHeaderObject() {
+	void testRequestWithDefaultHeaderObject() {
 		final String name = "X-Custom-Header";
 		final String value = "FooBar";
 		final HttpHeader header = HttpHeader.header(name, value);
@@ -593,230 +583,166 @@ public abstract class BaseHttpClientTest {
 
 		stubDefaultRequest(ENDPOINT);
 
-		testRequestHeader(createCustomClient(configuration), name, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-			}
-		});
+		testRequestHeader(createCustomClient(configuration), name, value, rq -> {});
 	}
 
 	@Test
-	public void testRequest_with_custom_header() {
+	void testRequest_with_custom_header() {
 		final String name = "X-Custom-Header";
 		final String value = "FooBar";
-		testRequestHeader(name, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addHeader(name, value);
-			}
-		});
+		testRequestHeader(name, value, rq ->
+			rq.addHeader(name, value)
+		);
 	}
 
 	@Test
-	public void testRequest_with_custom_header_instance() {
+	void testRequest_with_custom_header_instance() {
 		final String name = "X-Custom-Header";
 		final String value = "FooBar";
 		final HttpHeader header = HttpHeader.header(name, value);
-		testRequestHeader(name, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addHeader(header);
-			}
-		});
+		testRequestHeader(name, value, rq ->
+			rq.addHeader(header)
+		);
 	}
 
 	@Test
-	public void testRequest_as_xml_http_request() {
+	void testRequest_as_xml_http_request() {
 		final String value = "XMLHttpRequest";
-		testRequestHeader(X_REQUESTED_WITH, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.asXmlHttpRequest();
-			}
-		});
+		testRequestHeader(X_REQUESTED_WITH, value,
+			HttpRequest::asXmlHttpRequest
+		);
 	}
 
 	@Test
-	public void testRequest_accept_language() {
+	void testRequest_accept_language() {
 		final String value = "fr";
-		testRequestHeader(ACCEPT_LANGUAGE, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.acceptLanguage(value);
-			}
-		});
+		testRequestHeader(ACCEPT_LANGUAGE, value, rq ->
+			rq.acceptLanguage(value)
+		);
 	}
 
 	@Test
-	public void testRequest_accept_gzip() {
+	void testRequest_accept_gzip() {
 		final String value = "gzip, deflate";
-		testRequestHeader(ACCEPT_ENCODING, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.acceptGzip();
-			}
-		});
+		testRequestHeader(ACCEPT_ENCODING, value,
+			HttpRequest::acceptGzip
+		);
 	}
 
 	@Test
-	public void testRequest_if_match() {
+	void testRequest_if_match() {
 		final String value = UUID.randomUUID().toString();
-		testRequestHeader(IF_MATCH, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addIfMatch(value);
-			}
-		});
+		testRequestHeader(IF_MATCH, value, rq ->
+			rq.addIfMatch(value)
+		);
 	}
 
 	@Test
-	public void testRequest_if_none_match() {
+	void testRequest_if_none_match() {
 		final String value = UUID.randomUUID().toString();
-		testRequestHeader(IF_NONE_MATCH, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addIfNoneMatch(value);
-			}
-		});
+		testRequestHeader(IF_NONE_MATCH, value, rq ->
+			rq.addIfNoneMatch(value)
+		);
 	}
 
 	@Test
-	public void testRequest_if_modified_since() {
+	void testRequest_if_modified_since() {
 		final Date since = utcDate(2017, 0, 1, 0, 10, 20);
 		final String value = "Sun, 01 Jan 2017 00:10:20 GMT";
-		testRequestHeader(IF_MODIFIED_SINCE, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addIfModifiedSince(since);
-			}
-		});
+		testRequestHeader(IF_MODIFIED_SINCE, value, rq ->
+			rq.addIfModifiedSince(since)
+		);
 	}
 
 	@Test
-	public void testRequest_if_unmodified_since() {
+	void testRequest_if_unmodified_since() {
 		final Date unmodifiedSince = utcDate(2016, 1, 10, 11, 12, 13);
 		final String value = "Wed, 10 Feb 2016 11:12:13 GMT";
-		testRequestHeader(IF_UNMODIFIED_SINCE, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addIfUnmodifiedSince(unmodifiedSince);
-			}
-		});
+		testRequestHeader(IF_UNMODIFIED_SINCE, value, rq ->
+			rq.addIfUnmodifiedSince(unmodifiedSince)
+		);
 	}
 
 	@Test
-	public void testRequest_add_referer() {
+	void testRequest_add_referer() {
 		final String value = "ref";
-		testRequestHeader(REFERER, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addReferer(value);
-			}
-		});
+		testRequestHeader(REFERER, value, rq ->
+			rq.addReferer(value)
+		);
 	}
 
 	@Test
-	public void testRequest_add_origin() {
+	void testRequest_add_origin() {
 		final String value = "http://localhost:8080";
-		testRequestHeader(ORIGIN, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addOrigin(value);
-			}
-		});
+		testRequestHeader(ORIGIN, value, rq ->
+			rq.addOrigin(value)
+		);
 	}
 
 	@Test
-	public void testRequest_with_user_agent() {
+	void testRequest_with_user_agent() {
 		final String value = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31";
-		testRequestHeader(USER_AGENT, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.withUserAgent(value);
-			}
-		});
+		testRequestHeader(USER_AGENT, value, rq ->
+			rq.withUserAgent(value)
+		);
 	}
 
 	@Test
-	public void testRequest_accept_xml() {
-		testRequestHeader(ACCEPT, APPLICATION_XML, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.acceptXml();
-			}
-		});
+	void testRequest_accept_xml() {
+		testRequestHeader(ACCEPT, APPLICATION_XML,
+			HttpRequest::acceptXml
+		);
 	}
 
 	@Test
-	public void testRequest_accept_json() {
-		testRequestHeader(ACCEPT, APPLICATION_JSON, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.acceptJson();
-			}
-		});
+	void testRequest_accept_json() {
+		testRequestHeader(ACCEPT, APPLICATION_JSON,
+			HttpRequest::acceptJson
+		);
 	}
 
 	@Test
-	public void testRequest_add_csrf_token() {
+	void testRequest_add_csrf_token() {
 		final String value = UUID.randomUUID().toString();
-		testRequestHeader(X_CSRF_TOKEN, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addCsrfToken(value);
-			}
-		});
+		testRequestHeader(X_CSRF_TOKEN, value, rq ->
+			rq.addCsrfToken(value)
+		);
 	}
 
 	@Test
-	public void testRequest_as_json() {
-		testRequestHeader(CONTENT_TYPE, APPLICATION_JSON, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.asJson();
-			}
-		});
+	void testRequest_as_json() {
+		testRequestHeader(CONTENT_TYPE, APPLICATION_JSON,
+			HttpRequest::asJson
+		);
 	}
 
 	@Test
-	public void testRequest_as_xml() {
-		testRequestHeader(CONTENT_TYPE, APPLICATION_XML, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.asXml();
-			}
-		});
+	void testRequest_as_xml() {
+		testRequestHeader(CONTENT_TYPE, APPLICATION_XML,
+			HttpRequest::asXml
+		);
 	}
 
 	@Test
-	public void testRequest_override_put() {
-		testRequestHeader(X_HTTP_METHOD_OVERRIDE, HttpMethod.PUT.name(), new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.overridePut();
-			}
-		});
+	void testRequest_override_put() {
+		testRequestHeader(X_HTTP_METHOD_OVERRIDE, HttpMethod.PUT.name(),
+			HttpRequest::overridePut
+		);
 	}
 
 	@Test
-	public void testRequest_override_delete() {
-		testRequestHeader(X_HTTP_METHOD_OVERRIDE, HttpMethod.DELETE.name(), new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.overrideDelete();
-			}
-		});
+	void testRequest_override_delete() {
+		testRequestHeader(X_HTTP_METHOD_OVERRIDE, HttpMethod.DELETE.name(),
+			HttpRequest::overrideDelete
+		);
 	}
 
 	@Test
-	public void testRequest_add_x_http_method_override() {
+	void testRequest_add_x_http_method_override() {
 		final String value = "PATCH";
-		testRequestHeader(X_HTTP_METHOD_OVERRIDE, value, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addXHttpMethodOverride(value);
-			}
-		});
+		testRequestHeader(X_HTTP_METHOD_OVERRIDE, value, rq ->
+			rq.addXHttpMethodOverride(value)
+		);
 	}
 
 	private void testRequestHeader(String name, String value, Function<HttpRequest> func) {
@@ -825,38 +751,32 @@ public abstract class BaseHttpClientTest {
 
 	private void testRequestHeader(HttpClient client, String name, String value, Function<HttpRequest> func) {
 		// GIVEN
-		String endpoint = ENDPOINT;
+		final String endpoint = ENDPOINT;
 		stubDefaultRequest(ENDPOINT);
 
 		// WHEN
-		HttpRequest rq = client.prepareGet(endpoint);
+		final HttpRequest rq = client.prepareGet(endpoint);
 		func.apply(rq);
 
 		// THEN
-		HttpResponse rsp = rq.execute();
+		final HttpResponse rsp = rq.execute();
 		assertThat(rsp).isNotNull();
 		assertThat(rsp.status()).isEqualTo(200);
 		assertRequestWithHeader(endpoint, HttpMethod.GET, name, value);
 	}
 
 	@Test
-	public void testRequest_execute_json() {
-		testRequestExecuteAs(APPLICATION_JSON, new MapperFunction<HttpRequest, HttpResponse>() {
-			@Override
-			public HttpResponse apply(HttpRequest rq) {
-				return rq.executeJson();
-			}
-		});
+	void testRequest_execute_json() {
+		testRequestExecuteAs(APPLICATION_JSON,
+			HttpRequest::executeJson
+		);
 	}
 
 	@Test
-	public void testRequest_execute_xml() {
-		testRequestExecuteAs(APPLICATION_XML, new MapperFunction<HttpRequest, HttpResponse>() {
-			@Override
-			public HttpResponse apply(HttpRequest rq) {
-				return rq.executeXml();
-			}
-		});
+	void testRequest_execute_xml() {
+		testRequestExecuteAs(APPLICATION_XML,
+			HttpRequest::executeXml
+		);
 	}
 
 	private void testRequestExecuteAs(String contentType, MapperFunction<HttpRequest, HttpResponse> func) {
@@ -869,8 +789,8 @@ public abstract class BaseHttpClientTest {
 		stubGetRequest(endpoint, rspStatus, headers, rspBody);
 
 		// WHEN
-		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
-		HttpResponse rsp = func.apply(rq);
+		final HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
+		final HttpResponse rsp = func.apply(rq);
 
 		// THEN
 		assertThat(rsp).isNotNull();
@@ -880,59 +800,47 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_add_non_encoded_query_param() {
+	void testRequest_add_non_encoded_query_param() {
 		final String name = "name";
 		final String value = "john doe";
 		final String expectedUrl = ENDPOINT + "?" + encodeQueryParam(name, value);
-		testQueryParams(expectedUrl, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addQueryParam(name, value);
-			}
-		});
+		testQueryParams(expectedUrl, rq ->
+			rq.addQueryParam(name, value)
+		);
 	}
 
 	@Test
-	public void testRequest_add_non_encoded_query_param_with_ampersand() {
+	void testRequest_add_non_encoded_query_param_with_ampersand() {
 		final String name = "name";
 		final String value = "john & jane doe";
 		final String expectedUrl = ENDPOINT + "?" + encodeQueryParam(name, value);
-		testQueryParams(expectedUrl, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addQueryParam(name, value);
-			}
-		});
+		testQueryParams(expectedUrl, rq ->
+			rq.addQueryParam(name, value)
+		);
 	}
 
 	@Test
-	public void testRequest_add_query_param() {
+	void testRequest_add_query_param() {
 		final String name = "firstName";
 		final String value = "john";
 		final String expectedUrl = ENDPOINT + "?" + encodeQueryParam(name, value);
-		testQueryParams(expectedUrl, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addQueryParam(name, value);
-			}
-		});
+		testQueryParams(expectedUrl, rq ->
+			rq.addQueryParam(name, value)
+		);
 	}
 
 	@Test
-	public void testRequest_add_query_param_without_value() {
+	void testRequest_add_query_param_without_value() {
 		final String name = "flag";
 		final String value = null;
 		final String expectedUrl = ENDPOINT + "?" + encodeQueryParam(name, value);
-		testQueryParams(expectedUrl, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addQueryParam(name, value);
-			}
-		});
+		testQueryParams(expectedUrl, rq ->
+			rq.addQueryParam(name, value)
+		);
 	}
 
 	@Test
-	public void testRequest_add_several_query_params() {
+	void testRequest_add_several_query_params() {
 		final String n1 = "firstName";
 		final String v1 = "john";
 		final HttpParameter p1 = param(n1, v1);
@@ -945,12 +853,9 @@ public abstract class BaseHttpClientTest {
 			"?" + encodeQueryParam(n1, v1) +
 			"&" + encodeQueryParam(n2, v2);
 
-		testQueryParams(expectedUrl, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.addQueryParams(p1, p2);
-			}
-		});
+		testQueryParams(expectedUrl, rq ->
+			rq.addQueryParams(p1, p2)
+		);
 	}
 
 	private void testQueryParams(String expectedUrl, Function<HttpRequest> func) {
@@ -962,11 +867,11 @@ public abstract class BaseHttpClientTest {
 		stubGetRequest(expectedUrl, rspStatus, headers, rspBody);
 
 		// WHEN
-		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
+		final HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
 		func.apply(rq);
 
 		// THEN
-		HttpResponse rsp = rq.execute();
+		final HttpResponse rsp = rq.execute();
 		assertThat(rsp).isNotNull();
 		assertThat(rsp.status()).isEqualTo(rspStatus);
 		assertThat(rsp.body()).isEqualTo(rspBody);
@@ -974,39 +879,33 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_add_form_param() {
+	void testRequest_add_form_param() {
 		final String name = "firstName";
 		final String value = "john";
 		final String expectedBody = encodeFormParam(name, value);
+		final Map<String, String> parameters = singletonMap(name, value);
+		final HttpRequestBody body = formUrlEncodedBody(parameters);
 
-		testRequestBody(expectedBody, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.setBody(formUrlEncodedBody(
-					singletonMap(name, value)
-				));
-			}
-		});
+		testRequestBody(expectedBody, rq ->
+				rq.setBody(body)
+		);
 	}
 
 	@Test
-	public void testRequest_add_form_param_without_value() {
+	void testRequest_add_form_param_without_value() {
 		final String name = "flag";
 		final String value = "";
 		final Map<String, String> parameters = singletonMap(name, value);
 		final HttpRequestBody body = formUrlEncodedBody(parameters);
 		final String expectedBody = encodeFormParam(name, value);
 
-		testRequestBody(expectedBody, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.setBody(body);
-			}
-		});
+		testRequestBody(expectedBody, rq ->
+			rq.setBody(body)
+		);
 	}
 
 	@Test
-	public void testRequest_add_several_form_params() {
+	void testRequest_add_several_form_params() {
 		final String n1 = "firstName";
 		final String v1 = "John";
 		final HttpParameter p1 = param(n1, v1);
@@ -1018,71 +917,57 @@ public abstract class BaseHttpClientTest {
 		final HttpRequestBody body = formUrlEncodedBody(p1, p2);
 		final String expectedBody = encodeFormParam(n1, v1) + "&" + encodeFormParam(n2, v2);
 
-		testRequestBody(expectedBody, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.setBody(body);
-			}
-		});
+		testRequestBody(expectedBody, rq ->
+			rq.setBody(body)
+		);
 	}
 
 	@Test
-	public void testRequest_add_non_escaped_form_param_name() {
+	void testRequest_add_non_escaped_form_param_name() {
 		final String name = "first name";
 		final String value = "john";
 		final String expectedBody = encodeFormParam(name, value);
 		final Map<String, String> parameters = singletonMap(name, value);
 		final HttpRequestBody body = formUrlEncodedBody(parameters);
 
-		testRequestBody(expectedBody, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.setBody(body);
-			}
-		});
+		testRequestBody(expectedBody, rq ->
+			rq.setBody(body)
+		);
 	}
 
 	@Test
-	public void testRequest_add_non_escaped_form_param_value() {
+	void testRequest_add_non_escaped_form_param_value() {
 		final String name = "name";
 		final String value = "john doe";
 		final String expectedBody = encodeFormParam(name, value);
 		final Map<String, String> parameters = singletonMap(name, value);
 		final HttpRequestBody body = formUrlEncodedBody(parameters);
 
-		testRequestBody(expectedBody, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.setBody(body);
-			}
-		});
+		testRequestBody(expectedBody, rq ->
+			rq.setBody(body)
+		);
 	}
 
 	@Test
-	public void testRequest_set_raw_body() {
+	void testRequest_set_raw_body() {
 		final String rawBody = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
 		final HttpRequestBody body = requestBody(rawBody);
-		testRequestBody(rawBody, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.setBody(body);
-			}
-		});
+		testRequestBody(rawBody, rq ->
+			rq.setBody(body)
+		);
 	}
 
 	@Test
-	public void testRequest_set_body() {
-		final String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
-		testRequestBody(body, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.setBody(requestBody(body));
-			}
-		});
+	void testRequest_set_body() {
+		final String rawBody = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
+		final HttpRequestBody body = requestBody(rawBody);
+		testRequestBody(rawBody, rq ->
+			rq.setBody(body)
+		);
 	}
 
 	@Test
-	public void testRequest_add_body_form() {
+	void testRequest_add_body_form() {
 		final String n1 = "firstName";
 		final String v1 = "John";
 		final HttpParameter p1 = param(n1, v1);
@@ -1092,29 +977,26 @@ public abstract class BaseHttpClientTest {
 		final HttpParameter p2 = param(n2, v2);
 
 		final String expectedBody = encodeFormParam(n1, v1) + "&" + encodeFormParam(n2, v2);
+		final HttpRequestBody body = formUrlEncodedBody(p1, p2);
 
-		testRequestBody(expectedBody, new Function<HttpRequest>() {
-			@Override
-			public void apply(HttpRequest rq) {
-				rq.setBody(formUrlEncodedBody(p1, p2));
-			}
-		});
+		testRequestBody(expectedBody, rq ->
+			rq.setBody(body)
+		);
 	}
 
 	private void testRequestBody(String body, Function<HttpRequest> func) {
-		// GIVEN
 		final String endpoint = ENDPOINT;
 		final int rspStatus = 204;
 		final Collection<Pair> headers = emptyList();
 		final String rspBody = "";
-		stubPostRequest(endpoint, rspStatus, headers, rspBody);
-		HttpRequest rq = createDefaultClient().preparePost(ENDPOINT);
 
-		// WHEN
+		stubPostRequest(endpoint, rspStatus, headers, rspBody);
+
+		final HttpRequest rq = createDefaultClient().preparePost(ENDPOINT);
+
 		func.apply(rq);
 
-		// THEN
-		HttpResponse rsp = rq.execute();
+		final HttpResponse rsp = rq.execute();
 		assertThat(rsp).isNotNull();
 		assertThat(rsp.status()).isEqualTo(rspStatus);
 		assertThat(rsp.body()).isEqualTo(rspBody);
@@ -1122,32 +1004,32 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_should_fail_to_set_body_on_get_request() {
-		HttpRequest httpRequest = createDefaultClient().prepareGet(ENDPOINT);
-		String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
+	void testRequest_should_fail_to_set_body_on_get_request() {
+		final HttpRequest httpRequest = createDefaultClient().prepareGet(ENDPOINT);
+		final String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
 
-		assertThatThrownBy(setRequestBody(httpRequest, body))
+		assertThatThrownBy(() -> httpRequest.setBody(requestBody(body)))
 			.isExactlyInstanceOf(UnsupportedOperationException.class)
 			.hasMessage("Http method GET does not support request body");
 	}
 
 	@Test
-	public void testRequest_should_fail_to_set_body_on_delete_request() {
-		HttpRequest httpRequest = createDefaultClient().prepareDelete(ENDPOINT);
-		String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
+	void testRequest_should_fail_to_set_body_on_delete_request() {
+		final HttpRequest httpRequest = createDefaultClient().prepareDelete(ENDPOINT);
+		final String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
 
-		assertThatThrownBy(setRequestBody(httpRequest, body))
+		assertThatThrownBy(() -> httpRequest.setBody(requestBody(body)))
 			.isExactlyInstanceOf(UnsupportedOperationException.class)
 			.hasMessage("Http method DELETE does not support request body");
 	}
 
 	@Test
-	public void testRequest_with_simple_cookie() {
-		String endpoint = ENDPOINT;
+	void testRequest_with_simple_cookie() {
+		final String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
-		String name = "foo";
-		String value = "bar";
+		final String name = "foo";
+		final String value = "bar";
 
 		createDefaultClient()
 			.prepareGet(endpoint)
@@ -1158,7 +1040,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_with_default_cookie() {
+	void testRequest_with_default_cookie() {
 		final String endpoint = ENDPOINT;
 		final String name = "foo";
 		final String value = "bar";
@@ -1176,7 +1058,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_with_default_cookie_object() {
+	void testRequest_with_default_cookie_object() {
 		final String endpoint = ENDPOINT;
 		final String name = "foo";
 		final String value = "bar";
@@ -1194,12 +1076,12 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_with_simple_cookie_method() {
-		String endpoint = ENDPOINT;
+	void testRequest_with_simple_cookie_method() {
+		final String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
-		String name = "foo";
-		String value = "bar";
+		final String name = "foo";
+		final String value = "bar";
 
 		createDefaultClient()
 			.prepareGet(endpoint)
@@ -1210,15 +1092,15 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_with_simple_cookies() {
-		String endpoint = ENDPOINT;
+	void testRequest_with_simple_cookies() {
+		final String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
-		String n1 = "f1";
-		String v1 = "b1";
+		final String n1 = "f1";
+		final String v1 = "b1";
 
-		String n2 = "f2";
-		String v2 = "b2";
+		final String n2 = "f2";
+		final String v2 = "b2";
 
 		createDefaultClient()
 			.prepareGet(endpoint)
@@ -1226,7 +1108,7 @@ public abstract class BaseHttpClientTest {
 			.addCookie(Cookies.cookie(n2, v2))
 			.executeJson();
 
-		List<Pair> expectedCookies = asList(
+		final List<Pair> expectedCookies = asList(
 			pair(n1, v1),
 			pair(n2, v2)
 		);
@@ -1235,7 +1117,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_with_simple_cookies_method() {
+	void testRequest_with_simple_cookies_method() {
 		final String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
@@ -1260,7 +1142,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_with_complex_cookie() {
+	void testRequest_with_complex_cookie() {
 		final String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
@@ -1294,7 +1176,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testResponse_without_headers() {
+	void testResponse_without_headers() {
 		final String endpoint = ENDPOINT;
 		final int status = 200;
 		final String body = null;
@@ -1333,167 +1215,124 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testResponse_with_custom_header() {
+	void testResponse_with_custom_header() {
 		final String name = "X-Custom-Header";
 		final String value = "Foo";
 
-		testResponseHeader(name, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getHeader(name);
-			}
-		});
+		testResponseHeader(name, value, rsp ->
+			rsp.getHeader(name)
+		);
 	}
 
 	@Test
-	public void testResponse_with_custom_header_and_multiple_values() {
+	void testResponse_with_custom_header_and_multiple_values() {
 		final String name = "X-Custom-Header";
 		final String v1 = "Foo";
 		final String v2 = "Bar";
 		final String v3 = "Quix";
 		final List<String> values = asList(v1, v2, v3);
 
-		testResponseWithSeveralValues(name, values, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getHeader(name);
-			}
-		});
+		testResponseWithSeveralValues(name, values, rsp ->
+			rsp.getHeader(name)
+		);
 	}
 
 	@Test
-	public void testResponse_with_content_type_header() {
-		testResponseHeader(CONTENT_TYPE, APPLICATION_XML, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getContentType();
-			}
-		});
+	void testResponse_with_content_type_header() {
+		testResponseHeader(CONTENT_TYPE, APPLICATION_XML,
+			HttpResponse::getContentType
+		);
 	}
 
 	@Test
-	public void testResponse_with_etag() {
+	void testResponse_with_etag() {
 		final String value = UUID.randomUUID().toString();
-		testResponseHeader(ETAG, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getETag();
-			}
-		});
+		testResponseHeader(ETAG, value,
+			HttpResponse::getETag
+		);
 	}
 
 	@Test
-	public void testResponse_with_cache_control() {
+	void testResponse_with_cache_control() {
 		final String value = "no-cache, no-store, must-revalidate";
-		testResponseHeader(CACHE_CONTROL, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getCacheControl();
-			}
-		});
+		testResponseHeader(CACHE_CONTROL, value,
+			HttpResponse::getCacheControl
+		);
 	}
 
 	@Test
-	public void testResponse_with_content_encoding() {
+	void testResponse_with_content_encoding() {
 		final String value = "identity";
-		testResponseHeader(CONTENT_ENCODING, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getContentEncoding();
-			}
-		});
+		testResponseHeader(CONTENT_ENCODING, value,
+			HttpResponse::getContentEncoding
+		);
 	}
 
 	@Test
-	public void testResponse_with_location() {
+	void testResponse_with_location() {
 		final String value = "http://localhost";
-		testResponseHeader(LOCATION, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getLocation();
-			}
-		});
+		testResponseHeader(LOCATION, value,
+			HttpResponse::getLocation
+		);
 	}
 
 	@Test
-	public void testResponse_with_last_modified() {
+	void testResponse_with_last_modified() {
 		final String value = "Wed, 15 Nov 1995 04:58:08 GMT";
-		testResponseHeader(LAST_MODIFIED, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getLastModified();
-			}
-		});
+		testResponseHeader(LAST_MODIFIED, value,
+			HttpResponse::getLastModified
+		);
 	}
 
 	@Test
-	public void testResponse_with_strict_transport_security() {
+	void testResponse_with_strict_transport_security() {
 		final String value = "max-age=31536000; includeSubDomains; preload";
-		testResponseHeader(STRICT_TRANSPORT_SECURITY, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getStrictTransportSecurity();
-			}
-		});
+		testResponseHeader(STRICT_TRANSPORT_SECURITY, value,
+			HttpResponse::getStrictTransportSecurity
+		);
 	}
 
 	@Test
-	public void testResponse_with_content_security_policy() {
+	void testResponse_with_content_security_policy() {
 		final String value = "default-src 'self';";
-		testResponseHeader(CONTENT_SECURITY_POLICY, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getContentSecurityPolicy();
-			}
-		});
+		testResponseHeader(CONTENT_SECURITY_POLICY, value,
+			HttpResponse::getContentSecurityPolicy
+		);
 	}
 
 	@Test
-	public void testResponse_with_x_content_security_policy() {
+	void testResponse_with_x_content_security_policy() {
 		final String value = "default-src 'self';";
-		testResponseHeader(X_CONTENT_SECURITY_POLICY, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getXContentSecurityPolicy();
-			}
-		});
+		testResponseHeader(X_CONTENT_SECURITY_POLICY, value,
+			HttpResponse::getXContentSecurityPolicy
+		);
 	}
 
 	@Test
-	public void testResponse_with_x_webkit_csp() {
+	void testResponse_with_x_webkit_csp() {
 		final String value = "default-src 'self';";
-		testResponseHeader(X_WEBKIT_CSP, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getXWebkitCSP();
-			}
-		});
+		testResponseHeader(X_WEBKIT_CSP, value,
+			HttpResponse::getXWebkitCSP
+		);
 	}
 
 	@Test
-	public void testResponse_with_xss_protection() {
+	void testResponse_with_xss_protection() {
 		final String value = "1; mode=block";
-		testResponseHeader(X_XSS_PROTECTION, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getXXSSProtection();
-			}
-		});
+		testResponseHeader(X_XSS_PROTECTION, value,
+			HttpResponse::getXXSSProtection
+		);
 	}
 
 	@Test
-	public void testResponse_with_content_type_options() {
+	void testResponse_with_content_type_options() {
 		final String value = "nosniff";
-		testResponseHeader(X_CONTENT_TYPE_OPTIONS, value, new MapperFunction<HttpResponse, HttpHeader>() {
-			@Override
-			public HttpHeader apply(HttpResponse rsp) {
-				return rsp.getXContentTypeOptions();
-			}
-		});
+		testResponseHeader(X_CONTENT_TYPE_OPTIONS, value,
+			HttpResponse::getXContentTypeOptions
+		);
 	}
 
 	private void testResponseHeader(String name, String value, MapperFunction<HttpResponse, HttpHeader> func) {
-		// GIVEN
 		final String endpoint = ENDPOINT;
 		final int status = 200;
 		final Collection<Pair> headers = singleton(pair(name, value));
@@ -1501,14 +1340,12 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(endpoint, status, headers, body);
 
-		// WHEN
-		HttpResponse rsp = createDefaultClient()
+		final HttpResponse rsp = createDefaultClient()
 			.prepareGet(endpoint)
 			.addAcceptEncoding("identity")
 			.executeJson();
 
-		// THEN
-		HttpHeader header = rsp.getHeader(name);
+		final HttpHeader header = rsp.getHeader(name);
 		assertThat(rsp.containsHeader(name)).isTrue();
 		assertThat(func.apply(rsp)).isEqualTo(header);
 
@@ -1534,13 +1371,13 @@ public abstract class BaseHttpClientTest {
 		stubGetRequest(endpoint, status, headers, body);
 
 		// WHEN
-		HttpResponse rsp = createDefaultClient()
+		final HttpResponse rsp = createDefaultClient()
 			.prepareGet(endpoint)
 			.addAcceptEncoding("identity")
 			.executeJson();
 
 		// THEN
-		HttpHeader header = rsp.getHeader(name);
+		final HttpHeader header = rsp.getHeader(name);
 		assertThat(rsp.containsHeader(name)).isTrue();
 		assertThat(func.apply(rsp)).isEqualTo(header);
 
@@ -1557,7 +1394,7 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testResponse_with_cookies() {
+	void testResponse_with_cookies() {
 		final String name = "id";
 		final String value = "foo";
 		final String domain = "localhost";
@@ -1578,14 +1415,14 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
+		final HttpResponse rsp = createDefaultClient()
 			.prepareGet(endpoint)
 			.executeJson();
 
-		List<Cookie> cookies = rsp.getCookies();
+		final List<Cookie> cookies = rsp.getCookies();
 		assertThat(cookies).hasSize(1);
 
-		Cookie cookie = cookies.get(0);
+		final Cookie cookie = cookies.get(0);
 		assertThat(cookie.getName()).isEqualTo(name);
 		assertThat(cookie.getValue()).isEqualTo(value);
 		assertThat(cookie.getDomain()).isEqualTo(domain);
@@ -1599,11 +1436,11 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testResponse_without_cookies() {
-		String endpoint = ENDPOINT;
+	void testResponse_without_cookies() {
+		final String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
-		HttpResponse rsp = createDefaultClient()
+		final HttpResponse rsp = createDefaultClient()
 			.prepareGet(endpoint)
 			.executeJson();
 
@@ -1612,23 +1449,23 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void testRequest_Response_Duration() {
-		String endpoint = ENDPOINT;
+	void testRequest_Response_Duration() {
+		final String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
-		HttpResponse rsp = createDefaultClient()
+		final HttpResponse rsp = createDefaultClient()
 			.prepareGet(endpoint)
 			.executeJson();
 
-		long durationNano = rsp.getRequestDuration();
-		long durationMillis = rsp.getRequestDurationInMillis();
+		final long durationNano = rsp.getRequestDuration();
+		final long durationMillis = rsp.getRequestDurationInMillis();
 		assertThat(durationNano).isGreaterThan(0);
 		assertThat(durationMillis).isEqualTo(durationNano / 1000 / 1000);
 	}
 
 	@Test
-	public void it_should_destroy_client() {
-		HttpClient newClient = createDefaultClient();
+	void it_should_destroy_client() {
+		final HttpClient newClient = createDefaultClient();
 
 		assertThat(newClient.isDestroyed()).isFalse();
 		newClient.destroy();
@@ -1636,12 +1473,12 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
-	public void it_should_fail_to_create_request_from_a_destroyed_client() {
-		String endpoint = "/foo";
-		HttpClient newClient = createDefaultClient();
+	void it_should_fail_to_create_request_from_a_destroyed_client() {
+		final String endpoint = "/foo";
+		final HttpClient newClient = createDefaultClient();
 		newClient.destroy();
 
-		assertThatThrownBy(prepareGet(newClient, endpoint))
+		assertThatThrownBy(() -> newClient.prepareGet(endpoint))
 			.isExactlyInstanceOf(IllegalStateException.class)
 			.hasMessage("Cannot create request from a destroyed client");
 	}
@@ -1649,21 +1486,15 @@ public abstract class BaseHttpClientTest {
 	protected abstract HttpClientStrategy strategy();
 
 	private HttpClient createDefaultClient() {
-		return createClient(new HttpClientFactory() {
-			@Override
-			public HttpClient create() {
-				return strategy().build(server);
-			}
-		});
+		return createClient(() ->
+			strategy().build(server)
+		);
 	}
 
 	private HttpClient createCustomClient(final HttpClientConfiguration configuration) {
-		return createClient(new HttpClientFactory() {
-			@Override
-			public HttpClient create() {
-				return strategy().build(configuration, server);
-			}
-		});
+		return createClient(() ->
+			strategy().build(configuration, server)
+		);
 	}
 
 	private HttpClient createClient(HttpClientFactory factory) {
@@ -1680,23 +1511,5 @@ public abstract class BaseHttpClientTest {
 
 	private interface HttpClientFactory {
 		HttpClient create();
-	}
-
-	private static ThrowingCallable prepareGet(final HttpClient client, final String endpoint) {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				client.prepareGet(endpoint);
-			}
-		};
-	}
-
-	private static ThrowingCallable setRequestBody(final HttpRequest request, final String body) {
-		return new ThrowingCallable() {
-			@Override
-			public void call() {
-				request.setBody(requestBody(body));
-			}
-		};
 	}
 }

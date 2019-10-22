@@ -22,15 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.client.it.impl;
+package com.github.mjeanroy.junit.servers.utils.jupiter;
 
-import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.client.it.BaseHttpClientTest;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-class ApacheHttpClientTest extends BaseHttpClientTest {
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-	@Override
-	protected HttpClientStrategy strategy() {
-		return HttpClientStrategy.APACHE_HTTP_CLIENT;
-	}
+/**
+ * A simple annotation that can be used to start wiremock before all test (and stop
+ * it after all tests).
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Documented
+@ExtendWith(WireMockExtension.class)
+public @interface WireMockTest {
 }

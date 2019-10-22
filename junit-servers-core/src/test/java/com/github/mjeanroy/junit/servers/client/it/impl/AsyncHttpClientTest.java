@@ -26,11 +26,8 @@ package com.github.mjeanroy.junit.servers.client.it.impl;
 
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.client.it.BaseHttpClientTest;
-import com.github.mjeanroy.junit4.runif.RunIf;
-import com.github.mjeanroy.junit4.runif.conditions.AtLeastJava8Condition;
 
-@RunIf(AtLeastJava8Condition.class)
-public class AsyncHttpClientTest extends BaseHttpClientTest {
+class AsyncHttpClientTest extends BaseHttpClientTest {
 
 	@Override
 	protected HttpClientStrategy strategy() {
