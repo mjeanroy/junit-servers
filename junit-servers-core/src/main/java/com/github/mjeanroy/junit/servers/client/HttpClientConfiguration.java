@@ -39,7 +39,7 @@ import static java.util.Collections.unmodifiableMap;
 /**
  * HTTP Client configuration that can be used to configure instances of {@link HttpClient}.
  */
-public class HttpClientConfiguration {
+public final class HttpClientConfiguration {
 
 	/**
 	 * Default value for {@link HttpClientConfiguration#followRedirect}.

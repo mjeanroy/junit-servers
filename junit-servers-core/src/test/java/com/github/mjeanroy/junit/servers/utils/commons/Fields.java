@@ -46,8 +46,33 @@ public final class Fields {
 	 * @return The field.
 	 */
 	public static Field getPrivateField(Class<?> klass, String name) {
+		Class<?> current = klass;
+
+		while (current != null && current != Object.class) {
+			Field field = getDeclaredField(current, name);
+			if (field != null) {
+				return field;
+			}
+
+			current = current.getSuperclass();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get private field on given class.
+	 *
+	 * @param klass The class.
+	 * @param name The field name.
+	 * @return The field.
+	 */
+	private static Field getDeclaredField(Class<?> klass, String name) {
 		try {
 			return klass.getDeclaredField(name);
+		}
+		catch (NoSuchFieldException ex) {
+			return null;
 		}
 		catch (Exception ex) {
 			throw new AssertionError(ex);

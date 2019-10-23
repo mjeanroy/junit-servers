@@ -25,10 +25,10 @@
 package com.github.mjeanroy.junit.servers.jupiter;
 
 import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.platform.commons.util.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,16 +63,16 @@ class FakeParameterContext implements ParameterContext {
 
 	@Override
 	public boolean isAnnotated(Class<? extends Annotation> annotationType) {
-		return parameter.isAnnotationPresent(annotationType);
+		return AnnotationUtils.isAnnotated(parameter, annotationType);
 	}
 
 	@Override
 	public <A extends Annotation> Optional<A> findAnnotation(Class<A> annotationType) {
-		return Optional.ofNullable(parameter.getAnnotation(annotationType));
+		return AnnotationUtils.findAnnotation(parameter, annotationType);
 	}
 
 	@Override
 	public <A extends Annotation> List<A> findRepeatableAnnotations(Class<A> annotationType) {
-		return Arrays.asList(parameter.getAnnotationsByType(annotationType));
+		return AnnotationUtils.findRepeatableAnnotations(parameter, annotationType);
 	}
 }

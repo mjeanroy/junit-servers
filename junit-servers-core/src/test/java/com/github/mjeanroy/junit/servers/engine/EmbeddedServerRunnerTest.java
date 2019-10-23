@@ -25,7 +25,9 @@
 package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.client.impl.okhttp3.OkHttpClient;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
@@ -206,6 +208,93 @@ public class EmbeddedServerRunnerTest {
 
 		assertThat(client1).isNotNull();
 		assertThat(client2).isNotNull();
+		assertThat(client1).isSameAs(client2);
+	}
+
+	@Test
+	public void it_should_get_client_with_custom_configuration() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
+		final HttpClient client = adapter.getClient(configuration);
+
+		assertThat(client).isNotNull();
+		assertThat(client.getConfiguration()).isSameAs(configuration);
+	}
+
+	@Test
+	public void it_should_get_client_with_custom_configuration_and_return_previous_one_with_same_configuration() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+
+		final HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().build();
+		final HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().build();
+
+		final HttpClient client1 = adapter.getClient(configuration1);
+		final HttpClient client2 = adapter.getClient(configuration2);
+
+		assertThat(client1).isSameAs(client2);
+	}
+
+	@Test
+	public void it_should_get_client_and_do_not_return_previous_one_with_different_configuration() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		final HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().build();
+		final HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
+
+		final HttpClient client1 = adapter.getClient(configuration1);
+		final HttpClient client2 = adapter.getClient(configuration2);
+
+		assertThat(client1).isNotSameAs(client2);
+		assertThat(client1.getConfiguration()).isSameAs(configuration1);
+		assertThat(client2.getConfiguration()).isSameAs(configuration2);
+	}
+
+	@Test
+	public void it_should_get_client_with_given_strategy_custom_configuration() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
+		final HttpClient client = adapter.getClient(strategy, configuration);
+
+		assertThat(client).isInstanceOf(OkHttpClient.class);
+		assertThat(client.getConfiguration()).isSameAs(configuration);
+	}
+
+	@Test
+	public void it_should_get_client_with_given_strategy_custom_configuration_and_return_new_one_with_different_configuration() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+
+		final HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
+		final HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().build();
+
+		final HttpClient client1 = adapter.getClient(strategy, configuration1);
+		final HttpClient client2 = adapter.getClient(strategy, configuration2);
+
+		assertThat(client1).isNotSameAs(client2);
+		assertThat(client1).isInstanceOf(OkHttpClient.class);
+		assertThat(client2).isInstanceOf(OkHttpClient.class);
+
+		assertThat(client1.getConfiguration()).isSameAs(configuration1);
+		assertThat(client2.getConfiguration()).isSameAs(configuration2);
+	}
+
+	@Test
+	public void it_should_get_client_with_given_strategy_custom_configuration_and_return_previous_one_with_same_configuration() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+
+		final HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().build();
+		final HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().build();
+
+		final HttpClient client1 = adapter.getClient(strategy, configuration1);
+		final HttpClient client2 = adapter.getClient(strategy, configuration2);
+
 		assertThat(client1).isSameAs(client2);
 	}
 

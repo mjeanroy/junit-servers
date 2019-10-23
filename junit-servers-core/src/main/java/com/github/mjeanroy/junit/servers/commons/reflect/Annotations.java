@@ -30,11 +30,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableSet;
 
 /**
  * Static Annotation Utilities.
@@ -67,7 +71,7 @@ public final class Annotations {
 	 * @return {@code true} if annotation is present, {@code false} otherwise.
 	 */
 	static boolean isAnnotationPresent(Field field, Class<? extends Annotation> annotationClass) {
-		return field != null && field.isAnnotationPresent(annotationClass);
+		return field != null && findAnnotation(field, annotationClass) != null;
 	}
 
 	/**
@@ -79,6 +83,16 @@ public final class Annotations {
 	 */
 	static boolean isAnnotationPresent(Method method, Class<? extends Annotation> annotationClass) {
 		return method != null && method.isAnnotationPresent(annotationClass);
+	}
+
+	/**
+	 * Find <strong>all</strong> annotations on given field.
+	 *
+	 * @param field The field.
+	 * @return All found annotations.
+	 */
+	public static Collection<Annotation> findAnnotations(Field field) {
+		return findAnnotationOn(field);
 	}
 
 	/**
@@ -95,6 +109,19 @@ public final class Annotations {
 	}
 
 	/**
+	 * Find expected annotation on given field, or a class in the hierarchy.
+	 *
+	 * @param field Class.
+	 * @param annotationClass Annotation class to look for.
+	 * @param <T> Type of annotation.
+	 * @return Annotation if found, {@code null} otherwise.
+	 */
+	public static <T extends Annotation> T findAnnotation(Field field, Class<T> annotationClass) {
+		Collection<T> annotations = findAnnotationOn(field, annotationClass);
+		return annotations.isEmpty() ? null : annotations.iterator().next();
+	}
+
+	/**
 	 * Find expected annotation on class, or a class in the hierarchy.
 	 *
 	 * @param klass Class.
@@ -102,7 +129,7 @@ public final class Annotations {
 	 * @param <T> Type of annotation.
 	 * @return Annotation if found, {@code null} otherwise.
 	 */
-	private static <T extends Annotation> List<T> findAnnotations(Class<?> klass, Class<T> annotationClass) {
+	private static <T extends Annotation> Collection<T> findAnnotations(Class<?> klass, Class<T> annotationClass) {
 		return findAnnotationOn(klass, annotationClass);
 	}
 
@@ -114,7 +141,7 @@ public final class Annotations {
 	 * @param <T> Type of annotation.
 	 * @return Annotation if found, {@code null} otherwise.
 	 */
-	private static <T extends Annotation> List<T> findAnnotationOn(AnnotatedElement element, Class<T> annotationClass) {
+	private static <T extends Annotation> Collection<T> findAnnotationOn(AnnotatedElement element, Class<T> annotationClass) {
 		final List<T> results = new ArrayList<>();
 
 		if (element == null) {
@@ -143,7 +170,7 @@ public final class Annotations {
 			// Look on interfaces.
 			for (Class<?> intf : klass.getInterfaces()) {
 				if (shouldScan(intf)) {
-					final List<T> subResults = findAnnotationOn(intf, annotationClass);
+					final Collection<T> subResults = findAnnotationOn(intf, annotationClass);
 					if (!subResults.isEmpty()) {
 						results.addAll(subResults);
 					}
@@ -153,7 +180,7 @@ public final class Annotations {
 			// Go up in the class hierarchy.
 			Class<?> superClass = klass.getSuperclass();
 			if (shouldScan(superClass)) {
-				final List<T> subResults = findAnnotations(superClass, annotationClass);
+				final Collection<T> subResults = findAnnotations(superClass, annotationClass);
 				if (!subResults.isEmpty()) {
 					results.addAll(subResults);
 				}
@@ -162,7 +189,7 @@ public final class Annotations {
 			// Search in outer class.
 			Class<?> declaringClass = klass.getDeclaringClass();
 			if (shouldScan(declaringClass)) {
-				final List<T> subResults = findAnnotations(declaringClass, annotationClass);
+				final Collection<T> subResults = findAnnotations(declaringClass, annotationClass);
 				if (!subResults.isEmpty()) {
 					results.addAll(subResults);
 				}
@@ -170,6 +197,75 @@ public final class Annotations {
 		}
 
 		return unmodifiableList(results);
+	}
+
+	/**
+	 * Find <strong>all</strong> annotation on given element.
+	 *
+	 * @param element Class.
+	 * @return Annotation if found, {@code null} otherwise.
+	 */
+	private static Collection<Annotation> findAnnotationOn(AnnotatedElement element) {
+		if (element == null) {
+			return emptySet();
+		}
+
+		Collection<Annotation> elementAnnotations = findWhitelistedElementAnnotations(element);
+
+		Set<Annotation> results = new LinkedHashSet<>(elementAnnotations);
+
+		// Search for meta-annotation
+		for (Annotation candidate : elementAnnotations) {
+			Class<? extends Annotation> candidateAnnotationType = candidate.annotationType();
+			if (shouldScan(candidateAnnotationType)) {
+				results.addAll(findAnnotationOn(candidateAnnotationType));
+			}
+		}
+
+		if (element instanceof Class) {
+			Class<?> klass = (Class<?>) element;
+
+			// Look on interfaces.
+			for (Class<?> intf : klass.getInterfaces()) {
+				if (shouldScan(intf)) {
+					results.addAll(findAnnotationOn(intf));
+				}
+			}
+
+			// Go up in the class hierarchy.
+			Class<?> superClass = klass.getSuperclass();
+			if (shouldScan(superClass)) {
+				results.addAll(findAnnotationOn(superClass));
+			}
+
+			// Search in outer class.
+			Class<?> declaringClass = klass.getDeclaringClass();
+			if (shouldScan(declaringClass)) {
+				results.addAll(findAnnotationOn(declaringClass));
+			}
+		}
+
+		return unmodifiableSet(results);
+	}
+
+	/**
+	 * Find all "whitelisted" annotations for given element.
+	 *
+	 * @param annotatedElement The target element.
+	 * @return All found annotations.
+	 */
+	private static Collection<Annotation> findWhitelistedElementAnnotations(AnnotatedElement annotatedElement) {
+		final Annotation[] annotations = annotatedElement.getAnnotations();
+		final List<Annotation> whitelistedAnnotations = new ArrayList<>(annotations.length);
+
+		for (Annotation annotation : annotations) {
+			final Class<? extends Annotation> annotationType = annotation.annotationType();
+			if (shouldScan(annotationType)) {
+				whitelistedAnnotations.add(annotation);
+			}
+		}
+
+		return whitelistedAnnotations;
 	}
 
 	/**

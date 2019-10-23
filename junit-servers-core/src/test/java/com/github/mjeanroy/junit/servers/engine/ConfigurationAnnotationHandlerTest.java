@@ -27,7 +27,6 @@ package com.github.mjeanroy.junit.servers.engine;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.utils.builders.AbstractConfigurationMockBuilder;
-import com.github.mjeanroy.junit.servers.utils.fixtures.FixtureClass;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
@@ -53,11 +52,11 @@ public class ConfigurationAnnotationHandlerTest {
 	@Test
 	public void it_should_set_configuration_instance() {
 		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
-		final FixtureClass fixture = new FixtureClass();
+		final TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
 		final Field field = extractConfigurationField();
 		final AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 
-		verifyBeforeTest(configuration, fixture, field, handler);
+		verifyBeforeTest(configuration, target, field, handler);
 	}
 
 	@Test
@@ -73,16 +72,22 @@ public class ConfigurationAnnotationHandlerTest {
 		);
 	}
 
-	private static void verifyBeforeTest(AbstractConfiguration configuration, FixtureClass fixture, Field field, AnnotationHandler handler) {
-		handler.before(fixture, field);
-		assertThat((AbstractConfiguration) readPrivate(fixture, "configuration")).isSameAs(configuration);
+	private static void verifyBeforeTest(AbstractConfiguration configuration, TestClassWithAnnotatedField target, Field field, AnnotationHandler handler) {
+		handler.before(target, field);
+		assertThat((AbstractConfiguration) readPrivate(target, "configuration")).isSameAs(configuration);
 	}
 
 	private static Field extractConfigurationField() {
-		return getPrivateField(FixtureClass.class, "configuration");
+		return getPrivateField(TestClassWithAnnotatedField.class, "configuration");
 	}
 
 	private static Annotation readAnnotation(Field field) {
 		return field.getAnnotation(TestServerConfiguration.class);
+	}
+
+	static class TestClassWithAnnotatedField {
+
+		@TestServerConfiguration
+		public AbstractConfiguration configuration;
 	}
 }

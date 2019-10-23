@@ -28,6 +28,7 @@ import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.commons.reflect.Annotations;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
@@ -73,9 +74,11 @@ class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
 	@Override
 	public void before(Object target, Field field) {
 		log.debug("Inject HTTP client to {} # {}", target, field);
-		TestHttpClient httpClient = field.getAnnotation(TestHttpClient.class);
-		HttpClientStrategy strategy = httpClient.strategy();
-		setter(target, field, strategy.build(server));
+		TestHttpClient httpClient = Annotations.findAnnotation(field, TestHttpClient.class);
+		if (httpClient != null) {
+			HttpClientStrategy strategy = httpClient.strategy();
+			setter(target, field, strategy.build(server));
+		}
 	}
 
 	@Override

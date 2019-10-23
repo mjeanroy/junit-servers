@@ -22,11 +22,13 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.annotations;
+package com.github.mjeanroy.junit.servers.samples.tomcat.jupiter;
 
-import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClientConfigurationFactory;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -35,43 +37,23 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Annotation that can be used to inject simple http
- * client to query embedded server.
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({
-	ElementType.FIELD,
-	ElementType.PARAMETER,
-	ElementType.ANNOTATION_TYPE,
-})
-@Documented
-@Inherited
-public @interface TestHttpClient {
+import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static org.assertj.core.api.Assertions.assertThat;
 
-	/**
-	 * Get strategy to use to build http client.
-	 * Default is {@link HttpClientStrategy#AUTO} and classpath detection
-	 * will be used to instantiate appropriate client implementation.
-	 *
-	 * @return Strategy, default is {@link HttpClientStrategy#AUTO}.
-	 */
-	HttpClientStrategy strategy() default HttpClientStrategy.AUTO;
+@DefaultTomcatTest
+class IndexWithCustomHttpClient {
 
-	/**
-	 * A configuration factory to use to create configuration for given HTTP Client.
-	 *
-	 * @return The HTTP Client configuration factory.
-	 */
-	Class<? extends HttpClientConfigurationFactory> configuration() default DefaultHttpClientConfigurationFactory.class;
+	@Test
+	void it_should_have_an_index(@AsyncHttpClient HttpClient client, EmbeddedTomcat tomcat) {
+		ensureWebAppIsOk(client, tomcat);
+		assertThat(client).isInstanceOf(com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient.class);
+	}
 
-	/**
-	 * The default implementation, that just returns the default configuration.
-	 */
-	class DefaultHttpClientConfigurationFactory implements HttpClientConfigurationFactory {
-		@Override
-		public HttpClientConfiguration build() {
-			return HttpClientConfiguration.defaultConfiguration();
-		}
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.PARAMETER)
+	@Documented
+	@Inherited
+	@TestHttpClient(strategy = HttpClientStrategy.ASYNC_HTTP_CLIENT)
+	@interface AsyncHttpClient {
 	}
 }

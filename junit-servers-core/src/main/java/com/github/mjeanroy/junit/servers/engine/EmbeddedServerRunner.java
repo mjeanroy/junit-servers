@@ -35,7 +35,9 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import static com.github.mjeanroy.junit.servers.client.HttpClientConfiguration.defaultConfiguration;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
 
@@ -62,7 +64,7 @@ public final class EmbeddedServerRunner extends AbstractTestRunner implements Te
 	/**
 	 * The HTTP clients (will be automatically destroyed in the {@code after} step.
 	 */
-	private final Map<HttpClientStrategy, HttpClient> clients;
+	private final Map<HttpClientId, HttpClient> clients;
 
 	/**
 	 * Create rule with default embedded server.
@@ -261,30 +263,58 @@ public final class EmbeddedServerRunner extends AbstractTestRunner implements Te
 	 * @throws UnsupportedOperationException If the client cannot be returned because of missing implementation.
 	 */
 	public HttpClient getClient() {
-		return openClient(HttpClientStrategy.AUTO);
+		return getClient(defaultConfiguration());
 	}
 
 	/**
 	 * Returns HTTP client that can be used against {@link #server}.
 	 *
+	 * @param configuration The client configuration.
+	 * @return The HTTP client.
+	 * @throws UnsupportedOperationException If the client cannot be returned because of missing implementation.
+	 */
+	public HttpClient getClient(HttpClientConfiguration configuration) {
+		return openClient(HttpClientStrategy.AUTO, configuration);
+	}
+
+	/**
+	 * Returns HTTP client that can be used against {@link #server}.
+	 *
+	 * @param strategy The strategy to use.
 	 * @return The HTTP client.
 	 * @throws UnsupportedOperationException If the client cannot be returned because of missing implementation.
 	 */
 	public HttpClient getClient(HttpClientStrategy strategy) {
-		return openClient(notNull(strategy, "strategy"));
+		return getClient(strategy, defaultConfiguration());
 	}
 
-	private HttpClient openClient(HttpClientStrategy strategy) {
+	/**
+	 * Returns HTTP client that can be used against {@link #server}.
+	 *
+	 * @param strategy The strategy to use.
+	 * @param configuration The client configuration.
+	 * @return The HTTP client.
+	 * @throws UnsupportedOperationException If the client cannot be returned because of missing implementation.
+	 */
+	public HttpClient getClient(HttpClientStrategy strategy, HttpClientConfiguration configuration) {
+		return openClient(strategy, configuration);
+	}
+
+	private HttpClient openClient(HttpClientStrategy strategy, HttpClientConfiguration configuration) {
 		log.debug("Opening HTTP client using strategy: {}", strategy);
 
+		notNull(strategy, "strategy");
+		notNull(configuration, "configuration");
+
 		synchronized (clients) {
-			if (!clients.containsKey(strategy) || clients.get(strategy).isDestroyed()) {
-				HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
+			HttpClientId id = new HttpClientId(strategy, configuration);
+
+			if (!clients.containsKey(id) || clients.get(id).isDestroyed()) {
 				HttpClient client = strategy.build(configuration, server);
-				clients.put(strategy, client);
+				clients.put(id, client);
 			}
 
-			return clients.get(strategy);
+			return clients.get(id);
 		}
 	}
 
@@ -294,5 +324,42 @@ public final class EmbeddedServerRunner extends AbstractTestRunner implements Te
 			.append("server", server)
 			.append("clients", clients)
 			.build();
+	}
+
+	private static final class HttpClientId {
+		private final HttpClientStrategy strategy;
+		private final HttpClientConfiguration configuration;
+
+		private HttpClientId(HttpClientStrategy strategy, HttpClientConfiguration configuration) {
+			this.strategy = strategy;
+			this.configuration = configuration;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o == this) {
+				return true;
+			}
+
+			if (o instanceof HttpClientId) {
+				HttpClientId id = (HttpClientId) o;
+				return Objects.equals(strategy, id.strategy) && Objects.equals(configuration, id.configuration);
+			}
+
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(strategy, configuration);
+		}
+
+		@Override
+		public String toString() {
+			return ToStringBuilder.create(getClass())
+				.append("strategy", strategy)
+				.append("configuration", configuration)
+				.build();
+		}
 	}
 }

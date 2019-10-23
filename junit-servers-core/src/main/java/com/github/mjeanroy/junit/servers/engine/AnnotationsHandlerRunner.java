@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
+import com.github.mjeanroy.junit.servers.commons.reflect.Annotations;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
@@ -32,6 +33,7 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.findAllFields;
@@ -124,15 +126,38 @@ public class AnnotationsHandlerRunner extends AbstractTestRunner implements Test
 	 * @param before Flag to know if handler has to run "before" phase or "after" phase.
 	 */
 	private void processField(Object target, AnnotationHandler handler, Field field, boolean before) {
-		for (Annotation annotation : field.getAnnotations()) {
-			if (handler.support(annotation)) {
-				if (before) {
-					handler.before(target, field);
-				}
-				else {
-					handler.after(target, field);
-				}
-			}
+		log.debug("Processing field: {}", field);
+		Collection<Annotation> annotations = Annotations.findAnnotations(field);
+
+		log.debug("Found annotations on field: {}", annotations);
+		for (Annotation annotation : annotations) {
+			processFieldAnnotation(target, handler, field, before, annotation);
+		}
+	}
+
+	/**
+	 * Process given annotations for given field.
+	 *
+	 * @param target Class target.
+	 * @param handler The handler being processed.
+	 * @param field The annotated field.
+	 * @param before If the handler should run the "before" step or the "after" step.
+	 * @param annotation The processed annotation.
+	 */
+	private void processFieldAnnotation(Object target, AnnotationHandler handler, Field field, boolean before, Annotation annotation) {
+		log.debug("Checking for annotation: {}", annotation);
+		if (handler.support(annotation)) {
+			log.debug("Annotation {} supported by handler: {}", annotation, handler);
+			processHandlerAnnotation(target, handler, field, before);
+		}
+	}
+
+	private void processHandlerAnnotation(Object target, AnnotationHandler handler, Field field, boolean before) {
+		if (before) {
+			handler.before(target, field);
+		}
+		else {
+			handler.after(target, field);
 		}
 	}
 }

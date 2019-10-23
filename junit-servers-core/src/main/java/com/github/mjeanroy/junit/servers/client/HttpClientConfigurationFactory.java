@@ -22,24 +22,17 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.annotations;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package com.github.mjeanroy.junit.servers.client;
 
 /**
- * Annotation that can be used to inject embedded server
- * into unit tests.
+ * Factory for {@link HttpClientConfiguration}.
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({
-	ElementType.FIELD,
-})
-@Documented
-@Inherited
-public @interface TestServer {
+public interface HttpClientConfigurationFactory {
+
+	/**
+	 * Create configuration.
+	 *
+	 * @return The configuration.
+	 */
+	HttpClientConfiguration build();
 }

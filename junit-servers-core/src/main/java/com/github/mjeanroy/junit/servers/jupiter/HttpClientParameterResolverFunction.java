@@ -25,13 +25,18 @@
 package com.github.mjeanroy.junit.servers.jupiter;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfigurationFactory;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
+import com.github.mjeanroy.junit.servers.commons.reflect.Classes;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import org.junit.jupiter.api.extension.ParameterContext;
 
-import java.util.function.Function;
+import java.util.Optional;
+
+import static com.github.mjeanroy.junit.servers.client.HttpClientConfiguration.defaultConfiguration;
 
 /**
  * Resolve {@link com.github.mjeanroy.junit.servers.client.HttpClient} parameter.
@@ -64,21 +69,31 @@ class HttpClientParameterResolverFunction implements ParameterResolverFunction {
 	@Override
 	public Object resolve(ParameterContext parameterContext, EmbeddedServerRunner serverAdapter) {
 		log.debug("Resolving HTTP Client for parameter: {}", parameterContext);
-		HttpClientStrategy strategy = getStrategy(parameterContext);
-		return serverAdapter.getClient(strategy);
+		final Optional<TestHttpClient> maybeAnnotation = parameterContext.findAnnotation(TestHttpClient.class);
+
+		final HttpClientConfiguration configuration;
+		final HttpClientStrategy strategy;
+
+		if (maybeAnnotation.isPresent()) {
+			TestHttpClient annotation = maybeAnnotation.get();
+			strategy = getStrategy(annotation);
+			configuration = getConfiguration(annotation);
+		} else {
+			strategy = defaultStrategy();
+			configuration = defaultConfiguration();
+		}
+
+		return serverAdapter.getClient(strategy, configuration);
 	}
 
-	private static HttpClientStrategy getStrategy(ParameterContext parameterContext) {
-		return parameterContext.findAnnotation(TestHttpClient.class)
-			.map(new Function<TestHttpClient, HttpClientStrategy>() {
-				@Override
-				public HttpClientStrategy apply(TestHttpClient testHttpClient) {
-					return testHttpClient.strategy();
-				}
-			})
-			.orElse(
-				defaultStrategy()
-			);
+	private static HttpClientStrategy getStrategy(TestHttpClient client) {
+		return client.strategy();
+	}
+
+	private static HttpClientConfiguration getConfiguration(TestHttpClient client) {
+		final Class<? extends HttpClientConfigurationFactory> factoryClass = client.configuration();
+		final HttpClientConfigurationFactory factory = Classes.instantiate(factoryClass);
+		return factory.build();
 	}
 
 	private static HttpClientStrategy defaultStrategy() {

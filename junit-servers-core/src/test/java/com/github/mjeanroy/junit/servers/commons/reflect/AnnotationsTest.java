@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.commons.reflect;
 
 import org.junit.Test;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -34,6 +35,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -80,6 +83,7 @@ public class AnnotationsTest {
 		assertThat(Annotations.isAnnotationPresent((Field) null, TestAnnotation.class)).isFalse();
 		assertThat(Annotations.isAnnotationPresent(field("field1"), TestAnnotation.class)).isTrue();
 		assertThat(Annotations.isAnnotationPresent(field("field2"), TestAnnotation.class)).isFalse();
+		assertThat(Annotations.isAnnotationPresent(field("field3"), TestAnnotation.class)).isTrue();
 	}
 
 	@Test
@@ -87,6 +91,21 @@ public class AnnotationsTest {
 		assertThat(Annotations.isAnnotationPresent((Method) null, TestAnnotation.class)).isFalse();
 		assertThat(Annotations.isAnnotationPresent(method("method1"), TestAnnotation.class)).isTrue();
 		assertThat(Annotations.isAnnotationPresent(method("method2"), TestAnnotation.class)).isFalse();
+	}
+
+	@Test
+	public void it_should_find_annotation_on_field() {
+		assertThat(Annotations.findAnnotation(field("field1"), TestAnnotation.class)).isNotNull();
+		assertThat(Annotations.findAnnotation(field("field3"), TestAnnotation.class)).isNotNull();
+	}
+
+	@Test
+	public void it_should_find_all_annotations_on_field() {
+		final Field field = field("field3");
+		final List<Annotation> annotations = new ArrayList<>(Annotations.findAnnotations(field));
+		assertThat(annotations).hasSize(2);
+		assertThat(annotations.get(0).annotationType()).isEqualTo(TestMetaAnnotation.class);
+		assertThat(annotations.get(1).annotationType()).isEqualTo(TestAnnotation.class);
 	}
 
 	private static Field field(String name) {
@@ -145,7 +164,11 @@ public class AnnotationsTest {
 	private static class TestClass {
 		@TestAnnotation(5)
 		private static int field1;
+
 		private static int field2;
+
+		@TestMetaAnnotation
+		private static int field3;
 
 		@TestAnnotation(6)
 		private static int method1() {

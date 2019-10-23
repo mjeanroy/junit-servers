@@ -27,7 +27,6 @@ package com.github.mjeanroy.junit.servers.engine;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
-import com.github.mjeanroy.junit.servers.utils.fixtures.FixtureClass;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
@@ -54,10 +53,10 @@ public class ServerAnnotationHandlerTest {
 	public void it_should_set_server_instance() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final Field field = extractServerField();
-		final FixtureClass fixture = new FixtureClass();
+		final TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
 		final AnnotationHandler handler = newServerAnnotationHandler(server);
 
-		verifyBeforeTest(server, field, fixture, handler);
+		verifyBeforeTest(server, field, target, handler);
 	}
 
 	@Test
@@ -73,12 +72,17 @@ public class ServerAnnotationHandlerTest {
 		);
 	}
 
-	private static void verifyBeforeTest(EmbeddedServer<?> server, Field field, FixtureClass fixture, AnnotationHandler handler) {
-		handler.before(fixture, field);
-		assertThat((EmbeddedServer<?>) readPrivate(fixture, "server")).isSameAs(server);
+	private static void verifyBeforeTest(EmbeddedServer<?> server, Field field, TestClassWithAnnotatedField targer, AnnotationHandler handler) {
+		handler.before(targer, field);
+		assertThat((EmbeddedServer<?>) readPrivate(targer, "server")).isSameAs(server);
 	}
 
 	private static Field extractServerField() {
-		return getPrivateField(FixtureClass.class, "server");
+		return getPrivateField(TestClassWithAnnotatedField.class, "server");
+	}
+
+	static class TestClassWithAnnotatedField {
+		@TestServer
+		public EmbeddedServer<?> server;
 	}
 }

@@ -26,6 +26,8 @@ package com.github.mjeanroy.junit.servers.jupiter;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClientConfigurationFactory;
 import com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
@@ -33,6 +35,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ParameterContext;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
@@ -67,6 +75,30 @@ public class HttpClientParameterResolverFunctionTest {
 		assertThat(result).isExactlyInstanceOf(NingAsyncHttpClient.class);
 	}
 
+	@Test
+	public void it_should_resolve_http_client_with_given_configuration() throws Exception {
+		final ParameterContext parameterContext = extractParameterContext("method_with_annotation_and_configuration_factory");
+		final Object result = resolver.resolve(parameterContext, adapter);
+
+		assertThat(result).isInstanceOf(HttpClient.class);
+
+		final HttpClient httpClient = (HttpClient) result;
+		assertThat(httpClient.getConfiguration()).isNotNull();
+		assertThat(httpClient.getConfiguration().isFollowRedirect()).isFalse();
+	}
+
+	@Test
+	public void it_should_resolve_http_client_with_given_configuration_on_meta_annotation() throws Exception {
+		final ParameterContext parameterContext = extractParameterContext("method_with_meta_annotation");
+		final Object result = resolver.resolve(parameterContext, adapter);
+
+		assertThat(result).isInstanceOf(HttpClient.class);
+
+		final HttpClient httpClient = (HttpClient) result;
+		assertThat(httpClient.getConfiguration()).isNotNull();
+		assertThat(httpClient.getConfiguration().isFollowRedirect()).isFalse();
+	}
+
 	private ParameterContext extractParameterContext(String methodName) throws Exception {
 		Method method = getClass().getDeclaredMethod(methodName, HttpClient.class);
 		Parameter parameter = method.getParameters()[0];
@@ -77,5 +109,28 @@ public class HttpClientParameterResolverFunctionTest {
 	}
 
 	public void method_with_annotation(@TestHttpClient(strategy = NING_ASYNC_HTTP_CLIENT) HttpClient client) {
+	}
+
+	public void method_with_annotation_and_configuration_factory(
+		@TestHttpClient(configuration = CustomHttpClientConfigurationFactory.class) HttpClient client) {
+	}
+
+	public void method_with_meta_annotation(
+		@DefaultTestHttpClient HttpClient client) {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.PARAMETER)
+	@Inherited
+	@Documented
+	@TestHttpClient(configuration = CustomHttpClientConfigurationFactory.class)
+	private @interface DefaultTestHttpClient {
+	}
+
+	private static class CustomHttpClientConfigurationFactory implements HttpClientConfigurationFactory {
+		@Override
+		public HttpClientConfiguration build() {
+			return new HttpClientConfiguration.Builder().disableFollowRedirect().build();
+		}
 	}
 }

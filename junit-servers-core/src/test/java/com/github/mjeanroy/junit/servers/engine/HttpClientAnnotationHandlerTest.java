@@ -26,13 +26,19 @@ package com.github.mjeanroy.junit.servers.engine;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.commons.Fields;
-import com.github.mjeanroy.junit.servers.utils.fixtures.FixtureClass;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 import static com.github.mjeanroy.junit.servers.engine.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
@@ -45,7 +51,7 @@ public class HttpClientAnnotationHandlerTest {
 	public void it_should_support_server_annotation() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
-		final Field field = extractClientField();
+		final Field field = extractClientField(TestClassWithAnnotatedField.class);
 		final Annotation annotation = readAnnotation(field);
 
 		assertThat(handler.support(annotation)).isTrue();
@@ -54,12 +60,38 @@ public class HttpClientAnnotationHandlerTest {
 	@Test
 	public void it_should_set_client_instance() {
 		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final FixtureClass fixture = new FixtureClass();
-		final Field field = extractClientField();
+		final TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
+		final Field field = extractClientField(TestClassWithAnnotatedField.class);
 		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
 
-		HttpClient client = verifyBeforeTest(fixture, field, handler);
-		verifyAfterTest(fixture, field, handler, client);
+		final HttpClient client = verifyBeforeTest(target, field, handler);
+
+		verifyAfterTest(target, field, handler, client);
+	}
+
+	@Test
+	public void it_should_set_client_instance_on_super_class() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final TestInheritedClassWithAnnotatedField target = new TestInheritedClassWithAnnotatedField();
+		final Field field = extractClientField(TestInheritedClassWithAnnotatedField.class);
+		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
+
+		final HttpClient client = verifyBeforeTest(target, field, handler);
+
+		verifyAfterTest(target, field, handler, client);
+	}
+
+	@Test
+	public void it_should_set_client_instance_on_meta_annotated_field() {
+		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		final TestClassWithMetaAnnotationField target = new TestClassWithMetaAnnotationField();
+		final Field field = extractClientField(TestClassWithMetaAnnotationField.class);
+		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
+
+		final HttpClient client = verifyBeforeTest(target, field, handler);
+
+		verifyAfterTest(target, field, handler, client);
+		verifyAsyncHttpClient(client);
 	}
 
 	@Test
@@ -75,27 +107,53 @@ public class HttpClientAnnotationHandlerTest {
 		);
 	}
 
-	private static void verifyAfterTest(FixtureClass fixture, Field field, AnnotationHandler handler, HttpClient client) {
-		handler.after(fixture, field);
+	private static void verifyAfterTest(Object target, Field field, AnnotationHandler handler, HttpClient client) {
+		handler.after(target, field);
 
-		assertThat((HttpClient) readPrivate(fixture, "client")).isNull();
+		assertThat((HttpClient) readPrivate(target, "client")).isNull();
 		assertThat(client.isDestroyed()).isTrue();
 	}
 
-	private static HttpClient verifyBeforeTest(FixtureClass fixture, Field field, AnnotationHandler handler) {
-		handler.before(fixture, field);
+	private static HttpClient verifyBeforeTest(Object target, Field field, AnnotationHandler handler) {
+		handler.before(target, field);
 
-		HttpClient client = readPrivate(fixture, "client");
+		final HttpClient client = readPrivate(target, "client");
 		assertThat(client).isNotNull();
 		assertThat(client.isDestroyed()).isFalse();
 		return client;
 	}
 
-	private static Field extractClientField() {
-		return Fields.getPrivateField(FixtureClass.class, "client");
+	private static void verifyAsyncHttpClient(HttpClient client) {
+		assertThat(client).isInstanceOf(com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient.class);
+	}
+
+	private static Field extractClientField(Class<?> targetClass) {
+		return Fields.getPrivateField(targetClass, "client");
 	}
 
 	private static Annotation readAnnotation(Field field) {
 		return field.getAnnotation(TestHttpClient.class);
+	}
+
+	static class TestClassWithAnnotatedField {
+
+		@TestHttpClient
+		public HttpClient client;
+	}
+
+	private static class TestInheritedClassWithAnnotatedField extends TestClassWithAnnotatedField {
+	}
+
+	static class TestClassWithMetaAnnotationField {
+		@AsyncHttpClient
+		public HttpClient client;
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	@Documented
+	@Inherited
+	@TestHttpClient(strategy = HttpClientStrategy.NING_ASYNC_HTTP_CLIENT)
+	@interface AsyncHttpClient {
 	}
 }
