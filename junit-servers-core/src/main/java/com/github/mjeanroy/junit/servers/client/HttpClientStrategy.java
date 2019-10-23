@@ -32,6 +32,9 @@ import com.github.mjeanroy.junit.servers.commons.reflect.Classes;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
+import java.util.Iterator;
+import java.util.ServiceLoader;
+
 /**
  * Available strategies that can be used to build
  * appropriate implementation of http client.
@@ -173,6 +176,13 @@ public enum HttpClientStrategy {
 
 		@Override
 		HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server) {
+			// First, look into available providers.
+			HttpClientProvider provider = findProviders();
+			if (provider != null) {
+				return provider.instantiate(server);
+			}
+
+			// Then, use classpath detection.
 			for (HttpClientStrategy strategy : HttpClientStrategy.values()) {
 				if (strategy.support()) {
 					return strategy.instantiate(server);
@@ -186,6 +196,13 @@ public enum HttpClientStrategy {
 
 		@Override
 		HttpClient instantiate(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server) {
+			// First, look into available providers.
+			HttpClientProvider provider = findProviders();
+			if (provider != null) {
+				return provider.instantiate(configuration, server);
+			}
+
+			// Then, use classpath detection.
 			for (HttpClientStrategy strategy : HttpClientStrategy.values()) {
 				if (strategy.support()) {
 					return strategy.instantiate(configuration, server);
@@ -197,6 +214,17 @@ public enum HttpClientStrategy {
 			);
 		}
 	};
+
+	/**
+	 * Look into {@link HttpClientProvider} available using the standard Service Provider Interface.
+	 *
+	 * @return Custom {@link HttpClientProvider}, {@code null} if no one exists.
+	 */
+	private static HttpClientProvider findProviders() {
+		ServiceLoader<HttpClientProvider> providers = ServiceLoader.load(HttpClientProvider.class);
+		Iterator<HttpClientProvider> it = providers.iterator();
+		return it.hasNext() ? it.next() : null;
+	}
 
 	/**
 	 * The CompletableFuture FQN that has been added in JDK8.
