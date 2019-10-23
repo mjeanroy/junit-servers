@@ -97,7 +97,7 @@ public enum HttpClientStrategy {
 	ASYNC_HTTP_CLIENT("AsyncHttpClient") {
 		@Override
 		public boolean support() {
-			return SUPPORT_JAVA_8 && SUPPORT_ASYNC_HTTP_CLIENT;
+			return SUPPORT_ASYNC_HTTP_CLIENT;
 		}
 
 		@Override
@@ -227,19 +227,6 @@ public enum HttpClientStrategy {
 	}
 
 	/**
-	 * The CompletableFuture FQN that has been added in JDK8.
-	 */
-	private static final String COMPLETABLE_FUTURE_CLASS = "java.util.concurrent.CompletableFuture";
-
-	/**
-	 * This is a flag that can be used to ensure that the runtime environment support Java 8 API.
-	 * For now, the only verification is the support of the new JDK8 CompletableFuture class.
-	 *
-	 * @see HttpClientStrategy#COMPLETABLE_FUTURE_CLASS
-	 */
-	private static final boolean SUPPORT_JAVA_8 = Classes.isPresent(COMPLETABLE_FUTURE_CLASS);
-
-	/**
 	 * The FQN entry point for the async-http-client library.
 	 *
 	 * @see <a href="http://www.javadoc.io/doc/org.asynchttpclient/async-http-client">http://www.javadoc.io/doc/org.asynchttpclient/async-http-client</a>
@@ -254,12 +241,11 @@ public enum HttpClientStrategy {
 	 *   <li>The async-http-client library must be available on the classpath.</li>
 	 * </ul>
 	 *
-	 * @see HttpClientStrategy#SUPPORT_JAVA_8
 	 * @see HttpClientStrategy#ASYNC_HTTP_CLIENT_CLASS
 	 * @see <a href="https://github.com/AsyncHttpClient/async-http-client">https://github.com/AsyncHttpClient/async-http-client</a>
 	 * @see <a href="http://www.javadoc.io/doc/org.asynchttpclient/async-http-client">http://www.javadoc.io/doc/org.asynchttpclient/async-http-client</a>
 	 */
-	private static final boolean SUPPORT_ASYNC_HTTP_CLIENT = SUPPORT_JAVA_8 && Classes.isPresent(ASYNC_HTTP_CLIENT_CLASS);
+	private static final boolean SUPPORT_ASYNC_HTTP_CLIENT = Classes.isPresent(ASYNC_HTTP_CLIENT_CLASS);
 
 	/**
 	 * The FQN entry point for the (ning) async-http-client library.
