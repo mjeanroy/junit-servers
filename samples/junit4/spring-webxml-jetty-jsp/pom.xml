@@ -33,7 +33,7 @@
 
   <properties>
     <owasp-xss-encoder.version>1.2.2</owasp-xss-encoder.version>
-    <owasp-html-sanitizer.version>r239</owasp-html-sanitizer.version>
+    <owasp-html-sanitizer.version>1.1</owasp-html-sanitizer.version>
   </properties>
 
   <dependencies>
