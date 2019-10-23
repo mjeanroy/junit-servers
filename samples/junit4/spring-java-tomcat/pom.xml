@@ -31,7 +31,7 @@
   <parent>
     <artifactId>junit-servers-samples-junit4</artifactId>
     <groupId>com.github.mjeanroy</groupId>
-    <version>0.13.0</version>
+    <version>0.13.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>spring-java-tomcat</artifactId>
