@@ -35,7 +35,6 @@
     <owasp-xss-encoder.version>1.2.2</owasp-xss-encoder.version>
     <owasp-html-sanitizer.version>r239</owasp-html-sanitizer.version>
     <javax.servlet-jstl.version>1.2</javax.servlet-jstl.version>
-    <tomcat.version>${tomcat-java7.version}</tomcat.version>
   </properties>
 
   <dependencies>

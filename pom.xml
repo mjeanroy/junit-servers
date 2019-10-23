@@ -105,21 +105,8 @@
 
     <java-module-name>com.github.mjeanroy.junit.servers</java-module-name>
 
-    <jetty-java7.version>9.2.24.v20180105</jetty-java7.version>
-    <jetty-java8.version>9.4.21.v20190926</jetty-java8.version>
-    <jetty-java9.version>9.4.21.v20190926</jetty-java9.version>
-    <jetty-java10.version>9.4.21.v20190926</jetty-java10.version>
-    <jetty-java11.version>9.4.21.v20190926</jetty-java11.version>
-    <jetty-java12.version>9.4.21.v20190926</jetty-java12.version>
-    <jetty.version>${jetty-java7.version}</jetty.version>
-
-    <tomcat-java7.version>8.5.46</tomcat-java7.version>
-    <tomcat-java8.version>8.5.46</tomcat-java8.version>
-    <tomcat-java9.version>8.5.46</tomcat-java9.version>
-    <tomcat-java10.version>8.5.46</tomcat-java10.version>
-    <tomcat-java11.version>8.5.46</tomcat-java11.version>
-    <tomcat-java12.version>8.5.46</tomcat-java12.version>
-    <tomcat.version>${tomcat-java7.version}</tomcat.version>
+    <jetty.version>9.4.21.v20190926</jetty.version>
+    <tomcat.version>8.5.46</tomcat.version>
 
     <junit.version>4.12</junit.version>
     <junit-jupiter.version>5.5.2</junit-jupiter.version>
@@ -188,6 +175,16 @@
       <dependency>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-server</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-servlet</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-servlets</artifactId>
         <version>${jetty.version}</version>
       </dependency>
       <dependency>
