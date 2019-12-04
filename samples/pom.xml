@@ -47,7 +47,7 @@
 
   <properties>
     <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
-    <spring.version>5.2.1.RELEASE</spring.version>
+    <spring.version>5.2.2.RELEASE</spring.version>
   </properties>
 
   <repositories>
