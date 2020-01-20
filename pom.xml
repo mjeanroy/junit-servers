@@ -106,7 +106,7 @@
     <java-module-name>com.github.mjeanroy.junit.servers</java-module-name>
 
     <jetty.version>9.4.26.v20200117</jetty.version>
-    <tomcat.version>8.5.46</tomcat.version>
+    <tomcat.version>9.0.30</tomcat.version>
 
     <junit.version>4.13</junit.version>
     <junit-jupiter.version>5.5.2</junit-jupiter.version>
