@@ -122,7 +122,7 @@
     <wiremock.version>2.26.0</wiremock.version>
     <equalsverifier.version>3.1.12</equalsverifier.version>
     <slf4j.version>1.7.30</slf4j.version>
-    <log4j.version>2.13.0</log4j.version>
+    <log4j.version>2.13.1</log4j.version>
     <logback.version>1.2.3</logback.version>
   </properties>
 
