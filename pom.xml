@@ -120,7 +120,7 @@
     <okhttp.version>4.4.1</okhttp.version>
     <commons-io.version>2.6</commons-io.version>
     <wiremock.version>2.26.3</wiremock.version>
-    <equalsverifier.version>3.1.12</equalsverifier.version>
+    <equalsverifier.version>3.1.13</equalsverifier.version>
     <slf4j.version>1.7.30</slf4j.version>
     <log4j.version>2.13.1</log4j.version>
     <logback.version>1.2.3</logback.version>
