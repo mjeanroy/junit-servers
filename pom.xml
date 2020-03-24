@@ -109,7 +109,7 @@
     <tomcat.version>8.5.46</tomcat.version>
 
     <junit.version>4.13</junit.version>
-    <junit-jupiter.version>5.6.0</junit-jupiter.version>
+    <junit-jupiter.version>5.6.1</junit-jupiter.version>
     <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
     <mockito.version>3.3.3</mockito.version>
     <assertj.version>3.15.0</assertj.version>
