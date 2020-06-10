@@ -27,7 +27,11 @@ package com.github.mjeanroy.junit.servers.commons.io;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -94,6 +98,20 @@ public final class Ios {
 
 		log.debug("Try to guess content type of path: {}", path);
 
+		String mimeType = tryProbeContentType(path);
+
+		if (mimeType == null) {
+			mimeType = tryGuessContentTypeFromStream(path);
+		}
+
+		if (mimeType == null) {
+			mimeType = tryGuessContentTypeFromFileName(path);
+		}
+
+		return mimeType;
+	}
+
+	private static String tryProbeContentType(Path path) {
 		try {
 			return Files.probeContentType(path);
 		}
@@ -101,5 +119,19 @@ public final class Ios {
 			log.warn(ex.getMessage(), ex);
 			return null;
 		}
+	}
+
+	private static String tryGuessContentTypeFromStream(Path path) {
+		try (InputStream is = new BufferedInputStream(new FileInputStream(path.toFile()))) {
+			return URLConnection.guessContentTypeFromStream(is);
+		}
+		catch (IOException ex) {
+			log.warn(ex.getMessage(), ex);
+			return null;
+		}
+	}
+
+	private static String tryGuessContentTypeFromFileName(Path path) {
+		return URLConnection.guessContentTypeFromName(path.getFileName().toString());
 	}
 }
