@@ -119,7 +119,7 @@
     <httpclient.version>4.5.12</httpclient.version>
     <okhttp.version>4.7.2</okhttp.version>
     <commons-io.version>2.7</commons-io.version>
-    <wiremock.version>2.26.3</wiremock.version>
+    <wiremock.version>2.27.0</wiremock.version>
     <equalsverifier.version>3.4.1</equalsverifier.version>
     <slf4j.version>1.7.30</slf4j.version>
     <log4j.version>2.13.3</log4j.version>
