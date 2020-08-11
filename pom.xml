@@ -101,7 +101,7 @@
     <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
 
     <apache-rat-plugin.version>0.13</apache-rat-plugin.version>
-    <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
+    <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
 
     <java-module-name>com.github.mjeanroy.junit.servers</java-module-name>
 
