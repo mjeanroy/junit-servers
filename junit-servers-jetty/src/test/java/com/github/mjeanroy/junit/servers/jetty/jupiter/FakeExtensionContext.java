@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * A fake {@link ExtensionContext}
@@ -118,12 +119,22 @@ class FakeExtensionContext implements ExtensionContext {
 	}
 
 	@Override
+	public TestInstances getRequiredTestInstances() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public Object getRequiredTestInstance() {
 		return testInstance;
 	}
 
 	@Override
 	public Optional<Method> getTestMethod() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Method getRequiredTestMethod() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -138,7 +149,22 @@ class FakeExtensionContext implements ExtensionContext {
 	}
 
 	@Override
+	public <T> Optional<T> getConfigurationParameter(String key, Function<String, T> transformer) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void publishReportEntry(Map<String, String> map) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void publishReportEntry(String key, String value) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void publishReportEntry(String value) {
 		throw new UnsupportedOperationException();
 	}
 
