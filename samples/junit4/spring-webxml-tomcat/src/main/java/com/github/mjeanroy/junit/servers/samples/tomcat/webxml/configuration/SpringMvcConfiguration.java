@@ -40,8 +40,6 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
 	public void configurePathMatch(PathMatchConfigurer configurer) {
 		UrlPathHelper urlPathHelper = new UrlPathHelper();
 		urlPathHelper.setAlwaysUseFullPath(true);
-
 		configurer.setUrlPathHelper(urlPathHelper);
-		configurer.setUseSuffixPatternMatch(true);
 	}
 }
