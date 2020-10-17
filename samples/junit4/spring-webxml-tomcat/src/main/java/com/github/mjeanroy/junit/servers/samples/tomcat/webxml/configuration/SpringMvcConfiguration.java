@@ -28,13 +28,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.util.UrlPathHelper;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.github.mjeanroy.junit.servers.samples")
-public class SpringMvcConfiguration extends WebMvcConfigurerAdapter {
+public class SpringMvcConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void configurePathMatch(PathMatchConfigurer configurer) {
