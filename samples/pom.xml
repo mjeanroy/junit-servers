@@ -50,14 +50,6 @@
     <spring.version>5.2.9.RELEASE</spring.version>
   </properties>
 
-  <repositories>
-    <repository>
-      <id>springsource-repo</id>
-      <name>SpringSource Repository</name>
-      <url>https://repo.springsource.org/release</url>
-    </repository>
-  </repositories>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
