@@ -41,6 +41,8 @@ matrix:
       jdk: openjdk11
     - name: "OpenJDK 12"
       jdk: openjdk12
+    - name: "OpenJDK 13"
+      jdk: openjdk13
 
 addons:
   # https://github.com/travis-ci/travis-ci/issues/5914
