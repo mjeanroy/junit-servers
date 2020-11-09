@@ -32,7 +32,7 @@
   <url>https://github.com/mjeanroy/junit-servers</url>
 
   <properties>
-    <owasp-xss-encoder.version>1.2.2</owasp-xss-encoder.version>
+    <owasp-xss-encoder.version>1.2.3</owasp-xss-encoder.version>
     <owasp-html-sanitizer.version>1.1</owasp-html-sanitizer.version>
     <javax.servlet-jstl.version>1.2</javax.servlet-jstl.version>
   </properties>
