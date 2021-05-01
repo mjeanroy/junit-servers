@@ -53,7 +53,7 @@ import static java.lang.System.nanoTime;
  * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
  */
-class NingAsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
+class NingAsyncHttpRequest extends AbstractHttpRequest {
 
 	/**
 	 * Class Logger.

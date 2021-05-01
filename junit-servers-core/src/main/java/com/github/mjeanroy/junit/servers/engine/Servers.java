@@ -101,7 +101,7 @@ public final class Servers {
 	 * @param configuration Optional configuration.
 	 * @return Embedded server.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static <T extends AbstractConfiguration> EmbeddedServer<T> instantiate(T configuration) {
 		log.debug("Instantiating embedded server using configuration: {}", configuration);
 

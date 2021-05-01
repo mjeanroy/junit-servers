@@ -46,7 +46,7 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
  * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
  */
-public class ApacheHttpClient extends AbstractHttpClient implements HttpClient {
+public class ApacheHttpClient extends AbstractHttpClient {
 
 	/**
 	 * Create new http client using default internal client.

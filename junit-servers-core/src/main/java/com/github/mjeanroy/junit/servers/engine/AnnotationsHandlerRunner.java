@@ -51,7 +51,7 @@ import static java.util.Arrays.asList;
  *   <li>{@link com.github.mjeanroy.junit.servers.annotations.TestHttpClient}</li>
  * </ul>
  */
-public class AnnotationsHandlerRunner extends AbstractTestRunner implements TestRunner {
+public class AnnotationsHandlerRunner extends AbstractTestRunner {
 
 	/**
 	 * Class Logger.

@@ -25,13 +25,12 @@
 package com.github.mjeanroy.junit.servers.utils.impl;
 
 import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import javax.servlet.ServletContext;
 
 import static org.mockito.Mockito.mock;
 
-public class FakeEmbeddedServer extends AbstractEmbeddedServer<FakeServer, FakeEmbeddedServerConfiguration> implements EmbeddedServer<FakeEmbeddedServerConfiguration> {
+public class FakeEmbeddedServer extends AbstractEmbeddedServer<FakeServer, FakeEmbeddedServerConfiguration> {
 
 	/**
 	 * The number of times the fake server has been started.

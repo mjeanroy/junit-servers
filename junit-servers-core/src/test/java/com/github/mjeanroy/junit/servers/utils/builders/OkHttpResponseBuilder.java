@@ -38,6 +38,7 @@ import java.util.Map;
  */
 public class OkHttpResponseBuilder extends AbstractHttpResponseBuilder<Response, OkHttpResponseBuilder> {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public Response build() {
 		Request request = new Request.Builder().url("http://localhost:8080").build();

@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
  * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
  */
-public class OkHttpClient extends AbstractHttpClient implements HttpClient {
+public class OkHttpClient extends AbstractHttpClient {
 
 	/**
 	 * Create new http client using internal

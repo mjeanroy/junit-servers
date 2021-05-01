@@ -50,7 +50,7 @@ import java.io.IOException;
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
  * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
  */
-class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
+class OkHttpRequest extends AbstractHttpRequest {
 
 	/**
 	 * Class Logger.
@@ -162,6 +162,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @see RequestBody#create(MediaType, String)
 	 * @see FormBody
 	 */
+	@SuppressWarnings("deprecation")
 	private RequestBody createBody() throws IOException {
 		if (body == null) {
 			return null;
@@ -179,6 +180,7 @@ class OkHttpRequest extends AbstractHttpRequest implements HttpRequest {
 	 * @return Request body element.
 	 * @see RequestBody
 	 */
+	@SuppressWarnings("deprecation")
 	private static RequestBody createEmptyBody() {
 		return RequestBody.create(null, "");
 	}

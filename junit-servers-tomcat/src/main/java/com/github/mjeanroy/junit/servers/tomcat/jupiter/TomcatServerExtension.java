@@ -28,7 +28,6 @@ import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatFactory;
@@ -79,7 +78,7 @@ public class TomcatServerExtension extends JunitServerExtension {
 	}
 
 	@Override
-	protected EmbeddedServer instantiateServer(Class<?> testClass, AbstractConfiguration configuration) {
+	protected EmbeddedTomcat instantiateServer(Class<?> testClass, AbstractConfiguration configuration) {
 		log.debug("Instantiating embedded tomcat for test class: {}", testClass);
 		return EmbeddedTomcatFactory.createFrom(testClass, configuration);
 	}

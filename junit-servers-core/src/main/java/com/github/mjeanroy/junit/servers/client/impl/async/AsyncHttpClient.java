@@ -45,7 +45,7 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
  * @see <a href="https://asynchttpclient.github.io/">https://asynchttpclient.github.io/</a>
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#ASYNC_HTTP_CLIENT
  */
-public class AsyncHttpClient extends AbstractHttpClient implements HttpClient {
+public class AsyncHttpClient extends AbstractHttpClient {
 
 	/**
 	 * Create new http client using default internal http client.

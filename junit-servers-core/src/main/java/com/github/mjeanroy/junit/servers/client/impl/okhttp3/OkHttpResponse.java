@@ -44,7 +44,7 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
  * Implementation of {@link HttpResponse} delegating calls to original {@link Response}
  * instance.
  */
-final class OkHttpResponse extends AbstractHttpResponse implements HttpResponse {
+final class OkHttpResponse extends AbstractHttpResponse {
 
 	/**
 	 * The original response.

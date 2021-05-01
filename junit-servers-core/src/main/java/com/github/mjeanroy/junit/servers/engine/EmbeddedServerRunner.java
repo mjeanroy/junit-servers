@@ -49,7 +49,7 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
  *   <li>Stop embedded server after all tests are run.</li>
  * </ol>
  */
-public final class EmbeddedServerRunner extends AbstractTestRunner implements TestRunner {
+public final class EmbeddedServerRunner extends AbstractTestRunner {
 
 	/**
 	 * Class Logger.

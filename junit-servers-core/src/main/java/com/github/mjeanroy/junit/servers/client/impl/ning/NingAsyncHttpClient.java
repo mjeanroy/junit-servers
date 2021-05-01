@@ -44,7 +44,7 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
  * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
  */
-public class NingAsyncHttpClient extends AbstractHttpClient implements HttpClient {
+public class NingAsyncHttpClient extends AbstractHttpClient {
 
 	/**
 	 * Create new http client using internal

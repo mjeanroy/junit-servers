@@ -54,7 +54,7 @@ import static java.lang.System.nanoTime;
  * @see <a href="https://asynchttpclient.github.io/">https://asynchttpclient.github.io/</a>
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#ASYNC_HTTP_CLIENT
  */
-class AsyncHttpRequest extends AbstractHttpRequest implements HttpRequest {
+class AsyncHttpRequest extends AbstractHttpRequest {
 
 	/**
 	 * Class Logger.

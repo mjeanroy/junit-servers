@@ -36,7 +36,7 @@ import java.util.Objects;
 /**
  * A simple implementation of {@link HttpResponse}.
  */
-public final class DefaultHttpResponse extends AbstractHttpResponse implements HttpResponse {
+public final class DefaultHttpResponse extends AbstractHttpResponse {
 
 	/**
 	 * Create a default HTTP Response from given values.

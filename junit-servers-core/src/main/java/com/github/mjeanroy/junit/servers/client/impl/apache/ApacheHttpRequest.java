@@ -63,7 +63,7 @@ import static java.lang.System.nanoTime;
  * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
  * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
  */
-class ApacheHttpRequest extends AbstractHttpRequest implements HttpRequest {
+class ApacheHttpRequest extends AbstractHttpRequest {
 
 	/**
 	 * Class Logger.
