@@ -121,7 +121,7 @@
     <commons-io.version>2.10.0</commons-io.version>
     <wiremock.version>2.27.2</wiremock.version>
     <equalsverifier.version>3.6.1</equalsverifier.version>
-    <slf4j.version>1.7.30</slf4j.version>
+    <slf4j.version>1.7.31</slf4j.version>
     <log4j.version>2.14.1</log4j.version>
     <logback.version>1.2.3</logback.version>
   </properties>
