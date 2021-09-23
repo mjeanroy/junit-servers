@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.jupiter;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstances;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -175,6 +176,11 @@ class FakeExtensionContext implements ExtensionContext {
 		}
 
 		return stores.get(namespace);
+	}
+
+	@Override
+	public ExecutionMode getExecutionMode() {
+		return ExecutionMode.SAME_THREAD;
 	}
 
 	/**
