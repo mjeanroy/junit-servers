@@ -98,6 +98,16 @@ public interface HttpClient {
 	HttpRequest prepareDelete(String endpoint);
 
 	/**
+	 * Create {@code DELETE} request.
+	 *
+	 * @param endpoint URL, full url or path relative to server url.
+	 * @param body Request body.
+	 * @return DELETE request.
+	 * @see #prepareRequest(HttpMethod, String)
+	 */
+	HttpRequest prepareDelete(String endpoint, HttpRequestBody body);
+
+	/**
 	 * Create {@code PATCH} request.
 	 *
 	 * @param endpoint URL, full url or path relative to server url.

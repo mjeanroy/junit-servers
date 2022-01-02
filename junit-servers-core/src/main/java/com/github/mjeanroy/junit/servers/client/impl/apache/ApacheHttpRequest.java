@@ -191,7 +191,7 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 			}
 
 			if (httpMethod == HttpMethod.DELETE) {
-				return new HttpDelete();
+				return new HttpDeleteEntityEnclosingRequest();
 			}
 
 			if (httpMethod == HttpMethod.PATCH) {
@@ -203,6 +203,17 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 			}
 
 			throw new UnsupportedOperationException("Method " + httpMethod + " is not supported by apache http-client");
+		}
+	}
+
+	private static final class HttpDeleteEntityEnclosingRequest extends HttpEntityEnclosingRequestBase {
+		public HttpDeleteEntityEnclosingRequest() {
+			super();
+		}
+
+		@Override
+		public String getMethod() {
+			return HttpDelete.METHOD_NAME;
 		}
 	}
 }

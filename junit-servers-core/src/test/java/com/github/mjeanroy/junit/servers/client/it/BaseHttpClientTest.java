@@ -539,6 +539,27 @@ public abstract class BaseHttpClientTest {
 	}
 
 	@Test
+	void testDeleteWithRequestBody() {
+		final String endpoint = ENDPOINT;
+		final int status = 200;
+		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
+		final String body = "{\"id\": 1, \"name\": \"Jane Doe\"}";
+
+		stubDeleteRequest(endpoint, status, headers, body);
+
+		final HttpResponse rsp = createDefaultClient()
+				.prepareDelete(endpoint, jsonBody(body))
+				.acceptJson()
+				.execute();
+
+		assertRequest(endpoint, HttpMethod.DELETE);
+		assertThat(rsp.status()).isEqualTo(status);
+		assertThat(rsp.body()).isEqualTo(body);
+		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+	}
+
+	@Test
 	void testUploadWithMultipartRequest() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
@@ -1011,16 +1032,6 @@ public abstract class BaseHttpClientTest {
 		assertThatThrownBy(() -> httpRequest.setBody(requestBody(body)))
 			.isExactlyInstanceOf(UnsupportedOperationException.class)
 			.hasMessage("Http method GET does not support request body");
-	}
-
-	@Test
-	void testRequest_should_fail_to_set_body_on_delete_request() {
-		final HttpRequest httpRequest = createDefaultClient().prepareDelete(ENDPOINT);
-		final String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
-
-		assertThatThrownBy(() -> httpRequest.setBody(requestBody(body)))
-			.isExactlyInstanceOf(UnsupportedOperationException.class)
-			.hasMessage("Http method DELETE does not support request body");
 	}
 
 	@Test

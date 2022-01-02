@@ -150,6 +150,18 @@ final class WireMockTestUtils {
 	}
 
 	/**
+	 * Stub {@code DELETE} request.
+	 *
+	 * @param endpoint Request endpoint.
+	 * @param status Response HTTP status code.
+	 * @param headers Response headers.
+	 * @param body Request body.
+	 */
+	static void stubDeleteRequest(String endpoint, int status, Collection<Pair> headers, String body) {
+		stubRequest(DELETE, endpoint, status, headers, body);
+	}
+
+	/**
 	 * Stub File Upload Request.
 	 *
 	 * @param endpoint Request endpoint.

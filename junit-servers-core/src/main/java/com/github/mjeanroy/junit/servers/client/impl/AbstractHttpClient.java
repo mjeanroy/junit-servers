@@ -89,6 +89,11 @@ public abstract class AbstractHttpClient implements HttpClient {
 	}
 
 	@Override
+	public HttpRequest prepareDelete(String endpoint, HttpRequestBody body) {
+		return prepareRequest(HttpMethod.DELETE, endpoint).setBody(body);
+	}
+
+	@Override
 	public HttpRequest prepareGet(String endpoint) {
 		return prepareRequest(HttpMethod.GET, endpoint);
 	}
