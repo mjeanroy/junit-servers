@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2019 <mickael.jeanroy@gmail.com>
+ * Copyright (c) 2014-2022 <mickael.jeanroy@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -115,17 +115,17 @@ class EmbeddedJettyTest {
 
 		try (URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { url })) {
 			assertThat(urlClassLoader.getResource(name)).isNotNull();
-	
+
 			jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
 				.withWebapp(dir)
 				.withParentClasspath(url)
 				.build());
-	
+
 			jetty.start();
-	
+
 			WebAppContext ctx = (WebAppContext) jetty.getDelegate().getHandler();
 			ClassLoader cl = ctx.getClassLoader();
-	
+
 			assertThat(cl).isNotNull();
 			assertThat(cl.getResource("custom-web.xml")).isNotNull();
 			assertThat(cl.getResource(name)).isNotNull();
