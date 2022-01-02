@@ -34,6 +34,9 @@ import org.junit.runner.RunWith;
 @RunWith(TomcatServerJunit4Runner.class)
 public abstract class AbstractTomcatJunit4Test {
 
+	/**
+	 * The started embedded server.
+	 */
 	@TestServer
 	public static EmbeddedTomcat server;
 

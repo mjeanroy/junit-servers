@@ -40,7 +40,7 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
  * Runner that will start and stop embedded server before tests.
  * This runner will also add some custom rules to inject data to test classes.
  *
- * <h3>How to use?</h3>
+ * <h2>How to use?</h2>
  *
  * Simply set the {@link JunitServerRunner} class with the JUnit {@link org.junit.runner.RunWith} annotation:
  *
@@ -67,7 +67,7 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
  *   }
  * </code></pre>
  *
- * <h3>Should I use the {@link ServerRule} or the runner?</h3>
+ * <h2>Should I use the {@link ServerRule} or the runner?</h2>
  *
  * The runner should be used, but due to the limitation of JUnit (only one runner can be used), the rule can
  * be used if you need to use a custom runner.
@@ -94,7 +94,7 @@ public class JunitServerRunner extends BlockJUnit4ClassRunner {
 	/**
 	 * Create runner starting an embedded server.
 	 *
-	 * <p/>
+	 * <br>
 	 *
 	 * <strong>The embedded server implementation is automatically detected using classpath
 	 * detection, so one of {@code junit-servers-jetty} or {@code junit-servers-tomcat} dependency must

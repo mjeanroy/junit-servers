@@ -27,7 +27,6 @@ package com.github.mjeanroy.junit.servers.exceptions;
 /**
  * Exception thrown when embedded server fail.
  */
-@SuppressWarnings("serial")
 abstract class AbstractEmbeddedServerException extends AbstractException {
 
 	/**

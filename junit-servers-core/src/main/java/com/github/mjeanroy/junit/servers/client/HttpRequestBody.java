@@ -42,6 +42,7 @@ public interface HttpRequestBody {
 	 * The request body.
 	 *
 	 * @return Request body.
+	 * @throws IOException If an error occurs while reading request body.
 	 */
 	byte[] getBody() throws IOException;
 }

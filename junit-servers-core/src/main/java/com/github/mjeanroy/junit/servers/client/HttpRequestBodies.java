@@ -32,6 +32,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Request Body Factories.
+ */
 public class HttpRequestBodies {
 
 	/**
@@ -215,6 +218,8 @@ public class HttpRequestBodies {
 	/**
 	 * Create form urlencoded body from given parameters.
 	 *
+	 * @param parameter First parameter.
+	 * @param others Other parameters.
 	 * @return The request body.
 	 */
 	public static HttpRequestBody formUrlEncodedBody(HttpParameter parameter, HttpParameter... others) {

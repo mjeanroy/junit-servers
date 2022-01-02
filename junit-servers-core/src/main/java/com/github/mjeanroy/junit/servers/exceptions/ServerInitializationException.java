@@ -27,9 +27,13 @@ package com.github.mjeanroy.junit.servers.exceptions;
 /**
  * Exception thrown when server cannot be initialized.
  */
-@SuppressWarnings("serial")
 public final class ServerInitializationException extends AbstractEmbeddedServerException {
 
+	/**
+	 * Create exception.
+	 *
+	 * @param throwable Original cause.
+	 */
 	public ServerInitializationException(Throwable throwable) {
 		super(throwable);
 	}

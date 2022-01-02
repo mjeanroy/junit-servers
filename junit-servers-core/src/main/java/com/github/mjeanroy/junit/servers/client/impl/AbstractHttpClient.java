@@ -202,6 +202,8 @@ public abstract class AbstractHttpClient implements HttpClient {
 
 	/**
 	 * Effectively destroy HTTP Client.
+	 *
+	 * @throws Exception If an error occurs while destroying client.
 	 */
 	protected abstract void doDestroy() throws Exception;
 

@@ -104,7 +104,8 @@ public final class HttpRequestBodyMultipartBuilder {
 	 * will be automatically added with this part, such as: {@code Content-Disposition: form-data; name="<name>"}.
 	 *
 	 * @param body Part body.
-	 * @param name The name attribute of {@code COntent-Disposition} header.
+	 * @param name The name attribute of {@code Content-Disposition} header.
+	 * @param filename The filename attribute {@code Content-Disposition} header.
 	 * @return The builder.
 	 */
 	public HttpRequestBodyMultipartBuilder addFormDataPart(HttpRequestBody body, String name, String filename) {
@@ -159,7 +160,7 @@ public final class HttpRequestBodyMultipartBuilder {
 	 *
 	 * @param file The file being sent.
 	 * @param name The name attribute of {@code COntent-Disposition} header.
-	 * @param filename The filename attribute {@code COntent-Disposition} header.
+	 * @param filename The filename attribute {@code Content-Disposition} header.
 	 * @return The builder.
 	 */
 	public HttpRequestBodyMultipartBuilder addFormDataPart(File file, String name, String filename) {
@@ -260,6 +261,11 @@ public final class HttpRequestBodyMultipartBuilder {
 		return this;
 	}
 
+	/**
+	 * Update content-type to {@code "multipart/parallel"}.
+	 *
+	 * @return The builder.
+	 */
 	public HttpRequestBodyMultipartBuilder asMultipartParallel() {
 		this.contentType = MediaType.MULTIPART_PARALLEL;
 		return this;

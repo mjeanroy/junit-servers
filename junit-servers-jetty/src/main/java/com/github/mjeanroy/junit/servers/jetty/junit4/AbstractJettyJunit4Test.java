@@ -34,6 +34,9 @@ import org.junit.runner.RunWith;
 @RunWith(JettyServerJunit4Runner.class)
 public abstract class AbstractJettyJunit4Test {
 
+	/**
+	 * The started embedded server.
+	 */
 	@TestServer
 	public static EmbeddedJetty server;
 

@@ -29,6 +29,23 @@ package com.github.mjeanroy.junit.servers.servers;
  */
 public enum ServerStatus {
 
-	STOPPED, STARTED, STOPPING, STARTING
+	/**
+	 * Server is stopped.
+	 */
+	STOPPED,
 
+	/**
+	 * Server has just been started.
+	 */
+	STARTED,
+
+	/**
+	 * Server is stopping.
+	 */
+	STOPPING,
+
+	/**
+	 * Server is starting.
+	 */
+	STARTING
 }

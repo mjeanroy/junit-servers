@@ -177,8 +177,8 @@ public final class ToStringBuilder {
 	 *
 	 * @param name The name of the field.
 	 * @param values The collection of values.
-	 * @param <T> Type of elements in collection.
 	 * @return The current builder (for chaining).
+	 * @param <T> Type of elements in collection.
 	 */
 	public <T> ToStringBuilder append(String name, Iterable<T> values) {
 		StringBuilder pending = new StringBuilder().append(OPEN_ARRAY);
@@ -200,7 +200,7 @@ public final class ToStringBuilder {
 	 * Append new {@link Path} value.
 	 *
 	 * @param name The name of the field.
-	 * @param path The path value.* @param <T> Type of elements in collection.
+	 * @param path The path value.
 	 * @return The current builder (for chaining).
 	 */
 	public ToStringBuilder append(String name, Path path) {

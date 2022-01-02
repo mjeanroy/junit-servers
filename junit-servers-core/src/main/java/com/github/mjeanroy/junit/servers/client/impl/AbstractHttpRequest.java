@@ -105,6 +105,12 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 	 */
 	protected final Map<String, HttpHeader> headers;
 
+	/**
+	 * Create request.
+	 *
+	 * @param endpoint Request endpoint.
+	 * @param method Request method.
+	 */
 	protected AbstractHttpRequest(HttpUrl endpoint, HttpMethod method) {
 		this.endpoint = notNull(endpoint, "endpoint");
 		this.method = notNull(method, "method");

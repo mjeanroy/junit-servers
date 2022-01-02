@@ -27,9 +27,14 @@ package com.github.mjeanroy.junit.servers.tomcat.exceptions;
 import com.github.mjeanroy.junit.servers.exceptions.IllegalConfigurationException;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
-@SuppressWarnings("serial")
+/**
+ * Error thrown when Tomcat configuration is not valid.
+ */
 public class IllegalTomcatConfigurationException extends IllegalConfigurationException {
 
+	/**
+	 * Create exception with default error message.
+	 */
 	public IllegalTomcatConfigurationException() {
 		super(createMessage());
 	}
