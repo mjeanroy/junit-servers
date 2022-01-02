@@ -35,7 +35,10 @@ import java.util.Map;
 /**
  * Request Body Factories.
  */
-public class HttpRequestBodies {
+public final class HttpRequestBodies {
+
+	private HttpRequestBodies() {
+	}
 
 	/**
 	 * Create request body from given raw string.
