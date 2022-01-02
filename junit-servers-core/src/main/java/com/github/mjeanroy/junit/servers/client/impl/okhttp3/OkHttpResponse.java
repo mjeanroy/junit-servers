@@ -46,45 +46,47 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
  */
 final class OkHttpResponse extends AbstractHttpResponse {
 
-	/**
-	 * The original response.
-	 */
-	private final Response response;
+	private final int code;
+	private final String body;
+	private final Headers headers;
 
 	/**
 	 * Create the response from OkHTTP3
 	 *
-	 * @param response The original response.
+	 * @param code The original response status.
+	 * @param body The original response body.
+	 * @param headers The original response headers.
 	 * @param duration Request duration.
 	 */
-	OkHttpResponse(Response response, long duration) {
+	OkHttpResponse(
+			int code,
+			String body,
+			Headers headers,
+			long duration
+	) {
 		super(duration);
-		this.response = notNull(response, "Response");
+		this.code = code;
+		this.body = body;
+		this.headers = notNull(headers, "Headers");
 	}
 
 	@Override
 	public int status() {
-		return response.code();
+		return code;
 	}
 
 	@Override
-	protected String readResponseBody() throws IOException {
-		final ResponseBody body = response.body();
-		if (body == null) {
-			return null;
-		}
-
-		return body.string();
+	protected String readResponseBody() {
+		return body;
 	}
 
 	@Override
 	public Collection<HttpHeader> getHeaders() {
-		Headers headers = response.headers();
 		int size = headers.size();
 
 		List<HttpHeader> results = new ArrayList<>(size);
 		for (String name : headers.names()) {
-			results.add(HttpHeader.header(name, response.headers(name)));
+			results.add(HttpHeader.header(name, headers.values(name)));
 		}
 
 		return results;
@@ -92,7 +94,7 @@ final class OkHttpResponse extends AbstractHttpResponse {
 
 	@Override
 	public HttpHeader getHeader(String name) {
-		List<String> values = response.headers(name);
+		List<String> values = headers.values(name);
 		if (values == null || values.isEmpty()) {
 			return null;
 		}
@@ -104,7 +106,9 @@ final class OkHttpResponse extends AbstractHttpResponse {
 	public String toString() {
 		return ToStringBuilder.create(getClass())
 			.append("duration", getRequestDuration())
-			.append("response", response)
+			.append("code", code)
+			.append("body", body)
+			.append("headers", headers)
 			.build();
 	}
 
@@ -116,7 +120,10 @@ final class OkHttpResponse extends AbstractHttpResponse {
 
 		if (o instanceof OkHttpResponse) {
 			OkHttpResponse r = (OkHttpResponse) o;
-			return super.equals(r) && Objects.equals(response, r.response);
+			return super.equals(r)
+					&& Objects.equals(code, r.code)
+					&& Objects.equals(body, r.body)
+					&& Objects.equals(headers, r.headers);
 		}
 
 		return false;
@@ -124,7 +131,7 @@ final class OkHttpResponse extends AbstractHttpResponse {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(super.hashCode(), response);
+		return Objects.hash(super.hashCode(), code, body, headers);
 	}
 
 	@Override

@@ -96,10 +96,10 @@ class OkHttpRequest extends AbstractHttpRequest {
 		final Call call = client.newCall(builder.build());
 
 		final long start = System.nanoTime();
-		final Response response = call.execute();
-		final long duration = System.nanoTime() - start;
-
-		return OkHttpResponseFactory.of(response, duration);
+		try (Response response = call.execute()) {
+			final long duration = System.nanoTime() - start;
+			return OkHttpResponseFactory.of(response, duration);
+		}
 	}
 
 	/**

@@ -28,7 +28,10 @@ import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponseImplTes
 import com.github.mjeanroy.junit.servers.utils.builders.OkHttpResponseBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,19 +44,31 @@ class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpResponseBuil
 
 	@Override
 	protected OkHttpResponse createHttpResponse(Response delegate, long duration) {
-		return new OkHttpResponse(delegate, duration);
+		return new OkHttpResponse(
+				delegate.code(),
+				readResponseBody(delegate),
+				delegate.headers(),
+				duration
+		);
 	}
 
 	@Test
 	void it_should_implement_to_string() {
 		final Response delegate = new OkHttpResponseBuilder().build();
 		final long duration = 1000L;
-		final OkHttpResponse response = new OkHttpResponse(delegate, duration);
+		final OkHttpResponse response = new OkHttpResponse(
+				delegate.code(),
+				readResponseBody(delegate),
+				delegate.headers(),
+				duration
+		);
 
 		assertThat(response.toString()).isEqualTo(
 			"OkHttpResponse{" +
 				"duration: 1000, " +
-				"response: Response{protocol=http/1.0, code=200, message=OK, url=http://localhost:8080/}" +
+				"code: 200, " +
+				"body: \"\", " +
+				"headers: []" +
 			"}"
 		);
 	}
@@ -68,5 +83,13 @@ class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpResponseBuil
 			.withIgnoredFields("readResponseBodyLock", "_body")
 			.withPrefabValues(Response.class, red, black)
 			.verify();
+	}
+
+	private static String readResponseBody(Response response) {
+		try (ResponseBody body = response.body()) {
+			return body == null ? null : body.string();
+		} catch (IOException ex) {
+			throw new AssertionError(ex);
+		}
 	}
 }

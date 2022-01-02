@@ -26,7 +26,11 @@ package com.github.mjeanroy.junit.servers.client.impl.okhttp3;
 
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
+import com.github.mjeanroy.junit.servers.exceptions.HttpClientException;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
+
+import java.io.IOException;
 
 /**
  * Factory that produce {@link HttpResponse} from {@link Response}.
@@ -48,6 +52,19 @@ final class OkHttpResponseFactory {
 	 * @return The HTTP response.
 	 */
 	static HttpResponse of(Response response, long duration) {
-		return new OkHttpResponse(response, duration);
+		return new OkHttpResponse(
+				response.code(),
+				readResponseBody(response),
+				response.headers(),
+				duration
+		);
+	}
+
+	private static String readResponseBody(Response response) {
+		try (ResponseBody body = response.body()) {
+			return body == null ? null : body.string();
+		} catch (IOException ex) {
+			throw new HttpClientException(ex);
+		}
 	}
 }
