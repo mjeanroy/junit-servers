@@ -98,7 +98,7 @@
     <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
     <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
     <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-    <maven-site-plugin.version>3.11.0</maven-site-plugin.version>
+    <maven-site-plugin.version>3.12.0</maven-site-plugin.version>
 
     <apache-rat-plugin.version>0.13</apache-rat-plugin.version>
     <versions-maven-plugin.version>2.10.0</versions-maven-plugin.version>
