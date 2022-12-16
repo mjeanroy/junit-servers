@@ -42,7 +42,7 @@ jobs:
       uses: actions/setup-java@v3.9.0
       with:
         java-version: ${{ matrix.java }}
-        distribution: 'zulu'
+        distribution: 'temurin'
         cache: 'maven'
     - name: Set up GCS Maven Central mirror
       run: echo "<settings><mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors></settings>" > ~/.m2/settings.xml
