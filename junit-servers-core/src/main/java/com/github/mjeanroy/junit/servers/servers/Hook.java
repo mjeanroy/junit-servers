@@ -24,8 +24,6 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-import javax.servlet.ServletContext;
-
 /**
  * Hook that will be invoked:
  *
