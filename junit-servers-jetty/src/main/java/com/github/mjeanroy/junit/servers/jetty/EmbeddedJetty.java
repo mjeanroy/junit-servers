@@ -46,7 +46,6 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
-import javax.servlet.ServletContext;
 import java.io.File;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
@@ -258,7 +257,7 @@ public class EmbeddedJetty extends AbstractEmbeddedServer<Server, EmbeddedJettyC
 	}
 
 	@Override
-	public ServletContext getServletContext() {
+	public Object getServletContext() {
 		return webAppContext == null ? null : webAppContext.getServletContext();
 	}
 

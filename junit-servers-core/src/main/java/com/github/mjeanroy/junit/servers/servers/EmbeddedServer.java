@@ -119,7 +119,16 @@ public interface EmbeddedServer<T extends AbstractConfiguration> {
 	 * Get servlet context used within container.
 	 * If container is not a servlet container, this method should return null.
 	 *
+	 * @param klass The expected class, use {@code javax.servlet.ServletContext} or {@code jakarta.servlet.ServletContext}, depending on the servlet API being used.
 	 * @return Servlet Context from container.
 	 */
-	ServletContext getServletContext();
+	<SERVLET_CONTEXT> SERVLET_CONTEXT getServletContext(Class<SERVLET_CONTEXT> klass);
+
+	/**
+	 * Get servlet context used within container.
+	 * If container is not a servlet container, this method should return null.
+	 *
+	 * @return Servlet Context from container.
+	 */
+	Object getServletContext();
 }

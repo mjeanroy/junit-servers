@@ -57,5 +57,5 @@ public interface Hook {
 	 * @param server Server.
 	 * @param servletContext Servlet context started within container.
 	 */
-	void onStarted(EmbeddedServer<?> server, ServletContext servletContext);
+	void onStarted(EmbeddedServer<?> server, Object servletContext);
 }

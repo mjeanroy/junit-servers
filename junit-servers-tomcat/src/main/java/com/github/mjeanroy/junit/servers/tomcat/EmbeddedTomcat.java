@@ -38,7 +38,6 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.StandardRoot;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 
-import javax.servlet.ServletContext;
 import java.io.File;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
@@ -270,7 +269,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 	}
 
 	@Override
-	public ServletContext getServletContext() {
+	public Object getServletContext() {
 		return context == null ? null : context.getServletContext();
 	}
 

@@ -49,7 +49,7 @@ final class SpringWebTestUtils {
 	 */
 	static void verifySpringWebContext(EmbeddedServer<?> server) {
 		// Try to get servlet context
-		ServletContext servletContext = server.getServletContext();
+		ServletContext servletContext = server.getServletContext(ServletContext.class);
 		assertThat(servletContext).isNotNull();
 
 		// Try to retrieve spring webApplicationContext
