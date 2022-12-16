@@ -46,9 +46,9 @@ jobs:
         cache: 'maven'
     - name: Set up GCS Maven Central mirror
       run: echo "<settings><mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors></settings>" > ~/.m2/settings.xml
-    - name: Java Infos
+    - name: java -version
       run: java -version
-    - name: Mvn Infos
+    - name: mvn -version
       run: ./mvnw -version
     - name: Build
       run: ./mvnw -B install -DskipTests
