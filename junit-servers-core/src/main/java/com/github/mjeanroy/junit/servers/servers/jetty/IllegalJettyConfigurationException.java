@@ -22,41 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJetty;
-import org.eclipse.jetty.webapp.WebInfConfiguration;
-
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import com.github.mjeanroy.junit.servers.exceptions.IllegalConfigurationException;
 
 /**
- * Jetty Embedded Server.
+ * Error thrown when jetty configuration is not valid.
  */
-public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration> {
+public class IllegalJettyConfigurationException extends IllegalConfigurationException {
 
 	/**
-	 * Build default embedded jetty server.
+	 * Create exception with default message.
 	 */
-	public EmbeddedJetty() {
-		this(defaultConfiguration());
+	public IllegalJettyConfigurationException(Class<?> requiredClass) {
+		super(createMessage(requiredClass));
 	}
 
-	/**
-	 * Build embedded jetty server.
-	 *
-	 * @param configuration Server configuration.
-	 */
-	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	protected String containerJarPatternPropertyName() {
-		return WebInfConfiguration.CONTAINER_JAR_PATTERN;
-	}
-
-	@Override
-	protected String webInfJarPatternPropertyName() {
-		return WebInfConfiguration.WEBINF_JAR_PATTERN;
+	private static String createMessage(Class<?> requiredClass) {
+		return "Embedded jetty server requires a configuration that is an instance of " + requiredClass.getName() + ", please fix it.";
 	}
 }

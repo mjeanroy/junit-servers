@@ -22,41 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty11.tests;
 
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJetty;
-import org.eclipse.jetty.webapp.WebInfConfiguration;
+import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJettyConfiguration;
 
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import static org.mockito.Mockito.mock;
 
 /**
- * Jetty Embedded Server.
+ * Builder for mock instances of {@link EmbeddedJettyConfiguration}.
  */
-public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration> {
+public class EmbeddedJettyConfigurationMockBuilder {
 
 	/**
-	 * Build default embedded jetty server.
-	 */
-	public EmbeddedJetty() {
-		this(defaultConfiguration());
-	}
-
-	/**
-	 * Build embedded jetty server.
+	 * Build mock instance of {@link EmbeddedJettyConfiguration}.
 	 *
-	 * @param configuration Server configuration.
+	 * @return The mock instance.
 	 */
-	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	protected String containerJarPatternPropertyName() {
-		return WebInfConfiguration.CONTAINER_JAR_PATTERN;
-	}
-
-	@Override
-	protected String webInfJarPatternPropertyName() {
-		return WebInfConfiguration.WEBINF_JAR_PATTERN;
+	public EmbeddedJettyConfiguration build() {
+		return mock(EmbeddedJettyConfiguration.class);
 	}
 }

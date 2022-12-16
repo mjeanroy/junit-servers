@@ -22,41 +22,38 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty11.junit4;
 
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJetty;
-import org.eclipse.jetty.webapp.WebInfConfiguration;
-
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.junit4.ServerRule;
 
 /**
- * Jetty Embedded Server.
+ * Rule that can be used to start and stop embedded jetty server.
  */
-public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration> {
-
+public class JettyServerJunit4Rule extends ServerRule {
 	/**
-	 * Build default embedded jetty server.
-	 */
-	public EmbeddedJetty() {
-		this(defaultConfiguration());
-	}
-
-	/**
-	 * Build embedded jetty server.
+	 * Create rule.
 	 *
-	 * @param configuration Server configuration.
+	 * @param jetty Jetty Embedded Server.
 	 */
-	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
-		super(configuration);
+	public JettyServerJunit4Rule(EmbeddedJetty jetty) {
+		super(jetty);
 	}
 
-	@Override
-	protected String containerJarPatternPropertyName() {
-		return WebInfConfiguration.CONTAINER_JAR_PATTERN;
+	/**
+	 * Create rule using jetty as embedded server.
+	 */
+	public JettyServerJunit4Rule() {
+		this(new EmbeddedJetty());
 	}
 
-	@Override
-	protected String webInfJarPatternPropertyName() {
-		return WebInfConfiguration.WEBINF_JAR_PATTERN;
+	/**
+	 * Create rule.
+	 *
+	 * @param configuration Jetty Configuration.
+	 */
+	public JettyServerJunit4Rule(EmbeddedJettyConfiguration configuration) {
+		this(new EmbeddedJetty(configuration));
 	}
 }

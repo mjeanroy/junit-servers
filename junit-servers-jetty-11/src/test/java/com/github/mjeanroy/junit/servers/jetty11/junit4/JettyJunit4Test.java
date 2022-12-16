@@ -22,41 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty11.junit4;
 
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJetty;
-import org.eclipse.jetty.webapp.WebInfConfiguration;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Jetty Embedded Server.
- */
-public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration> {
+public class JettyJunit4Test extends AbstractJettyJunit4Test {
 
-	/**
-	 * Build default embedded jetty server.
-	 */
-	public EmbeddedJetty() {
-		this(defaultConfiguration());
+	@TestHttpClient
+	private HttpClient client;
+
+	@Test
+	public void it_should_have_a_server() {
+		assertThat(server).isNotNull();
+		assertThat(server.getPort()).isPositive();
 	}
 
-	/**
-	 * Build embedded jetty server.
-	 *
-	 * @param configuration Server configuration.
-	 */
-	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	protected String containerJarPatternPropertyName() {
-		return WebInfConfiguration.CONTAINER_JAR_PATTERN;
-	}
-
-	@Override
-	protected String webInfJarPatternPropertyName() {
-		return WebInfConfiguration.WEBINF_JAR_PATTERN;
+	@Test
+	public void it_should_have_a_client() {
+		assertThat(client).isNotNull();
 	}
 }

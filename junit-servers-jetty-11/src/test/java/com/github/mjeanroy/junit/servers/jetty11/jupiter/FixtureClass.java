@@ -22,41 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty11.jupiter;
 
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJetty;
-import org.eclipse.jetty.webapp.WebInfConfiguration;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJettyConfiguration;
 
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+class FixtureClass {
 
-/**
- * Jetty Embedded Server.
- */
-public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration> {
+	@TestServer
+	EmbeddedJetty jetty;
 
-	/**
-	 * Build default embedded jetty server.
-	 */
-	public EmbeddedJetty() {
-		this(defaultConfiguration());
-	}
+	@TestServerConfiguration
+	EmbeddedJettyConfiguration configuration;
 
-	/**
-	 * Build embedded jetty server.
-	 *
-	 * @param configuration Server configuration.
-	 */
-	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	protected String containerJarPatternPropertyName() {
-		return WebInfConfiguration.CONTAINER_JAR_PATTERN;
-	}
-
-	@Override
-	protected String webInfJarPatternPropertyName() {
-		return WebInfConfiguration.WEBINF_JAR_PATTERN;
-	}
+	@TestHttpClient
+	HttpClient client;
 }

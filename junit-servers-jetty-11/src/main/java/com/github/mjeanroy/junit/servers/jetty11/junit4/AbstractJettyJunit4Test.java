@@ -22,41 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty11.junit4;
 
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJetty;
-import org.eclipse.jetty.webapp.WebInfConfiguration;
-
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJetty;
+import org.junit.runner.RunWith;
 
 /**
- * Jetty Embedded Server.
+ * Simple abstraction that define a server rule using jetty as embedded server.
  */
-public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration> {
+@RunWith(JettyServerJunit4Runner.class)
+public abstract class AbstractJettyJunit4Test {
 
 	/**
-	 * Build default embedded jetty server.
+	 * The started embedded server.
 	 */
-	public EmbeddedJetty() {
-		this(defaultConfiguration());
-	}
+	@TestServer
+	public static EmbeddedJetty server;
 
-	/**
-	 * Build embedded jetty server.
-	 *
-	 * @param configuration Server configuration.
-	 */
-	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	protected String containerJarPatternPropertyName() {
-		return WebInfConfiguration.CONTAINER_JAR_PATTERN;
-	}
-
-	@Override
-	protected String webInfJarPatternPropertyName() {
-		return WebInfConfiguration.WEBINF_JAR_PATTERN;
-	}
 }

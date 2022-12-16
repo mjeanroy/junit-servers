@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty11;
 
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJettyFactory;
@@ -38,7 +38,7 @@ public final class EmbeddedJettyFactory extends AbstractEmbeddedJettyFactory<
 		EmbeddedJettyConfiguration,
 		EmbeddedJettyConfigurationProvider,
 		EmbeddedJetty
->{
+> {
 
 	private static final EmbeddedJettyFactory INSTANCE = new EmbeddedJettyFactory();
 
@@ -49,7 +49,7 @@ public final class EmbeddedJettyFactory extends AbstractEmbeddedJettyFactory<
 	 * @return Created embedded jetty instance.
 	 */
 	public static EmbeddedJetty createFrom(Class<?> testClass) {
-		return INSTANCE.instantiateFrom(testClass, null);
+		return INSTANCE.instantiateFrom(testClass);
 	}
 
 	/**

@@ -22,24 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty.exceptions;
+package com.github.mjeanroy.junit.servers.jetty11;
 
-import com.github.mjeanroy.junit.servers.exceptions.IllegalConfigurationException;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
 
 /**
- * Error thrown when jetty configuration is not valid.
+ * Jetty Embedded Server provider, used by the service provider interface from the JDK.
  */
-public class IllegalJettyConfigurationException extends IllegalConfigurationException {
+public class EmbeddedJettyProvider implements EmbeddedServerProvider<EmbeddedJettyConfiguration> {
 
-	/**
-	 * Create exception with default message.
-	 */
-	public IllegalJettyConfigurationException() {
-		super(createMessage());
+	@Override
+	public EmbeddedJetty instantiate() {
+		return new EmbeddedJetty();
 	}
 
-	private static String createMessage() {
-		return "Embedded jetty server requires a configuration that is an instance of " + EmbeddedJettyConfiguration.class.getName() + ", please fix it.";
+	@Override
+	public EmbeddedJetty instantiate(EmbeddedJettyConfiguration configuration) {
+		return new EmbeddedJetty(configuration);
 	}
 }

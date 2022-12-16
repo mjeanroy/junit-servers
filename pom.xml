@@ -35,13 +35,6 @@
   <url>https://github.com/mjeanroy/junit-servers</url>
   <description>Add Embedded Server to your junit tests case.</description>
 
-  <modules>
-    <module>junit-servers-core</module>
-    <module>junit-servers-jetty</module>
-    <module>junit-servers-tomcat</module>
-    <module>samples</module>
-  </modules>
-
   <licenses>
     <license>
       <name>MIT License</name>
@@ -99,13 +92,13 @@
     <maven-dependency-plugin.version>3.4.0</maven-dependency-plugin.version>
     <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
     <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
+    <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
 
     <apache-rat-plugin.version>0.15</apache-rat-plugin.version>
     <versions-maven-plugin.version>2.13.0</versions-maven-plugin.version>
 
     <java-module-name>com.github.mjeanroy.junit.servers</java-module-name>
 
-    <jetty.version>9.4.49.v20220914</jetty.version>
     <tomcat.version>8.5.83</tomcat.version>
 
     <junit.version>4.13.2</junit.version>
@@ -170,57 +163,6 @@
         <groupId>com.squareup.okhttp3</groupId>
         <artifactId>okhttp</artifactId>
         <version>${okhttp.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-server</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-servlet</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-servlets</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-webapp</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>apache-jsp</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-jndi</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-util</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-annotations</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-continuation</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty.websocket</groupId>
-        <artifactId>websocket-server</artifactId>
-        <version>${jetty.version}</version>
       </dependency>
 
       <dependency>
@@ -295,7 +237,7 @@
       </dependency>
       <dependency>
         <groupId>com.github.tomakehurst</groupId>
-        <artifactId>wiremock</artifactId>
+        <artifactId>wiremock-jre8-standalone</artifactId>
         <version>${wiremock.version}</version>
       </dependency>
       <dependency>
@@ -477,6 +419,33 @@
 
   <profiles>
     <profile>
+      <id>java8</id>
+      <activation>
+        <jdk>[,11)</jdk>
+      </activation>
+      <modules>
+        <module>junit-servers-core</module>
+        <module>junit-servers-jetty</module>
+        <module>junit-servers-tomcat</module>
+        <module>samples</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>java11</id>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <modules>
+        <module>junit-servers-core</module>
+        <module>junit-servers-jetty</module>
+        <module>junit-servers-jetty-11</module>
+        <module>junit-servers-tomcat</module>
+        <module>samples</module>
+      </modules>
+    </profile>
+
+    <profile>
       <id>release</id>
       <build>
         <plugins>
@@ -522,6 +491,28 @@
                 <goals>
                   <goal>jar</goal>
                 </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>${maven-enforcer-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>default-cli</id>
+                <phase>validate</phase>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireJavaVersion>
+                      <version>[11,)</version>
+                    </requireJavaVersion>
+                  </rules>
+                </configuration>
               </execution>
             </executions>
           </plugin>

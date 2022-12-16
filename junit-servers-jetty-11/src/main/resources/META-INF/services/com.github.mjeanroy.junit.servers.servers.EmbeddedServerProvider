@@ -22,33 +22,6 @@
 # THE SOFTWARE.
 ##
 
-name: Build & Test
-
-on: [push]
-
-jobs:
-  build:
-
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest ]
-        java: [ 8, 11, 17, 19 ]
-
-    steps:
-    - uses: actions/checkout@v3.2.0
-    - name: Set up JDK
-      uses: actions/setup-java@v3.9.0
-      with:
-        java-version: ${{ matrix.java }}
-        distribution: 'temurin'
-        cache: 'maven'
-    - name: java -version
-      run: java -version
-    - name: mvn -version
-      run: ./mvnw -version
-    - name: Build
-      run: ./mvnw -B install -DskipTests
-    - name: Test
-      run: ./mvnw verify
+# This is the implementation that will be automatically discovered by the SPI used
+# in the junit-servers-core module.
+com.github.mjeanroy.junit.servers.jetty11.EmbeddedJettyProvider

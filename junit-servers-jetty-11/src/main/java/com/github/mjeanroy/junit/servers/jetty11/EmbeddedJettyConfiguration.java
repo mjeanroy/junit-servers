@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty11;
 
 import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJettyConfigurationBuilder;
@@ -64,7 +64,6 @@ public class EmbeddedJettyConfiguration extends AbstractEmbeddedJettyConfigurati
 	 * Builder for {@link EmbeddedJettyConfiguration} instances.
 	 */
 	public static class Builder extends AbstractEmbeddedJettyConfigurationBuilder<Builder, EmbeddedJettyConfiguration> {
-
 		private Builder() {
 			super();
 		}

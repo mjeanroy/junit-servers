@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty11;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
@@ -69,7 +69,7 @@ class EmbeddedJettyFactoryTest {
 		assertThatThrownBy(() -> EmbeddedJettyFactory.createFrom(ClassUsingNonJettyConfiguration.class))
 			.isInstanceOf(IllegalJettyConfigurationException.class)
 			.hasMessage(
-				"Embedded jetty server requires a configuration that is an instance of com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration, please fix it."
+				"Embedded jetty server requires a configuration that is an instance of com.github.mjeanroy.junit.servers.jetty11.EmbeddedJettyConfiguration, please fix it."
 			);
 	}
 

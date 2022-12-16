@@ -22,41 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
-
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJetty;
-import org.eclipse.jetty.webapp.WebInfConfiguration;
-
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+package com.github.mjeanroy.junit.servers.servers.jetty;
 
 /**
- * Jetty Embedded Server.
+ * A Jetty configuration provider.
  */
-public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration> {
+public interface AbstractEmbeddedJettyConfigurationProvider<CONFIG extends AbstractEmbeddedJettyConfiguration> {
 
 	/**
-	 * Build default embedded jetty server.
-	 */
-	public EmbeddedJetty() {
-		this(defaultConfiguration());
-	}
-
-	/**
-	 * Build embedded jetty server.
+	 * Create configuration for given test class.
 	 *
-	 * @param configuration Server configuration.
+	 * @param testClass The test class.
+	 * @return The embedded jetty configuration.
 	 */
-	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	protected String containerJarPatternPropertyName() {
-		return WebInfConfiguration.CONTAINER_JAR_PATTERN;
-	}
-
-	@Override
-	protected String webInfJarPatternPropertyName() {
-		return WebInfConfiguration.WEBINF_JAR_PATTERN;
-	}
+	CONFIG build(Class<?> testClass);
 }

@@ -24,16 +24,10 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
+import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJettyConfigurationProvider;
+
 /**
  * A {@link EmbeddedJettyConfiguration} provider.
  */
-public interface EmbeddedJettyConfigurationProvider {
-
-	/**
-	 * Create {@link EmbeddedJettyConfiguration} for given test class.
-	 *
-	 * @param testClass The test class.
-	 * @return The embedded jetty configuration.
-	 */
-	EmbeddedJettyConfiguration build(Class<?> testClass);
+public interface EmbeddedJettyConfigurationProvider extends AbstractEmbeddedJettyConfigurationProvider<EmbeddedJettyConfiguration> {
 }

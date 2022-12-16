@@ -32,6 +32,7 @@
   <url>https://github.com/mjeanroy/junit-servers</url>
 
   <properties>
+    <jetty.version>9.4.49.v20220914</jetty.version>
     <owasp-xss-encoder.version>1.2.3</owasp-xss-encoder.version>
     <owasp-html-sanitizer.version>1.1</owasp-html-sanitizer.version>
   </properties>
@@ -113,6 +114,7 @@
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
+        <version>${jetty.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -22,41 +22,32 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty11;
 
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJetty;
-import org.eclipse.jetty.webapp.WebInfConfiguration;
+import com.github.mjeanroy.junit.servers.jetty11.tests.EmbeddedJettyConfigurationMockBuilder;
+import org.junit.jupiter.api.Test;
 
-import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import static com.github.mjeanroy.junit.servers.jetty11.EmbeddedJettyConfiguration.defaultConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Jetty Embedded Server.
- */
-public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration> {
+class EmbeddedJettyProviderTest {
 
-	/**
-	 * Build default embedded jetty server.
-	 */
-	public EmbeddedJetty() {
-		this(defaultConfiguration());
+	@Test
+	void it_should_instantiate_jetty_with_default_configuration() {
+		final EmbeddedJettyProvider provider = new EmbeddedJettyProvider();
+		final EmbeddedJetty jetty = provider.instantiate();
+
+		assertThat(jetty).isNotNull();
+		assertThat(jetty.getConfiguration()).isNotNull().isEqualTo(defaultConfiguration());
 	}
 
-	/**
-	 * Build embedded jetty server.
-	 *
-	 * @param configuration Server configuration.
-	 */
-	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
-		super(configuration);
-	}
+	@Test
+	void it_should_instantiate_jetty_with_custom_configuration() {
+		final EmbeddedJettyProvider provider = new EmbeddedJettyProvider();
+		final EmbeddedJettyConfiguration configuration = new EmbeddedJettyConfigurationMockBuilder().build();
+		final EmbeddedJetty jetty = provider.instantiate(configuration);
 
-	@Override
-	protected String containerJarPatternPropertyName() {
-		return WebInfConfiguration.CONTAINER_JAR_PATTERN;
-	}
-
-	@Override
-	protected String webInfJarPatternPropertyName() {
-		return WebInfConfiguration.WEBINF_JAR_PATTERN;
+		assertThat(jetty).isNotNull();
+		assertThat(jetty.getConfiguration()).isNotNull().isSameAs(configuration);
 	}
 }
