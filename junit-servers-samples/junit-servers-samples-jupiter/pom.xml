@@ -27,10 +27,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <modules>
-    <module>junit-servers-samples-jupiter-spring-jetty-9</module>
-    <module>junit-servers-samples-jupiter-spring-tomcat</module>
-  </modules>
+
+  <profiles>
+    <profile>
+      <id>java8</id>
+      <activation>
+        <jdk>[,11)</jdk>
+      </activation>
+      <modules>
+        <module>junit-servers-samples-jupiter-spring-jetty-9</module>
+        <module>junit-servers-samples-jupiter-spring-tomcat</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>java11</id>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <modules>
+        <module>junit-servers-samples-jupiter-spring-jetty-9</module>
+        <module>junit-servers-samples-jupiter-spring-jetty-10</module>
+        <module>junit-servers-samples-jupiter-spring-tomcat</module>
+      </modules>
+    </profile>
+  </profiles>
 
   <parent>
     <artifactId>junit-servers-samples</artifactId>
