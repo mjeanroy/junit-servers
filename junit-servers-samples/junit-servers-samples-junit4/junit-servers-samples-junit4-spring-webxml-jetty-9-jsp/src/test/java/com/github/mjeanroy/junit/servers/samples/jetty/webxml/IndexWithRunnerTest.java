@@ -28,9 +28,9 @@ import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jetty9.junit4.JettyServerJunit4Runner;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

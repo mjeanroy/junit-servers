@@ -26,13 +26,13 @@ package com.github.mjeanroy.junit.servers.junit4;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.jupiter.api.Test;
 
-import static com.github.mjeanroy.junit.servers.jetty11.EmbeddedJettyConfiguration.defaultConfiguration;
+import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 import static org.apache.commons.lang3.reflect.FieldUtils.readField;
 import static org.assertj.core.api.Assertions.assertThat;
 

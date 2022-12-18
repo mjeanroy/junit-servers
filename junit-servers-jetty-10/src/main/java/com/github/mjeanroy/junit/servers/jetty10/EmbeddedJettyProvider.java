@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.jetty10;
 
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
 /**
  * Jetty Embedded Server provider, used by the service provider interface from the JDK.

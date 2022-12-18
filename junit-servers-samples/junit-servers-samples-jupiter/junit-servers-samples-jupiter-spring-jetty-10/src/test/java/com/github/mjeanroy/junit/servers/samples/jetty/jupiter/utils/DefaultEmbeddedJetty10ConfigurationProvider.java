@@ -24,15 +24,15 @@
 
 package com.github.mjeanroy.junit.servers.samples.jetty.jupiter.utils;
 
-import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJettyConfigurationProvider;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfigurationProvider;
 
-import static com.github.mjeanroy.junit.servers.samples.jetty.jupiter.utils.EmbeddedJetty10ConfigurationFactory.createJetty10Configuration;
+import static com.github.mjeanroy.junit.servers.samples.utils.jetty.JettyTestUtils.createJettyConfiguration;
 
 public class DefaultEmbeddedJetty10ConfigurationProvider implements EmbeddedJettyConfigurationProvider {
 
 	@Override
 	public EmbeddedJettyConfiguration build(Class<?> testClass) {
-		return createJetty10Configuration();
+		return createJettyConfiguration();
 	}
 }

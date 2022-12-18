@@ -22,18 +22,29 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * A Jetty configuration provider.
+ * Annotation that can be used to specify {@link EmbeddedJettyConfiguration} provider that will be used
+ * to create new {@link EmbeddedJettyConfiguration} and use it for the test suite.
  */
-public interface AbstractEmbeddedJettyConfigurationProvider<CONFIG extends AbstractEmbeddedJettyConfiguration> {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Documented
+@Inherited
+public @interface JettyConfiguration {
 
 	/**
-	 * Create configuration for given test class.
+	 * The configuration provider.
 	 *
-	 * @param testClass The test class.
-	 * @return The embedded jetty configuration.
+	 * @return The configuration provider class.
 	 */
-	CONFIG build(Class<?> testClass);
+	Class<? extends EmbeddedJettyConfigurationProvider> providedBy();
 }

@@ -25,8 +25,8 @@
 package com.github.mjeanroy.junit.servers.jetty9.junit4;
 
 import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.junit4.ServerRule;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
 /**
  * Rule that can be used to start and stop embedded jetty server.

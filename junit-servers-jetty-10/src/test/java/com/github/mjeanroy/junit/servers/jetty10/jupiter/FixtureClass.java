@@ -29,7 +29,7 @@ import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
 class FixtureClass {
 

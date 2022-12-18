@@ -22,12 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty9;
-
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJettyConfigurationProvider;
+package com.github.mjeanroy.junit.servers.jetty;
 
 /**
  * A {@link EmbeddedJettyConfiguration} provider.
  */
-public interface EmbeddedJettyConfigurationProvider extends AbstractEmbeddedJettyConfigurationProvider<EmbeddedJettyConfiguration> {
+public interface EmbeddedJettyConfigurationProvider {
+
+	/**
+	 * Create configuration for given test class.
+	 *
+	 * @param testClass The test class.
+	 * @return The embedded jetty configuration.
+	 */
+	EmbeddedJettyConfiguration build(Class<?> testClass);
 }

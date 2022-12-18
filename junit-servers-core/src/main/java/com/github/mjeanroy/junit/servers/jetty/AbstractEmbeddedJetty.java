@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty;
 
 import com.github.mjeanroy.junit.servers.commons.core.CompositeClassLoader;
 import com.github.mjeanroy.junit.servers.commons.core.Java;

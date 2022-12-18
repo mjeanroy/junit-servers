@@ -24,21 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.jetty11;
 
+import com.github.mjeanroy.junit.servers.jetty.AbstractEmbeddedJettyFactory;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.IllegalJettyConfigurationException;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJettyFactory;
-import com.github.mjeanroy.junit.servers.servers.jetty.IllegalJettyConfigurationException;
-
-import static com.github.mjeanroy.junit.servers.commons.reflect.Annotations.findAnnotation;
 
 /**
  * Static factories for {@link EmbeddedJetty} that can be used in JUnit 4 Runner implementation
  * or JUnit Jupiter Extension.
  */
-public final class EmbeddedJettyFactory extends AbstractEmbeddedJettyFactory<
-		EmbeddedJettyConfiguration,
-		EmbeddedJettyConfigurationProvider,
-		EmbeddedJetty
-> {
+public final class EmbeddedJettyFactory extends AbstractEmbeddedJettyFactory<EmbeddedJetty> {
 
 	private static final EmbeddedJettyFactory INSTANCE = new EmbeddedJettyFactory();
 
@@ -73,7 +68,6 @@ public final class EmbeddedJettyFactory extends AbstractEmbeddedJettyFactory<
 
 	// Ensure non instantiation.
 	private EmbeddedJettyFactory() {
-		super(EmbeddedJettyConfiguration.class);
 	}
 
 	@Override
@@ -84,11 +78,5 @@ public final class EmbeddedJettyFactory extends AbstractEmbeddedJettyFactory<
 	@Override
 	protected EmbeddedJetty instantiateFrom(EmbeddedJettyConfiguration embeddedJettyConfiguration) {
 		return new EmbeddedJetty(embeddedJettyConfiguration);
-	}
-
-	@Override
-	protected Class<? extends EmbeddedJettyConfigurationProvider> findEmbeddedJettyConfigurationProvider(Class<?> testClass) {
-		JettyConfiguration configurationAnnotation = findAnnotation(testClass, JettyConfiguration.class);
-		return configurationAnnotation == null ? null : configurationAnnotation.providedBy();
 	}
 }

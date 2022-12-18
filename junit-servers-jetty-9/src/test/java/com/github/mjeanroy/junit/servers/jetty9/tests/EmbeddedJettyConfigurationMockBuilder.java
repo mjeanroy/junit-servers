@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.jetty9.tests;
 
-import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
 import static org.mockito.Mockito.mock;
 

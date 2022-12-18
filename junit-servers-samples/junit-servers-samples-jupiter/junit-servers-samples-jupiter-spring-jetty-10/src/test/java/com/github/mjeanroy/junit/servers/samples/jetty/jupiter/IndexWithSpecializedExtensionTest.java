@@ -27,19 +27,19 @@ package com.github.mjeanroy.junit.servers.samples.jetty.jupiter;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jetty10.jupiter.JettyServerExtension;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.github.mjeanroy.junit.servers.samples.jetty.jupiter.utils.EmbeddedJetty10ConfigurationFactory.createJetty10Configuration;
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.jetty.JettyTestUtils.createJettyConfiguration;
 
 @ExtendWith(JettyServerExtension.class)
 class IndexWithSpecializedExtensionTest {
 
 	@TestServerConfiguration
-	private static EmbeddedJettyConfiguration configuration = createJetty10Configuration();
+	private static EmbeddedJettyConfiguration configuration = createJettyConfiguration();
 
 	@Test
 	void it_should_have_an_index(HttpClient client, EmbeddedJetty jetty) {

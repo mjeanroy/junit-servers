@@ -26,8 +26,8 @@ package com.github.mjeanroy.junit.servers.jetty9.jupiter;
 
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jetty9.tests.EmbeddedJettyMockBuilder;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

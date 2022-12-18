@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty;
 
 import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
@@ -33,7 +33,7 @@ import java.util.Objects;
 /**
  * Jetty configuration settings.
  */
-public abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration {
+abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration {
 
 	static final int DEFAULT_STOP_TIMEOUT = 30000;
 	static final boolean DEFAULT_STOP_AT_SHUTDOWN = true;

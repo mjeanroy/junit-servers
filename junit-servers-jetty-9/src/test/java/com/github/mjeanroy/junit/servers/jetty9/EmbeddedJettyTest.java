@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.jetty9;
 
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

@@ -25,9 +25,10 @@
 package com.github.mjeanroy.junit.servers.jetty10;
 
 import com.github.mjeanroy.junit.servers.jetty10.tests.EmbeddedJettyConfigurationMockBuilder;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import org.junit.jupiter.api.Test;
 
-import static com.github.mjeanroy.junit.servers.jetty10.EmbeddedJettyConfiguration.defaultConfiguration;
+import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class EmbeddedJettyProviderTest {

@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.junit4;
 
 import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 

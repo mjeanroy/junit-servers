@@ -22,11 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty;
 
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 
+import static com.github.mjeanroy.junit.servers.commons.reflect.Annotations.findAnnotation;
 import static com.github.mjeanroy.junit.servers.commons.reflect.Classes.instantiate;
 import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
@@ -35,21 +36,13 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration
  * or JUnit Jupiter Extension.
  */
 public abstract class AbstractEmbeddedJettyFactory<
-		CONFIG extends AbstractEmbeddedJettyConfiguration,
-		CONFIG_PROVIDER extends AbstractEmbeddedJettyConfigurationProvider<CONFIG>,
-		EMBEDDED_JETTY extends AbstractEmbeddedJetty<CONFIG>
+		EMBEDDED_JETTY extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration>
 > {
 
 	/**
 	 * Class Logger.
 	 */
 	private static final Logger log = LoggerFactory.getLogger(AbstractEmbeddedJettyFactory.class);
-
-	private final Class<CONFIG> configurationClass;
-
-	protected AbstractEmbeddedJettyFactory(Class<CONFIG> configurationClass) {
-		this.configurationClass = configurationClass;
-	}
 
 	/**
 	 * Instantiate embedded jetty from given test class.
@@ -68,15 +61,15 @@ public abstract class AbstractEmbeddedJettyFactory<
 	 * @param configuration The configuration to use, may be {@code null}.
 	 * @return Created embedded jetty instance.
 	 */
-	public EMBEDDED_JETTY instantiateFrom(Class<?> testClass, CONFIG configuration) {
+	public EMBEDDED_JETTY instantiateFrom(Class<?> testClass, EmbeddedJettyConfiguration configuration) {
 		log.debug("Instantiating embedded jetty for test class: {}", testClass);
-		CONFIG configurationToUse = extractConfiguration(testClass, configuration);
+		EmbeddedJettyConfiguration configurationToUse = extractConfiguration(testClass, configuration);
 		return configurationToUse == null ? instantiateFrom() : instantiateFrom(configurationToUse);
 	}
 
 	protected abstract EMBEDDED_JETTY instantiateFrom();
 
-	protected abstract EMBEDDED_JETTY instantiateFrom(CONFIG config);
+	protected abstract EMBEDDED_JETTY instantiateFrom(EmbeddedJettyConfiguration config);
 
 	/**
 	 * Try to extract Jetty configuration from:
@@ -90,13 +83,13 @@ public abstract class AbstractEmbeddedJettyFactory<
 	 * @return The Jetty configuration.
 	 * @throws IllegalJettyConfigurationException If extracted {@code configuration} is not an instance of required configuration type.
 	 */
-	private CONFIG extractConfiguration(Class<?> testClass, CONFIG configuration) {
+	private EmbeddedJettyConfiguration extractConfiguration(Class<?> testClass, EmbeddedJettyConfiguration configuration) {
 		if (configuration != null) {
 			log.debug("Returning provided configuration instance: {}", configuration);
 			return checkConfiguration(configuration);
 		}
 
-		Class<? extends AbstractEmbeddedJettyConfigurationProvider<? extends CONFIG>> providerClass = findEmbeddedJettyConfigurationProvider(testClass);
+		Class<? extends EmbeddedJettyConfigurationProvider> providerClass = findEmbeddedJettyConfigurationProvider(testClass);
 		if (providerClass != null) {
 			return buildEmbeddedJettyConfiguration(testClass, providerClass);
 		}
@@ -107,7 +100,10 @@ public abstract class AbstractEmbeddedJettyFactory<
 		);
 	}
 
-	protected abstract Class<? extends CONFIG_PROVIDER> findEmbeddedJettyConfigurationProvider(Class<?> testClass);
+	private Class<? extends EmbeddedJettyConfigurationProvider> findEmbeddedJettyConfigurationProvider(Class<?> testClass) {
+		JettyConfiguration configurationAnnotation = findAnnotation(testClass, JettyConfiguration.class);
+		return configurationAnnotation == null ? null : configurationAnnotation.providedBy();
+	}
 
 	/**
 	 * Create configuration using custom annotation, dedicated to Jetty.
@@ -116,12 +112,12 @@ public abstract class AbstractEmbeddedJettyFactory<
 	 * @param providerClass The provider class.
 	 * @return The configuration.
 	 */
-	private CONFIG buildEmbeddedJettyConfiguration(
+	private EmbeddedJettyConfiguration buildEmbeddedJettyConfiguration(
 			Class<?> testClass,
-			Class<? extends AbstractEmbeddedJettyConfigurationProvider<? extends CONFIG>> providerClass
+			Class<? extends EmbeddedJettyConfigurationProvider> providerClass
 	) {
 		log.debug("Returning configuration provided by test class");
-		AbstractEmbeddedJettyConfigurationProvider<? extends CONFIG> provider = instantiate(providerClass);
+		EmbeddedJettyConfigurationProvider provider = instantiate(providerClass);
 		return provider.build(testClass);
 	}
 
@@ -132,17 +128,16 @@ public abstract class AbstractEmbeddedJettyFactory<
 	 * @param configuration The configuration.
 	 * @return The configuration.
 	 */
-	@SuppressWarnings("unchecked")
-	private CONFIG checkConfiguration(Object configuration) {
+	private EmbeddedJettyConfiguration checkConfiguration(Object configuration) {
 		if (configuration == null) {
 			return null;
 		}
 
-		if (!configurationClass.isAssignableFrom(configuration.getClass())) {
-			log.error("Cannot instantiate embedded jetty using configuration {} because it does not extends {} class", configuration, configurationClass);
-			throw new IllegalJettyConfigurationException(configurationClass);
+		if (!(configuration instanceof EmbeddedJettyConfiguration)) {
+			log.error("Cannot instantiate embedded jetty using configuration {} because it does not extends {} class", configuration, EmbeddedJettyConfiguration.class);
+			throw new IllegalJettyConfigurationException(EmbeddedJettyConfiguration.class);
 		}
 
-		return (CONFIG) configuration;
+		return (EmbeddedJettyConfiguration) configuration;
 	}
 }

@@ -25,8 +25,11 @@
 package com.github.mjeanroy.junit.servers.jetty10;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.JettyConfiguration;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.jetty.IllegalJettyConfigurationException;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfigurationProvider;
+import com.github.mjeanroy.junit.servers.jetty.IllegalJettyConfigurationException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,7 +72,7 @@ class EmbeddedJettyFactoryTest {
 		assertThatThrownBy(() -> EmbeddedJettyFactory.createFrom(ClassUsingNonJettyConfiguration.class))
 			.isInstanceOf(IllegalJettyConfigurationException.class)
 			.hasMessage(
-				"Embedded jetty server requires a configuration that is an instance of com.github.mjeanroy.junit.servers.jetty10.EmbeddedJettyConfiguration, please fix it."
+				"Embedded jetty server requires a configuration that is an instance of com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration, please fix it."
 			);
 	}
 

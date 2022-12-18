@@ -30,14 +30,14 @@ import com.github.mjeanroy.junit.servers.jetty10.jupiter.JettyServerExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static com.github.mjeanroy.junit.servers.samples.jetty.jupiter.utils.EmbeddedJetty10ConfigurationFactory.createJetty10Configuration;
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
+import static com.github.mjeanroy.junit.servers.samples.utils.jetty.JettyTestUtils.createJettyConfiguration;
 
 class IndexWithRegisteredNonStaticExtensionTest {
 
 	@RegisterExtension
 	final JettyServerExtension jetty = new JettyServerExtension(
-			createJetty10Configuration()
+			createJettyConfiguration()
 	);
 
 	@Test

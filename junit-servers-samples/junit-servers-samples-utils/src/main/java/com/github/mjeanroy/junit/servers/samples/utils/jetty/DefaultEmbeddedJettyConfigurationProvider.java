@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.samples.utils.jetty;
 
-import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJettyConfigurationProvider;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfigurationProvider;
 
 import static com.github.mjeanroy.junit.servers.samples.utils.jetty.JettyTestUtils.createJettyConfiguration;
 

@@ -22,19 +22,19 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.servers.jetty;
+package com.github.mjeanroy.junit.servers.jetty;
 
 import com.github.mjeanroy.junit.servers.servers.AbstractConfigurationBuilder;
 import org.eclipse.jetty.util.resource.Resource;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.positive;
-import static com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJettyConfiguration.DEFAULT_STOP_AT_SHUTDOWN;
-import static com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJettyConfiguration.DEFAULT_STOP_TIMEOUT;
+import static com.github.mjeanroy.junit.servers.jetty.AbstractEmbeddedJettyConfiguration.DEFAULT_STOP_AT_SHUTDOWN;
+import static com.github.mjeanroy.junit.servers.jetty.AbstractEmbeddedJettyConfiguration.DEFAULT_STOP_TIMEOUT;
 
 /**
  * Jetty configuration settings.
  */
-public abstract class AbstractEmbeddedJettyConfigurationBuilder<
+abstract class AbstractEmbeddedJettyConfigurationBuilder<
 		BUILDER extends AbstractEmbeddedJettyConfigurationBuilder<BUILDER, CONFIG>,
 		CONFIG extends AbstractEmbeddedJettyConfiguration
 > extends AbstractConfigurationBuilder<BUILDER, CONFIG> {

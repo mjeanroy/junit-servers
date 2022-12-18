@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.jetty11;
 import com.github.mjeanroy.junit.servers.jetty11.junit4.JettyServerJunit4Rule;
 import com.github.mjeanroy.junit.servers.jetty11.tests.EmbeddedJettyConfigurationMockBuilder;
 import com.github.mjeanroy.junit.servers.jetty11.tests.EmbeddedJettyMockBuilder;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;

@@ -22,29 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty9;
+package com.github.mjeanroy.junit.servers.jetty;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.mjeanroy.junit.servers.exceptions.IllegalConfigurationException;
 
 /**
- * Annotation that can be used to specify {@link EmbeddedJettyConfiguration} provider that will be used
- * to create new {@link EmbeddedJettyConfiguration} and use it for the test suite.
+ * Error thrown when jetty configuration is not valid.
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Documented
-@Inherited
-public @interface JettyConfiguration {
+public class IllegalJettyConfigurationException extends IllegalConfigurationException {
 
 	/**
-	 * The configuration provider.
-	 *
-	 * @return The configuration provider class.
+	 * Create exception with default message.
 	 */
-	Class<? extends EmbeddedJettyConfigurationProvider> providedBy();
+	public IllegalJettyConfigurationException(Class<?> requiredClass) {
+		super(createMessage(requiredClass));
+	}
+
+	private static String createMessage(Class<?> requiredClass) {
+		return "Embedded jetty server requires a configuration that is an instance of " + requiredClass.getName() + ", please fix it.";
+	}
 }

@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.jetty10.tests;
 
 import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 

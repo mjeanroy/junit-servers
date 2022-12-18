@@ -25,13 +25,13 @@
 package com.github.mjeanroy.junit.servers.jetty11.jupiter;
 
 import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJettyFactory;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
 /**
  * A specialized {@link JunitServerExtension} that will instantiate an {@link EmbeddedJetty}

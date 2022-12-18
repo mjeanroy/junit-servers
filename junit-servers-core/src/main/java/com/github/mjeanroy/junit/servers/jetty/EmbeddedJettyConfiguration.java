@@ -22,10 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty9;
-
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJettyConfigurationBuilder;
+package com.github.mjeanroy.junit.servers.jetty;
 
 /**
  * Jetty configuration settings.
@@ -51,7 +48,7 @@ public class EmbeddedJettyConfiguration extends AbstractEmbeddedJettyConfigurati
 	}
 
 	// Private constructor, use static builder.
-	private EmbeddedJettyConfiguration(Builder builder) {
+	private EmbeddedJettyConfiguration(AbstractEmbeddedJettyConfigurationBuilder<?, ?> builder) {
 		super(builder);
 	}
 

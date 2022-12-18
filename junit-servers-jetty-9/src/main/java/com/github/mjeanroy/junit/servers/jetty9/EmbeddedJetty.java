@@ -24,10 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.jetty9;
 
-import com.github.mjeanroy.junit.servers.servers.jetty.AbstractEmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.AbstractEmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 
-import static com.github.mjeanroy.junit.servers.jetty9.EmbeddedJettyConfiguration.defaultConfiguration;
+import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 
 /**
  * Jetty Embedded Server.
