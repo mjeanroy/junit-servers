@@ -259,23 +259,6 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 		return configuration;
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public <SERVLET_CLASS> SERVLET_CLASS getServletContext(Class<SERVLET_CLASS> klass) {
-		Object servletContext = getServletContext();
-		if (servletContext == null) {
-			return null;
-		}
-
-		Class<?> actualClass = servletContext.getClass();
-		if (!klass.isAssignableFrom(actualClass)) {
-			throw new IllegalArgumentException("Cannot cast '" + actualClass.getName() + "' to '" + klass.getName() + "'");
-		}
-
-		return (SERVLET_CLASS) servletContext;
-	}
-
-
 	/**
 	 * Get internal server implementation.
 	 * Note that this method should not be used to start
