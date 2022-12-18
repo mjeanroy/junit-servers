@@ -34,14 +34,10 @@
     <version>2.1.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>spring-java-jetty</artifactId>
-  <name>junit-servers-spring-java-jetty</name>
+  <artifactId>junit-servers-samples-junit4-spring-java-tomcat</artifactId>
+  <name>junit-servers-samples-junit4-spring-java-tomcat</name>
   <packaging>war</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
-
-  <properties>
-    <jetty.version>9.4.49.v20220914</jetty.version>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -73,7 +69,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.mjeanroy</groupId>
-      <artifactId>junit-servers-jetty</artifactId>
+      <artifactId>junit-servers-tomcat</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -89,13 +85,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.ning</groupId>
-      <artifactId>async-http-client</artifactId>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
+      <groupId>com.ning</groupId>
+      <artifactId>async-http-client</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -103,21 +99,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>${jetty.version}</version>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -40,9 +40,9 @@
   <url>https://github.com/mjeanroy/junit-servers</url>
 
   <modules>
-    <module>samples-utils</module>
-    <module>junit4</module>
-    <module>jupiter</module>
+    <module>junit-servers-samples-utils</module>
+    <module>junit-servers-samples-junit4</module>
+    <module>junit-servers-samples-jupiter</module>
   </modules>
 
   <properties>

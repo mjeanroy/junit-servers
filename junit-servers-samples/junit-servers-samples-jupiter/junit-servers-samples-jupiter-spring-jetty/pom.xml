@@ -25,17 +25,15 @@
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-  <modelVersion>4.0.0</modelVersion>
-
   <parent>
-    <artifactId>junit-servers-samples-junit4</artifactId>
+    <artifactId>junit-servers-samples-jupiter</artifactId>
     <groupId>com.github.mjeanroy</groupId>
     <version>2.1.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>spring-java-tomcat</artifactId>
-  <name>junit-servers-spring-java-tomcat</name>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>junit-servers-samples-jupiter-spring-jetty</artifactId>
+  <name>junit-servers-samples-jupiter-spring-jetty</name>
   <packaging>war</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
 
@@ -63,13 +61,19 @@
     </dependency>
 
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit-jupiter.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.github.mjeanroy</groupId>
-      <artifactId>junit-servers-tomcat</artifactId>
+      <artifactId>junit-servers-jetty</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -85,28 +89,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.ning</groupId>
+      <groupId>org.asynchttpclient</groupId>
       <artifactId>async-http-client</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </build>
-
 </project>

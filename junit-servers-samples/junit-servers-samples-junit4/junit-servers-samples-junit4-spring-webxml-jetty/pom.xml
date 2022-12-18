@@ -34,8 +34,8 @@
     <version>2.1.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>spring-webxml-jetty</artifactId>
-  <name>junit-servers-spring-webxml-jetty</name>
+  <artifactId>junit-servers-samples-junit4-spring-webxml-jetty</artifactId>
+  <name>junit-servers-samples-junit4-spring-webxml-jetty</name>
   <packaging>war</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
 

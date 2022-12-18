@@ -34,8 +34,8 @@
     <version>2.1.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>spring-tomcat-jupiter</artifactId>
-  <name>junit-servers-spring-tomcat-jupiter</name>
+  <artifactId>junit-servers-samples-jupiter-spring-tomcat</artifactId>
+  <name>junit-servers-samples-jupiter-spring-tomcat</name>
   <packaging>war</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
 
