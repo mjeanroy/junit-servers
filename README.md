@@ -54,7 +54,7 @@ Default configuration is:
 
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
 
 import okhttp3.OkHttpClient;
@@ -67,20 +67,20 @@ import org.junit.runner.RunWith;
 
 @RunWith(JunitServerRunner.class)
 public class MyTest {
-  @TestServer
-  public static EmbeddedJetty jetty;
+	@TestServer
+	public static EmbeddedJetty jetty;
 
-  @Test
-  public void should_have_index() {
-    OkHttpClient client = new OkHttpClient();
-    Request request = new Request.Builder()
-      .url(jetty.getUrl())
-      .build();
+	@Test
+	public void should_have_index() {
+		OkHttpClient client = new OkHttpClient();
+		Request request = new Request.Builder()
+				.url(jetty.getUrl())
+				.build();
 
-    Response response = client.newCall(request).execute();
+		Response response = client.newCall(request).execute();
 
-    Assert.assertEquals(200, response.code());
-  }
+		Assert.assertEquals(200, response.code());
+	}
 }
 ```
 
@@ -89,9 +89,9 @@ public class MyTest {
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty9.junit4.JettyServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -103,24 +103,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 public class MyTest {
-  @ClassRule
-  public static JettyServerJunit4Rule jetty = new JettyServerJunit4Rule(EmbeddedJettyConfiguration.build()
-      .withPath("/app")
-      .withPort(8080)
-      .withProperty("spring.profiles.active", "test")
-      .build());
+	@ClassRule
+	public static JettyServerJunit4Rule jetty = new JettyServerJunit4Rule(EmbeddedJettyConfiguration.build()
+			.withPath("/app")
+			.withPort(8080)
+			.withProperty("spring.profiles.active", "test")
+			.build());
 
-  @Test
-  public void should_have_index() {
-    OkHttpClient client = new OkHttpClient();
-    Request request = new Request.Builder()
-      .url(jetty.getUrl())
-      .build();
+	@Test
+	public void should_have_index() {
+		OkHttpClient client = new OkHttpClient();
+		Request request = new Request.Builder()
+				.url(jetty.getUrl())
+				.build();
 
-    Response response = client.newCall(request).execute();
+		Response response = client.newCall(request).execute();
 
-    Assert.assertEquals(200, response.code());
-  }
+		Assert.assertEquals(200, response.code());
+	}
 }
 ```
 
@@ -128,8 +128,8 @@ public class MyTest {
 
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.junit4.AbstractJettyJunit4Test;
+import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty9.junit4.AbstractJettyJunit4Test;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -140,17 +140,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 public class MyTest extends AbstractJettyJunit4Test {
-  @Test
-  public void should_have_index() {
-    OkHttpClient client = new OkHttpClient();
-    Request request = new Request.Builder()
-      .url(server.getUrl())
-      .build();
+	@Test
+	public void should_have_index() {
+		OkHttpClient client = new OkHttpClient();
+		Request request = new Request.Builder()
+				.url(server.getUrl())
+				.build();
 
-    Response response = client.newCall(request).execute();
+		Response response = client.newCall(request).execute();
 
-    Assert.assertEquals(200, response.code());
-  }
+		Assert.assertEquals(200, response.code());
+	}
 }
 ```
 

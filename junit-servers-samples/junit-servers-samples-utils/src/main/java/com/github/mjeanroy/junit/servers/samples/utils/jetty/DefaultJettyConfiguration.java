@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.samples.utils.jetty;
 
-import com.github.mjeanroy.junit.servers.jetty.JettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty9.JettyConfiguration;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

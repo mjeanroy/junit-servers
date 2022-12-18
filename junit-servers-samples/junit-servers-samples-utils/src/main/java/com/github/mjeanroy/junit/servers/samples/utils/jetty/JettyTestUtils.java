@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.samples.utils.jetty;
 
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJettyConfiguration;
 
 import java.io.File;
 import java.net.URL;
