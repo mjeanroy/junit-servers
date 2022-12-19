@@ -180,7 +180,7 @@ Default configuration is:
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -199,8 +199,8 @@ public class MyTest {
   public void should_have_index() {
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(tomcat.getUrl())
-      .build();
+            .url(tomcat.getUrl())
+            .build();
 
     Response response = client.newCall(request).execute();
 
@@ -214,9 +214,9 @@ public class MyTest {
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
+import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat8.junit4.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -230,17 +230,17 @@ import org.junit.runner.RunWith;
 public class MyTest {
   @ClassRule
   public static TomcatServerJunit4Rule tomcat = new TomcatServerJunit4Rule(EmbeddedTomcatConfiguration.builder()
-      .withPath("/app")
-      .withPort(8080)
-      .withProperty("spring.profiles.active", "test")
-      .build());
+          .withPath("/app")
+          .withPort(8080)
+          .withProperty("spring.profiles.active", "test")
+          .build());
 
   @Test
   public void should_have_index() {
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(tomcat.getUrl())
-      .build();
+            .url(tomcat.getUrl())
+            .build();
 
     Response response = client.newCall(request).execute();
 
@@ -253,8 +253,8 @@ public class MyTest {
 
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.junit4.AbstractTomcatJunit4Test;
+import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.tomcat8.junit4.AbstractTomcatJunit4Test;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -269,8 +269,8 @@ public class MyTest extends AbstractTomcatJunit4Test {
   public void should_have_index() {
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder()
-      .url(server.getUrl())
-      .build();
+            .url(server.getUrl())
+            .build();
 
     Response response = client.newCall(request).execute();
 

@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.samples.utils.tomcat;
 
-import com.github.mjeanroy.junit.servers.tomcat.TomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat8.TomcatConfiguration;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

@@ -42,7 +42,7 @@
   <dependencies>
     <dependency>
       <groupId>com.github.mjeanroy</groupId>
-      <artifactId>junit-servers-tomcat</artifactId>
+      <artifactId>junit-servers-tomcat-8</artifactId>
       <version>${project.version}</version>
       <optional>true</optional>
     </dependency>

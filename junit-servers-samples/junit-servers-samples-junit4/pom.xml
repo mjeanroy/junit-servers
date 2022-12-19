@@ -41,11 +41,11 @@
 
   <modules>
     <module>junit-servers-samples-junit4-spring-java-jetty-9</module>
-    <module>junit-servers-samples-junit4-spring-java-tomcat</module>
+    <module>junit-servers-samples-junit4-spring-java-tomcat-8</module>
     <module>junit-servers-samples-junit4-spring-webxml-jetty-9</module>
-    <module>junit-servers-samples-junit4-spring-webxml-tomcat</module>
+    <module>junit-servers-samples-junit4-spring-webxml-tomcat-8</module>
     <module>junit-servers-samples-junit4-spring-webxml-jetty-9-jsp</module>
-    <module>junit-servers-samples-junit4-spring-webxml-tomcat-jsp</module>
+    <module>junit-servers-samples-junit4-spring-webxml-tomcat-8-jsp</module>
   </modules>
 
   <build>

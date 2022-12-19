@@ -426,7 +426,7 @@
       <modules>
         <module>junit-servers-core</module>
         <module>junit-servers-jetty-9</module>
-        <module>junit-servers-tomcat</module>
+        <module>junit-servers-tomcat-8</module>
         <module>junit-servers-samples</module>
       </modules>
     </profile>
@@ -441,7 +441,7 @@
         <module>junit-servers-jetty-9</module>
         <module>junit-servers-jetty-10</module>
         <module>junit-servers-jetty-11</module>
-        <module>junit-servers-tomcat</module>
+        <module>junit-servers-tomcat-8</module>
         <module>junit-servers-samples</module>
       </modules>
     </profile>
