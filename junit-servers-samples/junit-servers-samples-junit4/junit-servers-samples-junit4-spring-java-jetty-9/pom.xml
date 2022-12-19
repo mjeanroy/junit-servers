@@ -40,7 +40,7 @@
   <url>https://github.com/mjeanroy/junit-servers</url>
 
   <properties>
-    <jetty.version>9.4.50.v20221201</jetty.version>
+    <jetty.version>11.0.0</jetty.version>
   </properties>
 
   <dependencies>
