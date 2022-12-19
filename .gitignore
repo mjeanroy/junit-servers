@@ -44,6 +44,7 @@ overlays/
 # Logs and databases   #
 ########################
 *.log
+!org.apache.juli.logging.Log
 mem.properties
 mem.script
 
