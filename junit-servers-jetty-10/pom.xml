@@ -42,7 +42,7 @@
 
   <properties>
     <java-module-name>com.github.mjeanroy.junit.servers.jetty10</java-module-name>
-    <jetty.version>10.0.13</jetty.version>
+    <jetty.version>11.0.13</jetty.version>
   </properties>
 
   <dependencies>

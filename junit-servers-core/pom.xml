@@ -41,7 +41,7 @@
 
   <properties>
     <java-module-name>com.github.mjeanroy.junit.servers.core</java-module-name>
-    <jetty.version>9.4.50.v20221201</jetty.version>
+    <jetty.version>11.0.13</jetty.version>
   </properties>
 
   <dependencies>
