@@ -45,7 +45,9 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
 /**
  * Embedded server using tomcat as implementation.
  */
-public abstract class AbstractEmbeddedTomcat<CONFIG extends AbstractEmbeddedTomcatConfiguration> extends AbstractEmbeddedServer<Tomcat, CONFIG> {
+public abstract class AbstractEmbeddedTomcat<
+	CONFIGURATION extends AbstractEmbeddedTomcatConfiguration
+> extends AbstractEmbeddedServer<Tomcat, CONFIGURATION> {
 
 	/**
 	 * Class Logger.
@@ -67,7 +69,7 @@ public abstract class AbstractEmbeddedTomcat<CONFIG extends AbstractEmbeddedTomc
 	 *
 	 * @param configuration Tomcat configuration.
 	 */
-	protected AbstractEmbeddedTomcat(CONFIG configuration) {
+	protected AbstractEmbeddedTomcat(CONFIGURATION configuration) {
 		super(configuration);
 		this.tomcat = initServer();
 	}

@@ -42,31 +42,22 @@ import static java.lang.System.getProperty;
  * Subclasses should implement {@link #doStart()} and {@link #doStop()} methods and synchronization is already
  * managed by this abstract implementation.
  */
-public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration> implements EmbeddedServer<T> {
+public abstract class AbstractEmbeddedServer<
+	EMBEDDED_SERVER,
+	CONFIGURATION extends AbstractConfiguration
+> implements EmbeddedServer<CONFIGURATION> {
 
-	/**
-	 * Class Logger.
-	 */
 	private static final Logger log = LoggerFactory.getLogger(AbstractEmbeddedServer.class);
 
-	/**
-	 * The default scheme returned by {@link AbstractEmbeddedServer#getScheme()}.
-	 */
 	private static final String DEFAULT_SCHEME = "http";
-
-	/**
-	 * The default host returned by {@link AbstractEmbeddedServer#getHost()}.
-	 */
 	private static final String DEFAULT_HOST = "localhost";
-
 	private static final String SCHEME_SEPARATOR = "://";
-
 	private static final String PORT_SEPARATOR = ":";
 
 	/**
 	 * Server configuration.
 	 */
-	protected final T configuration;
+	protected final CONFIGURATION configuration;
 
 	/**
 	 * Flag to keep server status:
@@ -91,7 +82,7 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	 *
 	 * @param configuration Server configuration.
 	 */
-	protected AbstractEmbeddedServer(T configuration) {
+	protected AbstractEmbeddedServer(CONFIGURATION configuration) {
 		this.configuration = notNull(configuration, "configuration");
 		this.status = ServerStatus.STOPPED;
 		this.oldProperties = new LinkedHashMap<>();
@@ -255,7 +246,7 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	}
 
 	@Override
-	public T getConfiguration() {
+	public CONFIGURATION getConfiguration() {
 		return configuration;
 	}
 
@@ -269,7 +260,7 @@ public abstract class AbstractEmbeddedServer<S, T extends AbstractConfiguration>
 	 *
 	 * @return Original server implementation.
 	 */
-	public abstract S getDelegate();
+	public abstract EMBEDDED_SERVER getDelegate();
 
 	/**
 	 * Start embedded server.

@@ -100,18 +100,18 @@ public final class Servers {
 	 *
 	 * @param configuration Optional configuration.
 	 * @return Embedded server.
-	 * @param <T> Type of configuration.
+	 * @param <CONFIGURATION> Type of configuration.
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static <T extends AbstractConfiguration> EmbeddedServer<T> instantiate(T configuration) {
+	public static <CONFIGURATION extends AbstractConfiguration> EmbeddedServer<CONFIGURATION> instantiate(CONFIGURATION configuration) {
 		log.debug("Instantiating embedded server using configuration: {}", configuration);
 
 		ServiceLoader<EmbeddedServerProvider> serviceProviders = ServiceLoader.load(EmbeddedServerProvider.class);
 
-		List<EmbeddedServerProvider<T>> coreServerProviders = new ArrayList<>();
-		List<EmbeddedServerProvider<T>> customServerProviders = new ArrayList<>();
+		List<EmbeddedServerProvider<CONFIGURATION>> coreServerProviders = new ArrayList<>();
+		List<EmbeddedServerProvider<CONFIGURATION>> customServerProviders = new ArrayList<>();
 
-		for (EmbeddedServerProvider<T> provider : serviceProviders) {
+		for (EmbeddedServerProvider<CONFIGURATION> provider : serviceProviders) {
 			Class<? extends EmbeddedServerProvider> providerClass = provider.getClass();
 
 			log.debug("Found provider {}", providerClass);
@@ -146,7 +146,7 @@ public final class Servers {
 		return instantiate(customServerProviders.get(0), configuration);
 	}
 
-	private static <T extends AbstractConfiguration> EmbeddedServer<T> instantiate(EmbeddedServerProvider<T> provider, T configuration) {
+	private static <CONFIGURATION extends AbstractConfiguration> EmbeddedServer<CONFIGURATION> instantiate(EmbeddedServerProvider<CONFIGURATION> provider, CONFIGURATION configuration) {
 		log.debug("Instantiate embedded server using provider: {}", provider);
 		return configuration == null ? provider.instantiate() : provider.instantiate(configuration);
 	}
@@ -157,10 +157,10 @@ public final class Servers {
 	 * annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} annotation.
 	 *
 	 * @param klass Class to inspect.
-	 * @param <T> Type of configuration.
+	 * @param <CONFIGURATION> Type of configuration.
 	 * @return Configuration.
 	 */
-	public static <T extends AbstractConfiguration> T findConfiguration(Class<?> klass) {
+	public static <CONFIGURATION extends AbstractConfiguration> CONFIGURATION findConfiguration(Class<?> klass) {
 		log.debug("Extract configuration from class: {}", klass);
 
 		// Look for static methods first

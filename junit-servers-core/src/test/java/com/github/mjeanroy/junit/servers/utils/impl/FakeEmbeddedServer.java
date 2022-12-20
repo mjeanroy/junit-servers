@@ -45,12 +45,12 @@ public class FakeEmbeddedServer extends AbstractEmbeddedServer<FakeServer, FakeE
 	/**
 	 * A fake servlet context.
 	 */
-	private ServletContext servletContext;
+	private final ServletContext servletContext;
 
 	/**
 	 * A fake delegated server.
 	 */
-	private FakeServer delegate;
+	private final FakeServer delegate;
 
 	public FakeEmbeddedServer() {
 		this(new FakeEmbeddedServerConfiguration());

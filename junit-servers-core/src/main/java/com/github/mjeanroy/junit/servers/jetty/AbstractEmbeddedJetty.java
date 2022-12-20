@@ -54,7 +54,9 @@ import static org.eclipse.jetty.util.resource.Resource.newResource;
 /**
  * Jetty Embedded Server.mv
  */
-public abstract class AbstractEmbeddedJetty<CONFIG extends AbstractEmbeddedJettyConfiguration> extends AbstractEmbeddedServer<Server, CONFIG> {
+public abstract class AbstractEmbeddedJetty<
+	CONFIGURATION extends AbstractEmbeddedJettyConfiguration
+> extends AbstractEmbeddedServer<Server, CONFIGURATION> {
 
 	/**
 	 * Class Logger.
@@ -81,7 +83,7 @@ public abstract class AbstractEmbeddedJetty<CONFIG extends AbstractEmbeddedJetty
 	 *
 	 * @param configuration Server configuration.
 	 */
-	protected AbstractEmbeddedJetty(CONFIG configuration) {
+	protected AbstractEmbeddedJetty(CONFIGURATION configuration) {
 		super(configuration);
 		this.server = initServer();
 	}

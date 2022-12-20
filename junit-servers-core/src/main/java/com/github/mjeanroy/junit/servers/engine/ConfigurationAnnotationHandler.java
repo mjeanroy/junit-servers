@@ -50,11 +50,11 @@ class ConfigurationAnnotationHandler extends AbstractAnnotationHandler {
 	/**
 	 * Create new handler.
 	 * @param configuration Server configuration.
-	 * @param <T> Type of configuration instance.
+	 * @param <CONFIGURATION> Type of configuration instance.
 	 * @return Handler.
 	 * @throws NullPointerException if configuration is null.
 	 */
-	static <T extends AbstractConfiguration> AnnotationHandler newConfigurationAnnotationHandler(T configuration) {
+	static <CONFIGURATION extends AbstractConfiguration> AnnotationHandler newConfigurationAnnotationHandler(CONFIGURATION configuration) {
 		return new ConfigurationAnnotationHandler(notNull(configuration, "configuration"));
 	}
 

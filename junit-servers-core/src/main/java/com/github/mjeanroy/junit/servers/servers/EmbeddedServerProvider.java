@@ -27,16 +27,16 @@ package com.github.mjeanroy.junit.servers.servers;
 /**
  * Factory used to create {@link EmbeddedServerProvider} (should be used with SPI).
  *
- * @param <T> Type of embedded server.
+ * @param <CONFIGURATION> Type of embedded server.
  */
-public interface EmbeddedServerProvider<T extends AbstractConfiguration> {
+public interface EmbeddedServerProvider<CONFIGURATION extends AbstractConfiguration> {
 
 	/**
 	 * Instantiate embedded server with default configuration.
 	 *
 	 * @return The embedded server.
 	 */
-	EmbeddedServer<T> instantiate();
+	EmbeddedServer<CONFIGURATION> instantiate();
 
 	/**
 	 * Instantiate embedded server with given configuration.
@@ -44,5 +44,5 @@ public interface EmbeddedServerProvider<T extends AbstractConfiguration> {
 	 * @param configuration The server configuration.
 	 * @return The embedded server.
 	 */
-	EmbeddedServer<T> instantiate(T configuration);
+	EmbeddedServer<CONFIGURATION> instantiate(CONFIGURATION configuration);
 }

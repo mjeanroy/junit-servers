@@ -35,9 +35,9 @@ package com.github.mjeanroy.junit.servers.servers;
  *   <li>Must provide port that can be used to query resources.</li>
  * </ul>
  *
- * @param <T> The type of configuration used by the embedded server implementation.
+ * @param <CONFIGURATION> The type of configuration used by the embedded server implementation.
  */
-public interface EmbeddedServer<T extends AbstractConfiguration> {
+public interface EmbeddedServer<CONFIGURATION extends AbstractConfiguration> {
 
 	/**
 	 * Start embedded server.
@@ -61,7 +61,7 @@ public interface EmbeddedServer<T extends AbstractConfiguration> {
 	 *
 	 * @return Configuration.
 	 */
-	T getConfiguration();
+	CONFIGURATION getConfiguration();
 
 	/**
 	 * Check if embedded server is started.
