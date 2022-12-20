@@ -22,38 +22,33 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat9;
+package com.github.mjeanroy.junit.servers.tomcat10;
 
-import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.apache.catalina.Context;
+import com.github.mjeanroy.junit.servers.tomcat10.tests.builders.EmbeddedTomcatConfigurationMockBuilder;
+import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Embedded server using tomcat as implementation.
- */
-public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
+class EmbeddedTomcatProviderTest {
 
-	/**
-	 * Build embedded tomcat with default configuration.
-	 */
-	public EmbeddedTomcat() {
-		this(defaultConfiguration());
+	@Test
+	void it_should_instantiate_jetty_with_default_configuration() {
+		final EmbeddedTomcatProvider provider = new EmbeddedTomcatProvider();
+		final EmbeddedTomcat tomcat = provider.instantiate();
+
+		assertThat(tomcat).isNotNull();
+		assertThat(tomcat.getConfiguration()).isNotNull().isEqualTo(defaultConfiguration());
 	}
 
-	/**
-	 * Build embedded tomcat.
-	 *
-	 * @param configuration Tomcat configuration.
-	 */
-	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
-		super(configuration);
-	}
+	@Test
+	void it_should_instantiate_jetty_with_custom_configuration() {
+		final EmbeddedTomcatProvider provider = new EmbeddedTomcatProvider();
+		final EmbeddedTomcatConfiguration configuration = new EmbeddedTomcatConfigurationMockBuilder().build();
+		final EmbeddedTomcat tomcat = provider.instantiate(configuration);
 
-	@Override
-	public Object getServletContext() {
-		Context context = getContext();
-		return context == null ? null : context.getServletContext();
+		assertThat(tomcat).isNotNull();
+		assertThat(tomcat.getConfiguration()).isNotNull().isSameAs(configuration);
 	}
 }

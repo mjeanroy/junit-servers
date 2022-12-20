@@ -22,38 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat9;
+package com.github.mjeanroy.junit.servers.tomcat10.jupiter;
 
-import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.apache.catalina.Context;
+import com.github.mjeanroy.junit.servers.tomcat10.EmbeddedTomcat;
 
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
+class FixtureClass {
 
-/**
- * Embedded server using tomcat as implementation.
- */
-public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
+	@TestServer
+	EmbeddedTomcat tomcat;
 
-	/**
-	 * Build embedded tomcat with default configuration.
-	 */
-	public EmbeddedTomcat() {
-		this(defaultConfiguration());
-	}
+	@TestServerConfiguration
+	EmbeddedTomcatConfiguration configuration;
 
-	/**
-	 * Build embedded tomcat.
-	 *
-	 * @param configuration Tomcat configuration.
-	 */
-	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	public Object getServletContext() {
-		Context context = getContext();
-		return context == null ? null : context.getServletContext();
-	}
+	@TestHttpClient
+	HttpClient client;
 }

@@ -22,38 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat9;
+package com.github.mjeanroy.junit.servers.tomcat10;
 
-import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.apache.catalina.Context;
-
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 
 /**
- * Embedded server using tomcat as implementation.
+ * Embedded Tomcat Provider used by the service provider interface from the JDK.
  */
-public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
+public class EmbeddedTomcatProvider implements EmbeddedServerProvider<EmbeddedTomcatConfiguration> {
 
-	/**
-	 * Build embedded tomcat with default configuration.
-	 */
-	public EmbeddedTomcat() {
-		this(defaultConfiguration());
-	}
-
-	/**
-	 * Build embedded tomcat.
-	 *
-	 * @param configuration Tomcat configuration.
-	 */
-	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
-		super(configuration);
+	@Override
+	public EmbeddedTomcat instantiate() {
+		return new EmbeddedTomcat();
 	}
 
 	@Override
-	public Object getServletContext() {
-		Context context = getContext();
-		return context == null ? null : context.getServletContext();
+	public EmbeddedTomcat instantiate(EmbeddedTomcatConfiguration configuration) {
+		return new EmbeddedTomcat(configuration);
 	}
 }

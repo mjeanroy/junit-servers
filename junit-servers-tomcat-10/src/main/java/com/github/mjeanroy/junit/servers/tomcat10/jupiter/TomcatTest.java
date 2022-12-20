@@ -22,38 +22,24 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat9;
+package com.github.mjeanroy.junit.servers.tomcat10.jupiter;
 
-import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.apache.catalina.Context;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Embedded server using tomcat as implementation.
+ * Create test with {@link TomcatServerExtension}.
  */
-public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
-
-	/**
-	 * Build embedded tomcat with default configuration.
-	 */
-	public EmbeddedTomcat() {
-		this(defaultConfiguration());
-	}
-
-	/**
-	 * Build embedded tomcat.
-	 *
-	 * @param configuration Tomcat configuration.
-	 */
-	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	public Object getServletContext() {
-		Context context = getContext();
-		return context == null ? null : context.getServletContext();
-	}
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@ExtendWith(TomcatServerExtension.class)
+@Documented
+@Inherited
+public @interface TomcatTest {
 }

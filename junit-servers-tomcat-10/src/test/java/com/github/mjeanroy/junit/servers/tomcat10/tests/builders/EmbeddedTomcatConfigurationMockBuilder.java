@@ -22,38 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat9;
+package com.github.mjeanroy.junit.servers.tomcat10.tests.builders;
 
-import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.apache.catalina.Context;
 
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
+import static org.mockito.Mockito.mock;
 
 /**
- * Embedded server using tomcat as implementation.
+ * Builder for mock instances of {@link EmbeddedTomcatConfiguration}.
  */
-public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
+public class EmbeddedTomcatConfigurationMockBuilder {
 
 	/**
-	 * Build embedded tomcat with default configuration.
-	 */
-	public EmbeddedTomcat() {
-		this(defaultConfiguration());
-	}
-
-	/**
-	 * Build embedded tomcat.
+	 * Build mock instance of {@link EmbeddedTomcatConfiguration}.
 	 *
-	 * @param configuration Tomcat configuration.
+	 * @return The mock instance.
 	 */
-	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	public Object getServletContext() {
-		Context context = getContext();
-		return context == null ? null : context.getServletContext();
+	public EmbeddedTomcatConfiguration build() {
+		return mock(EmbeddedTomcatConfiguration.class);
 	}
 }

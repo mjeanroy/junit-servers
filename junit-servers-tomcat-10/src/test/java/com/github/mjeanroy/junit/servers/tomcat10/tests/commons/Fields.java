@@ -22,38 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat9;
+package com.github.mjeanroy.junit.servers.tomcat10.tests.commons;
 
-import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.apache.catalina.Context;
-
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
- * Embedded server using tomcat as implementation.
+ * Static reflection utilities, used in tests only.
  */
-public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
+public final class Fields {
 
-	/**
-	 * Build embedded tomcat with default configuration.
-	 */
-	public EmbeddedTomcat() {
-		this(defaultConfiguration());
+	// Ensure non instantiation.
+	private Fields() {
 	}
 
 	/**
-	 * Build embedded tomcat.
+	 * Read private field on given instance.
 	 *
-	 * @param configuration Tomcat configuration.
+	 * @param instance Object instance.
+	 * @param name Name of field.
+	 * @param <T> Type of field value.
+	 * @return The value of the field.
 	 */
-	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	public Object getServletContext() {
-		Context context = getContext();
-		return context == null ? null : context.getServletContext();
+	@SuppressWarnings("unchecked")
+	public static <T> T readPrivate(Object instance, String name) {
+		try {
+			return (T) FieldUtils.readField(instance, name, true);
+		}
+		catch (IllegalAccessException ex) {
+			throw new AssertionError(ex);
+		}
 	}
 }

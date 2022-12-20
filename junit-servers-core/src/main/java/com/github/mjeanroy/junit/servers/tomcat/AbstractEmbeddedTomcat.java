@@ -258,13 +258,12 @@ public abstract class AbstractEmbeddedTomcat<CONFIG extends AbstractEmbeddedTomc
 	}
 
 	@Override
-	public Object getServletContext() {
-		return context == null ? null : context.getServletContext();
-	}
-
-	@Override
 	protected int doGetPort() {
 		return getConnector().getLocalPort();
+	}
+
+	protected Context getContext() {
+		return context;
 	}
 
 	private Connector getConnector() {

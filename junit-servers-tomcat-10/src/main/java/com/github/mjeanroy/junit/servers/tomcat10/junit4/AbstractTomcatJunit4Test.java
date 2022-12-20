@@ -22,38 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat9;
+package com.github.mjeanroy.junit.servers.tomcat10.junit4;
 
-import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.apache.catalina.Context;
-
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.tomcat10.EmbeddedTomcat;
+import org.junit.runner.RunWith;
 
 /**
- * Embedded server using tomcat as implementation.
+ * Simple abstraction that define a server rule using tomcat as embedded server.
  */
-public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
+@RunWith(TomcatServerJunit4Runner.class)
+public abstract class AbstractTomcatJunit4Test {
 
 	/**
-	 * Build embedded tomcat with default configuration.
+	 * The started embedded server.
 	 */
-	public EmbeddedTomcat() {
-		this(defaultConfiguration());
-	}
+	@TestServer
+	public static EmbeddedTomcat server;
 
-	/**
-	 * Build embedded tomcat.
-	 *
-	 * @param configuration Tomcat configuration.
-	 */
-	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	public Object getServletContext() {
-		Context context = getContext();
-		return context == null ? null : context.getServletContext();
-	}
 }

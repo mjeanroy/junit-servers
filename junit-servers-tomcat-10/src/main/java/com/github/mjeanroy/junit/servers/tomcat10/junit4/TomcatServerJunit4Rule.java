@@ -22,38 +22,39 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat9;
+package com.github.mjeanroy.junit.servers.tomcat10.junit4;
 
-import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.junit4.ServerRule;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.apache.catalina.Context;
-
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat10.EmbeddedTomcat;
 
 /**
- * Embedded server using tomcat as implementation.
+ * Rule that can be used to start and stop embedded tomcat server.
  */
-public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
-
+public class TomcatServerJunit4Rule extends ServerRule {
 	/**
-	 * Build embedded tomcat with default configuration.
-	 */
-	public EmbeddedTomcat() {
-		this(defaultConfiguration());
-	}
-
-	/**
-	 * Build embedded tomcat.
+	 * Create rule.
 	 *
-	 * @param configuration Tomcat configuration.
+	 * @param tomcat Tomcat Embedded Server.
+	 * @throws NullPointerException If {@code tomcat} is {@code null}.
 	 */
-	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
-		super(configuration);
+	public TomcatServerJunit4Rule(EmbeddedTomcat tomcat) {
+		super(tomcat);
 	}
 
-	@Override
-	public Object getServletContext() {
-		Context context = getContext();
-		return context == null ? null : context.getServletContext();
+	/**
+	 * Create rule using tomcat as embedded server.
+	 */
+	public TomcatServerJunit4Rule() {
+		this(new EmbeddedTomcat());
+	}
+
+	/**
+	 * Create rule.
+	 *
+	 * @param configuration Tomcat Configuration.
+	 */
+	public TomcatServerJunit4Rule(EmbeddedTomcatConfiguration configuration) {
+		this(new EmbeddedTomcat(configuration));
 	}
 }

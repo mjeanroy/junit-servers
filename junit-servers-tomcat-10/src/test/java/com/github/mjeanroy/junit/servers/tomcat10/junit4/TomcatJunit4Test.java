@@ -22,38 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat9;
+package com.github.mjeanroy.junit.servers.tomcat10.junit4;
 
-import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import org.apache.catalina.Context;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import org.junit.Test;
 
-import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Embedded server using tomcat as implementation.
- */
-public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
+public class TomcatJunit4Test extends AbstractTomcatJunit4Test {
 
-	/**
-	 * Build embedded tomcat with default configuration.
-	 */
-	public EmbeddedTomcat() {
-		this(defaultConfiguration());
+	@TestHttpClient
+	private HttpClient client;
+
+	@Test
+	public void it_should_have_a_server() {
+		assertThat(server).isNotNull();
+		assertThat(server.getPort()).isPositive();
 	}
 
-	/**
-	 * Build embedded tomcat.
-	 *
-	 * @param configuration Tomcat configuration.
-	 */
-	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	public Object getServletContext() {
-		Context context = getContext();
-		return context == null ? null : context.getServletContext();
+	@Test
+	public void it_should_have_a_client() {
+		assertThat(client).isNotNull();
 	}
 }
