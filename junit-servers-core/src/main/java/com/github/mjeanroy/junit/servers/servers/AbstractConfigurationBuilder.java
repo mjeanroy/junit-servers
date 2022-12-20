@@ -47,10 +47,10 @@ import static com.github.mjeanroy.junit.servers.servers.AbstractConfiguration.DE
 /**
  * Builder for {@link AbstractConfiguration} instances, should be extended by custom configuration implementation.
  *
- * @param <T> Type of extended builder.
- * @param <U> Type of {@link AbstractConfiguration} implementation.
+ * @param <SELF> Type of extended builder.
+ * @param <CONFIG> Type of {@link AbstractConfiguration} implementation.
  */
-public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurationBuilder<T, U>, U extends AbstractConfiguration> {
+public abstract class AbstractConfigurationBuilder<SELF extends AbstractConfigurationBuilder<SELF, CONFIG>, CONFIG extends AbstractConfiguration> {
 
 	/**
 	 * Path value.
@@ -126,14 +126,14 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 *
 	 * @return this.
 	 */
-	protected abstract T self();
+	protected abstract SELF self();
 
 	/**
 	 * Build the final configuration instance.
 	 *
 	 * @return The configuration instance.
 	 */
-	public abstract U build();
+	public abstract CONFIG build();
 
 	/**
 	 * Get current {@link #path}.
@@ -214,7 +214,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @return this
 	 * @throws NullPointerException If {@code path} is {@code null}.
 	 */
-	public T withPath(String path) {
+	public SELF withPath(String path) {
 		this.path = notNull(path, "path");
 		return self();
 	}
@@ -226,7 +226,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @return this
 	 * @throws NullPointerException If {@code webapp} is {@code null}.
 	 */
-	public T withWebapp(String webapp) {
+	public SELF withWebapp(String webapp) {
 		this.webapp = notNull(webapp, "webapp");
 		return self();
 	}
@@ -238,7 +238,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @return this
 	 * @throws NullPointerException If {@code webapp} is null.
 	 */
-	public T withWebapp(File webapp) {
+	public SELF withWebapp(File webapp) {
 		notNull(webapp, "webapp");
 		this.webapp = webapp.getAbsolutePath();
 		return self();
@@ -251,7 +251,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @return this
 	 * @throws IllegalArgumentException If {@code port} is strictly lower than zero.
 	 */
-	public T withPort(int port) {
+	public SELF withPort(int port) {
 		this.port = positive(port, "port");
 		return self();
 	}
@@ -262,7 +262,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @param classpath New {@link #classpath} value.
 	 * @return this
 	 */
-	public T withClasspath(String classpath) {
+	public SELF withClasspath(String classpath) {
 		this.classpath = classpath;
 		return self();
 	}
@@ -276,7 +276,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @throws NullPointerException If {@code name} or {@code value} are {@code null}.
 	 * @throws IllegalArgumentException if {@code name} is empty or blank.
 	 */
-	public T withProperty(String name, String value) {
+	public SELF withProperty(String name, String value) {
 		this.envProperties.put(
 			notBlank(name, "name"),
 			notNull(value, "value")
@@ -291,7 +291,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @return this
 	 * @throws NullPointerException if {@code hook} is {@code null}.
 	 */
-	public T withHook(Hook hook) {
+	public SELF withHook(Hook hook) {
 		this.hooks.add(notNull(hook, "hook"));
 		return self();
 	}
@@ -302,7 +302,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @param cls The class that will be used to get classloader.
 	 * @return this
 	 */
-	public T withParentClassLoader(Class<?> cls) {
+	public SELF withParentClassLoader(Class<?> cls) {
 		notNull(cls, "Base class");
 		return withParentClassLoader(cls.getClassLoader());
 	}
@@ -314,7 +314,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @param others Other (optional) classpath urls.
 	 * @return this
 	 */
-	public T withParentClasspath(URL classpath, URL... others) {
+	public SELF withParentClasspath(URL classpath, URL... others) {
 		Set<URL> classpathUrls = new HashSet<>();
 		classpathUrls.add(classpath);
 		Collections.addAll(classpathUrls, others);
@@ -327,7 +327,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @param classpath New {@link #parentClassLoader} value.
 	 * @return this
 	 */
-	public T withParentClasspath(Collection<URL> classpath) {
+	public SELF withParentClasspath(Collection<URL> classpath) {
 		int nbUrls = classpath.size();
 		if (nbUrls > 0) {
 			URL[] urls = classpath.toArray(new URL[nbUrls]);
@@ -338,7 +338,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 		return self();
 	}
 
-	private T withParentClassLoader(ClassLoader parentClassLoader) {
+	private SELF withParentClassLoader(ClassLoader parentClassLoader) {
 		this.parentClassLoader = parentClassLoader;
 		return self();
 	}
@@ -349,7 +349,7 @@ public abstract class AbstractConfigurationBuilder<T extends AbstractConfigurati
 	 * @param overrideDescriptor The new {@link #overrideDescriptor} value.
 	 * @return this
 	 */
-	public T withOverrideDescriptor(String overrideDescriptor) {
+	public SELF withOverrideDescriptor(String overrideDescriptor) {
 		this.overrideDescriptor = overrideDescriptor;
 		return self();
 	}

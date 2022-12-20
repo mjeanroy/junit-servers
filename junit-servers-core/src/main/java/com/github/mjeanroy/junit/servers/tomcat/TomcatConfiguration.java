@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat8;
+package com.github.mjeanroy.junit.servers.tomcat;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

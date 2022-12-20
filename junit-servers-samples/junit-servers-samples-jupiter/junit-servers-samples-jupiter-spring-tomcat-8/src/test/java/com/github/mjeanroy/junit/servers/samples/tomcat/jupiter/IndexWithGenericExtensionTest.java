@@ -27,8 +27,8 @@ package com.github.mjeanroy.junit.servers.samples.tomcat.jupiter;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

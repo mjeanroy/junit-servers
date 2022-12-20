@@ -59,8 +59,8 @@ final class EmbeddedConfiguration extends AbstractConfiguration {
 		Map<String, String> envProperties,
 		List<Hook> hooks,
 		ClassLoader parentClassLoader,
-		String overrideDescriptor) {
-
+		String overrideDescriptor
+	) {
 		super(
 			classpath,
 			path,

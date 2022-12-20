@@ -286,7 +286,7 @@ public abstract class AbstractConfiguration {
 	 * @return {@code true} if {@code o} can be equal to {@code this}, {@code false} otherwise.
 	 */
 	protected boolean canEqual(Object o) {
-		return o instanceof AbstractConfiguration;
+		return getClass().isInstance(o);
 	}
 
 	@Override

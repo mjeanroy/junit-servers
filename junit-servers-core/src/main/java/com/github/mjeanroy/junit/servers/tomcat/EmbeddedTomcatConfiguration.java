@@ -22,24 +22,57 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat8.exceptions;
-
-import com.github.mjeanroy.junit.servers.exceptions.IllegalConfigurationException;
-import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration;
+package com.github.mjeanroy.junit.servers.tomcat;
 
 /**
- * Error thrown when Tomcat configuration is not valid.
+ * Tomcat configuration settings.
  */
-public class IllegalTomcatConfigurationException extends IllegalConfigurationException {
+public class EmbeddedTomcatConfiguration extends AbstractEmbeddedTomcatConfiguration {
 
 	/**
-	 * Create exception with default error message.
+	 * Get configuration builder.
+	 *
+	 * @return Builder.
 	 */
-	public IllegalTomcatConfigurationException() {
-		super(createMessage());
+	public static Builder builder() {
+		return new Builder();
 	}
 
-	private static String createMessage() {
-		return "Embedded tomcat server requires a configuration that is an instance of " + EmbeddedTomcatConfiguration.class.getName() + ", please fix it.";
+	/**
+	 * Get default configuration.
+	 *
+	 * @return Default configuration.
+	 */
+	public static EmbeddedTomcatConfiguration defaultConfiguration() {
+		return new Builder().build();
+	}
+
+	/**
+	 * Build new tomcat configuration.
+	 *
+	 * @param builder Builder object.
+	 */
+	private EmbeddedTomcatConfiguration(Builder builder) {
+		super(builder);
+	}
+
+	/**
+	 * Builder for {@link EmbeddedTomcatConfiguration}.
+	 */
+	public static class Builder extends AbstractEmbeddedTomcatConfigurationBuilder<Builder, EmbeddedTomcatConfiguration> {
+
+		private Builder() {
+			super();
+		}
+
+		@Override
+		protected Builder self() {
+			return this;
+		}
+
+		@Override
+		public EmbeddedTomcatConfiguration build() {
+			return new EmbeddedTomcatConfiguration(this);
+		}
 	}
 }

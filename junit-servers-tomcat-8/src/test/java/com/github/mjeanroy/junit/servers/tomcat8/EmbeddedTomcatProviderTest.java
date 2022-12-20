@@ -24,10 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.tomcat8;
 
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.tests.builders.EmbeddedTomcatConfigurationMockBuilder;
 import org.junit.jupiter.api.Test;
 
-import static com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration.defaultConfiguration;
+import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class EmbeddedTomcatProviderTest {

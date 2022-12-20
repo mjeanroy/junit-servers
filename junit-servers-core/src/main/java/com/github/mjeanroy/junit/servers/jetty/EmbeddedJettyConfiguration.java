@@ -52,11 +52,6 @@ public class EmbeddedJettyConfiguration extends AbstractEmbeddedJettyConfigurati
 		super(builder);
 	}
 
-	@Override
-	protected boolean canEqual(Object o) {
-		return o instanceof EmbeddedJettyConfiguration;
-	}
-
 	/**
 	 * Builder for {@link EmbeddedJettyConfiguration} instances.
 	 */

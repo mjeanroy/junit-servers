@@ -42,6 +42,7 @@
   <properties>
     <java-module-name>com.github.mjeanroy.junit.servers.core</java-module-name>
     <jetty.version>9.4.50.v20221201</jetty.version>
+    <tomcat.version>8.5.83</tomcat.version>
   </properties>
 
   <dependencies>
@@ -84,6 +85,14 @@
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-annotations</artifactId>
       <version>${jetty.version}</version>
+      <optional>true</optional>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-core</artifactId>
+      <version>${tomcat.version}</version>
       <optional>true</optional>
       <scope>provided</scope>
     </dependency>

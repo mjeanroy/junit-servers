@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.tomcat8.tests.builders;
 
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 

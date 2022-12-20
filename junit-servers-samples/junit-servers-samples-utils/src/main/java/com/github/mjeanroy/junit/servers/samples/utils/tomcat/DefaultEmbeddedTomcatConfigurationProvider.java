@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.samples.utils.tomcat;
 
-import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfigurationProvider;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfigurationProvider;
 
 import static com.github.mjeanroy.junit.servers.samples.utils.tomcat.TomcatTestUtils.createTomcatConfiguration;
 

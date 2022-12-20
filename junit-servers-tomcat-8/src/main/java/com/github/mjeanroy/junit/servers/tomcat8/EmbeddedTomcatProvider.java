@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.tomcat8;
 
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 /**
  * Embedded Tomcat Provider used by the service provider interface from the JDK.

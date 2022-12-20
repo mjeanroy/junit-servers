@@ -28,8 +28,8 @@ import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatFactory;
 import org.junit.jupiter.api.extension.RegisterExtension;
 

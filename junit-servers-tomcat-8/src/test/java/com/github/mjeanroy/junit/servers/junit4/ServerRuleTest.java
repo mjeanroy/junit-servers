@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.junit4;
 
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 

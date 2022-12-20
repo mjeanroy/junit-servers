@@ -26,7 +26,10 @@ package com.github.mjeanroy.junit.servers.tomcat8;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat8.exceptions.IllegalTomcatConfigurationException;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfigurationProvider;
+import com.github.mjeanroy.junit.servers.tomcat.IllegalTomcatConfigurationException;
+import com.github.mjeanroy.junit.servers.tomcat.TomcatConfiguration;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,7 +72,7 @@ class EmbeddedTomcatFactoryTest {
 		assertThatThrownBy(() -> EmbeddedTomcatFactory.createFrom(ClassUsingNonTomcatConfiguration.class))
 			.isInstanceOf(IllegalTomcatConfigurationException.class)
 			.hasMessage(
-				"Embedded tomcat server requires a configuration that is an instance of com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration, please fix it."
+				"Embedded tomcat server requires a configuration that is an instance of com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration, please fix it."
 			);
 	}
 

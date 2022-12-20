@@ -27,9 +27,7 @@ package com.github.mjeanroy.junit.servers.samples.tomcat.java;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.samples.utils.tomcat.DefaultEmbeddedTomcatConfigurationProvider;
 import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat8.TomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.junit4.TomcatServerJunit4Runner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +35,6 @@ import org.junit.runner.RunWith;
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
 
 @RunWith(TomcatServerJunit4Runner.class)
-@TomcatConfiguration(providedBy = DefaultEmbeddedTomcatConfigurationProvider.class)
 public class IndexWithRunnerAndConfigurationProviderTest {
 
 	@TestServer

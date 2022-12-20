@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.servers;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;
@@ -63,6 +64,7 @@ class EmbeddedConfigurationTest {
 		final ClassLoader red = new URLClassLoader(new URL[0]);
 		final ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(EmbeddedConfiguration.class)
+			.suppress(Warning.STRICT_INHERITANCE)
 			.withPrefabValues(ClassLoader.class, red, black)
 			.verify();
 	}

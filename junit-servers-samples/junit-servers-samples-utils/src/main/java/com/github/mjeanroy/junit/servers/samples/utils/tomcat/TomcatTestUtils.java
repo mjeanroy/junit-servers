@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.samples.utils.tomcat;
 
-import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration;
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 import java.io.File;
 import java.net.URL;

@@ -25,16 +25,13 @@
 package com.github.mjeanroy.junit.servers.samples.tomcat.jupiter;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.samples.utils.tomcat.DefaultEmbeddedTomcatConfigurationProvider;
 import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat8.TomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.jupiter.TomcatTest;
 import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
 
 @TomcatTest
-@TomcatConfiguration(providedBy = DefaultEmbeddedTomcatConfigurationProvider.class)
 class IndexWithConfigurationProviderTest {
 
 	@Test

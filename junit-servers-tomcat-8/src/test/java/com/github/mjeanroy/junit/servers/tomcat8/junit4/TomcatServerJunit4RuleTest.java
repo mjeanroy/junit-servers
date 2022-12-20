@@ -24,8 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.tomcat8.junit4;
 
+import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
-import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.tests.builders.EmbeddedTomcatMockBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.Description;

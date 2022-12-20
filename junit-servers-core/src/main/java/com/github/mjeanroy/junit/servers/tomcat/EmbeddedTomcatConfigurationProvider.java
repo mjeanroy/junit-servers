@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat8;
+package com.github.mjeanroy.junit.servers.tomcat;
 
 /**
  * A {@link EmbeddedTomcatConfiguration} provider.

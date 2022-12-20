@@ -74,8 +74,9 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	 */
 	private final String webInfJarPattern;
 
-	// Private constructor, use static builder.
-	protected AbstractEmbeddedJettyConfiguration(AbstractEmbeddedJettyConfigurationBuilder<?, ?> builder) {
+	AbstractEmbeddedJettyConfiguration(
+			AbstractEmbeddedJettyConfigurationBuilder<?, ?> builder
+	) {
 		super(
 			builder.getClasspath(),
 			builder.getPath(),
@@ -158,9 +159,6 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 
 		return false;
 	}
-
-	@Override
-	protected abstract boolean canEqual(Object o);
 
 	@Override
 	public int hashCode() {

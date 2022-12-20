@@ -22,39 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils.impl;
+package com.github.mjeanroy.junit.servers.tomcat;
 
-import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
-import com.github.mjeanroy.junit.servers.servers.Hook;
+import com.github.mjeanroy.junit.servers.exceptions.IllegalConfigurationException;
 
-import java.util.List;
-import java.util.Map;
+/**
+ * Error thrown when Tomcat configuration is not valid.
+ */
+public class IllegalTomcatConfigurationException extends IllegalConfigurationException {
 
-public class FakeEmbeddedServerConfiguration extends AbstractConfiguration {
-
-	public FakeEmbeddedServerConfiguration() {
-		super();
+	/**
+	 * Create exception with default error message.
+	 */
+	public IllegalTomcatConfigurationException(Class<?> requiredClass) {
+		super(createMessage(requiredClass));
 	}
 
-	FakeEmbeddedServerConfiguration(
-		String classpath,
-		String path,
-		String webapp,
-		int port,
-		Map<String, String> envProperties,
-		List<Hook> hooks,
-		ClassLoader parentClassLoader,
-		String overrideDescriptor
-	) {
-		super(
-			classpath,
-			path,
-			webapp,
-			port,
-			envProperties,
-			hooks,
-			parentClassLoader,
-			overrideDescriptor
-		);
+	private static String createMessage(Class<?> requiredClass) {
+		return "Embedded tomcat server requires a configuration that is an instance of " + requiredClass.getName() + ", please fix it.";
 	}
 }

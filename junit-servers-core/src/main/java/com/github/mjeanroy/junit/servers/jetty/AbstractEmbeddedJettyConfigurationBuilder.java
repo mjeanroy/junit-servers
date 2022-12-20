@@ -35,9 +35,9 @@ import static com.github.mjeanroy.junit.servers.jetty.AbstractEmbeddedJettyConfi
  * Jetty configuration settings.
  */
 abstract class AbstractEmbeddedJettyConfigurationBuilder<
-		BUILDER extends AbstractEmbeddedJettyConfigurationBuilder<BUILDER, CONFIG>,
+		SELF extends AbstractEmbeddedJettyConfigurationBuilder<SELF, CONFIG>,
 		CONFIG extends AbstractEmbeddedJettyConfiguration
-> extends AbstractConfigurationBuilder<BUILDER, CONFIG> {
+> extends AbstractConfigurationBuilder<SELF, CONFIG> {
 
 	/**
 	 * Configure the stop timeout in milliseconds: set a graceful stop time.
@@ -134,7 +134,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 * @return this
 	 * @throws IllegalArgumentException If {@code stopTimeout} is not positive.
 	 */
-	public BUILDER withStopTimeout(int stopTimeout) {
+	public SELF withStopTimeout(int stopTimeout) {
 		this.stopTimeout = positive(stopTimeout, "stopTimeout");
 		return self();
 	}
@@ -143,7 +143,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 * Set {@link #stopAtShutdown} to {@code false}.
 	 * @return this
 	 */
-	public BUILDER disableStopAtShutdown() {
+	public SELF disableStopAtShutdown() {
 		return toggleStopAtShutdown(false);
 	}
 
@@ -151,7 +151,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 * Set {@link #stopAtShutdown} to {@code true}.
 	 * @return this
 	 */
-	public BUILDER enableStopAtShutdown() {
+	public SELF enableStopAtShutdown() {
 		return toggleStopAtShutdown(true);
 	}
 
@@ -161,7 +161,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 * @param stopAtShutdown New {@link #stopAtShutdown} value.
 	 * @return this
 	 */
-	private BUILDER toggleStopAtShutdown(boolean stopAtShutdown) {
+	private SELF toggleStopAtShutdown(boolean stopAtShutdown) {
 		this.stopAtShutdown = stopAtShutdown;
 		return self();
 	}
@@ -172,7 +172,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 * @param resource New {@link #baseResource} value.
 	 * @return this
 	 */
-	public BUILDER withBaseResource(Resource resource) {
+	public SELF withBaseResource(Resource resource) {
 		this.baseResource = resource;
 		return self();
 	}
@@ -183,7 +183,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 * @param containerJarPattern The container JAR pattern.
 	 * @return this
 	 */
-	public BUILDER withContainerJarPattern(String containerJarPattern) {
+	public SELF withContainerJarPattern(String containerJarPattern) {
 		this.containerJarPattern = containerJarPattern;
 		return self();
 	}
@@ -194,7 +194,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 * @param webInfJarPattern The webinf JAR pattern.
 	 * @return this
 	 */
-	public BUILDER withWebInfJarPattern(String webInfJarPattern) {
+	public SELF withWebInfJarPattern(String webInfJarPattern) {
 		this.webInfJarPattern = webInfJarPattern;
 		return self();
 	}
