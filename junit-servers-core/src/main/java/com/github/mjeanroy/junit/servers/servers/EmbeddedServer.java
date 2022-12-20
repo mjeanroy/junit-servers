@@ -117,28 +117,6 @@ public interface EmbeddedServer<CONFIGURATION extends AbstractConfiguration> {
 	 * Get servlet context used within container.
 	 * If container is not a servlet container, this method should return null.
 	 *
-	 * @param klass The expected class, use {@code javax.servlet.ServletContext} or {@code jakarta.servlet.ServletContext}, depending on the servlet API being used.
-	 * @return Servlet Context from container.
-	 */
-	@SuppressWarnings("unchecked")
-	default <SERVLET_CONTEXT> SERVLET_CONTEXT getServletContext(Class<SERVLET_CONTEXT> klass) {
-		Object servletContext = getServletContext();
-		if (servletContext == null) {
-			return null;
-		}
-
-		Class<?> actualClass = servletContext.getClass();
-		if (!klass.isAssignableFrom(actualClass)) {
-			throw new IllegalArgumentException("Cannot cast '" + actualClass.getName() + "' to '" + klass.getName() + "'");
-		}
-
-		return (SERVLET_CONTEXT) servletContext;
-	}
-
-	/**
-	 * Get servlet context used within container.
-	 * If container is not a servlet container, this method should return null.
-	 *
 	 * @return Servlet Context from container.
 	 */
 	Object getServletContext();

@@ -255,13 +255,12 @@ public abstract class AbstractEmbeddedJetty<
 	}
 
 	@Override
-	public Object getServletContext() {
-		return webAppContext == null ? null : webAppContext.getServletContext();
-	}
-
-	@Override
 	protected int doGetPort() {
 		return connector.getLocalPort();
+	}
+
+	protected WebAppContext getWebAppContext() {
+		return webAppContext;
 	}
 
 	private ServerConnector findConnector() {

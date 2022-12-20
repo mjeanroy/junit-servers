@@ -25,7 +25,6 @@
 package com.github.mjeanroy.junit.servers.tomcat10;
 
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import jakarta.servlet.ServletContext;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -134,13 +133,6 @@ class EmbeddedTomcatTest {
 	}
 
 	@Test
-	void it_should_get_servlet_context_with_expected_class() {
-		tomcat = new EmbeddedTomcat(defaultConfiguration());
-		tomcat.start();
-		assertThat(tomcat.getServletContext(ServletContext.class)).isNotNull();
-	}
-
-	@Test
 	void it_should_get_servlet_context() {
 		tomcat = new EmbeddedTomcat(defaultConfiguration());
 		tomcat.start();
@@ -154,7 +146,7 @@ class EmbeddedTomcatTest {
 	}
 
 	@Test
-	void it_should_create_meta_inf_directory_if_it_does_not_exist(@TempDir File baseDir) throws Exception {
+	void it_should_create_meta_inf_directory_if_it_does_not_exist(@TempDir File baseDir) {
 		final File metaInf = new File(baseDir, "META-INF");
 
 		tomcat = new EmbeddedTomcat(EmbeddedTomcatConfiguration.builder()

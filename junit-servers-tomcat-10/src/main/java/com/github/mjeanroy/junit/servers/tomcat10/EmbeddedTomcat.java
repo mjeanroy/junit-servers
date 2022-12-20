@@ -26,6 +26,7 @@ package com.github.mjeanroy.junit.servers.tomcat10;
 
 import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+import jakarta.servlet.ServletContext;
 import org.apache.catalina.Context;
 
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
@@ -52,7 +53,7 @@ public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfigu
 	}
 
 	@Override
-	public Object getServletContext() {
+	public ServletContext getServletContext() {
 		Context context = getContext();
 		return context == null ? null : context.getServletContext();
 	}
