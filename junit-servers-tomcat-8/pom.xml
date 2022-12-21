@@ -42,7 +42,7 @@
 
   <properties>
     <java-module-name>com.github.mjeanroy.junit.servers.tomcat8</java-module-name>
-    <tomcat.version>8.5.83</tomcat.version>
+    <tomcat.version>10.1.4</tomcat.version>
   </properties>
 
   <dependencies>
