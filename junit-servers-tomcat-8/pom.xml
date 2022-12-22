@@ -42,7 +42,6 @@
 
   <properties>
     <java-module-name>com.github.mjeanroy.junit.servers.tomcat8</java-module-name>
-    <tomcat.version>8.5.83</tomcat.version>
   </properties>
 
   <dependencies>
@@ -66,27 +65,27 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-core</artifactId>
-      <version>${tomcat.version}</version>
+      <version>${tomcat8.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-jasper</artifactId>
-      <version>${tomcat.version}</version>
+      <version>${tomcat8.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>tomcat-jasper</artifactId>
-      <version>${tomcat.version}</version>
+      <version>${tomcat8.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>tomcat-jasper-el</artifactId>
-      <version>${tomcat.version}</version>
+      <version>${tomcat8.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>tomcat-jsp-api</artifactId>
-      <version>${tomcat.version}</version>
+      <version>${tomcat8.version}</version>
     </dependency>
 
     <dependency>

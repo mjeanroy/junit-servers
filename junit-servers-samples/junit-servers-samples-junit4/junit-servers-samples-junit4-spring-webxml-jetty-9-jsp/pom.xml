@@ -32,7 +32,6 @@
   <url>https://github.com/mjeanroy/junit-servers</url>
 
   <properties>
-    <jetty.version>9.4.50.v20221201</jetty.version>
     <owasp-xss-encoder.version>1.2.3</owasp-xss-encoder.version>
     <owasp-html-sanitizer.version>1.1</owasp-html-sanitizer.version>
   </properties>
@@ -72,7 +71,7 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>apache-jstl</artifactId>
-      <version>${jetty.version}</version>
+      <version>${jetty9.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -114,7 +113,7 @@
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
-        <version>${jetty.version}</version>
+        <version>${jetty9.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -140,7 +139,7 @@
                 <artifactItem>
                   <groupId>org.eclipse.jetty</groupId>
                   <artifactId>apache-jstl</artifactId>
-                  <version>${jetty.version}</version>
+                  <version>${jetty9.version}</version>
                   <type>jar</type>
                   <overWrite>true</overWrite>
                   <outputDirectory>${basedir}/target/lib</outputDirectory>
@@ -167,7 +166,7 @@
         <!-- validate JSPs -->
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-jspc-maven-plugin</artifactId>
-        <version>${jetty.version}</version>
+        <version>${jetty9.version}</version>
         <executions>
           <execution>
             <phase>validate</phase>
