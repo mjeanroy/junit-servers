@@ -13,6 +13,7 @@
 .idea/
 .settings/
 .project
+.mvn
 *.iml
 
 ########################
@@ -20,7 +21,11 @@
 ########################
 
 /junit-servers-core
-/junit-servers-jetty
-/junit-servers-tomcat
-/samples
+/junit-servers-jetty-9
+/junit-servers-jetty-10
+/junit-servers-jetty-11
+/junit-servers-tomcat-8
+/junit-servers-tomcat-9
+/junit-servers-tomcat-10
+/junit-servers-samples
 /target
