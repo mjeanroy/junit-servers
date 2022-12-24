@@ -212,7 +212,7 @@ public abstract class AbstractEmbeddedServer<
 	}
 
 	private void onStarted() {
-		log.error("Executing `onStarted` embedded server lifecycle hooks");
+		log.debug("Executing `onStarted` embedded server lifecycle hooks");
 		for (Hook hook : configuration.getHooks()) {
 			hook.onStarted(this, getServletContext());
 		}
