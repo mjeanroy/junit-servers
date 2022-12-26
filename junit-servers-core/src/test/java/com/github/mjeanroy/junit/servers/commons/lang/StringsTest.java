@@ -39,6 +39,25 @@ class StringsTest {
 	}
 
 	@Test
+	void it_should_check_if_string_is_empty() {
+		assertThat(Strings.isEmpty(null)).isTrue();
+		assertThat(Strings.isEmpty("")).isTrue();
+		assertThat(Strings.isEmpty(" ")).isFalse();
+		assertThat(Strings.isEmpty("foo")).isFalse();
+	}
+
+	@Test
+	void it_should_trim_string_is_empty() {
+		assertThat(Strings.trim(null)).isNull();
+		assertThat(Strings.trim("")).isEqualTo("");
+		assertThat(Strings.trim(" ")).isEqualTo("");
+		assertThat(Strings.trim("foo")).isEqualTo("foo");
+		assertThat(Strings.trim("foo  ")).isEqualTo("foo");
+		assertThat(Strings.trim("  foo")).isEqualTo("foo");
+		assertThat(Strings.trim("  foo  ")).isEqualTo("foo");
+	}
+
+	@Test
 	void it_should_turn_string_to_lower_case() {
 		assertThat(Strings.toLowerCase(null)).isNull();
 		assertThat(Strings.toLowerCase("")).isEqualTo("");

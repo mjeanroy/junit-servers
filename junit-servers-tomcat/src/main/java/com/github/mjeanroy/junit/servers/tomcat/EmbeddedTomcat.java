@@ -41,7 +41,9 @@ import org.apache.tomcat.util.scan.StandardJarScanner;
 import javax.servlet.ServletContext;
 import java.io.File;
 
+import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isEmpty;
 import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
+import static com.github.mjeanroy.junit.servers.commons.lang.Strings.trim;
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 
 /**
@@ -138,8 +140,12 @@ public class EmbeddedTomcat extends AbstractEmbeddedServer<Tomcat, EmbeddedTomca
 			log.debug("Setting tomcat app base: {}", webappAbsolutePath);
 			tomcat.getHost().setAppBase(webappAbsolutePath);
 
-			log.debug("Adding tomcat webapp using contextPath={} and docBase={}", path, webappAbsolutePath);
-			context = tomcat.addWebapp(path, webappAbsolutePath);
+			log.debug("Getting context path from path={}", path);
+			String trimmedPath = trim(path);
+			String contextPath = isEmpty(trimmedPath) || trimmedPath.equals("/") ? "" : trimmedPath;
+
+			log.debug("Adding tomcat webapp using contextPath={} and docBase={}", contextPath, webappAbsolutePath);
+			context = tomcat.addWebapp(contextPath, webappAbsolutePath);
 
 			// Add additional classpath entry
 			if (isNotBlank(classpath)) {
