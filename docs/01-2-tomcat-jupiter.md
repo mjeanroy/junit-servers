@@ -1,11 +1,28 @@
 ##### JUnit Jupiter Extension
 
-Since version `0.10.0`, an extension for [JUnit Jupiter](https://junit.org/junit5/docs/current/user-guide) has been added:
+**Notes:**
+
+The [JUnit Jupiter](https://junit.org/junit5/docs/current/user-guide) extension is available since version `0.10.0`.
+
+Starting with version 3.0.0, it's possible to choose the major Tomcat version:
+  - It means that code samples below might be a bit different if you're using `junit-servers-tomcat-8`, `junit-servers-tomcat-9` or `junit-servers-tomcat-10`.
+  - The following will assume you are using `junit-servers-tomcat-8`, but please check commented code for instructions to adapt.
+
+
+Here is a simple example using the JUnit Jupiter extension:
 
 ```java
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+
+// If you're using `junit-servers-tomcat-8`
+import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-9`
+// import com.github.mjeanroy.junit.servers.tomcat9.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-10`
+// import com.github.mjeanroy.junit.servers.tomcat10.EmbeddedTomcat;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,7 +56,7 @@ class MyTest {
 What happens here:
 
 - The `JunitServerExtension` extension:
-  - Will automatically start the embedded server **before all** test and shutdown the server **after all** test.
+  - Will automatically start the embedded server **before all** tests and shutdown the server **after all** tests.
   - Automatically inject `EmbeddedTomcat` parameter into the test method (also works with `BeforeEach` methods, etc.). The extension can also inject
     the server instance using the `TestServer` annotation, but it is recommended to use the parameter injection instead.
   - Note that the configuration can also be injected into test methods, exactly like the `EmbeddedTomcat` parameter in the previous example.
@@ -58,8 +75,16 @@ See the example below:
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+
+// If you're using `junit-servers-tomcat-8`
+import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-9`
+// import com.github.mjeanroy.junit.servers.tomcat9.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-10`
+// import com.github.mjeanroy.junit.servers.tomcat10.EmbeddedTomcat;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -104,8 +129,16 @@ Note that:
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+
+// If you're using `junit-servers-tomcat-8`
+import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-9`
+// import com.github.mjeanroy.junit.servers.tomcat9.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-10`
+// import com.github.mjeanroy.junit.servers.tomcat10.EmbeddedTomcat;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
