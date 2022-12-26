@@ -7,6 +7,12 @@ JUnit-Servers is an easy-to-use library that will allow you to test your web app
 
 JUnit-Servers is simple, and self-contained: you don’t need any dependencies to use it. It is also open-source: if you find a bug or think some features are missing, feel free to submit an issue or, even better, open a pull request!
 
+#### Upgrading to version 3.0.O
+
+Starting with version 3.0.0, it's now possible to choose the major Tomcat/Jetty version to use, just check our upgrade guides for more information:
+- Tomcat: [upgrade to 3.0.0]({{ '/tomcat/upgrade' | prepend: site.baseurl }})
+- Jetty: [upgrade to 3.0.0]({{ '/jetty/upgrade' | prepend: site.baseurl }})
+
 #### JUnit JUpiter
 
 Here is a simple example that demonstrate how easy it is to test your application using [OkHttp](http://square.github.io/okhttp/) library:
