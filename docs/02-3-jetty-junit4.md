@@ -1,11 +1,23 @@
 ##### JUnit Runner
 
+Starting with version 3.0.0, it's possible to choose the major Jetty version:
+  - It means that code samples below might be a bit different if you're using `junit-servers-jetty-9`, `junit-servers-jetty-10` or `junit-servers-jetty-11`.
+  - The following will assume you are using `junit-servers-jetty-9`, but please check commented code for instructions to adapt.
+
 The simplest way to start is to use the dedicated [JUnit runner](https://github.com/junit-team/junit4/wiki/test-runners), see the example below:
 
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
+
+// If you're using `junit-servers-jetty-9`
+import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
+
+// If you're using `junit-servers-jetty-10`
+// import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJetty;
+
+// If you're using `junit-servers-jetty-11`
+// import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJetty;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -55,9 +67,17 @@ See the example below:
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
+
+// If you're using `junit-servers-jetty-9`
+import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
+
+// If you're using `junit-servers-jetty-10`
+// import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJetty;
+
+// If you're using `junit-servers-jetty-11`
+// import com.github.mjeanroy.junit.servers.jetty11.EmbeddedJetty;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -104,7 +124,14 @@ public class MyTest {
 Using the [JUnit rule](https://github.com/junit-team/junit4/wiki/Rules) is relatively easy:
 
 ```java
-import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Rule;
+// If you're using `junit-servers-jetty-9`
+import com.github.mjeanroy.junit.servers.jetty9.junit4.JettyServerJunit4Rule;
+
+// If you're using `junit-servers-jetty-10`
+// import com.github.mjeanroy.junit.servers.jetty10.junit4.JettyServerJunit4Rule;
+
+// If you're using `junit-servers-jetty-11`
+// import com.github.mjeanroy.junit.servers.jetty11.junit4.JettyServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -144,7 +171,15 @@ Sometimes, you will have to change some configuration option, this is possible u
 
 ```java
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.jetty.junit4.JettyServerJunit4Rule;
+
+// If you're using `junit-servers-jetty-9`
+import com.github.mjeanroy.junit.servers.jetty9.junit4.JettyServerJunit4Rule;
+
+// If you're using `junit-servers-jetty-10`
+// import com.github.mjeanroy.junit.servers.jetty10.junit4.JettyServerJunit4Rule;
+
+// If you're using `junit-servers-jetty-11`
+// import com.github.mjeanroy.junit.servers.jetty11.junit4.JettyServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
