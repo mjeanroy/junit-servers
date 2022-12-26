@@ -59,6 +59,26 @@ public final class Strings {
 	}
 
 	/**
+	 * Check if given string is {@code null} or empty.
+	 *
+	 * @param value Value to check.
+	 * @return {@code true} if {@code value} is {@code null} or empty, {@code false} otherwise.
+	 */
+	public static boolean isEmpty(String value) {
+		return value == null || value.isEmpty();
+	}
+
+	/**
+	 * Trim given string.
+	 *
+	 * @param value String to trim.
+	 * @return Trimmed string.
+	 */
+	public static String trim(String value) {
+		return value == null ? value : value.trim();
+	}
+
+	/**
 	 * Check that given string is blank.
 	 *
 	 * @param value String to check.
