@@ -1,11 +1,23 @@
 ##### JUnit Runner
 
+Starting with version 3.0.0, it's possible to choose the major Tomcat version:
+  - It means that code samples below might be a bit different if you're using `junit-servers-tomcat-8`, `junit-servers-tomcat-9` or `junit-servers-tomcat-10`.
+  - The following will assume you are using `junit-servers-tomcat-8`, but please check commented code for instructions to adapt.
+
 The simplest way to start is to use the dedicated [JUnit runner](https://github.com/junit-team/junit4/wiki/test-runners), see the example below:
 
 ```java
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-8`
+import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-9`
+// import com.github.mjeanroy.junit.servers.tomcat9.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-10`
+// import com.github.mjeanroy.junit.servers.tomcat10.EmbeddedTomcat;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -56,8 +68,16 @@ See the example below:
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.junit4.JunitServerRunner;
-import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
+
+// If you're using `junit-servers-tomcat-8`
+import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-9`
+// import com.github.mjeanroy.junit.servers.tomcat9.EmbeddedTomcat;
+
+// If you're using `junit-servers-tomcat-10`
+// import com.github.mjeanroy.junit.servers.tomcat10.EmbeddedTomcat;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -104,7 +124,14 @@ public class MyTest {
 Using the [JUnit rule](https://github.com/junit-team/junit4/wiki/Rules) is relatively easy:
 
 ```java
-import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
+// If you're using `junit-servers-tomcat-8`
+import com.github.mjeanroy.junit.servers.tomcat8.junit4.TomcatServerJunit4Rule;
+
+// If you're using `junit-servers-tomcat-9`
+// import com.github.mjeanroy.junit.servers.tomcat9.junit4.TomcatServerJunit4Rule;
+
+// If you're using `junit-servers-tomcat-10`
+// import com.github.mjeanroy.junit.servers.tomcat10.junit4.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -144,7 +171,15 @@ Sometimes, you will have to change some configuration option, this is possible u
 
 ```java
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import com.github.mjeanroy.junit.servers.tomcat.junit4.TomcatServerJunit4Rule;
+
+// If you're using `junit-servers-tomcat-8`
+import com.github.mjeanroy.junit.servers.tomcat8.junit4.TomcatServerJunit4Rule;
+
+// If you're using `junit-servers-tomcat-9`
+// import com.github.mjeanroy.junit.servers.tomcat9.junit4.TomcatServerJunit4Rule;
+
+// If you're using `junit-servers-tomcat-10`
+// import com.github.mjeanroy.junit.servers.tomcat10.junit4.TomcatServerJunit4Rule;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
