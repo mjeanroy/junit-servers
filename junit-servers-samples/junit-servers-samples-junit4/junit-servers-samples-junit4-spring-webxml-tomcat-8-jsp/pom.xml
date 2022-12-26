@@ -23,7 +23,7 @@
   <parent>
     <artifactId>junit-servers-samples-junit4</artifactId>
     <groupId>com.github.mjeanroy</groupId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0</version>
   </parent>
 
   <artifactId>junit-servers-samples-junit4-spring-webxml-tomcat-8-jsp</artifactId>
