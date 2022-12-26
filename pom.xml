@@ -31,7 +31,7 @@
   <artifactId>junit-servers</artifactId>
   <packaging>pom</packaging>
   <name>junit-servers</name>
-  <version>2.1.1-SNAPSHOT</version>
+  <version>2.1.1</version>
   <url>https://github.com/mjeanroy/junit-servers</url>
   <description>Add Embedded Server to your junit tests case.</description>
 
@@ -55,7 +55,7 @@
     <developerConnection>scm:git:git@github.com:mjeanroy/junit-servers.git
     </developerConnection>
     <url>https://github.com/mjeanroy/junit-servers</url>
-    <tag>HEAD</tag>
+    <tag>junit-servers-2.1.1</tag>
   </scm>
 
   <developers>
