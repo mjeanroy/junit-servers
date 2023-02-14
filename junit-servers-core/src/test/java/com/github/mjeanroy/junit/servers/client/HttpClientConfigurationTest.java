@@ -31,7 +31,9 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchIllegalArgumentException;
 import static org.assertj.core.api.Assertions.entry;
+import static org.assertj.core.api.Assertions.tuple;
 
 class HttpClientConfigurationTest {
 
@@ -40,7 +42,7 @@ class HttpClientConfigurationTest {
 
 	@Test
 	void it_should_create_default_configuration() {
-		final HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
+		HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
 		assertThat(configuration).isNotNull();
 		assertThat(configuration.isFollowRedirect()).isTrue();
 		assertThat(configuration.getDefaultCookies()).isNotNull().isEmpty();
@@ -49,9 +51,9 @@ class HttpClientConfigurationTest {
 
 	@Test
 	void it_should_create_custom_configuration() {
-		final String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
-		final String jsessionId = UUID.randomUUID().toString();
-		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
+		String jsessionId = UUID.randomUUID().toString();
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
 			.addDefaultCookie(COOKIE_NAME, jsessionId)
 			.addDefaultHeader(USER_AGENT_NAME, ua)
@@ -60,22 +62,18 @@ class HttpClientConfigurationTest {
 		assertThat(configuration).isNotNull();
 		assertThat(configuration.isFollowRedirect()).isFalse();
 
-		assertThat(configuration.getDefaultCookies())
-			.isNotEmpty()
-			.hasSize(1)
-			.containsOnly(Cookies.cookie(COOKIE_NAME, jsessionId));
+		assertThat(configuration.getDefaultCookies()).hasSize(1).containsOnly(
+			Cookies.cookie(COOKIE_NAME, jsessionId)
+		);
 
-		assertThat(configuration.getDefaultHeaders())
-			.isNotEmpty()
-			.hasSize(1)
-			.containsOnly(
-				entry(USER_AGENT_NAME, HttpHeader.header(USER_AGENT_NAME, ua))
-			);
+		assertThat(configuration.getDefaultHeaders()).hasSize(1).containsOnly(
+			entry(USER_AGENT_NAME, HttpHeader.header(USER_AGENT_NAME, ua))
+		);
 	}
 
 	@Test
 	void it_should_create_custom_configuration_with_follow_redirect() {
-		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.enableFollowRedirect()
 			.build();
 
@@ -85,7 +83,7 @@ class HttpClientConfigurationTest {
 
 	@Test
 	void it_should_create_custom_configuration_without_follow_redirect() {
-		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
 			.build();
 
@@ -95,60 +93,83 @@ class HttpClientConfigurationTest {
 
 	@Test
 	void it_should_create_custom_configuration_with_cookie_name_value() {
-		final String jsessionId = UUID.randomUUID().toString();
-		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		String jsessionId = UUID.randomUUID().toString();
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.addDefaultCookie(COOKIE_NAME, jsessionId)
 			.build();
 
 		assertThat(configuration).isNotNull();
-		assertThat(configuration.getDefaultCookies())
-			.hasSize(1)
-			.containsOnly(Cookies.cookie(COOKIE_NAME, jsessionId));
+		assertThat(configuration.getDefaultCookies()).hasSize(1).containsOnly(
+			Cookies.cookie(COOKIE_NAME, jsessionId)
+		);
 	}
 
 	@Test
 	void it_should_create_custom_configuration_with_cookie() {
-		final String jsessionId = UUID.randomUUID().toString();
-		final Cookie cookie = Cookies.cookie(COOKIE_NAME, jsessionId);
-		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		String jsessionId = UUID.randomUUID().toString();
+		Cookie cookie = Cookies.cookie(COOKIE_NAME, jsessionId);
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.addDefaultCookie(cookie)
 			.build();
 
 		assertThat(configuration).isNotNull();
-		assertThat(configuration.getDefaultCookies())
-			.hasSize(1)
+		assertThat(configuration.getDefaultCookies()).hasSize(1)
 			.containsOnly(cookie);
 	}
 
 	@Test
 	void it_should_create_custom_configuration_with_header_name_value() {
-		final String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
-		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.addDefaultHeader(USER_AGENT_NAME, ua)
 			.build();
 
 		assertThat(configuration).isNotNull();
-		assertThat(configuration.getDefaultHeaders())
-			.hasSize(1)
-			.containsOnly(
-				entry(USER_AGENT_NAME, HttpHeader.header(USER_AGENT_NAME, ua))
-			);
+		assertThat(configuration.getDefaultHeaders()).hasSize(1).containsOnly(
+			entry(USER_AGENT_NAME, HttpHeader.header(USER_AGENT_NAME, ua))
+		);
 	}
 
 	@Test
 	void it_should_create_custom_configuration_with_header() {
-		final String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
-		final HttpHeader header = HttpHeader.header(USER_AGENT_NAME, ua);
-		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
+		HttpHeader header = HttpHeader.header(USER_AGENT_NAME, ua);
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.addDefaultHeader(header)
 			.build();
 
 		assertThat(configuration).isNotNull();
-		assertThat(configuration.getDefaultHeaders())
-			.hasSize(1)
-			.containsOnly(
-				entry(USER_AGENT_NAME, header)
+		assertThat(configuration.getDefaultHeaders()).hasSize(1).containsOnly(
+			entry(USER_AGENT_NAME, header)
+		);
+	}
+
+	@Test
+	void it_should_create_builder_from_configuration() {
+		String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
+		String jsessionId = UUID.randomUUID().toString();
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+			.disableFollowRedirect()
+			.addDefaultCookie(COOKIE_NAME, jsessionId)
+			.addDefaultHeader(USER_AGENT_NAME, ua)
+			.build();
+
+		HttpClientConfiguration newConfiguration = configuration.builder()
+			.enableFollowRedirect()
+			.build();
+
+		assertThat(newConfiguration).isNotNull();
+		assertThat(newConfiguration.isFollowRedirect()).isTrue();
+
+		assertThat(newConfiguration.getDefaultCookies()).hasSize(1)
+			.extracting(Cookie::getName, Cookie::getValue)
+			.containsExactly(
+				tuple(COOKIE_NAME, jsessionId)
 			);
+
+		assertThat(newConfiguration.getDefaultHeaders()).hasSize(1).containsOnly(
+			entry(USER_AGENT_NAME, HttpHeader.header(USER_AGENT_NAME, ua))
+		);
 	}
 
 	@Test
@@ -160,9 +181,9 @@ class HttpClientConfigurationTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
-		final String jsessionId = UUID.randomUUID().toString();
-		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
+		String ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.202.0 Safari/532.0";
+		String jsessionId = UUID.randomUUID().toString();
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder()
 			.disableFollowRedirect()
 			.addDefaultCookie(COOKIE_NAME, jsessionId)
 			.addDefaultHeader(USER_AGENT_NAME, ua)
@@ -175,7 +196,16 @@ class HttpClientConfigurationTest {
 					"User-Agent: HttpHeader{name: \"User-Agent\", values: [\"" + ua + "\"]}" +
 				"}, " +
 				"defaultCookies: [" +
-					"Cookie{name: \"JSESSIONID\", value: \"" + jsessionId + "\", domain: null, path: null, expires: null, maxAge: null, secure: false, httpOnly: false}" +
+					"Cookie{" +
+						"name: \"JSESSIONID\", " +
+						"value: \"" + jsessionId + "\", " +
+						"domain: null, " +
+						"path: null, " +
+						"expires: null, " +
+						"maxAge: null, " +
+						"secure: false, " +
+						"httpOnly: false" +
+					"}" +
 				"]" +
 			"}"
 		);

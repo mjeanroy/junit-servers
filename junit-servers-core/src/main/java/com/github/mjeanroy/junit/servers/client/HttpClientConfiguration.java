@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.client;
 import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,11 @@ public final class HttpClientConfiguration {
 	private final boolean followRedirect;
 
 	// Private constructor: use the builder instead.
-	private HttpClientConfiguration(boolean followRedirect, Map<String, HttpHeader> defaultHeaders, List<Cookie> defaultCookies) {
+	private HttpClientConfiguration(
+		boolean followRedirect,
+		Map<String, HttpHeader> defaultHeaders,
+		List<Cookie> defaultCookies
+	) {
 		this.followRedirect = followRedirect;
 		this.defaultHeaders = unmodifiableMap(new LinkedHashMap<>(defaultHeaders));
 		this.defaultCookies = unmodifiableList(new ArrayList<>(defaultCookies));
@@ -108,6 +113,15 @@ public final class HttpClientConfiguration {
 	 */
 	public boolean isFollowRedirect() {
 		return followRedirect;
+	}
+
+	/**
+	 * Get builder from given instance.
+	 *
+	 * @return The builder.
+	 */
+	public Builder builder() {
+		return new Builder().followRedirect(followRedirect).addDefaultHeaders(defaultHeaders.values()).addDefaultCookies(defaultCookies);
 	}
 
 	@Override
@@ -229,6 +243,31 @@ public final class HttpClientConfiguration {
 		}
 
 		/**
+		 * Add default cookies.
+		 *
+		 * @param cookies Default cookies.
+		 * @return The builder (for chaining).
+		 */
+		public Builder addDefaultCookies(Collection<Cookie> cookies) {
+			this.defaultCookies.addAll(cookies);
+			return this;
+		}
+
+		/**
+		 * Add all default headers.
+		 *
+		 * @param defaultHeaders Default headers to add.
+		 * @return The builder (for chaining).
+		 */
+		public Builder addDefaultHeaders(Collection<HttpHeader> defaultHeaders) {
+			for (HttpHeader defaultHeader : defaultHeaders) {
+				this.addDefaultHeader(defaultHeader);
+			}
+
+			return this;
+		}
+
+		/**
 		 * Enable follow redirection handling.
 		 *
 		 * @return The builder (for chaining).
@@ -245,6 +284,17 @@ public final class HttpClientConfiguration {
 		 */
 		public Builder disableFollowRedirect() {
 			this.followRedirect = false;
+			return this;
+		}
+
+		/**
+		 * Update {@link #followRedirect}
+		 *
+		 * @param followRedirect New {@link #followRedirect}
+		 * @return The builder (for chaining).
+		 */
+		public Builder followRedirect(boolean followRedirect) {
+			this.followRedirect = followRedirect;
 			return this;
 		}
 
