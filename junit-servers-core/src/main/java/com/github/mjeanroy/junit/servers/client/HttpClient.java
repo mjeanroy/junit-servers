@@ -32,7 +32,7 @@ package com.github.mjeanroy.junit.servers.client;
  * After test suite, client should be properly destroyed
  * using {@link HttpClient#destroy} method.
  */
-public interface HttpClient {
+public interface HttpClient extends AutoCloseable {
 
 	/**
 	 * Get the client configuration.
@@ -163,4 +163,9 @@ public interface HttpClient {
 	 * @return {@code true} if client is closed, {@code false} otherwise.
 	 */
 	boolean isDestroyed();
+
+	@Override
+	default void close() {
+		destroy();
+	}
 }
