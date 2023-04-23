@@ -116,7 +116,7 @@
     <ning-async-http-client.version>1.9.40</ning-async-http-client.version>
     <async-http-client.version>2.12.3</async-http-client.version>
     <httpclient.version>4.5.14</httpclient.version>
-    <okhttp.version>4.10.0</okhttp.version>
+    <okhttp.version>4.11.0</okhttp.version>
     <commons-io.version>2.11.0</commons-io.version>
     <wiremock.version>2.35.0</wiremock.version>
     <equalsverifier.version>3.14.1</equalsverifier.version>
