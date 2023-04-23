@@ -104,7 +104,7 @@
     <jetty11.version>11.0.13</jetty11.version>
 
     <tomcat8.version>8.5.83</tomcat8.version>
-    <tomcat9.version>9.0.70</tomcat9.version>
+    <tomcat9.version>9.0.74</tomcat9.version>
     <tomcat10.version>10.1.8</tomcat10.version>
 
     <junit.version>4.13.2</junit.version>
