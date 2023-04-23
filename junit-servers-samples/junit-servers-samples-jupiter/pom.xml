@@ -65,7 +65,7 @@
   <url>https://github.com/mjeanroy/junit-servers</url>
 
   <properties>
-    <spring.version>5.3.23</spring.version>
+    <spring.version>5.3.27</spring.version>
   </properties>
 
   <build>
