@@ -117,7 +117,7 @@
     <async-http-client.version>2.12.3</async-http-client.version>
     <httpclient.version>4.5.14</httpclient.version>
     <okhttp.version>4.11.0</okhttp.version>
-    <commons-io.version>2.11.0</commons-io.version>
+    <commons-io.version>2.12.0</commons-io.version>
     <wiremock.version>2.35.0</wiremock.version>
     <equalsverifier.version>3.14.1</equalsverifier.version>
     <slf4j.version>2.0.7</slf4j.version>
