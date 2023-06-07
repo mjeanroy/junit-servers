@@ -95,7 +95,7 @@
     <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
 
     <apache-rat-plugin.version>0.15</apache-rat-plugin.version>
-    <versions-maven-plugin.version>2.15.0</versions-maven-plugin.version>
+    <versions-maven-plugin.version>2.16.0</versions-maven-plugin.version>
 
     <java-module-name>com.github.mjeanroy.junit.servers</java-module-name>
 
