@@ -103,7 +103,7 @@
     <jetty10.version>10.0.15</jetty10.version>
     <jetty11.version>11.0.15</jetty11.version>
 
-    <tomcat8.version>8.5.88</tomcat8.version>
+    <tomcat8.version>10.1.10</tomcat8.version>
     <tomcat9.version>9.0.74</tomcat9.version>
     <tomcat10.version>10.1.8</tomcat10.version>
 
