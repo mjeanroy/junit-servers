@@ -112,7 +112,7 @@
     <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
     <mockito.version>4.11.0</mockito.version>
     <assertj.version>3.24.2</assertj.version>
-    <commons-lang3.version>3.13.0</commons-lang3.version>
+    <commons-lang3.version>3.14.0</commons-lang3.version>
     <ning-async-http-client.version>1.9.40</ning-async-http-client.version>
     <async-http-client.version>2.12.3</async-http-client.version>
     <httpclient.version>4.5.14</httpclient.version>
