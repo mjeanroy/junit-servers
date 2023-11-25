@@ -71,6 +71,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
+      <version>${spring5.version}</version>
       <optional>true</optional>
     </dependency>
   </dependencies>

@@ -27,9 +27,6 @@ package com.github.mjeanroy.junit.servers.jetty10;
 import com.github.mjeanroy.junit.servers.jetty.AbstractEmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import org.eclipse.jetty.webapp.MetaInfConfiguration;
-import org.eclipse.jetty.webapp.WebAppContext;
-
-import javax.servlet.ServletContext;
 
 import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 
@@ -55,18 +52,12 @@ public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfigurat
 	}
 
 	@Override
-	protected String containerJarPatternPropertyName() {
+	protected final String containerJarPatternPropertyName() {
 		return MetaInfConfiguration.CONTAINER_JAR_PATTERN;
 	}
 
 	@Override
-	protected String webInfJarPatternPropertyName() {
+	protected final String webInfJarPatternPropertyName() {
 		return MetaInfConfiguration.WEBINF_JAR_PATTERN;
-	}
-
-	@Override
-	public ServletContext getServletContext() {
-		WebAppContext webAppContext = getWebAppContext();
-		return webAppContext == null ? null : webAppContext.getServletContext();
 	}
 }

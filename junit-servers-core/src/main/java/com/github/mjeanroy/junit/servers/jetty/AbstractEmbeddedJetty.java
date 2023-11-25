@@ -24,19 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-import com.github.mjeanroy.junit.servers.commons.core.CompositeClassLoader;
-import com.github.mjeanroy.junit.servers.commons.core.Java;
-import com.github.mjeanroy.junit.servers.exceptions.ServerInitializationException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStartException;
-import com.github.mjeanroy.junit.servers.exceptions.ServerStopException;
-import com.github.mjeanroy.junit.servers.loggers.Logger;
-import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
-import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.util.resource.PathResource;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.FragmentConfiguration;
@@ -46,37 +34,15 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
-import java.io.File;
-
-import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
-import static org.eclipse.jetty.util.resource.Resource.newResource;
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * Jetty Embedded Server.mv
  */
 public abstract class AbstractEmbeddedJetty<
 	CONFIGURATION extends AbstractEmbeddedJettyConfiguration
-> extends AbstractEmbeddedServer<Server, CONFIGURATION> {
-
-	/**
-	 * Class Logger.
-	 */
-	private static final Logger log = LoggerFactory.getLogger(AbstractEmbeddedJetty.class);
-
-	/**
-	 * Instance of Jetty Server.
-	 */
-	private final Server server;
-
-	/**
-	 * Jetty Web App Context.
-	 */
-	private volatile WebAppContext webAppContext;
-
-	/**
-	 * Server Connector, lazily initialized.
-	 */
-	private volatile ServerConnector connector;
+> extends AbstractBaseEmbeddedJetty<WebAppContext, CONFIGURATION> {
 
 	/**
 	 * Build embedded jetty server.
@@ -85,196 +51,70 @@ public abstract class AbstractEmbeddedJetty<
 	 */
 	protected AbstractEmbeddedJetty(CONFIGURATION configuration) {
 		super(configuration);
-		this.server = initServer();
-	}
-
-	protected abstract String containerJarPatternPropertyName();
-
-	protected abstract String webInfJarPatternPropertyName();
-
-	private Server initServer() {
-		log.debug("Initialize jetty server");
-		Server server = new Server(configuration.getPort());
-		server.setStopAtShutdown(configuration.isStopAtShutdown());
-		server.setStopTimeout(configuration.getStopTimeout());
-		return server;
-	}
-
-	private WebAppContext initContext() {
-		try {
-			log.debug("Initialize jetty webapp context");
-			return createdWebAppContext();
-		}
-		catch (Exception ex) {
-			log.error(ex.getMessage(), ex);
-			throw new ServerInitializationException(ex);
-		}
 	}
 
 	@Override
-	public Server getDelegate() {
-		return server;
+	protected final WebAppContext newWebAppContext() {
+		return new WebAppContext();
 	}
 
 	@Override
-	protected void doStart() {
-		try {
-			log.debug("Initializing embedded jetty context");
-			webAppContext = initContext();
-
-			log.debug("Starting embedded jetty");
-			server.start();
-
-			log.debug("Looking for embedded jetty server connector");
-			connector = findConnector();
-		}
-		catch (Exception ex) {
-			log.error(ex.getMessage(), ex);
-			throw new ServerStartException(ex);
-		}
-	}
-
-	/**
-	 * Build web app context used to launch server.
-	 * May be override by subclasses.
-	 *
-	 * @throws Exception May be thrown by web app context initialization (will be wrapped later).
-	 */
-	private WebAppContext createdWebAppContext() throws Exception {
-		final String path = configuration.getPath();
-		final String webapp = configuration.getWebapp();
-		final String classpath = configuration.getClasspath();
-		final ClassLoader parentClassLoader = configuration.getParentClassLoader();
-		final String overrideDescriptor = configuration.getOverrideDescriptor();
-		final Resource baseResource = configuration.getBaseResource();
-		final String containerJarPattern = configuration.getContainerJarPattern();
-		final String webInfJarPattern = configuration.getWebInfJarPattern();
-
-		final WebAppContext ctx = new WebAppContext();
-
-		if (containerJarPattern != null) {
-			log.debug("Setting jetty 'containerJarPattern' attribute: {}", containerJarPattern);
-			ctx.setAttribute(containerJarPatternPropertyName(), containerJarPattern);
-		}
-		else if (Java.isPostJdk9()) {
-			// Fix to make TLD scanning works with Java >= 9
-			log.debug("Setting default jetty 'containerJarPattern' for JRE >= 9: {}");
-			ctx.setAttribute(containerJarPatternPropertyName(), ".*\\.jar");
-		}
-
-		if (webInfJarPattern != null) {
-			log.debug("Setting jetty 'WebInfJarPattern' attribute: {}", webInfJarPattern);
-			ctx.setAttribute(webInfJarPatternPropertyName(), webInfJarPattern);
-		}
-
-		final ClassLoader systemClassLoader = Thread.currentThread().getContextClassLoader();
-		final ClassLoader classLoader;
-
-		if (parentClassLoader != null) {
-			log.debug("Overriding jetty parent classloader");
-			classLoader = new CompositeClassLoader(parentClassLoader, systemClassLoader);
-		}
-		else {
-			log.debug("Using current thread classloader as jetty parent classloader");
-			classLoader = systemClassLoader;
-		}
-
-		log.debug("Set jetty classloader");
-		ctx.setClassLoader(classLoader);
-
-		log.debug("Set jetty context path to: {}", path);
-		ctx.setContextPath(path);
-
-		Resource actualBaseResource = baseResource;
-		if (actualBaseResource == null) {
-			log.debug("Initializing default jetty base resource from: {}", webapp);
-			actualBaseResource = newResource(webapp);
-		}
-
-		if (actualBaseResource != null) {
-			// use default base resource
-			log.debug("Initializing jetty base resource: {}", actualBaseResource);
-			ctx.setBaseResource(actualBaseResource);
-		}
-
-		if (overrideDescriptor != null) {
-			log.debug("Set jetty descriptor: {}", overrideDescriptor);
-			ctx.setOverrideDescriptor(overrideDescriptor);
-		}
-
-		log.debug("Initializing jetty configuration classes");
-		ctx.setConfigurations(new Configuration[] {
-			new WebInfConfiguration(),
-			new WebXmlConfiguration(),
-			new AnnotationConfiguration(),
-			new JettyWebXmlConfiguration(),
-			new MetaInfConfiguration(),
-			new FragmentConfiguration()
-		});
-
-		if (isNotBlank(classpath)) {
-			log.debug("Adding jetty container resource: {}", classpath);
-
-			// Fix to scan Spring WebApplicationInitializer
-			// This will add compiled classes to jetty classpath
-			// See: http://stackoverflow.com/questions/13222071/spring-3-1-webapplicationinitializer-embedded-jetty-8-annotationconfiguration
-			// And more precisely: http://stackoverflow.com/a/18449506/1215828
-			final File classes = new File(classpath);
-			final PathResource containerResources = new PathResource(classes.toURI());
-			ctx.getMetaData().addContainerResource(containerResources);
-		}
-
-		ctx.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", Boolean.toString(configuration.isDirAllowed()));
-		ctx.setParentLoaderPriority(true);
-		ctx.setWar(webapp);
-		ctx.setServer(server);
-
-		// Add server context
-		server.setHandler(ctx);
-
-		return ctx;
+	protected final void setOverrideDescriptor(WebAppContext webAppContext, String overrideDescriptor) {
+		webAppContext.setOverrideDescriptor(overrideDescriptor);
 	}
 
 	@Override
-	protected void doStop() {
-		try {
-			log.debug("Stopping embedded jettu");
-			server.stop();
-
-			log.debug("Clearing jetty webapp context");
-			webAppContext = null;
-
-			log.debug("Clearing jetty server connector");
-			connector = null;
-		}
-		catch (Exception ex) {
-			throw new ServerStopException(ex);
-		}
-	}
-
-	@Override
-	public String getScheme() {
-		return isStarted() ? server.getURI().getScheme() : super.getScheme();
-	}
-
-	@Override
-	protected int doGetPort() {
-		return connector.getLocalPort();
-	}
-
-	protected WebAppContext getWebAppContext() {
-		return webAppContext;
-	}
-
-	private ServerConnector findConnector() {
-		log.debug("Extracting jetty server connector");
-		for (Connector connector : server.getConnectors()) {
-			if (connector instanceof ServerConnector) {
-				return (ServerConnector) connector;
+	protected final void configure(WebAppContext webAppContext) {
+		webAppContext.setConfigurations(
+			new Configuration[] {
+				new WebInfConfiguration(),
+				new WebXmlConfiguration(),
+				new AnnotationConfiguration(),
+				new JettyWebXmlConfiguration(),
+				new MetaInfConfiguration(),
+				new FragmentConfiguration()
 			}
-		}
+		);
+	}
 
-		log.warn("Cannot find jetty server connector");
-		return null;
+	@Override
+	protected final void setParentLoaderPriority(WebAppContext webAppContext, boolean parentLoaderPriority) {
+		webAppContext.setParentLoaderPriority(parentLoaderPriority);
+	}
+
+	@Override
+	protected final void setWar(WebAppContext webAppContext, String war) {
+		webAppContext.setWar(war);
+	}
+
+	@Override
+	public final Object getServletContext() {
+		WebAppContext webAppContext = getWebAppContext();
+		return webAppContext == null ? null : webAppContext.getServletContext();
+	}
+
+	@Override
+	protected final void addContainerResources(WebAppContext webAppContext, Resource containerResources) {
+		webAppContext.getMetaData().addContainerResource(containerResources);
+	}
+
+	@Override
+	protected final void setAttribute(WebAppContext webAppContext, String name, String value) {
+		webAppContext.setAttribute(containerJarPatternPropertyName(), value);
+	}
+
+	@Override
+	protected final Resource newResource(WebAppContext webAppContext, String resource) throws IOException {
+		return Resource.newResource(resource);
+	}
+
+	@Override
+	protected final Resource newResource(WebAppContext webAppContext, URI resource) throws IOException {
+		return Resource.newResource(resource);
+	}
+
+	@Override
+	protected final void setInitParameter(WebAppContext webAppContext, String name, Object value) {
+		webAppContext.setInitParameter(name, String.valueOf(value));
 	}
 }

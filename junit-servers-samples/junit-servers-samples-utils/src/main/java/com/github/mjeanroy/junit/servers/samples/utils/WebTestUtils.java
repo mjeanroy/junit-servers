@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Static Web Utilities for various samples.
  */
-final class WebTestUtils {
+public final class WebTestUtils {
 
 	// Ensure non instantiation.
 	private WebTestUtils() {
@@ -42,7 +42,7 @@ final class WebTestUtils {
 	 *
 	 * @param client The HTTP client.
 	 */
-	static void ensureIndexIsOk(HttpClient client) {
+	public static void ensureIndexIsOk(HttpClient client) {
 		String message = client.prepareGet("/index").execute().body();
 		assertThat(message).isNotEmpty().contains("Hello World");
 	}
