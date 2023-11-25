@@ -43,11 +43,24 @@
     <profile>
       <id>java11</id>
       <activation>
-        <jdk>[11,)</jdk>
+        <jdk>[11,17)</jdk>
       </activation>
       <modules>
         <module>junit-servers-samples-jupiter-spring-jetty-9</module>
         <module>junit-servers-samples-jupiter-spring-jetty-10</module>
+        <module>junit-servers-samples-jupiter-spring-tomcat-8</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>java17</id>
+      <activation>
+        <jdk>[17,)</jdk>
+      </activation>
+      <modules>
+        <module>junit-servers-samples-jupiter-spring-jetty-9</module>
+        <module>junit-servers-samples-jupiter-spring-jetty-10</module>
+        <module>junit-servers-samples-jupiter-spring-jetty-12</module>
         <module>junit-servers-samples-jupiter-spring-tomcat-8</module>
       </modules>
     </profile>
@@ -63,10 +76,6 @@
   <name>junit-servers-samples-jupiter</name>
   <packaging>pom</packaging>
   <url>https://github.com/mjeanroy/junit-servers</url>
-
-  <properties>
-    <spring.version>5.3.27</spring.version>
-  </properties>
 
   <build>
     <plugins>

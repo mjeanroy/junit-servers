@@ -102,6 +102,7 @@
     <jetty9.version>9.4.53.v20231009</jetty9.version>
     <jetty10.version>10.0.18</jetty10.version>
     <jetty11.version>11.0.18</jetty11.version>
+    <jetty12.version>12.0.3</jetty12.version>
 
     <tomcat8.version>8.5.96</tomcat8.version>
     <tomcat9.version>9.0.83</tomcat9.version>
@@ -434,7 +435,7 @@
     <profile>
       <id>java11</id>
       <activation>
-        <jdk>[11,)</jdk>
+        <jdk>[11,17)</jdk>
       </activation>
       <modules>
         <module>junit-servers-testing</module>
@@ -443,6 +444,27 @@
         <module>junit-servers-jetty-9</module>
         <module>junit-servers-jetty-10</module>
         <module>junit-servers-jetty-11</module>
+        <module>junit-servers-tomcat</module>
+        <module>junit-servers-tomcat-8</module>
+        <module>junit-servers-tomcat-9</module>
+        <module>junit-servers-tomcat-10</module>
+        <module>junit-servers-samples</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>java17</id>
+      <activation>
+        <jdk>[17,)</jdk>
+      </activation>
+      <modules>
+        <module>junit-servers-testing</module>
+        <module>junit-servers-core</module>
+        <module>junit-servers-jetty</module>
+        <module>junit-servers-jetty-9</module>
+        <module>junit-servers-jetty-10</module>
+        <module>junit-servers-jetty-11</module>
+        <module>junit-servers-jetty-12</module>
         <module>junit-servers-tomcat</module>
         <module>junit-servers-tomcat-8</module>
         <module>junit-servers-tomcat-9</module>
