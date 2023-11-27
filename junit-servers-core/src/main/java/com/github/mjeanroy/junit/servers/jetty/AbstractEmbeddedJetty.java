@@ -185,14 +185,16 @@ public abstract class AbstractEmbeddedJetty<
 		log.debug("Set jetty context path to: {}", path);
 		ctx.setContextPath(path);
 
-		if (baseResource == null) {
-			// use default base resource
+		Resource actualBaseResource = baseResource;
+		if (actualBaseResource == null) {
 			log.debug("Initializing default jetty base resource from: {}", webapp);
-			ctx.setBaseResource(newResource(webapp));
+			actualBaseResource = newResource(webapp);
 		}
-		else {
-			log.debug("Initializing jetty base resource from: {}", baseResource);
-			ctx.setBaseResource(baseResource);
+
+		if (actualBaseResource != null) {
+			// use default base resource
+			log.debug("Initializing jetty base resource: {}", actualBaseResource);
+			ctx.setBaseResource(actualBaseResource);
 		}
 
 		if (overrideDescriptor != null) {
