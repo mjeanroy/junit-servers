@@ -19,6 +19,7 @@ target/
 .project
 bin-debug/
 bin-release/
+.factorypath
 
 ########################
 # Intellij files       #
