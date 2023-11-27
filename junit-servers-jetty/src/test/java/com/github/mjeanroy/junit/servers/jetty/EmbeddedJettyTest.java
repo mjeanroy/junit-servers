@@ -26,7 +26,6 @@ package com.github.mjeanroy.junit.servers.jetty;
 
 import com.github.mjeanroy.junit.servers.testing.HttpTestUtils.HttpResponse;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -35,6 +34,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.get;
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.localhost;
@@ -44,44 +44,38 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("deprecation")
 class EmbeddedJettyTest {
 
-	private volatile EmbeddedJetty jetty;
-
-	@AfterEach
-	void tearDown() {
-		jetty.stop();
-	}
-
 	@Test
 	void it_should_start_jetty() {
-		jetty = new EmbeddedJetty();
+		EmbeddedJetty jetty = new EmbeddedJetty();
 		assertThat(jetty.getScheme()).isEqualTo("http");
 		assertThat(jetty.getHost()).isEqualTo("localhost");
 		assertThat(jetty.getPath()).isEqualTo("/");
 
-		jetty.start();
-		assertThat(jetty.isStarted()).isTrue();
-		assertThat(jetty.getPort()).isNotZero();
-		assertThat(jetty.getUrl()).isEqualTo(localhost(jetty.getPort()));
+		doRun(jetty, () -> {
+			assertThat(jetty.isStarted()).isTrue();
+			assertThat(jetty.getPort()).isNotZero();
+			assertThat(jetty.getUrl()).isEqualTo(localhost(jetty.getPort()));
 
-		// Since there is no webapp deployed, we should get a 404
-		HttpResponse rsp = get(jetty.getUrl());
-		assertThat(rsp.getStatusCode()).isEqualTo(404);
-		assertThat(rsp.getResponseBody()).isNotEmpty();
+			// Since there is no webapp deployed, we should get a 404
+			HttpResponse rsp = get(jetty.getUrl());
+			assertThat(rsp.getStatusCode()).isEqualTo(404);
+			assertThat(rsp.getResponseBody()).isNotEmpty();
+		});
 	}
 
 	@Test
 	void it_should_stop_jetty() {
-		jetty = new EmbeddedJetty();
+		EmbeddedJetty jetty = new EmbeddedJetty();
 		assertThat(jetty.getScheme()).isEqualTo("http");
 		assertThat(jetty.getHost()).isEqualTo("localhost");
 		assertThat(jetty.getPath()).isEqualTo("/");
 
-		jetty.start();
-		assertThat(jetty.isStarted()).isTrue();
-		assertThat(jetty.getPort()).isNotZero();
-		assertThat(jetty.getUrl()).isEqualTo(localhost(jetty.getPort()));
+		doRun(jetty, () -> {
+			assertThat(jetty.isStarted()).isTrue();
+			assertThat(jetty.getPort()).isNotZero();
+			assertThat(jetty.getUrl()).isEqualTo(localhost(jetty.getPort()));
+		});
 
-		jetty.stop();
 		assertThat(jetty.isStarted()).isFalse();
 		assertThat(jetty.getPort()).isZero();
 		assertThat(jetty.getUrl()).isEqualTo(localhost(jetty.getPort()));
@@ -89,27 +83,28 @@ class EmbeddedJettyTest {
 
 	@Test
 	void it_should_get_configuration_port_until_jetty_is_started() {
-		jetty = new EmbeddedJetty();
+		EmbeddedJetty jetty = new EmbeddedJetty();
 		assertThat(jetty.getPort()).isZero();
 
-		jetty.start();
-		assertThat(jetty.getPort()).isNotZero();
+		doRun(jetty, () ->
+			assertThat(jetty.getPort()).isNotZero()
+		);
 
-		jetty.stop();
 		assertThat(jetty.getPort()).isZero();
 	}
 
 	@Test
 	void it_should_get_servlet_context() {
-		jetty = new EmbeddedJetty();
-		jetty.start();
-		assertThat(jetty.getServletContext()).isNotNull();
+		run((jetty) ->
+			assertThat(jetty.getServletContext()).isNotNull()
+		);
 	}
 
 	@Test
 	void it_should_get_original_jetty() {
-		jetty = new EmbeddedJetty();
-		assertThat(jetty.getDelegate()).isNotNull();
+		run((jetty) ->
+			assertThat(jetty.getDelegate()).isNotNull()
+		);
 	}
 
 	@Test
@@ -122,38 +117,57 @@ class EmbeddedJettyTest {
 		try (URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { url })) {
 			assertThat(urlClassLoader.getResource(name)).isNotNull();
 
-			jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
+			EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
 				.withWebapp(dir)
 				.withParentClasspath(url)
-				.build());
+				.build();
 
-			jetty.start();
+			run(configuration, (jetty) -> {
+				HttpResponse rsp = get(jetty.getUrl());
+				assertThat(rsp.getStatusCode()).isEqualTo(200);
+				assertThat(rsp.getResponseBody()).isNotEmpty();
 
-			HttpResponse rsp = get(jetty.getUrl());
-			assertThat(rsp.getStatusCode()).isEqualTo(200);
-			assertThat(rsp.getResponseBody()).isNotEmpty();
-
-			WebAppContext ctx = (WebAppContext) jetty.getDelegate().getHandler();
-			ClassLoader cl = ctx.getClassLoader();
-			assertThat(cl).isNotNull();
-			assertThat(cl.getResource("custom-web.xml")).isNotNull();
-			assertThat(cl.getResource(name)).isNotNull();
+				WebAppContext ctx = (WebAppContext) jetty.getDelegate().getHandler();
+				ClassLoader cl = ctx.getClassLoader();
+				assertThat(cl).isNotNull();
+				assertThat(cl.getResource("custom-web.xml")).isNotNull();
+				assertThat(cl.getResource(name)).isNotNull();
+			});
 		}
 	}
 
 	@Test
 	void it_should_override_web_xml() {
 		File customWebXml = getFileFromClasspath("/custom-web.xml");
-
-		jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
+		EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
 			.withWebapp(customWebXml.getParentFile())
 			.withOverrideDescriptor(customWebXml.getAbsolutePath())
-			.build());
+			.build();
 
+		run(configuration, (jetty) -> {
+			HttpResponse rsp = get(jetty.getUrl() + "hello");
+			assertThat(rsp.getStatusCode()).isEqualTo(200);
+			assertThat(rsp.getResponseBody()).isNotEmpty().contains("Hello World");
+		});
+	}
+
+	private static void run(Consumer<EmbeddedJetty> testFn) {
+		EmbeddedJetty jetty = new EmbeddedJetty();
+		doRun(jetty, () -> testFn.accept(jetty));
+	}
+
+	private static void run(EmbeddedJettyConfiguration configuration, Consumer<EmbeddedJetty> testFn) {
+		EmbeddedJetty jetty = new EmbeddedJetty(configuration);
+		doRun(jetty, () -> testFn.accept(jetty));
+	}
+
+	private static void doRun(EmbeddedJetty jetty, Runnable testFn) {
 		jetty.start();
 
-		HttpResponse rsp = get(jetty.getUrl() + "hello");
-		assertThat(rsp.getStatusCode()).isEqualTo(200);
-		assertThat(rsp.getResponseBody()).isNotEmpty().contains("Hello World");
+		try {
+			testFn.run();
+		} finally {
+			jetty.stop();
+		}
 	}
 }
