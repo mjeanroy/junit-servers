@@ -30,9 +30,7 @@ import com.github.mjeanroy.junit.servers.client.impl.AbstractHttpResponse;
 import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 import okhttp3.Headers;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

@@ -82,9 +82,10 @@ class HttpClientParameterResolverFunctionTest {
 
 		assertThat(result).isInstanceOf(HttpClient.class);
 
-		final HttpClient httpClient = (HttpClient) result;
-		assertThat(httpClient.getConfiguration()).isNotNull();
-		assertThat(httpClient.getConfiguration().isFollowRedirect()).isFalse();
+		try (HttpClient httpClient = (HttpClient) result) {
+			assertThat(httpClient.getConfiguration()).isNotNull();
+			assertThat(httpClient.getConfiguration().isFollowRedirect()).isFalse();
+		}
 	}
 
 	@Test
@@ -94,9 +95,10 @@ class HttpClientParameterResolverFunctionTest {
 
 		assertThat(result).isInstanceOf(HttpClient.class);
 
-		final HttpClient httpClient = (HttpClient) result;
-		assertThat(httpClient.getConfiguration()).isNotNull();
-		assertThat(httpClient.getConfiguration().isFollowRedirect()).isFalse();
+		try (HttpClient httpClient = (HttpClient) result) {
+			assertThat(httpClient.getConfiguration()).isNotNull();
+			assertThat(httpClient.getConfiguration().isFollowRedirect()).isFalse();
+		}
 	}
 
 	private ParameterContext extractParameterContext(String methodName) throws Exception {
