@@ -32,7 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathFile;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getFileFromClasspath;
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.toUtf8String;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -147,7 +147,7 @@ class HttpRequestBodyMultipartTest {
 	void it_should_serialize_multipart_body_with_a_file() throws Exception {
 		final String contentType = "multipart/form-data";
 		final String boundaries = "123456789";
-		final File file = classpathFile("/file1.txt");
+		final File file = getFileFromClasspath("/file1.txt");
 		final List<HttpRequestBodyPart> parts = asList(
 			givenHttpRequestBodyPart("param", HttpRequestBodyString.of("HttpRequestBody", TEXT_PLAIN)),
 			givenHttpRequestBodyPart("file", HttpRequestBodyFile.of(file))

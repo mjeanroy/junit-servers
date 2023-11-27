@@ -29,7 +29,7 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.url;
+import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.url;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

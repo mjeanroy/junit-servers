@@ -30,8 +30,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathFile;
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathPath;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getFileFromClasspath;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getPathFromClasspath;
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.toUtf8String;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;
@@ -77,7 +77,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_and_guess_content_type() throws Exception {
-		final File file = classpathFile("/file1.txt");
+		final File file = getFileFromClasspath("/file1.txt");
 		final HttpRequestBody body = HttpRequestBodies.fileBody(file);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("text/plain");
@@ -88,7 +88,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_with_content_type() throws Exception {
-		final File file = classpathFile("/file1.txt");
+		final File file = getFileFromClasspath("/file1.txt");
 		final String contentType = "text/plain";
 		final HttpRequestBody body = HttpRequestBodies.fileBody(file, contentType);
 		assertThat(body).isNotNull();
@@ -100,7 +100,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_from_path_and_guess_content_type() throws Exception {
-		final Path path = classpathPath("/file1.txt");
+		final Path path = getPathFromClasspath("/file1.txt");
 		final HttpRequestBody body = HttpRequestBodies.fileBody(path);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("text/plain");
@@ -111,7 +111,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_from_path_with_content_type() throws Exception {
-		final Path path = classpathPath("/file1.txt");
+		final Path path = getPathFromClasspath("/file1.txt");
 		final String contentType = "text/plain";
 		final HttpRequestBody body = HttpRequestBodies.fileBody(path, contentType);
 		assertThat(body).isNotNull();
@@ -123,7 +123,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_with_jpeg_content_type() throws Exception {
-		final File file = classpathFile("/img1.jpg");
+		final File file = getFileFromClasspath("/img1.jpg");
 		final HttpRequestBody body = HttpRequestBodies.jpeg(file);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("image/jpeg");
@@ -132,7 +132,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_with_png_content_type() throws Exception {
-		final File file = classpathFile("/img2.png");
+		final File file = getFileFromClasspath("/img2.png");
 		final HttpRequestBody body = HttpRequestBodies.png(file);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("image/png");
@@ -141,7 +141,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_from_path_with_png_content_type() throws Exception {
-		final Path path = classpathPath("/img2.png");
+		final Path path = getPathFromClasspath("/img2.png");
 		final HttpRequestBody body = HttpRequestBodies.png(path);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("image/png");
@@ -151,7 +151,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_with_pdf_content_type() throws Exception {
-		final File file = classpathFile("/file1.pdf");
+		final File file = getFileFromClasspath("/file1.pdf");
 		final HttpRequestBody body = HttpRequestBodies.pdf(file);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("application/pdf");
@@ -160,7 +160,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_from_path_with_pdf_content_type() throws Exception {
-		final Path path = classpathPath("/file1.pdf");
+		final Path path = getPathFromClasspath("/file1.pdf");
 		final HttpRequestBody body = HttpRequestBodies.pdf(path);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("application/pdf");

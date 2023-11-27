@@ -30,8 +30,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Path;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathFile;
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathPath;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getFileFromClasspath;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getPathFromClasspath;
 import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.toUtf8String;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,7 +39,7 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_create_body_file_from_file_and_guess_content_type() {
-		final File file = classpathFile("/file1.txt");
+		final File file = getFileFromClasspath("/file1.txt");
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(file);
 
 		assertThat(bodyFile).isNotNull();
@@ -50,7 +50,7 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_create_body_file_from_file_with_content_type() {
-		final File file = classpathFile("/file1.txt");
+		final File file = getFileFromClasspath("/file1.txt");
 		final String contentType = "text/plain";
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(file, contentType);
 
@@ -62,7 +62,7 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_create_body_file_from_path_and_guess_content_type() {
-		final Path path = classpathPath("/file1.txt");
+		final Path path = getPathFromClasspath("/file1.txt");
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
 
 		assertThat(bodyFile).isNotNull();
@@ -73,7 +73,7 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_create_body_file_from_path_with_content_type() {
-		final Path path = classpathPath("/file1.txt");
+		final Path path = getPathFromClasspath("/file1.txt");
 		final String contentType = "text/plain";
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path, contentType);
 
@@ -85,7 +85,7 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_serialize_body() throws Exception {
-		final Path path = classpathPath("/file1.txt");
+		final Path path = getPathFromClasspath("/file1.txt");
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
 
 		assertThat(toUtf8String(bodyFile.getBody())).isEqualToIgnoringNewLines(
@@ -95,7 +95,7 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final Path path = classpathPath("/file1.txt");
+		final Path path = getPathFromClasspath("/file1.txt");
 		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
 		assertThat(bodyFile).hasToString(
 			"HttpRequestBodyFile{" +

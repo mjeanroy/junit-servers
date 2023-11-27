@@ -420,6 +420,7 @@
         <jdk>[,11)</jdk>
       </activation>
       <modules>
+        <module>junit-servers-testing</module>
         <module>junit-servers-core</module>
         <module>junit-servers-jetty</module>
         <module>junit-servers-jetty-9</module>
@@ -436,6 +437,7 @@
         <jdk>[11,)</jdk>
       </activation>
       <modules>
+        <module>junit-servers-testing</module>
         <module>junit-servers-core</module>
         <module>junit-servers-jetty</module>
         <module>junit-servers-jetty-9</module>

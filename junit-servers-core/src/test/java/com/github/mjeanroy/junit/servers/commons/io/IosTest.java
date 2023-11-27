@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathPath;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getPathFromClasspath;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class IosTest {
@@ -58,7 +58,7 @@ class IosTest {
 
 	@Test
 	void it_should_serialize_file_to_byte_array() throws Exception {
-		final Path path = classpathPath("/file1.txt");
+		final Path path = getPathFromClasspath("/file1.txt");
 		final byte[] output = Ios.toBytes(path);
 		final String strOutput = new String(output, StandardCharsets.UTF_8);
 		assertThat(strOutput).isEqualToIgnoringNewLines("Content of file1.txt");
@@ -67,9 +67,9 @@ class IosTest {
 	@Test
 	void it_should_guess_content_type_files() {
 		assertThat(Ios.guessContentType(null)).isNull();
-		assertThat(Ios.guessContentType(classpathPath("/file1.txt"))).isEqualTo("text/plain");
-		assertThat(Ios.guessContentType(classpathPath("/img1.jpg"))).isEqualTo("image/jpeg");
-		assertThat(Ios.guessContentType(classpathPath("/img2.png"))).isEqualTo("image/png");
-		assertThat(Ios.guessContentType(classpathPath("/file1.pdf"))).isEqualTo("application/pdf");
+		assertThat(Ios.guessContentType(getPathFromClasspath("/file1.txt"))).isEqualTo("text/plain");
+		assertThat(Ios.guessContentType(getPathFromClasspath("/img1.jpg"))).isEqualTo("image/jpeg");
+		assertThat(Ios.guessContentType(getPathFromClasspath("/img2.png"))).isEqualTo("image/png");
+		assertThat(Ios.guessContentType(getPathFromClasspath("/file1.pdf"))).isEqualTo("application/pdf");
 	}
 }

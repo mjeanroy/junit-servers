@@ -106,9 +106,9 @@ import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stub
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stubPostRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stubPutRequest;
 import static com.github.mjeanroy.junit.servers.client.it.WireMockTestUtils.stubUploadRequest;
+import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.url;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getFileFromClasspath;
 import static com.github.mjeanroy.junit.servers.utils.commons.Pair.pair;
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathFile;
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.url;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
@@ -563,7 +563,7 @@ public abstract class BaseHttpClientTest {
 	void testUploadWithMultipartRequest() {
 		final String endpoint = ENDPOINT;
 		final int status = 201;
-		final File file = classpathFile("/img1.jpg");
+		final File file = getFileFromClasspath("/img1.jpg");
 
 		stubUploadRequest(endpoint, status);
 

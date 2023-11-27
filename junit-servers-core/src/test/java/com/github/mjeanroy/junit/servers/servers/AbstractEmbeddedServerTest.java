@@ -35,7 +35,7 @@ import java.util.concurrent.CountDownLatch;
 
 import static com.github.mjeanroy.junit.servers.servers.FakeWorker.startWorker;
 import static com.github.mjeanroy.junit.servers.servers.FakeWorker.stopWorker;
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
+import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.localhost;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -320,19 +320,19 @@ class AbstractEmbeddedServerTest {
 
 	@Test
 	void it_should_get_url() {
-		assertThat(server.getUrl()).isEqualTo(localUrl(0));
+		assertThat(server.getUrl()).isEqualTo(localhost(0));
 	}
 
 	@Test
 	void it_should_get_url_with_custom_path() {
 		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder().withPath("/foo").build());
-		assertThat(server.getUrl()).isEqualTo(localUrl(server.getPort(), "/foo"));
+		assertThat(server.getUrl()).isEqualTo(localhost(server.getPort(), "/foo"));
 	}
 
 	@Test
 	void it_should_get_url_with_custom_path_pre_pending_slash() {
 		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder().withPath("foo").build());
-		assertThat(server.getUrl()).isEqualTo(localUrl(0, "/foo"));
+		assertThat(server.getUrl()).isEqualTo(localhost(0, "/foo"));
 	}
 
 	@Test
@@ -341,7 +341,7 @@ class AbstractEmbeddedServerTest {
 		final FakeEmbeddedServer server = new FakeEmbeddedServer(configuration);
 		final String url = server.getUrl();
 
-		assertThat(url).isEqualTo(localUrl(server.getPort(), "/foo bar"));
+		assertThat(url).isEqualTo(localhost(server.getPort(), "/foo bar"));
 	}
 
 	@Test

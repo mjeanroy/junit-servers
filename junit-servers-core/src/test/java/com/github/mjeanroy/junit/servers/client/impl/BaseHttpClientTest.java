@@ -33,9 +33,9 @@ import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilde
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.localhost;
+import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.url;
 import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.localUrl;
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.url;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -98,7 +98,9 @@ public abstract class BaseHttpClientTest {
 		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
 		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
 		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path + endpoint);
-		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, path + endpoint));
+		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(
+			url(scheme, host, port, path + endpoint)
+		);
 	}
 
 	@Test
@@ -177,7 +179,7 @@ public abstract class BaseHttpClientTest {
 		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
 		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
 		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path);
-		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(localUrl(port));
+		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(localhost(port));
 	}
 
 	@Test

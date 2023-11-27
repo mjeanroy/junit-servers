@@ -30,8 +30,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Path;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathFile;
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathPath;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getFileFromClasspath;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getPathFromClasspath;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -55,7 +55,7 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_create_part_from_file_and_guess_content_type() {
-		final File file = classpathFile("/file1.txt");
+		final File file = getFileFromClasspath("/file1.txt");
 		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(file).build();
 
 		assertThat(part).isNotNull();
@@ -69,7 +69,7 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_create_part_from_path_and_guess_content_type() {
-		final Path path = classpathPath("/file1.txt");
+		final Path path = getPathFromClasspath("/file1.txt");
 		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(path).build();
 
 		assertThat(part).isNotNull();

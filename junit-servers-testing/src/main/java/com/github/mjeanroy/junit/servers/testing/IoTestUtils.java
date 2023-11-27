@@ -22,61 +22,43 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils.commons;
+package com.github.mjeanroy.junit.servers.testing;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.net.URL;
+import java.nio.file.Path;
 
 /**
- * Static Test Utilities.
+ * Static IO Utilities, used only for testing.
  */
-public final class TestUtils {
+public final class IoTestUtils {
 
-	// Ensure non instantiation.
-	private TestUtils() {
+	private IoTestUtils() {
 	}
 
 	/**
-	 * URL encode string value.
-	 * @param value String value.
-	 * @return URL encoded value.
-	 * @see URLEncoder#encode(String, String)
-	 */
-	public static String urlEncode(String value) {
-		try {
-			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
-		}
-		catch (UnsupportedEncodingException ex) {
-			throw new AssertionError(ex);
-		}
-	}
-
-	/**
-	 * Translate array of bytes to a string using UTF-8 encoding.
+	 * Get file from classpath.
 	 *
-	 * @param bytes Array of bytes.
-	 * @return The result string.
+	 * @param resourceName Resource name.
+	 * @return The file.
 	 */
-	public static String toUtf8String(byte[] bytes) {
-		return new String(bytes, StandardCharsets.UTF_8);
+	public static File getFileFromClasspath(String resourceName) {
+		URL resource = IoTestUtils.class.getResource(resourceName);
+		if (resource == null) {
+			throw new AssertionError("Cannot find resource: " + resourceName);
+		}
+
+		String file = resource.getFile();
+		return new File(file);
 	}
 
 	/**
-	 * Read given file to an array of bytes.
+	 * Get path instance from classpath.
 	 *
-	 * @param file The file to read.
-	 * @return The result.
+	 * @param resourceName Resource name.
+	 * @return The file.
 	 */
-	public static byte[] readFile(File file) {
-		try {
-			return Files.readAllBytes(file.toPath());
-		}
-		catch (IOException ex) {
-			throw new AssertionError(ex);
-		}
+	public static Path getPathFromClasspath(String resourceName) {
+		return getFileFromClasspath(resourceName).toPath();
 	}
 }

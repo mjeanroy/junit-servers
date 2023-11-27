@@ -31,8 +31,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Path;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathFile;
-import static com.github.mjeanroy.junit.servers.utils.commons.TestUtils.classpathPath;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getFileFromClasspath;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getPathFromClasspath;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -110,7 +110,7 @@ class HttpRequestBodyMultipartBuilderTest {
 	void it_should_build_multipart_body_with_given_file() {
 		final String name = "file";
 		final String filename = "file1.txt";
-		final File file = classpathFile("/" + filename);
+		final File file = getFileFromClasspath("/" + filename);
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().addFormDataPart(file, name).build();
 
 		verifyMultipartBody(requestBody, name, filename);
@@ -119,7 +119,7 @@ class HttpRequestBodyMultipartBuilderTest {
 	@Test
 	void it_should_build_multipart_body_with_given_file_and_custom_file_name() {
 		final String name = "file";
-		final File file = classpathFile("/file1.txt");
+		final File file = getFileFromClasspath("/file1.txt");
 		final String filename = "foo.txt";
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().addFormDataPart(file, name, filename).build();
 
@@ -130,7 +130,7 @@ class HttpRequestBodyMultipartBuilderTest {
 	void it_should_build_multipart_body_with_given_path() {
 		final String name = "path";
 		final String filename = "file1.txt";
-		final Path path = classpathPath("/" + filename);
+		final Path path = getPathFromClasspath("/" + filename);
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().addFormDataPart(path, name).build();
 
 		verifyMultipartBody(requestBody, name, filename);
@@ -139,7 +139,7 @@ class HttpRequestBodyMultipartBuilderTest {
 	@Test
 	void it_should_build_multipart_body_with_given_path_and_custom_file_name() {
 		final String name = "path";
-		final Path path = classpathPath("/file1.txt");
+		final Path path = getPathFromClasspath("/file1.txt");
 		final String filename = "foo.txt";
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().addFormDataPart(path, name, filename).build();
 
@@ -169,7 +169,7 @@ class HttpRequestBodyMultipartBuilderTest {
 	void it_should_build_multipart_body_with_given_body_file() {
 		final String name = "name";
 		final String filename = "file1.txt";
-		final File file = classpathFile("/" + filename);
+		final File file = getFileFromClasspath("/" + filename);
 		final HttpRequestBodyFile partBody = HttpRequestBodyFile.of(file);
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().addFormDataPart(partBody, name).build();
 
@@ -180,7 +180,7 @@ class HttpRequestBodyMultipartBuilderTest {
 	void it_should_build_multipart_body_with_given_body_file_and_custom_filename() {
 		final String name = "name";
 		final String filename = "foo.txt";
-		final File file = classpathFile("/file1.txt");
+		final File file = getFileFromClasspath("/file1.txt");
 		final HttpRequestBodyFile partBody = HttpRequestBodyFile.of(file);
 		final HttpRequestBody requestBody = new HttpRequestBodyMultipartBuilder().addFormDataPart(partBody, name, filename).build();
 
