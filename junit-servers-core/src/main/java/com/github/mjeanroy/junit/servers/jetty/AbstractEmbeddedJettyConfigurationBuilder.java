@@ -77,9 +77,16 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 */
 	private String webInfJarPattern;
 
+	/**
+	 * If true, directory listings are returned if no welcome file is found.
+	 * Else 403 Forbidden.
+	 */
+	private boolean dirAllowed;
+
 	protected AbstractEmbeddedJettyConfigurationBuilder() {
 		stopTimeout = DEFAULT_STOP_TIMEOUT;
 		stopAtShutdown = DEFAULT_STOP_AT_SHUTDOWN;
+		dirAllowed = true;
 	}
 
 	/**
@@ -125,6 +132,15 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 */
 	public String getWebInfJarPattern() {
 		return webInfJarPattern;
+	}
+
+	/**
+	 * Get current {@link #dirAllowed} value.
+	 *
+	 * @return {@link #dirAllowed}
+	 */
+	public boolean isDirAllowed() {
+		return dirAllowed;
 	}
 
 	/**
@@ -196,6 +212,17 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 */
 	public SELF withWebInfJarPattern(String webInfJarPattern) {
 		this.webInfJarPattern = webInfJarPattern;
+		return self();
+	}
+
+	/**
+	 * Change {@link #dirAllowed} value.
+	 *
+	 * @param dirAllowed Directory listing flag.
+	 * @return this
+	 */
+	public SELF withDirAllowed(boolean dirAllowed) {
+		this.dirAllowed = dirAllowed;
 		return self();
 	}
 }

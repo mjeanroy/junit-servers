@@ -74,6 +74,12 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	 */
 	private final String webInfJarPattern;
 
+	/**
+	 * If true, directory listings are returned if no welcome file is found.
+	 * Else 403 Forbidden.
+	 */
+	private final boolean dirAllowed;
+
 	AbstractEmbeddedJettyConfiguration(
 			AbstractEmbeddedJettyConfigurationBuilder<?, ?> builder
 	) {
@@ -93,6 +99,7 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 		this.baseResource = builder.getBaseResource();
 		this.containerJarPattern = builder.getContainerJarPattern();
 		this.webInfJarPattern = builder.getWebInfJarPattern();
+		this.dirAllowed = builder.isDirAllowed();
 	}
 
 	/**
@@ -140,6 +147,15 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 		return webInfJarPattern;
 	}
 
+	/**
+	 * Get {@link #dirAllowed}
+	 *
+	 * @return {@link #dirAllowed}
+	 */
+	public boolean isDirAllowed() {
+		return dirAllowed;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this) {
@@ -154,7 +170,8 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 				&& Objects.equals(stopAtShutdown, c.stopAtShutdown)
 				&& Objects.equals(baseResource, c.baseResource)
 				&& Objects.equals(containerJarPattern, c.containerJarPattern)
-				&& Objects.equals(webInfJarPattern, c.webInfJarPattern);
+				&& Objects.equals(webInfJarPattern, c.webInfJarPattern)
+				&& Objects.equals(dirAllowed, c.dirAllowed);
 		}
 
 		return false;
@@ -163,12 +180,13 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	@Override
 	public int hashCode() {
 		return Objects.hash(
-				super.hashCode(),
-				stopTimeout,
-				stopAtShutdown,
-				baseResource,
-				containerJarPattern,
-				webInfJarPattern
+			super.hashCode(),
+			stopTimeout,
+			stopAtShutdown,
+			baseResource,
+			containerJarPattern,
+			webInfJarPattern,
+			dirAllowed
 		);
 	}
 
@@ -186,6 +204,7 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 			.append("baseResource", baseResource)
 			.append("containerJarPattern", containerJarPattern)
 			.append("webInfJarPattern", webInfJarPattern)
+			.append("dirAllowed", dirAllowed)
 			.build();
 	}
 }

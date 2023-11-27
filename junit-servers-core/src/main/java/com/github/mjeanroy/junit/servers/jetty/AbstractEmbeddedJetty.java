@@ -224,6 +224,7 @@ public abstract class AbstractEmbeddedJetty<
 			ctx.getMetaData().addContainerResource(containerResources);
 		}
 
+		ctx.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", Boolean.toString(configuration.isDirAllowed()));
 		ctx.setParentLoaderPriority(true);
 		ctx.setWar(webapp);
 		ctx.setServer(server);

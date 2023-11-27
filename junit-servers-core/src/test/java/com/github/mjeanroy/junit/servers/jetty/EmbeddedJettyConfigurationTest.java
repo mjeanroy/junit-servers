@@ -45,6 +45,7 @@ class EmbeddedJettyConfigurationTest {
 		assertThat(result.getPath()).isEqualTo("/");
 		assertThat(result.getClasspath()).isEqualTo(".");
 		assertThat(result.getWebapp()).isEqualTo("src/main/webapp");
+		assertThat(result.isDirAllowed()).isTrue();
 	}
 
 	@Test
@@ -57,6 +58,7 @@ class EmbeddedJettyConfigurationTest {
 		final Resource resource = mock(Resource.class);
 		final String containerJarPattern = ".*\\.jar";
 		final String webInfJarPattern = ".*";
+		final boolean dirAllowed = false;
 
 		final EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.builder()
 			.withPort(port)
@@ -68,6 +70,7 @@ class EmbeddedJettyConfigurationTest {
 			.withBaseResource(resource)
 			.withContainerJarPattern(containerJarPattern)
 			.withWebInfJarPattern(webInfJarPattern)
+			.withDirAllowed(dirAllowed)
 			.build();
 
 		assertThat(result.getPort()).isEqualTo(port);
@@ -79,6 +82,7 @@ class EmbeddedJettyConfigurationTest {
 		assertThat(result.getBaseResource()).isSameAs(resource);
 		assertThat(result.getContainerJarPattern()).isEqualTo(containerJarPattern);
 		assertThat(result.getWebInfJarPattern()).isEqualTo(webInfJarPattern);
+		assertThat(result.isDirAllowed()).isEqualTo(dirAllowed);
 	}
 
 	@Test
@@ -107,7 +111,8 @@ class EmbeddedJettyConfigurationTest {
 				"stopAtShutdown: true, " +
 				"baseResource: null, " +
 				"containerJarPattern: null, " +
-				"webInfJarPattern: null" +
+				"webInfJarPattern: null, " +
+				"dirAllowed: true" +
 			"}"
 		);
 	}

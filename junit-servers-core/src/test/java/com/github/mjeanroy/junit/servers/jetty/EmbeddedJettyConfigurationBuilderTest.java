@@ -129,4 +129,12 @@ class EmbeddedJettyConfigurationBuilderTest {
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isStopAtShutdown()).isFalse();
 	}
+
+	@Test
+	void it_should_disallow_dir_listing() {
+		final EmbeddedJettyConfiguration.Builder result = builder.withDirAllowed(false);
+
+		assertThat(result).isSameAs(builder);
+		assertThat(result.isDirAllowed()).isFalse();
+	}
 }
