@@ -28,13 +28,13 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -52,7 +52,7 @@ class EmbeddedJettyTest {
 	}
 
 	@Test
-	void it_should_start_jetty() {
+	void it_should_start_jetty() throws Exception {
 		jetty = new EmbeddedJetty();
 		assertThat(jetty.getScheme()).isEqualTo("http");
 		assertThat(jetty.getHost()).isEqualTo("localhost");
@@ -62,6 +62,11 @@ class EmbeddedJettyTest {
 		assertThat(jetty.isStarted()).isTrue();
 		assertThat(jetty.getPort()).isNotZero();
 		assertThat(jetty.getUrl()).isEqualTo(localUrl(jetty.getPort()));
+
+		// Since there is no webapp deployed, we should get a 404
+		HttpResponse rsp = get(jetty.getUrl());
+		assertThat(rsp.statusCode).isEqualTo(404);
+		assertThat(rsp.responseBody).isNotEmpty();
 	}
 
 	@Test
@@ -124,9 +129,12 @@ class EmbeddedJettyTest {
 
 			jetty.start();
 
+			HttpResponse rsp = get(jetty.getUrl());
+			assertThat(rsp.statusCode).isEqualTo(200);
+			assertThat(rsp.responseBody).isNotEmpty();
+
 			WebAppContext ctx = (WebAppContext) jetty.getDelegate().getHandler();
 			ClassLoader cl = ctx.getClassLoader();
-
 			assertThat(cl).isNotNull();
 			assertThat(cl.getResource("custom-web.xml")).isNotNull();
 			assertThat(cl.getResource(name)).isNotNull();
@@ -135,31 +143,52 @@ class EmbeddedJettyTest {
 
 	@Test
 	void it_should_override_web_xml() throws Exception {
-		final URL resource = getClass().getResource("/custom-web.xml");
-		final String webXmlPath = resource.getFile();
-		final File descriptor = new File(webXmlPath);
+		File customWebXml = getCustomWebXml();
 
 		jetty = new EmbeddedJetty(EmbeddedJettyConfiguration.builder()
-			.withWebapp(descriptor.getParentFile())
-			.withOverrideDescriptor(descriptor.getAbsolutePath())
+			.withWebapp(customWebXml.getParentFile())
+			.withOverrideDescriptor(customWebXml.getAbsolutePath())
 			.build());
 
 		jetty.start();
 
-		String url = jetty.getUrl() + "hello";
+		HttpResponse rsp = get(jetty.getUrl() + "hello");
+		assertThat(rsp.statusCode).isEqualTo(200);
+		assertThat(rsp.responseBody).isNotEmpty().contains("Hello World");
+	}
+
+	private static File getCustomWebXml() {
+		String resourceName = "/custom-web.xml";
+		URL resource = EmbeddedJettyTest.class.getResource("/custom-web.xml");
+		if (resource == null) {
+			throw new AssertionError("Cannot find resource: " + resourceName);
+		}
+
+		String webXmlPath = resource.getFile();
+		return new File(webXmlPath);
+	}
+
+	private static HttpResponse get(String url) throws IOException {
 		OkHttpClient client = new OkHttpClient();
 		Request rq = new Request.Builder().url(url).build();
-		Response rsp = client.newCall(rq).execute();
-
-		assertThat(rsp).isNotNull();
-		assertThat(rsp.code()).isEqualTo(200);
-
-		ResponseBody body = rsp.body();
-		String content = body == null ? null : body.string();
-		assertThat(content).isNotEmpty().contains("Hello World");
+		try (Response rsp = client.newCall(rq).execute()) {
+			int statusCode = rsp.code();
+			String responseBody = rsp.body() == null ? null : rsp.body().string();
+			return new HttpResponse(statusCode, responseBody);
+		}
 	}
 
 	private static String localUrl(int port) {
 		return "http://localhost:" + port + "/";
+	}
+
+	private static final class HttpResponse {
+		private final int statusCode;
+		private final String responseBody;
+
+		private HttpResponse(int statusCode, String responseBody) {
+			this.statusCode = statusCode;
+			this.responseBody = responseBody;
+		}
 	}
 }
