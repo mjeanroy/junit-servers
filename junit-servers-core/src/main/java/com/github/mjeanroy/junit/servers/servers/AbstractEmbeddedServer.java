@@ -172,25 +172,29 @@ public abstract class AbstractEmbeddedServer<
 
 	/**
 	 * Reset custom environment properties.
+	 *
 	 * Initial values stored in {@link #oldProperties} will be restored
-	 * or clear.
+	 * or cleared.
 	 */
 	private void destroyEnvironment() {
 		log.debug("Resetting environment properties");
 		for (Map.Entry<String, String> property : configuration.getEnvProperties().entrySet()) {
-			String name = property.getKey();
+			resetSystemProperty(property.getKey());
+		}
+	}
 
-			String oldValue = oldProperties.get(name);
-			oldProperties.remove(name);
+	private void resetSystemProperty(String name) {
+		updateSystemPropery(name, oldProperties.remove(name));
+	}
 
-			if (oldValue == null) {
-				log.trace("Clear environment property: {}", name);
-				System.clearProperty(name);
-			}
-			else {
-				log.trace("Setting environment property: {}", name);
-				System.setProperty(name, oldValue);
-			}
+	private static void updateSystemPropery(String name, String value) {
+		if (value == null) {
+			log.trace("Clear environment property: {}", name);
+			System.clearProperty(name);
+		}
+		else {
+			log.trace("Setting environment property: {}", name);
+			System.setProperty(name, value);
 		}
 	}
 
