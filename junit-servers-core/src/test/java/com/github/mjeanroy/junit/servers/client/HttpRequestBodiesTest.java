@@ -41,8 +41,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_request_body() throws Exception {
-		final String rawBody = "{}";
-		final HttpRequestBody body = HttpRequestBodies.requestBody(rawBody);
+		String rawBody = "{}";
+		HttpRequestBody body = HttpRequestBodies.requestBody(rawBody);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isNull();
 		assertThat(toUtf8String(body.getBody())).isEqualTo(rawBody);
@@ -50,8 +50,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_json_raw_body() throws Exception {
-		final String rawBody = "{}";
-		final HttpRequestBody body = HttpRequestBodies.jsonBody(rawBody);
+		String rawBody = "{}";
+		HttpRequestBody body = HttpRequestBodies.jsonBody(rawBody);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("application/json");
 		assertThat(toUtf8String(body.getBody())).isEqualTo(rawBody);
@@ -59,8 +59,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_xml_raw_body() throws Exception {
-		final String rawBody = "<person></person>";
-		final HttpRequestBody body = HttpRequestBodies.xmlBody(rawBody);
+		String rawBody = "<person></person>";
+		HttpRequestBody body = HttpRequestBodies.xmlBody(rawBody);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("application/xml");
 		assertThat(toUtf8String(body.getBody())).isEqualTo(rawBody);
@@ -68,8 +68,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_text_raw_body() throws Exception {
-		final String rawBody = "test";
-		final HttpRequestBody body = HttpRequestBodies.textBody(rawBody);
+		String rawBody = "test";
+		HttpRequestBody body = HttpRequestBodies.textBody(rawBody);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("text/plain");
 		assertThat(toUtf8String(body.getBody())).isEqualTo(rawBody);
@@ -77,8 +77,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_and_guess_content_type() throws Exception {
-		final File file = getFileFromClasspath("/file1.txt");
-		final HttpRequestBody body = HttpRequestBodies.fileBody(file);
+		File file = getFileFromClasspath("/file1.txt");
+		HttpRequestBody body = HttpRequestBodies.fileBody(file);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("text/plain");
 		assertThat(toUtf8String(body.getBody())).isEqualToIgnoringNewLines(
@@ -88,9 +88,9 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_with_content_type() throws Exception {
-		final File file = getFileFromClasspath("/file1.txt");
-		final String contentType = "text/plain";
-		final HttpRequestBody body = HttpRequestBodies.fileBody(file, contentType);
+		File file = getFileFromClasspath("/file1.txt");
+		String contentType = "text/plain";
+		HttpRequestBody body = HttpRequestBodies.fileBody(file, contentType);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo(contentType);
 		assertThat(toUtf8String(body.getBody())).isEqualToIgnoringNewLines(
@@ -100,8 +100,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_from_path_and_guess_content_type() throws Exception {
-		final Path path = getPathFromClasspath("/file1.txt");
-		final HttpRequestBody body = HttpRequestBodies.fileBody(path);
+		Path path = getPathFromClasspath("/file1.txt");
+		HttpRequestBody body = HttpRequestBodies.fileBody(path);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("text/plain");
 		assertThat(toUtf8String(body.getBody())).isEqualToIgnoringNewLines(
@@ -111,9 +111,9 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_from_path_with_content_type() throws Exception {
-		final Path path = getPathFromClasspath("/file1.txt");
-		final String contentType = "text/plain";
-		final HttpRequestBody body = HttpRequestBodies.fileBody(path, contentType);
+		Path path = getPathFromClasspath("/file1.txt");
+		String contentType = "text/plain";
+		HttpRequestBody body = HttpRequestBodies.fileBody(path, contentType);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo(contentType);
 		assertThat(toUtf8String(body.getBody())).isEqualToIgnoringNewLines(
@@ -123,8 +123,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_with_jpeg_content_type() throws Exception {
-		final File file = getFileFromClasspath("/img1.jpg");
-		final HttpRequestBody body = HttpRequestBodies.jpeg(file);
+		File file = getFileFromClasspath("/img1.jpg");
+		HttpRequestBody body = HttpRequestBodies.jpeg(file);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("image/jpeg");
 		assertThat(body.getBody()).isEqualTo(Files.readAllBytes(file.toPath()));
@@ -132,8 +132,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_with_png_content_type() throws Exception {
-		final File file = getFileFromClasspath("/img2.png");
-		final HttpRequestBody body = HttpRequestBodies.png(file);
+		File file = getFileFromClasspath("/img2.png");
+		HttpRequestBody body = HttpRequestBodies.png(file);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("image/png");
 		assertThat(body.getBody()).isEqualTo(Files.readAllBytes(file.toPath()));
@@ -141,8 +141,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_from_path_with_png_content_type() throws Exception {
-		final Path path = getPathFromClasspath("/img2.png");
-		final HttpRequestBody body = HttpRequestBodies.png(path);
+		Path path = getPathFromClasspath("/img2.png");
+		HttpRequestBody body = HttpRequestBodies.png(path);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("image/png");
 		assertThat(body.getBody()).isEqualTo(Files.readAllBytes(path));
@@ -151,8 +151,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_with_pdf_content_type() throws Exception {
-		final File file = getFileFromClasspath("/file1.pdf");
-		final HttpRequestBody body = HttpRequestBodies.pdf(file);
+		File file = getFileFromClasspath("/file1.pdf");
+		HttpRequestBody body = HttpRequestBodies.pdf(file);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("application/pdf");
 		assertThat(body.getBody()).isEqualTo(Files.readAllBytes(file.toPath()));
@@ -160,8 +160,8 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_body_file_from_path_with_pdf_content_type() throws Exception {
-		final Path path = getPathFromClasspath("/file1.pdf");
-		final HttpRequestBody body = HttpRequestBodies.pdf(path);
+		Path path = getPathFromClasspath("/file1.pdf");
+		HttpRequestBody body = HttpRequestBodies.pdf(path);
 		assertThat(body).isNotNull();
 		assertThat(body.getContentType()).isEqualTo("application/pdf");
 		assertThat(body.getBody()).isEqualTo(Files.readAllBytes(path));
@@ -169,7 +169,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_form_body_from_parameters() throws Exception {
-		final HttpRequestBody body = HttpRequestBodies.formUrlEncodedBody(asList(
+		HttpRequestBody body = HttpRequestBodies.formUrlEncodedBody(asList(
 			HttpParameter.of("id", "1"),
 			HttpParameter.of("firstName", "John"),
 			HttpParameter.of("lastName", "Doe")
@@ -182,7 +182,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_form_body_from_parameter_map() throws Exception {
-		final HttpRequestBody body = HttpRequestBodies.formUrlEncodedBody(singletonMap(
+		HttpRequestBody body = HttpRequestBodies.formUrlEncodedBody(singletonMap(
 			"id", "1"
 		));
 
@@ -193,7 +193,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_form_body_builder() throws Exception {
-		final HttpRequestBody body = HttpRequestBodies.formBuilder()
+		HttpRequestBody body = HttpRequestBodies.formBuilder()
 			.add("id", "1")
 			.add("firstName", "John")
 			.add("lastName", "Doe")
@@ -206,7 +206,7 @@ class HttpRequestBodiesTest {
 
 	@Test
 	void it_should_create_multipart_body_builder() throws Exception {
-		final HttpRequestBody body = HttpRequestBodies.multipartBuilder()
+		HttpRequestBody body = HttpRequestBodies.multipartBuilder()
 			.addFormDataPart("id", "1")
 			.addFormDataPart("firstName", "John")
 			.addFormDataPart("lastName", "Doe")

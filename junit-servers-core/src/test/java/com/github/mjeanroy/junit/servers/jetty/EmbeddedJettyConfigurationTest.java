@@ -39,7 +39,7 @@ class EmbeddedJettyConfigurationTest {
 
 	@Test
 	void it_should_build_default_configuration() {
-		final EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
+		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
 
 		assertThat(result.getPort()).isEqualTo(0);
 		assertThat(result.getPath()).isEqualTo("/");
@@ -50,17 +50,17 @@ class EmbeddedJettyConfigurationTest {
 
 	@Test
 	void it_should_build_configuration() {
-		final int port = 8080;
-		final String path = "/foo";
-		final String webapp = "foo";
-		final String classpath = "/target/classes";
-		final int stopTimeout = 50;
-		final Resource resource = mock(Resource.class);
-		final String containerJarPattern = ".*\\.jar";
-		final String webInfJarPattern = ".*";
-		final boolean dirAllowed = false;
+		int port = 8080;
+		String path = "/foo";
+		String webapp = "foo";
+		String classpath = "/target/classes";
+		int stopTimeout = 50;
+		Resource resource = mock(Resource.class);
+		String containerJarPattern = ".*\\.jar";
+		String webInfJarPattern = ".*";
+		boolean dirAllowed = false;
 
-		final EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.builder()
+		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.builder()
 			.withPort(port)
 			.withClasspath(classpath)
 			.withWebapp(webapp)
@@ -87,8 +87,8 @@ class EmbeddedJettyConfigurationTest {
 
 	@Test
 	void it_should_implement_equals_hashCode() {
-		final ClassLoader red = new URLClassLoader(new URL[0]);
-		final ClassLoader black = new URLClassLoader(new URL[0]);
+		ClassLoader red = new URLClassLoader(new URL[0]);
+		ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(EmbeddedJettyConfiguration.class)
 			.suppress(Warning.STRICT_INHERITANCE)
 			.withRedefinedSuperclass()
@@ -98,7 +98,7 @@ class EmbeddedJettyConfigurationTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
+		EmbeddedJettyConfiguration result = EmbeddedJettyConfiguration.defaultConfiguration();
 		assertThat(result.toString()).isEqualTo(
 			"EmbeddedJettyConfiguration{" +
 				"port: 0, " +

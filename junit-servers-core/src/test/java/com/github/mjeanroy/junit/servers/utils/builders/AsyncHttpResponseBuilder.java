@@ -64,9 +64,9 @@ public class AsyncHttpResponseBuilder extends AbstractHttpResponseBuilder<Respon
 			headers.add(entry.getKey(), entry.getValue());
 		}
 
-		final List<HttpResponseBodyPart> bodyParts;
+		List<HttpResponseBodyPart> bodyParts;
 		if (body != null) {
-			final byte[] bodyBytes = body.getBytes(defaultCharset());
+			byte[] bodyBytes = body.getBytes(defaultCharset());
 			ByteBuf buf = Unpooled.copiedBuffer(bodyBytes);
 			HttpResponseBodyPart part = new EagerResponseBodyPart(buf, true);
 			bodyParts = singletonList(part);

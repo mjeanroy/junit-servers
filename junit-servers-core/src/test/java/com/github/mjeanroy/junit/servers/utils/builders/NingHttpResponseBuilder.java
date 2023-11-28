@@ -62,7 +62,7 @@ public class NingHttpResponseBuilder extends AbstractHttpResponseBuilder<Respons
 		HttpResponseStatus status = new ResponseStatus(uri, config, conn);
 		HttpResponseHeaders headers = new ResponseHeaders(uri, conn, provider);
 
-		final List<HttpResponseBodyPart> bodyParts;
+		List<HttpResponseBodyPart> bodyParts;
 		if (body != null) {
 			byte[] bodyBytes = body.getBytes(defaultCharset());
 			HttpResponseBodyPart part = new ResponseBodyPart(bodyBytes, true);

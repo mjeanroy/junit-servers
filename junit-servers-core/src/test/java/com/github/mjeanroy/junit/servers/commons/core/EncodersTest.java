@@ -32,8 +32,8 @@ class EncodersTest {
 
 	@Test
 	void it_should_url_encode_value() {
-		final String value = "test avec +";
-		final String encoded = Encoders.urlEncode(value);
+		String value = "test avec +";
+		String encoded = Encoders.urlEncode(value);
 		assertThat(encoded).isEqualTo("test+avec+%2B");
 	}
 }

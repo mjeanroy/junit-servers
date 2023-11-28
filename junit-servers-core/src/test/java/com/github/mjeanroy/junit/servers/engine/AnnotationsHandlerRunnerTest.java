@@ -37,10 +37,10 @@ class AnnotationsHandlerRunnerTest {
 
 	@Test
 	void it_should_process_handlers() {
-		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
-		final EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
-		final FixtureClass target = new FixtureClass();
-		final AnnotationsHandlerRunner adapter = new AnnotationsHandlerRunner(embeddedServer, configuration);
+		AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
+		EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
+		FixtureClass target = new FixtureClass();
+		AnnotationsHandlerRunner adapter = new AnnotationsHandlerRunner(embeddedServer, configuration);
 
 		verifyBeforeTest(configuration, embeddedServer, target, adapter);
 		verifyAfterTest(configuration, embeddedServer, target, adapter);
@@ -48,9 +48,9 @@ class AnnotationsHandlerRunnerTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
-		final EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
-		final AnnotationsHandlerRunner adapter = new AnnotationsHandlerRunner(embeddedServer, configuration);
+		AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
+		EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
+		AnnotationsHandlerRunner adapter = new AnnotationsHandlerRunner(embeddedServer, configuration);
 
 		assertThat(adapter).hasToString(
 			"AnnotationsHandlerRunner{" +

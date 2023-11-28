@@ -74,9 +74,9 @@ final class WireMockTestUtils {
 	 * @param endpoint Endpoint to stub.
 	 */
 	static void stubDefaultRequest(String endpoint) {
-		final int status = 200;
-		final Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
-		final String body = "[]";
+		int status = 200;
+		Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
+		String body = "[]";
 		stubRequest(GET, endpoint, status, headers, body);
 	}
 

@@ -46,36 +46,36 @@ class HttpRequestBodyMultipartTest {
 
 	@Test
 	void it_should_create_multipart_body_with_default_content_type() {
-		final String contentType = null;
-		final String boundaries = null;
-		final List<HttpRequestBodyPart> parts = emptyList();
+		String contentType = null;
+		String boundaries = null;
+		List<HttpRequestBodyPart> parts = emptyList();
 
-		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
+		HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
 
 		assertThat(requestBody.getContentType()).isEqualTo("multipart/form-data; boundary=---------------------------974767299852498929531610575");
 	}
 
 	@Test
 	void it_should_create_multipart_body_with_custom_content_type() {
-		final String contentType = "multipart/mixed";
-		final String boundaries = null;
-		final List<HttpRequestBodyPart> parts = emptyList();
+		String contentType = "multipart/mixed";
+		String boundaries = null;
+		List<HttpRequestBodyPart> parts = emptyList();
 
-		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
+		HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
 
 		assertThat(requestBody.getContentType()).isEqualTo("multipart/mixed; boundary=---------------------------974767299852498929531610575");
 	}
 
 	@Test
 	void it_should_create_multipart_body_with_parts_and_boundaries() {
-		final String contentType = "multipart/form-data";
-		final String boundaries = "123456789";
-		final List<HttpRequestBodyPart> parts = asList(
+		String contentType = "multipart/form-data";
+		String boundaries = "123456789";
+		List<HttpRequestBodyPart> parts = asList(
 			givenHttpRequestBodyPart("part1", HttpRequestBodyString.of("HttpRequestBody1", TEXT_PLAIN)),
 			givenHttpRequestBodyPart("part2", HttpRequestBodyString.of("HttpRequestBody2", TEXT_PLAIN))
 		);
 
-		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
+		HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
 
 		assertThat(requestBody.getBoundaries()).isEqualTo(boundaries);
 		assertThat(requestBody.getParts()).isEqualTo(parts);
@@ -83,14 +83,14 @@ class HttpRequestBodyMultipartTest {
 
 	@Test
 	void it_should_create_multipart_body_with_parts_and_default_boundaries() {
-		final String contentType = "multipart/form-data";
-		final String boundaries = null;
-		final List<HttpRequestBodyPart> parts = asList(
+		String contentType = "multipart/form-data";
+		String boundaries = null;
+		List<HttpRequestBodyPart> parts = asList(
 			givenHttpRequestBodyPart("part1", HttpRequestBodyString.of("HttpRequestBody1", TEXT_PLAIN)),
 			givenHttpRequestBodyPart("part2", HttpRequestBodyString.of("HttpRequestBody2", TEXT_PLAIN))
 		);
 
-		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
+		HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
 
 		assertThat(requestBody.getBoundaries()).isEqualTo("---------------------------974767299852498929531610575");
 		assertThat(requestBody.getParts()).isEqualTo(parts);
@@ -98,35 +98,35 @@ class HttpRequestBodyMultipartTest {
 
 	@Test
 	void it_should_have_content_type_with_custom_boundaries() {
-		final String contentType = "multipart/form-data";
-		final String boundaries = "123456789";
-		final List<HttpRequestBodyPart> parts = emptyList();
-		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
+		String contentType = "multipart/form-data";
+		String boundaries = "123456789";
+		List<HttpRequestBodyPart> parts = emptyList();
+		HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
 
 		assertThat(requestBody.getContentType()).isEqualTo("multipart/form-data; boundary=123456789");
 	}
 
 	@Test
 	void it_should_have_content_type_with_default_boundaries() {
-		final String contentType = "multipart/form-data";
-		final String boundaries = null;
-		final List<HttpRequestBodyPart> parts = emptyList();
-		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
+		String contentType = "multipart/form-data";
+		String boundaries = null;
+		List<HttpRequestBodyPart> parts = emptyList();
+		HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
 
 		assertThat(requestBody.getContentType()).isEqualTo("multipart/form-data; boundary=---------------------------974767299852498929531610575");
 	}
 
 	@Test
 	void it_should_serialize_multipart_body() throws Exception {
-		final String contentType = "multipart/form-data";
-		final String boundaries = "123456789";
-		final List<HttpRequestBodyPart> parts = asList(
+		String contentType = "multipart/form-data";
+		String boundaries = "123456789";
+		List<HttpRequestBodyPart> parts = asList(
 			givenHttpRequestBodyPart("part1", HttpRequestBodyString.of("HttpRequestBody1", TEXT_PLAIN)),
 			givenHttpRequestBodyPart("part2", HttpRequestBodyString.of("HttpRequestBody2", TEXT_PLAIN))
 		);
 
-		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
-		final String result = new String(requestBody.getBody(), StandardCharsets.UTF_8);
+		HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
+		String result = new String(requestBody.getBody(), StandardCharsets.UTF_8);
 
 		assertThat(result).isEqualTo(String.join("\r\n", asList(
 			"--123456789",
@@ -145,16 +145,16 @@ class HttpRequestBodyMultipartTest {
 
 	@Test
 	void it_should_serialize_multipart_body_with_a_file() throws Exception {
-		final String contentType = "multipart/form-data";
-		final String boundaries = "123456789";
-		final File file = getFileFromClasspath("/file1.txt");
-		final List<HttpRequestBodyPart> parts = asList(
+		String contentType = "multipart/form-data";
+		String boundaries = "123456789";
+		File file = getFileFromClasspath("/file1.txt");
+		List<HttpRequestBodyPart> parts = asList(
 			givenHttpRequestBodyPart("param", HttpRequestBodyString.of("HttpRequestBody", TEXT_PLAIN)),
 			givenHttpRequestBodyPart("file", HttpRequestBodyFile.of(file))
 		);
 
-		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
-		final String result = toUtf8String(requestBody.getBody());
+		HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, parts);
+		String result = toUtf8String(requestBody.getBody());
 
 		assertThat(result).isEqualToNormalizingNewlines(String.join("\r\n", asList(
 			"--123456789",
@@ -174,12 +174,12 @@ class HttpRequestBodyMultipartTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final String contentType = "multipart/form-data";
-		final String boundaries = "123456789";
-		final HttpRequestBody body = mock(HttpRequestBody.class, "MockHttpRequestBody");
-		final HttpHeader header = HttpHeader.header("Content-Encoding", "gzip");
-		final HttpRequestBodyPart part = HttpRequestBodyPart.of(body, singleton(header));
-		final HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, singleton(part));
+		String contentType = "multipart/form-data";
+		String boundaries = "123456789";
+		HttpRequestBody body = mock(HttpRequestBody.class, "MockHttpRequestBody");
+		HttpHeader header = HttpHeader.header("Content-Encoding", "gzip");
+		HttpRequestBodyPart part = HttpRequestBodyPart.of(body, singleton(header));
+		HttpRequestBodyMultipart requestBody = new HttpRequestBodyMultipart(contentType, boundaries, singleton(part));
 
 		assertThat(requestBody).hasToString(
 			"HttpRequestBodyMultipart{" +

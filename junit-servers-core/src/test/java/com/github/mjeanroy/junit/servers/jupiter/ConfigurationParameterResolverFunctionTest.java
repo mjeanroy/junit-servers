@@ -52,8 +52,8 @@ class ConfigurationParameterResolverFunctionTest {
 
 	@Test
 	void it_should_resolve_configuration() throws Exception {
-		final ParameterContext parameterContext = createParameterContext();
-		final Object result = resolver.resolve(parameterContext, adapter);
+		ParameterContext parameterContext = createParameterContext();
+		Object result = resolver.resolve(parameterContext, adapter);
 
 		assertThat(result).isSameAs(server.getConfiguration());
 	}

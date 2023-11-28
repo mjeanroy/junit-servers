@@ -41,50 +41,50 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_create_part_from_raw_value() {
-		final String rawValue = "123";
-		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(rawValue).build();
+		String rawValue = "123";
+		HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(rawValue).build();
 
 		assertThat(part).isNotNull();
 		assertThat(part.getHeaders()).isEmpty();
 		assertThat(part.getBody()).isInstanceOf(HttpRequestBodyString.class);
 
-		final HttpRequestBodyString bodyString = (HttpRequestBodyString) part.getBody();
+		HttpRequestBodyString bodyString = (HttpRequestBodyString) part.getBody();
 		assertThat(bodyString.getContentType()).isNull();
 		assertThat(bodyString.getBodyString()).isEqualTo(rawValue);
 	}
 
 	@Test
 	void it_should_create_part_from_file_and_guess_content_type() {
-		final File file = getFileFromClasspath("/file1.txt");
-		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(file).build();
+		File file = getFileFromClasspath("/file1.txt");
+		HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(file).build();
 
 		assertThat(part).isNotNull();
 		assertThat(part.getHeaders()).isEmpty();
 		assertThat(part.getBody()).isInstanceOf(HttpRequestBodyFile.class);
 
-		final HttpRequestBodyFile bodyString = (HttpRequestBodyFile) part.getBody();
+		HttpRequestBodyFile bodyString = (HttpRequestBodyFile) part.getBody();
 		assertThat(bodyString.getContentType()).isEqualTo("text/plain");
 		assertThat(bodyString.getPath()).isEqualTo(file.toPath());
 	}
 
 	@Test
 	void it_should_create_part_from_path_and_guess_content_type() {
-		final Path path = getPathFromClasspath("/file1.txt");
-		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(path).build();
+		Path path = getPathFromClasspath("/file1.txt");
+		HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(path).build();
 
 		assertThat(part).isNotNull();
 		assertThat(part.getHeaders()).isEmpty();
 		assertThat(part.getBody()).isInstanceOf(HttpRequestBodyFile.class);
 
-		final HttpRequestBodyFile bodyString = (HttpRequestBodyFile) part.getBody();
+		HttpRequestBodyFile bodyString = (HttpRequestBodyFile) part.getBody();
 		assertThat(bodyString.getContentType()).isEqualTo("text/plain");
 		assertThat(bodyString.getPath()).isEqualTo(path);
 	}
 
 	@Test
 	void it_should_create_part_from_given_request_body() {
-		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
-		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).build();
+		HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
+		HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).build();
 
 		assertThat(part).isNotNull();
 		assertThat(part.getHeaders()).isEmpty();
@@ -93,10 +93,10 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_create_part_with_header() {
-		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
-		final String headerName = "Content-Disposition";
-		final String headerValue = "form-data; name=\"foo\"";
-		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).addHeader(headerName, headerValue).build();
+		HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
+		String headerName = "Content-Disposition";
+		String headerValue = "form-data; name=\"foo\"";
+		HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).addHeader(headerName, headerValue).build();
 
 		assertThat(part).isNotNull();
 		assertThat(part.getBody()).isSameAs(body);
@@ -109,11 +109,11 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_create_part_with_header_object() {
-		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
-		final String headerName = "Content-Disposition";
-		final String headerValue = "form-data; name=\"foo\"";
-		final HttpHeader header = HttpHeader.of(headerName, headerValue);
-		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).addHeader(header).build();
+		HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
+		String headerName = "Content-Disposition";
+		String headerValue = "form-data; name=\"foo\"";
+		HttpHeader header = HttpHeader.of(headerName, headerValue);
+		HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).addHeader(header).build();
 
 		assertThat(part).isNotNull();
 		assertThat(part.getBody()).isSameAs(body);
@@ -126,9 +126,9 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_set_part_to_form_data_part_with_given_name() {
-		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
-		final String name = "foo";
-		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).asFormData(name).build();
+		HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
+		String name = "foo";
+		HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).asFormData(name).build();
 
 		assertThat(part).isNotNull();
 		assertThat(part.getBody()).isSameAs(body);
@@ -141,10 +141,10 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_set_part_to_form_data_part_with_given_name_and_filename() {
-		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
-		final String name = "foo";
-		final String filename = "request.json";
-		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).asFormData(name, filename).build();
+		HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
+		String name = "foo";
+		String filename = "request.json";
+		HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).asFormData(name, filename).build();
 
 		assertThat(part).isNotNull();
 		assertThat(part.getBody()).isSameAs(body);
@@ -157,9 +157,9 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_set_part_to_form_data_part_with_given_name_being_escaped() {
-		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
-		final String name = "foo\nbar\r\"quix\"";
-		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).asFormData(name).build();
+		HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
+		String name = "foo\nbar\r\"quix\"";
+		HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).asFormData(name).build();
 
 		assertThat(part).isNotNull();
 		assertThat(part.getBody()).isSameAs(body);
@@ -172,8 +172,8 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_fail_to_create_part_with_content_type_header() {
-		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
-		final HttpRequestBodyPartBuilder builder = HttpRequestBodyPartBuilder.of(body);
+		HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
+		HttpRequestBodyPartBuilder builder = HttpRequestBodyPartBuilder.of(body);
 
 		assertThatThrownBy(() -> builder.addHeader("Content-Type", "application/json"))
 			.isInstanceOf(IllegalArgumentException.class)
@@ -182,10 +182,10 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_set_part_to_form_data_part_with_given_name_and_filename_being_escaped() {
-		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
-		final String name = "foo\rbar\n\"quix\"";
-		final String filename = "request\r.\n\"json";
-		final HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).asFormData(name, filename).build();
+		HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
+		String name = "foo\rbar\n\"quix\"";
+		String filename = "request\r.\n\"json";
+		HttpRequestBodyPart part = HttpRequestBodyPartBuilder.of(body).asFormData(name, filename).build();
 
 		assertThat(part).isNotNull();
 		assertThat(part.getBody()).isSameAs(body);
@@ -198,10 +198,10 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_fail_to_create_part_with_header_added_twice() {
-		final HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
-		final String headerName = "Content-Disposition";
-		final String headerValue = "form-data; name=\"foo\"";
-		final HttpRequestBodyPartBuilder builder = HttpRequestBodyPartBuilder.of(body).addHeader(headerName, headerValue);
+		HttpRequestBody body = HttpRequestBodyString.of("{}", "application/json");
+		String headerName = "Content-Disposition";
+		String headerValue = "form-data; name=\"foo\"";
+		HttpRequestBodyPartBuilder builder = HttpRequestBodyPartBuilder.of(body).addHeader(headerName, headerValue);
 
 		assertThatThrownBy(() -> builder.addHeader(headerName, headerValue))
 			.isInstanceOf(IllegalStateException.class)
@@ -210,8 +210,8 @@ class HttpRequestBodyPartBuilderTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final String rawValue = "123";
-		final HttpRequestBodyPartBuilder builder = HttpRequestBodyPartBuilder.of(rawValue).addHeader("Content-Transfer-Encoding", "binary");
+		String rawValue = "123";
+		HttpRequestBodyPartBuilder builder = HttpRequestBodyPartBuilder.of(rawValue).addHeader("Content-Transfer-Encoding", "binary");
 
 		assertThat(builder).hasToString(
 			"HttpRequestBodyPartBuilder{" +

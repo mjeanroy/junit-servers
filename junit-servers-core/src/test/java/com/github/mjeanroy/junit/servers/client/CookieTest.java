@@ -52,14 +52,14 @@ class CookieTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final String name = "name";
-		final String value = "value";
-		final String domain = "foo.com";
-		final String path = "/";
-		final boolean secure = true;
-		final boolean httpOnly = true;
-		final long maxAge = 0;
-		final Cookie cookie = new Cookie.Builder(name, value)
+		String name = "name";
+		String value = "value";
+		String domain = "foo.com";
+		String path = "/";
+		boolean secure = true;
+		boolean httpOnly = true;
+		long maxAge = 0;
+		Cookie cookie = new Cookie.Builder(name, value)
 			.domain(domain)
 			.path(path)
 			.secure(secure)
@@ -83,9 +83,9 @@ class CookieTest {
 
 	@Test
 	void it_should_create_simple_cookie_with_builder() {
-		final String name = "name";
-		final String value = "value";
-		final Cookie cookie = new Cookie.Builder(name, value).build();
+		String name = "name";
+		String value = "value";
+		Cookie cookie = new Cookie.Builder(name, value).build();
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -94,15 +94,15 @@ class CookieTest {
 
 	@Test
 	void it_should_create_complex_cookie_with_builder() {
-		final String name = "name";
-		final String value = "value";
-		final String domain = "domain";
-		final String path = "path";
-		final boolean secure = true;
-		final boolean httpOnly = true;
-		final long maxAge = 3600;
+		String name = "name";
+		String value = "value";
+		String domain = "domain";
+		String path = "path";
+		boolean secure = true;
+		boolean httpOnly = true;
+		long maxAge = 3600;
 
-		final Cookie cookie = new Cookie.Builder(name, value)
+		Cookie cookie = new Cookie.Builder(name, value)
 			.domain(domain)
 			.path(path)
 			.secure(secure)
@@ -123,19 +123,19 @@ class CookieTest {
 
 	@Test
 	void it_should_create_complex_cookie_with_expires_date_with_builder() {
-		final String name = "name";
-		final String value = "value";
-		final String domain = "domain";
-		final String path = "path";
-		final boolean secure = true;
-		final boolean httpOnly = true;
-		final long maxAge = 3600;
+		String name = "name";
+		String value = "value";
+		String domain = "domain";
+		String path = "path";
+		boolean secure = true;
+		boolean httpOnly = true;
+		long maxAge = 3600;
 
-		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) + 1);
-		final long expires = cal.getTimeInMillis();
+		long expires = cal.getTimeInMillis();
 
-		final Cookie cookie = new Cookie.Builder(name, value)
+		Cookie cookie = new Cookie.Builder(name, value)
 			.domain(domain)
 			.path(path)
 			.secure(secure)

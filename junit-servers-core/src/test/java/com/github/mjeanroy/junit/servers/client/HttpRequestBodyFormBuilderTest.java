@@ -36,7 +36,7 @@ class HttpRequestBodyFormBuilderTest {
 
 	@Test
 	void it_should_create_form_body_from_single_parameter() {
-		final HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().add("id", "1").build();
+		HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().add("id", "1").build();
 		assertThat(bodyForm).isInstanceOf(HttpRequestBodyForm.class);
 		assertThat(((HttpRequestBodyForm) bodyForm).getParameters()).hasSize(1)
 			.extracting("name", "value")
@@ -47,7 +47,7 @@ class HttpRequestBodyFormBuilderTest {
 
 	@Test
 	void it_should_create_form_body_from_single_parameter_object() {
-		final HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().add(HttpParameter.of("id", "1")).build();
+		HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().add(HttpParameter.of("id", "1")).build();
 		assertThat(bodyForm).isInstanceOf(HttpRequestBodyForm.class);
 		assertThat(((HttpRequestBodyForm) bodyForm).getParameters()).hasSize(1)
 			.extracting("name", "value")
@@ -58,7 +58,7 @@ class HttpRequestBodyFormBuilderTest {
 
 	@Test
 	void it_should_create_form_body_from_parameter_map() {
-		final HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().addAll(singletonMap("id", "1")).build();
+		HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().addAll(singletonMap("id", "1")).build();
 		assertThat(bodyForm).isInstanceOf(HttpRequestBodyForm.class);
 		assertThat(((HttpRequestBodyForm) bodyForm).getParameters()).hasSize(1)
 			.extracting("name", "value")
@@ -69,7 +69,7 @@ class HttpRequestBodyFormBuilderTest {
 
 	@Test
 	void it_should_create_form_body_from_parameters() {
-		final HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().addAll(singleton(HttpParameter.of("id", "1"))).build();
+		HttpRequestBody bodyForm = new HttpRequestBodyFormBuilder().addAll(singleton(HttpParameter.of("id", "1"))).build();
 		assertThat(bodyForm).isInstanceOf(HttpRequestBodyForm.class);
 		assertThat(((HttpRequestBodyForm) bodyForm).getParameters()).hasSize(1)
 			.extracting("name", "value")
@@ -85,7 +85,7 @@ class HttpRequestBodyFormBuilderTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final HttpRequestBodyFormBuilder builder = new HttpRequestBodyFormBuilder()
+		HttpRequestBodyFormBuilder builder = new HttpRequestBodyFormBuilder()
 			.add("id", "1")
 			.add("name", "John Doe");
 

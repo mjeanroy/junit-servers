@@ -46,9 +46,9 @@ class ApacheHttpResponseTest extends AbstractHttpResponseImplTest<ApacheHttpResp
 
 	@Test
 	void it_should_implement_to_string() {
-		final HttpResponse apacheHttpResponse = new ApacheHttpResponseBuilder().build();
+		HttpResponse apacheHttpResponse = new ApacheHttpResponseBuilder().build();
 		long duration = 1000L;
-		final ApacheHttpResponse response = new ApacheHttpResponse(apacheHttpResponse, duration);
+		ApacheHttpResponse response = new ApacheHttpResponse(apacheHttpResponse, duration);
 
 		assertThat(response.toString()).isEqualTo(
 			"ApacheHttpResponse{" +

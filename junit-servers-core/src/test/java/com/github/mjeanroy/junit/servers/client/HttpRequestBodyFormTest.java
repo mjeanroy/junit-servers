@@ -38,12 +38,12 @@ class HttpRequestBodyFormTest {
 
 	@Test
 	void it_should_create_form_body() {
-		final List<HttpParameter> parameters = asList(
+		List<HttpParameter> parameters = asList(
 			HttpParameter.of("id", "1"),
 			HttpParameter.of("name", "JohnDoe")
 		);
 
-		final HttpRequestBodyForm bodyForm = new HttpRequestBodyForm(parameters);
+		HttpRequestBodyForm bodyForm = new HttpRequestBodyForm(parameters);
 
 		assertThat(bodyForm.getContentType()).isEqualTo("application/x-www-form-urlencoded");
 		assertThat(bodyForm.getBody()).isEqualTo("id=1&name=JohnDoe".getBytes(Charset.defaultCharset()));
@@ -52,12 +52,12 @@ class HttpRequestBodyFormTest {
 
 	@Test
 	void it_should_create_form_body_with_url_encoded_param() {
-		final List<HttpParameter> parameters = asList(
+		List<HttpParameter> parameters = asList(
 			HttpParameter.of("id", "1"),
 			HttpParameter.of("full name", "John Doe")
 		);
 
-		final HttpRequestBodyForm bodyForm = new HttpRequestBodyForm(parameters);
+		HttpRequestBodyForm bodyForm = new HttpRequestBodyForm(parameters);
 
 		assertThat(bodyForm.getContentType()).isEqualTo("application/x-www-form-urlencoded");
 		assertThat(bodyForm.getBody()).isEqualTo("id=1&full+name=John+Doe".getBytes(Charset.defaultCharset()));
@@ -71,11 +71,11 @@ class HttpRequestBodyFormTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final List<HttpParameter> parameters = singletonList(
+		List<HttpParameter> parameters = singletonList(
 			HttpParameter.of("id", "1")
 		);
 
-		final HttpRequestBodyForm bodyForm = new HttpRequestBodyForm(parameters);
+		HttpRequestBodyForm bodyForm = new HttpRequestBodyForm(parameters);
 
 		assertThat(bodyForm).hasToString(
 			"HttpRequestBodyForm{" +

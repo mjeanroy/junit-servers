@@ -36,16 +36,16 @@ class ToStringBuilderTest {
 
 	@Test
 	void it_should_create_to_string_value() {
-		final String f1 = "v1";
-		final String f2 = null;
-		final int f3 = 10;
-		final boolean f4 = true;
-		final List<String> f5 = asList("foo", "bar");
-		final List<String> f6 = emptyList();
-		final Value f7 = new Value("val");
-		final Value f8 = null;
+		String f1 = "v1";
+		String f2 = null;
+		int f3 = 10;
+		boolean f4 = true;
+		List<String> f5 = asList("foo", "bar");
+		List<String> f6 = emptyList();
+		Value f7 = new Value("val");
+		Value f8 = null;
 
-		final String toString = ToStringBuilder.create(ToStringBuilderTest.class)
+		String toString = ToStringBuilder.create(ToStringBuilderTest.class)
 			.append("f1", f1)
 			.append("f2", f2)
 			.append("f3", f3)

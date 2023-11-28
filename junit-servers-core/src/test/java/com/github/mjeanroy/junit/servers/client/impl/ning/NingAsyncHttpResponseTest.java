@@ -46,9 +46,9 @@ class NingAsyncHttpResponseTest extends AbstractHttpResponseImplTest<NingHttpRes
 
 	@Test
 	void it_should_implement_to_string() {
-		final Response delegate = new NingHttpResponseBuilder().build();
-		final long duration = 1000L;
-		final NingAsyncHttpResponse response = new NingAsyncHttpResponse(delegate, duration);
+		Response delegate = new NingHttpResponseBuilder().build();
+		long duration = 1000L;
+		NingAsyncHttpResponse response = new NingAsyncHttpResponse(delegate, duration);
 
 		assertThat(response.toString()).isEqualTo(
 			"NingAsyncHttpResponse{" +

@@ -54,9 +54,9 @@ class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpResponseBuil
 
 	@Test
 	void it_should_implement_to_string() {
-		final Response delegate = new OkHttpResponseBuilder().build();
-		final long duration = 1000L;
-		final OkHttpResponse response = new OkHttpResponse(
+		Response delegate = new OkHttpResponseBuilder().build();
+		long duration = 1000L;
+		OkHttpResponse response = new OkHttpResponse(
 				delegate.code(),
 				readResponseBody(delegate),
 				delegate.headers(),
@@ -75,8 +75,8 @@ class OkHttpResponseTest extends AbstractHttpResponseImplTest<OkHttpResponseBuil
 
 	@Test
 	void it_should_implement_equal_and_hash_code() {
-		final Response red = new OkHttpResponseBuilder().withStatus(200).build();
-		final Response black = new OkHttpResponseBuilder().withStatus(400).build();
+		Response red = new OkHttpResponseBuilder().withStatus(200).build();
+		Response black = new OkHttpResponseBuilder().withStatus(400).build();
 
 		EqualsVerifier.forClass(OkHttpResponse.class)
 			.withRedefinedSuperclass()

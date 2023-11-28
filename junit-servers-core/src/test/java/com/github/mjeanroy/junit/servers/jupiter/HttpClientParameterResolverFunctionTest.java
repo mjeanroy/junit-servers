@@ -60,16 +60,16 @@ class HttpClientParameterResolverFunctionTest {
 
 	@Test
 	void it_should_resolve_http_client_with_default_strategy() throws Exception {
-		final ParameterContext parameterContext = extractParameterContext("method_without_annotation");
-		final Object result = resolver.resolve(parameterContext, adapter);
+		ParameterContext parameterContext = extractParameterContext("method_without_annotation");
+		Object result = resolver.resolve(parameterContext, adapter);
 
 		assertThat(result).isInstanceOf(HttpClient.class);
 	}
 
 	@Test
 	void it_should_resolve_http_client_with_given_strategy() throws Exception {
-		final ParameterContext parameterContext = extractParameterContext("method_with_annotation");
-		final Object result = resolver.resolve(parameterContext, adapter);
+		ParameterContext parameterContext = extractParameterContext("method_with_annotation");
+		Object result = resolver.resolve(parameterContext, adapter);
 
 		assertThat(result).isInstanceOf(HttpClient.class);
 		assertThat(result).isExactlyInstanceOf(NingAsyncHttpClient.class);
@@ -77,8 +77,8 @@ class HttpClientParameterResolverFunctionTest {
 
 	@Test
 	public void it_should_resolve_http_client_with_given_configuration() throws Exception {
-		final ParameterContext parameterContext = extractParameterContext("method_with_annotation_and_configuration_factory");
-		final Object result = resolver.resolve(parameterContext, adapter);
+		ParameterContext parameterContext = extractParameterContext("method_with_annotation_and_configuration_factory");
+		Object result = resolver.resolve(parameterContext, adapter);
 
 		assertThat(result).isInstanceOf(HttpClient.class);
 
@@ -90,8 +90,8 @@ class HttpClientParameterResolverFunctionTest {
 
 	@Test
 	public void it_should_resolve_http_client_with_given_configuration_on_meta_annotation() throws Exception {
-		final ParameterContext parameterContext = extractParameterContext("method_with_meta_annotation");
-		final Object result = resolver.resolve(parameterContext, adapter);
+		ParameterContext parameterContext = extractParameterContext("method_with_meta_annotation");
+		Object result = resolver.resolve(parameterContext, adapter);
 
 		assertThat(result).isInstanceOf(HttpClient.class);
 

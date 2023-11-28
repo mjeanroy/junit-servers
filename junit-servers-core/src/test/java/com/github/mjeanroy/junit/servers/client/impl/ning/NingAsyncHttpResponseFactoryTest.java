@@ -35,9 +35,9 @@ class NingAsyncHttpResponseFactoryTest {
 
 	@Test
 	void it_should_create_http_response() {
-		final Response delegate = new NingHttpResponseBuilder().build();
-		final long duration = 1000L;
-		final HttpResponse response = NingAsyncHttpResponseFactory.of(delegate, duration);
+		Response delegate = new NingHttpResponseBuilder().build();
+		long duration = 1000L;
+		HttpResponse response = NingAsyncHttpResponseFactory.of(delegate, duration);
 
 		assertThat(response).isNotNull().isExactlyInstanceOf(NingAsyncHttpResponse.class);
 		assertThat(response.getRequestDuration()).isEqualTo(duration);

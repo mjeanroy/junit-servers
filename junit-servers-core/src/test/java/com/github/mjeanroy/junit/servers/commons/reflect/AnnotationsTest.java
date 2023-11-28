@@ -44,8 +44,8 @@ class AnnotationsTest {
 
 	@Test
 	void it_should_find_annotation_on_class() {
-		final Class<TestClassWithAnnotation> klass = TestClassWithAnnotation.class;
-		final TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
+		Class<TestClassWithAnnotation> klass = TestClassWithAnnotation.class;
+		TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
 
 		assertThat(annotation).isNotNull();
 		assertThat(annotation.value()).isEqualTo(1);
@@ -53,8 +53,8 @@ class AnnotationsTest {
 
 	@Test
 	void it_should_find_annotation_on_super_class() {
-		final Class<TestChildClassWithAnnotation> klass = TestChildClassWithAnnotation.class;
-		final TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
+		Class<TestChildClassWithAnnotation> klass = TestChildClassWithAnnotation.class;
+		TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
 
 		assertThat(annotation).isNotNull();
 		assertThat(annotation.value()).isEqualTo(1);
@@ -62,8 +62,8 @@ class AnnotationsTest {
 
 	@Test
 	void it_should_find_annotation_on_interface() {
-		final Class<TestClassImplementingAnnotatedInterface> klass = TestClassImplementingAnnotatedInterface.class;
-		final TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
+		Class<TestClassImplementingAnnotatedInterface> klass = TestClassImplementingAnnotatedInterface.class;
+		TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
 
 		assertThat(annotation).isNotNull();
 		assertThat(annotation.value()).isEqualTo(2);
@@ -71,8 +71,8 @@ class AnnotationsTest {
 
 	@Test
 	void it_should_find_annotation_on_meta_annotation() {
-		final Class<TestClassWithMetaAnnotation> klass = TestClassWithMetaAnnotation.class;
-		final TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
+		Class<TestClassWithMetaAnnotation> klass = TestClassWithMetaAnnotation.class;
+		TestAnnotation annotation = Annotations.findAnnotation(klass, TestAnnotation.class);
 
 		assertThat(annotation).isNotNull();
 		assertThat(annotation.value()).isEqualTo(3);
@@ -101,8 +101,8 @@ class AnnotationsTest {
 
 	@Test
 	public void it_should_find_all_annotations_on_field() {
-		final Field field = field("field3");
-		final List<Annotation> annotations = new ArrayList<>(Annotations.findAnnotations(field));
+		Field field = field("field3");
+		List<Annotation> annotations = new ArrayList<>(Annotations.findAnnotations(field));
 		assertThat(annotations).hasSize(2);
 		assertThat(annotations.get(0).annotationType()).isEqualTo(TestMetaAnnotation.class);
 		assertThat(annotations.get(1).annotationType()).isEqualTo(TestAnnotation.class);

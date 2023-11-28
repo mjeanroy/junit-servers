@@ -34,9 +34,9 @@ class ApacheHttpResponseFactoryTest {
 
 	@Test
 	void it_should_create_http_response() {
-		final HttpResponse delegate = new ApacheHttpResponseBuilder().build();
-		final long duration = 1000L;
-		final com.github.mjeanroy.junit.servers.client.HttpResponse response = ApacheHttpResponseFactory.of(delegate, duration);
+		HttpResponse delegate = new ApacheHttpResponseBuilder().build();
+		long duration = 1000L;
+		com.github.mjeanroy.junit.servers.client.HttpResponse response = ApacheHttpResponseFactory.of(delegate, duration);
 
 		assertThat(response).isNotNull().isExactlyInstanceOf(ApacheHttpResponse.class);
 		assertThat(response.getRequestDuration()).isEqualTo(duration);

@@ -37,19 +37,19 @@ class HttpUrlTest {
 
 	@Test
 	void it_should_create_default_url() {
-		final HttpUrl url = new HttpUrl.Builder().build();
+		HttpUrl url = new HttpUrl.Builder().build();
 		assertUrl(url, "http", "localhost", 80, "/");
 	}
 
 	@Test
 	void it_should_create_default_https_url() {
-		final HttpUrl url = new HttpUrl.Builder().withScheme("https").build();
+		HttpUrl url = new HttpUrl.Builder().withScheme("https").build();
 		assertUrl(url, "https", "localhost", 443, "/");
 	}
 
 	@Test
 	void it_should_fail_with_unknown_scheme() {
-		final HttpUrl.Builder builder = new HttpUrl.Builder();
+		HttpUrl.Builder builder = new HttpUrl.Builder();
 		assertThatThrownBy(() -> builder.withScheme("ftp"))
 			.isExactlyInstanceOf(IllegalArgumentException.class)
 			.hasMessage("Unknown scheme: ftp");
@@ -57,24 +57,24 @@ class HttpUrlTest {
 
 	@Test
 	void it_should_create_url_with_empty_path() {
-		final HttpUrl url = new HttpUrl.Builder().withPath("").build();
+		HttpUrl url = new HttpUrl.Builder().withPath("").build();
 		assertUrl(url, "http", "localhost", 80, "/");
 	}
 
 	@Test
 	void it_should_create_url_and_ensure_absolute_path() {
-		final HttpUrl url = new HttpUrl.Builder().withPath("foo").build();
+		HttpUrl url = new HttpUrl.Builder().withPath("foo").build();
 		assertUrl(url, "http", "localhost", 80, "/foo");
 	}
 
 	@Test
 	void it_should_create_custom_url() {
-		final String scheme = "https";
-		final String host = "127.0.0.1";
-		final int port = 443;
-		final String path = "/app";
+		String scheme = "https";
+		String host = "127.0.0.1";
+		int port = 443;
+		String path = "/app";
 
-		final HttpUrl url = new HttpUrl.Builder()
+		HttpUrl url = new HttpUrl.Builder()
 			.withScheme(scheme)
 			.withHost(host)
 			.withPort(port)
@@ -86,25 +86,25 @@ class HttpUrlTest {
 
 	@Test
 	void it_should_create_uri() {
-		final HttpUrl url = new HttpUrl.Builder().build();
+		HttpUrl url = new HttpUrl.Builder().build();
 		assertThat(url.toURI()).isEqualTo(URI.create("http://localhost:80/"));
 	}
 
 	@Test
 	void it_should_create_uri_with_non_encoded_path() {
-		final HttpUrl url = new HttpUrl.Builder().withPath("foo bar").build();
+		HttpUrl url = new HttpUrl.Builder().withPath("foo bar").build();
 		assertThat(url.toURI()).isEqualTo(URI.create("http://localhost:80/foo%20bar"));
 	}
 
 	@Test
 	void it_should_implement_to_string() {
-		final HttpUrl url = new HttpUrl.Builder().build();
+		HttpUrl url = new HttpUrl.Builder().build();
 		assertThat(url.toString()).isEqualTo("http://localhost:80/");
 	}
 
 	@Test
 	void it_should_implement_to_string_with_custom_path() {
-		final HttpUrl url = new HttpUrl.Builder().withPath("/foo").build();
+		HttpUrl url = new HttpUrl.Builder().withPath("/foo").build();
 		assertThat(url.toString()).isEqualTo("http://localhost:80/foo");
 	}
 
@@ -117,31 +117,31 @@ class HttpUrlTest {
 
 	@Test
 	void it_should_parse_url() {
-		final HttpUrl url = HttpUrl.parse("http://localhost:80/");
+		HttpUrl url = HttpUrl.parse("http://localhost:80/");
 		assertUrl(url, "http", "localhost", 80, "/");
 	}
 
 	@Test
 	void it_should_parse_url_with_default_port() {
-		final HttpUrl url = HttpUrl.parse("http://localhost/");
+		HttpUrl url = HttpUrl.parse("http://localhost/");
 		assertUrl(url, "http", "localhost", 80, "/");
 	}
 
 	@Test
 	void it_should_parse_https_url() {
-		final HttpUrl url = HttpUrl.parse("https://localhost:443/");
+		HttpUrl url = HttpUrl.parse("https://localhost:443/");
 		assertUrl(url, "https", "localhost", 443, "/");
 	}
 
 	@Test
 	void it_should_parse_https_url_with_default_port() {
-		final HttpUrl url = HttpUrl.parse("https://localhost/");
+		HttpUrl url = HttpUrl.parse("https://localhost/");
 		assertUrl(url, "https", "localhost", 443, "/");
 	}
 
 	@Test
 	void it_should_parse_with_non_encoded_path() {
-		final HttpUrl url = HttpUrl.parse("http://localhost:80/people/john doe");
+		HttpUrl url = HttpUrl.parse("http://localhost:80/people/john doe");
 		assertUrl(url, "http", "localhost", 80, "/people/john doe");
 	}
 

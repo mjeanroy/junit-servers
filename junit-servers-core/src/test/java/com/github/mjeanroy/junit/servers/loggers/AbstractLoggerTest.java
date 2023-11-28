@@ -141,7 +141,7 @@ abstract class AbstractLoggerTest {
 	}
 
 	private void verifyOutput(CaptureSystemOut sysout, String logLevel, String message) {
-		final String out = sysout.getOut();
+		String out = sysout.getOut();
 		assertThat(out).contains(logLevel);
 		assertThat(out).contains(message);
 	}

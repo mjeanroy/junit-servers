@@ -46,12 +46,12 @@ class UrlsTest {
 
 	@Test
 	void it_should_create_uri_object() {
-		final String scheme = "http";
-		final String host = "localhost";
-		final int port = 80;
-		final String path = "/foo";
+		String scheme = "http";
+		String host = "localhost";
+		int port = 80;
+		String path = "/foo";
 
-		final URI uri = Urls.createUri(scheme, host, port, path);
+		URI uri = Urls.createUri(scheme, host, port, path);
 
 		assertThat(uri).isNotNull();
 		assertThat(uri.getScheme()).isEqualTo(scheme);
@@ -66,10 +66,10 @@ class UrlsTest {
 
 	@Test
 	void it_should_fail_to_create_malformed_uri() {
-		final String scheme = "http";
-		final String host = "localhost";
-		final int port = 80;
-		final String path = "foo";
+		String scheme = "http";
+		String host = "localhost";
+		int port = 80;
+		String path = "foo";
 
 		try {
 			Urls.createUri(scheme, host, port, path);

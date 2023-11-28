@@ -36,31 +36,31 @@ class IosTest {
 
 	@Test
 	void it_should_expose_cr_lf() {
-		final String strOutput = new String(Ios.CRLF, StandardCharsets.UTF_8);
+		String strOutput = new String(Ios.CRLF, StandardCharsets.UTF_8);
 		assertThat(strOutput).isEqualTo("\r\n");
 	}
 
 	@Test
 	void it_should_serialize_string_to_byte_array() {
-		final String input = "test";
-		final byte[] output = Ios.toUtf8Bytes(input);
-		final String strOutput = new String(output, StandardCharsets.UTF_8);
+		String input = "test";
+		byte[] output = Ios.toUtf8Bytes(input);
+		String strOutput = new String(output, StandardCharsets.UTF_8);
 		assertThat(strOutput).isEqualTo(input);
 	}
 
 	@Test
 	void it_should_serialize_null_string_to_empty_byte_array() {
-		final String input = null;
-		final byte[] output = Ios.toUtf8Bytes(input);
-		final String strOutput = new String(output, StandardCharsets.UTF_8);
+		String input = null;
+		byte[] output = Ios.toUtf8Bytes(input);
+		String strOutput = new String(output, StandardCharsets.UTF_8);
 		assertThat(strOutput).isEqualTo("");
 	}
 
 	@Test
 	void it_should_serialize_file_to_byte_array() throws Exception {
-		final Path path = getPathFromClasspath("/file1.txt");
-		final byte[] output = Ios.toBytes(path);
-		final String strOutput = new String(output, StandardCharsets.UTF_8);
+		Path path = getPathFromClasspath("/file1.txt");
+		byte[] output = Ios.toBytes(path);
+		String strOutput = new String(output, StandardCharsets.UTF_8);
 		assertThat(strOutput).isEqualToIgnoringNewLines("Content of file1.txt");
 	}
 

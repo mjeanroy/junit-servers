@@ -91,7 +91,7 @@ final class HttpTestUtils {
 	 * @return The date created with UTC timezone.
 	 */
 	static Date utcDate(int year, int month, int dayOfMonth, int hour, int minutes, int second) {
-		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);

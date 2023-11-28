@@ -42,8 +42,8 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_instantiate_server_from_service_loader_with_default_configuration() {
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner();
-		final EmbeddedServer<?> server = adapter.getServer();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner();
+		EmbeddedServer<?> server = adapter.getServer();
 
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
 		assertThat(server.getConfiguration()).isNotNull();
@@ -51,9 +51,9 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_instantiate_server_from_service_loader_with_custom_configuration() {
-		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(configuration);
-		final EmbeddedServer<?> server = adapter.getServer();
+		FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(configuration);
+		EmbeddedServer<?> server = adapter.getServer();
 
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
 		assertThat(server.getConfiguration()).isSameAs(configuration);
@@ -61,8 +61,8 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_start_server_before_test() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
 		adapter.beforeAll();
 
@@ -71,8 +71,8 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_stop_server_after_test() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
 		adapter.afterAll();
 
@@ -81,8 +81,8 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_start_server() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
 		adapter.start();
 
@@ -91,8 +91,8 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_stop_server() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
 		adapter.stop();
 
@@ -101,8 +101,8 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_restart_server() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
 		adapter.restart();
 
@@ -111,8 +111,8 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_check_if_server_is_started() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
 		adapter.start();
 		assertThat(adapter.isStarted()).isTrue();
@@ -123,66 +123,66 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_get_server_scheme() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final String scheme = adapter.getScheme();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		String scheme = adapter.getScheme();
 		assertThat(scheme).isNotNull().isEqualTo(server.getScheme());
 	}
 
 	@Test
 	void it_should_get_server_host() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final String host = adapter.getHost();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		String host = adapter.getHost();
 		assertThat(host).isNotNull().isEqualTo(server.getHost());
 	}
 
 	@Test
 	void it_should_get_server_path() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final String path = adapter.getPath();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		String path = adapter.getPath();
 		assertThat(path).isNotNull().isEqualTo(server.getPath());
 	}
 
 	@Test
 	void it_should_get_server_port() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final int port = adapter.getPort();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		int port = adapter.getPort();
 		assertThat(port).isNotNull().isEqualTo(server.getPort());
 	}
 
 	@Test
 	void it_should_get_url() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final String url = adapter.getUrl();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		String url = adapter.getUrl();
 		assertThat(url).isNotNull().isEqualTo(server.getUrl());
 	}
 
 	@Test
 	void it_should_get_server() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final EmbeddedServer<?> result = adapter.getServer();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		EmbeddedServer<?> result = adapter.getServer();
 		assertThat(result).isNotNull().isSameAs(server);
 	}
 
 	@Test
 	void it_should_get_client() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClient client = adapter.getClient();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClient client = adapter.getClient();
 		assertThat(client).isNotNull();
 	}
 
 	@Test
 	void it_should_get_client_and_returns_previous_one() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClient client1 = adapter.getClient();
-		final HttpClient client2 = adapter.getClient();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClient client1 = adapter.getClient();
+		HttpClient client2 = adapter.getClient();
 
 		assertThat(client1).isNotNull();
 		assertThat(client2).isNotNull();
@@ -191,20 +191,20 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_get_client_of_given_strategy() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
-		final HttpClient client = adapter.getClient(strategy);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+		HttpClient client = adapter.getClient(strategy);
 		assertThat(client).isNotNull();
 	}
 
 	@Test
 	void it_should_get_client_of_given_strategy_and_returns_previous_one() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
-		final HttpClient client1 = adapter.getClient(strategy);
-		final HttpClient client2 = adapter.getClient(strategy);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+		HttpClient client1 = adapter.getClient(strategy);
+		HttpClient client2 = adapter.getClient(strategy);
 
 		assertThat(client1).isNotNull();
 		assertThat(client2).isNotNull();
@@ -213,10 +213,10 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	public void it_should_get_client_with_custom_configuration() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
-		final HttpClient client = adapter.getClient(configuration);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
+		HttpClient client = adapter.getClient(configuration);
 
 		assertThat(client).isNotNull();
 		assertThat(client.getConfiguration()).isSameAs(configuration);
@@ -224,27 +224,27 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	public void it_should_get_client_with_custom_configuration_and_return_previous_one_with_same_configuration() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
-		final HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().build();
-		final HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().build();
+		HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().build();
+		HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().build();
 
-		final HttpClient client1 = adapter.getClient(configuration1);
-		final HttpClient client2 = adapter.getClient(configuration2);
+		HttpClient client1 = adapter.getClient(configuration1);
+		HttpClient client2 = adapter.getClient(configuration2);
 
 		assertThat(client1).isSameAs(client2);
 	}
 
 	@Test
 	public void it_should_get_client_and_do_not_return_previous_one_with_different_configuration() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().build();
-		final HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().build();
+		HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
 
-		final HttpClient client1 = adapter.getClient(configuration1);
-		final HttpClient client2 = adapter.getClient(configuration2);
+		HttpClient client1 = adapter.getClient(configuration1);
+		HttpClient client2 = adapter.getClient(configuration2);
 
 		assertThat(client1).isNotSameAs(client2);
 		assertThat(client1.getConfiguration()).isSameAs(configuration1);
@@ -253,11 +253,11 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	public void it_should_get_client_with_given_strategy_custom_configuration() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
-		final HttpClientConfiguration configuration = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
-		final HttpClient client = adapter.getClient(strategy, configuration);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+		HttpClientConfiguration configuration = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
+		HttpClient client = adapter.getClient(strategy, configuration);
 
 		assertThat(client).isInstanceOf(OkHttpClient.class);
 		assertThat(client.getConfiguration()).isSameAs(configuration);
@@ -265,15 +265,15 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	public void it_should_get_client_with_given_strategy_custom_configuration_and_return_new_one_with_different_configuration() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
 
-		final HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
-		final HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().build();
+		HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().disableFollowRedirect().build();
+		HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().build();
 
-		final HttpClient client1 = adapter.getClient(strategy, configuration1);
-		final HttpClient client2 = adapter.getClient(strategy, configuration2);
+		HttpClient client1 = adapter.getClient(strategy, configuration1);
+		HttpClient client2 = adapter.getClient(strategy, configuration2);
 
 		assertThat(client1).isNotSameAs(client2);
 		assertThat(client1).isInstanceOf(OkHttpClient.class);
@@ -285,24 +285,24 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	public void it_should_get_client_with_given_strategy_custom_configuration_and_return_previous_one_with_same_configuration() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
 
-		final HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().build();
-		final HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().build();
+		HttpClientConfiguration configuration1 = new HttpClientConfiguration.Builder().build();
+		HttpClientConfiguration configuration2 = new HttpClientConfiguration.Builder().build();
 
-		final HttpClient client1 = adapter.getClient(strategy, configuration1);
-		final HttpClient client2 = adapter.getClient(strategy, configuration2);
+		HttpClient client1 = adapter.getClient(strategy, configuration1);
+		HttpClient client2 = adapter.getClient(strategy, configuration2);
 
 		assertThat(client1).isSameAs(client2);
 	}
 
 	@Test
 	void it_should_stop_server_and_close_clients() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClient client = adapter.getClient();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClient client = adapter.getClient();
 
 		assertThat(client).isNotNull();
 		assertThat(client.isDestroyed()).isFalse();
@@ -315,10 +315,10 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_get_client_of_given_strategy_and_destroy_it_when_server_stop() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
-		final HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
-		final HttpClient client = adapter.getClient(strategy);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		HttpClientStrategy strategy = HttpClientStrategy.OK_HTTP3;
+		HttpClient client = adapter.getClient(strategy);
 
 		assertThat(client).isNotNull();
 		assertThat(client.isDestroyed()).isFalse();
@@ -331,8 +331,8 @@ class EmbeddedServerRunnerTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 
 		assertThat(adapter).hasToString(
 			"EmbeddedServerRunner{" +

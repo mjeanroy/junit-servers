@@ -35,11 +35,11 @@ class CookiesTest {
 
 	@Test
 	void it_should_serialize_single_cookie() {
-		final String name = "foo";
-		final String value = "bar";
-		final Cookie cookie = Cookies.cookie(name, value);
+		String name = "foo";
+		String value = "bar";
+		Cookie cookie = Cookies.cookie(name, value);
 
-		final String result = Cookies.serialize(singleton(cookie));
+		String result = Cookies.serialize(singleton(cookie));
 
 		assertThat(result)
 			.isNotNull()
@@ -49,15 +49,15 @@ class CookiesTest {
 
 	@Test
 	void it_should_serialize_list_of_cookies() {
-		final String n1 = "f1";
-		final String v1 = "b1";
-		final Cookie c1 = Cookies.cookie(n1, v1);
+		String n1 = "f1";
+		String v1 = "b1";
+		Cookie c1 = Cookies.cookie(n1, v1);
 
-		final String n2 = "f2";
-		final String v2 = "b2";
-		final Cookie c2 = Cookies.cookie(n2, v2);
+		String n2 = "f2";
+		String v2 = "b2";
+		Cookie c2 = Cookies.cookie(n2, v2);
 
-		final String result = Cookies.serialize(asList(c1, c2));
+		String result = Cookies.serialize(asList(c1, c2));
 
 		assertThat(result)
 			.isNotNull()
@@ -67,10 +67,10 @@ class CookiesTest {
 
 	@Test
 	void it_should_default_create_cookie() {
-		final String name = "foo";
-		final String value = "bar";
+		String name = "foo";
+		String value = "bar";
 
-		final Cookie cookie = Cookies.cookie(name, value);
+		Cookie cookie = Cookies.cookie(name, value);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -85,16 +85,16 @@ class CookiesTest {
 
 	@Test
 	void it_should_create_cookie() {
-		final String name = "foo";
-		final String value = "bar";
-		final long expires = 0;
-		final long maxAge = 10;
-		final String domain = "domain";
-		final String path = "path";
-		final boolean secure = true;
-		final boolean httpOnly = false;
+		String name = "foo";
+		String value = "bar";
+		long expires = 0;
+		long maxAge = 10;
+		String domain = "domain";
+		String path = "path";
+		boolean secure = true;
+		boolean httpOnly = false;
 
-		final Cookie cookie = Cookies.cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
+		Cookie cookie = Cookies.cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -109,14 +109,14 @@ class CookiesTest {
 
 	@Test
 	void it_should_create_secure_cookie() {
-		final String name = "foo";
-		final String value = "bar";
-		final long expires = 0;
-		final long maxAge = 10;
-		final String domain = "domain";
-		final String path = "path";
+		String name = "foo";
+		String value = "bar";
+		long expires = 0;
+		long maxAge = 10;
+		String domain = "domain";
+		String path = "path";
 
-		final Cookie cookie = Cookies.secureCookie(name, value, domain, path, expires, maxAge);
+		Cookie cookie = Cookies.secureCookie(name, value, domain, path, expires, maxAge);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -131,12 +131,12 @@ class CookiesTest {
 
 	@Test
 	void it_should_create_session_cookie() {
-		final String name = "foo";
-		final String value = "bar";
-		final String domain = "domain";
-		final String path = "path";
+		String name = "foo";
+		String value = "bar";
+		String domain = "domain";
+		String path = "path";
 
-		final Cookie cookie = Cookies.sessionCookie(name, value, domain, path);
+		Cookie cookie = Cookies.sessionCookie(name, value, domain, path);
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo(name);
@@ -151,7 +151,7 @@ class CookiesTest {
 
 	@Test
 	void it_should_create_cookie_with_name_and_value() {
-		final Cookie cookie = Cookies.read("name=value");
+		Cookie cookie = Cookies.read("name=value");
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -166,7 +166,7 @@ class CookiesTest {
 
 	@Test
 	void it_should_create_cookie_with_name_value_domain_path_and_flags() {
-		final Cookie cookie = Cookies.read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
+		Cookie cookie = Cookies.read("name=value; Domain=foo.com; Path=/; Secure; HttpOnly");
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");
@@ -181,7 +181,7 @@ class CookiesTest {
 
 	@Test
 	void it_should_create_cookie_with_name_value_domain_path_expires_max_date_and_flags() {
-		final Cookie cookie = Cookies.read("name=value; Domain=foo.com; Expires=Wed, 13-Jan-2021 22:23:01 GMT; max-age=3600; Path=/; Secure; HttpOnly");
+		Cookie cookie = Cookies.read("name=value; Domain=foo.com; Expires=Wed, 13-Jan-2021 22:23:01 GMT; max-age=3600; Path=/; Secure; HttpOnly");
 
 		assertThat(cookie).isNotNull();
 		assertThat(cookie.getName()).isEqualTo("name");

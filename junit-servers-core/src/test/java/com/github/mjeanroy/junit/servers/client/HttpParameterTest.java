@@ -35,10 +35,10 @@ class HttpParameterTest {
 
 	@Test
 	void it_should_create_http_parameter() {
-		final String name = "foo";
-		final String value = "bar";
+		String name = "foo";
+		String value = "bar";
 
-		final HttpParameter parameter = HttpParameter.param(name, value);
+		HttpParameter parameter = HttpParameter.param(name, value);
 
 		assertThat(parameter.getName()).isEqualTo(name);
 		assertThat(parameter.getValue()).isEqualTo(value);
@@ -46,10 +46,10 @@ class HttpParameterTest {
 
 	@Test
 	void it_should_create_http_parameter_of_given_values() {
-		final String name = "foo";
-		final String value = "bar";
+		String name = "foo";
+		String value = "bar";
 
-		final HttpParameter parameter = HttpParameter.of(name, value);
+		HttpParameter parameter = HttpParameter.of(name, value);
 
 		assertThat(parameter.getName()).isEqualTo(name);
 		assertThat(parameter.getValue()).isEqualTo(value);
@@ -57,10 +57,10 @@ class HttpParameterTest {
 
 	@Test
 	void it_should_get_url_encoded_name() {
-		final String name = "foo bar";
-		final String value = "bar";
+		String name = "foo bar";
+		String value = "bar";
 
-		final HttpParameter parameter = HttpParameter.param(name, value);
+		HttpParameter parameter = HttpParameter.param(name, value);
 
 		assertThat(parameter.getName()).isEqualTo(name);
 		assertThat(parameter.getEncodedName()).isEqualTo(TestUtils.urlEncode(name));
@@ -68,10 +68,10 @@ class HttpParameterTest {
 
 	@Test
 	void it_should_get_url_encoded_value() {
-		final String name = "foo";
-		final String value = "foo bar";
+		String name = "foo";
+		String value = "foo bar";
 
-		final HttpParameter parameter = HttpParameter.param(name, value);
+		HttpParameter parameter = HttpParameter.param(name, value);
 
 		assertThat(parameter.getValue()).isEqualTo(value);
 		assertThat(parameter.getEncodedValue()).isEqualTo(TestUtils.urlEncode(value));
@@ -79,9 +79,9 @@ class HttpParameterTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final String name = "foo";
-		final String value = "bar";
-		final HttpParameter parameter = HttpParameter.param(name, value);
+		String name = "foo";
+		String value = "bar";
+		HttpParameter parameter = HttpParameter.param(name, value);
 		assertThat(parameter.toString()).isEqualTo("HttpParameter{name: \"foo\", value: \"bar\"}");
 	}
 

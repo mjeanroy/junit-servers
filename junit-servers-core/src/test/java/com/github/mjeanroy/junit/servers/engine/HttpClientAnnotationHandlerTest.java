@@ -49,46 +49,46 @@ class HttpClientAnnotationHandlerTest {
 
 	@Test
 	void it_should_support_server_annotation() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
-		final Field field = extractClientField(TestClassWithAnnotatedField.class);
-		final Annotation annotation = readAnnotation(field);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		AnnotationHandler handler = newHttpClientAnnotationHandler(server);
+		Field field = extractClientField(TestClassWithAnnotatedField.class);
+		Annotation annotation = readAnnotation(field);
 
 		assertThat(handler.support(annotation)).isTrue();
 	}
 
 	@Test
 	void it_should_set_client_instance() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
-		final Field field = extractClientField(TestClassWithAnnotatedField.class);
-		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
+		Field field = extractClientField(TestClassWithAnnotatedField.class);
+		AnnotationHandler handler = newHttpClientAnnotationHandler(server);
 
-		final HttpClient client = verifyBeforeTest(target, field, handler);
+		HttpClient client = verifyBeforeTest(target, field, handler);
 
 		verifyAfterTest(target, field, handler, client);
 	}
 
 	@Test
 	void it_should_set_client_instance_on_super_class() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final TestInheritedClassWithAnnotatedField target = new TestInheritedClassWithAnnotatedField();
-		final Field field = extractClientField(TestInheritedClassWithAnnotatedField.class);
-		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		TestInheritedClassWithAnnotatedField target = new TestInheritedClassWithAnnotatedField();
+		Field field = extractClientField(TestInheritedClassWithAnnotatedField.class);
+		AnnotationHandler handler = newHttpClientAnnotationHandler(server);
 
-		final HttpClient client = verifyBeforeTest(target, field, handler);
+		HttpClient client = verifyBeforeTest(target, field, handler);
 
 		verifyAfterTest(target, field, handler, client);
 	}
 
 	@Test
 	void it_should_set_client_instance_on_meta_annotated_field() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final TestClassWithMetaAnnotationField target = new TestClassWithMetaAnnotationField();
-		final Field field = extractClientField(TestClassWithMetaAnnotationField.class);
-		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		TestClassWithMetaAnnotationField target = new TestClassWithMetaAnnotationField();
+		Field field = extractClientField(TestClassWithMetaAnnotationField.class);
+		AnnotationHandler handler = newHttpClientAnnotationHandler(server);
 
-		final HttpClient client = verifyBeforeTest(target, field, handler);
+		HttpClient client = verifyBeforeTest(target, field, handler);
 
 		verifyAfterTest(target, field, handler, client);
 		verifyAsyncHttpClient(client);
@@ -96,8 +96,8 @@ class HttpClientAnnotationHandlerTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final AnnotationHandler handler = newHttpClientAnnotationHandler(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		AnnotationHandler handler = newHttpClientAnnotationHandler(server);
 
 		assertThat(handler).hasToString(
 			"HttpClientAnnotationHandler{" +
@@ -117,7 +117,7 @@ class HttpClientAnnotationHandlerTest {
 	private static HttpClient verifyBeforeTest(Object target, Field field, AnnotationHandler handler) {
 		handler.before(target, field);
 
-		final HttpClient client = readPrivate(target, "client");
+		HttpClient client = readPrivate(target, "client");
 		assertThat(client).isNotNull();
 		assertThat(client.isDestroyed()).isFalse();
 		return client;

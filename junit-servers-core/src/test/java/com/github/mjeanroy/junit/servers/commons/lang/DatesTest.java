@@ -52,10 +52,10 @@ class DatesTest {
 
 	@Test
 	void it_should_parse_date() {
-		final String value = "Wed, 13 Jan 2021 22:23:01 GMT";
-		final String pattern = "EEE, d MMM yyyy HH:mm:ss Z";
+		String value = "Wed, 13 Jan 2021 22:23:01 GMT";
+		String pattern = "EEE, d MMM yyyy HH:mm:ss Z";
 
-		final Date date = parse(value, pattern);
+		Date date = parse(value, pattern);
 
 		assertThat(date)
 			.isNotNull()
@@ -69,11 +69,11 @@ class DatesTest {
 
 	@Test
 	void it_should_parse_date_using_appropriate_pattern() {
-		final String value = "Wed, 13-Jan-2021 22:23:01 GMT";
-		final String pattern1 = "EEE, d MMM yyyy HH:mm:ss Z";
-		final String pattern2 = "EEE, d-MMM-yyyy HH:mm:ss Z";
+		String value = "Wed, 13-Jan-2021 22:23:01 GMT";
+		String pattern1 = "EEE, d MMM yyyy HH:mm:ss Z";
+		String pattern2 = "EEE, d-MMM-yyyy HH:mm:ss Z";
 
-		final Date date = parse(value, pattern1, pattern2);
+		Date date = parse(value, pattern1, pattern2);
 
 		assertThat(date)
 			.isNotNull()
@@ -87,21 +87,21 @@ class DatesTest {
 
 	@Test
 	void it_should_parse_date_and_return_null_without_matching_pattern() {
-		final String value = "2021-01-01";
-		final String pattern1 = "EEE, d MMM yyyy HH:mm:ss Z";
-		final String pattern2 = "EEE, d-MMM-yyyy HH:mm:ss Z";
+		String value = "2021-01-01";
+		String pattern1 = "EEE, d MMM yyyy HH:mm:ss Z";
+		String pattern2 = "EEE, d-MMM-yyyy HH:mm:ss Z";
 
-		final Date date = parse(value, pattern1, pattern2);
+		Date date = parse(value, pattern1, pattern2);
 
 		assertThat(date).isNull();
 	}
 
 	@Test
 	void it_should_parse_date_and_get_time() {
-		final String value = "Wed, 13 Jan 2021 22:23:01 GMT";
-		final String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
+		String value = "Wed, 13 Jan 2021 22:23:01 GMT";
+		String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
-		final Long time = getTime(value, pattern);
+		Long time = getTime(value, pattern);
 
 		assertThat(time)
 			.isNotNull()
@@ -110,10 +110,10 @@ class DatesTest {
 
 	@Test
 	void it_should_format_time() {
-		final long time = 1610576581000L;
-		final String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
+		long time = 1610576581000L;
+		String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
-		final String value = formatTime(time, pattern);
+		String value = formatTime(time, pattern);
 
 		assertThat(value)
 			.isNotNull()
@@ -122,11 +122,11 @@ class DatesTest {
 
 	@Test
 	void it_should_format_date() {
-		final String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
-		final Date date = new Date();
+		String pattern = "EEE, dd MMM yyyy HH:mm:ss zzz";
+		Date date = new Date();
 		date.setTime(1610576581000L);
 
-		final String value = format(date, pattern);
+		String value = format(date, pattern);
 
 		assertThat(value)
 			.isNotNull()

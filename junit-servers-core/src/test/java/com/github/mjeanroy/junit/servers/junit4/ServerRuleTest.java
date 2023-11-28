@@ -41,8 +41,8 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_instantiate_server_from_service_loader_with_default_configuration() {
-		final ServerRule rule = createRule();
-		final EmbeddedServer<?> server = rule.getServer();
+		ServerRule rule = createRule();
+		EmbeddedServer<?> server = rule.getServer();
 
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
 		assertThat(server.getConfiguration()).isNotNull();
@@ -50,9 +50,9 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_instantiate_server_from_service_loader_with_custom_configuration() {
-		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
-		final ServerRule rule = createRule(configuration);
-		final EmbeddedServer<?> server = rule.getServer();
+		FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
+		ServerRule rule = createRule(configuration);
+		EmbeddedServer<?> server = rule.getServer();
 
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
 		assertThat(server.getConfiguration()).isSameAs(configuration);
@@ -60,8 +60,8 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_start_server() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final ServerRule rule = createRule(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		ServerRule rule = createRule(server);
 
 		rule.before();
 
@@ -70,8 +70,8 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_stop_server() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final ServerRule rule = createRule(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		ServerRule rule = createRule(server);
 
 		rule.after();
 
@@ -80,8 +80,8 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_restart_server() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final ServerRule rule = createRule(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		ServerRule rule = createRule(server);
 
 		rule.restart();
 
@@ -90,8 +90,8 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_check_if_server_is_started() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final ServerRule rule = createRule(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		ServerRule rule = createRule(server);
 		assertThat(rule.isStarted()).isFalse();
 
 		rule.start();
@@ -101,11 +101,11 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_get_server_scheme() {
-		final String scheme = "http";
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().withScheme(scheme).build();
-		final ServerRule rule = createRule(server);
+		String scheme = "http";
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().withScheme(scheme).build();
+		ServerRule rule = createRule(server);
 
-		final String result = rule.getScheme();
+		String result = rule.getScheme();
 
 		assertThat(result).isEqualTo(scheme);
 		verify(server).getScheme();
@@ -113,11 +113,11 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_get_server_host() {
-		final String host = "http";
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().withHost(host).build();
-		final ServerRule rule = createRule(server);
+		String host = "http";
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().withHost(host).build();
+		ServerRule rule = createRule(server);
 
-		final String result = rule.getHost();
+		String result = rule.getHost();
 
 		assertThat(result).isEqualTo(host);
 		verify(server).getHost();
@@ -125,11 +125,11 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_get_server_path() {
-		final String path = "/foo";
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().withPath(path).build();
-		final ServerRule rule = createRule(server);
+		String path = "/foo";
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().withPath(path).build();
+		ServerRule rule = createRule(server);
 
-		final String result = rule.getPath();
+		String result = rule.getPath();
 
 		assertThat(result).isEqualTo(path);
 		verify(server).getPath();
@@ -137,15 +137,15 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_get_server_url() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder()
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder()
 			.withScheme("http")
 			.withHost("localhost")
 			.withPort(8080)
 			.withPath("/")
 			.build();
 
-		final ServerRule rule = createRule(server);
-		final String result = rule.getUrl();
+		ServerRule rule = createRule(server);
+		String result = rule.getUrl();
 
 		assertThat(result).isEqualTo("http://localhost:8080/");
 		verify(server).getUrl();
@@ -153,18 +153,18 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_get_server() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final ServerRule rule = createRule(server);
-		final EmbeddedServer<?> result = rule.getServer();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		ServerRule rule = createRule(server);
+		EmbeddedServer<?> result = rule.getServer();
 
 		assertThat(result).isSameAs(server);
 	}
 
 	@Test
 	void it_should_get_http_client() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final ServerRule rule = createRule(server);
-		final HttpClient client = rule.getClient();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		ServerRule rule = createRule(server);
+		HttpClient client = rule.getClient();
 
 		assertThat(client).isNotNull();
 		assertThat(client).isSameAs(rule.getClient());
@@ -173,9 +173,9 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_get_new_http_client_if_it_has_been_destroyed() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final ServerRule rule = createRule(server);
-		final HttpClient client = rule.getClient();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		ServerRule rule = createRule(server);
+		HttpClient client = rule.getClient();
 
 		assertThat(client).isNotNull();
 		assertThat(client).isSameAs(rule.getClient());
@@ -183,7 +183,7 @@ class ServerRuleTest {
 
 		client.destroy();
 
-		final HttpClient newClient = rule.getClient();
+		HttpClient newClient = rule.getClient();
 		assertThat(newClient).isNotNull();
 		assertThat(newClient).isNotSameAs(client);
 		assertThat(newClient.isDestroyed()).isFalse();
@@ -191,9 +191,9 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_destroy_http_client_when_rule_stop() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final ServerRule rule = createRule(server);
-		final HttpClient client = rule.getClient();
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		ServerRule rule = createRule(server);
+		HttpClient client = rule.getClient();
 		assertThat(client).isNotNull();
 		assertThat(client.isDestroyed()).isFalse();
 
@@ -204,8 +204,8 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final ServerRule rule = createRule(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		ServerRule rule = createRule(server);
 
 		assertThat(rule).hasToString(
 			"ServerRule{" +

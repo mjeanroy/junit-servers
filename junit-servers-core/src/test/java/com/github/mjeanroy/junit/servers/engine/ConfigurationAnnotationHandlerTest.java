@@ -41,28 +41,28 @@ class ConfigurationAnnotationHandlerTest {
 
 	@Test
 	void it_should_support_server_annotation() {
-		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
-		final AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
-		final Field field = extractConfigurationField();
-		final Annotation annotation = readAnnotation(field);
+		AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
+		AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
+		Field field = extractConfigurationField();
+		Annotation annotation = readAnnotation(field);
 
 		assertThat(handler.support(annotation)).isTrue();
 	}
 
 	@Test
 	void it_should_set_configuration_instance() {
-		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
-		final TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
-		final Field field = extractConfigurationField();
-		final AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
+		AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
+		TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
+		Field field = extractConfigurationField();
+		AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 
 		verifyBeforeTest(configuration, target, field, handler);
 	}
 
 	@Test
 	void it_should_implement_to_string() {
-		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
-		final AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
+		AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
+		AnnotationHandler handler = newConfigurationAnnotationHandler(configuration);
 
 		assertThat(handler).hasToString(
 			"ConfigurationAnnotationHandler{" +

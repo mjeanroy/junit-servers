@@ -37,7 +37,7 @@ class EmbeddedConfigurationTest {
 
 	@Test
 	void it_should_build_configuration() {
-		final EmbeddedConfiguration result = createConfiguration();
+		EmbeddedConfiguration result = createConfiguration();
 		assertThat(result.getPort()).isEqualTo(0);
 		assertThat(result.getPath()).isEqualTo("/");
 		assertThat(result.getClasspath()).isEqualTo(".");
@@ -46,7 +46,7 @@ class EmbeddedConfigurationTest {
 
 	@Test
 	void it_should_have_to_string() {
-		final EmbeddedConfiguration result = createConfiguration();
+		EmbeddedConfiguration result = createConfiguration();
 		assertThat(result.toString()).isEqualTo(
 			EmbeddedConfiguration.class.getSimpleName() + "{" +
 				"port: 0, " +
@@ -61,8 +61,8 @@ class EmbeddedConfigurationTest {
 
 	@Test
 	void it_should_implement_equals_hashCode() {
-		final ClassLoader red = new URLClassLoader(new URL[0]);
-		final ClassLoader black = new URLClassLoader(new URL[0]);
+		ClassLoader red = new URLClassLoader(new URL[0]);
+		ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(EmbeddedConfiguration.class)
 			.suppress(Warning.STRICT_INHERITANCE)
 			.withPrefabValues(ClassLoader.class, red, black)

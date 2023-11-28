@@ -35,47 +35,47 @@ class HttpHeaderTest {
 
 	@Test
 	void it_should_create_http_header_of_single_value() {
-		final String name = "foo1";
-		final String value = "bar1";
-		final HttpHeader header = HttpHeader.of(name, value);
+		String name = "foo1";
+		String value = "bar1";
+		HttpHeader header = HttpHeader.of(name, value);
 
 		verifyHeaderWithSingleValue(name, value, header);
 	}
 
 	@Test
 	void it_should_create_http_header_off_several_value() {
-		final String name = "foo1";
-		final String v1 = "bar11";
-		final String v2 = "bar12";
-		final HttpHeader header = HttpHeader.header(name, asList(v1, v2));
+		String name = "foo1";
+		String v1 = "bar11";
+		String v2 = "bar12";
+		HttpHeader header = HttpHeader.header(name, asList(v1, v2));
 
 		verifyHeaderWithValues(name, v1, v2, header);
 	}
 
 	@Test
 	void it_should_create_http_header_with_single_value() {
-		final String name = "foo2";
-		final String value = "bar2";
-		final HttpHeader header = HttpHeader.header(name, value);
+		String name = "foo2";
+		String value = "bar2";
+		HttpHeader header = HttpHeader.header(name, value);
 
 		verifyHeaderWithSingleValue(name, value, header);
 	}
 
 	@Test
 	void it_should_create_http_header_with_several_value() {
-		final String name = "foo2";
-		final String v1 = "bar21";
-		final String v2 = "bar22";
-		final HttpHeader header = HttpHeader.header(name, asList(v1, v2));
+		String name = "foo2";
+		String v1 = "bar21";
+		String v2 = "bar22";
+		HttpHeader header = HttpHeader.header(name, asList(v1, v2));
 
 		verifyHeaderWithValues(name, v1, v2, header);
 	}
 
 	@Test
 	void it_should_implement_to_string_with_single_value() {
-		final String name = "foo";
-		final String value = "bar";
-		final HttpHeader parameter = HttpHeader.header(name, value);
+		String name = "foo";
+		String value = "bar";
+		HttpHeader parameter = HttpHeader.header(name, value);
 
 		assertThat(parameter.toString()).isEqualTo(
 			"HttpHeader{" +
@@ -87,10 +87,10 @@ class HttpHeaderTest {
 
 	@Test
 	void it_should_implement_to_string_with_several_value() {
-		final String name = "foo";
-		final String v1 = "bar1";
-		final String v2 = "bar2";
-		final HttpHeader parameter = HttpHeader.header(name, asList(v1, v2));
+		String name = "foo";
+		String v1 = "bar1";
+		String v2 = "bar2";
+		HttpHeader parameter = HttpHeader.header(name, asList(v1, v2));
 
 		assertThat(parameter.toString()).isEqualTo(
 			"HttpHeader{" +

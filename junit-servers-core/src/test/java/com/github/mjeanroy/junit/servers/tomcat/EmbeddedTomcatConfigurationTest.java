@@ -37,7 +37,7 @@ class EmbeddedTomcatConfigurationTest {
 
 	@Test
 	void it_should_build_default_configuration() {
-		final EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.defaultConfiguration();
+		EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.defaultConfiguration();
 
 		assertThat(result.getPort()).isEqualTo(0);
 		assertThat(result.getPath()).isEqualTo("/");
@@ -50,12 +50,12 @@ class EmbeddedTomcatConfigurationTest {
 
 	@Test
 	void it_should_build_configuration() {
-		final int port = 8080;
-		final String path = "/foo";
-		final String webapp = "foo";
-		final String classpath = "/target/classes";
+		int port = 8080;
+		String path = "/foo";
+		String webapp = "foo";
+		String classpath = "/target/classes";
 
-		final EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.builder()
+		EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.builder()
 			.withPort(port)
 			.withClasspath(classpath)
 			.withWebapp(webapp)
@@ -76,8 +76,8 @@ class EmbeddedTomcatConfigurationTest {
 
 	@Test
 	void it_should_implement_equals_hashCode() {
-		final ClassLoader red = new URLClassLoader(new URL[0]);
-		final ClassLoader black = new URLClassLoader(new URL[0]);
+		ClassLoader red = new URLClassLoader(new URL[0]);
+		ClassLoader black = new URLClassLoader(new URL[0]);
 		EqualsVerifier.forClass(EmbeddedTomcatConfiguration.class)
 			.suppress(Warning.STRICT_INHERITANCE)
 			.withRedefinedSuperclass()
@@ -87,7 +87,7 @@ class EmbeddedTomcatConfigurationTest {
 
 	@Test
 	void it_should_have_to_string() {
-		final EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.defaultConfiguration();
+		EmbeddedTomcatConfiguration result = EmbeddedTomcatConfiguration.defaultConfiguration();
 		assertThat(result).hasToString(
 			"EmbeddedTomcatConfiguration{" +
 				"port: 0, " +

@@ -38,13 +38,13 @@ class ClassesTest {
 
 	@Test
 	void it_should_instantiate_class_using_empty_constructor() {
-		final ClassWithoutConstructor instance = Classes.instantiate(ClassWithoutConstructor.class);
+		ClassWithoutConstructor instance = Classes.instantiate(ClassWithoutConstructor.class);
 		assertThat(instance).isNotNull();
 	}
 
 	@Test
 	void it_should_instantiate_class_using_private_empty_constructor() {
-		final ClassWithPrivateEmptyConstructor instance = Classes.instantiate(ClassWithPrivateEmptyConstructor.class);
+		ClassWithPrivateEmptyConstructor instance = Classes.instantiate(ClassWithPrivateEmptyConstructor.class);
 		assertThat(instance).isNotNull();
 	}
 

@@ -35,8 +35,8 @@ class HttpRequestBodyStringTest {
 
 	@Test
 	void it_should_create_body_string_without_content_type() {
-		final String rawBody = "{}";
-		final HttpRequestBodyString bodyString = HttpRequestBodyString.of(rawBody);
+		String rawBody = "{}";
+		HttpRequestBodyString bodyString = HttpRequestBodyString.of(rawBody);
 
 		assertThat(bodyString.getContentType()).isNull();
 		assertThat(bodyString.getBody()).isEqualTo(rawBody.getBytes(StandardCharsets.UTF_8));
@@ -44,9 +44,9 @@ class HttpRequestBodyStringTest {
 
 	@Test
 	void it_should_create_body_with_content_type() {
-		final String contentType = "application/json";
-		final String rawBody = "{}";
-		final HttpRequestBodyString bodyString = HttpRequestBodyString.of(rawBody, contentType);
+		String contentType = "application/json";
+		String rawBody = "{}";
+		HttpRequestBodyString bodyString = HttpRequestBodyString.of(rawBody, contentType);
 
 		assertThat(bodyString.getContentType()).isEqualTo(contentType);
 		assertThat(bodyString.getBody()).isEqualTo(rawBody.getBytes(StandardCharsets.UTF_8));
@@ -59,9 +59,9 @@ class HttpRequestBodyStringTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final String body = "{\"id\": 1}";
-		final String contentType = "application/json";
-		final HttpRequestBodyString bodyString = HttpRequestBodyString.of(body, contentType);
+		String body = "{\"id\": 1}";
+		String contentType = "application/json";
+		HttpRequestBodyString bodyString = HttpRequestBodyString.of(body, contentType);
 		assertThat(bodyString).hasToString(
 			"HttpRequestBodyString{" +
 				"contentType: \"application/json\", " +

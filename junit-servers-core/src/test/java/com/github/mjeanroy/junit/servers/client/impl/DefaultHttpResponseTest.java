@@ -39,14 +39,14 @@ class DefaultHttpResponseTest {
 
 	@Test
 	void it_should_create_http_response() {
-		final long duration = 1000L;
-		final int status = 200;
-		final String body = "The response body";
+		long duration = 1000L;
+		int status = 200;
+		String body = "The response body";
 
-		final HttpHeader header = header("Content-Type", "text/plain");
-		final Set<HttpHeader> headers = singleton(header);
+		HttpHeader header = header("Content-Type", "text/plain");
+		Set<HttpHeader> headers = singleton(header);
 
-		final DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, body, headers);
+		DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, body, headers);
 
 		assertThat(response).isNotNull();
 		assertThat(response.getRequestDuration()).isEqualTo(duration);
@@ -62,13 +62,13 @@ class DefaultHttpResponseTest {
 
 	@Test
 	void it_should_get_header_case_insensitively() {
-		final long duration = 1000L;
-		final int status = 200;
-		final String body = "The response body";
-		final HttpHeader header = header("Content-Type", "text/plain");
-		final Set<HttpHeader> headers = singleton(header);
+		long duration = 1000L;
+		int status = 200;
+		String body = "The response body";
+		HttpHeader header = header("Content-Type", "text/plain");
+		Set<HttpHeader> headers = singleton(header);
 
-		final DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, body, headers);
+		DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, body, headers);
 
 		assertThat(response.getHeader("Content-Type")).isEqualTo(header);
 		assertThat(response.getHeader("content-type")).isEqualTo(header);
@@ -87,9 +87,9 @@ class DefaultHttpResponseTest {
 	void it_should_implement_to_string() {
 		long duration = 1000L;
 		int status = 200;
-		final String responseBody = "The response body";
-		final Set<HttpHeader> headers = singleton(header("Content-Type", "text/plain"));
-		final DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, responseBody, headers);
+		String responseBody = "The response body";
+		Set<HttpHeader> headers = singleton(header("Content-Type", "text/plain"));
+		DefaultHttpResponse response = DefaultHttpResponse.of(duration, status, responseBody, headers);
 
 		assertThat(response).hasToString(
 			"DefaultHttpResponse{" +

@@ -37,10 +37,10 @@ class AnnotationsHandlerRuleTest {
 
 	@Test
 	void it_should_process_handlers() {
-		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
-		final EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
-		final FixtureClass target = new FixtureClass();
-		final AnnotationsHandlerRule rule = new AnnotationsHandlerRule(target, embeddedServer, configuration);
+		AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
+		EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
+		FixtureClass target = new FixtureClass();
+		AnnotationsHandlerRule rule = new AnnotationsHandlerRule(target, embeddedServer, configuration);
 
 		verifyBeforeTest(configuration, embeddedServer, target, rule);
 		verifyAfterTest(configuration, embeddedServer, target, rule);
@@ -48,10 +48,10 @@ class AnnotationsHandlerRuleTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
-		final EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
-		final FixtureClass target = new FixtureClass();
-		final AnnotationsHandlerRule rule = new AnnotationsHandlerRule(target, embeddedServer, configuration);
+		AbstractConfiguration configuration = new AbstractConfigurationMockBuilder().build();
+		EmbeddedServer<?> embeddedServer = new EmbeddedServerMockBuilder().build();
+		FixtureClass target = new FixtureClass();
+		AnnotationsHandlerRule rule = new AnnotationsHandlerRule(target, embeddedServer, configuration);
 
 		assertThat(rule).hasToString(
 			"AnnotationsHandlerRule{" +

@@ -55,10 +55,10 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_port() {
-		final int oldPort = builder.getPort();
-		final int newPort = oldPort + 10;
+		int oldPort = builder.getPort();
+		int newPort = oldPort + 10;
 
-		final EmbeddedTomcatConfiguration.Builder result = builder.withPort(newPort);
+		EmbeddedTomcatConfiguration.Builder result = builder.withPort(newPort);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getPort()).isNotEqualTo(oldPort).isEqualTo(newPort);
@@ -66,10 +66,10 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_path() {
-		final String oldPath = builder.getPath();
-		final String newPath = oldPath + "foo";
+		String oldPath = builder.getPath();
+		String newPath = oldPath + "foo";
 
-		final EmbeddedTomcatConfiguration.Builder result = builder.withPath(newPath);
+		EmbeddedTomcatConfiguration.Builder result = builder.withPath(newPath);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getPath()).isNotEqualTo(oldPath).isEqualTo(newPath);
@@ -77,10 +77,10 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_webapp_path() {
-		final String oldWebapp = builder.getWebapp();
-		final String newWebapp = oldWebapp + "foo";
+		String oldWebapp = builder.getWebapp();
+		String newWebapp = oldWebapp + "foo";
 
-		final EmbeddedTomcatConfiguration.Builder result = builder.withWebapp(newWebapp);
+		EmbeddedTomcatConfiguration.Builder result = builder.withWebapp(newWebapp);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
@@ -88,11 +88,11 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_webapp_path_with_file(@TempDir File dir) throws Exception {
-		final String oldWebapp = builder.getWebapp();
-		final File file = Files.createTempFile(dir.toPath(), null, null).toFile();
-		final String newWebapp = file.getAbsolutePath();
+		String oldWebapp = builder.getWebapp();
+		File file = Files.createTempFile(dir.toPath(), null, null).toFile();
+		String newWebapp = file.getAbsolutePath();
 
-		final EmbeddedTomcatConfiguration.Builder result = builder.withWebapp(file);
+		EmbeddedTomcatConfiguration.Builder result = builder.withWebapp(file);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
@@ -100,10 +100,10 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_classpath_entry() {
-		final String oldClasspath = builder.getClasspath();
-		final String newClasspath = oldClasspath + "foo";
+		String oldClasspath = builder.getClasspath();
+		String newClasspath = oldClasspath + "foo";
 
-		final EmbeddedTomcatConfiguration.Builder result = builder.withClasspath(newClasspath);
+		EmbeddedTomcatConfiguration.Builder result = builder.withClasspath(newClasspath);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getClasspath()).isNotEqualTo(oldClasspath).isEqualTo(newClasspath);
@@ -111,10 +111,10 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_base_dir() {
-		final String oldBaseDir = builder.getBaseDir();
-		final String newBaseDir = oldBaseDir + "foo";
+		String oldBaseDir = builder.getBaseDir();
+		String newBaseDir = oldBaseDir + "foo";
 
-		final EmbeddedTomcatConfiguration.Builder result = builder.withBaseDir(newBaseDir);
+		EmbeddedTomcatConfiguration.Builder result = builder.withBaseDir(newBaseDir);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getBaseDir()).isNotEqualTo(oldBaseDir).isEqualTo(newBaseDir);
@@ -122,7 +122,7 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_keep_base_dir() {
-		final EmbeddedTomcatConfiguration.Builder result = builder.keepBaseDir();
+		EmbeddedTomcatConfiguration.Builder result = builder.keepBaseDir();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isKeepBaseDir()).isTrue();
@@ -130,7 +130,7 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_delete_base_dir() {
-		final EmbeddedTomcatConfiguration.Builder result = builder.deleteBaseDir();
+		EmbeddedTomcatConfiguration.Builder result = builder.deleteBaseDir();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isKeepBaseDir()).isFalse();
@@ -138,7 +138,7 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_enable_naming() {
-		final EmbeddedTomcatConfiguration.Builder result = builder.enableNaming();
+		EmbeddedTomcatConfiguration.Builder result = builder.enableNaming();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isEnableNaming()).isTrue();
@@ -146,7 +146,7 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_disable_naming() {
-		final EmbeddedTomcatConfiguration.Builder result = builder.disableNaming();
+		EmbeddedTomcatConfiguration.Builder result = builder.disableNaming();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isEnableNaming()).isFalse();
@@ -154,7 +154,7 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_enable_metaInf_creation() {
-		final EmbeddedTomcatConfiguration.Builder result = builder.enableForceMetaInf();
+		EmbeddedTomcatConfiguration.Builder result = builder.enableForceMetaInf();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isForceMetaInf()).isTrue();
@@ -162,7 +162,7 @@ class EmbeddedTomcatConfigurationBuilderTest {
 
 	@Test
 	void it_should_disable_metaInf_creation() {
-		final EmbeddedTomcatConfiguration.Builder result = builder.disableForceMetaInf();
+		EmbeddedTomcatConfiguration.Builder result = builder.disableForceMetaInf();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isForceMetaInf()).isFalse();

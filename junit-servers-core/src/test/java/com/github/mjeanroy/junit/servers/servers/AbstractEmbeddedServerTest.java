@@ -63,10 +63,10 @@ class AbstractEmbeddedServerTest {
 
 	@Test
 	void it_should_have_custom_configuration() {
-		final String path = "/foo";
-		final int port = 8080;
-		final String webapp = "/foo/bar";
-		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder()
+		String path = "/foo";
+		int port = 8080;
+		String webapp = "/foo/bar";
+		FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder()
 			.withPath(path)
 			.withPort(port)
 			.withWebapp(webapp)
@@ -234,15 +234,15 @@ class AbstractEmbeddedServerTest {
 
 	@Test
 	void it_should_set_environment_properties() {
-		final String name1 = "foo";
-		final String oldValue1 = "foo";
-		final String newValue1 = "bar";
+		String name1 = "foo";
+		String oldValue1 = "foo";
+		String newValue1 = "bar";
 		System.setProperty(name1, oldValue1);
 
-		final String name2 = "foo1";
-		final String newValue2 = "bar1";
+		String name2 = "foo1";
+		String newValue2 = "bar1";
 
-		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder()
+		FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder()
 			.withProperty(name1, newValue1)
 			.withProperty(name2, newValue2)
 			.build();
@@ -265,8 +265,8 @@ class AbstractEmbeddedServerTest {
 
 	@Test
 	void it_should_execute_hook() {
-		final Hook hook = mock(Hook.class);
-		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().withHook(hook).build();
+		Hook hook = mock(Hook.class);
+		FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().withHook(hook).build();
 
 		server = new FakeEmbeddedServer(configuration);
 
@@ -285,10 +285,10 @@ class AbstractEmbeddedServerTest {
 
 	@Test
 	void it_should_execute_hook_before_doStop() {
-		final Hook hook = mock(Hook.class);
-		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().withHook(hook).build();
+		Hook hook = mock(Hook.class);
+		FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().withHook(hook).build();
 
-		final Answer<Object> ensureIsStillStartedAnswer = invocation -> {
+		Answer<Object> ensureIsStillStartedAnswer = invocation -> {
 			FakeEmbeddedServer server = invocation.getArgument(0);
 			assertThat(server).isNotNull();
 			assertThat(server.getNbStop()).isZero();
@@ -314,7 +314,7 @@ class AbstractEmbeddedServerTest {
 
 	@Test
 	void it_should_get_custom_path() {
-		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder().withPath("/foo").build());
+		FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder().withPath("/foo").build());
 		assertThat(server.getPath()).isEqualTo("/foo");
 	}
 
@@ -325,30 +325,30 @@ class AbstractEmbeddedServerTest {
 
 	@Test
 	void it_should_get_url_with_custom_path() {
-		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder().withPath("/foo").build());
+		FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder().withPath("/foo").build());
 		assertThat(server.getUrl()).isEqualTo(localhost(server.getPort(), "/foo"));
 	}
 
 	@Test
 	void it_should_get_url_with_custom_path_pre_pending_slash() {
-		final FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder().withPath("foo").build());
+		FakeEmbeddedServer server = new FakeEmbeddedServer(new FakeEmbeddedServerConfigurationBuilder().withPath("foo").build());
 		assertThat(server.getUrl()).isEqualTo(localhost(0, "/foo"));
 	}
 
 	@Test
 	void it_should_get_url_and_do_not_encode_custom_path() {
-		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().withPath("/foo bar").build();
-		final FakeEmbeddedServer server = new FakeEmbeddedServer(configuration);
-		final String url = server.getUrl();
+		FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().withPath("/foo bar").build();
+		FakeEmbeddedServer server = new FakeEmbeddedServer(configuration);
+		String url = server.getUrl();
 
 		assertThat(url).isEqualTo(localhost(server.getPort(), "/foo bar"));
 	}
 
 	@Test
 	void it_should_get_original_server_implementation() {
-		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().withPath("foo").build();
-		final FakeEmbeddedServer server = new FakeEmbeddedServer(configuration);
-		final FakeServer delegate = server.getDelegate();
+		FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().withPath("foo").build();
+		FakeEmbeddedServer server = new FakeEmbeddedServer(configuration);
+		FakeServer delegate = server.getDelegate();
 		assertThat(delegate).isNotNull();
 	}
 }

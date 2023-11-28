@@ -38,8 +38,8 @@ class PreconditionsTest {
 
 	@Test
 	void it_should_throw_exception_if_value_is_null() {
-		final String input = null;
-		final String name = "foo";
+		String input = null;
+		String name = "foo";
 
 		assertThatThrownBy(() -> Preconditions.notNull(input, name))
 			.isExactlyInstanceOf(NullPointerException.class)
@@ -48,8 +48,8 @@ class PreconditionsTest {
 
 	@Test
 	void it_should_throw_exception_if_one_value_is_null() {
-		final List<String> inputs = asList("1", null, "3");
-		final String name = "inputs";
+		List<String> inputs = asList("1", null, "3");
+		String name = "inputs";
 
 		assertThatThrownBy(() -> Preconditions.doesNotContainNull(inputs, name))
 			.isExactlyInstanceOf(NullPointerException.class)
@@ -58,16 +58,16 @@ class PreconditionsTest {
 
 	@Test
 	void it_should_return_iterable_if_no_value_are_null() {
-		final List<String> inputs = asList("1", "2", "3");
-		final String name = "inputs";
-		final Iterable<String> outputs = Preconditions.doesNotContainNull(inputs, name);
+		List<String> inputs = asList("1", "2", "3");
+		String name = "inputs";
+		Iterable<String> outputs = Preconditions.doesNotContainNull(inputs, name);
 		assertThat(outputs).isSameAs(inputs);
 	}
 
 	@Test
 	void it_should_throw_exception_if_collection_is_empty() {
-		final List<Object> inputs = emptyList();
-		final String name = "foo";
+		List<Object> inputs = emptyList();
+		String name = "foo";
 
 		assertThatThrownBy(() -> Preconditions.notEmpty(inputs, name))
 			.isExactlyInstanceOf(IllegalArgumentException.class)
@@ -76,8 +76,8 @@ class PreconditionsTest {
 
 	@Test
 	void it_should_throw_exception_if_collection_is_null() {
-		final Collection<String> inputs = null;
-		final String name = "foo";
+		Collection<String> inputs = null;
+		String name = "foo";
 
 		assertThatThrownBy(() -> Preconditions.notEmpty(inputs, name))
 			.isExactlyInstanceOf(NullPointerException.class)
@@ -86,16 +86,16 @@ class PreconditionsTest {
 
 	@Test
 	void it_should_not_throw_exception_if_collection_is_not_empty() {
-		final Collection<String> list = asList("foo", "bar");
-		final String name = "foo";
-		final Collection<String> result = Preconditions.notEmpty(list, name);
+		Collection<String> list = asList("foo", "bar");
+		String name = "foo";
+		Collection<String> result = Preconditions.notEmpty(list, name);
 		assertThat(result).isNotNull().isSameAs(list);
 	}
 
 	@Test
 	void it_should_throw_exception_if_string_is_null() {
-		final String value = null;
-		final String name = "foo";
+		String value = null;
+		String name = "foo";
 
 		assertThatThrownBy(() -> Preconditions.notBlank(value, name))
 			.isExactlyInstanceOf(NullPointerException.class)
@@ -104,8 +104,8 @@ class PreconditionsTest {
 
 	@Test
 	void it_should_throw_exception_if_string_is_empty() {
-		final String value = "";
-		final String name = "foo";
+		String value = "";
+		String name = "foo";
 
 		assertThatThrownBy(() -> Preconditions.notBlank(value, name))
 			.isExactlyInstanceOf(IllegalArgumentException.class)
@@ -114,8 +114,8 @@ class PreconditionsTest {
 
 	@Test
 	void it_should_throw_exception_if_string_is_blank() {
-		final String value = "   ";
-		final String name = "foo";
+		String value = "   ";
+		String name = "foo";
 
 		assertThatThrownBy(() -> Preconditions.notBlank(value, name))
 			.isExactlyInstanceOf(IllegalArgumentException.class)
@@ -124,15 +124,15 @@ class PreconditionsTest {
 
 	@Test
 	void it_should_not_throw_exception_if_string_is_not_blank() {
-		final String input = "  foo  ";
-		final String output = Preconditions.notBlank(input, "foo");
+		String input = "  foo  ";
+		String output = Preconditions.notBlank(input, "foo");
 		assertThat(output).isEqualTo(input);
 	}
 
 	@Test
 	void it_should_throw_exception_if_int_is_negative() {
-		final int value = -1;
-		final String name = "foo";
+		int value = -1;
+		String name = "foo";
 
 		assertThatThrownBy(() -> Preconditions.positive(value, name))
 			.isExactlyInstanceOf(IllegalArgumentException.class)
@@ -147,8 +147,8 @@ class PreconditionsTest {
 
 	@Test
 	void it_should_throw_exception_if_long_is_negative() {
-		final long value = -1L;
-		final String name = "foo";
+		long value = -1L;
+		String name = "foo";
 
 		assertThatThrownBy(() -> Preconditions.positive(value, name))
 			.isExactlyInstanceOf(IllegalArgumentException.class)

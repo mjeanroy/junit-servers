@@ -40,11 +40,11 @@ class EmbeddedConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_port() {
-		final EmbeddedConfigurationBuilder builder = createBuilder();
-		final int oldPort = builder.getPort();
-		final int newPort = oldPort + 10;
+		EmbeddedConfigurationBuilder builder = createBuilder();
+		int oldPort = builder.getPort();
+		int newPort = oldPort + 10;
 
-		final EmbeddedConfigurationBuilder result = builder.withPort(newPort);
+		EmbeddedConfigurationBuilder result = builder.withPort(newPort);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getPort()).isNotEqualTo(oldPort).isEqualTo(newPort);
@@ -52,11 +52,11 @@ class EmbeddedConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_path() {
-		final EmbeddedConfigurationBuilder builder = createBuilder();
-		final String oldPath = builder.getPath();
-		final String newPath = oldPath + "foo";
+		EmbeddedConfigurationBuilder builder = createBuilder();
+		String oldPath = builder.getPath();
+		String newPath = oldPath + "foo";
 
-		final EmbeddedConfigurationBuilder result = builder.withPath(newPath);
+		EmbeddedConfigurationBuilder result = builder.withPath(newPath);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getPath()).isNotEqualTo(oldPath).isEqualTo(newPath);
@@ -64,11 +64,11 @@ class EmbeddedConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_webapp_path() {
-		final EmbeddedConfigurationBuilder builder = createBuilder();
-		final String oldWebapp = builder.getWebapp();
-		final String newWebapp = oldWebapp + "foo";
+		EmbeddedConfigurationBuilder builder = createBuilder();
+		String oldWebapp = builder.getWebapp();
+		String newWebapp = oldWebapp + "foo";
 
-		final EmbeddedConfigurationBuilder result = builder.withWebapp(newWebapp);
+		EmbeddedConfigurationBuilder result = builder.withWebapp(newWebapp);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
@@ -76,11 +76,11 @@ class EmbeddedConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_webapp_path_with_file(@TempDir File tempDir) {
-		final EmbeddedConfigurationBuilder builder = createBuilder();
-		final String oldWebapp = builder.getWebapp();
-		final String newWebapp = tempDir.getAbsolutePath();
+		EmbeddedConfigurationBuilder builder = createBuilder();
+		String oldWebapp = builder.getWebapp();
+		String newWebapp = tempDir.getAbsolutePath();
 
-		final EmbeddedConfigurationBuilder result = builder.withWebapp(tempDir);
+		EmbeddedConfigurationBuilder result = builder.withWebapp(tempDir);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
@@ -88,10 +88,10 @@ class EmbeddedConfigurationBuilderTest {
 
 	@Test
 	void it_should_override_descriptor_file() {
-		final EmbeddedConfigurationBuilder builder = createBuilder();
-		final String newDescriptor = "src/test/resources/web.xml";
-		final String oldDescriptor = builder.getOverrideDescriptor();
-		final EmbeddedConfigurationBuilder result = builder.withOverrideDescriptor(newDescriptor);
+		EmbeddedConfigurationBuilder builder = createBuilder();
+		String newDescriptor = "src/test/resources/web.xml";
+		String oldDescriptor = builder.getOverrideDescriptor();
+		EmbeddedConfigurationBuilder result = builder.withOverrideDescriptor(newDescriptor);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getOverrideDescriptor()).isNotEqualTo(oldDescriptor).isEqualTo(newDescriptor);
@@ -99,8 +99,8 @@ class EmbeddedConfigurationBuilderTest {
 
 	@Test
 	void it_should_fail_to_override_classloader_with_null_class() {
-		final EmbeddedConfigurationBuilder builder = createBuilder();
-		final Class<?> klass = null;
+		EmbeddedConfigurationBuilder builder = createBuilder();
+		Class<?> klass = null;
 
 		assertThatThrownBy(() -> builder.withParentClassLoader(klass))
 			.isExactlyInstanceOf(NullPointerException.class)
@@ -109,30 +109,30 @@ class EmbeddedConfigurationBuilderTest {
 
 	@Test
 	void it_should_add_property() {
-		final EmbeddedConfigurationBuilder builder = createBuilder();
-		final Map<String, String> oldProperties = builder.getEnvProperties();
+		EmbeddedConfigurationBuilder builder = createBuilder();
+		Map<String, String> oldProperties = builder.getEnvProperties();
 		assertThat(oldProperties).isEmpty();
 
-		final String name = "foo";
-		final String value = "bar";
-		final EmbeddedConfigurationBuilder result = builder.withProperty(name, value);
+		String name = "foo";
+		String value = "bar";
+		EmbeddedConfigurationBuilder result = builder.withProperty(name, value);
 		assertThat(result).isSameAs(builder);
 
-		final Map<String, String> newProperties = result.getEnvProperties();
+		Map<String, String> newProperties = result.getEnvProperties();
 		assertThat(newProperties).hasSize(1).containsOnly(entry(name, value));
 	}
 
 	@Test
 	void it_should_add_hook() {
-		final Hook hook = mock(Hook.class);
-		final EmbeddedConfigurationBuilder builder = createBuilder();
-		final List<Hook> oldHooks = builder.getHooks();
+		Hook hook = mock(Hook.class);
+		EmbeddedConfigurationBuilder builder = createBuilder();
+		List<Hook> oldHooks = builder.getHooks();
 		assertThat(oldHooks).isEmpty();
 
-		final EmbeddedConfigurationBuilder result = builder.withHook(hook);
+		EmbeddedConfigurationBuilder result = builder.withHook(hook);
 		assertThat(result).isSameAs(builder);
 
-		final List<Hook> newHooks = result.getHooks();
+		List<Hook> newHooks = result.getHooks();
 		assertThat(newHooks).hasSize(1).containsOnly(hook);
 	}
 

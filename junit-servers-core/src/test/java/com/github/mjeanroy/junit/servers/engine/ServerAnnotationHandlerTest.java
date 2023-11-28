@@ -41,28 +41,28 @@ class ServerAnnotationHandlerTest {
 
 	@Test
 	void it_should_support_server_annotation() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final Field field = extractServerField();
-		final AnnotationHandler handler = newServerAnnotationHandler(server);
-		final Annotation annotation = field.getAnnotation(TestServer.class);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		Field field = extractServerField();
+		AnnotationHandler handler = newServerAnnotationHandler(server);
+		Annotation annotation = field.getAnnotation(TestServer.class);
 
 		assertThat(handler.support(annotation)).isTrue();
 	}
 
 	@Test
 	void it_should_set_server_instance() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final Field field = extractServerField();
-		final TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
-		final AnnotationHandler handler = newServerAnnotationHandler(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		Field field = extractServerField();
+		TestClassWithAnnotatedField target = new TestClassWithAnnotatedField();
+		AnnotationHandler handler = newServerAnnotationHandler(server);
 
 		verifyBeforeTest(server, field, target, handler);
 	}
 
 	@Test
 	void it_should_implement_to_string() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final AnnotationHandler handler = newServerAnnotationHandler(server);
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		AnnotationHandler handler = newServerAnnotationHandler(server);
 
 		assertThat(handler).hasToString(
 			"ServerAnnotationHandler{" +

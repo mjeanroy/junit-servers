@@ -39,8 +39,8 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_create_body_file_from_file_and_guess_content_type() {
-		final File file = getFileFromClasspath("/file1.txt");
-		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(file);
+		File file = getFileFromClasspath("/file1.txt");
+		HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(file);
 
 		assertThat(bodyFile).isNotNull();
 		assertThat(bodyFile.getContentType()).isEqualTo("text/plain");
@@ -50,9 +50,9 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_create_body_file_from_file_with_content_type() {
-		final File file = getFileFromClasspath("/file1.txt");
-		final String contentType = "text/plain";
-		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(file, contentType);
+		File file = getFileFromClasspath("/file1.txt");
+		String contentType = "text/plain";
+		HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(file, contentType);
 
 		assertThat(bodyFile).isNotNull();
 		assertThat(bodyFile.getContentType()).isEqualTo(contentType);
@@ -62,8 +62,8 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_create_body_file_from_path_and_guess_content_type() {
-		final Path path = getPathFromClasspath("/file1.txt");
-		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
+		Path path = getPathFromClasspath("/file1.txt");
+		HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
 
 		assertThat(bodyFile).isNotNull();
 		assertThat(bodyFile.getContentType()).isEqualTo("text/plain");
@@ -73,9 +73,9 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_create_body_file_from_path_with_content_type() {
-		final Path path = getPathFromClasspath("/file1.txt");
-		final String contentType = "text/plain";
-		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path, contentType);
+		Path path = getPathFromClasspath("/file1.txt");
+		String contentType = "text/plain";
+		HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path, contentType);
 
 		assertThat(bodyFile).isNotNull();
 		assertThat(bodyFile.getContentType()).isEqualTo(contentType);
@@ -85,8 +85,8 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_serialize_body() throws Exception {
-		final Path path = getPathFromClasspath("/file1.txt");
-		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
+		Path path = getPathFromClasspath("/file1.txt");
+		HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
 
 		assertThat(toUtf8String(bodyFile.getBody())).isEqualToIgnoringNewLines(
 			"Content of file1.txt"
@@ -95,8 +95,8 @@ class HttpRequestBodyFileTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final Path path = getPathFromClasspath("/file1.txt");
-		final HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
+		Path path = getPathFromClasspath("/file1.txt");
+		HttpRequestBodyFile bodyFile = HttpRequestBodyFile.of(path);
 		assertThat(bodyFile).hasToString(
 			"HttpRequestBodyFile{" +
 				"contentType: \"text/plain\", " +

@@ -38,35 +38,35 @@ class ServersTest {
 
 	@Test
 	void it_should_instantiate_server_using_service_loader() {
-		final EmbeddedServer<?> server = Servers.instantiate(FixtureClass.class);
+		EmbeddedServer<?> server = Servers.instantiate(FixtureClass.class);
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
 		assertThat(server.getConfiguration()).isNotNull();
 	}
 
 	@Test
 	void it_should_instantiate_server_using_service_loader_with_custom_configuration() {
-		final EmbeddedServer<?> server = Servers.instantiate(FixtureClassWithConfiguration.class);
+		EmbeddedServer<?> server = Servers.instantiate(FixtureClassWithConfiguration.class);
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
 		assertThat(server.getConfiguration()).isNotNull().isSameAs(FixtureClassWithConfiguration.configuration);
 	}
 
 	@Test
 	void it_should_instantiate_server_with_configuration() {
-		final FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
-		final EmbeddedServer<?> server = Servers.instantiate(configuration);
+		FakeEmbeddedServerConfiguration configuration = new FakeEmbeddedServerConfigurationBuilder().build();
+		EmbeddedServer<?> server = Servers.instantiate(configuration);
 		assertThat(server).isNotNull().isExactlyInstanceOf(FakeEmbeddedServer.class);
 		assertThat(server.getConfiguration()).isNotNull().isSameAs(configuration);
 	}
 
 	@Test
 	void it_should_return_null_without_configuration_field() {
-		final AbstractConfiguration configuration = Servers.findConfiguration(FixtureClass.class);
+		AbstractConfiguration configuration = Servers.findConfiguration(FixtureClass.class);
 		assertThat(configuration).isNull();
 	}
 
 	@Test
 	void it_should_return_configuration_as_result_of_method() {
-		final AbstractConfiguration configuration = Servers.findConfiguration(FixtureClassWithConfigurationAsMethod.class);
+		AbstractConfiguration configuration = Servers.findConfiguration(FixtureClassWithConfigurationAsMethod.class);
 		assertThat(configuration).isNotNull();
 	}
 

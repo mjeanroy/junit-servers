@@ -40,8 +40,8 @@ class HttpRequestBodyPartTest {
 
 	@Test
 	void it_should_create_body_part() {
-		final HttpRequestBody bodyString = HttpRequestBodyString.of("1");
-		final HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString);
+		HttpRequestBody bodyString = HttpRequestBodyString.of("1");
+		HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString);
 
 		assertThat(part).isNotNull();
 		assertThat(part.getHeaders()).isEmpty();
@@ -50,11 +50,11 @@ class HttpRequestBodyPartTest {
 
 	@Test
 	void it_should_create_body_part_with_headers() {
-		final HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
-		final List<HttpHeader> httpHeaders = singletonList(header);
-		final HttpRequestBody bodyString = HttpRequestBodyString.of("1");
+		HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
+		List<HttpHeader> httpHeaders = singletonList(header);
+		HttpRequestBody bodyString = HttpRequestBodyString.of("1");
 
-		final HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString, httpHeaders);
+		HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString, httpHeaders);
 
 		assertThat(part).isNotNull();
 		assertThat(part.getHeaders()).hasSize(1).containsAll(httpHeaders);
@@ -63,10 +63,10 @@ class HttpRequestBodyPartTest {
 
 	@Test
 	void it_should_create_body_part_with_single_header() {
-		final HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
-		final HttpRequestBody bodyString = HttpRequestBodyString.of("1");
+		HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
+		HttpRequestBody bodyString = HttpRequestBodyString.of("1");
 
-		final HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString, header);
+		HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString, header);
 
 		assertThat(part).isNotNull();
 		assertThat(part.getHeaders()).hasSize(1).containsOnly(header);
@@ -75,12 +75,12 @@ class HttpRequestBodyPartTest {
 
 	@Test
 	void it_should_serialize_part() throws Exception {
-		final HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
-		final List<HttpHeader> httpHeaders = singletonList(header);
-		final HttpRequestBody bodyString = HttpRequestBodyString.of("1");
-		final HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString, httpHeaders);
+		HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
+		List<HttpHeader> httpHeaders = singletonList(header);
+		HttpRequestBody bodyString = HttpRequestBodyString.of("1");
+		HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString, httpHeaders);
 
-		final String result = new String(part.serialize(), StandardCharsets.UTF_8);
+		String result = new String(part.serialize(), StandardCharsets.UTF_8);
 
 		assertThat(result).isEqualTo(String.join("\r\n", asList(
 			"Content-Disposition: form-data; name=\"file\"",
@@ -91,14 +91,14 @@ class HttpRequestBodyPartTest {
 
 	@Test
 	void it_should_serialize_part_with_a_content_type() throws Exception {
-		final HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
-		final List<HttpHeader> httpHeaders = singletonList(header);
-		final String contentType = "text/plain";
-		final String rawBody = "1";
-		final HttpRequestBody bodyString = HttpRequestBodyString.of(rawBody, contentType);
-		final HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString, httpHeaders);
+		HttpHeader header = HttpHeader.header("Content-Disposition", "form-data; name=\"file\"");
+		List<HttpHeader> httpHeaders = singletonList(header);
+		String contentType = "text/plain";
+		String rawBody = "1";
+		HttpRequestBody bodyString = HttpRequestBodyString.of(rawBody, contentType);
+		HttpRequestBodyPart part = HttpRequestBodyPart.of(bodyString, httpHeaders);
 
-		final String result = new String(part.serialize(), StandardCharsets.UTF_8);
+		String result = new String(part.serialize(), StandardCharsets.UTF_8);
 
 		assertThat(result).isEqualTo(String.join("\r\n", asList(
 			"Content-Disposition: form-data; name=\"file\"",
@@ -110,9 +110,9 @@ class HttpRequestBodyPartTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final HttpRequestBody body = mock(HttpRequestBody.class, "MockHttpRequestBody");
-		final HttpHeader header = HttpHeader.header("Content-Type", "text/plain");
-		final HttpRequestBodyPart part = HttpRequestBodyPart.of(body, singleton(header));
+		HttpRequestBody body = mock(HttpRequestBody.class, "MockHttpRequestBody");
+		HttpHeader header = HttpHeader.header("Content-Type", "text/plain");
+		HttpRequestBodyPart part = HttpRequestBodyPart.of(body, singleton(header));
 
 		assertThat(part).hasToString(
 			"HttpRequestBodyPart{" +

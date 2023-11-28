@@ -61,9 +61,9 @@ class ApacheHttpClientTest extends BaseHttpClientTest {
 
 	@Test
 	void it_should_implement_to_string() {
-		final EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		final HttpClient client = createDefaultClient(server);
-		final CloseableHttpClient internalClient = readPrivate(client, "client");
+		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
+		HttpClient client = createDefaultClient(server);
+		CloseableHttpClient internalClient = readPrivate(client, "client");
 
 		assertThat(client).hasToString(
 			"ApacheHttpClient{" +

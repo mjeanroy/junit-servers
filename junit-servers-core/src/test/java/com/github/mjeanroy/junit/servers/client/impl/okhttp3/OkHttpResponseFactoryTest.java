@@ -35,9 +35,9 @@ class OkHttpResponseFactoryTest {
 
 	@Test
 	void it_should_create_http_response() {
-		final Response delegate = new OkHttpResponseBuilder().build();
-		final long duration = 1000L;
-		final HttpResponse response = OkHttpResponseFactory.of(delegate, duration);
+		Response delegate = new OkHttpResponseBuilder().build();
+		long duration = 1000L;
+		HttpResponse response = OkHttpResponseFactory.of(delegate, duration);
 
 		assertThat(response).isNotNull().isExactlyInstanceOf(OkHttpResponse.class);
 		assertThat(response.getRequestDuration()).isEqualTo(duration);

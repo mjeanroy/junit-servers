@@ -46,28 +46,28 @@ class ReflectionsTest {
 
 	@Test
 	void it_should_find_all_fields() {
-		final List<Field> fields = findAllFields(Bar.class);
+		List<Field> fields = findAllFields(Bar.class);
 		assertThat(fields).hasSize(4);
 	}
 
 	@Test
 	void it_should_find_all_static_fields_with_annotations() {
-		final List<Field> fields = findStaticFieldsAnnotatedWith(Bar.class, FooAnnotation.class);
+		List<Field> fields = findStaticFieldsAnnotatedWith(Bar.class, FooAnnotation.class);
 		assertThat(fields).hasSize(1);
 	}
 
 	@Test
 	void it_should_find_all_static_methods_with_annotations() {
-		final List<Method> methods = findStaticMethodsAnnotatedWith(Bar.class, FooAnnotation.class);
+		List<Method> methods = findStaticMethodsAnnotatedWith(Bar.class, FooAnnotation.class);
 		assertThat(methods).hasSize(1);
 	}
 
 	@Test
 	void it_should_set_value_on_private_field() {
-		final Bar bar = new Bar(1, "foo");
-		final String newValue = "bar";
+		Bar bar = new Bar(1, "foo");
+		String newValue = "bar";
 
-		final Field field = getPrivateField(Bar.class, "name");
+		Field field = getPrivateField(Bar.class, "name");
 
 		assertThat(field.isAccessible()).isFalse();
 		assertThat(bar.getName()).isEqualTo("foo");
@@ -80,13 +80,13 @@ class ReflectionsTest {
 
 	@Test
 	void it_should_get_value_on_private_field() {
-		final String actualValue = "foo";
-		final Bar bar = new Bar(1, actualValue);
-		final Field field = getPrivateField(Bar.class, "name");
+		String actualValue = "foo";
+		Bar bar = new Bar(1, actualValue);
+		Field field = getPrivateField(Bar.class, "name");
 
 		assertThat(field.isAccessible()).isFalse();
 
-		final String value = getter(bar, field);
+		String value = getter(bar, field);
 
 		assertThat(field.isAccessible()).isFalse();
 		assertThat(value).isEqualTo(actualValue);
@@ -94,11 +94,11 @@ class ReflectionsTest {
 
 	@Test
 	void it_should_get_value_on_static_private_field() {
-		final Field field = getPrivateField(Bar.class, "staticField");
+		Field field = getPrivateField(Bar.class, "staticField");
 
 		assertThat(field.isAccessible()).isFalse();
 
-		final String value = getter(field);
+		String value = getter(field);
 
 		assertThat(field.isAccessible()).isFalse();
 		assertThat(value).isEqualTo("foo");
@@ -106,11 +106,11 @@ class ReflectionsTest {
 
 	@Test
 	void it_should_get_value_on_static_private_method() {
-		final Method method = getPrivateMethod(Bar.class, "getStaticPrivateMethod");
+		Method method = getPrivateMethod(Bar.class, "getStaticPrivateMethod");
 
 		assertThat(method.isAccessible()).isFalse();
 
-		final int value = invoke(method);
+		int value = invoke(method);
 
 		assertThat(method.isAccessible()).isFalse();
 		assertThat(value).isEqualTo(0);

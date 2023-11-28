@@ -46,9 +46,9 @@ class AsyncHttpResponseTest extends AbstractHttpResponseImplTest<AsyncHttpRespon
 
 	@Test
 	void it_should_implement_to_string() {
-		final Response delegate = new AsyncHttpResponseBuilder().build();
-		final long duration = 1000L;
-		final AsyncHttpResponse response = new AsyncHttpResponse(delegate, duration);
+		Response delegate = new AsyncHttpResponseBuilder().build();
+		long duration = 1000L;
+		AsyncHttpResponse response = new AsyncHttpResponse(delegate, duration);
 
 		assertThat(response.toString()).isEqualTo(
 			"AsyncHttpResponse{" +

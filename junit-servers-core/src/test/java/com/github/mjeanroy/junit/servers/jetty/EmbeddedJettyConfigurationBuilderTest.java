@@ -50,10 +50,10 @@ class EmbeddedJettyConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_port() {
-		final int oldPort = builder.getPort();
-		final int newPort = oldPort + 10;
+		int oldPort = builder.getPort();
+		int newPort = oldPort + 10;
 
-		final EmbeddedJettyConfiguration.Builder result = builder.withPort(newPort);
+		EmbeddedJettyConfiguration.Builder result = builder.withPort(newPort);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getPort()).isNotEqualTo(oldPort).isEqualTo(newPort);
@@ -61,10 +61,10 @@ class EmbeddedJettyConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_path() {
-		final String oldPath = builder.getPath();
-		final String newPath = oldPath + "foo";
+		String oldPath = builder.getPath();
+		String newPath = oldPath + "foo";
 
-		final EmbeddedJettyConfiguration.Builder result = builder.withPath(newPath);
+		EmbeddedJettyConfiguration.Builder result = builder.withPath(newPath);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getPath()).isNotEqualTo(oldPath).isEqualTo(newPath);
@@ -72,10 +72,10 @@ class EmbeddedJettyConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_webapp_path() {
-		final String oldWebapp = builder.getWebapp();
-		final String newWebapp = oldWebapp + "foo";
+		String oldWebapp = builder.getWebapp();
+		String newWebapp = oldWebapp + "foo";
 
-		final EmbeddedJettyConfiguration.Builder result = builder.withWebapp(newWebapp);
+		EmbeddedJettyConfiguration.Builder result = builder.withWebapp(newWebapp);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
@@ -83,10 +83,10 @@ class EmbeddedJettyConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_webapp_path_with_file(@TempDir File file) {
-		final String oldWebapp = builder.getWebapp();
-		final String newWebapp = file.getAbsolutePath();
+		String oldWebapp = builder.getWebapp();
+		String newWebapp = file.getAbsolutePath();
 
-		final EmbeddedJettyConfiguration.Builder result = builder.withWebapp(file);
+		EmbeddedJettyConfiguration.Builder result = builder.withWebapp(file);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getWebapp()).isNotEqualTo(oldWebapp).isEqualTo(newWebapp);
@@ -94,10 +94,10 @@ class EmbeddedJettyConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_classpath_entry() {
-		final String oldClasspath = builder.getClasspath();
-		final String newClasspath = oldClasspath + "foo";
+		String oldClasspath = builder.getClasspath();
+		String newClasspath = oldClasspath + "foo";
 
-		final EmbeddedJettyConfiguration.Builder result = builder.withClasspath(newClasspath);
+		EmbeddedJettyConfiguration.Builder result = builder.withClasspath(newClasspath);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getClasspath()).isNotEqualTo(oldClasspath).isEqualTo(newClasspath);
@@ -105,10 +105,10 @@ class EmbeddedJettyConfigurationBuilderTest {
 
 	@Test
 	void it_should_change_stop_timeout() {
-		final int oldStopTimeout = builder.getStopTimeout();
-		final int newStopTimeout = oldStopTimeout + 10;
+		int oldStopTimeout = builder.getStopTimeout();
+		int newStopTimeout = oldStopTimeout + 10;
 
-		final EmbeddedJettyConfiguration.Builder result = builder.withStopTimeout(newStopTimeout);
+		EmbeddedJettyConfiguration.Builder result = builder.withStopTimeout(newStopTimeout);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.getStopTimeout()).isNotEqualTo(oldStopTimeout).isEqualTo(newStopTimeout);
@@ -116,7 +116,7 @@ class EmbeddedJettyConfigurationBuilderTest {
 
 	@Test
 	void it_should_enable_stop_at_shutdown() {
-		final EmbeddedJettyConfiguration.Builder result = builder.enableStopAtShutdown();
+		EmbeddedJettyConfiguration.Builder result = builder.enableStopAtShutdown();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isStopAtShutdown()).isTrue();
@@ -124,7 +124,7 @@ class EmbeddedJettyConfigurationBuilderTest {
 
 	@Test
 	void it_should_disable_stop_at_shutdown() {
-		final EmbeddedJettyConfiguration.Builder result = builder.disableStopAtShutdown();
+		EmbeddedJettyConfiguration.Builder result = builder.disableStopAtShutdown();
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isStopAtShutdown()).isFalse();
@@ -132,7 +132,7 @@ class EmbeddedJettyConfigurationBuilderTest {
 
 	@Test
 	void it_should_disallow_dir_listing() {
-		final EmbeddedJettyConfiguration.Builder result = builder.withDirAllowed(false);
+		EmbeddedJettyConfiguration.Builder result = builder.withDirAllowed(false);
 
 		assertThat(result).isSameAs(builder);
 		assertThat(result.isDirAllowed()).isFalse();
