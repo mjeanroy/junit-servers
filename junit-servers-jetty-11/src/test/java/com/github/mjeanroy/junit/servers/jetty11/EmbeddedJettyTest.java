@@ -26,6 +26,8 @@ package com.github.mjeanroy.junit.servers.jetty11;
 
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import com.github.mjeanroy.junit.servers.testing.HttpTestUtils.HttpResponse;
+import com.github.mjeanroy.junit.servers.testing.IoTestUtils;
+import com.github.mjeanroy.junit.servers.testing.IoTestUtils.TempFile;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -39,6 +41,7 @@ import java.util.function.Consumer;
 
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.get;
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.localhost;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.createTempFile;
 import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getFileFromClasspath;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -108,32 +111,25 @@ class EmbeddedJettyTest {
 	}
 
 	@Test
-	void it_should_add_parent_classloader(@TempDir Path tmp) throws Exception {
-		final File tmpFile = Files.createTempFile(tmp.toRealPath(), null, null).toFile();
-		final File dir = tmpFile.getParentFile();
-		final URL url = dir.toURI().toURL();
-		final String name = tmpFile.getName();
+	void it_should_add_parent_classloader(@TempDir Path tmp) {
+		TempFile tmpFile = createTempFile(tmp);
 
-		try (URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { url })) {
-			assertThat(urlClassLoader.getResource(name)).isNotNull();
+		EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
+			.withWebapp(tmpFile.getParentDir())
+			.withParentClasspath(tmpFile.getParentDirURL())
+			.build();
 
-			EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
-				.withWebapp(dir)
-				.withParentClasspath(url)
-				.build();
+		run(configuration, (jetty) -> {
+			HttpResponse rsp = get(jetty.getUrl());
+			assertThat(rsp.getStatusCode()).isEqualTo(200);
+			assertThat(rsp.getResponseBody()).isNotEmpty();
 
-			run(configuration, (jetty) -> {
-				HttpResponse rsp = get(jetty.getUrl());
-				assertThat(rsp.getStatusCode()).isEqualTo(200);
-				assertThat(rsp.getResponseBody()).isNotEmpty();
-
-				WebAppContext ctx = (WebAppContext) jetty.getDelegate().getHandler();
-				ClassLoader cl = ctx.getClassLoader();
-				assertThat(cl).isNotNull();
-				assertThat(cl.getResource("custom-web.xml")).isNotNull();
-				assertThat(cl.getResource(name)).isNotNull();
-			});
-		}
+			WebAppContext ctx = (WebAppContext) jetty.getDelegate().getHandler();
+			ClassLoader cl = ctx.getClassLoader();
+			assertThat(cl).isNotNull();
+			assertThat(cl.getResource("custom-web.xml")).isNotNull();
+			assertThat(cl.getResource(tmpFile.getName())).isNotNull();
+		});
 	}
 
 	@Test

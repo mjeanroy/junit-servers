@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.tomcat9;
 
 import com.github.mjeanroy.junit.servers.testing.HttpTestUtils.HttpResponse;
+import com.github.mjeanroy.junit.servers.testing.IoTestUtils;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.apache.catalina.Container;
 import org.apache.catalina.Context;
@@ -33,11 +34,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.get;
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.localhost;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.createTempFile;
 import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getFileFromClasspath;
 import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -151,12 +155,11 @@ class EmbeddedTomcatTest {
 	}
 
 	@Test
-	void it_should_add_parent_classloader(@TempDir File tmpDir) throws Exception {
-		File tmpFile = Files.createTempFile(tmpDir.toPath(), null, null).toFile();
-		File dir = tmpFile.getParentFile();
+	void it_should_add_parent_classloader(@TempDir Path tmpDir) {
+		IoTestUtils.TempFile tmpFile = createTempFile(tmpDir);
 		EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
-			.withWebapp(dir)
-			.withParentClasspath(dir.toURI().toURL())
+			.withWebapp(tmpFile.getParentDir())
+			.withParentClasspath(tmpFile.getParentDirURL())
 			.build();
 
 		run(configuration, (tomcat) -> {

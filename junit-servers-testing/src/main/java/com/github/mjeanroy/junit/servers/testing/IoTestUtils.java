@@ -25,7 +25,10 @@
 package com.github.mjeanroy.junit.servers.testing;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -60,5 +63,47 @@ public final class IoTestUtils {
 	 */
 	public static Path getPathFromClasspath(String resourceName) {
 		return getFileFromClasspath(resourceName).toPath();
+	}
+
+	/**
+	 * Create temporary file in given directory.
+	 *
+	 * @param root Root directory.
+	 * @return The temporary file.
+	 */
+	public static TempFile createTempFile(Path root) {
+		try {
+			File tmpFile = Files.createTempFile(root.toRealPath(), null, null).toFile();
+			tmpFile.deleteOnExit();
+			return new TempFile(tmpFile);
+		}
+		catch (IOException ex) {
+			throw new AssertionError(ex);
+		}
+	}
+
+	public static final class TempFile {
+		private final File file;
+
+		private TempFile(File file) {
+			this.file = file;
+		}
+
+		public String getName() {
+			return file.getName();
+		}
+
+		public File getParentDir() {
+			return file.getParentFile();
+		}
+
+		public URL getParentDirURL() {
+			try {
+				return getParentDir().toURI().toURL();
+			}
+			catch (MalformedURLException ex) {
+				throw new AssertionError(ex);
+			}
+		}
 	}
 }
