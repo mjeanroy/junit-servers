@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.get;
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.localhost;
 import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getFileFromClasspath;
-import static com.github.mjeanroy.junit.servers.tomcat.tests.commons.Fields.readPrivate;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("deprecation")

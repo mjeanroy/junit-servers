@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.localhost;
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.url;
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 

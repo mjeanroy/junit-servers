@@ -26,14 +26,20 @@ package com.github.mjeanroy.junit.servers.commons.reflect;
 
 import com.github.mjeanroy.junit.servers.commons.fixtures.Bar;
 import com.github.mjeanroy.junit.servers.commons.fixtures.FooAnnotation;
-import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.*;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.findAllFields;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.findStaticFieldsAnnotatedWith;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.findStaticMethodsAnnotatedWith;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.getter;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.invoke;
+import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.setter;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.getPrivateField;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.getPrivateMethod;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ReflectionsTest {
@@ -61,7 +67,7 @@ class ReflectionsTest {
 		final Bar bar = new Bar(1, "foo");
 		final String newValue = "bar";
 
-		final Field field = Fields.getPrivateField(Bar.class, "name");
+		final Field field = getPrivateField(Bar.class, "name");
 
 		assertThat(field.isAccessible()).isFalse();
 		assertThat(bar.getName()).isEqualTo("foo");
@@ -76,7 +82,7 @@ class ReflectionsTest {
 	void it_should_get_value_on_private_field() {
 		final String actualValue = "foo";
 		final Bar bar = new Bar(1, actualValue);
-		final Field field = Fields.getPrivateField(Bar.class, "name");
+		final Field field = getPrivateField(Bar.class, "name");
 
 		assertThat(field.isAccessible()).isFalse();
 
@@ -88,7 +94,7 @@ class ReflectionsTest {
 
 	@Test
 	void it_should_get_value_on_static_private_field() {
-		final Field field = Fields.getPrivateField(Bar.class, "staticField");
+		final Field field = getPrivateField(Bar.class, "staticField");
 
 		assertThat(field.isAccessible()).isFalse();
 
@@ -100,7 +106,7 @@ class ReflectionsTest {
 
 	@Test
 	void it_should_get_value_on_static_private_method() {
-		final Method method = Fields.getPrivateMethod(Bar.class, "getStaticPrivateMethod");
+		final Method method = getPrivateMethod(Bar.class, "getStaticPrivateMethod");
 
 		assertThat(method.isAccessible()).isFalse();
 

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient.defaultAsyncHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient.newAsyncHttpClient;
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class NingAsyncHttpClientTest extends BaseHttpClientTest {

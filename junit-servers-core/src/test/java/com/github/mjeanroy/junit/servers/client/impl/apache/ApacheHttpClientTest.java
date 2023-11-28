@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.client.impl.apache.ApacheHttpClient.defaultApacheHttpClient;
 import static com.github.mjeanroy.junit.servers.client.impl.apache.ApacheHttpClient.newApacheHttpClient;
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ApacheHttpClientTest extends BaseHttpClientTest {

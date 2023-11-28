@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.loggers;
 
 import ch.qos.logback.classic.Level;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.readPrivate;
 
 class Slf4jLoggerTest extends AbstractLoggerTest {
 

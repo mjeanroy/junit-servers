@@ -33,8 +33,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import static com.github.mjeanroy.junit.servers.engine.ConfigurationAnnotationHandler.newConfigurationAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.getPrivateField;
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.getPrivateField;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ConfigurationAnnotationHandlerTest {

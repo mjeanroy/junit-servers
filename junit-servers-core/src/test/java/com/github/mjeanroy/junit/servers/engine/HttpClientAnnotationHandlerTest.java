@@ -29,7 +29,6 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
-import com.github.mjeanroy.junit.servers.utils.commons.Fields;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Annotation;
@@ -42,7 +41,8 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 import static com.github.mjeanroy.junit.servers.engine.HttpClientAnnotationHandler.newHttpClientAnnotationHandler;
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.getPrivateField;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpClientAnnotationHandlerTest {
@@ -128,7 +128,7 @@ class HttpClientAnnotationHandlerTest {
 	}
 
 	private static Field extractClientField(Class<?> targetClass) {
-		return Fields.getPrivateField(targetClass, "client");
+		return getPrivateField(targetClass, "client");
 	}
 
 	private static Annotation readAnnotation(Field field) {

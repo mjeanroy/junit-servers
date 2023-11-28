@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.utils.commons;
+package com.github.mjeanroy.junit.servers.testing;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -30,12 +30,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * Static field utilities to use in tests.
+ * Static field utilities, used for testing only.
  */
-public final class Fields {
+public final class ReflectionTestUtils {
 
 	// Ensure non instantiation.
-	private Fields() {
+	private ReflectionTestUtils() {
 	}
 
 	/**
@@ -107,29 +107,6 @@ public final class Fields {
 		try {
 			@SuppressWarnings("unchecked")
 			T value = (T) FieldUtils.readField(instance, name, true);
-
-			return value;
-		}
-		catch (IllegalAccessException ex) {
-			throw new AssertionError(ex);
-		}
-	}
-
-	/**
-	 * Read private static field on given class.
-	 *
-	 * @param klass The class.
-	 * @param name The field name.
-	 * @param <T> Type of returned value.
-	 * @return The field value.
-	 */
-	public static <T> T readPrivateStatic(Class<?> klass, String name) {
-		Field field = FieldUtils.getDeclaredField(klass, name, true);
-		FieldUtils.removeFinalModifier(field);
-
-		try {
-			@SuppressWarnings("unchecked")
-			T value = (T) FieldUtils.readStaticField(field, true);
 
 			return value;
 		}

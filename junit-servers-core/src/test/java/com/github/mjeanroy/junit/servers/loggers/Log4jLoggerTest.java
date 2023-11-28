@@ -26,7 +26,7 @@ package com.github.mjeanroy.junit.servers.loggers;
 
 import org.apache.logging.log4j.Level;
 
-import static com.github.mjeanroy.junit.servers.utils.commons.Fields.readPrivate;
+import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.readPrivate;
 
 class Log4jLoggerTest extends AbstractLoggerTest {
 
