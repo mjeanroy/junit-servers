@@ -48,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class IndexWithCustomHttpClientTest extends AbstractTomcatJunit4Test {
 
 	@TestServerConfiguration
-	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();;
+	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();
 
 	@TestServer
 	private static EmbeddedTomcat tomcat;

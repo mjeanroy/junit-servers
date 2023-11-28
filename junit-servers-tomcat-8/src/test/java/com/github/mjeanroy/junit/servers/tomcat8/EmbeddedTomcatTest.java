@@ -25,7 +25,6 @@
 package com.github.mjeanroy.junit.servers.tomcat8;
 
 import com.github.mjeanroy.junit.servers.testing.HttpTestUtils.HttpResponse;
-import com.github.mjeanroy.junit.servers.testing.IoTestUtils;
 import com.github.mjeanroy.junit.servers.testing.IoTestUtils.TempFile;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import org.apache.catalina.Container;
@@ -35,8 +34,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
@@ -140,7 +137,7 @@ class EmbeddedTomcatTest {
 	}
 
 	@Test
-	void it_should_create_meta_inf_directory_if_it_does_not_exist(@TempDir File baseDir) throws Exception {
+	void it_should_create_meta_inf_directory_if_it_does_not_exist(@TempDir File baseDir) {
 		File metaInf = new File(baseDir, "META-INF");
 		EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.builder()
 			.withClasspath(baseDir.getAbsolutePath())

@@ -85,22 +85,4 @@ class FakeStore implements Store {
 	public <V> V remove(Object key, Class<V> requiredType) {
 		return (V) remove(key);
 	}
-
-	/**
-	 * Get current store size (number of stored entries).
-	 *
-	 * @return Store size.
-	 */
-	int size() {
-		return map.size();
-	}
-
-	/**
-	 * Check if store is empty.
-	 *
-	 * @return {@code true} if store is empty, {@code false} otherwise.
-	 */
-	boolean isEmpty() {
-		return size() == 0;
-	}
 }

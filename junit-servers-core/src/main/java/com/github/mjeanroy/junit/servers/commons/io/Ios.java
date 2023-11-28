@@ -28,7 +28,6 @@ import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 
 import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
@@ -122,7 +121,7 @@ public final class Ios {
 	}
 
 	private static String tryGuessContentTypeFromStream(Path path) {
-		try (InputStream is = new BufferedInputStream(new FileInputStream(path.toFile()))) {
+		try (InputStream is = new BufferedInputStream(Files.newInputStream(path))) {
 			return URLConnection.guessContentTypeFromStream(is);
 		}
 		catch (IOException ex) {

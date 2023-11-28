@@ -150,7 +150,7 @@ class EmbeddedServerRunnerTest {
 		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		EmbeddedServerRunner adapter = new EmbeddedServerRunner(server);
 		int port = adapter.getPort();
-		assertThat(port).isNotNull().isEqualTo(server.getPort());
+		assertThat(port).isEqualTo(server.getPort());
 	}
 
 	@Test

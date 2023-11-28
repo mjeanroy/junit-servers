@@ -286,7 +286,7 @@ public abstract class AbstractEmbeddedTomcat<
 		File file = new File(path);
 		if (file.exists()) {
 			File[] files = file.listFiles();
-			if (files != null && files.length > 0) {
+			if (files != null) {
 				for (File f : files) {
 					if (f.isDirectory()) {
 						deleteDirectory(f.getAbsolutePath());

@@ -100,7 +100,7 @@ class HttpRequestBodyFileTest {
 		assertThat(bodyFile).hasToString(
 			"HttpRequestBodyFile{" +
 				"contentType: \"text/plain\", " +
-				"path: " + path.toString() +
+				"path: " + path +
 			"}"
 		);
 	}

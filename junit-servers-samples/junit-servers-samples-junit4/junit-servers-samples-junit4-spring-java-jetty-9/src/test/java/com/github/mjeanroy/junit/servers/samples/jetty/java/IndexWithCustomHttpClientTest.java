@@ -48,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class IndexWithCustomHttpClientTest extends AbstractJettyJunit4Test {
 
 	@TestServerConfiguration
-	private static EmbeddedJettyConfiguration configuration = createJettyConfiguration();;
+	private static EmbeddedJettyConfiguration configuration = createJettyConfiguration();
 
 	@TestServer
 	private static EmbeddedJetty jetty;

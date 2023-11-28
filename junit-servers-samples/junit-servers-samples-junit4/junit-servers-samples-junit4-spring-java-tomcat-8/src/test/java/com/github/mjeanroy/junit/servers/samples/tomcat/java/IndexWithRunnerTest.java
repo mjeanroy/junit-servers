@@ -39,7 +39,7 @@ import static com.github.mjeanroy.junit.servers.samples.utils.tomcat.TomcatTestU
 public class IndexWithRunnerTest extends AbstractTomcatJunit4Test {
 
 	@TestServerConfiguration
-	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();;
+	private static EmbeddedTomcatConfiguration configuration = createTomcatConfiguration();
 
 	@TestServer
 	private static EmbeddedTomcat tomcat;
