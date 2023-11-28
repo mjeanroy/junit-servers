@@ -109,7 +109,7 @@ class EmbeddedJettyTest {
 
 	@Test
 	void it_should_add_parent_classloader(@TempDir Path tmp) throws Exception {
-		final File tmpFile = Files.createTempFile(tmp, null, null).toFile();
+		final File tmpFile = Files.createTempFile(tmp.toRealPath(), null, null).toFile();
 		final File dir = tmpFile.getParentFile();
 		final URL url = dir.toURI().toURL();
 		final String name = tmpFile.getName();
