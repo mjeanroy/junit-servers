@@ -33,6 +33,8 @@ import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilde
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.function.Consumer;
+
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.localhost;
 import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.url;
 import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.readPrivate;
@@ -61,13 +63,14 @@ public abstract class BaseHttpClientTest {
 
 	@Test
 	void it_should_create_default_client() {
-		HttpClient client = createDefaultClient(server);
-		assertThat(client).isNotNull();
+		useHttpClient((client) -> {
+			assertThat(client).isNotNull();
 
-		EmbeddedServer<?> internalServer = readPrivate(client, "server");
-		assertThat(internalServer).isSameAs(server);
+			EmbeddedServer<?> internalServer = readPrivate(client, "server");
+			assertThat(internalServer).isSameAs(server);
 
-		checkInternalHttpClient(client);
+			checkInternalHttpClient(client);
+		});
 	}
 
 	@Test
@@ -76,68 +79,72 @@ public abstract class BaseHttpClientTest {
 			.disableFollowRedirect()
 			.build();
 
-		HttpClient client = createCustomClient(configuration, server);
-		assertThat(client).isNotNull();
+		useHttpClient(configuration, (client) -> {
+			assertThat(client).isNotNull();
 
-		EmbeddedServer<?> server = readPrivate(client, "server");
-		assertThat(server).isNotNull().isSameAs(this.server);
-		checkInternalHttpClient(configuration, client);
+			EmbeddedServer<?> server = readPrivate(client, "server");
+			assertThat(server).isNotNull().isSameAs(this.server);
+			checkInternalHttpClient(configuration, client);
+		});
 	}
 
 	@Test
 	void it_should_create_request() {
-		HttpClient client = createDefaultClient(server);
-		String endpoint = "/foo";
-		HttpMethod httpMethod = HttpMethod.POST;
+		useHttpClient((client) -> {
+			String endpoint = "/foo";
+			HttpMethod httpMethod = HttpMethod.POST;
 
-		HttpRequest httpRequest = client.prepareRequest(httpMethod, endpoint);
+			HttpRequest httpRequest = client.prepareRequest(httpMethod, endpoint);
 
-		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
-		assertThat(httpRequest.getEndpoint()).isNotNull();
-		assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
-		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
-		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
-		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path + endpoint);
-		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(
-			url(scheme, host, port, path + endpoint)
-		);
+			assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
+			assertThat(httpRequest.getEndpoint()).isNotNull();
+			assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
+			assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
+			assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
+			assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path + endpoint);
+			assertThat(httpRequest.getEndpoint().toString()).isEqualTo(
+				url(scheme, host, port, path + endpoint)
+			);
+		});
 	}
 
 	@Test
 	void it_should_create_request_and_do_not_prepend_server_path() {
-		HttpClient client = createDefaultClient(server);
-		String endpoint = "/foo";
-		String fullPath = server.getPath() + endpoint;
-		HttpMethod httpMethod = HttpMethod.POST;
+		useHttpClient((client) -> {
+			String endpoint = "/foo";
+			String fullPath = server.getPath() + endpoint;
+			HttpMethod httpMethod = HttpMethod.POST;
 
-		HttpRequest httpRequest = client.prepareRequest(httpMethod, fullPath);
+			HttpRequest httpRequest = client.prepareRequest(httpMethod, fullPath);
 
-		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
-		assertThat(httpRequest.getEndpoint()).isNotNull();
-		assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
-		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
-		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
-		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(fullPath);
-		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, fullPath));
+			assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
+			assertThat(httpRequest.getEndpoint()).isNotNull();
+			assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
+			assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
+			assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
+			assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(fullPath);
+			assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, fullPath));
+		});
 	}
 
 	@Test
 	void it_should_create_request_and_do_not_prepend_server_url() {
-		HttpClient client = createDefaultClient(server);
-		String endpoint = "/foo";
-		String absoluteUrl = server.getUrl() + endpoint;
-		HttpMethod httpMethod = HttpMethod.POST;
+		useHttpClient((client) -> {
+			String endpoint = "/foo";
+			String absoluteUrl = server.getUrl() + endpoint;
+			HttpMethod httpMethod = HttpMethod.POST;
 
-		HttpRequest httpRequest = client.prepareRequest(httpMethod, absoluteUrl);
+			HttpRequest httpRequest = client.prepareRequest(httpMethod, absoluteUrl);
 
-		assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
+			assertThat(httpRequest.getMethod()).isEqualTo(httpMethod);
 
-		assertThat(httpRequest.getEndpoint()).isNotNull();
-		assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
-		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
-		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
-		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path + endpoint);
-		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, path + endpoint));
+			assertThat(httpRequest.getEndpoint()).isNotNull();
+			assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
+			assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
+			assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
+			assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path + endpoint);
+			assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, path + endpoint));
+		});
 	}
 
 	@Test
@@ -147,18 +154,19 @@ public abstract class BaseHttpClientTest {
 		when(server.getUrl()).thenReturn(serverUrl);
 		when(server.getPath()).thenReturn("/");
 
-		HttpClient client = createDefaultClient(server);
-		String path = "/foo";
-		HttpMethod httpMethod = HttpMethod.GET;
+		useHttpClient((client) -> {
+			String path = "/foo";
+			HttpMethod httpMethod = HttpMethod.GET;
 
-		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
+			HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
 
-		assertThat(httpRequest.getEndpoint()).isNotNull();
-		assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
-		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
-		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
-		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path);
-		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, path));
+			assertThat(httpRequest.getEndpoint()).isNotNull();
+			assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
+			assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
+			assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
+			assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path);
+			assertThat(httpRequest.getEndpoint().toString()).isEqualTo(url(scheme, host, port, path));
+		});
 	}
 
 	@Test
@@ -169,45 +177,62 @@ public abstract class BaseHttpClientTest {
 		when(server.getUrl()).thenReturn(serverUrl);
 		when(server.getPath()).thenReturn(path);
 
-		HttpClient client = createDefaultClient(server);
-		HttpMethod httpMethod = HttpMethod.GET;
+		useHttpClient((client) -> {
+			HttpMethod httpMethod = HttpMethod.GET;
 
-		HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
+			HttpRequest httpRequest = client.prepareRequest(httpMethod, path);
 
-		assertThat(httpRequest.getEndpoint()).isNotNull();
-		assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
-		assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
-		assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
-		assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path);
-		assertThat(httpRequest.getEndpoint().toString()).isEqualTo(localhost(port));
+			assertThat(httpRequest.getEndpoint()).isNotNull();
+			assertThat(httpRequest.getEndpoint().getScheme()).isEqualTo(scheme);
+			assertThat(httpRequest.getEndpoint().getHost()).isEqualTo(host);
+			assertThat(httpRequest.getEndpoint().getPort()).isEqualTo(port);
+			assertThat(httpRequest.getEndpoint().getPath()).isEqualTo(path);
+			assertThat(httpRequest.getEndpoint().toString()).isEqualTo(localhost(port));
+		});
 	}
 
 	@Test
 	void it_should_create_get_request() {
-		HttpClient client = createDefaultClient(server);
-		HttpRequest httpRequest = client.prepareGet("/foo");
-		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
+		useHttpClient((client) -> {
+			HttpRequest httpRequest = client.prepareGet("/foo");
+			assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.GET);
+		});
 	}
 
 	@Test
 	void it_should_create_post_request() {
-		HttpClient client = createDefaultClient(server);
-		HttpRequest httpRequest = client.preparePost("/foo");
-		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST);
+		useHttpClient((client) -> {
+			HttpRequest httpRequest = client.preparePost("/foo");
+			assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.POST);
+		});
 	}
 
 	@Test
 	void it_should_create_put_request() {
-		HttpClient client = createDefaultClient(server);
-		HttpRequest httpRequest = client.preparePut("/foo");
-		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.PUT);
+		useHttpClient((client) -> {
+			HttpRequest httpRequest = client.preparePut("/foo");
+			assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.PUT);
+		});
 	}
 
 	@Test
 	void it_should_create_delete_request() {
-		HttpClient client = createDefaultClient(server);
-		HttpRequest httpRequest = client.prepareDelete("/foo");
-		assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.DELETE);
+		useHttpClient((client) -> {
+			HttpRequest httpRequest = client.prepareDelete("/foo");
+			assertThat(httpRequest.getMethod()).isEqualTo(HttpMethod.DELETE);
+		});
+	}
+
+	private void useHttpClient(Consumer<HttpClient> testFn) {
+		try (HttpClient client = createDefaultClient(server)) {
+			testFn.accept(client);
+		}
+	}
+
+	private void useHttpClient(HttpClientConfiguration configuration, Consumer<HttpClient> testFn) {
+		try (HttpClient client = createCustomClient(configuration, server)) {
+			testFn.accept(client);
+		}
 	}
 
 	/**

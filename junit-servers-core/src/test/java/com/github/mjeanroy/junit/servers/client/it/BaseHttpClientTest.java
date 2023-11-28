@@ -42,7 +42,6 @@ import com.github.mjeanroy.junit.servers.utils.commons.MapperFunction;
 import com.github.mjeanroy.junit.servers.utils.commons.Pair;
 import com.github.mjeanroy.junit.servers.utils.jupiter.WireMockTest;
 import com.github.tomakehurst.wiremock.WireMockServer;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -54,6 +53,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static com.github.mjeanroy.junit.servers.client.HttpParameter.param;
 import static com.github.mjeanroy.junit.servers.client.HttpRequestBodies.formUrlEncodedBody;
@@ -127,7 +128,6 @@ public abstract class BaseHttpClientTest {
 	private String scheme;
 	private String host;
 	private int port;
-	private HttpClient client;
 
 	@BeforeEach
 	void setUp(WireMockServer wireMockServer) {
@@ -141,28 +141,22 @@ public abstract class BaseHttpClientTest {
 			.build();
 	}
 
-	@AfterEach
-	void tearDown() {
-		if (client != null) {
-			client.destroy();
-		}
-	}
-
 	@Test
 	void testRequestUrl() {
-		String endpoint = ENDPOINT;
-		HttpRequest rq = createDefaultClient()
-			.prepareGet(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest();
+		useHttpClient((client) -> {
+			String endpoint = ENDPOINT;
+			HttpRequest rq = client.prepareGet(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest();
 
-		assertThat(rq.getEndpoint()).isNotNull();
-		assertThat(rq.getEndpoint().getScheme()).isEqualTo(scheme);
-		assertThat(rq.getEndpoint().getHost()).isEqualTo(host);
-		assertThat(rq.getEndpoint().getPort()).isEqualTo(port);
-		assertThat(rq.getEndpoint().getPath()).isEqualTo(endpoint);
+			assertThat(rq.getEndpoint()).isNotNull();
+			assertThat(rq.getEndpoint().getScheme()).isEqualTo(scheme);
+			assertThat(rq.getEndpoint().getHost()).isEqualTo(host);
+			assertThat(rq.getEndpoint().getPort()).isEqualTo(port);
+			assertThat(rq.getEndpoint().getPath()).isEqualTo(endpoint);
 
-		assertThat(rq.getMethod()).isEqualTo(HttpMethod.GET);
+			assertThat(rq.getMethod()).isEqualTo(HttpMethod.GET);
+		});
 	}
 
 	@Test
@@ -174,17 +168,18 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareGet(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareGet(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.GET);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEqualTo(body);
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+			assertRequest(endpoint, HttpMethod.GET);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEqualTo(body);
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		});
 	}
 
 	@Test
@@ -196,15 +191,16 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareGet(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareGet(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.execute();
 
-		String r1 = rsp.body();
-		String r2 = rsp.body();
-		assertThat(r1).isEqualTo(r2);
+			String r1 = rsp.body();
+			String r2 = rsp.body();
+			assertThat(r1).isEqualTo(r2);
+		});
 	}
 
 	@Test
@@ -217,17 +213,18 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareGet(rqUrl)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareGet(rqUrl)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.GET);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEqualTo(body);
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+			assertRequest(endpoint, HttpMethod.GET);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEqualTo(body);
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		});
 	}
 
 	@Test
@@ -240,17 +237,18 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(encodedPath, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareGet(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareGet(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.execute();
 
-		assertRequest(encodedPath, HttpMethod.GET);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEqualTo(body);
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+			assertRequest(encodedPath, HttpMethod.GET);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEqualTo(body);
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		});
 	}
 
 	@Test
@@ -261,17 +259,19 @@ public abstract class BaseHttpClientTest {
 
 		stubHeadRequest(endpoint, status, headers);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareHead(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareHead(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.HEAD);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isNullOrEmpty();
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+			assertRequest(endpoint, HttpMethod.HEAD);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isNullOrEmpty();
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+
+		});
 	}
 
 	@Test
@@ -283,18 +283,19 @@ public abstract class BaseHttpClientTest {
 
 		stubPostRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePost(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.setBody(jsonBody("{\"name\": \"Jane Doe\"}"))
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePost(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.setBody(jsonBody("{\"name\": \"Jane Doe\"}"))
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.POST);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEqualTo(body);
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+			assertRequest(endpoint, HttpMethod.POST);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEqualTo(body);
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		});
 	}
 
 	@Test
@@ -307,18 +308,19 @@ public abstract class BaseHttpClientTest {
 
 		stubPostRequest(endpoint, status, expectedHeaders, rawBody);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePost(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.setBody(body)
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePost(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.setBody(body)
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.POST);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEqualTo(rawBody);
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+			assertRequest(endpoint, HttpMethod.POST);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEqualTo(rawBody);
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		});
 	}
 
 	@Test
@@ -330,18 +332,19 @@ public abstract class BaseHttpClientTest {
 
 		stubPostRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePost(endpoint)
-			.acceptJson()
-			.asJson()
-			.asXmlHttpRequest()
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePost(endpoint)
+				.acceptJson()
+				.asJson()
+				.asXmlHttpRequest()
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.POST);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEqualTo(body);
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+			assertRequest(endpoint, HttpMethod.POST);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEqualTo(body);
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		});
 	}
 
 	@Test
@@ -353,15 +356,14 @@ public abstract class BaseHttpClientTest {
 
 		stubPostRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePost(endpoint, jsonBody(body))
-			.execute();
-
-		assertRequest(endpoint, HttpMethod.POST);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEqualTo(body);
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePost(endpoint, jsonBody(body)).execute();
+			assertRequest(endpoint, HttpMethod.POST);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEqualTo(body);
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		});
 	}
 
 	@Test
@@ -372,17 +374,18 @@ public abstract class BaseHttpClientTest {
 
 		stubPutRequest(endpoint, status, headers);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePut(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.setBody(jsonBody("{\"id\": 1, \"name\": \"Jane Doe\"}"))
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePut(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.setBody(jsonBody("{\"id\": 1, \"name\": \"Jane Doe\"}"))
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.PUT);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEmpty();
-		assertThat(rsp.getContentType()).isNull();
+			assertRequest(endpoint, HttpMethod.PUT);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEmpty();
+			assertThat(rsp.getContentType()).isNull();
+		});
 	}
 
 	@Test
@@ -395,17 +398,18 @@ public abstract class BaseHttpClientTest {
 
 		stubPutRequest(endpoint, status, headers);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePut(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.setBody(body)
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePut(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.setBody(body)
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.PUT);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEmpty();
-		assertThat(rsp.getContentType()).isNull();
+			assertRequest(endpoint, HttpMethod.PUT);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEmpty();
+			assertThat(rsp.getContentType()).isNull();
+		});
 	}
 
 	@Test
@@ -416,17 +420,18 @@ public abstract class BaseHttpClientTest {
 
 		stubPutRequest(endpoint, status, headers);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePut(endpoint)
-			.acceptJson()
-			.asJson()
-			.asXmlHttpRequest()
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePut(endpoint)
+				.acceptJson()
+				.asJson()
+				.asXmlHttpRequest()
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.PUT);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEmpty();
-		assertThat(rsp.getContentType()).isNull();
+			assertRequest(endpoint, HttpMethod.PUT);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEmpty();
+			assertThat(rsp.getContentType()).isNull();
+		});
 	}
 
 	@Test
@@ -438,14 +443,13 @@ public abstract class BaseHttpClientTest {
 
 		stubPutRequest(endpoint, status, headers);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePut(endpoint, jsonBody(body))
-			.execute();
-
-		assertRequest(endpoint, HttpMethod.PUT);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEmpty();
-		assertThat(rsp.getContentType()).isNull();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePut(endpoint, jsonBody(body)).execute();
+			assertRequest(endpoint, HttpMethod.PUT);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEmpty();
+			assertThat(rsp.getContentType()).isNull();
+		});
 	}
 
 	@Test
@@ -459,18 +463,19 @@ public abstract class BaseHttpClientTest {
 
 		stubPatchRequest(endpoint, status, headers, bodyResponse);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePatch(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.setBody(body)
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePatch(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.setBody(body)
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.PATCH);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEqualTo(bodyResponse);
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+			assertRequest(endpoint, HttpMethod.PATCH);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEqualTo(bodyResponse);
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		});
 	}
 
 	@Test
@@ -484,19 +489,20 @@ public abstract class BaseHttpClientTest {
 
 		stubPatchRequest(endpoint, status, headers, responseBody);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePatch(endpoint)
-			.acceptJson()
-			.asJson()
-			.asXmlHttpRequest()
-			.setBody(body)
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePatch(endpoint)
+				.acceptJson()
+				.asJson()
+				.asXmlHttpRequest()
+				.setBody(body)
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.PATCH);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEqualTo(responseBody);
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+			assertRequest(endpoint, HttpMethod.PATCH);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEqualTo(responseBody);
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		});
 	}
 
 	@Test
@@ -508,13 +514,12 @@ public abstract class BaseHttpClientTest {
 
 		stubPatchRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePatch(endpoint, jsonBody(body))
-			.execute();
-
-		assertRequest(endpoint, HttpMethod.PATCH);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEmpty();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePatch(endpoint, jsonBody(body)).execute();
+			assertRequest(endpoint, HttpMethod.PATCH);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEmpty();
+		});
 	}
 
 	@Test
@@ -525,17 +530,18 @@ public abstract class BaseHttpClientTest {
 
 		stubDeleteRequest(endpoint, status, headers);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareDelete(endpoint)
-			.acceptJson()
-			.asJson()
-			.asXmlHttpRequest()
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareDelete(endpoint)
+				.acceptJson()
+				.asJson()
+				.asXmlHttpRequest()
+				.execute();
 
-		assertRequest(endpoint, HttpMethod.DELETE);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEmpty();
-		assertThat(rsp.getContentType()).isNull();
+			assertRequest(endpoint, HttpMethod.DELETE);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEmpty();
+			assertThat(rsp.getContentType()).isNull();
+		});
 	}
 
 	@Test
@@ -547,16 +553,18 @@ public abstract class BaseHttpClientTest {
 
 		stubDeleteRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
+		useHttpClient((client) -> {
+			HttpResponse rsp = client
 				.prepareDelete(endpoint, jsonBody(body))
 				.acceptJson()
 				.execute();
 
-		assertRequest(endpoint, HttpMethod.DELETE);
-		assertThat(rsp.status()).isEqualTo(status);
-		assertThat(rsp.body()).isEqualTo(body);
-		assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
-		assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+			assertRequest(endpoint, HttpMethod.DELETE);
+			assertThat(rsp.status()).isEqualTo(status);
+			assertThat(rsp.body()).isEqualTo(body);
+			assertThat(rsp.getContentType().getFirstValue()).isEqualTo(APPLICATION_JSON);
+			assertThat(rsp.getContentType().getLastValue()).isEqualTo(APPLICATION_JSON);
+		});
 	}
 
 	@Test
@@ -567,17 +575,19 @@ public abstract class BaseHttpClientTest {
 
 		stubUploadRequest(endpoint, status);
 
-		HttpResponse rsp = createDefaultClient()
-			.preparePost(endpoint)
-			.acceptJson()
-			.asXmlHttpRequest()
-			.setBody(multipartBuilder()
-				.addFormDataPart(file, "image")
-				.build())
-			.execute();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.preparePost(endpoint)
+				.acceptJson()
+				.asXmlHttpRequest()
+				.setBody(multipartBuilder()
+					.addFormDataPart(file, "image")
+					.build())
+				.execute();
 
-		assertUploadRequest(endpoint, HttpMethod.POST, file);
-		assertThat(rsp.status()).isEqualTo(status);
+			assertUploadRequest(endpoint, HttpMethod.POST, file);
+			assertThat(rsp.status()).isEqualTo(status);
+
+		});
 	}
 
 	@Test
@@ -810,14 +820,16 @@ public abstract class BaseHttpClientTest {
 		stubGetRequest(endpoint, rspStatus, headers, rspBody);
 
 		// WHEN
-		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
-		HttpResponse rsp = func.apply(rq);
+		useHttpClient((client) -> {
+			HttpRequest rq = client.prepareGet(ENDPOINT);
+			HttpResponse rsp = func.apply(rq);
 
-		// THEN
-		assertThat(rsp).isNotNull();
-		assertThat(rsp.status()).isEqualTo(rspStatus);
-		assertThat(rsp.body()).isEqualTo(rspBody);
-		assertRequestWithHeader(endpoint, HttpMethod.GET, CONTENT_TYPE, contentType);
+			// THEN
+			assertThat(rsp).isNotNull();
+			assertThat(rsp.status()).isEqualTo(rspStatus);
+			assertThat(rsp.body()).isEqualTo(rspBody);
+			assertRequestWithHeader(endpoint, HttpMethod.GET, CONTENT_TYPE, contentType);
+		});
 	}
 
 	@Test
@@ -888,15 +900,17 @@ public abstract class BaseHttpClientTest {
 		stubGetRequest(expectedUrl, rspStatus, headers, rspBody);
 
 		// WHEN
-		HttpRequest rq = createDefaultClient().prepareGet(ENDPOINT);
-		func.apply(rq);
+		useHttpClient((client) -> {
+			HttpRequest rq = client.prepareGet(ENDPOINT);
+			func.apply(rq);
 
-		// THEN
-		HttpResponse rsp = rq.execute();
-		assertThat(rsp).isNotNull();
-		assertThat(rsp.status()).isEqualTo(rspStatus);
-		assertThat(rsp.body()).isEqualTo(rspBody);
-		assertRequest(expectedUrl, HttpMethod.GET);
+			// THEN
+			HttpResponse rsp = rq.execute();
+			assertThat(rsp).isNotNull();
+			assertThat(rsp.status()).isEqualTo(rspStatus);
+			assertThat(rsp.body()).isEqualTo(rspBody);
+			assertRequest(expectedUrl, HttpMethod.GET);
+		});
 	}
 
 	@Test
@@ -1013,25 +1027,29 @@ public abstract class BaseHttpClientTest {
 
 		stubPostRequest(endpoint, rspStatus, headers, rspBody);
 
-		HttpRequest rq = createDefaultClient().preparePost(ENDPOINT);
+		useHttpClient((client) -> {
+			HttpRequest rq = client.preparePost(ENDPOINT);
 
-		func.apply(rq);
+			func.apply(rq);
 
-		HttpResponse rsp = rq.execute();
-		assertThat(rsp).isNotNull();
-		assertThat(rsp.status()).isEqualTo(rspStatus);
-		assertThat(rsp.body()).isEqualTo(rspBody);
-		assertRequestWithBody(endpoint, HttpMethod.POST, body);
+			HttpResponse rsp = rq.execute();
+			assertThat(rsp).isNotNull();
+			assertThat(rsp.status()).isEqualTo(rspStatus);
+			assertThat(rsp.body()).isEqualTo(rspBody);
+			assertRequestWithBody(endpoint, HttpMethod.POST, body);
+		});
 	}
 
 	@Test
 	void testRequest_should_fail_to_set_body_on_get_request() {
-		HttpRequest httpRequest = createDefaultClient().prepareGet(ENDPOINT);
-		String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
+		useHttpClient((client) -> {
+			HttpRequest httpRequest = client.prepareGet(ENDPOINT);
+			String body = "{\"id\": 1, \"firstName\": \"John\", \"lastName\": \"Doe\"}";
 
-		assertThatThrownBy(() -> httpRequest.setBody(requestBody(body)))
-			.isExactlyInstanceOf(UnsupportedOperationException.class)
-			.hasMessage("Http method GET does not support request body");
+			assertThatThrownBy(() -> httpRequest.setBody(requestBody(body)))
+				.isExactlyInstanceOf(UnsupportedOperationException.class)
+				.hasMessage("Http method GET does not support request body");
+		});
 	}
 
 	@Test
@@ -1042,12 +1060,13 @@ public abstract class BaseHttpClientTest {
 		String name = "foo";
 		String value = "bar";
 
-		createDefaultClient()
-			.prepareGet(endpoint)
-			.addCookie(Cookies.cookie(name, value))
-			.executeJson();
+		useHttpClient((client) -> {
+			client.prepareGet(endpoint)
+				.addCookie(Cookies.cookie(name, value))
+				.executeJson();
 
-		assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
+			assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
+		});
 	}
 
 	@Test
@@ -1061,11 +1080,10 @@ public abstract class BaseHttpClientTest {
 
 		stubDefaultRequest(endpoint);
 
-		createCustomClient(configuration)
-			.prepareGet(endpoint)
-			.executeJson();
-
-		assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
+		useHttpClient(configuration, (client) -> {
+			client.prepareGet(endpoint).executeJson();
+			assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
+		});
 	}
 
 	@Test
@@ -1079,11 +1097,10 @@ public abstract class BaseHttpClientTest {
 
 		stubDefaultRequest(endpoint);
 
-		createCustomClient(configuration)
-			.prepareGet(endpoint)
-			.executeJson();
-
-		assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
+		useHttpClient(configuration, (client) -> {
+			client.prepareGet(endpoint).executeJson();
+			assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
+		});
 	}
 
 	@Test
@@ -1094,12 +1111,10 @@ public abstract class BaseHttpClientTest {
 		String name = "foo";
 		String value = "bar";
 
-		createDefaultClient()
-			.prepareGet(endpoint)
-			.addCookie(name, value)
-			.executeJson();
-
-		assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
+		useHttpClient((client) -> {
+			client.prepareGet(endpoint).addCookie(name, value).executeJson();
+			assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
+		});
 	}
 
 	@Test
@@ -1113,18 +1128,19 @@ public abstract class BaseHttpClientTest {
 		String n2 = "f2";
 		String v2 = "b2";
 
-		createDefaultClient()
-			.prepareGet(endpoint)
-			.addCookie(Cookies.cookie(n1, v1))
-			.addCookie(Cookies.cookie(n2, v2))
-			.executeJson();
+		useHttpClient((client) -> {
+			client.prepareGet(endpoint)
+				.addCookie(Cookies.cookie(n1, v1))
+				.addCookie(Cookies.cookie(n2, v2))
+				.executeJson();
 
-		List<Pair> expectedCookies = asList(
-			pair(n1, v1),
-			pair(n2, v2)
-		);
+			List<Pair> expectedCookies = asList(
+				pair(n1, v1),
+				pair(n2, v2)
+			);
 
-		assertRequestWithCookies(endpoint, HttpMethod.GET, expectedCookies);
+			assertRequestWithCookies(endpoint, HttpMethod.GET, expectedCookies);
+		});
 	}
 
 	@Test
@@ -1138,18 +1154,19 @@ public abstract class BaseHttpClientTest {
 		String n2 = "f2";
 		String v2 = "b2";
 
-		createDefaultClient()
-			.prepareGet(endpoint)
-			.addCookie(n1, v1)
-			.addCookie(n2, v2)
-			.executeJson();
+		useHttpClient((client) -> {
+			client.prepareGet(endpoint)
+				.addCookie(n1, v1)
+				.addCookie(n2, v2)
+				.executeJson();
 
-		List<Pair> expectedCookies = asList(
-			pair(n1, v1),
-			pair(n2, v2)
-		);
+			List<Pair> expectedCookies = asList(
+				pair(n1, v1),
+				pair(n2, v2)
+			);
 
-		assertRequestWithCookies(endpoint, HttpMethod.GET, expectedCookies);
+			assertRequestWithCookies(endpoint, HttpMethod.GET, expectedCookies);
+		});
 	}
 
 	@Test
@@ -1177,13 +1194,14 @@ public abstract class BaseHttpClientTest {
 		long maxAge = maxAgeUtc.getTime();
 		Long expires = null;
 
-		createDefaultClient()
-			.prepareGet(endpoint)
-			.addHeader(ORIGIN, server.getUrl())
-			.addCookie(Cookies.cookie(name, value, domain, path, expires, maxAge, secured, httpOnly))
-			.executeJson();
+		useHttpClient((client) -> {
+			client.prepareGet(endpoint)
+				.addHeader(ORIGIN, server.getUrl())
+				.addCookie(Cookies.cookie(name, value, domain, path, expires, maxAge, secured, httpOnly))
+				.executeJson();
 
-		assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
+			assertRequestWithCookie(endpoint, HttpMethod.GET, name, value);
+		});
 	}
 
 	@Test
@@ -1195,34 +1213,33 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareGet(endpoint)
-			.executeJson();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareGet(endpoint).executeJson();
+			List<String> testedHeaders = asList(
+				ETAG,
+				LOCATION,
+				LAST_MODIFIED,
+				CONTENT_ENCODING,
+				CACHE_CONTROL,
+				CONTENT_TYPE,
+				STRICT_TRANSPORT_SECURITY,
+				X_CONTENT_SECURITY_POLICY,
+				X_WEBKIT_CSP,
+				CONTENT_SECURITY_POLICY,
+				X_XSS_PROTECTION,
+				X_CONTENT_TYPE_OPTIONS
+			);
 
-		List<String> testedHeaders = asList(
-			ETAG,
-			LOCATION,
-			LAST_MODIFIED,
-			CONTENT_ENCODING,
-			CACHE_CONTROL,
-			CONTENT_TYPE,
-			STRICT_TRANSPORT_SECURITY,
-			X_CONTENT_SECURITY_POLICY,
-			X_WEBKIT_CSP,
-			CONTENT_SECURITY_POLICY,
-			X_XSS_PROTECTION,
-			X_CONTENT_TYPE_OPTIONS
-		);
+			for (String header : testedHeaders) {
+				assertThat(rsp.containsHeader(header))
+					.overridingErrorMessage("Header %s should be missing", header)
+					.isFalse();
 
-		for (String header : testedHeaders) {
-			assertThat(rsp.containsHeader(header))
-				.overridingErrorMessage("Header %s should be missing", header)
-				.isFalse();
-
-			assertThat(rsp.getHeader(header))
-				.overridingErrorMessage("Header %s should be null", header)
-				.isNull();
-		}
+				assertThat(rsp.getHeader(header))
+					.overridingErrorMessage("Header %s should be null", header)
+					.isNull();
+			}
+		});
 	}
 
 	@Test
@@ -1351,25 +1368,26 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareGet(endpoint)
-			.addAcceptEncoding("identity")
-			.executeJson();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareGet(endpoint)
+				.addAcceptEncoding("identity")
+				.executeJson();
 
-		HttpHeader header = rsp.getHeader(name);
-		assertThat(rsp.containsHeader(name)).isTrue();
-		assertThat(func.apply(rsp)).isEqualTo(header);
+			HttpHeader header = rsp.getHeader(name);
+			assertThat(rsp.containsHeader(name)).isTrue();
+			assertThat(func.apply(rsp)).isEqualTo(header);
 
-		assertThat(header.getName()).isEqualTo(name);
-		assertThat(header.getValues()).isEqualTo(singletonList(value));
-		assertThat(header.getFirstValue()).isEqualTo(value);
-		assertThat(header.getLastValue()).isEqualTo(value);
+			assertThat(header.getName()).isEqualTo(name);
+			assertThat(header.getValues()).isEqualTo(singletonList(value));
+			assertThat(header.getFirstValue()).isEqualTo(value);
+			assertThat(header.getLastValue()).isEqualTo(value);
 
-		assertThat(rsp.getHeaders())
-			.extracting("name", "values")
-			.contains(
-				tuple(name, singletonList(value))
-			);
+			assertThat(rsp.getHeaders())
+				.extracting("name", "values")
+				.contains(
+					tuple(name, singletonList(value))
+				);
+		});
 	}
 
 	private void testResponseWithSeveralValues(String name, List<String> values, MapperFunction<HttpResponse, HttpHeader> func) {
@@ -1382,26 +1400,27 @@ public abstract class BaseHttpClientTest {
 		stubGetRequest(endpoint, status, headers, body);
 
 		// WHEN
-		HttpResponse rsp = createDefaultClient()
-			.prepareGet(endpoint)
-			.addAcceptEncoding("identity")
-			.executeJson();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareGet(endpoint)
+				.addAcceptEncoding("identity")
+				.executeJson();
 
-		// THEN
-		HttpHeader header = rsp.getHeader(name);
-		assertThat(rsp.containsHeader(name)).isTrue();
-		assertThat(func.apply(rsp)).isEqualTo(header);
+			// THEN
+			HttpHeader header = rsp.getHeader(name);
+			assertThat(rsp.containsHeader(name)).isTrue();
+			assertThat(func.apply(rsp)).isEqualTo(header);
 
-		assertThat(header.getName()).isEqualTo(name);
-		assertThat(header.getValues()).isEqualTo(values);
-		assertThat(header.getFirstValue()).isEqualTo(values.get(0));
-		assertThat(header.getLastValue()).isEqualTo(values.get(values.size() - 1));
+			assertThat(header.getName()).isEqualTo(name);
+			assertThat(header.getValues()).isEqualTo(values);
+			assertThat(header.getFirstValue()).isEqualTo(values.get(0));
+			assertThat(header.getLastValue()).isEqualTo(values.get(values.size() - 1));
 
-		assertThat(rsp.getHeaders())
-			.extracting("name", "values")
-			.contains(
-				tuple(name, values)
-			);
+			assertThat(rsp.getHeaders())
+				.extracting("name", "values")
+				.contains(
+					tuple(name, values)
+				);
+		});
 	}
 
 	@Test
@@ -1426,24 +1445,24 @@ public abstract class BaseHttpClientTest {
 
 		stubGetRequest(endpoint, status, headers, body);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareGet(endpoint)
-			.executeJson();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareGet(endpoint).executeJson();
 
-		List<Cookie> cookies = rsp.getCookies();
-		assertThat(cookies).hasSize(1);
+			List<Cookie> cookies = rsp.getCookies();
+			assertThat(cookies).hasSize(1);
 
-		Cookie cookie = cookies.get(0);
-		assertThat(cookie.getName()).isEqualTo(name);
-		assertThat(cookie.getValue()).isEqualTo(value);
-		assertThat(cookie.getDomain()).isEqualTo(domain);
-		assertThat(cookie.getPath()).isEqualTo(path);
-		assertThat(cookie.getMaxAge()).isEqualTo(maxAge);
-		assertThat(cookie.isSecure()).isTrue();
-		assertThat(cookie.isHttpOnly()).isTrue();
+			Cookie cookie = cookies.get(0);
+			assertThat(cookie.getName()).isEqualTo(name);
+			assertThat(cookie.getValue()).isEqualTo(value);
+			assertThat(cookie.getDomain()).isEqualTo(domain);
+			assertThat(cookie.getPath()).isEqualTo(path);
+			assertThat(cookie.getMaxAge()).isEqualTo(maxAge);
+			assertThat(cookie.isSecure()).isTrue();
+			assertThat(cookie.isHttpOnly()).isTrue();
 
-		assertThat(rsp.getCookie(name)).isEqualTo(cookie);
-		assertThat(rsp.getCookie("foobar")).isNull();
+			assertThat(rsp.getCookie(name)).isEqualTo(cookie);
+			assertThat(rsp.getCookie("foobar")).isNull();
+		});
 	}
 
 	@Test
@@ -1451,12 +1470,12 @@ public abstract class BaseHttpClientTest {
 		String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareGet(endpoint)
-			.executeJson();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareGet(endpoint).executeJson();
 
-		assertThat(rsp.getCookies()).isNotNull().isEmpty();
-		assertThat(rsp.getCookie("id")).isNull();
+			assertThat(rsp.getCookies()).isNotNull().isEmpty();
+			assertThat(rsp.getCookie("id")).isNull();
+		});
 	}
 
 	@Test
@@ -1464,37 +1483,49 @@ public abstract class BaseHttpClientTest {
 		String endpoint = ENDPOINT;
 		stubDefaultRequest(endpoint);
 
-		HttpResponse rsp = createDefaultClient()
-			.prepareGet(endpoint)
-			.executeJson();
+		useHttpClient((client) -> {
+			HttpResponse rsp = client.prepareGet(endpoint).executeJson();
 
-		long durationNano = rsp.getRequestDuration();
-		long durationMillis = rsp.getRequestDurationInMillis();
-		assertThat(durationNano).isGreaterThan(0);
-		assertThat(durationMillis).isEqualTo(durationNano / 1000 / 1000);
+			long durationNano = rsp.getRequestDuration();
+			long durationMillis = rsp.getRequestDurationInMillis();
+			assertThat(durationNano).isGreaterThan(0);
+			assertThat(durationMillis).isEqualTo(durationNano / 1000 / 1000);
+		});
 	}
 
 	@Test
 	void it_should_destroy_client() {
-		HttpClient newClient = createDefaultClient();
-
-		assertThat(newClient.isDestroyed()).isFalse();
-		newClient.destroy();
-		assertThat(newClient.isDestroyed()).isTrue();
+		useHttpClient((client) -> {
+			assertThat(client.isDestroyed()).isFalse();
+			client.destroy();
+			assertThat(client.isDestroyed()).isTrue();
+		});
 	}
 
 	@Test
 	void it_should_fail_to_create_request_from_a_destroyed_client() {
 		String endpoint = "/foo";
-		HttpClient newClient = createDefaultClient();
-		newClient.destroy();
-
-		assertThatThrownBy(() -> newClient.prepareGet(endpoint))
-			.isExactlyInstanceOf(IllegalStateException.class)
-			.hasMessage("Cannot create request from a destroyed client");
+		useHttpClient((client) -> {
+			client.destroy();
+			assertThatThrownBy(() -> client.prepareGet(endpoint))
+				.isExactlyInstanceOf(IllegalStateException.class)
+				.hasMessage("Cannot create request from a destroyed client");
+		});
 	}
 
 	protected abstract HttpClientStrategy strategy();
+
+	private void useHttpClient(Consumer<HttpClient> testFn) {
+		try (HttpClient client = createDefaultClient()) {
+			testFn.accept(client);
+		}
+	}
+
+	private void useHttpClient(HttpClientConfiguration configuration, Consumer<HttpClient> testFn) {
+		try (HttpClient client = createCustomClient(configuration)) {
+			testFn.accept(client);
+		}
+	}
 
 	private HttpClient createDefaultClient() {
 		return createClient(() ->
@@ -1502,25 +1533,13 @@ public abstract class BaseHttpClientTest {
 		);
 	}
 
-	private HttpClient createCustomClient(final HttpClientConfiguration configuration) {
+	private HttpClient createCustomClient(HttpClientConfiguration configuration) {
 		return createClient(() ->
 			strategy().build(configuration, server)
 		);
 	}
 
-	private HttpClient createClient(HttpClientFactory factory) {
-		ensureOneClient();
-		client = factory.create();
-		return client;
-	}
-
-	private void ensureOneClient() {
-		if (client != null) {
-			throw new AssertionError("Cannot create two clients on a test");
-		}
-	}
-
-	private interface HttpClientFactory {
-		HttpClient create();
+	private HttpClient createClient(Supplier<HttpClient> factory) {
+		return factory.get();
 	}
 }
