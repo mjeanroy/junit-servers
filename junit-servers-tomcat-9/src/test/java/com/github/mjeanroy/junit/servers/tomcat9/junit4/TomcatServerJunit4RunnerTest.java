@@ -43,9 +43,9 @@ class TomcatServerJunit4RunnerTest {
 
 	@Test
 	void it_should_instantiate_tomcat_with_default_configuration() throws Exception {
-		final TomcatServerJunit4Runner runner = createRunner(TestClassWithInjectedConfiguration.class);
-		final EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		final AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
+		TomcatServerJunit4Runner runner = createRunner(TestClassWithInjectedConfiguration.class);
+		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
+		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 
 		assertThat(server).isInstanceOf(EmbeddedTomcat.class);
 		assertThat(conf).isInstanceOf(EmbeddedTomcatConfiguration.class).isNotSameAs(configuration);
@@ -53,9 +53,9 @@ class TomcatServerJunit4RunnerTest {
 
 	@Test
 	void it_should_instantiate_tomcat_with_configuration() throws Exception {
-		final TomcatServerJunit4Runner runner = createRunner(TestClassWithConfigurationInitializer.class);
-		final EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		final AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
+		TomcatServerJunit4Runner runner = createRunner(TestClassWithConfigurationInitializer.class);
+		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
+		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 
 		assertThat(server).isInstanceOf(EmbeddedTomcat.class);
 		assertThat(conf).isInstanceOf(EmbeddedTomcatConfiguration.class).isSameAs(configuration);

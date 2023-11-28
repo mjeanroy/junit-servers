@@ -42,9 +42,9 @@ class JunitServerRunnerTest {
 
 	@Test
 	void it_should_instantiate_jetty_with_configuration() throws Exception {
-		final JunitServerRunner runner = new JunitServerRunner(TestClassWithConfigurationMethod.class);
-		final EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		final AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
+		JunitServerRunner runner = new JunitServerRunner(TestClassWithConfigurationMethod.class);
+		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
+		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 
 		assertThat(server).isInstanceOf(EmbeddedJetty.class);
 		assertThat(conf).isSameAs(configuration);
@@ -52,9 +52,9 @@ class JunitServerRunnerTest {
 
 	@Test
 	void it_should_instantiate_jetty_with_default_configuration() throws Exception {
-		final JunitServerRunner runner = new JunitServerRunner(TestClassWithInjectedConfiguration.class);
-		final EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
-		final AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
+		JunitServerRunner runner = new JunitServerRunner(TestClassWithInjectedConfiguration.class);
+		EmbeddedServer<?> server = (EmbeddedServer<?>) readField(runner, "server", true);
+		AbstractConfiguration conf = (AbstractConfiguration) readField(runner, "configuration", true);
 
 		assertThat(server).isInstanceOf(EmbeddedJetty.class);
 		assertThat(conf).isNotSameAs(configuration).isEqualTo(configuration);

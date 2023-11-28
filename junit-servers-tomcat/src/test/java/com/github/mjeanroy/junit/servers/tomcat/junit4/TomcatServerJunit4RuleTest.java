@@ -44,9 +44,9 @@ class TomcatServerJunit4RuleTest {
 
 	@Test
 	void it_should_create_rule_with_server() throws Throwable {
-		final EmbeddedTomcatConfiguration config = mock(EmbeddedTomcatConfiguration.class);
-		final EmbeddedTomcat tomcat = new EmbeddedTomcatMockBuilder().withConfiguration(config).build();
-		final TomcatServerJunit4Rule rule = createRule(tomcat);
+		EmbeddedTomcatConfiguration config = mock(EmbeddedTomcatConfiguration.class);
+		EmbeddedTomcat tomcat = new EmbeddedTomcatMockBuilder().withConfiguration(config).build();
+		TomcatServerJunit4Rule rule = createRule(tomcat);
 
 		assertThat(rule.getServer()).isSameAs(tomcat);
 		assertThat(rule.getScheme()).isEqualTo(tomcat.getScheme());
@@ -67,8 +67,8 @@ class TomcatServerJunit4RuleTest {
 
 	@Test
 	void it_should_create_server_from_configuration() throws Throwable {
-		final EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.defaultConfiguration();
-		final TomcatServerJunit4Rule rule = createRule(configuration);
+		EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.defaultConfiguration();
+		TomcatServerJunit4Rule rule = createRule(configuration);
 
 		assertThat(rule.getServer()).isNotNull();
 		assertThat(rule.getScheme()).isEqualTo("http");
@@ -81,7 +81,7 @@ class TomcatServerJunit4RuleTest {
 
 	@Test
 	void it_should_create_server_with_default_configuration() throws Throwable {
-		final TomcatServerJunit4Rule rule = createRule();
+		TomcatServerJunit4Rule rule = createRule();
 
 		assertThat(rule.getServer()).isNotNull();
 		assertThat(rule.getScheme()).isEqualTo("http");
@@ -105,7 +105,7 @@ class TomcatServerJunit4RuleTest {
 	}
 
 	private static void assertRule(final TomcatServerJunit4Rule rule) throws Throwable {
-		final Statement statement = spy(new FakeStatement(rule));
+		Statement statement = spy(new FakeStatement(rule));
 
 		evaluateRule(rule, statement);
 

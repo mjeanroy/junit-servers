@@ -38,15 +38,15 @@ class TomcatServerExtensionTest {
 
 	@Test
 	void it_should_start_given_tomcat_server_before_all_tests() {
-		final EmbeddedTomcat tomcat = new EmbeddedTomcatMockBuilder().build();
-		final TomcatServerExtension extension = new TomcatServerExtension(tomcat);
-		final FixtureClass testInstance = new FixtureClass();
-		final FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+		EmbeddedTomcat tomcat = new EmbeddedTomcatMockBuilder().build();
+		TomcatServerExtension extension = new TomcatServerExtension(tomcat);
+		FixtureClass testInstance = new FixtureClass();
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		final FakeJunitStore store = context.getSingleStore();
-		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
+		FakeJunitStore store = context.getSingleStore();
+		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isSameAs(tomcat);
@@ -55,15 +55,15 @@ class TomcatServerExtensionTest {
 
 	@Test
 	void it_should_start_tomcat_server_using_given_configuration_before_all_tests() {
-		final EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.defaultConfiguration();
-		final TomcatServerExtension extension = new TomcatServerExtension(configuration);
-		final FixtureClass testInstance = new FixtureClass();
-		final FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+		EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.defaultConfiguration();
+		TomcatServerExtension extension = new TomcatServerExtension(configuration);
+		FixtureClass testInstance = new FixtureClass();
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		final FakeJunitStore store = context.getSingleStore();
-		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
+		FakeJunitStore store = context.getSingleStore();
+		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull().isExactlyInstanceOf(EmbeddedTomcat.class);
@@ -73,14 +73,14 @@ class TomcatServerExtensionTest {
 
 	@Test
 	void it_should_start_server_with_default_configuration_before_all_tests() {
-		final TomcatServerExtension extension = new TomcatServerExtension();
-		final FixtureClass testInstance = new FixtureClass();
-		final FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+		TomcatServerExtension extension = new TomcatServerExtension();
+		FixtureClass testInstance = new FixtureClass();
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		final FakeJunitStore store = context.getSingleStore();
-		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
+		FakeJunitStore store = context.getSingleStore();
+		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull().isExactlyInstanceOf(EmbeddedTomcat.class);

@@ -36,15 +36,15 @@ class EmbeddedJettyFactoryTest {
 
 	@Test
 	void it_should_create_embedded_jetty_from_class_using_default_configuration() {
-		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingDefaultConfiguration.class);
+		EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingDefaultConfiguration.class);
 		assertThat(jetty).isNotNull();
 		assertThat(jetty.getConfiguration()).isEqualTo(EmbeddedJettyConfiguration.defaultConfiguration());
 	}
 
 	@Test
 	void it_should_create_embedded_jetty_from_class_using_provided_configuration() {
-		final EmbeddedJettyConfiguration providedConfiguration = EmbeddedJettyConfiguration.builder().withPath("/test").build();
-		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingDefaultConfiguration.class, providedConfiguration);
+		EmbeddedJettyConfiguration providedConfiguration = EmbeddedJettyConfiguration.builder().withPath("/test").build();
+		EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingDefaultConfiguration.class, providedConfiguration);
 
 		assertThat(jetty).isNotNull();
 		assertThat(jetty.getConfiguration()).isEqualTo(providedConfiguration);
@@ -52,14 +52,14 @@ class EmbeddedJettyFactoryTest {
 
 	@Test
 	void it_should_create_embedded_tomcat_from_class_using_configuration_provider() {
-		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassAnnotatedWithConfigurationProvider.class);
+		EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassAnnotatedWithConfigurationProvider.class);
 		assertThat(jetty).isNotNull();
 		assertThat(jetty.getConfiguration()).isSameAs(DefaultEmbeddedJettyConfigurationProvider.CONFIGURATION);
 	}
 
 	@Test
 	void it_should_create_embedded_jetty_from_class_using_custom_configuration() {
-		final EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingCustomConfiguration.class);
+		EmbeddedJetty jetty = EmbeddedJettyFactory.createFrom(ClassUsingCustomConfiguration.class);
 		assertThat(jetty).isNotNull();
 		assertThat(jetty.getConfiguration()).isSameAs(ClassUsingCustomConfiguration.configuration);
 	}

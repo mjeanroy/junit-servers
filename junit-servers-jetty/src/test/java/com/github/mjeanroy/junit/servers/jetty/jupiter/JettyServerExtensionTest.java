@@ -39,15 +39,15 @@ class JettyServerExtensionTest {
 
 	@Test
 	void it_should_start_given_jetty_server_before_all_tests() {
-		final EmbeddedJetty jetty = new EmbeddedJettyMockBuilder().build();
-		final JettyServerExtension extension = new JettyServerExtension(jetty);
-		final FixtureClass testInstance = new FixtureClass();
-		final FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+		EmbeddedJetty jetty = new EmbeddedJettyMockBuilder().build();
+		JettyServerExtension extension = new JettyServerExtension(jetty);
+		FixtureClass testInstance = new FixtureClass();
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		final FakeJunitStore store = context.getSingleStore();
-		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
+		FakeJunitStore store = context.getSingleStore();
+		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isSameAs(jetty);
@@ -56,15 +56,15 @@ class JettyServerExtensionTest {
 
 	@Test
 	void it_should_start_jetty_server_using_given_configuration_before_all_tests() {
-		final EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.defaultConfiguration();
-		final JettyServerExtension extension = new JettyServerExtension(configuration);
-		final FixtureClass testInstance = new FixtureClass();
-		final FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+		EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.defaultConfiguration();
+		JettyServerExtension extension = new JettyServerExtension(configuration);
+		FixtureClass testInstance = new FixtureClass();
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		final FakeJunitStore store = context.getSingleStore();
-		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
+		FakeJunitStore store = context.getSingleStore();
+		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull().isExactlyInstanceOf(EmbeddedJetty.class);
@@ -74,14 +74,14 @@ class JettyServerExtensionTest {
 
 	@Test
 	void it_should_start_server_with_default_configuration_before_all_tests() {
-		final JettyServerExtension extension = new JettyServerExtension();
-		final FixtureClass testInstance = new FixtureClass();
-		final FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+		JettyServerExtension extension = new JettyServerExtension();
+		FixtureClass testInstance = new FixtureClass();
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		final FakeJunitStore store = context.getSingleStore();
-		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
+		FakeJunitStore store = context.getSingleStore();
+		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
 		assertThat(serverAdapter.getServer()).isNotNull().isExactlyInstanceOf(EmbeddedJetty.class);

@@ -51,7 +51,7 @@ class ServerRuleTest {
 
 	@Test
 	void it_should_start_jetty_with_custom_configuration_because_of_classpath_detection() {
-		final EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
+		EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
 			.withPort(9000)
 			.build();
 

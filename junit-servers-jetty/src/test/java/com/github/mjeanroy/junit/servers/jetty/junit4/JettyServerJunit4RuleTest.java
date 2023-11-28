@@ -45,9 +45,9 @@ class JettyServerJunit4RuleTest {
 
 	@Test
 	void it_should_create_rule_with_server() throws Throwable {
-		final EmbeddedJettyConfiguration config = new EmbeddedJettyConfigurationMockBuilder().build();
-		final EmbeddedJetty jetty = new EmbeddedJettyMockBuilder().withConfiguration(config).build();
-		final JettyServerJunit4Rule rule = createRule(jetty);
+		EmbeddedJettyConfiguration config = new EmbeddedJettyConfigurationMockBuilder().build();
+		EmbeddedJetty jetty = new EmbeddedJettyMockBuilder().withConfiguration(config).build();
+		JettyServerJunit4Rule rule = createRule(jetty);
 
 		assertThat(rule.getServer()).isSameAs(jetty);
 		assertThat(rule.getScheme()).isEqualTo(jetty.getScheme());
@@ -68,8 +68,8 @@ class JettyServerJunit4RuleTest {
 
 	@Test
 	void it_should_create_server_from_configuration() throws Throwable {
-		final EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.defaultConfiguration();
-		final JettyServerJunit4Rule rule = createRule(configuration);
+		EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.defaultConfiguration();
+		JettyServerJunit4Rule rule = createRule(configuration);
 
 		assertThat(rule.getPort()).isZero();
 		assertRule(rule);
@@ -77,7 +77,7 @@ class JettyServerJunit4RuleTest {
 
 	@Test
 	void it_should_create_server_with_default_configuration() throws Throwable {
-		final JettyServerJunit4Rule rule = createRule();
+		JettyServerJunit4Rule rule = createRule();
 
 		assertThat(rule.getPort()).isZero(); // not started
 		assertRule(rule);
@@ -96,7 +96,7 @@ class JettyServerJunit4RuleTest {
 	}
 
 	private static void assertRule(final JettyServerJunit4Rule rule) throws Throwable {
-		final Statement statement = spy(new FakeStatement(rule));
+		Statement statement = spy(new FakeStatement(rule));
 
 		evaluateRule(rule, statement);
 
@@ -105,13 +105,13 @@ class JettyServerJunit4RuleTest {
 	}
 
 	private static void evaluateRule(JettyServerJunit4Rule rule) throws Throwable {
-		final Statement statement = mock(Statement.class);
+		Statement statement = mock(Statement.class);
 		evaluateRule(rule, statement);
 	}
 
 	private static void evaluateRule(JettyServerJunit4Rule rule, Statement statement) throws Throwable {
-		final Description description = mock(Description.class);
-		final Statement testStatement = rule.apply(statement, description);
+		Description description = mock(Description.class);
+		Statement testStatement = rule.apply(statement, description);
 		testStatement.evaluate();
 	}
 

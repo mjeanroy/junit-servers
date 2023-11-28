@@ -39,15 +39,15 @@ class EmbeddedTomcatFactoryTest {
 
 	@Test
 	void it_should_create_embedded_tomcat_from_class_using_default_configuration() {
-		final EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassUsingDefaultConfiguration.class);
+		EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassUsingDefaultConfiguration.class);
 		assertThat(tomcat).isNotNull();
 		assertThat(tomcat.getConfiguration()).isEqualTo(EmbeddedTomcatConfiguration.defaultConfiguration());
 	}
 
 	@Test
 	void it_should_create_embedded_tomcat_from_class_using_provided_configuration() {
-		final EmbeddedTomcatConfiguration providedConfiguration = EmbeddedTomcatConfiguration.builder().withPath("/test").build();
-		final EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassUsingDefaultConfiguration.class, providedConfiguration);
+		EmbeddedTomcatConfiguration providedConfiguration = EmbeddedTomcatConfiguration.builder().withPath("/test").build();
+		EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassUsingDefaultConfiguration.class, providedConfiguration);
 
 		assertThat(tomcat).isNotNull();
 		assertThat(tomcat.getConfiguration()).isEqualTo(providedConfiguration);
@@ -55,14 +55,14 @@ class EmbeddedTomcatFactoryTest {
 
 	@Test
 	void it_should_create_embedded_tomcat_from_class_using_configuration_provider() {
-		final EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassAnnotatedWithConfigurationProvider.class);
+		EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassAnnotatedWithConfigurationProvider.class);
 		assertThat(tomcat).isNotNull();
 		assertThat(tomcat.getConfiguration()).isSameAs(DefaultEmbeddedTomcatConfigurationProvider.CONFIGURATION);
 	}
 
 	@Test
 	void it_should_create_embedded_tomcat_from_class_using_custom_configuration() {
-		final EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassUsingCustomConfiguration.class);
+		EmbeddedTomcat tomcat = EmbeddedTomcatFactory.createFrom(ClassUsingCustomConfiguration.class);
 		assertThat(tomcat).isNotNull();
 		assertThat(tomcat.getConfiguration()).isSameAs(ClassUsingCustomConfiguration.configuration);
 	}

@@ -35,8 +35,8 @@ class EmbeddedJettyProviderTest {
 
 	@Test
 	void it_should_instantiate_jetty_with_default_configuration() {
-		final EmbeddedJettyProvider provider = new EmbeddedJettyProvider();
-		final EmbeddedJetty jetty = provider.instantiate();
+		EmbeddedJettyProvider provider = new EmbeddedJettyProvider();
+		EmbeddedJetty jetty = provider.instantiate();
 
 		assertThat(jetty).isNotNull();
 		assertThat(jetty.getConfiguration()).isNotNull().isEqualTo(defaultConfiguration());
@@ -44,9 +44,9 @@ class EmbeddedJettyProviderTest {
 
 	@Test
 	void it_should_instantiate_jetty_with_custom_configuration() {
-		final EmbeddedJettyProvider provider = new EmbeddedJettyProvider();
-		final EmbeddedJettyConfiguration configuration = new EmbeddedJettyConfigurationMockBuilder().build();
-		final EmbeddedJetty jetty = provider.instantiate(configuration);
+		EmbeddedJettyProvider provider = new EmbeddedJettyProvider();
+		EmbeddedJettyConfiguration configuration = new EmbeddedJettyConfigurationMockBuilder().build();
+		EmbeddedJetty jetty = provider.instantiate(configuration);
 
 		assertThat(jetty).isNotNull();
 		assertThat(jetty.getConfiguration()).isNotNull().isSameAs(configuration);

@@ -152,7 +152,7 @@ public class EmbeddedTomcatMockBuilder {
 	 * @return The mock instance.
 	 */
 	public EmbeddedTomcat build() {
-		final EmbeddedTomcat tomcat = mock(EmbeddedTomcat.class);
+		EmbeddedTomcat tomcat = mock(EmbeddedTomcat.class);
 		when(tomcat.getScheme()).thenReturn(scheme);
 		when(tomcat.getHost()).thenReturn(host);
 		when(tomcat.getPort()).thenReturn(port);

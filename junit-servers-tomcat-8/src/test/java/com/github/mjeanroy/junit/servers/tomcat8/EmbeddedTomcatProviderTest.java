@@ -35,8 +35,8 @@ class EmbeddedTomcatProviderTest {
 
 	@Test
 	void it_should_instantiate_jetty_with_default_configuration() {
-		final EmbeddedTomcatProvider provider = new EmbeddedTomcatProvider();
-		final EmbeddedTomcat tomcat = provider.instantiate();
+		EmbeddedTomcatProvider provider = new EmbeddedTomcatProvider();
+		EmbeddedTomcat tomcat = provider.instantiate();
 
 		assertThat(tomcat).isNotNull();
 		assertThat(tomcat.getConfiguration()).isNotNull().isEqualTo(defaultConfiguration());
@@ -44,9 +44,9 @@ class EmbeddedTomcatProviderTest {
 
 	@Test
 	void it_should_instantiate_jetty_with_custom_configuration() {
-		final EmbeddedTomcatProvider provider = new EmbeddedTomcatProvider();
-		final EmbeddedTomcatConfiguration configuration = new EmbeddedTomcatConfigurationMockBuilder().build();
-		final EmbeddedTomcat tomcat = provider.instantiate(configuration);
+		EmbeddedTomcatProvider provider = new EmbeddedTomcatProvider();
+		EmbeddedTomcatConfiguration configuration = new EmbeddedTomcatConfigurationMockBuilder().build();
+		EmbeddedTomcat tomcat = provider.instantiate(configuration);
 
 		assertThat(tomcat).isNotNull();
 		assertThat(tomcat.getConfiguration()).isNotNull().isSameAs(configuration);
