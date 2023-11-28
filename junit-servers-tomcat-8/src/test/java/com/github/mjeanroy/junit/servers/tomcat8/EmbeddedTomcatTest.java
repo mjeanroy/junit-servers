@@ -24,11 +24,9 @@
 
 package com.github.mjeanroy.junit.servers.tomcat8;
 
+import com.github.mjeanroy.junit.servers.testing.HttpTestUtils;
+import com.github.mjeanroy.junit.servers.testing.HttpTestUtils.HttpResponse;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 import org.apache.catalina.Container;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleState;
@@ -37,9 +35,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.file.Files;
 
+import static com.github.mjeanroy.junit.servers.testing.HttpTestUtils.localhost;
+import static com.github.mjeanroy.junit.servers.testing.IoTestUtils.getFileFromClasspath;
 import static com.github.mjeanroy.junit.servers.tomcat8.tests.commons.Fields.readPrivate;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -66,7 +65,7 @@ class EmbeddedTomcatTest {
 		assertThat(tomcat.getScheme()).isEqualTo("http");
 		assertThat(tomcat.getHost()).isEqualTo("localhost");
 		assertThat(tomcat.getPath()).isEqualTo("/");
-		assertThat(tomcat.getUrl()).isEqualTo(localUrl(tomcat.getPort()));
+		assertThat(tomcat.getUrl()).isEqualTo(localhost(tomcat.getPort()));
 	}
 
 	@Test
@@ -79,7 +78,7 @@ class EmbeddedTomcatTest {
 		assertThat(tomcat.getScheme()).isEqualTo("http");
 		assertThat(tomcat.getHost()).isEqualTo("localhost");
 		assertThat(tomcat.getPath()).isEqualTo("/");
-		assertThat(tomcat.getUrl()).isEqualTo(localUrl(tomcat.getPort()));
+		assertThat(tomcat.getUrl()).isEqualTo(localhost(tomcat.getPort()));
 
 		tomcat.stop();
 		assertThat(tomcat.isStarted()).isFalse();
@@ -87,7 +86,7 @@ class EmbeddedTomcatTest {
 		assertThat(tomcat.getScheme()).isEqualTo("http");
 		assertThat(tomcat.getHost()).isEqualTo("localhost");
 		assertThat(tomcat.getPath()).isEqualTo("/");
-		assertThat(tomcat.getUrl()).isEqualTo(localUrl(tomcat.getPort()));
+		assertThat(tomcat.getUrl()).isEqualTo(localhost(tomcat.getPort()));
 	}
 
 	@Test
@@ -182,10 +181,8 @@ class EmbeddedTomcatTest {
 	}
 
 	@Test
-	void it_should_override_web_xml() throws Exception {
-		final URL resource = getClass().getResource("/custom-web.xml");
-		final String webXmlPath = resource.getFile();
-		final File descriptor = new File(webXmlPath);
+	void it_should_override_web_xml() {
+		File descriptor = getFileFromClasspath("/custom-web.xml");
 
 		tomcat = new EmbeddedTomcat(defaultConfigurationBuilder()
 			.withOverrideDescriptor(descriptor.getAbsolutePath())
@@ -193,16 +190,10 @@ class EmbeddedTomcatTest {
 
 		tomcat.start();
 
-		final OkHttpClient client = new OkHttpClient();
-		final Request rq = new Request.Builder().url(tomcat.getUrl()).build();
-		final Response rsp = client.newCall(rq).execute();
-
+		HttpResponse rsp = HttpTestUtils.get(tomcat.getUrl());
 		assertThat(rsp).isNotNull();
-		assertThat(rsp.code()).isEqualTo(200);
-
-		final ResponseBody body = rsp.body();
-		String content = body == null ? null : body.string();
-		assertThat(content).isNotEmpty().contains("Hello World");
+		assertThat(rsp.getStatusCode()).isEqualTo(200);
+		assertThat(rsp.getResponseBody()).isNotEmpty().contains("Hello World");
 	}
 
 	private static EmbeddedTomcatConfiguration defaultConfiguration() {
@@ -225,9 +216,5 @@ class EmbeddedTomcatTest {
 		catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
-	}
-
-	private static String localUrl(int port) {
-		return "http://localhost:" + port + "/";
 	}
 }
