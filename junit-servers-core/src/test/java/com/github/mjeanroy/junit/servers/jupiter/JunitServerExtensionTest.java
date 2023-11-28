@@ -31,6 +31,9 @@ import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerRunner;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.testing.FakeJunitExtensionContext;
+import com.github.mjeanroy.junit.servers.testing.FakeJunitParameterContext;
+import com.github.mjeanroy.junit.servers.testing.FakeJunitStore;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import com.github.mjeanroy.junit.servers.utils.fixtures.FixtureClass;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
@@ -51,11 +54,11 @@ class JunitServerExtensionTest {
 		AbstractConfiguration configuration = new FakeEmbeddedServerConfiguration();
 		JunitServerExtension extension = new JunitServerExtension(configuration);
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
@@ -69,11 +72,11 @@ class JunitServerExtensionTest {
 		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
 		JunitServerExtension extension = new JunitServerExtension(server);
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
@@ -85,11 +88,11 @@ class JunitServerExtensionTest {
 	void it_should_start_server_before_all_tests() {
 		JunitServerExtension extension = new JunitServerExtension();
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
@@ -101,11 +104,11 @@ class JunitServerExtensionTest {
 	void it_should_stop_server_after_all_tests() {
 		JunitServerExtension extension = new JunitServerExtension();
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		extension.afterAll(context);
@@ -118,11 +121,11 @@ class JunitServerExtensionTest {
 	void it_should_start_server_before_each_tests() {
 		JunitServerExtension extension = new JunitServerExtension();
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeEach(context);
 
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
@@ -134,11 +137,11 @@ class JunitServerExtensionTest {
 	void it_should_stop_server_after_each_tests() {
 		JunitServerExtension extension = new JunitServerExtension();
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeEach(context);
 
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		extension.afterEach(context);
@@ -151,12 +154,12 @@ class JunitServerExtensionTest {
 	void it_should_detect_if_server_must_be_started_and_stopped_after_all_tests() {
 		JunitServerExtension extension = new JunitServerExtension();
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 		extension.beforeEach(context);
 
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		extension.afterEach(context);
@@ -174,11 +177,11 @@ class JunitServerExtensionTest {
 	void it_should_inject_annotated_field_before_each_test() {
 		JunitServerExtension extension = new JunitServerExtension();
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		extension.beforeEach(context);
@@ -195,13 +198,13 @@ class JunitServerExtensionTest {
 	void it_should_reset_injected_http_client_after_each_test() {
 		JunitServerExtension extension = new JunitServerExtension();
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 		extension.beforeEach(context);
 
 		HttpClient client = testInstance.client;
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 
 		extension.afterEach(context);
 
@@ -233,13 +236,13 @@ class JunitServerExtensionTest {
 	private void verifySupportsParameter(String methodName, Class<?> klass) throws Exception {
 		JunitServerExtension extension = new JunitServerExtension();
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
 		Method method = getClass().getMethod(methodName, klass);
 		Parameter parameter = method.getParameters()[0];
-		ParameterContext parameterContext = new FakeParameterContext(parameter);
+		ParameterContext parameterContext = new FakeJunitParameterContext(parameter);
 
 		assertThat(extension.supportsParameter(parameterContext, context)).isTrue();
 	}
@@ -247,9 +250,9 @@ class JunitServerExtensionTest {
 	@Test
 	void it_should_resolve_embedded_server_parameter() throws Exception {
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 		JunitServerExtension extension = initializeExtension(context);
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 		ParameterContext parameterContext = createParameterContext("method_server", EmbeddedServer.class);
 
@@ -261,9 +264,9 @@ class JunitServerExtensionTest {
 	@Test
 	void it_should_resolve_configuration_parameter() throws Exception {
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 		JunitServerExtension extension = initializeExtension(context);
-		FakeStore store = context.getSingleStore();
+		FakeJunitStore store = context.getSingleStore();
 		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 		ParameterContext parameterContext = createParameterContext("method_configuration", AbstractConfiguration.class);
 
@@ -275,7 +278,7 @@ class JunitServerExtensionTest {
 	@Test
 	void it_should_resolve_http_client_parameter_with_auto_strategy() throws Exception {
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 		JunitServerExtension extension = initializeExtension(context);
 		ParameterContext parameterContext = createParameterContext("method_http_client", HttpClient.class);
 
@@ -287,7 +290,7 @@ class JunitServerExtensionTest {
 	@Test
 	void it_should_resolve_http_client_parameter_with_custom_strategy() throws Exception {
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 		JunitServerExtension extension = initializeExtension(context);
 		ParameterContext parameterContext = createParameterContext("method_http_client_custom", HttpClient.class);
 
@@ -299,7 +302,7 @@ class JunitServerExtensionTest {
 	@Test
 	void it_should_resolve_extended_parameter() throws Exception {
 		FixtureClass testInstance = new FixtureClass();
-		FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 		JunitServerExtension extension = initializeExtension(context);
 		ParameterContext parameterContext = createParameterContext("method_with_fake_embedded_configuration", FakeEmbeddedServerConfiguration.class);
 
@@ -308,7 +311,7 @@ class JunitServerExtensionTest {
 		assertThat(result).isNotNull().isExactlyInstanceOf(FakeEmbeddedServerConfiguration.class);
 	}
 
-	private JunitServerExtension initializeExtension(FakeExtensionContext context) {
+	private JunitServerExtension initializeExtension(FakeJunitExtensionContext context) {
 		JunitServerExtension extension = new JunitServerExtension();
 		extension.beforeAll(context);
 		return extension;
@@ -317,7 +320,7 @@ class JunitServerExtensionTest {
 	private ParameterContext createParameterContext(String methodName, Class<?> klass) throws Exception {
 		Method method = getClass().getMethod(methodName, klass);
 		Parameter parameter = method.getParameters()[0];
-		return new FakeParameterContext(parameter);
+		return new FakeJunitParameterContext(parameter);
 	}
 
 	public void method_server(EmbeddedServer<?> server) {

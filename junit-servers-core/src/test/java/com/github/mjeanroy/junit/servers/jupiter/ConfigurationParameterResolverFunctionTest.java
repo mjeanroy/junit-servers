@@ -27,6 +27,7 @@ package com.github.mjeanroy.junit.servers.jupiter;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
+import com.github.mjeanroy.junit.servers.testing.FakeJunitParameterContext;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,7 +62,7 @@ class ConfigurationParameterResolverFunctionTest {
 	private ParameterContext createParameterContext() throws Exception {
 		Method method = getClass().getDeclaredMethod("method", AbstractConfiguration.class);
 		Parameter parameter = method.getParameters()[0];
-		return new FakeParameterContext(parameter);
+		return new FakeJunitParameterContext(parameter);
 	}
 
 	public void method(AbstractConfiguration configuration) {

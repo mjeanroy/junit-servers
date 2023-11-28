@@ -25,6 +25,8 @@
 package com.github.mjeanroy.junit.servers.tomcat8.jupiter;
 
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
+import com.github.mjeanroy.junit.servers.testing.FakeJunitExtensionContext;
+import com.github.mjeanroy.junit.servers.testing.FakeJunitStore;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat8.tests.builders.EmbeddedTomcatMockBuilder;
@@ -39,11 +41,11 @@ class TomcatServerExtensionTest {
 		final EmbeddedTomcat tomcat = new EmbeddedTomcatMockBuilder().build();
 		final TomcatServerExtension extension = new TomcatServerExtension(tomcat);
 		final FixtureClass testInstance = new FixtureClass();
-		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		final FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		final FakeStore store = context.getSingleStore();
+		final FakeJunitStore store = context.getSingleStore();
 		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
@@ -56,11 +58,11 @@ class TomcatServerExtensionTest {
 		final EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.defaultConfiguration();
 		final TomcatServerExtension extension = new TomcatServerExtension(configuration);
 		final FixtureClass testInstance = new FixtureClass();
-		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		final FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		final FakeStore store = context.getSingleStore();
+		final FakeJunitStore store = context.getSingleStore();
 		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();
@@ -73,11 +75,11 @@ class TomcatServerExtensionTest {
 	void it_should_start_server_with_default_configuration_before_all_tests() {
 		final TomcatServerExtension extension = new TomcatServerExtension();
 		final FixtureClass testInstance = new FixtureClass();
-		final FakeExtensionContext context = new FakeExtensionContext(testInstance);
+		final FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
 		extension.beforeAll(context);
 
-		final FakeStore store = context.getSingleStore();
+		final FakeJunitStore store = context.getSingleStore();
 		final EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
 
 		assertThat(serverAdapter).isNotNull();

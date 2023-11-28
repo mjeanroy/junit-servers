@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2022 <mickael.jeanroy@gmail.com>
+ * Copyright (c) 2014-2023 <mickael.jeanroy@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat.jupiter;
+package com.github.mjeanroy.junit.servers.testing;
 
 import org.junit.jupiter.api.extension.ExtensionContext.Store;
 
@@ -33,14 +33,14 @@ import java.util.function.Function;
 /**
  * A fake {@link Store} implementation using a map as internal implementation.
  */
-class FakeStore implements Store {
+public class FakeJunitStore implements Store {
 
 	/**
 	 * The internal map implementation.
 	 */
 	private final Map<Object, Object> map;
 
-	FakeStore() {
+	public FakeJunitStore() {
 		map = new HashMap<>();
 	}
 
@@ -84,5 +84,23 @@ class FakeStore implements Store {
 	@SuppressWarnings("unchecked")
 	public <V> V remove(Object key, Class<V> requiredType) {
 		return (V) remove(key);
+	}
+
+	/**
+	 * Get current store size (number of stored entries).
+	 *
+	 * @return Store size.
+	 */
+	int size() {
+		return map.size();
+	}
+
+	/**
+	 * Check if store is empty.
+	 *
+	 * @return {@code true} if store is empty, {@code false} otherwise.
+	 */
+	public boolean isEmpty() {
+		return size() == 0;
 	}
 }

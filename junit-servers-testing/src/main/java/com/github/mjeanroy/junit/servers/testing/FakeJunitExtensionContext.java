@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2022 <mickael.jeanroy@gmail.com>
+ * Copyright (c) 2014-2023 <mickael.jeanroy@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty9.jupiter;
+package com.github.mjeanroy.junit.servers.testing;
 
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExecutableInvoker;
@@ -42,12 +42,12 @@ import java.util.function.Function;
 /**
  * A fake {@link ExtensionContext}
  */
-class FakeExtensionContext implements ExtensionContext {
+public class FakeJunitExtensionContext implements ExtensionContext {
 
 	/**
 	 * The test context stores.
 	 */
-	private final Map<Namespace, FakeStore> stores;
+	private final Map<Namespace, FakeJunitStore> stores;
 
 	/**
 	 * The test unique identifier.
@@ -59,7 +59,7 @@ class FakeExtensionContext implements ExtensionContext {
 	 */
 	private final Object testInstance;
 
-	FakeExtensionContext(Object testInstance) {
+	public FakeJunitExtensionContext(Object testInstance) {
 		this.stores = new HashMap<>();
 		this.id = UUID.randomUUID().toString();
 		this.testInstance = testInstance;
@@ -173,7 +173,7 @@ class FakeExtensionContext implements ExtensionContext {
 	@Override
 	public Store getStore(Namespace namespace) {
 		if (!stores.containsKey(namespace)) {
-			stores.put(namespace, new FakeStore());
+			stores.put(namespace, new FakeJunitStore());
 		}
 
 		return stores.get(namespace);
@@ -195,7 +195,7 @@ class FakeExtensionContext implements ExtensionContext {
 	 *
 	 * @return The single created store.
 	 */
-	FakeStore getSingleStore() {
+	public FakeJunitStore getSingleStore() {
 		int size = stores.size();
 		if (size != 1) {
 			throw new AssertionError("Cannot get single store, found " + size + " stores instead.");

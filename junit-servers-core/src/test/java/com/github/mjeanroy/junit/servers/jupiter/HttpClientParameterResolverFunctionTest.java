@@ -30,6 +30,7 @@ import com.github.mjeanroy.junit.servers.client.HttpClientConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClientConfigurationFactory;
 import com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
+import com.github.mjeanroy.junit.servers.testing.FakeJunitParameterContext;
 import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -104,7 +105,7 @@ class HttpClientParameterResolverFunctionTest {
 	private ParameterContext extractParameterContext(String methodName) throws Exception {
 		Method method = getClass().getDeclaredMethod(methodName, HttpClient.class);
 		Parameter parameter = method.getParameters()[0];
-		return new FakeParameterContext(parameter);
+		return new FakeJunitParameterContext(parameter);
 	}
 
 	public void method_without_annotation(HttpClient client) {

@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2022 <mickael.jeanroy@gmail.com>
+ * Copyright (c) 2014-2023 <mickael.jeanroy@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,67 +22,57 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.tomcat10.jupiter;
+package com.github.mjeanroy.junit.servers.testing;
 
-import org.junit.jupiter.api.extension.ExtensionContext.Store;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.platform.commons.util.AnnotationUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
+import java.util.List;
+import java.util.Optional;
 
 /**
- * A fake {@link Store} implementation using a map as internal implementation.
+ * A fake {@link ParameterContext} implementation using a map as internal implementation.
  */
-class FakeStore implements Store {
+public class FakeJunitParameterContext implements ParameterContext {
 
 	/**
 	 * The internal map implementation.
 	 */
-	private final Map<Object, Object> map;
+	private final Parameter parameter;
 
-	FakeStore() {
-		map = new HashMap<>();
+	public FakeJunitParameterContext(Parameter parameter) {
+		this.parameter = parameter;
 	}
 
 	@Override
-	public Object get(Object key) {
-		return map.get(key);
+	public Parameter getParameter() {
+		return parameter;
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public <V> V get(Object key, Class<V> requiredType) {
-		return (V) get(key);
+	public int getIndex() {
+		return 0;
 	}
 
 	@Override
-	public <K, V> Object getOrComputeIfAbsent(K key, Function<K, V> defaultCreator) {
-		if (!map.containsKey(key)) {
-			map.put(key, defaultCreator.apply(key));
-		}
-
-		return map.get(key);
+	public Optional<Object> getTarget() {
+		return Optional.empty();
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public <K, V> V getOrComputeIfAbsent(K key, Function<K, V> defaultCreator, Class<V> requiredType) {
-		return (V) getOrComputeIfAbsent(key, defaultCreator);
+	public boolean isAnnotated(Class<? extends Annotation> annotationType) {
+		return AnnotationUtils.isAnnotated(parameter, annotationType);
 	}
 
 	@Override
-	public void put(Object key, Object value) {
-		map.put(key, value);
+	public <A extends Annotation> Optional<A> findAnnotation(Class<A> annotationType) {
+		return AnnotationUtils.findAnnotation(parameter, annotationType);
 	}
 
 	@Override
-	public Object remove(Object key) {
-		return map.remove(key);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <V> V remove(Object key, Class<V> requiredType) {
-		return (V) remove(key);
+	public <A extends Annotation> List<A> findRepeatableAnnotations(Class<A> annotationType) {
+		return AnnotationUtils.findRepeatableAnnotations(parameter, annotationType);
 	}
 }
