@@ -50,7 +50,7 @@ public abstract class AbstractEmbeddedTomcatFactory<
 	 * @param testClass The test class.
 	 * @return Created embedded tomcat instance.
 	 */
-	public EMBEDDED_TOMCAT instantiateFrom(Class<?> testClass) {
+	public final EMBEDDED_TOMCAT instantiateFrom(Class<?> testClass) {
 		return instantiateFrom(testClass, null);
 	}
 
@@ -61,28 +61,26 @@ public abstract class AbstractEmbeddedTomcatFactory<
 	 * @param configuration The configuration to use, may be {@code null}.
 	 * @return Created embedded tomcat instance.
 	 */
-	public EMBEDDED_TOMCAT instantiateFrom(Class<?> testClass, EmbeddedTomcatConfiguration configuration) {
+	public final EMBEDDED_TOMCAT instantiateFrom(Class<?> testClass, EmbeddedTomcatConfiguration configuration) {
 		log.debug("Instantiating embedded tomcat for test class: {}", testClass);
 		EmbeddedTomcatConfiguration configurationToUse = extractConfiguration(testClass, configuration);
 		return configurationToUse == null ? instantiateFrom() : instantiateFrom(configurationToUse);
 	}
 
+	/**
+	 * Instantiate embedded Tomcat using default configuration.
+	 *
+	 * @return Embedded tomcat.
+	 */
 	protected abstract EMBEDDED_TOMCAT instantiateFrom();
 
+	/**
+	 * Instantiate embedded Tomcat using given configuration.
+	 *
+	 * @return Embedded tomcat.
+	 */
 	protected abstract EMBEDDED_TOMCAT instantiateFrom(EmbeddedTomcatConfiguration config);
 
-	/**
-	 * Try to extract Jetty configuration from:
-	 * <ul>
-	 *   <li>The given {@code configuration} if it is not {@code null}.</li>
-	 *   <li>A class field/method annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} on given {@code testClass} otherwise.</li>
-	 * </ul>
-	 *
-	 * @param testClass The test class to analyze.
-	 * @param configuration The configuration to use if not {@code null}.
-	 * @return The Jetty configuration.
-	 * @throws IllegalTomcatConfigurationException If extracted {@code configuration} is not an instance of required configuration type.
-	 */
 	private EmbeddedTomcatConfiguration extractConfiguration(Class<?> testClass, EmbeddedTomcatConfiguration configuration) {
 		if (configuration != null) {
 			log.debug("Returning provided configuration instance: {}", configuration);
@@ -105,29 +103,15 @@ public abstract class AbstractEmbeddedTomcatFactory<
 		return configurationAnnotation == null ? null : configurationAnnotation.providedBy();
 	}
 
-	/**
-	 * Create configuration using custom annotation, dedicated to Tomcat.
-	 *
-	 * @param testClass The tested class.
-	 * @param providerClass The provider class.
-	 * @return The configuration.
-	 */
 	private EmbeddedTomcatConfiguration buildEmbeddedTomcatConfiguration(
-			Class<?> testClass,
-			Class<? extends EmbeddedTomcatConfigurationProvider> providerClass
+		Class<?> testClass,
+		Class<? extends EmbeddedTomcatConfigurationProvider> providerClass
 	) {
 		log.debug("Returning configuration provided by test class");
 		EmbeddedTomcatConfigurationProvider provider = instantiate(providerClass);
 		return provider.build(testClass);
 	}
 
-	/**
-	 * Ensure that given {@code configuration} parameter is an instance of compatible class and returns it,
-	 * or fail with {@link IllegalTomcatConfigurationException} otherwise.
-	 *
-	 * @param configuration The configuration.
-	 * @return The configuration.
-	 */
 	private EmbeddedTomcatConfiguration checkConfiguration(Object configuration) {
 		if (configuration == null) {
 			return null;

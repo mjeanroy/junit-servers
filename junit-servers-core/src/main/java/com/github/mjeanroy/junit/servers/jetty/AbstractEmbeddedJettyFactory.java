@@ -36,7 +36,7 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration
  * or JUnit Jupiter Extension.
  */
 public abstract class AbstractEmbeddedJettyFactory<
-		EMBEDDED_JETTY extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration>
+		EMBEDDED_JETTY extends AbstractBaseEmbeddedJetty<?, EmbeddedJettyConfiguration>
 > {
 
 	/**
@@ -50,7 +50,7 @@ public abstract class AbstractEmbeddedJettyFactory<
 	 * @param testClass The test class.
 	 * @return Created embedded jetty instance.
 	 */
-	public EMBEDDED_JETTY instantiateFrom(Class<?> testClass) {
+	public final EMBEDDED_JETTY instantiateFrom(Class<?> testClass) {
 		return instantiateFrom(testClass, null);
 	}
 
@@ -61,28 +61,26 @@ public abstract class AbstractEmbeddedJettyFactory<
 	 * @param configuration The configuration to use, may be {@code null}.
 	 * @return Created embedded jetty instance.
 	 */
-	public EMBEDDED_JETTY instantiateFrom(Class<?> testClass, EmbeddedJettyConfiguration configuration) {
+	public final EMBEDDED_JETTY instantiateFrom(Class<?> testClass, EmbeddedJettyConfiguration configuration) {
 		log.debug("Instantiating embedded jetty for test class: {}", testClass);
 		EmbeddedJettyConfiguration configurationToUse = extractConfiguration(testClass, configuration);
 		return configurationToUse == null ? instantiateFrom() : instantiateFrom(configurationToUse);
 	}
 
+	/**
+	 * Instantiate embedded Jetty using default configuration.
+	 *
+	 * @return Embedded jetty.
+	 */
 	protected abstract EMBEDDED_JETTY instantiateFrom();
 
+	/**
+	 * Instantiate embedded Jetty using given configuration.
+	 *
+	 * @return Embedded jetty.
+	 */
 	protected abstract EMBEDDED_JETTY instantiateFrom(EmbeddedJettyConfiguration config);
 
-	/**
-	 * Try to extract Jetty configuration from:
-	 * <ul>
-	 *   <li>The given {@code configuration} if it is not {@code null}.</li>
-	 *   <li>A class field/method annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} on given {@code testClass} otherwise.</li>
-	 * </ul>
-	 *
-	 * @param testClass The test class to analyze.
-	 * @param configuration The configuration to use if not {@code null}.
-	 * @return The Jetty configuration.
-	 * @throws IllegalJettyConfigurationException If extracted {@code configuration} is not an instance of required configuration type.
-	 */
 	private EmbeddedJettyConfiguration extractConfiguration(Class<?> testClass, EmbeddedJettyConfiguration configuration) {
 		if (configuration != null) {
 			log.debug("Returning provided configuration instance: {}", configuration);
@@ -105,29 +103,15 @@ public abstract class AbstractEmbeddedJettyFactory<
 		return configurationAnnotation == null ? null : configurationAnnotation.providedBy();
 	}
 
-	/**
-	 * Create configuration using custom annotation, dedicated to Jetty.
-	 *
-	 * @param testClass The tested class.
-	 * @param providerClass The provider class.
-	 * @return The configuration.
-	 */
 	private EmbeddedJettyConfiguration buildEmbeddedJettyConfiguration(
-			Class<?> testClass,
-			Class<? extends EmbeddedJettyConfigurationProvider> providerClass
+		Class<?> testClass,
+		Class<? extends EmbeddedJettyConfigurationProvider> providerClass
 	) {
 		log.debug("Returning configuration provided by test class");
 		EmbeddedJettyConfigurationProvider provider = instantiate(providerClass);
 		return provider.build(testClass);
 	}
 
-	/**
-	 * Ensure that given {@code configuration} parameter is an instance of compatible class and returns it,
-	 * or fail with {@link IllegalJettyConfigurationException} otherwise.
-	 *
-	 * @param configuration The configuration.
-	 * @return The configuration.
-	 */
 	private EmbeddedJettyConfiguration checkConfiguration(Object configuration) {
 		if (configuration == null) {
 			return null;
