@@ -162,7 +162,8 @@ class EmbeddedJettyTest {
 
 		try {
 			testFn.run();
-		} finally {
+		}
+		finally {
 			jetty.stop();
 		}
 	}
