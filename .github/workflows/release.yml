@@ -72,7 +72,7 @@ jobs:
             -DdryRun=${{ inputs.dry_run }} \
             -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
             -DreleaseVersion=${{ github.event.inputs.releaseVersion }} \
-            -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }} \
+            -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}-SNAPSHOT \
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
