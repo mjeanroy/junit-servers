@@ -45,7 +45,10 @@ import java.net.URI;
 import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
 
 /**
- * Jetty Embedded Server.mv
+ * Jetty Embedded Server.
+ *
+ * @param <CONTEXT> The jetty WebAppContext implementation.
+ * @param <CONFIGURATION> The jetty configuration implementation.
  */
 public abstract class AbstractBaseEmbeddedJetty<
 	CONTEXT extends ContextHandler,

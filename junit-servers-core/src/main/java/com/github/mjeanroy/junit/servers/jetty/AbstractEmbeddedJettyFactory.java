@@ -34,15 +34,23 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration
 /**
  * Static factories for {@link AbstractEmbeddedJetty} that can be used in JUnit 4 Runner implementation
  * or JUnit Jupiter Extension.
+ *
+ * @param <EMBEDDED_JETTY> The embedded jetty implementation.
  */
 public abstract class AbstractEmbeddedJettyFactory<
-		EMBEDDED_JETTY extends AbstractBaseEmbeddedJetty<?, EmbeddedJettyConfiguration>
+	EMBEDDED_JETTY extends AbstractBaseEmbeddedJetty<?, EmbeddedJettyConfiguration>
 > {
 
 	/**
 	 * Class Logger.
 	 */
 	private static final Logger log = LoggerFactory.getLogger(AbstractEmbeddedJettyFactory.class);
+
+	/**
+	 * Create factory.
+	 */
+	public AbstractEmbeddedJettyFactory() {
+	}
 
 	/**
 	 * Instantiate embedded jetty from given test class.
@@ -77,6 +85,7 @@ public abstract class AbstractEmbeddedJettyFactory<
 	/**
 	 * Instantiate embedded Jetty using given configuration.
 	 *
+	 * @param config Jetty configuration.
 	 * @return Embedded jetty.
 	 */
 	protected abstract EMBEDDED_JETTY instantiateFrom(EmbeddedJettyConfiguration config);

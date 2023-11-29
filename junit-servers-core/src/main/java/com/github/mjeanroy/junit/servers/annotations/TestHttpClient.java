@@ -69,6 +69,12 @@ public @interface TestHttpClient {
 	 * The default implementation, that just returns the default configuration.
 	 */
 	class DefaultHttpClientConfigurationFactory implements HttpClientConfigurationFactory {
+		/**
+		 * Create factory.
+		 */
+		public DefaultHttpClientConfigurationFactory() {
+		}
+
 		@Override
 		public HttpClientConfiguration build() {
 			return HttpClientConfiguration.defaultConfiguration();

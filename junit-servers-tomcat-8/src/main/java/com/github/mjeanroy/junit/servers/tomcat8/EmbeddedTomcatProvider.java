@@ -32,6 +32,12 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
  */
 public class EmbeddedTomcatProvider implements EmbeddedServerProvider<EmbeddedTomcatConfiguration> {
 
+	/**
+	 * Create provider.
+	 */
+	public EmbeddedTomcatProvider() {
+	}
+
 	@Override
 	public EmbeddedTomcat instantiate() {
 		return new EmbeddedTomcat();

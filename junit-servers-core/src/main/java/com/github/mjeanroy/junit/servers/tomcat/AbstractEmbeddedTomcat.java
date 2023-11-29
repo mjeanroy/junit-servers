@@ -46,6 +46,8 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Strings.trim;
 
 /**
  * Embedded server using tomcat as implementation.
+ *
+ * @param <CONFIGURATION> The tomcat configuration implementation.
  */
 public abstract class AbstractEmbeddedTomcat<
 	CONFIGURATION extends AbstractEmbeddedTomcatConfiguration
@@ -270,6 +272,11 @@ public abstract class AbstractEmbeddedTomcat<
 		return getConnector().getLocalPort();
 	}
 
+	/**
+	 * Get tomcat context.
+	 *
+	 * @return Tomcat context.
+	 */
 	protected Context getContext() {
 		return context;
 	}

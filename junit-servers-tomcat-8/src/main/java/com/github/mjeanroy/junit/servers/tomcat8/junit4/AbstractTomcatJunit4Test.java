@@ -40,4 +40,9 @@ public abstract class AbstractTomcatJunit4Test {
 	@TestServer
 	public static EmbeddedTomcat server;
 
+	/**
+	 * Initialize test suite.
+	 */
+	public AbstractTomcatJunit4Test() {
+	}
 }

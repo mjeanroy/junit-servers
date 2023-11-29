@@ -35,8 +35,8 @@ import static com.github.mjeanroy.junit.servers.jetty.AbstractEmbeddedJettyConfi
  * Jetty configuration settings.
  */
 abstract class AbstractEmbeddedJettyConfigurationBuilder<
-		SELF extends AbstractEmbeddedJettyConfigurationBuilder<SELF, CONFIG>,
-		CONFIG extends AbstractEmbeddedJettyConfiguration
+	SELF extends AbstractEmbeddedJettyConfigurationBuilder<SELF, CONFIG>,
+	CONFIG extends AbstractEmbeddedJettyConfiguration
 > extends AbstractConfigurationBuilder<SELF, CONFIG> {
 
 	/**
@@ -90,7 +90,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@link #stopTimeout} value.
+	 * Get current {@code stopTimeout} value.
 	 *
 	 * @return {@link #stopTimeout}.
 	 */
@@ -99,7 +99,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@link #stopAtShutdown} value.
+	 * Get current {@code stopAtShutdown} value.
 	 *
 	 * @return {@link #stopAtShutdown}.
 	 */
@@ -108,7 +108,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@link #baseResource} value.
+	 * Get current {@code baseResource} value.
 	 *
 	 * @return {@link #baseResource}.
 	 */
@@ -117,7 +117,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@link #containerJarPattern} value.
+	 * Get current {@code containerJarPattern} value.
 	 *
 	 * @return  {@link #containerJarPattern}
 	 */
@@ -126,7 +126,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@link #webInfJarPattern} value.
+	 * Get current {@code webInfJarPattern} value.
 	 *
 	 * @return {@link #webInfJarPattern}
 	 */
@@ -135,7 +135,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@link #dirAllowed} value.
+	 * Get current {@code dirAllowed} value.
 	 *
 	 * @return {@link #dirAllowed}
 	 */
@@ -144,7 +144,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Update {@link #stopTimeout} value.
+	 * Update {@code stopTimeout} value.
 	 *
 	 * @param stopTimeout New {@link #stopTimeout} value.
 	 * @return this
@@ -156,7 +156,8 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Set {@link #stopAtShutdown} to {@code false}.
+	 * Set {@code stopAtShutdown} to {@code false}.
+	 *
 	 * @return this
 	 */
 	public SELF disableStopAtShutdown() {
@@ -164,7 +165,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Set {@link #stopAtShutdown} to {@code true}.
+	 * Set {@code stopAtShutdown} to {@code true}.
 	 * @return this
 	 */
 	public SELF enableStopAtShutdown() {
@@ -172,7 +173,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Toggle {@link #stopAtShutdown}.
+	 * Toggle {@code stopAtShutdown}.
 	 *
 	 * @param stopAtShutdown New {@link #stopAtShutdown} value.
 	 * @return this
@@ -183,7 +184,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Change {@link #baseResource} value.
+	 * Change {@code baseResource} value.
 	 *
 	 * @param resource New {@link #baseResource} value.
 	 * @return this
@@ -194,7 +195,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Change {@link #containerJarPattern} value.
+	 * Change {@code containerJarPattern} value.
 	 *
 	 * @param containerJarPattern The container JAR pattern.
 	 * @return this
@@ -205,7 +206,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Change {@link #webInfJarPattern} value.
+	 * Change {@code webInfJarPattern} value.
 	 *
 	 * @param webInfJarPattern The webinf JAR pattern.
 	 * @return this
@@ -216,7 +217,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Change {@link #dirAllowed} value.
+	 * Change {@code dirAllowed} value.
 	 *
 	 * @param dirAllowed Directory listing flag.
 	 * @return this

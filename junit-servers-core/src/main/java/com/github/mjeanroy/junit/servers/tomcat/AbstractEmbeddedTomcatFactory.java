@@ -34,6 +34,8 @@ import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration
 /**
  * Static factories for Tomcat that can be used in JUnit 4 Runner implementation
  * or JUnit Jupiter Extension.
+ *
+ * @param <EMBEDDED_TOMCAT> The embedded tomcat implementation.
  */
 public abstract class AbstractEmbeddedTomcatFactory<
 		EMBEDDED_TOMCAT extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration>
@@ -43,6 +45,12 @@ public abstract class AbstractEmbeddedTomcatFactory<
 	 * Class Logger.
 	 */
 	private static final Logger log = LoggerFactory.getLogger(AbstractEmbeddedTomcatFactory.class);
+
+	/**
+	 * Create factory.
+	 */
+	public AbstractEmbeddedTomcatFactory() {
+	}
 
 	/**
 	 * Instantiate embedded tomcat from given test class.
@@ -77,6 +85,7 @@ public abstract class AbstractEmbeddedTomcatFactory<
 	/**
 	 * Instantiate embedded Tomcat using given configuration.
 	 *
+	 * @param config Tomcat configuration.
 	 * @return Embedded tomcat.
 	 */
 	protected abstract EMBEDDED_TOMCAT instantiateFrom(EmbeddedTomcatConfiguration config);

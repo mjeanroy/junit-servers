@@ -33,6 +33,8 @@ public class IllegalJettyConfigurationException extends IllegalConfigurationExce
 
 	/**
 	 * Create exception with default message.
+	 *
+	 * @param requiredClass The expected Jetty configuration class.
 	 */
 	public IllegalJettyConfigurationException(Class<?> requiredClass) {
 		super(createMessage(requiredClass));

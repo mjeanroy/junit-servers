@@ -43,4 +43,9 @@ public abstract class AbstractJettyJunit4Test {
 	@TestServer
 	public static EmbeddedJetty server;
 
+	/**
+	 * Initialize test suite.
+	 */
+	public AbstractJettyJunit4Test() {
+	}
 }

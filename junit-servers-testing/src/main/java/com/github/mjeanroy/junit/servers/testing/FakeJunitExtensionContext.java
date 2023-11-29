@@ -59,6 +59,11 @@ public class FakeJunitExtensionContext implements ExtensionContext {
 	 */
 	private final Object testInstance;
 
+	/**
+	 * Create fake JUnit {@link ExtensionContext} from given test instance.
+	 *
+	 * @param testInstance The test instance.
+	 */
 	public FakeJunitExtensionContext(Object testInstance) {
 		this.stores = new HashMap<>();
 		this.id = UUID.randomUUID().toString();

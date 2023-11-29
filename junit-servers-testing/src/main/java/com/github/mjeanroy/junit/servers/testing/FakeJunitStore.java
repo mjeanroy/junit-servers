@@ -40,6 +40,9 @@ public class FakeJunitStore implements Store {
 	 */
 	private final Map<Object, Object> map;
 
+	/**
+	 * Create fake JUnit {@link Store}.
+	 */
 	public FakeJunitStore() {
 		map = new HashMap<>();
 	}

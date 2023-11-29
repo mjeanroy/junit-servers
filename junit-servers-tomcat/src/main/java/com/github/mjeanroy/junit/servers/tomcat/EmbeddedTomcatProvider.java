@@ -38,6 +38,12 @@ public class EmbeddedTomcatProvider implements EmbeddedServerProvider<EmbeddedTo
 
 	private static final Logger log = LoggerFactory.getLogger(EmbeddedTomcatProvider.class);
 
+	/**
+	 * Create provider.
+	 */
+	public EmbeddedTomcatProvider() {
+	}
+
 	@Override
 	public EmbeddedTomcat instantiate() {
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", EmbeddedTomcatProvider.class);

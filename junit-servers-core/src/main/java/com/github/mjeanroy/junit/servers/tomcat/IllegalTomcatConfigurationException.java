@@ -33,6 +33,8 @@ public class IllegalTomcatConfigurationException extends IllegalConfigurationExc
 
 	/**
 	 * Create exception with default error message.
+	 *
+	 * @param requiredClass The expected tomcat configuration class.
 	 */
 	public IllegalTomcatConfigurationException(Class<?> requiredClass) {
 		super(createMessage(requiredClass));

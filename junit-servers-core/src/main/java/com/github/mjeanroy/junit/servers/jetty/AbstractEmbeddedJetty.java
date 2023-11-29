@@ -38,7 +38,9 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
- * Jetty Embedded Server.mv
+ * Jetty Embedded Server.
+ *
+ * @param <CONFIGURATION> The jetty configuration implementation.
  */
 public abstract class AbstractEmbeddedJetty<
 	CONFIGURATION extends AbstractEmbeddedJettyConfiguration

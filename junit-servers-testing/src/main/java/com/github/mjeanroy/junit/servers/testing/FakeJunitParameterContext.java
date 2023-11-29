@@ -42,6 +42,11 @@ public class FakeJunitParameterContext implements ParameterContext {
 	 */
 	private final Parameter parameter;
 
+	/**
+	 * Create fake JUnit {@link ParameterContext} from given parameter.
+	 *
+	 * @param parameter The parameter.
+	 */
 	public FakeJunitParameterContext(Parameter parameter) {
 		this.parameter = parameter;
 	}

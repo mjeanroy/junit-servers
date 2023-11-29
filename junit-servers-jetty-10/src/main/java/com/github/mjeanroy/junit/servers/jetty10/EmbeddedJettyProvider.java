@@ -32,6 +32,12 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
  */
 public class EmbeddedJettyProvider implements EmbeddedServerProvider<EmbeddedJettyConfiguration> {
 
+	/**
+	 * Create provider.
+	 */
+	public EmbeddedJettyProvider() {
+	}
+
 	@Override
 	public EmbeddedJetty instantiate() {
 		return new EmbeddedJetty();

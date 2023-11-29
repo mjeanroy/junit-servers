@@ -34,8 +34,8 @@ import static com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcatCon
 import static com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcatConfiguration.DEFAULT_KEEP_BASE_DIR;
 
 abstract class AbstractEmbeddedTomcatConfigurationBuilder<
-		SELF extends AbstractConfigurationBuilder<SELF, CONFIG>,
-		CONFIG extends AbstractEmbeddedTomcatConfiguration
+	SELF extends AbstractConfigurationBuilder<SELF, CONFIG>,
+	CONFIG extends AbstractEmbeddedTomcatConfiguration
 > extends AbstractConfigurationBuilder<SELF, CONFIG> {
 
 	/**
@@ -80,7 +80,7 @@ abstract class AbstractEmbeddedTomcatConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@link #baseDir} value.
+	 * Get current {@code baseDir} value.
 	 *
 	 * @return {@link #baseDir}
 	 */
@@ -89,7 +89,7 @@ abstract class AbstractEmbeddedTomcatConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@link #keepBaseDir} value.
+	 * Get current {@code keepBaseDir} value.
 	 *
 	 * @return {@link #keepBaseDir}
 	 */
@@ -98,7 +98,7 @@ abstract class AbstractEmbeddedTomcatConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@link #enableNaming} value.
+	 * Get current {@code enableNaming} value.
 	 *
 	 * @return {@link #enableNaming}
 	 */
@@ -107,7 +107,7 @@ abstract class AbstractEmbeddedTomcatConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@link #forceMetaInf} value.
+	 * Get current {@code forceMetaInf} value.
 	 *
 	 * @return {@link #forceMetaInf}
 	 */

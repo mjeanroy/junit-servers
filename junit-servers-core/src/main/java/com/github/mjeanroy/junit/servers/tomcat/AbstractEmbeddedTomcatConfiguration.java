@@ -93,7 +93,7 @@ abstract class AbstractEmbeddedTomcatConfiguration extends AbstractConfiguration
 	}
 
 	/**
-	 * Get {@link #baseDir}.
+	 * Get {@code baseDir}.
 	 *
 	 * @return {@link #baseDir}
 	 */
@@ -102,7 +102,7 @@ abstract class AbstractEmbeddedTomcatConfiguration extends AbstractConfiguration
 	}
 
 	/**
-	 * Get current {@link #keepBaseDir} value.
+	 * Get current {@code keepBaseDir} value.
 	 *
 	 * @return {@link #keepBaseDir}
 	 */
@@ -111,7 +111,7 @@ abstract class AbstractEmbeddedTomcatConfiguration extends AbstractConfiguration
 	}
 
 	/**
-	 * Get {@link #enableNaming}.
+	 * Get {@code enableNaming}.
 	 *
 	 * @return {@link #enableNaming}
 	 */
@@ -120,7 +120,7 @@ abstract class AbstractEmbeddedTomcatConfiguration extends AbstractConfiguration
 	}
 
 	/**
-	 * Get {@link #forceMetaInf}.
+	 * Get {@code forceMetaInf}.
 	 *
 	 * @return {@link #forceMetaInf}
 	 */

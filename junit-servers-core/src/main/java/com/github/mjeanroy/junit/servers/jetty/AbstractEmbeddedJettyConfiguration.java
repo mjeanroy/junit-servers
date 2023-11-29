@@ -103,7 +103,7 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	}
 
 	/**
-	 * Get {@link #stopTimeout}.
+	 * Get {@code stopTimeout}.
 	 *
 	 * @return {@link #stopTimeout}
 	 */
@@ -112,7 +112,7 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	}
 
 	/**
-	 * Get {@link #stopAtShutdown}.
+	 * Get {@code stopAtShutdown}.
 	 *
 	 * @return {@link #stopAtShutdown}
 	 */
@@ -121,7 +121,7 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	}
 
 	/**
-	 * Get {@link #baseResource}.
+	 * Get {@code baseResource}.
 	 *
 	 * @return {@link #baseResource}
 	 */
@@ -130,7 +130,7 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	}
 
 	/**
-	 * Get {@link #containerJarPattern}
+	 * Get {@code containerJarPattern}
 	 *
 	 * @return {@link #containerJarPattern}
 	 */
@@ -139,7 +139,7 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	}
 
 	/**
-	 * Get {@link #webInfJarPattern}
+	 * Get {@code webInfJarPattern}
 	 *
 	 * @return {@link #webInfJarPattern}
 	 */
@@ -148,7 +148,7 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	}
 
 	/**
-	 * Get {@link #dirAllowed}
+	 * Get {@code dirAllowed}
 	 *
 	 * @return {@link #dirAllowed}
 	 */
