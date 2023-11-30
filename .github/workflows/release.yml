@@ -49,6 +49,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4.1.1
+      - uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Set up JDK
         uses: actions/setup-java@v3.13.0
         with:
