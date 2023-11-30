@@ -55,15 +55,26 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: 'maven'
+          check-latest: true
+
+          # ID of the distributionManagement repository in the pom.xml file.
+          server-id: 'sonatype-nexus-staging'
+
+          # Environment variable name for the username for authentication to the Apache Maven repository.
+          server-username: MAVEN_USERNAME
+
+          # Environment variable name for password or token for authentication to the Apache Maven repository.
+          server-password: MAVEN_PASSWORD
+
+          # GPG private key to import. Default is empty string.
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+
+          # Environment variable name for the GPG private key passphrase.
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Configure Git User
         run: |
           git config user.email "mickael.jeanroy@gmail.com"
           git config user.name "Mickael Jeanroy"
-      - name: Import GPG Key
-        uses: crazy-max/ghaction-import-gpg@v6.0.0
-        with:
-          gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Release
         run: |
           ./mvnw -B -U \
@@ -76,3 +87,4 @@ jobs:
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
