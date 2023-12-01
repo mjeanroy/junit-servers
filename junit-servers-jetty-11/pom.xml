@@ -122,6 +122,7 @@
       <groupId>com.github.mjeanroy</groupId>
       <artifactId>junit-servers-testing</artifactId>
       <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
