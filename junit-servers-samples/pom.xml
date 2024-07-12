@@ -47,7 +47,7 @@
 
   <properties>
     <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
-    <spring5.version>5.3.31</spring5.version>
+    <spring5.version>6.1.11</spring5.version>
     <spring6.version>6.1.1</spring6.version>
     <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
   </properties>
