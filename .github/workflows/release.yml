@@ -52,12 +52,16 @@ jobs:
       - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Import GPG Key
+        uses: crazy-max/ghaction-import-gpg@v6.1.0
+        with:
+          gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Set up JDK
         uses: actions/setup-java@v4.2.2
         with:
           java-version: 21
           distribution: 'temurin'
-          cache: 'maven'
           check-latest: true
 
           # ID of the distributionManagement repository in the pom.xml file.
@@ -73,7 +77,7 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
 
           # Environment variable name for the GPG private key passphrase.
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+          gpg-passphrase: GPG_PASSPHRASE
       - name: Configure Git User
         run: |
           git config user.email "mickael.jeanroy@gmail.com"
@@ -84,10 +88,9 @@ jobs:
             release:prepare \
             release:perform \
             -DdryRun=${{ inputs.dry_run }} \
-            -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
             -DreleaseVersion=${{ github.event.inputs.releaseVersion }} \
             -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}-SNAPSHOT \
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
