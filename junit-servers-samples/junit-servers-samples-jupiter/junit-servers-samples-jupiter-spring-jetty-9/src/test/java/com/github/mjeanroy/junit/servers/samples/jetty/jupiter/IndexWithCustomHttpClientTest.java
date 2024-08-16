@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.samples.tomcat.jupiter;
+package com.github.mjeanroy.junit.servers.samples.jetty.jupiter;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
+import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Documented;
@@ -40,12 +40,12 @@ import java.lang.annotation.Target;
 import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTestUtils.ensureWebAppIsOk;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DefaultTomcatTest
-class IndexWithCustomHttpClient {
+@DefaultJettyTest
+class IndexWithCustomHttpClientTest {
 
 	@Test
-	void it_should_have_an_index(@AsyncHttpClient HttpClient client, EmbeddedTomcat tomcat) {
-		ensureWebAppIsOk(client, tomcat);
+	void it_should_have_an_index(@AsyncHttpClient HttpClient client, EmbeddedJetty jetty) {
+		ensureWebAppIsOk(client, jetty);
 		assertThat(client).isInstanceOf(com.github.mjeanroy.junit.servers.client.impl.async.AsyncHttpClient.class);
 	}
 

@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.samples.jetty.jupiter;
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClientStrategy;
-import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJetty;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Documented;
@@ -41,7 +41,7 @@ import static com.github.mjeanroy.junit.servers.samples.utils.EmbeddedWebAppTest
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DefaultJettyTest
-class IndexWithCustomHttpClient {
+class IndexWithCustomHttpClientTest {
 
 	@Test
 	void it_should_have_an_index(@AsyncHttpClient HttpClient client, EmbeddedJetty jetty) {

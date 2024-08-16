@@ -41,7 +41,7 @@ import static com.github.mjeanroy.junit.servers.samples.utils.WebTestUtils.ensur
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DefaultJettyTest
-class IndexWithCustomHttpClient {
+class IndexWithCustomHttpClientTest {
 
 	@Test
 	void it_should_have_an_index(@AsyncHttpClient HttpClient client, EmbeddedJetty jetty) {
