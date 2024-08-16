@@ -184,7 +184,11 @@ public abstract class AbstractBaseEmbeddedJetty<
 			actualBaseResource = newResource(ctx, webapp);
 		}
 
-		if (actualBaseResource != null) {
+		if (actualBaseResource != null && !actualBaseResource.exists()) {
+			log.warn("Jetty base resource does not seem to exists: {}", actualBaseResource);
+		}
+
+		if (isValidAndExistingResource(actualBaseResource)) {
 			// use default base resource
 			log.debug("Initializing jetty base resource: {}", actualBaseResource);
 			ctx.setBaseResource(actualBaseResource);
@@ -212,13 +216,28 @@ public abstract class AbstractBaseEmbeddedJetty<
 
 		setInitParameter(ctx, "org.eclipse.jetty.servlet.Default.dirAllowed", configuration.isDirAllowed());
 		setParentLoaderPriority(ctx, true);
-		setWar(ctx, webapp);
+
+		Resource webappResource = newResource(ctx, webapp);
+		if (isValidAndExistingResource(webappResource)) {
+			setWar(ctx, webappResource);
+		}
+
+		// Jetty needs a baseResource to starts properly.
+		if (!isValidAndExistingResource(actualBaseResource) && !isValidAndExistingResource(webappResource)) {
+			log.warn("No resource base/war resource set, switching to fallback alternative");
+			ctx.setBaseResource(actualBaseResource);
+		}
+
 		ctx.setServer(server);
 
 		// Add server context
 		server.setHandler(ctx);
 
 		return ctx;
+	}
+
+	private static boolean isValidAndExistingResource(Resource resource) {
+		return resource != null && resource.exists();
 	}
 
 	@Override
@@ -307,7 +326,7 @@ public abstract class AbstractBaseEmbeddedJetty<
 	 * @param context Jetty WebAppContext.
 	 * @param war The {@code war} value.
 	 */
-	protected abstract void setWar(CONTEXT context, String war);
+	protected abstract void setWar(CONTEXT context, Resource war);
 
 	/**
 	 * Configure Jetty container resource.

@@ -85,8 +85,8 @@ public abstract class AbstractEmbeddedJetty<
 	}
 
 	@Override
-	protected final void setWar(WebAppContext webAppContext, String war) {
-		webAppContext.setWar(war);
+	protected final void setWar(WebAppContext webAppContext, Resource war) {
+		webAppContext.setWarResource(war);
 	}
 
 	@Override
