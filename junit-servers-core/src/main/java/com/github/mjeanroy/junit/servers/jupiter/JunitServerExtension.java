@@ -52,6 +52,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
+import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_CLASS;
+import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_METHOD;
 
 /**
  * Extension for Junit Jupiter.
@@ -223,13 +225,13 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		// being instantiated.
 		EmbeddedServerRunner serverAdapter = findEmbeddedServerAdapterInStore(context);
 		if (serverAdapter == null) {
-			registerEmbeddedServer(context, Mode.STATIC);
+			registerEmbeddedServer(context, PER_CLASS);
 		}
 	}
 
 	@Override
 	public void afterAll(ExtensionContext context) {
-		unregisterEmbeddedServerIfNecessary(context, Mode.STATIC);
+		unregisterEmbeddedServerIfNecessary(context, PER_CLASS);
 	}
 
 	@Override
@@ -238,7 +240,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 
 		// The extension was not declared as a static extension.
 		if (serverAdapter == null) {
-			serverAdapter = registerEmbeddedServer(context, Mode.PER_TEST);
+			serverAdapter = registerEmbeddedServer(context, PER_METHOD);
 		}
 
 		EmbeddedServer<?> server = serverAdapter.getServer();
@@ -257,7 +259,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 			annotationsAdapter.afterEach(target);
 		}
 		finally {
-			unregisterEmbeddedServerIfNecessary(context, Mode.PER_TEST);
+			unregisterEmbeddedServerIfNecessary(context, PER_METHOD);
 			removeAnnotationsHandlerAdapterFromStore(context);
 		}
 	}
@@ -341,10 +343,10 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * </ul>
 	 *
 	 * @param context The test context.
-	 * @param mode The extension mode.
+	 * @param lifecycle The extension lifecycle.
 	 * @return The registered adapter.
 	 */
-	private EmbeddedServerRunner registerEmbeddedServer(ExtensionContext context, Mode mode) {
+	private EmbeddedServerRunner registerEmbeddedServer(ExtensionContext context, JunitServerExtensionLifecycle lifecycle) {
 		log.debug("Register embedded server to junit extension context");
 
 		Class<?> testClass = context.getRequiredTestClass();
@@ -353,7 +355,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		EmbeddedServerRunner serverAdapter = new EmbeddedServerRunner(server);
 		serverAdapter.beforeAll();
 
-		putEmbeddedServerAdapterInStore(context, serverAdapter, mode);
+		putEmbeddedServerAdapterInStore(context, serverAdapter, lifecycle);
 
 		return serverAdapter;
 	}
@@ -362,13 +364,13 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * Stop and remove from the store the started embedded server.
 	 *
 	 * @param context The test context.
-	 * @param mode The extension mode.
-	 * @see #registerEmbeddedServer(ExtensionContext, Mode)
+	 * @param lifecycle The extension lifecycle.
+	 * @see #registerEmbeddedServer(ExtensionContext, JunitServerExtensionLifecycle)
 	 */
-	private void unregisterEmbeddedServerIfNecessary(ExtensionContext context, Mode mode) {
+	private void unregisterEmbeddedServerIfNecessary(ExtensionContext context, JunitServerExtensionLifecycle lifecycle) {
 		log.debug("Attempt to unregister embedded server to junit extension context");
-		Mode registeredMode = findInStore(context, SERVER_RUNNER_MODE);
-		if (registeredMode != mode) {
+		JunitServerExtensionLifecycle registeredLifecycle = findInStore(context, SERVER_RUNNER_MODE);
+		if (registeredLifecycle != lifecycle) {
 			return;
 		}
 
@@ -385,7 +387,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * Stop and remove from the store the started embedded server.
 	 *
 	 * @param context The test context.
-	 * @see #registerEmbeddedServer(ExtensionContext, Mode)
+	 * @see #registerEmbeddedServer(ExtensionContext, JunitServerExtensionLifecycle)
 	 */
 	private void unregisterEmbeddedServer(ExtensionContext context) {
 		log.debug("Unregister embedded server to junit extension context");
@@ -424,7 +426,11 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @param context The Junit-Jupiter test context.
 	 * @param serverAdapter The instance to store.
 	 */
-	private static void putEmbeddedServerAdapterInStore(ExtensionContext context, EmbeddedServerRunner serverAdapter, Mode mode) {
+	private static void putEmbeddedServerAdapterInStore(
+		ExtensionContext context,
+		EmbeddedServerRunner serverAdapter,
+		JunitServerExtensionLifecycle mode
+	) {
 		log.debug("Store embedded server to junit extension context");
 		putInStore(context, SERVER_RUNNER_KEY, serverAdapter);
 		putInStore(context, SERVER_RUNNER_MODE, mode);
@@ -518,10 +524,5 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 */
 	private static Store getStore(ExtensionContext extensionContext) {
 		return extensionContext.getStore(NAMESPACE);
-	}
-
-	private enum Mode {
-		STATIC,
-		PER_TEST
 	}
 }
