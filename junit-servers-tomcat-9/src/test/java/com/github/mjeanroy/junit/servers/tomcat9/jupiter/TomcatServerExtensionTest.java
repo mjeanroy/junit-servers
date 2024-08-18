@@ -24,66 +24,157 @@
 
 package com.github.mjeanroy.junit.servers.tomcat9.jupiter;
 
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
-import com.github.mjeanroy.junit.servers.testing.FakeJunitExtensionContext;
-import com.github.mjeanroy.junit.servers.testing.FakeJunitStore;
+import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
+import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat9.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat9.tests.builders.EmbeddedTomcatMockBuilder;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+import static com.github.mjeanroy.junit.servers.testing.JupiterExtensionTesting.runTests;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TomcatServerExtensionTest {
 
 	@Test
 	void it_should_start_given_tomcat_server_before_all_tests() {
-		EmbeddedTomcat tomcat = new EmbeddedTomcatMockBuilder().build();
-		TomcatServerExtension extension = new TomcatServerExtension(tomcat);
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-
-		extension.beforeAll(context);
-
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-
-		assertThat(serverAdapter).isNotNull();
-		assertThat(serverAdapter.getServer()).isSameAs(tomcat);
-		assertThat(serverAdapter.getServer().isStarted()).isTrue();
+		runTests(
+			ItShouldStartGivenTomcatServerBeforeAllTests.class
+		);
 	}
 
 	@Test
-	void it_should_start_tomcat_server_using_given_configuration_before_all_tests() {
-		EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.defaultConfiguration();
-		TomcatServerExtension extension = new TomcatServerExtension(configuration);
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-
-		extension.beforeAll(context);
-
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-
-		assertThat(serverAdapter).isNotNull();
-		assertThat(serverAdapter.getServer()).isNotNull().isExactlyInstanceOf(EmbeddedTomcat.class);
-		assertThat(serverAdapter.getServer().getConfiguration()).isSameAs(configuration);
-		assertThat(serverAdapter.getServer().isStarted()).isTrue();
+	void it_should_initialize_extension_with_given_configuration_and_start_given_server_before_all_tests() {
+		runTests(
+			ItShouldInitializeExtensionWithGivenConfigurationAndStartGivenServerBeforeAllTests.class
+		);
 	}
 
 	@Test
 	void it_should_start_server_with_default_configuration_before_all_tests() {
-		TomcatServerExtension extension = new TomcatServerExtension();
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+		runTests(
+			ItShouldStartServerWithDefaultConfigurationBeforeAllTests.class
+		);
+	}
 
-		extension.beforeAll(context);
+	@SuppressWarnings("JUnitMalformedDeclaration")
+	static class ItShouldStartGivenTomcatServerBeforeAllTests {
+		private static final EmbeddedTomcat server = new EmbeddedTomcatMockBuilder().build();
 
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
+		@RegisterExtension
+		static JunitServerExtension extension = new TomcatServerExtension(server);
 
-		assertThat(serverAdapter).isNotNull();
-		assertThat(serverAdapter.getServer()).isNotNull().isExactlyInstanceOf(EmbeddedTomcat.class);
-		assertThat(serverAdapter.getServer().isStarted()).isTrue();
+		@BeforeAll
+		static void beforeAll(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@AfterAll
+		static void afterAll(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@BeforeEach
+		void beforeEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@AfterEach
+		void afterEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		private static void verifyEmbeddedServerState(EmbeddedServer<?> testServer) {
+			assertThat(testServer).isSameAs(server);
+			assertThat(testServer.isStarted()).isTrue();
+		}
+	}
+
+	@SuppressWarnings("JUnitMalformedDeclaration")
+	static class ItShouldInitializeExtensionWithGivenConfigurationAndStartGivenServerBeforeAllTests {
+		private static final EmbeddedTomcatConfiguration configuration = EmbeddedTomcatConfiguration.defaultConfiguration();
+
+		@RegisterExtension
+		static JunitServerExtension extension = new JunitServerExtension(configuration);
+
+		@BeforeAll
+		static void beforeAll(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@AfterAll
+		static void afterAll(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@BeforeEach
+		void beforeEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@AfterEach
+		void afterEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		private static void verifyEmbeddedServerState(EmbeddedServer<?> testServer) {
+			assertThat(testServer).isExactlyInstanceOf(EmbeddedTomcat.class);
+			assertThat(testServer.isStarted()).isTrue();
+			assertThat(testServer.getConfiguration()).isSameAs(configuration);
+		}
+	}
+
+	@SuppressWarnings("JUnitMalformedDeclaration")
+	@TomcatTest
+	static class ItShouldStartServerWithDefaultConfigurationBeforeAllTests {
+		@BeforeEach
+		void beforeEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@AfterEach
+		void afterEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		private static void verifyEmbeddedServerState(EmbeddedServer<?> testServer) {
+			assertThat(testServer).isExactlyInstanceOf(EmbeddedTomcat.class);
+			assertThat(testServer.isStarted()).isTrue();
+		}
 	}
 }

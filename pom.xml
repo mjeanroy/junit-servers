@@ -110,6 +110,7 @@
 
     <junit.version>4.13.2</junit.version>
     <junit-jupiter.version>5.10.3</junit-jupiter.version>
+    <junit-platform-testkit.version>1.11.0</junit-platform-testkit.version>
     <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
     <mockito.version>4.11.0</mockito.version>
     <assertj.version>3.26.3</assertj.version>
@@ -149,6 +150,12 @@
         <groupId>org.junit.vintage</groupId>
         <artifactId>junit-vintage-engine</artifactId>
         <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.platform</groupId>
+        <artifactId>junit-platform-testkit</artifactId>
+        <version>${junit-platform-testkit.version}</version>
         <scope>test</scope>
       </dependency>
 

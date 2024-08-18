@@ -22,23 +22,45 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty12.jupiter;
+package com.github.mjeanroy.junit.servers.testing;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.annotations.TestServer;
-import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.jetty12.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import org.junit.jupiter.api.Test;
+import org.junit.platform.engine.discovery.DiscoverySelectors;
+import org.junit.platform.testkit.engine.EngineExecutionResults;
+import org.junit.platform.testkit.engine.EngineTestKit;
 
-class FixtureClass {
+import java.lang.reflect.Method;
 
-	@TestServer
-	EmbeddedJetty jetty;
+public final class JupiterExtensionTesting {
 
-	@TestServerConfiguration
-	EmbeddedJettyConfiguration configuration;
+	private JupiterExtensionTesting() {
+	}
 
-	@TestHttpClient
-	HttpClient client;
+	public static void runTests(Class<?> klass) {
+		EngineExecutionResults results = EngineTestKit.engine("junit-jupiter")
+			.selectors(DiscoverySelectors.selectClass(klass))
+			.execute();
+
+		int nbTests = countTests(klass);
+		results.testEvents().assertStatistics(stats ->
+			stats.started(nbTests).succeeded(nbTests)
+		);
+	}
+
+	private static int countTests(Class<?> klass) {
+		int count = 0;
+
+		Class<?> currentKlass = klass;
+		while (currentKlass != null && currentKlass != Object.class) {
+			for (Method method : klass.getDeclaredMethods()) {
+				if (method.isAnnotationPresent(Test.class)) {
+					count++;
+				}
+			}
+
+			currentKlass = currentKlass.getSuperclass();
+		}
+
+		return count;
+	}
 }

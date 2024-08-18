@@ -25,316 +25,258 @@
 package com.github.mjeanroy.junit.servers.jupiter;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.annotations.TestServer;
+import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.client.impl.ning.NingAsyncHttpClient;
-import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerRunner;
-import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
-import com.github.mjeanroy.junit.servers.testing.FakeJunitExtensionContext;
-import com.github.mjeanroy.junit.servers.testing.FakeJunitParameterContext;
-import com.github.mjeanroy.junit.servers.testing.FakeJunitStore;
-import com.github.mjeanroy.junit.servers.utils.builders.EmbeddedServerMockBuilder;
-import com.github.mjeanroy.junit.servers.utils.fixtures.FixtureClass;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
 import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServerConfiguration;
+import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ParameterContext;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.mjeanroy.junit.servers.client.HttpClientStrategy.NING_ASYNC_HTTP_CLIENT;
+import static com.github.mjeanroy.junit.servers.testing.JupiterExtensionTesting.runTests;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JunitServerExtensionTest {
+	@BeforeEach
+	void setUp() {
+		FakeEmbeddedServer.servers.clear();
+	}
 
 	@Test
 	void it_should_initialize_extension_with_given_configuration_and_start_given_server_before_all_tests() {
-		AbstractConfiguration configuration = new FakeEmbeddedServerConfiguration();
-		JunitServerExtension extension = new JunitServerExtension(configuration);
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+		runTests(
+			ItShouldInitializeExtensionWithGivenConfigurationAndStartGivenServerBeforeAllTests.class
+		);
 
-		extension.beforeAll(context);
-
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-
-		assertThat(serverAdapter).isNotNull();
-		assertThat(serverAdapter.getServer()).isNotNull().isInstanceOf(FakeEmbeddedServer.class);
-		assertThat(serverAdapter.getServer().getConfiguration()).isSameAs(configuration);
-		assertThat(serverAdapter.getServer().isStarted()).isTrue();
+		assertThat(FakeEmbeddedServer.servers).hasSize(1)
+			.are(new Condition<>(srv -> !srv.isStarted(), "isStopped"))
+			.are(new Condition<>(srv -> srv.getNbStart() == 1, "started once"))
+			.are(new Condition<>(srv -> srv.getNbStop() == 1, "stopped once"));
 	}
 
 	@Test
 	void it_should_initialize_extension_with_given_server_and_start_given_server_before_all_tests() {
-		EmbeddedServer<?> server = new EmbeddedServerMockBuilder().build();
-		JunitServerExtension extension = new JunitServerExtension(server);
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+		runTests(
+			ItShouldInitializeExtensionWithGivenServerAndStartGivenServerBeforeAllTests.class
+		);
 
-		extension.beforeAll(context);
-
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-
-		assertThat(serverAdapter).isNotNull();
-		assertThat(serverAdapter.getServer()).isSameAs(server);
-		assertThat(serverAdapter.getServer().isStarted()).isTrue();
-	}
-
-	@Test
-	void it_should_start_server_before_all_tests() {
-		JunitServerExtension extension = new JunitServerExtension();
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-
-		extension.beforeAll(context);
-
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-
-		assertThat(serverAdapter).isNotNull();
-		assertThat(serverAdapter.getServer()).isNotNull();
-		assertThat(serverAdapter.getServer().isStarted()).isTrue();
-	}
-
-	@Test
-	void it_should_stop_server_after_all_tests() {
-		JunitServerExtension extension = new JunitServerExtension();
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-
-		extension.beforeAll(context);
-
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-
-		extension.afterAll(context);
-
-		assertThat(store.isEmpty()).isTrue();
-		assertThat(serverAdapter.getServer().isStarted()).isFalse();
+		assertThat(FakeEmbeddedServer.servers).hasSize(1)
+			.are(new Condition<>(srv -> !srv.isStarted(), "isStopped"))
+			.are(new Condition<>(srv -> srv.getNbStart() == 1, "started once"))
+			.are(new Condition<>(srv -> srv.getNbStop() == 1, "stopped once"));
 	}
 
 	@Test
 	void it_should_start_server_before_each_tests() {
-		JunitServerExtension extension = new JunitServerExtension();
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+		runTests(
+			ItShouldStartServerBeforeEachTests.class
+		);
 
-		extension.beforeEach(context);
-
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-
-		assertThat(serverAdapter).isNotNull();
-		assertThat(serverAdapter.getServer()).isNotNull();
-		assertThat(serverAdapter.getServer().isStarted()).isTrue();
-	}
-
-	@Test
-	void it_should_stop_server_after_each_tests() {
-		JunitServerExtension extension = new JunitServerExtension();
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-
-		extension.beforeEach(context);
-
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-
-		extension.afterEach(context);
-
-		assertThat(store.isEmpty()).isTrue();
-		assertThat(serverAdapter.getServer().isStarted()).isFalse();
-	}
-
-	@Test
-	void it_should_detect_if_server_must_be_started_and_stopped_after_all_tests() {
-		JunitServerExtension extension = new JunitServerExtension();
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-
-		extension.beforeAll(context);
-		extension.beforeEach(context);
-
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-
-		extension.afterEach(context);
-
-		assertThat(store.isEmpty()).isFalse();
-		assertThat(serverAdapter.getServer().isStarted()).isTrue();
-
-		extension.afterAll(context);
-
-		assertThat(store.isEmpty()).isTrue();
-		assertThat(serverAdapter.getServer().isStarted()).isFalse();
+		assertThat(FakeEmbeddedServer.servers).hasSize(2)
+			.are(new Condition<>(srv -> !srv.isStarted(), "isStopped"))
+			.are(new Condition<>(srv -> srv.getNbStart() == 1, "started once"))
+			.are(new Condition<>(srv -> srv.getNbStop() == 1, "stopped once"));
 	}
 
 	@Test
 	void it_should_inject_annotated_field_before_each_test() {
+		runTests(
+			ItShouldInjectAnnotatedFieldBeforeEachTest.class
+		);
+	}
+
+	@Test
+	void it_should_resolve_parameters() {
+		runTests(
+			ItShouldSupportResolutionOfParameters.class
+		);
+	}
+
+	@SuppressWarnings("JUnitMalformedDeclaration")
+	static class ItShouldInitializeExtensionWithGivenConfigurationAndStartGivenServerBeforeAllTests {
+		private static final AbstractConfiguration configuration = new FakeEmbeddedServerConfiguration();
+
+		@RegisterExtension
+		static JunitServerExtension extension = new JunitServerExtension(configuration);
+
+		@BeforeAll
+		static void beforeAll(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@AfterAll
+		static void afterAll(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@BeforeEach
+		void beforeEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@AfterEach
+		void afterEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		private static void verifyEmbeddedServerState(EmbeddedServer<?> server) {
+			assertThat(server).isInstanceOf(FakeEmbeddedServer.class);
+			assertThat(server.isStarted()).isTrue();
+			assertThat(server.getConfiguration()).isSameAs(configuration);
+			assertThat(((FakeEmbeddedServer) server).getNbStart()).isOne();
+			assertThat(((FakeEmbeddedServer) server).getNbStop()).isZero();
+		}
+	}
+
+	@SuppressWarnings("JUnitMalformedDeclaration")
+	static class ItShouldInitializeExtensionWithGivenServerAndStartGivenServerBeforeAllTests {
+		private static final EmbeddedServer<?> server = new FakeEmbeddedServer();
+
+		@RegisterExtension
+		static JunitServerExtension extension = new JunitServerExtension(server);
+
+		@BeforeAll
+		static void beforeAll(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@AfterAll
+		static void afterAll(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@BeforeEach
+		void beforeEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@AfterEach
+		void afterEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
+
+		private static void verifyEmbeddedServerState(EmbeddedServer<?> testServer) {
+			assertThat(testServer).isInstanceOf(FakeEmbeddedServer.class);
+			assertThat(testServer).isSameAs(server);
+			assertThat(testServer.isStarted()).isTrue();
+			assertThat(((FakeEmbeddedServer) testServer).getNbStart()).isOne();
+			assertThat(((FakeEmbeddedServer) testServer).getNbStop()).isZero();
+		}
+	}
+
+	@SuppressWarnings("JUnitMalformedDeclaration")
+	static class ItShouldStartServerBeforeEachTests {
+		@RegisterExtension
 		JunitServerExtension extension = new JunitServerExtension();
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
 
-		extension.beforeAll(context);
+		@BeforeEach
+		void beforeEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
 
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
+		@AfterEach
+		void afterEach(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
 
-		extension.beforeEach(context);
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
 
-		AnnotationsHandlerRunner annotationsAdapter = store.get("annotationsAdapter", AnnotationsHandlerRunner.class);
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			verifyEmbeddedServerState(server);
+		}
 
-		assertThat(annotationsAdapter).isNotNull();
-		assertThat(testInstance.server).isNotNull().isSameAs(serverAdapter.getServer());
-		assertThat(testInstance.configuration).isNotNull().isSameAs(serverAdapter.getServer().getConfiguration());
-		assertThat(testInstance.client).isNotNull();
+		private static void verifyEmbeddedServerState(EmbeddedServer<?> testServer) {
+			assertThat(testServer).isInstanceOf(FakeEmbeddedServer.class);
+			assertThat(testServer.isStarted()).isTrue();
+			assertThat(((FakeEmbeddedServer) testServer).getNbStart()).isOne();
+			assertThat(((FakeEmbeddedServer) testServer).getNbStop()).isZero();
+		}
 	}
 
-	@Test
-	void it_should_reset_injected_http_client_after_each_test() {
-		JunitServerExtension extension = new JunitServerExtension();
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
+	@SuppressWarnings("JUnitMalformedDeclaration")
+	@ExtendWith(JunitServerExtension.class)
+	static class ItShouldInjectAnnotatedFieldBeforeEachTest {
+		@TestServer
+		private FakeEmbeddedServer server;
 
-		extension.beforeAll(context);
-		extension.beforeEach(context);
+		@TestServerConfiguration
+		private FakeEmbeddedServerConfiguration configuration;
 
-		HttpClient client = testInstance.client;
-		FakeJunitStore store = context.getSingleStore();
+		@TestHttpClient
+		private HttpClient httpClient;
 
-		extension.afterEach(context);
+		@BeforeEach
+		void setUp() {
+			verifyAnnotatedFields();
+		}
 
-		assertThat(store.get("annotationsAdapter")).isNull();
-		assertThat(testInstance.client).isNull();
-		assertThat(client.isDestroyed()).isTrue();
+		@Test
+		void test1() {
+			verifyAnnotatedFields();
+		}
+
+		private void verifyAnnotatedFields() {
+			assertThat(server).isNotNull();
+			assertThat(configuration).isNotNull().isSameAs(server.getConfiguration());
+			assertThat(httpClient).isNotNull();
+		}
 	}
 
-	@Test
-	void it_should_support_resolution_of_embedded_server_parameter() throws Exception {
-		verifySupportsParameter("method_server", EmbeddedServer.class);
-	}
+	@SuppressWarnings({"JUnitMalformedDeclaration", "NewClassNamingConvention"})
+	@ExtendWith(JunitServerExtension.class)
+	static class ItShouldSupportResolutionOfParameters {
+		@Test
+		void test_embedded_server(FakeEmbeddedServer server) {
+			assertThat(server).isNotNull();
+		}
 
-	@Test
-	void it_should_support_resolution_of_configuration_parameter() throws Exception {
-		verifySupportsParameter("method_configuration", AbstractConfiguration.class);
-	}
+		@Test
+		void test_embedded_server_configuration(FakeEmbeddedServerConfiguration configuration) {
+			assertThat(configuration).isNotNull();
+		}
 
-	@Test
-	void it_should_support_resolution_of_http_client() throws Exception {
-		verifySupportsParameter("method_http_client", HttpClient.class);
-	}
+		@Test
+		void test_http_client(HttpClient httpClient) {
+			assertThat(httpClient).isNotNull();
+		}
 
-	@Test
-	void it_should_support_resolution_of_extended_parameter() throws Exception {
-		verifySupportsParameter("method_with_fake_embedded_configuration", FakeEmbeddedServerConfiguration.class);
-	}
-
-	private void verifySupportsParameter(String methodName, Class<?> klass) throws Exception {
-		JunitServerExtension extension = new JunitServerExtension();
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-
-		extension.beforeAll(context);
-
-		Method method = getClass().getMethod(methodName, klass);
-		Parameter parameter = method.getParameters()[0];
-		ParameterContext parameterContext = new FakeJunitParameterContext(parameter);
-
-		assertThat(extension.supportsParameter(parameterContext, context)).isTrue();
-	}
-
-	@Test
-	void it_should_resolve_embedded_server_parameter() throws Exception {
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-		JunitServerExtension extension = initializeExtension(context);
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-		ParameterContext parameterContext = createParameterContext("method_server", EmbeddedServer.class);
-
-		Object result = extension.resolveParameter(parameterContext, context);
-
-		assertThat(result).isNotNull().isSameAs(serverAdapter.getServer());
-	}
-
-	@Test
-	void it_should_resolve_configuration_parameter() throws Exception {
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-		JunitServerExtension extension = initializeExtension(context);
-		FakeJunitStore store = context.getSingleStore();
-		EmbeddedServerRunner serverAdapter = store.get("serverAdapter", EmbeddedServerRunner.class);
-		ParameterContext parameterContext = createParameterContext("method_configuration", AbstractConfiguration.class);
-
-		Object result = extension.resolveParameter(parameterContext, context);
-
-		assertThat(result).isNotNull().isSameAs(serverAdapter.getServer().getConfiguration());
-	}
-
-	@Test
-	void it_should_resolve_http_client_parameter_with_auto_strategy() throws Exception {
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-		JunitServerExtension extension = initializeExtension(context);
-		ParameterContext parameterContext = createParameterContext("method_http_client", HttpClient.class);
-
-		Object result = extension.resolveParameter(parameterContext, context);
-
-		assertThat(result).isNotNull().isInstanceOf(HttpClient.class);
-	}
-
-	@Test
-	void it_should_resolve_http_client_parameter_with_custom_strategy() throws Exception {
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-		JunitServerExtension extension = initializeExtension(context);
-		ParameterContext parameterContext = createParameterContext("method_http_client_custom", HttpClient.class);
-
-		Object result = extension.resolveParameter(parameterContext, context);
-
-		assertThat(result).isNotNull().isExactlyInstanceOf(NingAsyncHttpClient.class);
-	}
-
-	@Test
-	void it_should_resolve_extended_parameter() throws Exception {
-		FixtureClass testInstance = new FixtureClass();
-		FakeJunitExtensionContext context = new FakeJunitExtensionContext(testInstance);
-		JunitServerExtension extension = initializeExtension(context);
-		ParameterContext parameterContext = createParameterContext("method_with_fake_embedded_configuration", FakeEmbeddedServerConfiguration.class);
-
-		Object result = extension.resolveParameter(parameterContext, context);
-
-		assertThat(result).isNotNull().isExactlyInstanceOf(FakeEmbeddedServerConfiguration.class);
-	}
-
-	private JunitServerExtension initializeExtension(FakeJunitExtensionContext context) {
-		JunitServerExtension extension = new JunitServerExtension();
-		extension.beforeAll(context);
-		return extension;
-	}
-
-	private ParameterContext createParameterContext(String methodName, Class<?> klass) throws Exception {
-		Method method = getClass().getMethod(methodName, klass);
-		Parameter parameter = method.getParameters()[0];
-		return new FakeJunitParameterContext(parameter);
-	}
-
-	public void method_server(EmbeddedServer<?> server) {
-	}
-
-	public void method_configuration(AbstractConfiguration configuration) {
-	}
-
-	public void method_with_fake_embedded_configuration(FakeEmbeddedServerConfiguration configuration) {
-	}
-
-	public void method_http_client(HttpClient client) {
-	}
-
-	public void method_http_client_custom(@TestHttpClient(strategy = NING_ASYNC_HTTP_CLIENT) HttpClient client) {
+		@Test
+		void test_custom_http_client(@TestHttpClient(strategy = NING_ASYNC_HTTP_CLIENT) HttpClient httpClient) {
+			assertThat(httpClient).isExactlyInstanceOf(NingAsyncHttpClient.class);
+		}
 	}
 }

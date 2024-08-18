@@ -28,9 +28,14 @@ import com.github.mjeanroy.junit.servers.servers.AbstractEmbeddedServer;
 
 import javax.servlet.ServletContext;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.mock;
 
 public class FakeEmbeddedServer extends AbstractEmbeddedServer<FakeServer, FakeEmbeddedServerConfiguration> {
+
+	public static List<FakeEmbeddedServer> servers = new ArrayList<>();
 
 	/**
 	 * The number of times the fake server has been started.
@@ -60,6 +65,7 @@ public class FakeEmbeddedServer extends AbstractEmbeddedServer<FakeServer, FakeE
 		super(configuration);
 		this.servletContext = mock(ServletContext.class);
 		this.delegate = new FakeServer();
+		servers.add(this);
 	}
 
 	@Override
