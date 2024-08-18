@@ -266,42 +266,41 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 
 	@Override
 	public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-		final Parameter parameter = parameterContext.getParameter();
-		final Class<?> parameterClass = parameter.getType();
-
-		// Fast case: a perfect match.
-		if (RESOLVERS.containsKey(parameterClass)) {
-			return true;
-		}
-
-		for (Class<?> klass : RESOLVERS.keySet()) {
-			if (klass.isAssignableFrom(parameterClass)) {
-				return true;
-			}
-		}
-
-		return false;
+		ParameterResolverFunction resolver = findResolver(parameterContext);
+		return resolver != null;
 	}
 
 	@Override
 	public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+		ParameterResolverFunction resolver = findResolver(parameterContext);
+		if (resolver == null) {
+			// Should not happen since Junit framework will call this method if, and only if, the
+			// method `supportsParameter` has previously returned `true`.
+			return null;
+		}
+
+		EmbeddedServerRunner serverAdapter = findEmbeddedServerAdapterInStore(extensionContext);
+		return resolver.resolve(
+			parameterContext,
+			serverAdapter
+		);
+	}
+
+	private static ParameterResolverFunction findResolver(ParameterContext parameterContext) {
 		final Parameter parameter = parameterContext.getParameter();
 		final Class<?> parameterClass = parameter.getType();
-		final EmbeddedServerRunner serverAdapter = findEmbeddedServerAdapterInStore(extensionContext);
 
-		// Fast case: a perfect match.
+		// Fast lookup.
 		if (RESOLVERS.containsKey(parameterClass)) {
-			return RESOLVERS.get(parameterClass).resolve(parameterContext, serverAdapter);
+			return RESOLVERS.get(parameterClass);
 		}
 
 		for (Class<?> klass : RESOLVERS.keySet()) {
 			if (klass.isAssignableFrom(parameterClass)) {
-				return RESOLVERS.get(klass).resolve(parameterContext, serverAdapter);
+				return RESOLVERS.get(klass);
 			}
 		}
 
-		// Should not happen since Junit framework will call this method if, and only if, the
-		// method `supportsParameter` has previously returned `true`.
 		return null;
 	}
 
