@@ -71,6 +71,20 @@ final class JunitServerExtensionContext implements ExtensionContext.Store.Closea
 	}
 
 	@Override
+	public void close() {
+		// According to JUnit documentation:
+		//
+		// ExtensionContext.Store.CloseableResource
+		//   An extension context store is bound to its extension context lifecycle.
+		//   When an extension context lifecycle ends it closes its associated store.
+		//   All stored values that are instances of CloseableResource are notified by an invocation of their close()
+		//   method in the inverse order they were added in.
+		//
+		// Said differently: this method is automatically called when the associated extension context store is closed.
+		runner.stop();
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -100,10 +114,5 @@ final class JunitServerExtensionContext implements ExtensionContext.Store.Closea
 			.append("testClass", testClass)
 			.append("annotationsHandler", annotationsHandler)
 			.build();
-	}
-
-	@Override
-	public void close() {
-		runner.stop();
 	}
 }

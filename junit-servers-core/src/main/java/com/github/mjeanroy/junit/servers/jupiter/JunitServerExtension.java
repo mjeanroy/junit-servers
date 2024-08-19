@@ -210,7 +210,16 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 
 	@Override
 	public void afterAll(ExtensionContext context) {
-		stopIfNecessary(context, PER_CLASS);
+		// According to JUnit documentation:
+		//
+		// ExtensionContext.Store.CloseableResource
+		//   An extension context store is bound to its extension context lifecycle.
+		//   When an extension context lifecycle ends it closes its associated store.
+		//   All stored values that are instances of CloseableResource are notified by an invocation of their close()
+		//   method in the inverse order they were added in.
+		//
+		// Said differently: since JunitServerExtensionContext implements CloseableResource, no need to explicitely stop
+		// and close it, it's automatically done by JUnit when the store is closed.
 	}
 
 	@Override
@@ -229,14 +238,20 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 
 	@Override
 	public void afterEach(ExtensionContext context) {
-		try {
-			findContextInStore(context).getAnnotationsHandler().afterEach(
-				context.getRequiredTestClass()
-			);
-		}
-		finally {
-			stopIfNecessary(context, PER_METHOD);
-		}
+		findContextInStore(context).getAnnotationsHandler().afterEach(
+			context.getRequiredTestClass()
+		);
+
+		// According to JUnit documentation:
+		//
+		// ExtensionContext.Store.CloseableResource
+		//   An extension context store is bound to its extension context lifecycle.
+		//   When an extension context lifecycle ends it closes its associated store.
+		//   All stored values that are instances of CloseableResource are notified by an invocation of their close()
+		//   method in the inverse order they were added in.
+		//
+		// Said differently: since JunitServerExtensionContext implements CloseableResource, no need to explicitely stop
+		// and close it, it's automatically done by JUnit when the store is closed.
 	}
 
 	@Override
@@ -327,35 +342,6 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		return ctx;
 	}
 
-	private void stopIfNecessary(ExtensionContext context, JunitServerExtensionLifecycle lifecycle) {
-		log.debug("Attempt to unregister embedded server to junit extension context");
-		JunitServerExtensionContext ctx = findContextInStore(context);
-
-		if (ctx == null) {
-			return;
-		}
-
-		if (ctx.getLifecycle() != lifecycle) {
-			return;
-		}
-
-		if (ctx.getTestClass() != context.getRequiredTestClass()) {
-			return;
-		}
-
-		stop(context, ctx);
-	}
-
-	private void stop(ExtensionContext context, JunitServerExtensionContext ctx) {
-		log.debug("Unregister embedded server to junit extension context");
-		try {
-			ctx.getRunner().afterAll();
-		}
-		finally {
-			removeContextInStore(context);
-		}
-	}
-
 	private static JunitServerExtensionContext findContextInStore(ExtensionContext context) {
 		return getExtensionStore(context).get(
 			JunitServerExtensionContext.class.getName(),
@@ -366,11 +352,6 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	private static void putContextInStore(ExtensionContext context, JunitServerExtensionContext ctx) {
 		log.debug("Store context to junit extension context");
 		getExtensionStore(context).put(ctx.getClass().getName(), ctx);
-	}
-
-	private static void removeContextInStore(ExtensionContext context) {
-		log.debug("Clearing junit extension context");
-		getExtensionStore(context).remove(JunitServerExtensionContext.class.getName());
 	}
 
 	private static Store getExtensionStore(ExtensionContext extensionContext) {
