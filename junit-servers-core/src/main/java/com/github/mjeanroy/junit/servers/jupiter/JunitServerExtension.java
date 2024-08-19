@@ -28,7 +28,6 @@ import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerRunner;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import com.github.mjeanroy.junit.servers.engine.Servers;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
@@ -148,26 +147,6 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	private static final Namespace NAMESPACE = Namespace.create(JunitServerExtension.class.getName());
 
 	/**
-	 * The test class that was active when the server has been started.
-	 */
-	private static final String STARTING_TEST_CLASS = "startingTestClass";
-
-	/**
-	 * The name of the {@link EmbeddedServerRunner} instance in the internal store.
-	 */
-	private static final String SERVER_RUNNER_KEY = "serverAdapter";
-
-	/**
-	 * The name of the {@link EmbeddedServerRunner} start mode flag in the internal store.
-	 */
-	private static final String SERVER_RUNNER_MODE = "serverAdapterMode";
-
-	/**
-	 * The name of the {@link AnnotationsHandlerRunner} instance in the internal store.
-	 */
-	private static final String ANNOTATIONS_RUNNER_KEY = "annotationsAdapter";
-
-	/**
 	 * The list of parameter resolvers.
 	 */
 	private static final Map<Class<?>, ParameterResolverFunction> RESOLVERS = new HashMap<>();
@@ -223,44 +202,40 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	public void beforeAll(ExtensionContext context) {
 		// With nested class, the `beforeAll` is called, that could lead to multiple instances
 		// being instantiated.
-		EmbeddedServerRunner serverAdapter = findEmbeddedServerAdapterInStore(context);
-		if (serverAdapter == null) {
-			registerEmbeddedServer(context, PER_CLASS);
+		JunitServerExtensionContext ctx = findContextInStore(context);
+		if (ctx == null) {
+			start(context, PER_CLASS);
 		}
 	}
 
 	@Override
 	public void afterAll(ExtensionContext context) {
-		unregisterEmbeddedServerIfNecessary(context, PER_CLASS);
+		stopIfNecessary(context, PER_CLASS);
 	}
 
 	@Override
 	public void beforeEach(ExtensionContext context) {
-		EmbeddedServerRunner serverAdapter = findEmbeddedServerAdapterInStore(context);
+		JunitServerExtensionContext ctx = findContextInStore(context);
 
 		// The extension was not declared as a static extension.
-		if (serverAdapter == null) {
-			serverAdapter = registerEmbeddedServer(context, PER_METHOD);
+		if (ctx == null) {
+			ctx = start(context, PER_METHOD);
 		}
 
-		EmbeddedServer<?> server = serverAdapter.getServer();
-		AbstractConfiguration configuration = server.getConfiguration();
-		AnnotationsHandlerRunner annotationsAdapter = new AnnotationsHandlerRunner(server, configuration);
-		annotationsAdapter.beforeEach(context.getRequiredTestInstance());
-
-		putAnnotationsHandlerAdapterInStore(context, annotationsAdapter);
+		ctx.getAnnotationsHandler().beforeEach(
+			context.getRequiredTestInstance()
+		);
 	}
 
 	@Override
 	public void afterEach(ExtensionContext context) {
 		try {
-			Object target = context.getRequiredTestInstance();
-			AnnotationsHandlerRunner annotationsAdapter = findAnnotationsHandlerAdapterInStore(context);
-			annotationsAdapter.afterEach(target);
+			findContextInStore(context).getAnnotationsHandler().afterEach(
+				context.getRequiredTestClass()
+			);
 		}
 		finally {
-			unregisterEmbeddedServerIfNecessary(context, PER_METHOD);
-			removeAnnotationsHandlerAdapterFromStore(context);
+			stopIfNecessary(context, PER_METHOD);
 		}
 	}
 
@@ -273,16 +248,20 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	@Override
 	public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
 		ParameterResolverFunction resolver = findResolver(parameterContext);
+
 		if (resolver == null) {
-			// Should not happen since Junit framework will call this method if, and only if, the
-			// method `supportsParameter` has previously returned `true`.
 			return null;
 		}
 
-		EmbeddedServerRunner serverAdapter = findEmbeddedServerAdapterInStore(extensionContext);
+		JunitServerExtensionContext ctx = findContextInStore(extensionContext);
+
+		if (ctx == null) {
+			return null;
+		}
+
 		return resolver.resolve(
 			parameterContext,
-			serverAdapter
+			ctx.getRunner()
 		);
 	}
 
@@ -319,209 +298,94 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		);
 	}
 
-	/**
-	 * Find configuration for embedded server (implementation to use is automatically detected using the Service Provider
-	 * API).
-	 *
-	 * @param testClass The test class instance.
-	 * @param configuration The embedded server configuration to use.
-	 * @return The embedded server configuration.
-	 */
 	private AbstractConfiguration findConfiguration(Class<?> testClass, AbstractConfiguration configuration) {
-		return configuration == null ? Servers.findConfiguration(testClass) : configuration;
+		if (configuration != null) {
+			return configuration;
+		}
+
+		return Servers.findConfiguration(
+			testClass
+		);
 	}
 
-	/**
-	 * Start and register the embedded server.
-	 *
-	 * The embedded server may be used in two modes:
-	 *
-	 * <ul>
-	 *   <li>Started before all tests, and stopped after all tests, this is the static mode (the extension has been used as a static extension).</li>
-	 *   <li>Started before each tests, and stopped after eacg tests, this is the non static mode (the extension has not been used as a static extension).</li>
-	 * </ul>
-	 *
-	 * @param context The test context.
-	 * @param lifecycle The extension lifecycle.
-	 * @return The registered adapter.
-	 */
-	private EmbeddedServerRunner registerEmbeddedServer(ExtensionContext context, JunitServerExtensionLifecycle lifecycle) {
+	private JunitServerExtensionContext start(ExtensionContext context, JunitServerExtensionLifecycle lifecycle) {
 		log.debug("Register embedded server to junit extension context");
 
 		Class<?> testClass = context.getRequiredTestClass();
 		EmbeddedServer<?> server = this.server == null ? instantiateServer(testClass, configuration) : this.server;
+		EmbeddedServerRunner runner = new EmbeddedServerRunner(server);
+		JunitServerExtensionContext ctx = new JunitServerExtensionContext(
+			runner,
+			lifecycle,
+			testClass
+		);
 
-		EmbeddedServerRunner serverAdapter = new EmbeddedServerRunner(server);
-		serverAdapter.beforeAll();
+		ctx.getRunner().beforeAll();
 
-		putEmbeddedServerAdapterInStore(context, serverAdapter, lifecycle);
+		putContextInStore(context, ctx);
 
-		return serverAdapter;
+		return ctx;
 	}
 
-	/**
-	 * Stop and remove from the store the started embedded server.
-	 *
-	 * @param context The test context.
-	 * @param lifecycle The extension lifecycle.
-	 * @see #registerEmbeddedServer(ExtensionContext, JunitServerExtensionLifecycle)
-	 */
-	private void unregisterEmbeddedServerIfNecessary(ExtensionContext context, JunitServerExtensionLifecycle lifecycle) {
+	private void stopIfNecessary(ExtensionContext context, JunitServerExtensionLifecycle lifecycle) {
 		log.debug("Attempt to unregister embedded server to junit extension context");
-		JunitServerExtensionLifecycle registeredLifecycle = findInStore(context, SERVER_RUNNER_MODE);
-		if (registeredLifecycle != lifecycle) {
+		JunitServerExtensionContext ctx = findContextInStore(context);
+
+		if (ctx == null) {
 			return;
 		}
 
-		Class<?> testClass = context.getRequiredTestClass();
-		Class<?> startingTestClass = findStartingTestClass(context);
-		if (testClass != startingTestClass) {
+		if (ctx.getLifecycle() != lifecycle) {
 			return;
 		}
 
-		unregisterEmbeddedServer(context);
+		if (ctx.getTestClass() != context.getRequiredTestClass()) {
+			return;
+		}
+
+		stop(context, ctx);
 	}
 
-	/**
-	 * Stop and remove from the store the started embedded server.
-	 *
-	 * @param context The test context.
-	 * @see #registerEmbeddedServer(ExtensionContext, JunitServerExtensionLifecycle)
-	 */
-	private void unregisterEmbeddedServer(ExtensionContext context) {
+	private void stop(ExtensionContext context, JunitServerExtensionContext ctx) {
 		log.debug("Unregister embedded server to junit extension context");
 		try {
-			EmbeddedServerRunner serverAdapter = findEmbeddedServerAdapterInStore(context);
-			serverAdapter.afterAll();
+			ctx.getRunner().afterAll();
 		}
 		finally {
-			removeEmbeddedServerAdapterFromStore(context);
+			removeContextInStore(context);
 		}
 	}
 
-	/**
-	 * Find {@link EmbeddedServerRunner} instance in the test context store.
-	 *
-	 * @param context The Junit-Jupiter test context.
-	 * @return The current stored adapter.
-	 */
-	private static EmbeddedServerRunner findEmbeddedServerAdapterInStore(ExtensionContext context) {
-		return (EmbeddedServerRunner) findInStore(context, SERVER_RUNNER_KEY);
+	private static JunitServerExtensionContext findContextInStore(ExtensionContext context) {
+		return findInStore(context, JunitServerExtensionContext.class);
 	}
 
-	/**
-	 * Find the test class that was active when the server has been started.
-	 *
-	 * @param context The Junit-Jupiter test context.
-	 * @return The current stored adapter.
-	 */
-	private static Class<?> findStartingTestClass(ExtensionContext context) {
-		return (Class<?>) findInStore(context, STARTING_TEST_CLASS);
+	private static void putContextInStore(ExtensionContext context, JunitServerExtensionContext ctx) {
+		log.debug("Store context to junit extension context");
+		putInStore(context, ctx);
 	}
 
-	/**
-	 * Put {@link EmbeddedServerRunner} instance in the test context store.
-	 *
-	 * @param context The Junit-Jupiter test context.
-	 * @param serverAdapter The instance to store.
-	 */
-	private static void putEmbeddedServerAdapterInStore(
-		ExtensionContext context,
-		EmbeddedServerRunner serverAdapter,
-		JunitServerExtensionLifecycle mode
-	) {
-		log.debug("Store embedded server to junit extension context");
-		putInStore(context, SERVER_RUNNER_KEY, serverAdapter);
-		putInStore(context, SERVER_RUNNER_MODE, mode);
-		putInStore(context, STARTING_TEST_CLASS, context.getRequiredTestClass());
-	}
-
-	/**
-	 * Remove {@link EmbeddedServerRunner} instance from the test context store.
-	 *
-	 * @param context The Junit-Jupiter test context.
-	 */
-	private static void removeEmbeddedServerAdapterFromStore(ExtensionContext context) {
+	private static void removeContextInStore(ExtensionContext context) {
 		log.debug("Clearing junit extension context");
-		removeFromStore(context, SERVER_RUNNER_KEY);
-		removeFromStore(context, SERVER_RUNNER_MODE);
-		removeFromStore(context, STARTING_TEST_CLASS);
+		removeFromStore(context, JunitServerExtensionContext.class);
 	}
 
-	/**
-	 * Find {@link AnnotationsHandlerRunner} instance in the test context store.
-	 *
-	 * @param context The Junit-Jupiter test context.
-	 * @return The current stored adapter.
-	 */
-	private static AnnotationsHandlerRunner findAnnotationsHandlerAdapterInStore(ExtensionContext context) {
-		return findInStore(context, ANNOTATIONS_RUNNER_KEY);
+	private static <T> void putInStore(ExtensionContext context, T value) {
+		log.trace("Put to junit extension context: {}", value);
+		getExtensionStore(context).put(value.getClass().getName(), value);
 	}
 
-	/**
-	 * Put {@link AnnotationsHandlerRunner} instance in the test context store.
-	 *
-	 * @param context The Junit-Jupiter test context.
-	 * @param annotationsHandlerAdapter The instance to store.
-	 */
-	private static void putAnnotationsHandlerAdapterInStore(ExtensionContext context, AnnotationsHandlerRunner annotationsHandlerAdapter) {
-		putInStore(context, ANNOTATIONS_RUNNER_KEY, annotationsHandlerAdapter);
+	private static <T> T findInStore(ExtensionContext context, Class<T> klass) {
+		log.trace("Looking for {} entry in junit extension context", klass);
+		return getExtensionStore(context).get(klass.getName(), klass);
 	}
 
-	/**
-	 * Remove {@link AnnotationsHandlerRunner} instance from the test context store.
-	 *
-	 * @param context The Junit-Jupiter test context.
-	 */
-	private static void removeAnnotationsHandlerAdapterFromStore(ExtensionContext context) {
-		removeFromStore(context, ANNOTATIONS_RUNNER_KEY);
+	private static void removeFromStore(ExtensionContext context, Class<?> klass) {
+		log.trace("Remove to junit extension context: {}", klass);
+		getExtensionStore(context).remove(klass.getName());
 	}
 
-	/**
-	 * Put value in the internal store.
-	 *
-	 * @param context The Junit-Jupiter test context.
-	 * @param name The name of the value to look for.
-	 * @param value The value to store.
-	 * @param <T> The type of the value to look for.
-	 */
-	private static <T> void putInStore(ExtensionContext context, String name, T value) {
-		log.trace("Put to junit extension context: {} -> {}", name, value);
-		getStore(context).put(name, value);
-	}
-
-	/**
-	 * Find value in the internal store.
-	 *
-	 * @param context The Junit-Jupiter test context.
-	 * @param name The name of the value to look for.
-	 * @param <T> The type of the value to look for.
-	 * @return The value currently stored.
-	 */
-	@SuppressWarnings("unchecked")
-	private static <T> T findInStore(ExtensionContext context, String name) {
-		log.trace("Looking for {} entry in junit extension context", name);
-		return (T) getStore(context).get(name);
-	}
-
-	/**
-	 * Remove given entry from the internal store.
-	 *
-	 * @param context The Junit-Jupiter test context.
-	 * @param name The entry name to remove.
-	 */
-	private static void removeFromStore(ExtensionContext context, String name) {
-		log.trace("Remove to junit extension context: {}", name);
-		getStore(context).remove(name);
-	}
-
-	/**
-	 * Get the internal store from the Junit-Jupiter test context.
-	 *
-	 * @param extensionContext The test context.
-	 * @return The store.
-	 */
-	private static Store getStore(ExtensionContext extensionContext) {
+	private static Store getExtensionStore(ExtensionContext extensionContext) {
 		return extensionContext.getStore(NAMESPACE);
 	}
 }
