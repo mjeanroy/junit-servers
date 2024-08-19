@@ -357,32 +357,20 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	}
 
 	private static JunitServerExtensionContext findContextInStore(ExtensionContext context) {
-		return findInStore(context, JunitServerExtensionContext.class);
+		return getExtensionStore(context).get(
+			JunitServerExtensionContext.class.getName(),
+			JunitServerExtensionContext.class
+		);
 	}
 
 	private static void putContextInStore(ExtensionContext context, JunitServerExtensionContext ctx) {
 		log.debug("Store context to junit extension context");
-		putInStore(context, ctx);
+		getExtensionStore(context).put(ctx.getClass().getName(), ctx);
 	}
 
 	private static void removeContextInStore(ExtensionContext context) {
 		log.debug("Clearing junit extension context");
-		removeFromStore(context, JunitServerExtensionContext.class);
-	}
-
-	private static <T> void putInStore(ExtensionContext context, T value) {
-		log.trace("Put to junit extension context: {}", value);
-		getExtensionStore(context).put(value.getClass().getName(), value);
-	}
-
-	private static <T> T findInStore(ExtensionContext context, Class<T> klass) {
-		log.trace("Looking for {} entry in junit extension context", klass);
-		return getExtensionStore(context).get(klass.getName(), klass);
-	}
-
-	private static void removeFromStore(ExtensionContext context, Class<?> klass) {
-		log.trace("Remove to junit extension context: {}", klass);
-		getExtensionStore(context).remove(klass.getName());
+		getExtensionStore(context).remove(JunitServerExtensionContext.class.getName());
 	}
 
 	private static Store getExtensionStore(ExtensionContext extensionContext) {
