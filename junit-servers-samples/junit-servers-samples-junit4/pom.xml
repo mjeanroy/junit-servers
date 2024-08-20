@@ -31,7 +31,7 @@
   <parent>
     <artifactId>junit-servers-samples</artifactId>
     <groupId>com.github.mjeanroy</groupId>
-    <version>3.2.1-SNAPSHOT-SNAPSHOT</version>
+    <version>3.2.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>junit-servers-samples-junit4</artifactId>
