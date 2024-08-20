@@ -27,11 +27,16 @@ package com.github.mjeanroy.junit.servers.jetty.jupiter;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyFactory;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
+import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+
+import java.util.Optional;
+
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 /**
  * A specialized {@link JunitServerExtension} that will instantiate an {@link EmbeddedJetty}
@@ -57,7 +62,18 @@ public class JettyServerExtension extends JunitServerExtension {
 	 */
 	public JettyServerExtension() {
 		super();
-		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", JettyServerExtension.class);
+		logDeprecationWarning();
+	}
+
+	/**
+	 * Create the jupiter with default behavior.
+	 *
+	 * @param lifecycle The extension lifecycle.
+	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
+	 */
+	public JettyServerExtension(JunitServerExtensionLifecycle lifecycle) {
+		super(lifecycle);
+		logDeprecationWarning();
 	}
 
 	/**
@@ -68,18 +84,49 @@ public class JettyServerExtension extends JunitServerExtension {
 	 */
 	public JettyServerExtension(EmbeddedJetty jetty) {
 		super(jetty);
-		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", JettyServerExtension.class);
+		logDeprecationWarning();
+	}
+
+	/**
+	 * Create the jupiter and specify the embedded jetty instance to use.
+	 *
+	 * @param lifecycle The extension lifecycle.
+	 * @param jetty The embedded jetty instance to use.
+	 * @throws NullPointerException If {@code jetty} is {@code null}.
+	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
+	 */
+	public JettyServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedJetty jetty) {
+		super(lifecycle, jetty);
+		logDeprecationWarning();
 	}
 
 	/**
 	 * Create the jupiter and specify the embedded jetty configuration to use (when using
-	 * 	 * jupiter with {@link org.junit.jupiter.api.extension.RegisterExtension}).
+	 * jupiter with {@link org.junit.jupiter.api.extension.RegisterExtension}).
 	 *
 	 * @param configuration The embedded jetty configuration to use.
 	 * @throws NullPointerException If {@code configuration} is {@code null}.
 	 */
 	public JettyServerExtension(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
+		logDeprecationWarning();
+	}
+
+	/**
+	 * Create the jupiter and specify the embedded jetty configuration to use (when using
+	 * jupiter with {@link org.junit.jupiter.api.extension.RegisterExtension}).
+	 *
+	 * @param lifecycle The extension lifecycle.
+	 * @param configuration The embedded jetty configuration to use.
+	 * @throws NullPointerException If {@code configuration} is {@code null}.
+	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
+	 */
+	public JettyServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedJettyConfiguration configuration) {
+		super(lifecycle, configuration);
+		logDeprecationWarning();
+	}
+
+	private static void logDeprecationWarning() {
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", JettyServerExtension.class);
 	}
 
@@ -87,5 +134,10 @@ public class JettyServerExtension extends JunitServerExtension {
 	protected EmbeddedServer<?> instantiateServer(Class<?> testClass, AbstractConfiguration configuration) {
 		log.debug("Instantiating embedded jetty for test class: {}", testClass);
 		return EmbeddedJettyFactory.createFrom(testClass, configuration);
+	}
+
+	@Override
+	protected Optional<JunitServerExtensionLifecycle> findLifecycle(Class<?> testClass) {
+		return findAnnotation(testClass, JettyTest.class).map(JettyTest::lifecycle);
 	}
 }

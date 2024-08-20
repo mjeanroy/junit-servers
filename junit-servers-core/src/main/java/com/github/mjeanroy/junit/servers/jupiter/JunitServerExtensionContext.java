@@ -36,18 +36,10 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
 final class JunitServerExtensionContext implements ExtensionContext.Store.CloseableResource {
 
 	private final EmbeddedServerRunner runner;
-	private final JunitServerExtensionLifecycle lifecycle;
-	private final Class<?> testClass;
 	private final AnnotationsHandlerRunner annotationsHandler;
 
-	JunitServerExtensionContext(
-		EmbeddedServerRunner runner,
-		JunitServerExtensionLifecycle lifecycle,
-		Class<?> testClass
-	) {
+	JunitServerExtensionContext(EmbeddedServerRunner runner) {
 		this.runner = notNull(runner, "runner");
-		this.lifecycle = notNull(lifecycle, "lifecycle");
-		this.testClass = notNull(testClass, "testClass");
 		this.annotationsHandler = new AnnotationsHandlerRunner(
 			runner.getServer(),
 			runner.getServer().getConfiguration()
@@ -56,14 +48,6 @@ final class JunitServerExtensionContext implements ExtensionContext.Store.Closea
 
 	EmbeddedServerRunner getRunner() {
 		return runner;
-	}
-
-	JunitServerExtensionLifecycle getLifecycle() {
-		return lifecycle;
-	}
-
-	Class<?> getTestClass() {
-		return testClass;
 	}
 
 	AnnotationsHandlerRunner getAnnotationsHandler() {
@@ -92,10 +76,7 @@ final class JunitServerExtensionContext implements ExtensionContext.Store.Closea
 
 		if (o instanceof JunitServerExtensionContext) {
 			JunitServerExtensionContext that = (JunitServerExtensionContext) o;
-			return Objects.equals(runner, that.runner)
-				&& Objects.equals(lifecycle, that.lifecycle)
-				&& Objects.equals(testClass, that.testClass)
-				&& Objects.equals(annotationsHandler, that.annotationsHandler);
+			return Objects.equals(runner, that.runner) && Objects.equals(annotationsHandler, that.annotationsHandler);
 		}
 
 		return false;
@@ -103,15 +84,13 @@ final class JunitServerExtensionContext implements ExtensionContext.Store.Closea
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(runner, lifecycle, testClass, annotationsHandler);
+		return Objects.hash(runner, annotationsHandler);
 	}
 
 	@Override
 	public String toString() {
 		return ToStringBuilder.create(getClass())
 			.append("runner", runner)
-			.append("lifecycle", lifecycle)
-			.append("testClass", testClass)
 			.append("annotationsHandler", annotationsHandler)
 			.build();
 	}

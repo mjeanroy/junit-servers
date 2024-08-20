@@ -49,10 +49,12 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_CLASS;
 import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_METHOD;
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 /**
  * Extension for Junit Jupiter.
@@ -168,12 +170,31 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	private final AbstractConfiguration configuration;
 
 	/**
+	 * The extension lifecycle.
+	 */
+	private final JunitServerExtensionLifecycle lifecycle;
+
+	/**
 	 * Create the jupiter with default server that will be automatically detected using the Service Provider
 	 * API.
 	 */
 	public JunitServerExtension() {
 		this.server = null;
 		this.configuration = null;
+		this.lifecycle = null;
+	}
+
+	/**
+	 * Create the jupiter with default server that will be automatically detected using the Service Provider
+	 * API.
+	 *
+	 * @param lifecycle The extension lifecycle.
+	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
+	 */
+	public JunitServerExtension(JunitServerExtensionLifecycle lifecycle) {
+		this.server = null;
+		this.configuration = null;
+		this.lifecycle = notNull(lifecycle, "lifecycle");
 	}
 
 	/**
@@ -185,6 +206,21 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	public JunitServerExtension(EmbeddedServer<?> server) {
 		this.server = notNull(server, "server");
 		this.configuration = null;
+		this.lifecycle = null;
+	}
+
+	/**
+	 * Create the jupiter with given server to start/stop before/after tests.
+	 *
+	 * @param lifecycle The extension lifecycle.
+	 * @param server The embedded server to use.
+	 * @throws NullPointerException If {@code server} is {@code null}.
+	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
+	 */
+	public JunitServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedServer<?> server) {
+		this.server = notNull(server, "server");
+		this.configuration = null;
+		this.lifecycle = notNull(lifecycle, "lifecycle");
 	}
 
 	/**
@@ -196,16 +232,41 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	public JunitServerExtension(AbstractConfiguration configuration) {
 		this.server = null;
 		this.configuration = configuration;
+		this.lifecycle = null;
+	}
+
+	/**
+	 * Create the jupiter with given server configuration.
+	 *
+	 * @param lifecycle The extension lifecycle.
+	 * @param configuration The embedded server configuration to use.
+	 * @throws NullPointerException If {@code configuration} is {@code null}.
+	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
+	 */
+	public JunitServerExtension(JunitServerExtensionLifecycle lifecycle, AbstractConfiguration configuration) {
+		this.server = null;
+		this.configuration = configuration;
+		this.lifecycle = notNull(lifecycle, "lifecycle");
 	}
 
 	@Override
 	public void beforeAll(ExtensionContext context) {
-		// With nested class, the `beforeAll` is called, that could lead to multiple instances
-		// being instantiated.
-		JunitServerExtensionContext ctx = findContextInStore(context);
-		if (ctx == null) {
-			start(context, PER_CLASS);
+		Class<?> testClass = context.getRequiredTestClass();
+		JunitServerExtensionLifecycle actualLifecycle = getLifecycle(testClass, PER_CLASS);
+		if (actualLifecycle == PER_METHOD) {
+			return;
 		}
+
+		JunitServerExtensionContext ctx = findContextInStore(context);
+		if (ctx != null) {
+			return;
+		}
+
+		start(
+			actualLifecycle.getExtensionContext(context),
+			testClass,
+			actualLifecycle
+		);
 	}
 
 	@Override
@@ -226,9 +287,14 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	public void beforeEach(ExtensionContext context) {
 		JunitServerExtensionContext ctx = findContextInStore(context);
 
-		// The extension was not declared as a static extension.
 		if (ctx == null) {
-			ctx = start(context, PER_METHOD);
+			Class<?> testClass = context.getRequiredTestClass();
+			JunitServerExtensionLifecycle actualLifecycle = getLifecycle(testClass, PER_METHOD);
+			ctx = start(
+				actualLifecycle.getExtensionContext(context),
+				testClass,
+				actualLifecycle
+			);
 		}
 
 		ctx.getAnnotationsHandler().beforeEach(
@@ -323,17 +389,16 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		);
 	}
 
-	private JunitServerExtensionContext start(ExtensionContext context, JunitServerExtensionLifecycle lifecycle) {
-		log.debug("Register embedded server to junit extension context");
+	private JunitServerExtensionContext start(
+		ExtensionContext context,
+		Class<?> testClass,
+		JunitServerExtensionLifecycle lifecycle
+	) {
+		log.debug("Register embedded server to junit extension context using lifecycle: {}", lifecycle);
 
-		Class<?> testClass = context.getRequiredTestClass();
 		EmbeddedServer<?> server = this.server == null ? instantiateServer(testClass, configuration) : this.server;
 		EmbeddedServerRunner runner = new EmbeddedServerRunner(server);
-		JunitServerExtensionContext ctx = new JunitServerExtensionContext(
-			runner,
-			lifecycle,
-			testClass
-		);
+		JunitServerExtensionContext ctx = new JunitServerExtensionContext(runner);
 
 		ctx.getRunner().beforeAll();
 
@@ -342,11 +407,23 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		return ctx;
 	}
 
+	private JunitServerExtensionLifecycle getLifecycle(Class<?> testClass, JunitServerExtensionLifecycle defaults) {
+		if (lifecycle != null) {
+			return lifecycle;
+		}
+
+		return findLifecycle(testClass).orElse(defaults);
+	}
+
 	private static JunitServerExtensionContext findContextInStore(ExtensionContext context) {
 		return getExtensionStore(context).get(
 			JunitServerExtensionContext.class.getName(),
 			JunitServerExtensionContext.class
 		);
+	}
+
+	protected Optional<JunitServerExtensionLifecycle> findLifecycle(Class<?> testClass) {
+		return findAnnotation(testClass, JunitServerTest.class).map(JunitServerTest::lifecycle);
 	}
 
 	private static void putContextInStore(ExtensionContext context, JunitServerExtensionContext ctx) {

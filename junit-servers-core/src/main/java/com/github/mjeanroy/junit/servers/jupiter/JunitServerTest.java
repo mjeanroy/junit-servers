@@ -22,27 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty10.jupiter;
+package com.github.mjeanroy.junit.servers.jupiter;
 
-import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_CLASS;
 
-/**
- * Exception used to create a test with {@link JettyServerExtension}.
- */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@ExtendWith(JettyServerExtension.class)
+@Target({
+	ElementType.TYPE,
+})
 @Documented
-public @interface JettyTest {
+@Inherited
+@ExtendWith(JunitServerExtension.class)
+public @interface JunitServerTest {
 	/**
 	 * Lifecycle, defaults to {@link JunitServerExtensionLifecycle#PER_CLASS}.
 	 *
