@@ -43,6 +43,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.mjeanroy.junit.servers.client.HttpClientStrategy.NING_ASYNC_HTTP_CLIENT;
+import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.GLOBAL;
 import static com.github.mjeanroy.junit.servers.testing.JupiterExtensionTesting.runTests;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -56,6 +57,58 @@ class JunitServerExtensionTest {
 	void it_should_initialize_extension_with_given_configuration_and_start_given_server_before_all_tests() {
 		runTests(
 			ItShouldInitializeExtensionWithGivenConfigurationAndStartGivenServerBeforeAllTests.class
+		);
+
+		assertThat(FakeEmbeddedServer.servers).hasSize(1)
+			.are(new Condition<>(srv -> !srv.isStarted(), "isStopped"))
+			.are(new Condition<>(srv -> srv.getNbStart() == 1, "started once"))
+			.are(new Condition<>(srv -> srv.getNbStop() == 1, "stopped once"));
+	}
+
+	@Test
+	void it_should_start_server_before_all_tests_per_class() {
+		runTests(
+			ItShouldStartServerBeforeAllTestsPerClass1.class,
+			ItShouldStartServerBeforeAllTestsPerClass2.class
+		);
+
+		assertThat(FakeEmbeddedServer.servers).hasSize(2)
+			.are(new Condition<>(srv -> !srv.isStarted(), "isStopped"))
+			.are(new Condition<>(srv -> srv.getNbStart() == 1, "started once"))
+			.are(new Condition<>(srv -> srv.getNbStop() == 1, "stopped once"));
+	}
+
+	@Test
+	void it_should_start_server_before_all_tests_per_method() {
+		runTests(
+			ItShouldStartServerBeforeAllTestsPerMethod1.class,
+			ItShouldStartServerBeforeAllTestsPerMethod2.class
+		);
+
+		assertThat(FakeEmbeddedServer.servers).hasSize(4)
+			.are(new Condition<>(srv -> !srv.isStarted(), "isStopped"))
+			.are(new Condition<>(srv -> srv.getNbStart() == 1, "started once"))
+			.are(new Condition<>(srv -> srv.getNbStop() == 1, "stopped once"));
+	}
+
+	@Test
+	void it_should_start_server_before_all_tests_per_test_run() {
+		runTests(
+			ItShouldStartServerBeforeAllTestsPerTestRun1.class,
+			ItShouldStartServerBeforeAllTestsPerTestRun2.class
+		);
+
+		assertThat(FakeEmbeddedServer.servers).hasSize(1)
+			.are(new Condition<>(srv -> !srv.isStarted(), "isStopped"))
+			.are(new Condition<>(srv -> srv.getNbStart() == 1, "started once"))
+			.are(new Condition<>(srv -> srv.getNbStop() == 1, "stopped once"));
+	}
+
+	@Test
+	void it_should_start_server_before_all_tests_per_test_run_using_annotation() {
+		runTests(
+			ItShouldStartServerBeforeAllTestsPerTestRunUsingAnnotation1.class,
+			ItShouldStartServerBeforeAllTestsPerTestRunUsingAnnotation2.class
 		);
 
 		assertThat(FakeEmbeddedServer.servers).hasSize(1)
@@ -277,6 +330,142 @@ class JunitServerExtensionTest {
 		@Test
 		void test_custom_http_client(@TestHttpClient(strategy = NING_ASYNC_HTTP_CLIENT) HttpClient httpClient) {
 			assertThat(httpClient).isExactlyInstanceOf(NingAsyncHttpClient.class);
+		}
+	}
+
+	@SuppressWarnings({"JUnitMalformedDeclaration", "NewClassNamingConvention"})
+	static class ItShouldStartServerBeforeAllTestsPerClass1 {
+		@RegisterExtension
+		JunitServerExtension extension = new JunitServerExtension(
+			JunitServerExtensionLifecycle.PER_CLASS
+		);
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+	}
+
+	@SuppressWarnings({"JUnitMalformedDeclaration", "NewClassNamingConvention"})
+	static class ItShouldStartServerBeforeAllTestsPerClass2 {
+		@RegisterExtension
+		JunitServerExtension extension = new JunitServerExtension(
+			JunitServerExtensionLifecycle.PER_CLASS
+		);
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+	}
+
+	@SuppressWarnings({"JUnitMalformedDeclaration", "NewClassNamingConvention"})
+	static class ItShouldStartServerBeforeAllTestsPerMethod1 {
+		@RegisterExtension
+		static JunitServerExtension extension = new JunitServerExtension(
+			JunitServerExtensionLifecycle.PER_METHOD
+		);
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+	}
+
+	@SuppressWarnings({"JUnitMalformedDeclaration", "NewClassNamingConvention"})
+	static class ItShouldStartServerBeforeAllTestsPerMethod2 {
+		@RegisterExtension
+		static JunitServerExtension extension = new JunitServerExtension(
+			JunitServerExtensionLifecycle.PER_METHOD
+		);
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+	}
+
+	@SuppressWarnings({"JUnitMalformedDeclaration", "NewClassNamingConvention"})
+	static class ItShouldStartServerBeforeAllTestsPerTestRun1 {
+		@RegisterExtension
+		static JunitServerExtension extension = new JunitServerExtension(
+			GLOBAL
+		);
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+	}
+
+	@SuppressWarnings({"JUnitMalformedDeclaration", "NewClassNamingConvention"})
+	static class ItShouldStartServerBeforeAllTestsPerTestRun2 {
+		@RegisterExtension
+		static JunitServerExtension extension = new JunitServerExtension(
+			GLOBAL
+		);
+
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+	}
+
+	@SuppressWarnings({"JUnitMalformedDeclaration", "NewClassNamingConvention"})
+	@JunitServerTest(lifecycle = GLOBAL)
+	static class ItShouldStartServerBeforeAllTestsPerTestRunUsingAnnotation1 {
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+	}
+
+	@SuppressWarnings({"JUnitMalformedDeclaration", "NewClassNamingConvention"})
+	@JunitServerTest(lifecycle = GLOBAL)
+	static class ItShouldStartServerBeforeAllTestsPerTestRunUsingAnnotation2 {
+		@Test
+		void test1(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
+		}
+
+		@Test
+		void test2(EmbeddedServer<?> server) {
+			assertThat(server).isNotNull();
 		}
 	}
 }

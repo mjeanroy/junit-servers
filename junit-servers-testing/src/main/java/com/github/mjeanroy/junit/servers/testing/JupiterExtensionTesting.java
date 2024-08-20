@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.testing;
 
 import org.junit.jupiter.api.Test;
+import org.junit.platform.engine.discovery.ClassSelector;
 import org.junit.platform.engine.discovery.DiscoverySelectors;
 import org.junit.platform.testkit.engine.EngineExecutionResults;
 import org.junit.platform.testkit.engine.EngineTestKit;
@@ -36,21 +37,38 @@ public final class JupiterExtensionTesting {
 	private JupiterExtensionTesting() {
 	}
 
-	public static void runTests(Class<?> klass) {
+	public static void runTests(Class<?> klass, Class<?> ...otherKlasses) {
+		ClassSelector[] classSelectors = new ClassSelector[otherKlasses.length + 1];
+		classSelectors[0] = DiscoverySelectors.selectClass(klass);
+		for (int i = 0; i < otherKlasses.length; i++) {
+			classSelectors[i + 1] = DiscoverySelectors.selectClass(otherKlasses[i]);
+		}
+
 		EngineExecutionResults results = EngineTestKit.engine("junit-jupiter")
-			.selectors(DiscoverySelectors.selectClass(klass))
+			.selectors(classSelectors)
 			.execute();
 
-		int nbTests = countTests(klass);
+		int nbTests = countTests(klass, otherKlasses);
 		results.testEvents().assertStatistics(stats ->
 			stats.started(nbTests).succeeded(nbTests)
 		);
 	}
 
-	private static int countTests(Class<?> klass) {
+	private static int countTests(Class<?> klass, Class<?> ...otherKlasses) {
+		int nbTests = countClassTests(klass);
+
+		for (Class<?> otherClass : otherKlasses) {
+			nbTests += countClassTests(otherClass);
+		}
+
+		return nbTests;
+	}
+
+	private static int countClassTests(Class<?> klass) {
 		int count = 0;
 
 		Class<?> currentKlass = klass;
+
 		while (currentKlass != null && currentKlass != Object.class) {
 			for (Method method : klass.getDeclaredMethods()) {
 				if (method.isAnnotationPresent(Test.class)) {

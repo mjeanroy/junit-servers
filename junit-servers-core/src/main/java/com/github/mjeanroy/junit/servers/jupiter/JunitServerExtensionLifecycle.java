@@ -24,14 +24,50 @@
 
 package com.github.mjeanroy.junit.servers.jupiter;
 
-enum JunitServerExtensionLifecycle {
+import org.junit.jupiter.api.extension.ExtensionContext;
+
+public enum JunitServerExtensionLifecycle {
+	/**
+	 * Start/stop embedded server before/after all tests in all classes.
+	 */
+	GLOBAL {
+		@Override
+		ExtensionContext getExtensionContext(ExtensionContext context) {
+			return context.getRoot();
+		}
+	},
+
 	/**
 	 * Start/stop embedded server before/after all tests in a class.
 	 */
-	PER_CLASS,
+	PER_CLASS {
+		@Override
+		ExtensionContext getExtensionContext(ExtensionContext context) {
+			ExtensionContext current = context;
+			ExtensionContext root = context.getRoot();
+
+			while (current != root) {
+				ExtensionContext parent = current.getParent().orElse(null);
+				if (parent == null || parent == root) {
+					return current;
+				}
+
+				current = parent;
+			}
+
+			return context;
+		}
+	},
 
 	/**
 	 * Start/stop embedded server before/after any tests in a class.
 	 */
-	PER_METHOD
+	PER_METHOD {
+		@Override
+		ExtensionContext getExtensionContext(ExtensionContext context) {
+			return context;
+		}
+	};
+
+	abstract ExtensionContext getExtensionContext(ExtensionContext context);
 }

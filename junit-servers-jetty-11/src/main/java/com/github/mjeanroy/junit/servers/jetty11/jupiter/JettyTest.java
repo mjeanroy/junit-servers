@@ -24,6 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.jetty11.jupiter;
 
+import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.Documented;
@@ -31,6 +32,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_CLASS;
 
 /**
  * Exception used to create a test with {@link JettyServerExtension}.
@@ -40,4 +43,10 @@ import java.lang.annotation.Target;
 @ExtendWith(JettyServerExtension.class)
 @Documented
 public @interface JettyTest {
+	/**
+	 * Lifecycle, defaults to {@link JunitServerExtensionLifecycle#PER_CLASS}.
+	 *
+	 * @return Lifecycle.
+	 */
+	JunitServerExtensionLifecycle lifecycle() default PER_CLASS;
 }

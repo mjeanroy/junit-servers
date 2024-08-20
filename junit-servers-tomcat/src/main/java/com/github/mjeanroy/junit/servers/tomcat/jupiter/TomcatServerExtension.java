@@ -25,6 +25,7 @@
 package com.github.mjeanroy.junit.servers.tomcat.jupiter;
 
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
+import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle;
 import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
@@ -60,6 +61,18 @@ public class TomcatServerExtension extends JunitServerExtension {
 	 */
 	public TomcatServerExtension() {
 		super();
+		logDeprecationWarning();
+	}
+
+	/**
+	 * Create the jupiter with default behavior.
+	 *
+	 * @param lifecycle The extension lifecycle.
+	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
+	 */
+	public TomcatServerExtension(JunitServerExtensionLifecycle lifecycle) {
+		super(lifecycle);
+		logDeprecationWarning();
 	}
 
 	/**
@@ -70,7 +83,19 @@ public class TomcatServerExtension extends JunitServerExtension {
 	 */
 	public TomcatServerExtension(EmbeddedTomcat tomcat) {
 		super(tomcat);
-		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", TomcatServerExtension.class);
+		logDeprecationWarning();
+	}
+
+	/**
+	 * Create the jupiter and specify the embedded tomcat instance to use.
+	 *
+	 * @param tomcat The embedded tomcat instance to use.
+	 * @throws NullPointerException If {@code tomcat} is {@code null}.
+	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
+	 */
+	public TomcatServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedTomcat tomcat) {
+		super(lifecycle, tomcat);
+		logDeprecationWarning();
 	}
 
 	/**
@@ -82,6 +107,24 @@ public class TomcatServerExtension extends JunitServerExtension {
 	 */
 	public TomcatServerExtension(EmbeddedTomcatConfiguration configuration) {
 		super(configuration);
+		logDeprecationWarning();
+	}
+
+	/**
+	 * Create the jupiter and specify the embedded tomcat configuration to use (when using
+	 * jupiter with {@link RegisterExtension}).
+	 *
+	 * @param lifecycle The extension lifecycle.
+	 * @param configuration The embedded tomcat configuration to use.
+	 * @throws NullPointerException If {@code configuration} is {@code null}.
+	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
+	 */
+	public TomcatServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedTomcatConfiguration configuration) {
+		super(lifecycle, configuration);
+		logDeprecationWarning();
+	}
+
+	private static void logDeprecationWarning() {
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", TomcatServerExtension.class);
 	}
 
