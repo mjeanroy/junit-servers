@@ -31,7 +31,7 @@
   <parent>
     <artifactId>junit-servers-samples-jupiter</artifactId>
     <groupId>com.github.mjeanroy</groupId>
-    <version>3.2.1-SNAPSHOT</version>
+    <version>3.3.0</version>
   </parent>
 
   <artifactId>junit-servers-samples-jupiter-spring-tomcat-8</artifactId>
