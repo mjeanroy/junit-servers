@@ -144,11 +144,6 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	private static final Logger log = LoggerFactory.getLogger(JunitServerExtension.class);
 
 	/**
-	 * The namespace where each jupiter variable will be stored.
-	 */
-	private static final Namespace NAMESPACE = Namespace.create(JunitServerExtension.class.getName());
-
-	/**
 	 * The list of parameter resolvers.
 	 */
 	private static final Map<Class<?>, ParameterResolverFunction> RESOLVERS = new HashMap<>();
@@ -175,13 +170,16 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	private final JunitServerExtensionLifecycle lifecycle;
 
 	/**
+	 * The extension namespace.
+	 */
+	private final Namespace namespace;
+
+	/**
 	 * Create the jupiter with default server that will be automatically detected using the Service Provider
 	 * API.
 	 */
 	public JunitServerExtension() {
-		this.server = null;
-		this.configuration = null;
-		this.lifecycle = null;
+		this(null, null, null);
 	}
 
 	/**
@@ -192,9 +190,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
 	 */
 	public JunitServerExtension(JunitServerExtensionLifecycle lifecycle) {
-		this.server = null;
-		this.configuration = null;
-		this.lifecycle = notNull(lifecycle, "lifecycle");
+		this(notNull(lifecycle, "lifecycle"), null, null);
 	}
 
 	/**
@@ -204,9 +200,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @throws NullPointerException If {@code server} is {@code null}.
 	 */
 	public JunitServerExtension(EmbeddedServer<?> server) {
-		this.server = notNull(server, "server");
-		this.configuration = null;
-		this.lifecycle = null;
+		this(null, null, notNull(server, "server"));
 	}
 
 	/**
@@ -218,9 +212,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
 	 */
 	public JunitServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedServer<?> server) {
-		this.server = notNull(server, "server");
-		this.configuration = null;
-		this.lifecycle = notNull(lifecycle, "lifecycle");
+		this(notNull(lifecycle, "lifecycle"), null, notNull(server, "server"));
 	}
 
 	/**
@@ -230,9 +222,7 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @throws NullPointerException If {@code configuration} is {@code null}.
 	 */
 	public JunitServerExtension(AbstractConfiguration configuration) {
-		this.server = null;
-		this.configuration = configuration;
-		this.lifecycle = null;
+		this(null, configuration, null);
 	}
 
 	/**
@@ -244,9 +234,18 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
 	 */
 	public JunitServerExtension(JunitServerExtensionLifecycle lifecycle, AbstractConfiguration configuration) {
-		this.server = null;
+		this(notNull(lifecycle, "lifecycle"), configuration, null);
+	}
+
+	private JunitServerExtension(
+		JunitServerExtensionLifecycle lifecycle,
+		AbstractConfiguration configuration,
+		EmbeddedServer<?> server
+	) {
+		this.lifecycle = lifecycle;
 		this.configuration = configuration;
-		this.lifecycle = notNull(lifecycle, "lifecycle");
+		this.server = server;
+		this.namespace = Namespace.create(getClass().getName());
 	}
 
 	@Override
@@ -415,23 +414,23 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		return findLifecycle(testClass).orElse(defaults);
 	}
 
-	private static JunitServerExtensionContext findContextInStore(ExtensionContext context) {
+	protected Optional<JunitServerExtensionLifecycle> findLifecycle(Class<?> testClass) {
+		return findAnnotation(testClass, JunitServerTest.class).map(JunitServerTest::lifecycle);
+	}
+
+	private JunitServerExtensionContext findContextInStore(ExtensionContext context) {
 		return getExtensionStore(context).get(
 			JunitServerExtensionContext.class.getName(),
 			JunitServerExtensionContext.class
 		);
 	}
 
-	protected Optional<JunitServerExtensionLifecycle> findLifecycle(Class<?> testClass) {
-		return findAnnotation(testClass, JunitServerTest.class).map(JunitServerTest::lifecycle);
-	}
-
-	private static void putContextInStore(ExtensionContext context, JunitServerExtensionContext ctx) {
+	private void putContextInStore(ExtensionContext context, JunitServerExtensionContext ctx) {
 		log.debug("Store context to junit extension context");
 		getExtensionStore(context).put(ctx.getClass().getName(), ctx);
 	}
 
-	private static Store getExtensionStore(ExtensionContext extensionContext) {
-		return extensionContext.getStore(NAMESPACE);
+	private Store getExtensionStore(ExtensionContext extensionContext) {
+		return extensionContext.getStore(namespace);
 	}
 }
