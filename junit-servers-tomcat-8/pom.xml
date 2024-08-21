@@ -31,7 +31,7 @@
   <parent>
     <artifactId>junit-servers</artifactId>
     <groupId>com.github.mjeanroy</groupId>
-    <version>3.3.0</version>
+    <version>3.3.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>junit-servers-tomcat-8</artifactId>
