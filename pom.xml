@@ -112,7 +112,7 @@
     <junit-jupiter.version>5.11.2</junit-jupiter.version>
     <junit-platform-testkit.version>1.11.2</junit-platform-testkit.version>
     <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
-    <mockito.version>4.11.0</mockito.version>
+    <mockito.version>5.14.2</mockito.version>
     <assertj.version>3.26.3</assertj.version>
     <commons-lang3.version>3.17.0</commons-lang3.version>
     <ning-async-http-client.version>1.9.40</ning-async-http-client.version>
