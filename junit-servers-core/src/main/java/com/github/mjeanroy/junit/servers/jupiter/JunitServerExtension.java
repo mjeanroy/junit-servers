@@ -414,6 +414,15 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		return findLifecycle(testClass).orElse(defaults);
 	}
 
+	/**
+	 * Find configured embedded server {@link JunitServerExtensionLifecycle lifecycle}, defaults
+	 * to {@link JunitServerExtensionLifecycle#PER_CLASS} for backward compatibility reasons,
+	 * but {@link JunitServerExtensionLifecycle#GLOBAL} is the recommended setup and will become the
+	 * default in the next major release.
+	 *
+	 * @param testClass The tested class.
+	 * @return The lifecycle configuration, may be empty and will default to {@link JunitServerExtensionLifecycle#PER_CLASS} in this case.
+	 */
 	protected Optional<JunitServerExtensionLifecycle> findLifecycle(Class<?> testClass) {
 		return findAnnotation(testClass, JunitServerTest.class).map(JunitServerTest::lifecycle);
 	}

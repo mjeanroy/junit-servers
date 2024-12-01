@@ -26,6 +26,13 @@ package com.github.mjeanroy.junit.servers.jupiter;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+/**
+ * The embedded server lifecycle:
+ * <ul>
+ *   <li>Global: only one instance is shared and re-used across all tests.</li>
+ *   <li>Per class: Embedded server is started/stopped before all/after all tests in a given class.</li>
+ * </ul>
+ */
 public enum JunitServerExtensionLifecycle {
 	/**
 	 * Start/stop embedded server before/after all tests in all classes.

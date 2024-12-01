@@ -35,6 +35,10 @@ import java.lang.annotation.Target;
 
 import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_CLASS;
 
+/**
+ * Marker annotation that enable {@link JunitServerExtension} and allows configuring
+ * the embedded server {@link JunitServerExtensionLifecycle lifecycle}.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({
 	ElementType.TYPE,
@@ -44,7 +48,9 @@ import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLife
 @ExtendWith(JunitServerExtension.class)
 public @interface JunitServerTest {
 	/**
-	 * Lifecycle, defaults to {@link JunitServerExtensionLifecycle#PER_CLASS}.
+	 * Lifecycle, defaults to {@link JunitServerExtensionLifecycle#PER_CLASS} for backward
+	 * compatibility reasons, but {@link JunitServerExtensionLifecycle#GLOBAL} is the recommended
+	 * settings.
 	 *
 	 * @return Lifecycle.
 	 */
