@@ -16,7 +16,7 @@
   <description>Add Jetty 12 Embedded Server to your junit tests case.</description>
 
   <properties>
-    <java-module-name>com.github.mjeanroy.junit.servers.jetty9</java-module-name>
+    <java-module-name>com.github.mjeanroy.junit.servers.jetty12</java-module-name>
   </properties>
 
   <dependencies>
