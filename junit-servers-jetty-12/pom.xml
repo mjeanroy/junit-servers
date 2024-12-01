@@ -17,6 +17,7 @@
 
   <properties>
     <java-module-name>com.github.mjeanroy.junit.servers.jetty12</java-module-name>
+    <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
   </properties>
 
   <dependencies>
@@ -81,6 +82,12 @@
       <groupId>org.eclipse.jetty.websocket</groupId>
       <artifactId>jetty-websocket-jetty-server</artifactId>
       <version>${jetty12.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>${jakarta.servlet-api.version}</version>
     </dependency>
 
     <dependency>
