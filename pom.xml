@@ -106,7 +106,7 @@
 
     <tomcat8.version>8.5.100</tomcat8.version>
     <tomcat9.version>9.0.93</tomcat9.version>
-    <tomcat10.version>10.1.28</tomcat10.version>
+    <tomcat10.version>10.1.33</tomcat10.version>
 
     <junit.version>4.13.2</junit.version>
     <junit-jupiter.version>5.11.3</junit-jupiter.version>
