@@ -41,7 +41,10 @@ import org.eclipse.jetty.util.resource.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 
+import static com.github.mjeanroy.junit.servers.commons.io.Ios.toFilePath;
 import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
 
 /**
@@ -224,8 +227,9 @@ public abstract class AbstractBaseEmbeddedJetty<
 
 		// Jetty needs a baseResource to starts properly.
 		if (!isValidAndExistingResource(actualBaseResource) && !isValidAndExistingResource(webappResource)) {
-			log.warn("No resource base/war resource set, switching to fallback alternative");
-			ctx.setBaseResource(actualBaseResource);
+			Resource commonBaseResource = findCommonBaseResource(ctx);
+			log.warn("No resource base/war resource set, defaulting to: {}", commonBaseResource);
+			ctx.setBaseResource(commonBaseResource);
 		}
 
 		ctx.setServer(server);
@@ -234,6 +238,39 @@ public abstract class AbstractBaseEmbeddedJetty<
 		server.setHandler(ctx);
 
 		return ctx;
+	}
+
+	private Resource findCommonBaseResource(CONTEXT ctx) throws IOException {
+		// List of common path that we will check one by one
+		List<String> commonPaths = Arrays.asList(
+			toFilePath("src", "main", "webapp"),
+			toFilePath("src", "main", "resources", "static"),
+			toFilePath("src", "main", "resources", "public"),
+			toFilePath("src", "main", "resources", "static-root"),
+			toFilePath("src", "main", "resources", "resources"),
+			toFilePath("static"),
+			toFilePath("public"),
+			toFilePath("static-root"),
+			toFilePath("resources")
+		);
+
+		for (String commonPath : commonPaths) {
+			Resource resource = tryResource(ctx, commonPath);
+			if (resource != null && resource.exists()) {
+				return resource;
+			}
+		}
+
+		// Fallback to user.dir :/
+		return newResource(ctx, System.getProperty("user.dir"));
+	}
+
+	private Resource tryResource(CONTEXT ctx, String path) {
+		try {
+			return newResource(ctx, path);
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 	private static boolean isValidAndExistingResource(Resource resource) {

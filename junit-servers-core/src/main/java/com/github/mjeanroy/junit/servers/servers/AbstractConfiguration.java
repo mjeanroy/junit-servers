@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.github.mjeanroy.junit.servers.commons.io.Ios.toFilePath;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.positive;
 import static java.util.Collections.emptyList;
@@ -53,7 +54,7 @@ public abstract class AbstractConfiguration {
 	/**
 	 * The default webapp value.
 	 */
-	static final String DEFAULT_WEBAPP = "src/main/webapp";
+	static final String DEFAULT_WEBAPP = toFilePath("src", "main", "webapp");
 
 	/**
 	 * The default classpath.

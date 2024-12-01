@@ -28,6 +28,7 @@ import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
@@ -108,6 +109,22 @@ public final class Ios {
 		}
 
 		return mimeType;
+	}
+
+	/**
+	 * Build file path using OS default file separator.
+	 * @param path Root path.
+	 * @param subPaths Sub paths.
+	 * @return The full path.
+	 */
+	public static String toFilePath(String path, String... subPaths) {
+		StringBuilder output = new StringBuilder(path);
+
+		for (String subPath : subPaths) {
+			output.append(File.separator).append(subPath);
+		}
+
+		return output.toString();
 	}
 
 	private static String tryProbeContentType(Path path) {

@@ -29,9 +29,11 @@ import nl.jqno.equalsverifier.Warning;
 import org.eclipse.jetty.util.resource.Resource;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -44,7 +46,9 @@ class EmbeddedJettyConfigurationTest {
 		assertThat(result.getPort()).isEqualTo(0);
 		assertThat(result.getPath()).isEqualTo("/");
 		assertThat(result.getClasspath()).isEqualTo(".");
-		assertThat(result.getWebapp()).isEqualTo("src/main/webapp");
+		assertThat(result.getWebapp()).isEqualTo(
+			String.join(File.separator, asList("src", "main", "webapp"))
+		);
 		assertThat(result.isDirAllowed()).isTrue();
 	}
 
@@ -103,7 +107,7 @@ class EmbeddedJettyConfigurationTest {
 			"EmbeddedJettyConfiguration{" +
 				"port: 0, " +
 				"path: \"/\", " +
-				"webapp: \"src/main/webapp\", " +
+				"webapp: \"" + String.join(File.separator, asList("src", "main", "webapp")) + "\", " +
 				"classpath: \".\", " +
 				"overrideDescriptor: null, " +
 				"parentClassLoader: null, " +

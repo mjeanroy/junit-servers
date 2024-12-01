@@ -55,9 +55,8 @@ class EmbeddedJettyTest {
 			assertThat(jetty.getPort()).isNotZero();
 			assertThat(jetty.getUrl()).isEqualTo(localhost(jetty.getPort()));
 
-			// Since there is no webapp deployed, we should get an error status
 			HttpResponse rsp = get(jetty.getUrl());
-			assertThat(rsp.getStatusCode()).isNotEqualTo(200);
+			assertThat(rsp.getStatusCode()).isEqualTo(200);
 			assertThat(rsp.getResponseBody()).isNotEmpty();
 		});
 	}
