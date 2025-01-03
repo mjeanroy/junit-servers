@@ -35,3 +35,6 @@ updates:
     # logback-classic >= 1.4.0 requires Java 11
     - dependency-name: ch.qos.logback:logback-classic
       update-types: ["version-update:semver-major", "version-update:semver-minor"]
+    # mockito-core >= 5.0.0 requires Java 11
+    - dependency-name: org.mockito:mockito-core
+      update-types: ["version-update:semver-major"]
