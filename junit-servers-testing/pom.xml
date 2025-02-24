@@ -37,6 +37,11 @@
       <artifactId>junit-platform-testkit</artifactId>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-engine</artifactId>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>
