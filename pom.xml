@@ -113,7 +113,7 @@
     <junit-platform.version>1.13.4</junit-platform.version>
     <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
     <mockito.version>4.11.0</mockito.version>
-    <assertj.version>3.27.3</assertj.version>
+    <assertj.version>3.27.4</assertj.version>
     <commons-lang3.version>3.18.0</commons-lang3.version>
     <ning-async-http-client.version>1.9.40</ning-async-http-client.version>
     <async-http-client.version>2.12.3</async-http-client.version>
