@@ -99,7 +99,7 @@
 
     <java-module-name>com.github.mjeanroy.junit.servers</java-module-name>
 
-    <jetty9.version>9.4.57.v20241219</jetty9.version>
+    <jetty9.version>9.4.58.v20250814</jetty9.version>
     <jetty10.version>10.0.24</jetty10.version>
     <jetty11.version>11.0.24</jetty11.version>
     <jetty12.version>12.0.15</jetty12.version>
