@@ -145,6 +145,7 @@ public abstract class AbstractBaseEmbeddedJetty<
 		final Resource baseResource = configuration.getBaseResource();
 		final String containerJarPattern = configuration.getContainerJarPattern();
 		final String webInfJarPattern = configuration.getWebInfJarPattern();
+		final String tempDirectory = configuration.getTempDirectory();
 
 		final CONTEXT ctx = newWebAppContext();
 
@@ -200,6 +201,11 @@ public abstract class AbstractBaseEmbeddedJetty<
 		if (overrideDescriptor != null) {
 			log.debug("Set jetty descriptor: {}", overrideDescriptor);
 			setOverrideDescriptor(ctx, overrideDescriptor);
+		}
+
+		if (tempDirectory != null) {
+			log.debug("Set jetty temp directory: {}", tempDirectory);
+			setTempDirectory(ctx, tempDirectory);
 		}
 
 		log.debug("Initializing jetty configuration classes");
@@ -341,6 +347,14 @@ public abstract class AbstractBaseEmbeddedJetty<
 	 * @param overrideDescriptor The {@code overrideDescriptor} value.
 	 */
 	protected abstract void setOverrideDescriptor(CONTEXT context, String overrideDescriptor);
+
+	/**
+	 * Set WebAppContext {@code overrideDescriptor} value.
+	 *
+	 * @param context Jetty WebAppContext.
+	 * @param tempDirectory The {@code overrideDescriptor} value.
+	 */
+	protected abstract void setTempDirectory(CONTEXT context, String tempDirectory);
 
 	/**
 	 * Initialize Jetty WebAppContext configuration classes.

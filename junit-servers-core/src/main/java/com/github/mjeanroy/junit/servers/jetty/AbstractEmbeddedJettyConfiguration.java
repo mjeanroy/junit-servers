@@ -80,6 +80,11 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	 */
 	private final boolean dirAllowed;
 
+	/**
+	 * The jetty temp directory.
+	 */
+	private final String tempDirectory;
+
 	AbstractEmbeddedJettyConfiguration(
 			AbstractEmbeddedJettyConfigurationBuilder<?, ?> builder
 	) {
@@ -100,6 +105,7 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 		this.containerJarPattern = builder.getContainerJarPattern();
 		this.webInfJarPattern = builder.getWebInfJarPattern();
 		this.dirAllowed = builder.isDirAllowed();
+		this.tempDirectory = builder.getTempDirectory();
 	}
 
 	/**
@@ -156,6 +162,15 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 		return dirAllowed;
 	}
 
+	/**
+	 * Get {@code tempDirectory}
+	 *
+	 * @return {@link #tempDirectory}
+	 */
+	public String getTempDirectory() {
+		return tempDirectory;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this) {
@@ -171,7 +186,8 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 				&& Objects.equals(baseResource, c.baseResource)
 				&& Objects.equals(containerJarPattern, c.containerJarPattern)
 				&& Objects.equals(webInfJarPattern, c.webInfJarPattern)
-				&& Objects.equals(dirAllowed, c.dirAllowed);
+				&& Objects.equals(dirAllowed, c.dirAllowed)
+				&& Objects.equals(tempDirectory, c.tempDirectory);
 		}
 
 		return false;
@@ -186,7 +202,8 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 			baseResource,
 			containerJarPattern,
 			webInfJarPattern,
-			dirAllowed
+			dirAllowed,
+			tempDirectory
 		);
 	}
 
@@ -205,6 +222,7 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 			.append("containerJarPattern", containerJarPattern)
 			.append("webInfJarPattern", webInfJarPattern)
 			.append("dirAllowed", dirAllowed)
+			.append("tempDirectory", tempDirectory)
 			.build();
 	}
 }

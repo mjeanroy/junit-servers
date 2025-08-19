@@ -116,7 +116,8 @@ class EmbeddedJettyConfigurationTest {
 				"baseResource: null, " +
 				"containerJarPattern: null, " +
 				"webInfJarPattern: null, " +
-				"dirAllowed: true" +
+				"dirAllowed: true, " +
+				"tempDirectory: \"" + new File("jsp").getAbsolutePath() + "\"" +
 			"}"
 		);
 	}

@@ -27,6 +27,9 @@ package com.github.mjeanroy.junit.servers.jetty;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfigurationBuilder;
 import org.eclipse.jetty.util.resource.Resource;
 
+import java.io.File;
+import java.util.UUID;
+
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.positive;
 import static com.github.mjeanroy.junit.servers.jetty.AbstractEmbeddedJettyConfiguration.DEFAULT_STOP_AT_SHUTDOWN;
 import static com.github.mjeanroy.junit.servers.jetty.AbstractEmbeddedJettyConfiguration.DEFAULT_STOP_TIMEOUT;
@@ -83,10 +86,19 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 */
 	private boolean dirAllowed;
 
+	/**
+	 * The jetty temp directory.
+	 */
+	private String tempDirectory;
+
 	protected AbstractEmbeddedJettyConfigurationBuilder() {
 		stopTimeout = DEFAULT_STOP_TIMEOUT;
 		stopAtShutdown = DEFAULT_STOP_AT_SHUTDOWN;
 		dirAllowed = true;
+
+		// With jetty < 12.1.0, this was the default (i.e a `jsp` directory inside the current working directory).
+		// With jetty >= 12.1.0, it seems it needs to be explicitely set.
+		tempDirectory = new File("jsp").getAbsolutePath();;
 	}
 
 	/**
@@ -141,6 +153,15 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 */
 	public boolean isDirAllowed() {
 		return dirAllowed;
+	}
+
+	/**
+	 * Get current {@code tempDirectory} value.
+	 *
+	 * @return {@link #tempDirectory}
+	 */
+	public String getTempDirectory() {
+		return tempDirectory;
 	}
 
 	/**
@@ -224,6 +245,27 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	 */
 	public SELF withDirAllowed(boolean dirAllowed) {
 		this.dirAllowed = dirAllowed;
+		return self();
+	}
+
+	/**
+	 * Change {@code tempDirectory} value.
+	 *
+	 * @param tempDirectory Jetty Temp Directory.
+	 * @return this
+	 */
+	public SELF withTempDirectory(String tempDirectory) {
+		this.tempDirectory = tempDirectory;
+		return self();
+	}
+
+	/**
+	 * Change {@code tempDirectory} value to use a random directory inside `java.io.tmpdir`.
+	 *
+	 * @return this
+	 */
+	public SELF withRandomTempDirectory() {
+		this.tempDirectory = System.getProperty("java.io.tmpdir") + "/" + UUID.randomUUID();
 		return self();
 	}
 }

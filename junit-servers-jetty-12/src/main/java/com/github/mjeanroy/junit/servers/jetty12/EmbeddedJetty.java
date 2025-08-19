@@ -36,6 +36,7 @@ import org.eclipse.jetty.ee10.webapp.WebXmlConfiguration;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceFactory;
 
+import java.io.File;
 import java.net.URI;
 
 import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
@@ -79,6 +80,11 @@ public class EmbeddedJetty extends AbstractBaseEmbeddedJetty<WebAppContext, Embe
 	@Override
 	protected final void setOverrideDescriptor(WebAppContext webAppContext, String overrideDescriptor) {
 		webAppContext.setOverrideDescriptor(overrideDescriptor);
+	}
+
+	@Override
+	protected final void setTempDirectory(WebAppContext webAppContext, String tempDirectory) {
+		webAppContext.setTempDirectory(new File(tempDirectory));
 	}
 
 	@Override
