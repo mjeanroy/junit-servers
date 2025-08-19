@@ -65,7 +65,7 @@ jobs:
           check-latest: true
 
           # ID of the distributionManagement repository in the pom.xml file.
-          server-id: 'sonatype-nexus-staging'
+          server-id: 'central'
 
           # Environment variable name for the username for authentication to the Apache Maven repository.
           server-username: MAVEN_USERNAME

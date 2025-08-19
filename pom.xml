@@ -60,15 +60,10 @@
   </developers>
 
   <distributionManagement>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
     <repository>
-      <id>sonatype-nexus-staging</id>
-      <name>Nexus Release Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      <id>central</id>
+      <name>Sonatype Release Repository</name>
+      <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2</url>
     </repository>
   </distributionManagement>
 
@@ -90,10 +85,10 @@
     <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
     <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
     <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
-    <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
     <maven-site-plugin.version>3.21.0</maven-site-plugin.version>
     <maven-enforcer-plugin.version>3.6.1</maven-enforcer-plugin.version>
 
+    <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
     <apache-rat-plugin.version>0.16.1</apache-rat-plugin.version>
     <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
 
@@ -291,6 +286,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>${maven-deploy-plugin.version}</version>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -407,6 +405,24 @@
           <artifactId>versions-maven-plugin</artifactId>
           <version>${versions-maven-plugin.version}</version>
         </plugin>
+
+        <plugin>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>${central-publishing-maven-plugin.version}</version>
+          <configuration>
+            <publishingServerId>central</publishingServerId>
+          </configuration>
+          <executions>
+            <execution>
+              <id>publish-to-maven-central</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>publish</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -501,6 +517,12 @@
       <id>release</id>
       <build>
         <plugins>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <inherited>false</inherited>
+          </plugin>
+
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
