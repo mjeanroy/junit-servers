@@ -17,6 +17,7 @@
 
   <properties>
     <java-module-name>com.github.mjeanroy.junit.servers.testing</java-module-name>
+    <central.skip.bundling>true</central.skip.bundling>
   </properties>
 
   <dependencies>
