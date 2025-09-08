@@ -99,7 +99,7 @@
     <jetty11.version>11.0.26</jetty11.version>
     <jetty12.version>12.0.25</jetty12.version>
 
-    <tomcat8.version>8.5.100</tomcat8.version>
+    <tomcat8.version>11.0.11</tomcat8.version>
     <tomcat9.version>9.0.108</tomcat9.version>
     <tomcat10.version>10.1.44</tomcat10.version>
 
