@@ -104,7 +104,7 @@
     <tomcat10.version>10.1.44</tomcat10.version>
 
     <junit.version>4.13.2</junit.version>
-    <junit-jupiter.version>5.13.4</junit-jupiter.version>
+    <junit-jupiter.version>6.0.0</junit-jupiter.version>
     <junit-platform.version>1.13.4</junit-platform.version>
     <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
     <mockito.version>4.11.0</mockito.version>
