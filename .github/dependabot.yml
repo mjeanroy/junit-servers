@@ -38,3 +38,6 @@ updates:
     # mockito-core >= 5.0.0 requires Java 11
     - dependency-name: org.mockito:mockito-core
       update-types: ["version-update:semver-major"]
+    # equalsverifier >= 4.0.0 requires Java 11
+    - dependency-name: nl.jqno.equalsverifier:equalsverifier
+      update-types: [ "version-update:semver-major" ]
