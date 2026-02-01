@@ -25,7 +25,7 @@
 package com.github.mjeanroy.junit.servers.samples.jetty.jupiter;
 
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.jetty12.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty12ee10.EmbeddedJetty;
 import org.junit.jupiter.api.Test;
 
 import static com.github.mjeanroy.junit.servers.samples.utils.WebTestUtils.ensureIndexIsOk;

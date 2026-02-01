@@ -27,8 +27,8 @@ package com.github.mjeanroy.junit.servers.samples.jetty.jupiter;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.jetty12.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty12.jupiter.JettyServerExtension;
+import com.github.mjeanroy.junit.servers.jetty12ee10.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty12ee10.jupiter.JettyServerExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
