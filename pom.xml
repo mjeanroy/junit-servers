@@ -505,6 +505,7 @@
         <module>junit-servers-jetty-10</module>
         <module>junit-servers-jetty-11</module>
         <module>junit-servers-jetty-12</module>
+        <module>junit-servers-jetty-12-ee11</module>
         <module>junit-servers-tomcat</module>
         <module>junit-servers-tomcat-8</module>
         <module>junit-servers-tomcat-9</module>
