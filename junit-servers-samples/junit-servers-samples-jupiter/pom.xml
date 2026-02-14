@@ -61,6 +61,8 @@
         <module>junit-servers-samples-jupiter-spring-jetty-9</module>
         <module>junit-servers-samples-jupiter-spring-jetty-10</module>
         <module>junit-servers-samples-jupiter-spring-jetty-12</module>
+        <module>junit-servers-samples-jupiter-spring-jetty-12-ee10</module>
+        <module>junit-servers-samples-jupiter-spring-jetty-12-ee11</module>
         <module>junit-servers-samples-jupiter-spring-tomcat-8</module>
       </modules>
     </profile>
