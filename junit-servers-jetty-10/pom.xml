@@ -31,7 +31,7 @@
   <parent>
     <artifactId>junit-servers</artifactId>
     <groupId>com.github.mjeanroy</groupId>
-    <version>3.4.1-SNAPSHOT</version>
+    <version>3.5.0</version>
   </parent>
 
   <artifactId>junit-servers-jetty-10</artifactId>
