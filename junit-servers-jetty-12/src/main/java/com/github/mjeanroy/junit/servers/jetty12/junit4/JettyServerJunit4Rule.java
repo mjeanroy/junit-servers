@@ -22,31 +22,38 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty12ee10.jupiter;
+package com.github.mjeanroy.junit.servers.jetty12.junit4;
 
-import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_CLASS;
+import com.github.mjeanroy.junit.servers.jetty12.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.junit4.ServerRule;
+import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
 /**
- * Exception used to create a test with {@link JettyServerExtension}.
+ * Rule that can be used to start and stop embedded jetty server.
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@ExtendWith(JettyServerExtension.class)
-@Documented
-public @interface JettyTest {
+public class JettyServerJunit4Rule extends ServerRule {
 	/**
-	 * Lifecycle, defaults to {@link JunitServerExtensionLifecycle#PER_CLASS}.
+	 * Create rule.
 	 *
-	 * @return Lifecycle.
+	 * @param jetty Jetty Embedded Server.
 	 */
-	JunitServerExtensionLifecycle lifecycle() default PER_CLASS;
+	public JettyServerJunit4Rule(EmbeddedJetty jetty) {
+		super(jetty);
+	}
+
+	/**
+	 * Create rule using jetty as embedded server.
+	 */
+	public JettyServerJunit4Rule() {
+		this(new EmbeddedJetty());
+	}
+
+	/**
+	 * Create rule.
+	 *
+	 * @param configuration Jetty Configuration.
+	 */
+	public JettyServerJunit4Rule(EmbeddedJettyConfiguration configuration) {
+		this(new EmbeddedJetty(configuration));
+	}
 }

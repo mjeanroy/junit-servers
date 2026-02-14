@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty12ee10.tests;
+package com.github.mjeanroy.junit.servers.jetty12.tests;
 
-import com.github.mjeanroy.junit.servers.jetty12ee10.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty12.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;

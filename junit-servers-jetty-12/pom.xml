@@ -41,7 +41,7 @@
   <description>Add Jetty 12 Embedded Server to your junit tests case.</description>
 
   <properties>
-    <java-module-name>com.github.mjeanroy.junit.servers.jetty12ee10</java-module-name>
+    <java-module-name>com.github.mjeanroy.junit.servers.jetty12</java-module-name>
     <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
   </properties>
 
@@ -49,6 +49,11 @@
     <dependency>
       <groupId>com.github.mjeanroy</groupId>
       <artifactId>junit-servers-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.mjeanroy</groupId>
+      <artifactId>junit-servers-jetty-12-ee10</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -61,58 +66,6 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
-      <version>${jetty12.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-jndi</artifactId>
-      <version>${jetty12.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-util</artifactId>
-      <version>${jetty12.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty.ee10</groupId>
-      <artifactId>jetty-ee10-servlet</artifactId>
-      <version>${jetty12.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty.ee10</groupId>
-      <artifactId>jetty-ee10-servlets</artifactId>
-      <version>${jetty12.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty.ee10</groupId>
-      <artifactId>jetty-ee10-webapp</artifactId>
-      <version>${jetty12.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty.ee10</groupId>
-      <artifactId>jetty-ee10-apache-jsp</artifactId>
-      <version>${jetty12.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty.ee10</groupId>
-      <artifactId>jetty-ee10-annotations</artifactId>
-      <version>${jetty12.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
-      <artifactId>jetty-websocket-jetty-server</artifactId>
-      <version>${jetty12.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <version>${jakarta.servlet-api.version}</version>
     </dependency>
 
     <dependency>

@@ -24,4 +24,4 @@
 
 # This is the implementation that will be automatically discovered by the SPI used
 # in the junit-servers-core module.
-com.github.mjeanroy.junit.servers.jetty12ee10.EmbeddedJettyProvider
+com.github.mjeanroy.junit.servers.jetty12.EmbeddedJettyProvider

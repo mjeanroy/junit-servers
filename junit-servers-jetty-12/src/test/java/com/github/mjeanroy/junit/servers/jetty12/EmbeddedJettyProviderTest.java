@@ -22,29 +22,33 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty12ee10;
+package com.github.mjeanroy.junit.servers.jetty12;
 
-import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
+import com.github.mjeanroy.junit.servers.jetty12.tests.EmbeddedJettyConfigurationMockBuilder;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import org.junit.jupiter.api.Test;
 
-/**
- * Jetty Embedded Server provider, used by the service provider interface from the JDK.
- */
-public class EmbeddedJettyProvider implements EmbeddedServerProvider<EmbeddedJettyConfiguration> {
+import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
 
-	/**
-	 * Create provider.
-	 */
-	public EmbeddedJettyProvider() {
+class EmbeddedJettyProviderTest {
+
+	@Test
+	void it_should_instantiate_jetty_with_default_configuration() {
+		EmbeddedJettyProvider provider = new EmbeddedJettyProvider();
+		EmbeddedJetty jetty = provider.instantiate();
+
+		assertThat(jetty).isNotNull();
+		assertThat(jetty.getConfiguration()).isNotNull().isEqualTo(defaultConfiguration());
 	}
 
-	@Override
-	public EmbeddedJetty instantiate() {
-		return new EmbeddedJetty();
-	}
+	@Test
+	void it_should_instantiate_jetty_with_custom_configuration() {
+		EmbeddedJettyProvider provider = new EmbeddedJettyProvider();
+		EmbeddedJettyConfiguration configuration = new EmbeddedJettyConfigurationMockBuilder().build();
+		EmbeddedJetty jetty = provider.instantiate(configuration);
 
-	@Override
-	public EmbeddedJetty instantiate(EmbeddedJettyConfiguration configuration) {
-		return new EmbeddedJetty(configuration);
+		assertThat(jetty).isNotNull();
+		assertThat(jetty.getConfiguration()).isNotNull().isSameAs(configuration);
 	}
 }

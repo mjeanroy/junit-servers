@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty12ee10.jupiter;
+package com.github.mjeanroy.junit.servers.jetty12.jupiter;
 
-import com.github.mjeanroy.junit.servers.jetty12ee10.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.jetty12ee10.EmbeddedJettyFactory;
+import com.github.mjeanroy.junit.servers.jetty12.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty12.EmbeddedJettyFactory;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtension;
 import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle;
 import com.github.mjeanroy.junit.servers.loggers.Logger;

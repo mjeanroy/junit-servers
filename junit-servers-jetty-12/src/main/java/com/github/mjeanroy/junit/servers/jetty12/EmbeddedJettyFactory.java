@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty12ee10;
+package com.github.mjeanroy.junit.servers.jetty12;
 
 import com.github.mjeanroy.junit.servers.jetty.AbstractEmbeddedJettyFactory;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;

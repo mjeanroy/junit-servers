@@ -22,38 +22,29 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty12ee10.junit4;
+package com.github.mjeanroy.junit.servers.jetty12;
 
-import com.github.mjeanroy.junit.servers.jetty12ee10.EmbeddedJetty;
-import com.github.mjeanroy.junit.servers.junit4.ServerRule;
-import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
+import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
+import com.github.mjeanroy.junit.servers.client.HttpClient;
+import com.github.mjeanroy.junit.servers.jetty12.junit4.AbstractJettyJunit4Test;
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
 
-/**
- * Rule that can be used to start and stop embedded jetty server.
- */
-public class JettyServerJunit4Rule extends ServerRule {
-	/**
-	 * Create rule.
-	 *
-	 * @param jetty Jetty Embedded Server.
-	 */
-	public JettyServerJunit4Rule(EmbeddedJetty jetty) {
-		super(jetty);
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class JettyJunit4Test extends AbstractJettyJunit4Test {
+
+	@TestHttpClient
+	private HttpClient client;
+
+	@Test
+	public void it_should_have_a_server() {
+		Assertions.assertThat(server).isNotNull();
+		Assertions.assertThat(server.getPort()).isPositive();
 	}
 
-	/**
-	 * Create rule using jetty as embedded server.
-	 */
-	public JettyServerJunit4Rule() {
-		this(new EmbeddedJetty());
-	}
-
-	/**
-	 * Create rule.
-	 *
-	 * @param configuration Jetty Configuration.
-	 */
-	public JettyServerJunit4Rule(EmbeddedJettyConfiguration configuration) {
-		this(new EmbeddedJetty(configuration));
+	@Test
+	public void it_should_have_a_client() {
+		assertThat(client).isNotNull();
 	}
 }

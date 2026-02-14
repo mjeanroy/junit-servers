@@ -22,27 +22,31 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty12ee10.junit4;
+package com.github.mjeanroy.junit.servers.jetty12.jupiter;
 
-import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
-import com.github.mjeanroy.junit.servers.client.HttpClient;
-import org.junit.Test;
+import com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class JettyJunit4Test extends AbstractJettyJunit4Test {
+import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_CLASS;
 
-	@TestHttpClient
-	private HttpClient client;
-
-	@Test
-	public void it_should_have_a_server() {
-		assertThat(server).isNotNull();
-		assertThat(server.getPort()).isPositive();
-	}
-
-	@Test
-	public void it_should_have_a_client() {
-		assertThat(client).isNotNull();
-	}
+/**
+ * Exception used to create a test with {@link JettyServerExtension}.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@ExtendWith(JettyServerExtension.class)
+@Documented
+public @interface JettyTest {
+	/**
+	 * Lifecycle, defaults to {@link JunitServerExtensionLifecycle#PER_CLASS}.
+	 *
+	 * @return Lifecycle.
+	 */
+	JunitServerExtensionLifecycle lifecycle() default PER_CLASS;
 }

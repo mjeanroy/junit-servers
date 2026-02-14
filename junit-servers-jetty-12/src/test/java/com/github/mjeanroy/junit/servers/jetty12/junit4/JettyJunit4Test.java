@@ -22,12 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty12ee10;
+package com.github.mjeanroy.junit.servers.jetty12.junit4;
 
 import com.github.mjeanroy.junit.servers.annotations.TestHttpClient;
 import com.github.mjeanroy.junit.servers.client.HttpClient;
-import com.github.mjeanroy.junit.servers.jetty12ee10.junit4.AbstractJettyJunit4Test;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,8 +37,8 @@ public class JettyJunit4Test extends AbstractJettyJunit4Test {
 
 	@Test
 	public void it_should_have_a_server() {
-		Assertions.assertThat(server).isNotNull();
-		Assertions.assertThat(server.getPort()).isPositive();
+		assertThat(server).isNotNull();
+		assertThat(server.getPort()).isPositive();
 	}
 
 	@Test

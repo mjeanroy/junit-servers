@@ -27,7 +27,7 @@ package com.github.mjeanroy.junit.servers.junit4;
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
-import com.github.mjeanroy.junit.servers.jetty12ee10.EmbeddedJetty;
+import com.github.mjeanroy.junit.servers.jetty12.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import org.junit.jupiter.api.Test;

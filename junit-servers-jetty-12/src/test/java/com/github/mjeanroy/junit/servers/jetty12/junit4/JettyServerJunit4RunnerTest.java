@@ -22,11 +22,11 @@
  * THE SOFTWARE.
  */
 
-package com.github.mjeanroy.junit.servers.jetty12ee10;
+package com.github.mjeanroy.junit.servers.jetty12.junit4;
 
 import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration;
-import com.github.mjeanroy.junit.servers.jetty12ee10.junit4.JettyServerJunit4Runner;
+import com.github.mjeanroy.junit.servers.jetty12.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;

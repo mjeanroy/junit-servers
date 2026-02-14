@@ -24,7 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.samples.jetty.jupiter;
 
-import com.github.mjeanroy.junit.servers.jetty12ee10.jupiter.JettyTest;
+import com.github.mjeanroy.junit.servers.jetty12.jupiter.JettyTest;
 import com.github.mjeanroy.junit.servers.samples.utils.jetty.DefaultJettyConfiguration;
 
 import java.lang.annotation.Documented;
