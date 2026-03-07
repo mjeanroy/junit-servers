@@ -61,6 +61,7 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
       - name: Set up JDK
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
@@ -82,12 +83,15 @@ jobs:
 
           # Environment variable name for the GPG private key passphrase.
           gpg-passphrase: GPG_PASSPHRASE
+
       - name: Configure Git User
         run: |
           git config user.email "mickael.jeanroy@gmail.com"
           git config user.name "Mickael Jeanroy"
+
       - name: Release
         run: |
+          ./mvnw -version
           ./mvnw -B -U \
             release:prepare \
             release:perform \
