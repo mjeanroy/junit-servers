@@ -363,7 +363,7 @@
             <autoVersionSubmodules>true</autoVersionSubmodules>
             <mavenExecutorId>forked-path</mavenExecutorId>
             <useReleaseProfile>false</useReleaseProfile>
-            <arguments>-Prelease</arguments>
+            <arguments>-Prelease --color always</arguments>
           </configuration>
         </plugin>
 
