@@ -89,6 +89,7 @@ public class TomcatServerExtension extends JunitServerExtension {
 	/**
 	 * Create the jupiter and specify the embedded tomcat instance to use.
 	 *
+	 * @param lifecycle The extension lifecycle.
 	 * @param tomcat The embedded tomcat instance to use.
 	 * @throws NullPointerException If {@code tomcat} is {@code null}.
 	 * @throws NullPointerException If {@code lifecycle} is {@code null}.

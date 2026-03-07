@@ -109,63 +109,67 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 	}
 
 	/**
-	 * Get {@code stopTimeout}.
+	 * Get jetty stop timeout.
 	 *
-	 * @return {@link #stopTimeout}
+	 * @return The stop timeout, for graceful shutdown.
 	 */
 	public int getStopTimeout() {
 		return stopTimeout;
 	}
 
 	/**
-	 * Get {@code stopAtShutdown}.
+	 * When {@code true}, jetty server is automatically stopped at shutdown.
 	 *
-	 * @return {@link #stopAtShutdown}
+	 * @return {@code true} if jetty is stopped at shutdown, {@code false} otherwise.
 	 */
 	public boolean isStopAtShutdown() {
 		return stopAtShutdown;
 	}
 
 	/**
-	 * Get {@code baseResource}.
+	 * Jetty base resource.
 	 *
-	 * @return {@link #baseResource}
+	 * @return Jetty base resource.
 	 */
 	public Resource getBaseResource() {
 		return baseResource;
 	}
 
 	/**
-	 * Get {@code containerJarPattern}
+	 * Get the pattern controlling which parts of the container’s classpath should be
+	 * processed for things like annotations, {@code META-INF/resources}, {@code META-INF/web-fragment.xml}
+	 * and tlds inside META-INF.
 	 *
-	 * @return {@link #containerJarPattern}
+	 * @return Pattern controlling which parts of the container’s classpath should be processed.
 	 */
 	public String getContainerJarPattern() {
 		return containerJarPattern;
 	}
 
 	/**
-	 * Get {@code webInfJarPattern}
+	 * Get the pattern controlling which parts of the webinf’s classpath should be processed for
+	 * things like annotations, {@code META-INF/resources}, {@code META-INF/web-fragment.xml}
+	 * and tlds inside META-INF.
 	 *
-	 * @return {@link #webInfJarPattern}
+	 * @return Pattern controlling which parts of the webinf’s classpath should be processed.
 	 */
 	public String getWebInfJarPattern() {
 		return webInfJarPattern;
 	}
 
 	/**
-	 * Get {@code dirAllowed}
+	 * Control if directory listing is enabled or not.
 	 *
-	 * @return {@link #dirAllowed}
+	 * @return {@code true} if directory listing is enabled, {@code false} otherwise.
 	 */
 	public boolean isDirAllowed() {
 		return dirAllowed;
 	}
 
 	/**
-	 * Get {@code tempDirectory}
+	 * Jetty temp directory.
 	 *
-	 * @return {@link #tempDirectory}
+	 * @return Jetty temp directory.
 	 */
 	public String getTempDirectory() {
 		return tempDirectory;

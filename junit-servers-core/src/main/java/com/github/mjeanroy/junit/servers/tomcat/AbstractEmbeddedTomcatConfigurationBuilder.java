@@ -80,36 +80,37 @@ abstract class AbstractEmbeddedTomcatConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@code baseDir} value.
+	 * Get the tomcat base directory;
 	 *
-	 * @return {@link #baseDir}
+	 * @return The tomcat base directory.
 	 */
 	public String getBaseDir() {
 		return baseDir;
 	}
 
 	/**
-	 * Get current {@code keepBaseDir} value.
+	 * Keep tomcat base directory content on server stop.
 	 *
-	 * @return {@link #keepBaseDir}
+	 * @return {@code true} if tomcat base directory is preserved on server stop, {@code false} otheriwse.
 	 */
 	public boolean isKeepBaseDir() {
 		return keepBaseDir;
 	}
 
 	/**
-	 * Get current {@code enableNaming} value.
+	 * flag to enable/disable JNDI naming.
 	 *
-	 * @return {@link #enableNaming}
+	 * @return {@code true} of JNDI naming is enabled, {@code false} otherwise.
 	 */
 	public boolean isEnableNaming() {
 		return enableNaming;
 	}
 
 	/**
-	 * Get current {@code forceMetaInf} value.
+	 * Flag use to force the creation of the META-INF directory
+	 * if it does not exist in the classpath.
 	 *
-	 * @return {@link #forceMetaInf}
+	 * @return {@code true} to force the creation of the meta-inf directory, {@code false} otherwise..
 	 */
 	public boolean isForceMetaInf() {
 		return forceMetaInf;
@@ -184,9 +185,14 @@ abstract class AbstractEmbeddedTomcatConfigurationBuilder<
 	}
 
 	/**
-	 * Toggle {@link #enableNaming} to a new value.
+	 * Update JNDI naming directory flag:
 	 *
-	 * @param enableNaming New {@link #enableNaming}
+	 * <ul>
+	 *   <li>Use {@code true} to enable JNDI naming.</li>
+	 *   <li>Use {@code false} to disable JNDI naming.</li>
+	 * </ul>
+	 *
+	 * @param enableNaming The JNDI naming flag.
 	 * @return this.
 	 */
 	private SELF toggleNaming(boolean enableNaming) {
@@ -195,9 +201,14 @@ abstract class AbstractEmbeddedTomcatConfigurationBuilder<
 	}
 
 	/**
-	 * Toggle {@link #forceMetaInf} to a new value.
+	 * Update meta-inf directory flag:
 	 *
-	 * @param forceMetaInf New {@link #forceMetaInf}
+	 * <ul>
+	 *   <li>Use {@code true} to force the creation of the {@code meta-inf} directory.</li>
+	 *   <li>Use {@code false} to not do anything.</li>
+	 * </ul>
+	 *
+	 * @param forceMetaInf The flag value.
 	 * @return this.
 	 */
 	private SELF toggleMetaInf(boolean forceMetaInf) {

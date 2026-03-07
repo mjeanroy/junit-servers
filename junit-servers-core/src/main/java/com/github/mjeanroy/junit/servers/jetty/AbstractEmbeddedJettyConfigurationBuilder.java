@@ -102,63 +102,68 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	}
 
 	/**
-	 * Get current {@code stopTimeout} value.
+	 * Get the Jetty stop timeout (in ms).
 	 *
-	 * @return {@link #stopTimeout}.
+	 * @return Stop timeout (in ms).
 	 */
 	public int getStopTimeout() {
 		return stopTimeout;
 	}
 
 	/**
-	 * Get current {@code stopAtShutdown} value.
+	 * Configure jetty embedded server to stop at shutdown.
 	 *
-	 * @return {@link #stopAtShutdown}.
+	 * @return {@code true} if jetty is stopped when JVM shutdown, {@code false} otherwise.
 	 */
 	public boolean isStopAtShutdown() {
 		return stopAtShutdown;
 	}
 
 	/**
-	 * Get current {@code baseResource} value.
+	 * Jetty base resource.
 	 *
-	 * @return {@link #baseResource}.
+	 * @return The base resource for the Jetty context that will be created.
 	 */
 	public Resource getBaseResource() {
 		return baseResource;
 	}
 
 	/**
-	 * Get current {@code containerJarPattern} value.
+	 * The pattern to control which part of the container classpath will be processed.
 	 *
-	 * @return  {@link #containerJarPattern}
+	 * @return The pattern to control which part of the container classpath will be processed.
 	 */
 	public String getContainerJarPattern() {
 		return containerJarPattern;
 	}
 
 	/**
-	 * Get current {@code webInfJarPattern} value.
+	 * The pattern to control which part of the webinf directory classpath will be processed.
 	 *
-	 * @return {@link #webInfJarPattern}
+	 * @return The pattern to control which part of the webinf directory classpath will be processed.
 	 */
 	public String getWebInfJarPattern() {
 		return webInfJarPattern;
 	}
 
 	/**
-	 * Get current {@code dirAllowed} value.
+	 * The directory listing file:
 	 *
-	 * @return {@link #dirAllowed}
+	 * <ul>
+	 *   <li>When {@code true}, directory listing is enabled.</li>
+	 *   <li>When {@code false}, directory list is disabled.</li>
+	 * </ul>
+	 *
+	 * @return {@code true} if directory listing is enabled, {@code false} otherwise.
 	 */
 	public boolean isDirAllowed() {
 		return dirAllowed;
 	}
 
 	/**
-	 * Get current {@code tempDirectory} value.
+	 * Get Jetty temp directory.
 	 *
-	 * @return {@link #tempDirectory}
+	 * @return Jetty temp directory.
 	 */
 	public String getTempDirectory() {
 		return tempDirectory;
@@ -167,7 +172,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	/**
 	 * Update {@code stopTimeout} value.
 	 *
-	 * @param stopTimeout New {@link #stopTimeout} value.
+	 * @param stopTimeout New stop timeout value.
 	 * @return this
 	 * @throws IllegalArgumentException If {@code stopTimeout} is not positive.
 	 */
@@ -207,7 +212,7 @@ abstract class AbstractEmbeddedJettyConfigurationBuilder<
 	/**
 	 * Change {@code baseResource} value.
 	 *
-	 * @param resource New {@link #baseResource} value.
+	 * @param resource New jetty base resource.
 	 * @return this
 	 */
 	public SELF withBaseResource(Resource resource) {

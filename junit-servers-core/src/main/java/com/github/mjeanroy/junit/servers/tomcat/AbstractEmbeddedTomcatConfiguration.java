@@ -93,36 +93,51 @@ abstract class AbstractEmbeddedTomcatConfiguration extends AbstractConfiguration
 	}
 
 	/**
-	 * Get {@code baseDir}.
+	 * Get tomcat base directory.
 	 *
-	 * @return {@link #baseDir}
+	 * @return Tomcat base directory.
 	 */
 	public String getBaseDir() {
 		return baseDir;
 	}
 
 	/**
-	 * Get current {@code keepBaseDir} value.
+	 * Get the base dir cleanup flag:
 	 *
-	 * @return {@link #keepBaseDir}
+	 * <ul>
+	 *   <li>{@code true} if the tomcat base dir is deleted when server stops.</li>
+	 *   <li>{@code false} to keep default behavior.</li>
+	 * </ul>
+	 *
+	 * @return {@code true} if tomcat base dir is deleted when server stops, {@code false} if nothing is done.
 	 */
 	public boolean isKeepBaseDir() {
 		return keepBaseDir;
 	}
 
 	/**
-	 * Get {@code enableNaming}.
+	 * Get the JNDI flag:
 	 *
-	 * @return {@link #enableNaming}
+	 * <ul>
+	 *   <li>{@code true} if JNDI naming is enabled.</li>
+	 *   <li>{@code false} if JNDI naming is disabled.</li>
+	 * </ul>
+	 *
+	 * @return {@code true} if JNDI naming is enabled, {@code false} otherwise.
 	 */
 	public boolean isEnableNaming() {
 		return enableNaming;
 	}
 
 	/**
-	 * Get {@code forceMetaInf}.
+	 * Get the meta-inf directory flag:
 	 *
-	 * @return {@link #forceMetaInf}
+	 * <ul>
+	 *   <li>{@code true} if meta-inf directory creation is enforced.</li>
+	 *   <li>{@code false} otherwise.</li>
+	 * </ul>
+	 *
+	 * @return {@code true} if the {@code meta-inf} directory creation is enforced, {@code false} otherwise.
 	 */
 	public boolean isForceMetaInf() {
 		return forceMetaInf;
