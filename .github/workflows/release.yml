@@ -92,7 +92,7 @@ jobs:
       - name: Release
         run: |
           ./mvnw -version
-          ./mvnw -B -U \
+          ./mvnw -B --color always -U \
             release:prepare \
             release:perform \
             -DdryRun=${{ inputs.dry_run }} \
