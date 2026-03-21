@@ -36,87 +36,73 @@ import java.util.List;
 
 import static com.github.mjeanroy.junit.servers.engine.Servers.instantiate;
 
-/**
- * Runner that will start and stop embedded server before tests.
- * This runner will also add some custom rules to inject data to test classes.
- *
- * <h2>How to use?</h2>
- *
- * Simply set the {@link JunitServerRunner} class with the JUnit {@link org.junit.runner.RunWith} annotation:
- *
- * <pre><code>
- *   &#064;RunWith(JunitServerRunner.class)
- *   public class MyTest {
- *
- *     // Get the server
- *     &#064;TestHttpServer
- *     private static EmbeddedServer server;
- *
- *     // Get a client to query embedded server
- *     &#064;TestHttpServer
- *     private HttpClient client;
- *
- *     &#064;Test
- *     public void testGET() {
- *       HttpResponse rsp = client.prepareGet("/path")
- *         .acceptJson()
- *         .execute();
- *
- *       Assert.assertTrue(rsp.status() == 200);
- *     }
- *   }
- * </code></pre>
- *
- * <h2>Should I use the {@link ServerRule} or the runner?</h2>
- *
- * The runner should be used, but due to the limitation of JUnit (only one runner can be used), the rule can
- * be used if you need to use a custom runner.
- *
- * @see ServerRule
- */
+/// Runner that will start and stop embedded server before tests.
+/// This runner will also add some custom rules to inject data to test classes.
+///
+/// ## How to use?
+///
+/// Simply set the [JunitServerRunner] class with the JUnit [org.junit.runner.RunWith] annotation:
+///
+/// ```
+///   @RunWith(JunitServerRunner.class)
+///   public class MyTest {
+///
+///     // Get the server
+///     @TestHttpServer
+///     private static EmbeddedServer server;
+///
+///     // Get a client to query embedded server
+///     @TestHttpServer
+///     private HttpClient client;
+///
+///     @Test
+///     public void testGET() {
+///       HttpResponse rsp = client.prepareGet("/path")
+///         .acceptJson()
+///         .execute();
+///
+///       Assert.assertTrue(rsp.status() == 200);
+///     }
+///   }
+/// ```
+///
+/// ## Should I use the [ServerRule] or the runner?
+///
+/// The runner should be used, but due to the limitation of JUnit (only one runner can be used), the rule can
+/// be used if you need to use a custom runner.
+///
+/// @see ServerRule
 public class JunitServerRunner extends BlockJUnit4ClassRunner {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(JunitServerRunner.class);
 
-	/**
-	 * Embedded server defined before and after tests.
-	 */
+	/// Embedded server defined before and after tests.
 	private final EmbeddedServer<?> server;
 
-	/**
-	 * Server configuration.
-	 */
+	/// Server configuration.
 	private final AbstractConfiguration configuration;
 
-	/**
-	 * Create runner starting an embedded server.
-	 *
-	 * <br>
-	 *
-	 * <strong>The embedded server implementation is automatically detected using classpath
-	 * detection, so one of {@code junit-servers-jetty} or {@code junit-servers-tomcat} dependency must
-	 * be added to the classpath. In case of a conflict (i.e if both dependency are available in the
-	 * classpath), {@code junit-servers-jetty} will be used.</strong>
-	 *
-	 * @param klass Running class.
-	 * @throws InitializationError If an error occurred while starting embedded server.
-	 */
+	/// Create runner starting an embedded server.
+	///
+	/// **The embedded server implementation is automatically detected using classpath
+	/// detection, so one of `junit-servers-jetty` or `junit-servers-tomcat` dependency must
+	/// be added to the classpath. In case of a conflict (i.e if both dependency are available in the
+	/// classpath), `junit-servers-jetty` will be used.**
+	///
+	/// @param klass Running class.
+	/// @throws InitializationError If an error occurred while starting embedded server.
 	public JunitServerRunner(Class<?> klass) throws InitializationError {
 		super(klass);
 		this.server = instantiate(klass);
 		this.configuration = this.server.getConfiguration();
 	}
 
-	/**
-	 * Create runner with given embedded server.
-	 *
-	 * @param klass Running class.
-	 * @param server The embedded server to use.
-	 * @throws InitializationError If an error occurred while starting embedded server.
-	 */
+	/// Create runner with given embedded server.
+	///
+	/// @param klass Running class.
+	/// @param server The embedded server to use.
+	/// @throws InitializationError If an error occurred while starting embedded server.
 	protected JunitServerRunner(Class<?> klass, EmbeddedServer<?> server) throws InitializationError {
 		super(klass);
 		this.server = server;

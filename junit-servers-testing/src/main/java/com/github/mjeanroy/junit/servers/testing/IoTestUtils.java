@@ -31,20 +31,16 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/**
- * Static IO Utilities, used only for testing.
- */
+/// Static IO Utilities, used only for testing.
 public final class IoTestUtils {
 
 	private IoTestUtils() {
 	}
 
-	/**
-	 * Get file from classpath.
-	 *
-	 * @param resourceName Resource name.
-	 * @return The file.
-	 */
+	/// Get file from classpath.
+	///
+	/// @param resourceName Resource name.
+	/// @return The file.
 	public static File getFileFromClasspath(String resourceName) {
 		URL resource = IoTestUtils.class.getResource(resourceName);
 		if (resource == null) {
@@ -55,22 +51,18 @@ public final class IoTestUtils {
 		return new File(file);
 	}
 
-	/**
-	 * Get path instance from classpath.
-	 *
-	 * @param resourceName Resource name.
-	 * @return The file.
-	 */
+	/// Get path instance from classpath.
+	///
+	/// @param resourceName Resource name.
+	/// @return The file.
 	public static Path getPathFromClasspath(String resourceName) {
 		return getFileFromClasspath(resourceName).toPath();
 	}
 
-	/**
-	 * Create temporary file in given directory.
-	 *
-	 * @param root Root directory.
-	 * @return The temporary file.
-	 */
+	/// Create temporary file in given directory.
+	///
+	/// @param root Root directory.
+	/// @return The temporary file.
 	public static TempFile createTempFile(Path root) {
 		try {
 			File tmpFile = Files.createTempFile(root.toRealPath(), null, null).toFile();
@@ -82,43 +74,33 @@ public final class IoTestUtils {
 		}
 	}
 
-	/**
-	 * Temporary file, created with {@link #createTempFile(Path)}, used for
-	 * testing only.
-	 */
+	/// Temporary file, created with [#createTempFile(Path)], used for
+	/// testing only.
 	public static final class TempFile {
-		/**
-		 * The temporary file.
-		 */
+		/// The temporary file.
 		private final File file;
 
 		private TempFile(File file) {
 			this.file = file;
 		}
 
-		/**
-		 * Temporary file name.
-		 *
-		 * @return File name.
-		 */
+		/// Temporary file name.
+		///
+		/// @return File name.
 		public String getName() {
 			return file.getName();
 		}
 
-		/**
-		 * Get temporary file parent directory.
-		 *
-		 * @return The parent directory.
-		 */
+		/// Get temporary file parent directory.
+		///
+		/// @return The parent directory.
 		public File getParentDir() {
 			return file.getParentFile();
 		}
 
-		/**
-		 * Get temporary file parent directory URL.
-		 *
-		 * @return Parent directory URL.
-		 */
+		/// Get temporary file parent directory URL.
+		///
+		/// @return Parent directory URL.
 		public URL getParentDirURL() {
 			try {
 				return getParentDir().toURI().toURL();

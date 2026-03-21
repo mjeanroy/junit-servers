@@ -37,44 +37,30 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
 
-/**
- * HTTP Client configuration that can be used to configure instances of {@link HttpClient}.
- */
+/// HTTP Client configuration that can be used to configure instances of [HttpClient].
 public final class HttpClientConfiguration {
 
-	/**
-	 * Default value for {@link HttpClientConfiguration#followRedirect}.
-	 */
+	/// Default value for [HttpClientConfiguration#followRedirect].
 	private static final boolean DEFAULT_FOLLOW_REDIRECT = true;
 
-	/**
-	 * The default configuration.
-	 * Since the {@link HttpClientConfiguration} is immutable, it is safe to use a singleton.
-	 */
+	/// The default configuration.
+	/// Since the [HttpClientConfiguration] is immutable, it is safe to use a singleton.
 	private static final HttpClientConfiguration DEFAULT_CONFIGURATION = new HttpClientConfiguration.Builder().build();
 
-	/**
-	 * Get the default configuration.
-	 *
-	 * @return The default configuration.
-	 */
+	/// Get the default configuration.
+	///
+	/// @return The default configuration.
 	public static HttpClientConfiguration defaultConfiguration() {
 		return DEFAULT_CONFIGURATION;
 	}
 
-	/**
-	 * Set of default headers that will be added for each HTTP requests.
-	 */
+	/// Set of default headers that will be added for each HTTP requests.
 	private final Map<String, HttpHeader> defaultHeaders;
 
-	/**
-	 * List of cookies that will be added for each HTTP requests.
-	 */
+	/// List of cookies that will be added for each HTTP requests.
 	private final List<Cookie> defaultCookies;
 
-	/**
-	 * Flag that can enable/disable automatic redirection handling.
-	 */
+	/// Flag that can enable/disable automatic redirection handling.
 	private final boolean followRedirect;
 
 	// Private constructor: use the builder instead.
@@ -88,38 +74,30 @@ public final class HttpClientConfiguration {
 		this.defaultCookies = unmodifiableList(new ArrayList<>(defaultCookies));
 	}
 
-	/**
-	 * Get {@link #defaultHeaders} (non-modifiable map).
-	 *
-	 * @return {@link #defaultHeaders}.
-	 */
+	/// Get [#defaultHeaders] (non-modifiable map).
+	///
+	/// @return [#defaultHeaders].
 	public Map<String, HttpHeader> getDefaultHeaders() {
 		return defaultHeaders;
 	}
 
-	/**
-	 * Get {@link #defaultCookies} (non-modifiable list).
-	 *
-	 * @return {@link #defaultCookies}.
-	 */
+	/// Get [#defaultCookies] (non-modifiable list).
+	///
+	/// @return [#defaultCookies].
 	public List<Cookie> getDefaultCookies() {
 		return defaultCookies;
 	}
 
-	/**
-	 * Get {@link #followRedirect} flag.
-	 *
-	 * @return {@link #followRedirect}.
-	 */
+	/// Get [#followRedirect] flag.
+	///
+	/// @return [#followRedirect].
 	public boolean isFollowRedirect() {
 		return followRedirect;
 	}
 
-	/**
-	 * Get builder from given instance.
-	 *
-	 * @return The builder.
-	 */
+	/// Get builder from given instance.
+	///
+	/// @return The builder.
 	public Builder builder() {
 		return new Builder().followRedirect(followRedirect).addDefaultHeaders(defaultHeaders.values()).addDefaultCookies(defaultCookies);
 	}
@@ -154,111 +132,89 @@ public final class HttpClientConfiguration {
 			.build();
 	}
 
-	/**
-	 * Builder for {@link HttpClientConfiguration} class.
-	 */
+	/// Builder for [HttpClientConfiguration] class.
 	public static class Builder {
-		/**
-		 * Flag that can be used to enable/disable automatic redirection.
-		 * @see HttpClientConfiguration#DEFAULT_FOLLOW_REDIRECT
-		 */
+		/// Flag that can be used to enable/disable automatic redirection.
+		/// @see HttpClientConfiguration#DEFAULT_FOLLOW_REDIRECT
 		private boolean followRedirect;
 
-		/**
-		 * The set of default headers that will be added for each HTTP request.
-		 */
+		/// The set of default headers that will be added for each HTTP request.
 		private final Map<String, HttpHeader> defaultHeaders;
 
-		/**
-		 * The list of cookies that will be added for each HTTP request.
-		 */
+		/// The list of cookies that will be added for each HTTP request.
 		private final List<Cookie> defaultCookies;
 
-		/**
-		 * Create builder with default values.
-		 *
-		 * @see HttpClientConfiguration#DEFAULT_FOLLOW_REDIRECT
-		 */
+		/// Create builder with default values.
+		///
+		/// @see HttpClientConfiguration#DEFAULT_FOLLOW_REDIRECT
 		public Builder() {
 			this.followRedirect = DEFAULT_FOLLOW_REDIRECT;
 			this.defaultHeaders = new LinkedHashMap<>();
 			this.defaultCookies = new ArrayList<>();
 		}
 
-		/**
-		 * Add new default header: if a header with the same name as already been added, it
-		 * will be overwritten with this new header.
-		 *
-		 * @param header The header.
-		 * @return The builder (for chaining).
-		 * @throws NullPointerException If {@code header} is {@code null}.
-		 */
+		/// Add new default header: if a header with the same name as already been added, it
+		/// will be overwritten with this new header.
+		///
+		/// @param header The header.
+		/// @return The builder (for chaining).
+		/// @throws NullPointerException If `header` is `null`.
 		public Builder addDefaultHeader(HttpHeader header) {
 			notNull(header, "header");
 			this.defaultHeaders.put(header.getName(), header);
 			return this;
 		}
 
-		/**
-		 * Add new default header: if a header with the same name as already been added, it
-		 * will be overwritten with this new header.
-		 *
-		 * @param name Header name.
-		 * @param value Header value.
-		 * @return The builder (for chaining).
-		 * @throws NullPointerException If {@code name} or {@code value} are {@code null}.
-		 * @throws IllegalArgumentException If {@code name} is empty or blank.
-		 * @see HttpHeader#header(String, String)
-		 * @see #addDefaultHeader(HttpHeader)
-		 */
+		/// Add new default header: if a header with the same name as already been added, it
+		/// will be overwritten with this new header.
+		///
+		/// @param name Header name.
+		/// @param value Header value.
+		/// @return The builder (for chaining).
+		/// @throws NullPointerException If `name` or `value` are `null`.
+		/// @throws IllegalArgumentException If `name` is empty or blank.
+		/// @see HttpHeader#header(String, String)
+		/// @see #addDefaultHeader(HttpHeader)
 		public Builder addDefaultHeader(String name, String value) {
 			return addDefaultHeader(HttpHeader.header(name, value));
 		}
 
-		/**
-		 * Add new default cookie.
-		 *
-		 * @param cookie The cookie to add.
-		 * @return The builder (for chaining).
-		 * @throws NullPointerException If {@code cookie} is {@code null}.
-		 */
+		/// Add new default cookie.
+		///
+		/// @param cookie The cookie to add.
+		/// @return The builder (for chaining).
+		/// @throws NullPointerException If `cookie` is `null`.
 		public Builder addDefaultCookie(Cookie cookie) {
 			notNull(cookie, "cookie");
 			this.defaultCookies.add(cookie);
 			return this;
 		}
 
-		/**
-		 * Add new default cookie.
-		 *
-		 * @param name Cookie name.
-		 * @param value Cookie value.
-		 * @return The builder (for chaining).
-		 * @throws NullPointerException If {@code name} or {@code value} are {@code null}.
-		 * @see Cookies#cookie(String, String)
-		 * @see #addDefaultCookie(Cookie)
-		 */
+		/// Add new default cookie.
+		///
+		/// @param name Cookie name.
+		/// @param value Cookie value.
+		/// @return The builder (for chaining).
+		/// @throws NullPointerException If `name` or `value` are `null`.
+		/// @see Cookies#cookie(String, String)
+		/// @see #addDefaultCookie(Cookie)
 		public Builder addDefaultCookie(String name, String value) {
 			return addDefaultCookie(Cookies.cookie(name, value));
 		}
 
-		/**
-		 * Add default cookies.
-		 *
-		 * @param cookies Default cookies.
-		 * @return The builder (for chaining).
-		 */
+		/// Add default cookies.
+		///
+		/// @param cookies Default cookies.
+		/// @return The builder (for chaining).
 		public Builder addDefaultCookies(Collection<Cookie> cookies) {
 			this.defaultCookies.addAll(cookies);
 			return this;
 		}
 
-		/**
-		 * Add all default headers.
-		 *
-		 * @param defaultHeaders Default headers to add.
-		 * @return The builder (for chaining).
-		 */
+		/// Add all default headers.
+		///
+		/// @param defaultHeaders Default headers to add.
+		/// @return The builder (for chaining).
 		public Builder addDefaultHeaders(Collection<HttpHeader> defaultHeaders) {
 			for (HttpHeader defaultHeader : defaultHeaders) {
 				this.addDefaultHeader(defaultHeader);
@@ -267,42 +223,34 @@ public final class HttpClientConfiguration {
 			return this;
 		}
 
-		/**
-		 * Enable follow redirection handling.
-		 *
-		 * @return The builder (for chaining).
-		 */
+		/// Enable follow redirection handling.
+		///
+		/// @return The builder (for chaining).
 		public Builder enableFollowRedirect() {
 			this.followRedirect = true;
 			return this;
 		}
 
-		/**
-		 * Disable follow redirection handling.
-		 *
-		 * @return The builder (for chaining).
-		 */
+		/// Disable follow redirection handling.
+		///
+		/// @return The builder (for chaining).
 		public Builder disableFollowRedirect() {
 			this.followRedirect = false;
 			return this;
 		}
 
-		/**
-		 * Update {@link #followRedirect}
-		 *
-		 * @param followRedirect New {@link #followRedirect}
-		 * @return The builder (for chaining).
-		 */
+		/// Update [#followRedirect]
+		///
+		/// @param followRedirect New [#followRedirect]
+		/// @return The builder (for chaining).
 		public Builder followRedirect(boolean followRedirect) {
 			this.followRedirect = followRedirect;
 			return this;
 		}
 
-		/**
-		 * Create new client configuration.
-		 *
-		 * @return The HTTP client configuration.
-		 */
+		/// Create new client configuration.
+		///
+		/// @return The HTTP client configuration.
 		public HttpClientConfiguration build() {
 			return new HttpClientConfiguration(followRedirect, defaultHeaders, defaultCookies);
 		}

@@ -35,10 +35,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Annotation that can be used to inject simple http
- * client to query embedded server.
- */
+/// Annotation that can be used to inject simple http
+/// client to query embedded server.
 @Retention(RetentionPolicy.RUNTIME)
 @Target({
 	ElementType.FIELD,
@@ -49,29 +47,22 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface TestHttpClient {
 
-	/**
-	 * Get strategy to use to build http client.
-	 * Default is {@link HttpClientStrategy#AUTO} and classpath detection
-	 * will be used to instantiate appropriate client implementation.
-	 *
-	 * @return Strategy, default is {@link HttpClientStrategy#AUTO}.
-	 */
+	/// Get strategy to use to build http client.
+	///
+	/// Default is [HttpClientStrategy#AUTO] and classpath detection
+	/// will be used to instantiate appropriate client implementation.
+	///
+	/// @return Strategy, default is [HttpClientStrategy#AUTO].
 	HttpClientStrategy strategy() default HttpClientStrategy.AUTO;
 
-	/**
-	 * A configuration factory to use to create configuration for given HTTP Client.
-	 *
-	 * @return The HTTP Client configuration factory.
-	 */
+	/// A configuration factory to use to create configuration for given HTTP Client.
+	///
+	/// @return The HTTP Client configuration factory.
 	Class<? extends HttpClientConfigurationFactory> configuration() default DefaultHttpClientConfigurationFactory.class;
 
-	/**
-	 * The default implementation, that just returns the default configuration.
-	 */
+	/// The default implementation, that just returns the default configuration.
 	class DefaultHttpClientConfigurationFactory implements HttpClientConfigurationFactory {
-		/**
-		 * Create factory.
-		 */
+		/// Create factory.
 		public DefaultHttpClientConfigurationFactory() {
 		}
 

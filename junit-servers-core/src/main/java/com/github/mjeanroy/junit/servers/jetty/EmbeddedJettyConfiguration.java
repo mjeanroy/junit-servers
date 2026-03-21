@@ -24,25 +24,19 @@
 
 package com.github.mjeanroy.junit.servers.jetty;
 
-/**
- * Jetty configuration settings.
- */
+/// Jetty configuration settings.
 public class EmbeddedJettyConfiguration extends AbstractEmbeddedJettyConfiguration {
 
-	/**
-	 * Get configuration builder.
-	 *
-	 * @return Builder.
-	 */
+	/// Get configuration builder.
+	///
+	/// @return Builder.
 	public static Builder builder() {
 		return new Builder();
 	}
 
-	/**
-	 * Get default configuration.
-	 *
-	 * @return Default configuration.
-	 */
+	/// Get default configuration.
+	///
+	/// @return Default configuration.
 	public static EmbeddedJettyConfiguration defaultConfiguration() {
 		return new Builder().build();
 	}
@@ -52,9 +46,7 @@ public class EmbeddedJettyConfiguration extends AbstractEmbeddedJettyConfigurati
 		super(builder);
 	}
 
-	/**
-	 * Builder for {@link EmbeddedJettyConfiguration} instances.
-	 */
+	/// Builder for [EmbeddedJettyConfiguration] instances.
 	public static class Builder extends AbstractEmbeddedJettyConfigurationBuilder<Builder, EmbeddedJettyConfiguration> {
 
 		private Builder() {

@@ -44,31 +44,22 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
-/**
- * Implementation of {@link HttpRequest} using OkHttp library.
- *
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
- * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
- */
+/// Implementation of [HttpRequest] using [OkHttp](http://square.github.io/okhttp) library.
+///
+/// @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
 class OkHttpRequest extends AbstractHttpRequest {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(OkHttpRequest.class);
 
-	/**
-	 * The native OkHttp client.
-	 */
+	/// The native OkHttp client.
 	private final okhttp3.OkHttpClient client;
 
-	/**
-	 * Create apache http request.
-	 *
-	 * @param client Apache http client.
-	 * @param httpMethod Http method.
-	 * @param endpoint Http request url.
-	 */
+	/// Create OkHttp http request.
+	///
+	/// @param client OkHttp http client.
+	/// @param httpMethod Http method.
+	/// @param endpoint Http request url.
 	OkHttpRequest(okhttp3.OkHttpClient client, HttpMethod httpMethod, HttpUrl endpoint) {
 		super(endpoint, httpMethod);
 		this.client = client;
@@ -102,37 +93,31 @@ class OkHttpRequest extends AbstractHttpRequest {
 		}
 	}
 
-	/**
-	 * Add all HTTP headers to the final request.
-	 *
-	 * @param builder The OkHttp request builder.
-	 * @see Request.Builder#addHeader(String, String)
-	 */
+	/// Add all HTTP headers to the final request.
+	///
+	/// @param builder The OkHttp request builder.
+	/// @see Request.Builder#addHeader(String, String)
 	private void handleHeaders(Request.Builder builder) {
 		for (HttpHeader h : headers.values()) {
 			builder.header(h.getName(), h.serializeValues());
 		}
 	}
 
-	/**
-	 * Add all cookies to the final request (i.e add the {@code Cookie} header).
-	 *
-	 * @param builder The OkHttp request builder.
-	 * @see Request.Builder#addHeader(String, String)
-	 */
+	/// Add all cookies to the final request (i.e add the `Cookie` header).
+	///
+	/// @param builder The OkHttp request builder.
+	/// @see Request.Builder#addHeader(String, String)
 	private void handleCookies(Request.Builder builder) {
 		if (!cookies.isEmpty()) {
 			builder.addHeader(HttpHeaders.COOKIE, Cookies.serialize(cookies));
 		}
 	}
 
-	/**
-	 * Add request body if appropriate.
-	 *
-	 * @param builder The native OkHttp request builder.
-	 * @see Request.Builder#method(String, RequestBody)
-	 * @see RequestBody
-	 */
+	/// Add request body if appropriate.
+	///
+	/// @param builder The native OkHttp request builder.
+	/// @see Request.Builder#method(String, RequestBody)
+	/// @see RequestBody
 	private void handleBody(Request.Builder builder) throws IOException {
 		log.debug("Adding request body");
 
@@ -155,13 +140,11 @@ class OkHttpRequest extends AbstractHttpRequest {
 		}
 	}
 
-	/**
-	 * Create the OkHttp request body.
-	 *
-	 * @return OkHttp {@link RequestBody} instance.
-	 * @see RequestBody#create(MediaType, String)
-	 * @see FormBody
-	 */
+	/// Create the OkHttp request body.
+	///
+	/// @return OkHttp [RequestBody] instance.
+	/// @see RequestBody#create(MediaType, String)
+	/// @see FormBody
 	@SuppressWarnings("deprecation")
 	private RequestBody createBody() throws IOException {
 		if (body == null) {
@@ -174,12 +157,10 @@ class OkHttpRequest extends AbstractHttpRequest {
 		return RequestBody.create(mediaType, body.getBody());
 	}
 
-	/**
-	 * Create a new empty request body.
-	 *
-	 * @return Request body element.
-	 * @see RequestBody
-	 */
+	/// Create a new empty request body.
+	///
+	/// @return Request body element.
+	/// @see RequestBody
 	@SuppressWarnings("deprecation")
 	private static RequestBody createEmptyBody() {
 		return RequestBody.create(null, "");

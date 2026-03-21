@@ -37,24 +37,16 @@ public class FakeEmbeddedServer extends AbstractEmbeddedServer<FakeServer, FakeE
 
 	public static List<FakeEmbeddedServer> servers = new ArrayList<>();
 
-	/**
-	 * The number of times the fake server has been started.
-	 */
+	/// The number of times the fake server has been started.
 	private int nbStart;
 
-	/**
-	 * The number of times the fake server has been stopped.
-	 */
+	/// The number of times the fake server has been stopped.
 	private int nbStop;
 
-	/**
-	 * A fake servlet context.
-	 */
+	/// A fake servlet context.
 	private final ServletContext servletContext;
 
-	/**
-	 * A fake delegated server.
-	 */
+	/// A fake delegated server.
 	private final FakeServer delegate;
 
 	public FakeEmbeddedServer() {
@@ -98,20 +90,16 @@ public class FakeEmbeddedServer extends AbstractEmbeddedServer<FakeServer, FakeE
 		return delegate;
 	}
 
-	/**
-	 * Get {@link #nbStart}
-	 *
-	 * @return {@link #nbStart}
-	 */
+	/// Get [#nbStart]
+	///
+	/// @return Returns [#nbStart]
 	public int getNbStart() {
 		return nbStart;
 	}
 
-	/**
-	 * Get {@link #nbStop}
-	 *
-	 * @return {@link #nbStop}
-	 */
+	/// Get [#nbStop]
+	///
+	/// @return Returns [#nbStop]
 	public int getNbStop() {
 		return nbStop;
 	}

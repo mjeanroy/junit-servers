@@ -39,12 +39,11 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-/**
- * Structure for testing of {@link HttpResponse} implementations.
- * @param <T> Builder implementation to create {@link HttpResponse} implementations.
- * @param <U> The original HTTP Response implementation (apache, okhttp, etc.).
- * @param <V> The {@link HttpResponse} implementation.
- */
+/// Structure for testing of [HttpResponse] implementations.
+///
+/// @param <T> Builder implementation to create [HttpResponse] implementations.
+/// @param <U> The original HTTP Response implementation (apache, okhttp, etc.).
+/// @param <V> The [HttpResponse] implementation.
 public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpResponseBuilder<U, T>, U, V extends AbstractHttpResponse> {
 
 	@Test
@@ -340,29 +339,23 @@ public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpRespons
 		assertHeader(header, name, value);
 	}
 
-	/**
-	 * Get a builder instance that will be used to build instance of
-	 * delegated HTTP Response.
-	 *
-	 * @return The builder.
-	 */
+	/// Get a builder instance that will be used to build instance of
+	/// delegated HTTP Response.
+	///
+	/// @return The builder.
 	protected abstract T getBuilder();
 
-	/**
-	 * Create the HTTP response to be tested.
-	 *
-	 * @param delegate The delegated (internal implementation).
-	 * @param duration The request duration.
-	 * @return The HTTP response instance.
-	 */
+	/// Create the HTTP response to be tested.
+	///
+	/// @param delegate The delegated (internal implementation).
+	/// @param duration The request duration.
+	/// @return The HTTP response instance.
 	protected abstract V createHttpResponse(U delegate, long duration);
 
-	/**
-	 * Create HTTP response with given headers.
-	 *
-	 * @param headers The headers.
-	 * @return The HTTP Response.
-	 */
+	/// Create HTTP response with given headers.
+	///
+	/// @param headers The headers.
+	/// @return The HTTP Response.
 	private V createHttpResponseWithHeaders(HttpHeader... headers) {
 		long duration = 1000L;
 		T builder = getBuilder();
@@ -377,24 +370,20 @@ public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpRespons
 		return createHttpResponse(delegate, duration);
 	}
 
-	/**
-	 * Create HTTP Response with given header value.
-	 *
-	 * @param name Header name.
-	 * @param value Header value.
-	 * @return The HTTP Response.
-	 */
+	/// Create HTTP Response with given header value.
+	///
+	/// @param name Header name.
+	/// @param value Header value.
+	/// @return The HTTP Response.
 	private V createHttpResponseWithHeader(String name, String value) {
 		long duration = 1000L;
 		U delegate = getBuilder().withHeader(name, value).build();
 		return createHttpResponse(delegate, duration);
 	}
 
-	/**
-	 * Create default cookie header.
-	 *
-	 * @return The cookie header.
-	 */
+	/// Create default cookie header.
+	///
+	/// @return The cookie header.
 	private static HttpHeader givenCookieHeader() {
 		return HttpHeader.header("Set-Cookie", asList(
 			"hopsi=5b16593d9933d2325ad89633; Path=/",
@@ -402,24 +391,20 @@ public abstract class AbstractHttpResponseImplTest<T extends AbstractHttpRespons
 		));
 	}
 
-	/**
-	 * Assert that given {@code header} is not {@code null} and has expected name and expected single value.
-	 *
-	 * @param header The header.
-	 * @param expectedName The expected name.
-	 * @param expectedValue The expected value.
-	 */
+	/// Assert that given `header` is not `null` and has expected name and expected single value.
+	///
+	/// @param header The header.
+	/// @param expectedName The expected name.
+	/// @param expectedValue The expected value.
 	private static void assertHeader(HttpHeader header, String expectedName, String expectedValue) {
 		assertHeader(header, expectedName, singletonList(expectedValue));
 	}
 
-	/**
-	 * Assert that given {@code header} is not {@code null} and has expected name and expected values.
-	 *
-	 * @param header The header.
-	 * @param expectedName The expected name.
-	 * @param expectedValues The expected values.
-	 */
+	/// Assert that given `header` is not `null` and has expected name and expected values.
+	///
+	/// @param header The header.
+	/// @param expectedName The expected name.
+	/// @param expectedValues The expected values.
 	private static void assertHeader(HttpHeader header, String expectedName, List<String> expectedValues) {
 		assertThat(header).isNotNull();
 		assertThat(header.getName()).isEqualTo(expectedName);

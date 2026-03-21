@@ -26,21 +26,15 @@ package com.github.mjeanroy.junit.servers.loggers;
 
 import org.apache.logging.log4j.LogManager;
 
-/**
- * A logger delegating implementation to LOG4J {@link org.apache.logging.log4j.Logger}.
- */
+/// A logger delegating implementation to LOG4J [org.apache.logging.log4j.Logger].
 class Log4jLogger implements Logger {
 
-	/**
-	 * The internal logger.
-	 */
+	/// The internal logger.
 	private final org.apache.logging.log4j.Logger log;
 
-	/**
-	 * Create logger.
-	 *
-	 * @param klass Logger name.
-	 */
+	/// Create logger.
+	///
+	/// @param klass Logger name.
 	Log4jLogger(Class<?> klass) {
 		log = LogManager.getLogger(klass);
 	}

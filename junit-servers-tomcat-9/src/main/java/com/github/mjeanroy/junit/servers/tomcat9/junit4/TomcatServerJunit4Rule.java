@@ -28,32 +28,24 @@ import com.github.mjeanroy.junit.servers.junit4.ServerRule;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat9.EmbeddedTomcat;
 
-/**
- * Rule that can be used to start and stop embedded tomcat server.
- */
+/// Rule that can be used to start and stop embedded tomcat server.
 public class TomcatServerJunit4Rule extends ServerRule {
-	/**
-	 * Create rule.
-	 *
-	 * @param tomcat Tomcat Embedded Server.
-	 * @throws NullPointerException If {@code tomcat} is {@code null}.
-	 */
+	/// Create rule.
+	///
+	/// @param tomcat Tomcat Embedded Server.
+	/// @throws NullPointerException If `tomcat` is `null`.
 	public TomcatServerJunit4Rule(EmbeddedTomcat tomcat) {
 		super(tomcat);
 	}
 
-	/**
-	 * Create rule using tomcat as embedded server.
-	 */
+	/// Create rule using tomcat as embedded server.
 	public TomcatServerJunit4Rule() {
 		this(new EmbeddedTomcat());
 	}
 
-	/**
-	 * Create rule.
-	 *
-	 * @param configuration Tomcat Configuration.
-	 */
+	/// Create rule.
+	///
+	/// @param configuration Tomcat Configuration.
 	public TomcatServerJunit4Rule(EmbeddedTomcatConfiguration configuration) {
 		this(new EmbeddedTomcat(configuration));
 	}

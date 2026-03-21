@@ -32,53 +32,41 @@ import java.util.Objects;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
-/**
- * A simple {@link HttpRequestBody} using a raw string as request body.
- */
+/// A simple [HttpRequestBody] using a raw string as request body.
 final class HttpRequestBodyString implements HttpRequestBody {
 
-	/**
-	 * Create {@link HttpRequestBodyString} with a body and without any content-type.
-	 *
-	 * @param body Request body.
-	 * @return The body.
-	 * @throws NullPointerException If {@code body} is {@code null}
-	 */
+	/// Create [HttpRequestBodyString] with a body and without any content-type.
+	///
+	/// @param body Request body.
+	/// @return The body.
+	/// @throws NullPointerException If `body` is `null`
 	static HttpRequestBodyString of(String body) {
 		notNull(body, "body");
 		return new HttpRequestBodyString(null, body);
 	}
 
-	/**
-	 * Create {@link HttpRequestBodyString} with a body and with a content-type.
-	 *
-	 * @param body Request body.
-	 * @return The body.
-	 * @throws NullPointerException If {@code body} or {@code contentType} are {@code null}
-	 * @throws IllegalArgumentException If {@code contentType} is empty or blank.
-	 */
+	/// Create [HttpRequestBodyString] with a body and with a content-type.
+	///
+	/// @param body Request body.
+	/// @return The body.
+	/// @throws NullPointerException If `body` or `contentType` are `null`
+	/// @throws IllegalArgumentException If `contentType` is empty or blank.
 	static HttpRequestBodyString of(String body, String contentType) {
 		notNull(body, "body");
 		notBlank(contentType, "contentType");
 		return new HttpRequestBodyString(contentType, body);
 	}
 
-	/**
-	 * The body content type.
-	 */
+	/// The body content type.
 	private final String contentType;
 
-	/**
-	 * The body content.
-	 */
+	/// The body content.
 	private final String body;
 
-	/**
-	 * Create HTTP Request body from raw string.
-	 *
-	 * @param contentType The body content type.
-	 * @param body The body as a raw string.
-	 */
+	/// Create HTTP Request body from raw string.
+	///
+	/// @param contentType The body content type.
+	/// @param body The body as a raw string.
 	private HttpRequestBodyString(String contentType, String body) {
 		this.contentType = contentType;
 		this.body = body;
@@ -94,11 +82,9 @@ final class HttpRequestBodyString implements HttpRequestBody {
 		return Ios.toUtf8Bytes(body);
 	}
 
-	/**
-	 * Get {@link #body}
-	 *
-	 * @return {@link #body}
-	 */
+	/// Get [#body]
+	///
+	/// @return [#body]
 	String getBodyString() {
 		return body;
 	}

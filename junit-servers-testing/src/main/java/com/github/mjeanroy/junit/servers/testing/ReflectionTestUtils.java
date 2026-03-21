@@ -29,22 +29,18 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-/**
- * Static field utilities, used for testing only.
- */
+/// Static field utilities, used for testing only.
 public final class ReflectionTestUtils {
 
 	// Ensure non instantiation.
 	private ReflectionTestUtils() {
 	}
 
-	/**
-	 * Get private field on given class.
-	 *
-	 * @param klass The class.
-	 * @param name The field name.
-	 * @return The field.
-	 */
+	/// Get private field on given class.
+	///
+	/// @param klass The class.
+	/// @param name The field name.
+	/// @return The field.
 	public static Field getPrivateField(Class<?> klass, String name) {
 		Class<?> current = klass;
 
@@ -60,13 +56,11 @@ public final class ReflectionTestUtils {
 		return null;
 	}
 
-	/**
-	 * Get private field on given class.
-	 *
-	 * @param klass The class.
-	 * @param name The field name.
-	 * @return The field.
-	 */
+	/// Get private field on given class.
+	///
+	/// @param klass The class.
+	/// @param name The field name.
+	/// @return The field.
 	private static Field getDeclaredField(Class<?> klass, String name) {
 		try {
 			return klass.getDeclaredField(name);
@@ -79,13 +73,11 @@ public final class ReflectionTestUtils {
 		}
 	}
 
-	/**
-	 * Get private method on given class.
-	 *
-	 * @param klass The class.
-	 * @param name The field name.
-	 * @return The field.
-	 */
+	/// Get private method on given class.
+	///
+	/// @param klass The class.
+	/// @param name The field name.
+	/// @return The field.
 	public static Method getPrivateMethod(Class<?> klass, String name) {
 		try {
 			return klass.getDeclaredMethod(name);
@@ -95,14 +87,12 @@ public final class ReflectionTestUtils {
 		}
 	}
 
-	/**
-	 * Read private field on given object instance.
-	 *
-	 * @param instance The object instance.
-	 * @param name The field name.
-	 * @param <T> Type of the returned value.
-	 * @return The value of the field on given instance.
-	 */
+	/// Read private field on given object instance.
+	///
+	/// @param instance The object instance.
+	/// @param name The field name.
+	/// @param <T> Type of the returned value.
+	/// @return The value of the field on given instance.
 	public static <T> T readPrivate(Object instance, String name) {
 		try {
 			@SuppressWarnings("unchecked")

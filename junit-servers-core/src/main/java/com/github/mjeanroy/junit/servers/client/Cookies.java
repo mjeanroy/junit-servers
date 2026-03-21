@@ -30,69 +30,54 @@ import java.util.Map;
 import static com.github.mjeanroy.junit.servers.commons.lang.Dates.getTime;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
 
-/**
- * Static cookie utilities.
- */
+/// Static cookie utilities.
 public final class Cookies {
 
-	/**
-	 * The cookie separator used when multiple cookies needs to be sent to a server
-	 * in an HTTP request.
-	 */
+	/// The cookie separator used when multiple cookies needs to be sent to a server
+	/// in an HTTP request.
 	private static final String SEPARATOR = "; ";
 
-	/**
-	 * The character separating the name and the value of a cookie.
-	 */
+	/// The character separating the name and the value of a cookie.
 	private static final String NAME_VALUE_SEPARATOR = "=";
 
-	/**
-	 * The character separating cookies fields in the {@code Set-Cookie} header.
-	 */
+	/// The character separating cookies fields in the `Set-Cookie` header.
 	private static final String FIELD_SEPARATOR = ";";
 
 	// Ensure non instantiation.
 	private Cookies() {
 	}
 
-	/**
-	 * Create cookie with a name and a value, all other parameters will
-	 * use the default values:
-	 *
-	 * <ul>
-	 *   <li>The webapp path is initialized with {@code "src/main/webapp"}</li>
-	 *   <li>The path is initialized with {@code "/"}</li>
-	 *   <li>The port is initialized with zero.</li>
-	 *   <li>The cookie is not secured.</li>
-	 *   <li>The cookie is not http-only.</li>
-	 *   <li>The cookie max-age is {@code null}.</li>
-	 * </ul>.
-	 *
-	 * @param name Cookie name.
-	 * @param value Cookie value.
-	 * @return Cookie.
-	 * @throws NullPointerException if name or value is null.
-	 * @throws IllegalArgumentException if name is empty or blank.
-	 */
+	/// Create cookie with a name and a value, all other parameters will
+	/// use the default values:
+	/// - The webapp path is initialized with `"src/main/webapp"`
+	/// - The path is initialized with `"/"`
+	/// - The port is initialized with zero.
+	/// - The cookie is not secured.
+	/// - The cookie is not http-only.
+	/// - The cookie max-age is `null`.
+	///
+	/// @param name Cookie name.
+	/// @param value Cookie value.
+	/// @return Cookie.
+	/// @throws NullPointerException if name or value is null.
+	/// @throws IllegalArgumentException if name is empty or blank.
 	public static Cookie cookie(String name, String value) {
 		return new Cookie.Builder(name, value).build();
 	}
 
-	/**
-	 * Create cookie.
-	 *
-	 * @param name Cookie name.
-	 * @param value Cookie value.
-	 * @param domain Cookie domain.
-	 * @param path Cookie path.
-	 * @param expires Cookie expires value.
-	 * @param maxAge Cookie max age value.
-	 * @param secure Secure flag.
-	 * @param httpOnly Http flag.
-	 * @return Cookie.
-	 * @throws NullPointerException if name or value is null.
-	 * @throws IllegalArgumentException if name is empty or blank.
-	 */
+	/// Create cookie.
+	///
+	/// @param name Cookie name.
+	/// @param value Cookie value.
+	/// @param domain Cookie domain.
+	/// @param path Cookie path.
+	/// @param expires Cookie expires value.
+	/// @param maxAge Cookie max age value.
+	/// @param secure Secure flag.
+	/// @param httpOnly Http flag.
+	/// @return Cookie.
+	/// @throws NullPointerException if name or value is null.
+	/// @throws IllegalArgumentException if name is empty or blank.
 	public static Cookie cookie(String name, String value, String domain, String path, Long expires, Long maxAge, boolean secure, boolean httpOnly) {
 		Cookie.Builder builder = new Cookie.Builder(name, value)
 			.domain(domain)
@@ -112,47 +97,41 @@ public final class Cookies {
 	}
 
 
-	/**
-	 * Create a secured cookie, it means that cookie will have
-	 * secure flag and http only flag set to true.
-	 *
-	 * @param name Cookie name.
-	 * @param value Cookie value.
-	 * @param domain Cookie domain.
-	 * @param path Cookie path.
-	 * @param expires Cookie expires value.
-	 * @param maxAge Cookie max age.
-	 * @return Cookie.
-	 * @throws NullPointerException if name or value is null.
-	 * @throws IllegalArgumentException if name is empty or blank.
-	 */
+	/// Create a secured cookie, it means that cookie will have
+	/// secure flag and http only flag set to true.
+	///
+	/// @param name Cookie name.
+	/// @param value Cookie value.
+	/// @param domain Cookie domain.
+	/// @param path Cookie path.
+	/// @param expires Cookie expires value.
+	/// @param maxAge Cookie max age.
+	/// @return Cookie.
+	/// @throws NullPointerException if name or value is null.
+	/// @throws IllegalArgumentException if name is empty or blank.
 	public static Cookie secureCookie(String name, String value, String domain, String path, Long expires, Long maxAge) {
 		return Cookies.cookie(name, value, domain, path, expires, maxAge, true, true);
 	}
 
-	/**
-	 * Create a session cookie, it means that cookie will have
-	 * secure flag and http only flag set to true and expires / max age values
-	 * are set to zero.
-	 *
-	 * @param name Cookie name.
-	 * @param value Cookie value.
-	 * @param domain Cookie domain.
-	 * @param path Cookie path.
-	 * @return Cookie.
-	 * @throws NullPointerException if name or value is null.
-	 * @throws IllegalArgumentException if name is empty or blank.
-	 */
+	/// Create a session cookie, it means that cookie will have
+	/// secure flag and http only flag set to true and expires / max age values
+	/// are set to zero.
+	///
+	/// @param name Cookie name.
+	/// @param value Cookie value.
+	/// @param domain Cookie domain.
+	/// @param path Cookie path.
+	/// @return Cookie.
+	/// @throws NullPointerException if name or value is null.
+	/// @throws IllegalArgumentException if name is empty or blank.
 	public static Cookie sessionCookie(String name, String value, String domain, String path) {
 		return Cookies.cookie(name, value, domain, path, -1L, 0L, true, true);
 	}
 
-	/**
-	 * Create a cookie from header value.
-	 *
-	 * @param rawValue Header value.
-	 * @return Cookie.
-	 */
+	/// Create a cookie from header value.
+	///
+	/// @param rawValue Header value.
+	/// @return Cookie.
 	public static Cookie read(String rawValue) {
 		notBlank(rawValue, "Cookie value");
 
@@ -209,13 +188,11 @@ public final class Cookies {
 		return Cookies.cookie(name, value, domain, path, expires, maxAge, secure, httpOnly);
 	}
 
-	/**
-	 * Serialize cookies as a string that is ready to be sent to a server over an HTTP
-	 * request (a.k.a value of {@code Cookie} header).
-	 *
-	 * @param cookies Cookies to serialize.
-	 * @return The final value.
-	 */
+	/// Serialize cookies as a string that is ready to be sent to a server over an HTTP
+	/// request (a.k.a value of `Cookie` header).
+	///
+	/// @param cookies Cookies to serialize.
+	/// @return The final value.
 	public static String serialize(Iterable<Cookie> cookies) {
 		StringBuilder result = new StringBuilder();
 		boolean first = true;

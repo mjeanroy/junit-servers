@@ -35,32 +35,24 @@ import java.lang.reflect.Field;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.setter;
 
-/**
- * Annotation handler that will set configuration to a field
- * annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration}
- * on a given class instance.
- */
+/// Annotation handler that will set configuration to a field
+/// annotated with [com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration]
+/// on a given class instance.
 class ConfigurationAnnotationHandler extends AbstractAnnotationHandler {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(ConfigurationAnnotationHandler.class);
 
-	/**
-	 * Create new handler.
-	 * @param configuration Server configuration.
-	 * @param <CONFIGURATION> Type of configuration instance.
-	 * @return Handler.
-	 * @throws NullPointerException if configuration is null.
-	 */
+	/// Create new handler.
+	/// @param configuration Server configuration.
+	/// @param <CONFIGURATION> Type of configuration instance.
+	/// @return Handler.
+	/// @throws NullPointerException if configuration is null.
 	static <CONFIGURATION extends AbstractConfiguration> AnnotationHandler newConfigurationAnnotationHandler(CONFIGURATION configuration) {
 		return new ConfigurationAnnotationHandler(notNull(configuration, "configuration"));
 	}
 
-	/**
-	 * Server configuration.
-	 */
+	/// Server configuration.
 	private final AbstractConfiguration configuration;
 
 	// Use static factory instead

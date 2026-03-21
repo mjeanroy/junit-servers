@@ -31,63 +31,49 @@ import static com.github.mjeanroy.junit.servers.commons.reflect.Annotations.find
 import static com.github.mjeanroy.junit.servers.commons.reflect.Classes.instantiate;
 import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
-/**
- * Static factories for {@link AbstractEmbeddedJetty} that can be used in JUnit 4 Runner implementation
- * or JUnit Jupiter Extension.
- *
- * @param <EMBEDDED_JETTY> The embedded jetty implementation.
- */
+/// Static factories for [AbstractEmbeddedJetty] that can be used in JUnit 4 Runner implementation
+/// or JUnit Jupiter Extension.
+///
+/// @param <EMBEDDED_JETTY> The embedded jetty implementation.
 public abstract class AbstractEmbeddedJettyFactory<
 	EMBEDDED_JETTY extends AbstractBaseEmbeddedJetty<?, EmbeddedJettyConfiguration>
 > {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(AbstractEmbeddedJettyFactory.class);
 
-	/**
-	 * Create factory.
-	 */
+	/// Create factory.
 	public AbstractEmbeddedJettyFactory() {
 	}
 
-	/**
-	 * Instantiate embedded jetty from given test class.
-	 *
-	 * @param testClass The test class.
-	 * @return Created embedded jetty instance.
-	 */
+	/// Instantiate embedded jetty from given test class.
+	///
+	/// @param testClass The test class.
+	/// @return Created embedded jetty instance.
 	public final EMBEDDED_JETTY instantiateFrom(Class<?> testClass) {
 		return instantiateFrom(testClass, null);
 	}
 
-	/**
-	 * Instantiate embedded jetty from given test class, with given provided configuration (may be {@code null}).
-	 *
-	 * @param testClass The test class.
-	 * @param configuration The configuration to use, may be {@code null}.
-	 * @return Created embedded jetty instance.
-	 */
+	/// Instantiate embedded jetty from given test class, with given provided configuration (may be `null`).
+	///
+	/// @param testClass The test class.
+	/// @param configuration The configuration to use, may be `null`.
+	/// @return Created embedded jetty instance.
 	public final EMBEDDED_JETTY instantiateFrom(Class<?> testClass, EmbeddedJettyConfiguration configuration) {
 		log.debug("Instantiating embedded jetty for test class: {}", testClass);
 		EmbeddedJettyConfiguration configurationToUse = extractConfiguration(testClass, configuration);
 		return configurationToUse == null ? instantiateFrom() : instantiateFrom(configurationToUse);
 	}
 
-	/**
-	 * Instantiate embedded Jetty using default configuration.
-	 *
-	 * @return Embedded jetty.
-	 */
+	/// Instantiate embedded Jetty using default configuration.
+	///
+	/// @return Embedded jetty.
 	protected abstract EMBEDDED_JETTY instantiateFrom();
 
-	/**
-	 * Instantiate embedded Jetty using given configuration.
-	 *
-	 * @param config Jetty configuration.
-	 * @return Embedded jetty.
-	 */
+	/// Instantiate embedded Jetty using given configuration.
+	///
+	/// @param config Jetty configuration.
+	/// @return Embedded jetty.
 	protected abstract EMBEDDED_JETTY instantiateFrom(EmbeddedJettyConfiguration config);
 
 	private EmbeddedJettyConfiguration extractConfiguration(Class<?> testClass, EmbeddedJettyConfiguration configuration) {

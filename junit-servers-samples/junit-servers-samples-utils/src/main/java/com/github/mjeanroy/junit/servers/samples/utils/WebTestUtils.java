@@ -28,20 +28,16 @@ import com.github.mjeanroy.junit.servers.client.HttpClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Static Web Utilities for various samples.
- */
+/// Static Web Utilities for various samples.
 public final class WebTestUtils {
 
 	// Ensure non instantiation.
 	private WebTestUtils() {
 	}
 
-	/**
-	 * Ensure the home page can be rendered with expected message.
-	 *
-	 * @param client The HTTP client.
-	 */
+	/// Ensure the home page can be rendered with expected message.
+	///
+	/// @param client The HTTP client.
 	public static void ensureIndexIsOk(HttpClient client) {
 		String message = client.prepareGet("/index").execute().body();
 		assertThat(message).isNotEmpty().contains("Hello World");

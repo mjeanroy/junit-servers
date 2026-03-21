@@ -55,37 +55,25 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.posit
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
-/**
- * Abstract skeleton of {@link HttpResponse} interface.
- *
- * <p>
- *
- * <strong>This abstract class is not part of the public API and should not be used publicly.</strong>
- */
+/// Abstract skeleton of [HttpResponse] interface.
+///
+/// **This abstract class is not part of the public API and should not be used publicly.**
 public abstract class AbstractHttpResponse implements HttpResponse {
 
-	/**
-	 * The original request duration.
-	 */
+	/// The original request duration.
 	private final long duration;
 
-	/**
-	 * The lock used inside {@link #readResponseBody()} to avoid concurrent
-	 * writing to {@link #_body} value.
-	 */
+	/// The lock used inside [#readResponseBody()] to avoid concurrent
+	/// writing to [#_body] value.
 	private final Lock readResponseBodyLock;
 
-	/**
-	 * The response _body element, that will be computed the first time {@link #readResponseBody()} is
-	 * called.
-	 */
+	/// The response _body element, that will be computed the first time [#readResponseBody()] is
+	/// called.
 	private String _body;
 
-	/**
-	 * Create the partial HTTP response implementation.
-	 *
-	 * @param duration Original request duration.
-	 */
+	/// Create the partial HTTP response implementation.
+	///
+	/// @param duration Original request duration.
 	protected AbstractHttpResponse(long duration) {
 		this.duration = positive(duration, "Duration must be positive");
 		this.readResponseBodyLock = new ReentrantLock();
@@ -117,23 +105,19 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 		}
 	}
 
-	/**
-	 * Read HTTP Response _body as a {@link String} and update {@link #_body} value.
-	 *
-	 * @throws IOException If an error occurred while reading _body.
-	 */
+	/// Read HTTP Response _body as a [String] and update [#_body] value.
+	///
+	/// @throws IOException If an error occurred while reading _body.
 	private void readBodyIfNotAlreadyComputed() throws IOException {
 		if (_body == null) {
 			_body = readResponseBody();
 		}
 	}
 
-	/**
-	 * Read HTTP Response _body as a {@link String}.
-	 *
-	 * @return The response _body.
-	 * @throws IOException If an error occurred while reading _body.
-	 */
+	/// Read HTTP Response _body as a [String].
+	///
+	/// @return The response _body.
+	/// @throws IOException If an error occurred while reading _body.
 	protected abstract String readResponseBody() throws IOException;
 
 	@Override
@@ -257,12 +241,10 @@ public abstract class AbstractHttpResponse implements HttpResponse {
 		return Objects.hash(duration);
 	}
 
-	/**
-	 * Ensure that given object o can be equal to this.
-	 *
-	 * @param o The HTTP Response.
-	 * @return The flag.
-	 */
+	/// Ensure that given object o can be equal to this.
+	///
+	/// @param o The HTTP Response.
+	/// @return The flag.
 	protected boolean canEqual(AbstractHttpResponse o) {
 		return true;
 	}

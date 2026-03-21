@@ -24,16 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
-/**
- * Exception thrown when server cannot be initialized.
- */
+/// Exception thrown when server cannot be initialized.
 public final class ServerInitializationException extends AbstractEmbeddedServerException {
 
-	/**
-	 * Create exception.
-	 *
-	 * @param throwable Original cause.
-	 */
+	/// Create exception.
+	///
+	/// @param throwable Original cause.
 	public ServerInitializationException(Throwable throwable) {
 		super(throwable);
 	}

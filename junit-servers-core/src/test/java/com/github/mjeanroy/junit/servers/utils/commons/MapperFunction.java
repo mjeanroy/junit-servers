@@ -24,19 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.utils.commons;
 
-/**
- * A mapper function is a function that takes an argument of type T and return a
- * result of type U (U and T may be the same type).
- *
- * @param <T> Argument type.
- * @param <U> Return type.
- */
+/// A mapper function is a function that takes an argument of type T and return a
+/// result of type U (U and T may be the same type).
+///
+/// @param <T> Argument type.
+/// @param <U> Return type.
 public interface MapperFunction<T, U> {
 
-	/**
-	 * Execute function and return the result.
-	 * @param arg Function argument.
-	 * @return Function result.
-	 */
+	/// Execute function and return the result.
+	///
+	/// @param arg Function argument.
+	/// @return Function result.
 	U apply(T arg);
 }

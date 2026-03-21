@@ -31,63 +31,49 @@ import static com.github.mjeanroy.junit.servers.commons.reflect.Annotations.find
 import static com.github.mjeanroy.junit.servers.commons.reflect.Classes.instantiate;
 import static com.github.mjeanroy.junit.servers.engine.Servers.findConfiguration;
 
-/**
- * Static factories for Tomcat that can be used in JUnit 4 Runner implementation
- * or JUnit Jupiter Extension.
- *
- * @param <EMBEDDED_TOMCAT> The embedded tomcat implementation.
- */
+/// Static factories for Tomcat that can be used in JUnit 4 Runner implementation
+/// or JUnit Jupiter Extension.
+///
+/// @param <EMBEDDED_TOMCAT> The embedded tomcat implementation.
 public abstract class AbstractEmbeddedTomcatFactory<
 		EMBEDDED_TOMCAT extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration>
 > {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(AbstractEmbeddedTomcatFactory.class);
 
-	/**
-	 * Create factory.
-	 */
+	/// Create factory.
 	public AbstractEmbeddedTomcatFactory() {
 	}
 
-	/**
-	 * Instantiate embedded tomcat from given test class.
-	 *
-	 * @param testClass The test class.
-	 * @return Created embedded tomcat instance.
-	 */
+	/// Instantiate embedded tomcat from given test class.
+	///
+	/// @param testClass The test class.
+	/// @return Created embedded tomcat instance.
 	public final EMBEDDED_TOMCAT instantiateFrom(Class<?> testClass) {
 		return instantiateFrom(testClass, null);
 	}
 
-	/**
-	 * Instantiate embedded tomcat from given test class, with given provided configuration (may be {@code null}).
-	 *
-	 * @param testClass The test class.
-	 * @param configuration The configuration to use, may be {@code null}.
-	 * @return Created embedded tomcat instance.
-	 */
+	/// Instantiate embedded tomcat from given test class, with given provided configuration (may be `null`).
+	///
+	/// @param testClass The test class.
+	/// @param configuration The configuration to use, may be `null`.
+	/// @return Created embedded tomcat instance.
 	public final EMBEDDED_TOMCAT instantiateFrom(Class<?> testClass, EmbeddedTomcatConfiguration configuration) {
 		log.debug("Instantiating embedded tomcat for test class: {}", testClass);
 		EmbeddedTomcatConfiguration configurationToUse = extractConfiguration(testClass, configuration);
 		return configurationToUse == null ? instantiateFrom() : instantiateFrom(configurationToUse);
 	}
 
-	/**
-	 * Instantiate embedded Tomcat using default configuration.
-	 *
-	 * @return Embedded tomcat.
-	 */
+	/// Instantiate embedded Tomcat using default configuration.
+	///
+	/// @return Embedded tomcat.
 	protected abstract EMBEDDED_TOMCAT instantiateFrom();
 
-	/**
-	 * Instantiate embedded Tomcat using given configuration.
-	 *
-	 * @param config Tomcat configuration.
-	 * @return Embedded tomcat.
-	 */
+	/// Instantiate embedded Tomcat using given configuration.
+	///
+	/// @param config Tomcat configuration.
+	/// @return Embedded tomcat.
 	protected abstract EMBEDDED_TOMCAT instantiateFrom(EmbeddedTomcatConfiguration config);
 
 	private EmbeddedTomcatConfiguration extractConfiguration(Class<?> testClass, EmbeddedTomcatConfiguration configuration) {

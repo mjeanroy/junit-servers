@@ -32,29 +32,23 @@ import javax.servlet.ServletContext;
 
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 
-/**
- * Embedded server using tomcat as implementation.
- *
- * @deprecated Use {@code junit-servers-tomcat-8} instead.
- */
+/// Embedded server using tomcat as implementation.
+///
+/// @deprecated Use `junit-servers-tomcat-8` instead.
 @Deprecated
 public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
 
 	private static final Logger log = LoggerFactory.getLogger(EmbeddedTomcat.class);
 
-	/**
-	 * Build embedded tomcat with default configuration.
-	 */
+	/// Build embedded tomcat with default configuration.
 	public EmbeddedTomcat() {
 		this(defaultConfiguration());
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", EmbeddedTomcat.class);
 	}
 
-	/**
-	 * Build embedded tomcat.
-	 *
-	 * @param configuration Tomcat configuration.
-	 */
+	/// Build embedded tomcat.
+	///
+	/// @param configuration Tomcat configuration.
 	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
 		super(configuration);
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", EmbeddedTomcat.class);

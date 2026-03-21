@@ -27,27 +27,21 @@ package com.github.mjeanroy.junit.servers.client;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
-/**
- * A provider that can be implemented to provide custom {@link HttpClient} using the standard SPI.
- *
- * @see java.util.ServiceLoader
- */
+/// A provider that can be implemented to provide custom [HttpClient] using the standard SPI.
+///
+/// @see java.util.ServiceLoader
 public interface HttpClientProvider {
 
-	/**
-	 * Instantiate strategy.
-	 *
-	 * @param server The target server.
-	 * @return The new http client instance.
-	 */
+	/// Instantiate strategy.
+	///
+	/// @param server The target server.
+	/// @return The new http client instance.
 	HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server);
 
-	/**
-	 * Instantiate strategy with custom configuration.
-	 *
-	 * @param configuration HTTP Client configuration.
-	 * @param server The target server.
-	 * @return The new http client instance.
-	 */
+	/// Instantiate strategy with custom configuration.
+	///
+	/// @param configuration HTTP Client configuration.
+	/// @param server The target server.
+	/// @return The new http client instance.
 	HttpClient instantiate(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server);
 }

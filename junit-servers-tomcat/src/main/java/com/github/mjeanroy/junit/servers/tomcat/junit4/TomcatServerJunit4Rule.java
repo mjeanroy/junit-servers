@@ -30,40 +30,32 @@ import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 
-/**
- * Rule that can be used to start and stop embedded tomcat server.
- *
- * @deprecated Use {@code junit-servers-tomcat-8} instead.
- */
+/// Rule that can be used to start and stop embedded tomcat server.
+///
+/// @deprecated Use `junit-servers-tomcat-8` instead.
 @Deprecated
 public class TomcatServerJunit4Rule extends ServerRule {
 
 	private static final Logger log = LoggerFactory.getLogger(TomcatServerJunit4Rule.class);
 
-	/**
-	 * Create rule.
-	 *
-	 * @param tomcat Tomcat Embedded Server.
-	 * @throws NullPointerException If {@code tomcat} is {@code null}.
-	 */
+	/// Create rule.
+	///
+	/// @param tomcat Tomcat Embedded Server.
+	/// @throws NullPointerException If `tomcat` is `null`.
 	public TomcatServerJunit4Rule(EmbeddedTomcat tomcat) {
 		super(tomcat);
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", TomcatServerJunit4Rule.class);
 	}
 
-	/**
-	 * Create rule using tomcat as embedded server.
-	 */
+	/// Create rule using tomcat as embedded server.
 	public TomcatServerJunit4Rule() {
 		this(new EmbeddedTomcat());
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", TomcatServerJunit4Rule.class);
 	}
 
-	/**
-	 * Create rule.
-	 *
-	 * @param configuration Tomcat Configuration.
-	 */
+	/// Create rule.
+	///
+	/// @param configuration Tomcat Configuration.
 	public TomcatServerJunit4Rule(EmbeddedTomcatConfiguration configuration) {
 		this(new EmbeddedTomcat(configuration));
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", TomcatServerJunit4Rule.class);

@@ -24,28 +24,18 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-/**
- * Flag that can be used to track server status.
- */
+/// Flag that can be used to track server status.
 public enum ServerStatus {
 
-	/**
-	 * Server is stopped.
-	 */
+	/// Server is stopped.
 	STOPPED,
 
-	/**
-	 * Server has just been started.
-	 */
+	/// Server has just been started.
 	STARTED,
 
-	/**
-	 * Server is stopping.
-	 */
+	/// Server is stopping.
 	STOPPING,
 
-	/**
-	 * Server is starting.
-	 */
+	/// Server is starting.
 	STARTING
 }

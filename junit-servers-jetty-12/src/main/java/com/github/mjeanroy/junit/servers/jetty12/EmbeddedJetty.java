@@ -41,23 +41,17 @@ import java.net.URI;
 
 import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 
-/**
- * Jetty 12 Embedded Server.
- */
+/// Jetty 12 Embedded Server.
 public class EmbeddedJetty extends AbstractBaseEmbeddedJetty<WebAppContext, EmbeddedJettyConfiguration> {
 
-	/**
-	 * Build default embedded jetty server.
-	 */
+	/// Build default embedded jetty server.
 	public EmbeddedJetty() {
 		super(defaultConfiguration());
 	}
 
-	/**
-	 * Build embedded jetty server.
-	 *
-	 * @param configuration Server configuration.
-	 */
+	/// Build embedded jetty server.
+	///
+	/// @param configuration Server configuration.
 	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
 	}

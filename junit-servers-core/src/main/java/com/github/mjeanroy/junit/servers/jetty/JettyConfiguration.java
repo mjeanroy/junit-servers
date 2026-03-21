@@ -31,20 +31,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Annotation that can be used to specify {@link EmbeddedJettyConfiguration} provider that will be used
- * to create new {@link EmbeddedJettyConfiguration} and use it for the test suite.
- */
+/// Annotation that can be used to specify [EmbeddedJettyConfiguration] provider that will be used
+/// to create new [EmbeddedJettyConfiguration] and use it for the test suite.
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
 @Inherited
 public @interface JettyConfiguration {
 
-	/**
-	 * The configuration provider.
-	 *
-	 * @return The configuration provider class.
-	 */
+	/// The configuration provider.
+	///
+	/// @return The configuration provider class.
 	Class<? extends EmbeddedJettyConfigurationProvider> providedBy();
 }

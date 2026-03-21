@@ -24,66 +24,52 @@
 
 package com.github.mjeanroy.junit.servers.commons.lang;
 
-/**
- * Static string utilities.
- *
- * <p>
- *
- * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
- * or have their access level decreased from public to protected, package, or private in future versions without notice.
- */
+/// Static string utilities.
+///
+/// **Internal API**: these methods are part of the internal API and may be removed, have their signature change,
+/// or have their access level decreased from public to protected, package, or private in future versions without notice.
 public final class Strings {
 
 	private Strings() {
 	}
 
-	/**
-	 * Returns empty string if {@code value} is {@code null}, returns {@code value}
-	 * otherwise.
-	 *
-	 * @param value Given value.
-	 * @return The non null value.
-	 */
+	/// Returns empty string if `value` is `null`, returns `value`
+	/// otherwise.
+	///
+	/// @param value Given value.
+	/// @return The non null value.
 	public static String nullToEmpty(String value) {
 		return value == null ? "" : value;
 	}
 
-	/**
-	 * Check if given string is not {@code null} and not empty.
-	 *
-	 * @param value Value to check.
-	 * @return {@code true} if {@code value} is not {@code null} and not empty, {@code false} otherwise.
-	 */
+	/// Check if given string is not `null` and not empty.
+	///
+	/// @param value Value to check.
+	/// @return `true` if `value` is not `null` and not empty, `false` otherwise.
 	public static boolean isNotEmpty(String value) {
 		return value != null && !value.isEmpty();
 	}
 
-	/**
-	 * Check if given string is {@code null} or empty.
-	 *
-	 * @param value Value to check.
-	 * @return {@code true} if {@code value} is {@code null} or empty, {@code false} otherwise.
-	 */
+	/// Check if given string is `null` or empty.
+	///
+	/// @param value Value to check.
+	/// @return `true` if `value` is `null` or empty, `false` otherwise.
 	public static boolean isEmpty(String value) {
 		return value == null || value.isEmpty();
 	}
 
-	/**
-	 * Trim given string.
-	 *
-	 * @param value String to trim.
-	 * @return Trimmed string.
-	 */
+	/// Trim given string.
+	///
+	/// @param value String to trim.
+	/// @return Trimmed string.
 	public static String trim(String value) {
 		return value == null ? value : value.trim();
 	}
 
-	/**
-	 * Check that given string is blank.
-	 *
-	 * @param value String to check.
-	 * @return {@code true} if string is blank, {@code false} otherwise.
-	 */
+	/// Check that given string is blank.
+	///
+	/// @param value String to check.
+	/// @return `true` if string is blank, `false` otherwise.
 	static boolean isBlank(String value) {
 		if (value == null) {
 			return true;
@@ -98,24 +84,20 @@ public final class Strings {
 		return true;
 	}
 
-	/**
-	 * Check that given string is not blank.
-	 *
-	 * @param value String to check.
-	 * @return {@code true} if string is not blank, {@code false} otherwise.
-	 */
+	/// Check that given string is not blank.
+	///
+	/// @param value String to check.
+	/// @return `true` if string is not blank, `false` otherwise.
 	public static boolean isNotBlank(String value) {
 		return !isBlank(value);
 	}
 
-	/**
-	 * Remove string prefix if and only if string value starts with
-	 * the prefix, otherwise original string is returned.
-	 *
-	 * @param value String value.
-	 * @param prefix String prefix.
-	 * @return New string.
-	 */
+	/// Remove string prefix if and only if string value starts with
+	/// the prefix, otherwise original string is returned.
+	///
+	/// @param value String value.
+	/// @param prefix String prefix.
+	/// @return New string.
 	public static String removePrefix(String value, String prefix) {
 		if (value == null || prefix == null || prefix.length() > value.length()) {
 			return value;
@@ -124,16 +106,12 @@ public final class Strings {
 		return value.startsWith(prefix) ? value.substring(prefix.length()) : value;
 	}
 
-	/**
-	 * Returns the lowercase value of a given string:
-	 * <ul>
-	 *   <li>Returns {@code null} if {@code value} is {@code null}.</li>
-	 *   <li>Returns the result of {@link String#toLowerCase()} otherwise.</li>
-	 * </ul>
-	 *
-	 * @param value The string value.
-	 * @return The lowercase value.
-	 */
+	/// Returns the lowercase value of a given string:
+	/// - Returns `null` if `value` is `null`.
+	/// - Returns the result of [String#toLowerCase()] otherwise.
+	///
+	/// @param value The string value.
+	/// @return The lowercase value.
 	public static String toLowerCase(String value) {
 		return value == null ? null : value.toLowerCase();
 	}

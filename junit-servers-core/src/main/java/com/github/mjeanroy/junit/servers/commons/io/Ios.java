@@ -36,31 +36,23 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/**
- * Static I/O Utilities.
- */
+/// Static I/O Utilities.
 public final class Ios {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(Ios.class);
 
-	/**
-	 * The CRLF character (a.k.a {@code "\r\n"}).
-	 */
+	/// The CRLF character (a.k.a `"\r\n"`).
 	public static final byte[] CRLF = Ios.toUtf8Bytes("\r\n");
 
 	// Ensure non instantiation.
 	private Ios() {
 	}
 
-	/**
-	 * Serialize string to an array of bytes using UTF-8 encoding.
-	 *
-	 * @param value The string to serialize.
-	 * @return The serialization result.
-	 */
+	/// Serialize string to an array of bytes using UTF-8 encoding.
+	///
+	/// @param value The string to serialize.
+	/// @return The serialization result.
 	public static byte[] toUtf8Bytes(String value) {
 		if (value == null) {
 			return new byte[0];
@@ -69,14 +61,12 @@ public final class Ios {
 		return value.getBytes(StandardCharsets.UTF_8);
 	}
 
-	/**
-	 * Serialize file to an array of bytes.
-	 *
-	 * @param path The path.
-	 * @return The serialization result.
-	 * @throws IOException If an I/O error occurs reading from the stream
-	 * @see Files#readAllBytes(Path)
-	 */
+	/// Serialize file to an array of bytes.
+	///
+	/// @param path The path.
+	/// @return The serialization result.
+	/// @throws IOException If an I/O error occurs reading from the stream
+	/// @see Files#readAllBytes(Path)
 	public static byte[] toBytes(Path path) throws IOException {
 		if (path == null) {
 			return new byte[0];
@@ -85,12 +75,10 @@ public final class Ios {
 		return Files.readAllBytes(path);
 	}
 
-	/**
-	 * Try to guess content type of given file.
-	 *
-	 * @param path The file.
-	 * @return The content-type that has been guessed, may be {@code null}.
-	 */
+	/// Try to guess content type of given file.
+	///
+	/// @param path The file.
+	/// @return The content-type that has been guessed, may be `null`.
 	public static String guessContentType(Path path) {
 		if (path == null) {
 			return null;
@@ -111,12 +99,10 @@ public final class Ios {
 		return mimeType;
 	}
 
-	/**
-	 * Build file path using OS default file separator.
-	 * @param path Root path.
-	 * @param subPaths Sub paths.
-	 * @return The full path.
-	 */
+	/// Build file path using OS default file separator.
+	/// @param path Root path.
+	/// @param subPaths Sub paths.
+	/// @return The full path.
 	public static String toFilePath(String path, String... subPaths) {
 		StringBuilder output = new StringBuilder(path);
 

@@ -24,21 +24,16 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
-/**
- * Exception thrown when UTF-8 encoding is not supported on the runtime environment.
- *
- * Note that this exception should never be thrown as UTF-8 encoding should always be
- * available (see <a href="http://docs.oracle.com/javase/6/docs/technotes/guides/intl/encoding.doc.html">here</a> for
- * the list of supported encoding).
- */
+/// Exception thrown when UTF-8 encoding is not supported on the runtime environment.
+/// Note that this exception should never be thrown as UTF-8 encoding should always be
+/// available (see [here](http://docs.oracle.com/javase/6/docs/technotes/guides/intl/encoding.doc.html) for
+/// the list of supported encoding).
 @SuppressWarnings("serial")
 public class Utf8EncodingException extends AbstractException {
 
-	/**
-	 * Create the exception with original cause and a default error message.
-	 *
-	 * @param ex Original cause.
-	 */
+	/// Create the exception with original cause and a default error message.
+	///
+	/// @param ex Original cause.
 	public Utf8EncodingException(Throwable ex) {
 		super("UTF-8 encoding is not supported", ex);
 	}

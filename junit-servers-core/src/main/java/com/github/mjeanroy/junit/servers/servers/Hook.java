@@ -24,36 +24,25 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-/**
- * Hook that will be invoked:
- *
- * <ol>
- *   <li>Before server is started.</li>
- *   <li>Just after server is started.</li>
- *   <li>After server is stopped.</li>
- * </ol>
- */
+/// Hook that will be invoked:
+/// 1. Before server is started.
+/// 2. Just after server is started.
+/// 3. After server is stopped.
 public interface Hook {
 
-	/**
-	 * Method invoked before server starts.
-	 *
-	 * @param server Server.
-	 */
+	/// Method invoked before server starts.
+	///
+	/// @param server Server.
 	void pre(EmbeddedServer<?> server);
 
-	/**
-	 * Method invoked before server stops.
-	 *
-	 * @param server Server.
-	 */
+	/// Method invoked before server stops.
+	///
+	/// @param server Server.
 	void post(EmbeddedServer<?> server);
 
-	/**
-	 * Method invoked when server is fully started.
-	 *
-	 * @param server Server.
-	 * @param servletContext Servlet context started within container.
-	 */
+	/// Method invoked when server is fully started.
+	///
+	/// @param server Server.
+	/// @param servletContext Servlet context started within container.
 	void onStarted(EmbeddedServer<?> server, Object servletContext);
 }

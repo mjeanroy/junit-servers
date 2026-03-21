@@ -32,19 +32,16 @@ import org.junit.platform.testkit.engine.EngineTestKit;
 
 import java.lang.reflect.Method;
 
-/**
- * Static helpers for unit testing.
- */
+/// Static helpers for unit testing.
 public final class JupiterExtensionTesting {
 
 	private JupiterExtensionTesting() {
 	}
 
-	/**
-	 * Run tests
-	 * @param klass Test class.
-	 * @param otherKlasses Other (optional) test classes.
-	 */
+	/// Run tests
+	///
+	/// @param klass Test class.
+	/// @param otherKlasses Other (optional) test classes.
 	public static void runTests(Class<?> klass, Class<?> ...otherKlasses) {
 		ClassSelector[] classSelectors = new ClassSelector[otherKlasses.length + 1];
 		classSelectors[0] = DiscoverySelectors.selectClass(klass);

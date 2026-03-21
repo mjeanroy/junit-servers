@@ -32,25 +32,20 @@ import okhttp3.ResponseBody;
 
 import java.io.IOException;
 
-/**
- * Factory that produce {@link HttpResponse} from {@link Response}.
- *
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
- * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
- */
+/// Factory that produce [HttpResponse] from [Response].
+///
+/// @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
 final class OkHttpResponseFactory {
 
 	// Ensure non instantiation.
 	private OkHttpResponseFactory() {
 	}
 
-	/**
-	 * Create the final {@link DefaultHttpResponse} instance.
-	 *
-	 * @param response The OkHttp response.
-	 * @param duration The request duration.
-	 * @return The HTTP response.
-	 */
+	/// Create the final [DefaultHttpResponse] instance.
+	///
+	/// @param response The OkHttp response.
+	/// @param duration The request duration.
+	/// @return The HTTP response.
 	static HttpResponse of(Response response, long duration) {
 		return new OkHttpResponse(
 				response.code(),

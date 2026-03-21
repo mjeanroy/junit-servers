@@ -24,146 +24,112 @@
 
 package com.github.mjeanroy.junit.servers.loggers;
 
-/**
- * Logger abstraction.
- */
+/// Logger abstraction.
 public interface Logger {
 
-	/**
-	 * Log message with {@code "TRACE"} level.
-	 *
-	 * @param message Message to log.
-	 */
+	/// Log message with `"TRACE"` level.
+	///
+	/// @param message Message to log.
 	void trace(String message);
 
-	/**
-	 * Log message with {@code "TRACE"} level and interpolate parameter
-	 * to log message..
-	 *
-	 * @param message Message to log.
-	 * @param parameter Message dynamic parameter.
-	 */
+	/// Log message with `"TRACE"` level and interpolate parameter
+	/// to log message..
+	///
+	/// @param message Message to log.
+	/// @param parameter Message dynamic parameter.
 	void trace(String message, Object parameter);
 
-	/**
-	 * Log message with {@code "TRACE"} level and interpolate parameters
-	 * to log message..
-	 *
-	 * @param message Message to log.
-	 * @param p1 First message dynamic parameter.
-	 * @param p2 First message dynamic parameter.
-	 */
+	/// Log message with `"TRACE"` level and interpolate parameters
+	/// to log message..
+	///
+	/// @param message Message to log.
+	/// @param p1 First message dynamic parameter.
+	/// @param p2 First message dynamic parameter.
 	void trace(String message, Object p1, Object p2);
 
-	/**
-	 * Log message with {@code "DEBUG"} level.
-	 *
-	 * @param message Message to log.
-	 */
+	/// Log message with `"DEBUG"` level.
+	///
+	/// @param message Message to log.
 	void debug(String message);
 
-	/**
-	 * Log message with {@code "DEBUG"} level and interpolate parameter
-	 * to log message..
-	 *
-	 * @param message Message to log.
-	 * @param parameter Message dynamic parameter.
-	 */
+	/// Log message with `"DEBUG"` level and interpolate parameter
+	/// to log message..
+	///
+	/// @param message Message to log.
+	/// @param parameter Message dynamic parameter.
 	void debug(String message, Object parameter);
 
-	/**
-	 * Log message with {@code "DEBUG"} level and interpolate parameters
-	 * to log message..
-	 *
-	 * @param message Message to log.
-	 * @param p1 First message dynamic parameter.
-	 * @param p2 First message dynamic parameter.
-	 */
+	/// Log message with `"DEBUG"` level and interpolate parameters
+	/// to log message..
+	///
+	/// @param message Message to log.
+	/// @param p1 First message dynamic parameter.
+	/// @param p2 First message dynamic parameter.
 	void debug(String message, Object p1, Object p2);
 
-	/**
-	 * Log message with {@code "INFO"} level.
-	 *
-	 * @param message Message to log.
-	 */
+	/// Log message with `"INFO"` level.
+	///
+	/// @param message Message to log.
 	void info(String message);
 
-	/**
-	 * Log message with {@code "INFO"} level and interpolate parameter
-	 * to log message..
-	 *
-	 * @param message Message to log.
-	 * @param parameter Message dynamic parameter.
-	 */
+	/// Log message with `"INFO"` level and interpolate parameter
+	/// to log message..
+	///
+	/// @param message Message to log.
+	/// @param parameter Message dynamic parameter.
 	void info(String message, Object parameter);
 
-	/**
-	 * Log message with {@code "INFO"} level and interpolate parameters
-	 * to log message..
-	 *
-	 * @param message Message to log.
-	 * @param p1 First message dynamic parameter.
-	 * @param p2 First message dynamic parameter.
-	 */
+	/// Log message with `"INFO"` level and interpolate parameters
+	/// to log message..
+	///
+	/// @param message Message to log.
+	/// @param p1 First message dynamic parameter.
+	/// @param p2 First message dynamic parameter.
 	void info(String message, Object p1, Object p2);
 
-	/**
-	 * Log message with {@code "WARN"} level.
-	 *
-	 * @param message Message to log.
-	 */
+	/// Log message with `"WARN"` level.
+	///
+	/// @param message Message to log.
 	void warn(String message);
 
-	/**
-	 * Log message with {@code "WARN"} level and interpolate parameter
-	 * to log message..
-	 *
-	 * @param message Message to log.
-	 * @param parameter Message dynamic parameter.
-	 */
+	/// Log message with `"WARN"` level and interpolate parameter
+	/// to log message..
+	///
+	/// @param message Message to log.
+	/// @param parameter Message dynamic parameter.
 	void warn(String message, Object parameter);
 
-	/**
-	 * Log message with {@code "WARN"} level and interpolate parameters
-	 * to log message..
-	 *
-	 * @param message Message to log.
-	 * @param p1 First message dynamic parameter.
-	 * @param p2 First message dynamic parameter.
-	 */
+	/// Log message with `"WARN"` level and interpolate parameters
+	/// to log message..
+	///
+	/// @param message Message to log.
+	/// @param p1 First message dynamic parameter.
+	/// @param p2 First message dynamic parameter.
 	void warn(String message, Object p1, Object p2);
 
-	/**
-	 * Log message with {@code "ERROR"} level.
-	 *
-	 * @param message Message to log.
-	 */
+	/// Log message with `"ERROR"` level.
+	///
+	/// @param message Message to log.
 	void error(String message);
 
-	/**
-	 * Log message with {@code "ERROR"} level and interpolate parameter
-	 * to log message..
-	 *
-	 * @param message Message to log.
-	 * @param parameter Message dynamic parameter.
-	 */
+	/// Log message with `"ERROR"` level and interpolate parameter
+	/// to log message..
+	///
+	/// @param message Message to log.
+	/// @param parameter Message dynamic parameter.
 	void error(String message, Object parameter);
 
-	/**
-	 * Log message with {@code "ERROR"} level and interpolate parameters
-	 * to log message..
-	 *
-	 * @param message Message to log.
-	 * @param p1 First message dynamic parameter.
-	 * @param p2 First message dynamic parameter.
-	 */
+	/// Log message with `"ERROR"` level and interpolate parameters
+	/// to log message..
+	///
+	/// @param message Message to log.
+	/// @param p1 First message dynamic parameter.
+	/// @param p2 First message dynamic parameter.
 	void error(String message, Object p1, Object p2);
 
-	/**
-	 * Log message with {@code "ERROR"} level and print given exception stacktrace.
-	 *
-	 * @param message Message to log.
-	 * @param exception The exception.
-	 */
+	/// Log message with `"ERROR"` level and print given exception stacktrace.
+	///
+	/// @param message Message to log.
+	/// @param exception The exception.
 	void error(String message, Throwable exception);
 }

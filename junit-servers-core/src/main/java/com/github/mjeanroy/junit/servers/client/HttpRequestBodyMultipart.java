@@ -39,47 +39,31 @@ import java.util.Objects;
 import static com.github.mjeanroy.junit.servers.commons.lang.Objects.firstNonNull;
 import static java.util.Collections.unmodifiableList;
 
-/**
- * An implementation of {@link HttpRequestBody} for {@code "multipart/form-data"} request bodies.
- */
+/// An implementation of [HttpRequestBody] for `"multipart/form-data"` request bodies.
 final class HttpRequestBodyMultipart implements HttpRequestBody {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(HttpRequestBodyMultipart.class);
 
-	/**
-	 * The value added before boundaries in multipart request.
-	 */
+	/// The value added before boundaries in multipart request.
 	private static final byte[] DASH_DASH = Ios.toUtf8Bytes("--");
 
-	/**
-	 * The default boundaries that will be used if no one is defined.
-	 */
+	/// The default boundaries that will be used if no one is defined.
 	private static final String DEFAULT_BOUNDARIES = "---------------------------974767299852498929531610575";
 
-	/**
-	 * The content-type, starts with {@code "multipart/"}.
-	 */
+	/// The content-type, starts with `"multipart/"`.
 	private final String contentType;
 
-	/**
-	 * Part boundaries.
-	 */
+	/// Part boundaries.
 	private final String boundaries;
 
-	/**
-	 * The request parts.
-	 */
+	/// The request parts.
 	private final List<HttpRequestBodyPart> parts;
 
-	/**
-	 * Create multipart request body.
-	 *
-	 * @param boundaries Multipart boundaries (may be {@code null}).
-	 * @param parts The request parts.
-	 */
+	/// Create multipart request body.
+	///
+	/// @param boundaries Multipart boundaries (may be `null`).
+	/// @param parts The request parts.
 	HttpRequestBodyMultipart(String contentType, String boundaries, Collection<HttpRequestBodyPart> parts) {
 		this.contentType = firstNonNull(contentType, MediaType.MULTIPART_FORM_DATA);
 		this.boundaries = firstNonNull(boundaries, DEFAULT_BOUNDARIES);
@@ -115,20 +99,16 @@ final class HttpRequestBodyMultipart implements HttpRequestBody {
 		return bos.toByteArray();
 	}
 
-	/**
-	 * Get {@link #boundaries}
-	 *
-	 * @return {@link #boundaries}
-	 */
+	/// Get [#boundaries]
+	///
+	/// @return [#boundaries]
 	String getBoundaries() {
 		return boundaries;
 	}
 
-	/**
-	 * Get {@link #parts}
-	 *
-	 * @return {@link #parts}
-	 */
+	/// Get [#parts]
+	///
+	/// @return [#parts]
 	List<HttpRequestBodyPart> getParts() {
 		return parts;
 	}

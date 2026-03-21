@@ -26,16 +26,12 @@ package com.github.mjeanroy.junit.servers.tomcat;
 
 import com.github.mjeanroy.junit.servers.exceptions.IllegalConfigurationException;
 
-/**
- * Error thrown when Tomcat configuration is not valid.
- */
+/// Error thrown when Tomcat configuration is not valid.
 public class IllegalTomcatConfigurationException extends IllegalConfigurationException {
 
-	/**
-	 * Create exception with default error message.
-	 *
-	 * @param requiredClass The expected tomcat configuration class.
-	 */
+	/// Create exception with default error message.
+	///
+	/// @param requiredClass The expected tomcat configuration class.
 	public IllegalTomcatConfigurationException(Class<?> requiredClass) {
 		super(createMessage(requiredClass));
 	}

@@ -26,16 +26,12 @@ package com.github.mjeanroy.junit.servers.jetty;
 
 import com.github.mjeanroy.junit.servers.exceptions.IllegalConfigurationException;
 
-/**
- * Error thrown when jetty configuration is not valid.
- */
+/// Error thrown when jetty configuration is not valid.
 public class IllegalJettyConfigurationException extends IllegalConfigurationException {
 
-	/**
-	 * Create exception with default message.
-	 *
-	 * @param requiredClass The expected Jetty configuration class.
-	 */
+	/// Create exception with default message.
+	///
+	/// @param requiredClass The expected Jetty configuration class.
 	public IllegalJettyConfigurationException(Class<?> requiredClass) {
 		super(createMessage(requiredClass));
 	}

@@ -28,16 +28,12 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
 import static org.mockito.Mockito.mock;
 
-/**
- * Builder for mock instances of {@link EmbeddedTomcatConfiguration}.
- */
+/// Builder for mock instances of [EmbeddedTomcatConfiguration].
 public class EmbeddedTomcatConfigurationMockBuilder {
 
-	/**
-	 * Build mock instance of {@link EmbeddedTomcatConfiguration}.
-	 *
-	 * @return The mock instance.
-	 */
+	/// Build mock instance of [EmbeddedTomcatConfiguration].
+	///
+	/// @return The mock instance.
 	public EmbeddedTomcatConfiguration build() {
 		return mock(EmbeddedTomcatConfiguration.class);
 	}

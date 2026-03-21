@@ -29,37 +29,29 @@ import com.github.mjeanroy.junit.servers.exceptions.UrlException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-/**
- * Static URL utilities.
- *
- * <p>
- *
- * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
- * or have their access level decreased from public to protected, package, or private in future versions without notice.
- */
+/// Static URL utilities.
+///
+/// **Internal API**: these methods are part of the internal API and may be removed, have their signature change,
+/// or have their access level decreased from public to protected, package, or private in future versions without notice.
 public final class Urls {
 
 	private static final String[] HTTP_SCHEMES = new String[] { "http://", "https://" };
 
-	/**
-	 * The separator used in URL paths.
-	 */
+	/// The separator used in URL paths.
 	private static final char PATH_SEPARATOR = '/';
 
 	// Ensure non instantiation
 	private Urls() {
 	}
 
-	/**
-	 * Create URI object and wrap {@link URISyntaxException} to {@link UrlException}.
-	 *
-	 * @param scheme URL scheme.
-	 * @param host URL host.
-	 * @param port URL port.
-	 * @param path URL path.
-	 * @return The final URI.
-	 * @throws UrlException If URI cannot be built because of an invalid parameter.
-	 */
+	/// Create URI object and wrap [URISyntaxException] to [UrlException].
+	///
+	/// @param scheme URL scheme.
+	/// @param host URL host.
+	/// @param port URL port.
+	/// @param path URL path.
+	/// @return The final URI.
+	/// @throws UrlException If URI cannot be built because of an invalid parameter.
 	static URI createUri(String scheme, String host, int port, String path) {
 		try {
 			return new URI(scheme, null, host, port, path, null, null);
@@ -69,12 +61,10 @@ public final class Urls {
 		}
 	}
 
-	/**
-	 * Ensure that given path is an absolute path (i.e starts with {@code '/'}.
-	 *
-	 * @param path The path.
-	 * @return Absolute path.
-	 */
+	/// Ensure that given path is an absolute path (i.e starts with `'/'`.
+	///
+	/// @param path The path.
+	/// @return Absolute path.
 	public static String ensureAbsolutePath(String path) {
 		if (path == null || path.isEmpty()) {
 			return String.valueOf(PATH_SEPARATOR);
@@ -83,13 +73,11 @@ public final class Urls {
 		return path.charAt(0) == PATH_SEPARATOR ? path : PATH_SEPARATOR + path;
 	}
 
-	/**
-	 * Concatenate two path value.
-	 *
-	 * @param path Path prefix.
-	 * @param endpoint Path suffix.
-	 * @return Final path.
-	 */
+	/// Concatenate two path value.
+	///
+	/// @param path Path prefix.
+	/// @param endpoint Path suffix.
+	/// @return Final path.
 	public static String concatenatePath(String path, String endpoint) {
 		String firstSegment = ensureAbsolutePath(path);
 		if (endpoint == null || endpoint.isEmpty()) {
@@ -111,12 +99,10 @@ public final class Urls {
 		return sb.toString();
 	}
 
-	/**
-	 * Check if given {@code url} starts with HTTP scheme (i.e {@code "http"} or {@code "https"}).
-	 *
-	 * @param url The URL to check.
-	 * @return {@code true} if {@code url} starts with HTTP scheme, {@code false} otherwise.
-	 */
+	/// Check if given `url` starts with HTTP scheme (i.e `"http"` or `"https"`).
+	///
+	/// @param url The URL to check.
+	/// @return `true` if `url` starts with HTTP scheme, `false` otherwise.
 	public static boolean startsWithHttpScheme(String url) {
 		if (url == null || url.isEmpty()) {
 			return false;

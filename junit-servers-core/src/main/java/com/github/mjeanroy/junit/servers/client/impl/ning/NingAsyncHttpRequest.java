@@ -46,32 +46,23 @@ import java.io.IOException;
 
 import static java.lang.System.nanoTime;
 
-/**
- * Implementation for {@link HttpRequest} that use (ning) async-http-client
- * under the hood.
- *
- * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
- */
+/// Implementation for [HttpRequest] that use [(ning) async-http-client](https://github.com/ning/async-http-client)
+/// under the hood.
+///
+/// @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
 class NingAsyncHttpRequest extends AbstractHttpRequest {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(NingAsyncHttpRequest.class);
 
-	/**
-	 * Original http client, will be used to execute http request.
-	 */
+	/// Original http client, will be used to execute http request.
 	private final AsyncHttpClient client;
 
-	/**
-	 * Create http request.
-	 *
-	 * @param client Client used to execute request using async-http-client.
-	 * @param httpMethod Http method.
-	 * @param url Request URL.
-	 */
+	/// Create http request.
+	///
+	/// @param client Client used to execute request using async-http-client.
+	/// @param httpMethod Http method.
+	/// @param url Request URL.
 	NingAsyncHttpRequest(AsyncHttpClient client, HttpMethod httpMethod, HttpUrl url) {
 		super(url, httpMethod);
 		this.client = client;
@@ -104,25 +95,21 @@ class NingAsyncHttpRequest extends AbstractHttpRequest {
 		return NingAsyncHttpResponseFactory.of(response, duration);
 	}
 
-	/**
-	 * Add query parameter to the final HTTP request.
-	 *
-	 * @param builder The pending HTTP request.
-	 * @see RequestBuilder#addQueryParam(String, String)
-	 */
+	/// Add query parameter to the final HTTP request.
+	///
+	/// @param builder The pending HTTP request.
+	/// @see RequestBuilder#addQueryParam(String, String)
 	private void handleQueryParameters(RequestBuilder builder) {
 		for (HttpParameter p : queryParams.values()) {
 			builder.addQueryParam(p.getEncodedName(), p.getEncodedValue());
 		}
 	}
 
-	/**
-	 * Add request body.
-	 *
-	 * @param builder The pending HTTP request.
-	 * @see RequestBuilder#addFormParam(String, String)
-	 * @see RequestBuilder#setBody(String)
-	 */
+	/// Add request body.
+	///
+	/// @param builder The pending HTTP request.
+	/// @see RequestBuilder#addFormParam(String, String)
+	/// @see RequestBuilder#setBody(String)
 	private void handleBody(RequestBuilder builder) throws IOException {
 		if (!hasBody()) {
 			log.debug("HTTP Request does not have body, skip.");
@@ -137,24 +124,20 @@ class NingAsyncHttpRequest extends AbstractHttpRequest {
 		}
 	}
 
-	/**
-	 * Add cookies to the final HTTP request.
-	 *
-	 * @param builder The pending HTTP request.
-	 * @see RequestBuilder#addCookie(com.ning.http.client.cookie.Cookie)
-	 */
+	/// Add cookies to the final HTTP request.
+	///
+	/// @param builder The pending HTTP request.
+	/// @see RequestBuilder#addCookie(com.ning.http.client.cookie.Cookie)
 	private void handleCookies(RequestBuilder builder) {
 		if (!cookies.isEmpty()) {
 			builder.addHeader(HttpHeaders.COOKIE, Cookies.serialize(cookies));
 		}
 	}
 
-	/**
-	 * Add request headers.
-	 *
-	 * @param builder The pending HTTP request.
-	 * @see RequestBuilder#addHeader(String, String)
-	 */
+	/// Add request headers.
+	///
+	/// @param builder The pending HTTP request.
+	/// @see RequestBuilder#addHeader(String, String)
 	private void handleHeaders(RequestBuilder builder) {
 		for (HttpHeader header : headers.values()) {
 			builder.setHeader(header.getName(), header.serializeValues());

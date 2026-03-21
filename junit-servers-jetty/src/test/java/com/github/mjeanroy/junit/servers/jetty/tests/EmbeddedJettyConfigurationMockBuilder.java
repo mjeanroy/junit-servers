@@ -28,16 +28,12 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
 import static org.mockito.Mockito.mock;
 
-/**
- * Builder for mock instances of {@link EmbeddedJettyConfiguration}.
- */
+/// Builder for mock instances of [EmbeddedJettyConfiguration].
 public class EmbeddedJettyConfigurationMockBuilder {
 
-	/**
-	 * Build mock instance of {@link EmbeddedJettyConfiguration}.
-	 *
-	 * @return The mock instance.
-	 */
+	/// Build mock instance of [EmbeddedJettyConfiguration].
+	///
+	/// @return The mock instance.
 	public EmbeddedJettyConfiguration build() {
 		return mock(EmbeddedJettyConfiguration.class);
 	}

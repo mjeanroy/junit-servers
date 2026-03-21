@@ -34,17 +34,13 @@ import static com.github.mjeanroy.junit.servers.commons.core.Urls.ensureAbsolute
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static java.lang.System.getProperty;
 
-/**
- * Partial implementation of an embedded server.
- *
- * <p>
- *
- * Subclasses should implement {@link #doStart()} and {@link #doStop()} methods and synchronization is already
- * managed by this abstract implementation.
- *
- * @param <EMBEDDED_SERVER> The embedded server implementation.
- * @param <CONFIGURATION> The embedded server configuration implementation.
- */
+/// Partial implementation of an embedded server.
+///
+/// Subclasses should implement [#doStart()] and [#doStop()] methods and synchronization is already
+/// managed by this abstract implementation.
+///
+/// @param <EMBEDDED_SERVER> The embedded server implementation.
+/// @param <CONFIGURATION> The embedded server configuration implementation.
 public abstract class AbstractEmbeddedServer<
 	EMBEDDED_SERVER,
 	CONFIGURATION extends AbstractConfiguration
@@ -57,34 +53,24 @@ public abstract class AbstractEmbeddedServer<
 	private static final String SCHEME_SEPARATOR = "://";
 	private static final String PORT_SEPARATOR = ":";
 
-	/**
-	 * Server configuration.
-	 */
+	/// Server configuration.
 	protected final CONFIGURATION configuration;
 
-	/**
-	 * Flag to keep server status:
-	 * <ul>
-	 *   <li>Server can be started if and only if status is equal to {@link ServerStatus#STOPPED}.</li>
-	 *   <li>Server can be stopped if and only if status is equal to {@link ServerStatus#STARTED}.</li>
-	 * </ul>
-	 */
+	/// Flag to keep server status:
+	/// - Server can be started if and only if status is equal to [ServerStatus#STOPPED].
+	/// - Server can be stopped if and only if status is equal to [ServerStatus#STARTED].
 	private volatile ServerStatus status;
 
-	/**
-	 * Old properties used to restore initial environment properties values when server stops.
-	 * It can be used to set a spring profile property or anything else.
-	 */
+	/// Old properties used to restore initial environment properties values when server stops.
+	/// It can be used to set a spring profile property or anything else.
 	private final Map<String, String> oldProperties;
 
 	// Lock used to synchronize start and stop tasks
 	private static final Object lock = new Object();
 
-	/**
-	 * Build default embedded server.
-	 *
-	 * @param configuration Server configuration.
-	 */
+	/// Build default embedded server.
+	///
+	/// @param configuration Server configuration.
 	protected AbstractEmbeddedServer(CONFIGURATION configuration) {
 		this.configuration = notNull(configuration, "configuration");
 		this.status = ServerStatus.STOPPED;
@@ -154,11 +140,9 @@ public abstract class AbstractEmbeddedServer<
 		return configuration.getPath();
 	}
 
-	/**
-	 * Add custom environment properties.
-	 * Initial property value will be store in {@link #oldProperties} map
-	 * and will be restore later.
-	 */
+	/// Add custom environment properties.
+	/// Initial property value will be store in [#oldProperties] map
+	/// and will be restore later.
 	private void initEnvironment() {
 		log.debug("Initialize environment properties");
 		for (Map.Entry<String, String> property : configuration.getEnvProperties().entrySet()) {
@@ -173,12 +157,9 @@ public abstract class AbstractEmbeddedServer<
 		}
 	}
 
-	/**
-	 * Reset custom environment properties.
-	 *
-	 * Initial values stored in {@link #oldProperties} will be restored
-	 * or cleared.
-	 */
+	/// Reset custom environment properties.
+	/// Initial values stored in [#oldProperties] will be restored
+	/// or cleared.
 	private void destroyEnvironment() {
 		log.debug("Resetting environment properties");
 		for (Map.Entry<String, String> property : configuration.getEnvProperties().entrySet()) {
@@ -201,11 +182,9 @@ public abstract class AbstractEmbeddedServer<
 		}
 	}
 
-	/**
-	 * Exec hooks phase.
-	 *
-	 * @param pre Phase to execute (true => pre ; false => post).
-	 */
+	/// Exec hooks phase.
+	///
+	/// @param pre Phase to execute (true => pre ; false => post).
 	private void execHooks(boolean pre) {
 		log.debug("Executing embedded server lifecycle hooks (pre = {})", pre);
 		for (Hook hook : configuration.getHooks()) {
@@ -257,34 +236,27 @@ public abstract class AbstractEmbeddedServer<
 		return configuration;
 	}
 
-	/**
-	 * Get internal server implementation.
-	 * Note that this method should not be used to start
-	 * or stop internal server, use dedicated method instead.
-	 *
-	 * This method can be used to do some custom configuration
-	 * on original implementation.
-	 *
-	 * @return Original server implementation.
-	 */
+	/// Get internal server implementation.
+	///
+	/// Note that this method should not be used to start
+	/// or stop internal server, use dedicated method instead.
+	///
+	/// This method can be used to do some custom configuration
+	/// on original implementation.
+	///
+	/// @return Original server implementation.
 	public abstract EMBEDDED_SERVER getDelegate();
 
-	/**
-	 * Start embedded server.
-	 * Must block until server is fully started.
-	 */
+	/// Start embedded server.
+	/// Must block until server is fully started.
 	protected abstract void doStart();
 
-	/**
-	 * Stop embedded server.
-	 * Must block until server is fully stopped.
-	 */
+	/// Stop embedded server.
+	/// Must block until server is fully stopped.
 	protected abstract void doStop();
 
-	/**
-	 * Get port once server is started.
-	 *
-	 * @return The port.
-	 */
+	/// Get port once server is started.
+	///
+	/// @return The port.
 	protected abstract int doGetPort();
 }

@@ -39,88 +39,68 @@ import java.util.Objects;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
-/**
- * Builder for {@link HttpRequestBodyPart}.
- */
+/// Builder for [HttpRequestBodyPart].
 final class HttpRequestBodyPartBuilder {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(HttpRequestBodyPartBuilder.class);
 
-	/**
-	 * Initialize builder.
-	 *
-	 * @param body The part body.
-	 * @return The part builder.
-	 */
+	/// Initialize builder.
+	///
+	/// @param body The part body.
+	/// @return The part builder.
 	static HttpRequestBodyPartBuilder of(HttpRequestBody body) {
 		return new HttpRequestBodyPartBuilder(body);
 	}
 
-	/**
-	 * Initialize builder.
-	 *
-	 * @param file The file body.
-	 * @return The part builder.
-	 */
+	/// Initialize builder.
+	///
+	/// @param file The file body.
+	/// @return The part builder.
 	static HttpRequestBodyPartBuilder of(File file) {
 		return new HttpRequestBodyPartBuilder(HttpRequestBodyFile.of(file));
 	}
 
-	/**
-	 * Initialize builder.
-	 *
-	 * @param path The file body.
-	 * @return The part builder.
-	 */
+	/// Initialize builder.
+	///
+	/// @param path The file body.
+	/// @return The part builder.
 	static HttpRequestBodyPartBuilder of(Path path) {
 		return new HttpRequestBodyPartBuilder(HttpRequestBodyFile.of(path));
 	}
 
-	/**
-	 * Initialize builder.
-	 *
-	 * @param value The body string.
-	 * @return The part builder.
-	 */
+	/// Initialize builder.
+	///
+	/// @param value The body string.
+	/// @return The part builder.
 	static HttpRequestBodyPartBuilder of(String value) {
 		return new HttpRequestBodyPartBuilder(HttpRequestBodyString.of(value));
 	}
 
-	/**
-	 * The part body.
-	 */
+	/// The part body.
 	private final HttpRequestBody body;
 
-	/**
-	 * Part headers.
-	 */
+	/// Part headers.
 	private final Map<String, HttpHeader> headers;
 
-	/**
-	 * Create builder with given body.
-	 *
-	 * @param body The body.
-	 */
+	/// Create builder with given body.
+	///
+	/// @param body The body.
 	private HttpRequestBodyPartBuilder(HttpRequestBody body) {
 		this.body = notNull(body, "body");
 		this.headers = new LinkedHashMap<>();
 	}
 
-	/**
-	 * Add new header.
-	 *
-	 * Note that {@code Content-Type} header is forbidden here, as it should be defined with
-	 * the part {@link #body} (and it will be automatically added when part will be serialized).
-	 *
-	 * @param header Header.
-	 * @return The builder.
-	 * @throws NullPointerException If {@code header} is {@code null}
-	 * @throws IllegalArgumentException If header name is the {@code "Content-Type"} header.
-	 * @throws IllegalStateException If this header has already been added
-	 */
+	/// Add new header.
+	///
+	/// Note that `Content-Type` header is forbidden here, as it should be defined with
+	/// the part [#body] (and it will be automatically added when part will be serialized).
+	///
+	/// @param header Header.
+	/// @return The builder.
+	/// @throws NullPointerException If `header` is `null`
+	/// @throws IllegalArgumentException If header name is the `"Content-Type"` header.
+	/// @throws IllegalStateException If this header has already been added
 	HttpRequestBodyPartBuilder addHeader(HttpHeader header) {
 		log.trace("Attempt to add header: {}", header);
 
@@ -143,34 +123,30 @@ final class HttpRequestBodyPartBuilder {
 		return this;
 	}
 
-	/**
-	 * Add new header to this part.
-	 *
-	 * Note that {@code Content-Type} header is forbidden here, as it should be defined with
-	 * the part {@link #body} (and it will be automatically added when part will be serialized).
-	 *
-	 * @param name Header name.
-	 * @param value Header value.
-	 * @return The builder.
-	 * @throws NullPointerException If {@code name} is {@code null}
-	 * @throws IllegalArgumentException If {@code name} is empty or blank
-	 * @throws IllegalArgumentException If header name is the {@code "Content-Type"} header.
-	 * @throws IllegalStateException If this header has already been added
-	 */
+	/// Add new header to this part.
+	///
+	/// Note that `Content-Type` header is forbidden here, as it should be defined with
+	/// the part [#body] (and it will be automatically added when part will be serialized).
+	///
+	/// @param name Header name.
+	/// @param value Header value.
+	/// @return The builder.
+	/// @throws NullPointerException If `name` is `null`
+	/// @throws IllegalArgumentException If `name` is empty or blank
+	/// @throws IllegalArgumentException If header name is the `"Content-Type"` header.
+	/// @throws IllegalStateException If this header has already been added
 	HttpRequestBodyPartBuilder addHeader(String name, String value) {
 		return addHeader(
 			HttpHeader.of(name, value)
 		);
 	}
 
-	/**
-	 * Add the {@code "Content-Disposition"} header, specifying the form-data part with given {@code name}.
-	 *
-	 * @param name Part name.
-	 * @return The builder.
-	 * @throws NullPointerException If {@code name} is {@code null}
-	 * @throws IllegalArgumentException If {@code name} is empty, or blank.
-	 */
+	/// Add the `"Content-Disposition"` header, specifying the form-data part with given `name`.
+	///
+	/// @param name Part name.
+	/// @return The builder.
+	/// @throws NullPointerException If `name` is `null`
+	/// @throws IllegalArgumentException If `name` is empty, or blank.
 	HttpRequestBodyPartBuilder asFormData(String name) {
 		notBlank(name, "name");
 
@@ -179,16 +155,14 @@ final class HttpRequestBodyPartBuilder {
 		);
 	}
 
-	/**
-	 * Add the {@code "Content-Disposition"} header, specifying the form-data part with given {@code name}
-	 * and given {@code filename} being sent.
-	 *
-	 * @param name Part name.
-	 * @param filename Filename.
-	 * @return The builder.
-	 * @throws NullPointerException If {@code name} or {@code filename} are {@code null}
-	 * @throws IllegalArgumentException If {@code name} or {@code filename} are empty, or blank.
-	 */
+	/// Add the `"Content-Disposition"` header, specifying the form-data part with given `name`
+	/// and given `filename` being sent.
+	///
+	/// @param name Part name.
+	/// @param filename Filename.
+	/// @return The builder.
+	/// @throws NullPointerException If `name` or `filename` are `null`
+	/// @throws IllegalArgumentException If `name` or `filename` are empty, or blank.
 	HttpRequestBodyPartBuilder asFormData(String name, String filename) {
 		notBlank(name, "name");
 		notBlank(filename, "filename");
@@ -198,11 +172,9 @@ final class HttpRequestBodyPartBuilder {
 		);
 	}
 
-	/**
-	 * Build HTTP request body part.
-	 *
-	 * @return The body part.
-	 */
+	/// Build HTTP request body part.
+	///
+	/// @return The body part.
 	HttpRequestBodyPart build() {
 		return HttpRequestBodyPart.of(body, headers.values());
 	}
@@ -234,28 +206,24 @@ final class HttpRequestBodyPartBuilder {
 		return Objects.hash(body, headers);
 	}
 
-	/**
-	 * Create the {@code Content-Disposition} header, that can be use as header for multipart form-data
-	 * part.
-	 *
-	 * @param name The part name.
-	 * @param filename THe filename, may be {@code null}.
-	 * @return The header value.
-	 */
+	/// Create the `Content-Disposition` header, that can be use as header for multipart form-data
+	/// part.
+	///
+	/// @param name The part name.
+	/// @param filename THe filename, may be `null`.
+	/// @return The header value.
 	private static HttpHeader createContentDispositionHeader(String name, String filename) {
 		return HttpHeader.of(
 			HttpHeaders.CONTENT_DISPOSITION, createContentDispositionHeaderValue(name, filename)
 		);
 	}
 
-	/**
-	 * Create the {@code Content-Disposition} header value, that can be use as header for multipart form-data
-	 * part.
-	 *
-	 * @param name The part name.
-	 * @param filename THe filename, may be {@code null}.
-	 * @return The header value.
-	 */
+	/// Create the `Content-Disposition` header value, that can be use as header for multipart form-data
+	/// part.
+	///
+	/// @param name The part name.
+	/// @param filename THe filename, may be `null`.
+	/// @return The header value.
 	private static String createContentDispositionHeaderValue(String name, String filename) {
 		List<String> parts = new ArrayList<>(3);
 		parts.add("form-data");
@@ -268,12 +236,10 @@ final class HttpRequestBodyPartBuilder {
 		return String.join("; ", parts);
 	}
 
-	/**
-	 * Escape given input string to use it in {@code "Content-Disposition"} header safely.
-	 *
-	 * @param input Input string to escape.
-	 * @return Escaped string.
-	 */
+	/// Escape given input string to use it in `"Content-Disposition"` header safely.
+	///
+	/// @param input Input string to escape.
+	/// @return Escaped string.
 	private static String toEscapedString(String input) {
 		final int size = input.length();
 		final StringBuilder output = new StringBuilder(size * 3);

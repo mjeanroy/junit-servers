@@ -35,21 +35,17 @@ import java.lang.annotation.Target;
 
 import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_CLASS;
 
-/**
- * Exception used to create a test with {@link JettyServerExtension}.
- *
- * @deprecated Use {@code junit-servers-jetty-9} instead.
- */
+/// Exception used to create a test with [JettyServerExtension].
+///
+/// @deprecated Use `junit-servers-jetty-9` instead.
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @ExtendWith(JettyServerExtension.class)
 @Documented
 @Deprecated
 public @interface JettyTest {
-	/**
-	 * Lifecycle, defaults to {@link JunitServerExtensionLifecycle#PER_CLASS}.
-	 *
-	 * @return Lifecycle.
-	 */
+	/// Lifecycle, defaults to [JunitServerExtensionLifecycle#PER_CLASS].
+	///
+	/// @return Lifecycle.
 	JunitServerExtensionLifecycle lifecycle() default PER_CLASS;
 }

@@ -38,82 +38,66 @@ import java.util.Optional;
 
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
-/**
- * A specialized {@link JunitServerExtension} that will instantiate an {@link EmbeddedTomcat}
- * server automatically instead of using the Service Provider API.
- *
- * Since this jupiter extends {@link JunitServerExtension}, it has exactly the same features (parameter
- * injections, etc.).
- *
- * @see JunitServerExtension
- */
+/// A specialized [JunitServerExtension] that will instantiate an [EmbeddedTomcat]
+/// server automatically instead of using the Service Provider API.
+///
+/// Since this jupiter extends [JunitServerExtension], it has exactly the same features (parameter
+/// injections, etc.).
+///
+/// @see JunitServerExtension
 public class TomcatServerExtension extends JunitServerExtension {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(TomcatServerExtension.class);
 
-	/**
-	 * Create the jupiter with default behavior.
-	 */
+	/// Create the jupiter with default behavior.
 	public TomcatServerExtension() {
 		super();
 	}
 
 
-	/**
-	 * Create the jupiter with default behavior.
-	 *
-	 * @param lifecycle The extension lifecycle.
-	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
-	 */
+	/// Create the jupiter with default behavior.
+	///
+	/// @param lifecycle The extension lifecycle.
+	/// @throws NullPointerException If `lifecycle` is `null`.
 	public TomcatServerExtension(JunitServerExtensionLifecycle lifecycle) {
 		super(lifecycle);
 	}
 
-	/**
-	 * Create the jupiter and specify the embedded tomcat instance to use.
-	 *
-	 * @param tomcat The embedded tomcat instance to use.
-	 * @throws NullPointerException If {@code tomcat} is {@code null}.
-	 */
+	/// Create the jupiter and specify the embedded tomcat instance to use.
+	///
+	/// @param tomcat The embedded tomcat instance to use.
+	/// @throws NullPointerException If `tomcat` is `null`.
 	public TomcatServerExtension(EmbeddedTomcat tomcat) {
 		super(tomcat);
 	}
 
-	/**
-	 * Create the jupiter and specify the embedded tomcat instance to use.
-	 *
-	 * @param lifecycle The extension lifecycle.
-	 * @param tomcat The embedded tomcat instance to use.
-	 * @throws NullPointerException If {@code tomcat} is {@code null}.
-	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
-	 */
+	/// Create the jupiter and specify the embedded tomcat instance to use.
+	///
+	/// @param lifecycle The extension lifecycle.
+	/// @param tomcat The embedded tomcat instance to use.
+	/// @throws NullPointerException If `tomcat` is `null`.
+	/// @throws NullPointerException If `lifecycle` is `null`.
 	public TomcatServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedTomcat tomcat) {
 		super(lifecycle, tomcat);
 	}
 
-	/**
-	 * Create the jupiter and specify the embedded tomcat configuration to use (when using
-	 * jupiter with {@link RegisterExtension}).
-	 *
-	 * @param configuration The embedded tomcat configuration to use.
-	 * @throws NullPointerException If {@code configuration} is {@code null}.
-	 */
+	/// Create the jupiter and specify the embedded tomcat configuration to use (when using
+	/// jupiter with [RegisterExtension]).
+	///
+	/// @param configuration The embedded tomcat configuration to use.
+	/// @throws NullPointerException If `configuration` is `null`.
 	public TomcatServerExtension(EmbeddedTomcatConfiguration configuration) {
 		super(configuration);
 	}
 
-	/**
-	 * Create the jupiter and specify the embedded tomcat configuration to use (when using
-	 * jupiter with {@link RegisterExtension}).
-	 *
-	 * @param lifecycle The extension lifecycle.
-	 * @param configuration The embedded tomcat configuration to use.
-	 * @throws NullPointerException If {@code configuration} is {@code null}.
-	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
-	 */
+	/// Create the jupiter and specify the embedded tomcat configuration to use (when using
+	/// jupiter with [RegisterExtension]).
+	///
+	/// @param lifecycle The extension lifecycle.
+	/// @param configuration The embedded tomcat configuration to use.
+	/// @throws NullPointerException If `configuration` is `null`.
+	/// @throws NullPointerException If `lifecycle` is `null`.
 	public TomcatServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedTomcatConfiguration configuration) {
 		super(lifecycle, configuration);
 	}

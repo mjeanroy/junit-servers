@@ -29,26 +29,18 @@ import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import org.junit.jupiter.api.extension.ParameterContext;
 
-/**
- * Resolve {@link com.github.mjeanroy.junit.servers.servers.AbstractConfiguration} parameter.
- */
+/// Resolve [com.github.mjeanroy.junit.servers.servers.AbstractConfiguration] parameter.
 class ConfigurationResolverFunction implements ParameterResolverFunction {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(ConfigurationResolverFunction.class);
 
-	/**
-	 * The singleton instance.
-	 */
+	/// The singleton instance.
 	private static final ConfigurationResolverFunction INSTANCE = new ConfigurationResolverFunction();
 
-	/**
-	 * Get instance of {@link ConfigurationResolverFunction} resolver.
-	 *
-	 * @return The instance.
-	 */
+	/// Get instance of [ConfigurationResolverFunction] resolver.
+	///
+	/// @return The instance.
 	static ConfigurationResolverFunction getInstance() {
 		return INSTANCE;
 	}

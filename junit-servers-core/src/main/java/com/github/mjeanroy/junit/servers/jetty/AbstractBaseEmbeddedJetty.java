@@ -47,42 +47,30 @@ import java.util.List;
 import static com.github.mjeanroy.junit.servers.commons.io.Ios.toFilePath;
 import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
 
-/**
- * Jetty Embedded Server.
- *
- * @param <CONTEXT> The jetty WebAppContext implementation.
- * @param <CONFIGURATION> The jetty configuration implementation.
- */
+/// Jetty Embedded Server.
+///
+/// @param <CONTEXT> The jetty WebAppContext implementation.
+/// @param <CONFIGURATION> The jetty configuration implementation.
 public abstract class AbstractBaseEmbeddedJetty<
 	CONTEXT extends ContextHandler,
 	CONFIGURATION extends AbstractEmbeddedJettyConfiguration
 > extends AbstractEmbeddedServer<Server, CONFIGURATION> {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(AbstractBaseEmbeddedJetty.class);
 
-	/**
-	 * Instance of Jetty Server.
-	 */
+	/// Instance of Jetty Server.
 	private final Server server;
 
-	/**
-	 * Jetty Web App Context.
-	 */
+	/// Jetty Web App Context.
 	private volatile CONTEXT webAppContext;
 
-	/**
-	 * Server Connector, lazily initialized.
-	 */
+	/// Server Connector, lazily initialized.
 	private volatile ServerConnector connector;
 
-	/**
-	 * Build embedded jetty server.
-	 *
-	 * @param configuration Server configuration.
-	 */
+	/// Build embedded jetty server.
+	///
+	/// @param configuration Server configuration.
 	protected AbstractBaseEmbeddedJetty(CONFIGURATION configuration) {
 		super(configuration);
 		this.server = initServer();
@@ -130,12 +118,10 @@ public abstract class AbstractBaseEmbeddedJetty<
 		}
 	}
 
-	/**
-	 * Build web app context used to launch server.
-	 * May be override by subclasses.
-	 *
-	 * @throws Exception May be thrown by web app context initialization (will be wrapped later).
-	 */
+	/// Build web app context used to launch server.
+	/// May be override by subclasses.
+	///
+	/// @throws Exception May be thrown by web app context initialization (will be wrapped later).
 	private CONTEXT createdWebAppContext() throws Exception {
 		final String path = configuration.getPath();
 		final String webapp = configuration.getWebapp();
@@ -310,119 +296,91 @@ public abstract class AbstractBaseEmbeddedJetty<
 		return connector.getLocalPort();
 	}
 
-	/**
-	 * Get Jetty WebAppContext.
-	 *
-	 * @return WebAppContext, may be {@code null} if Jetty has not been started yet.
-	 */
+	/// Get Jetty WebAppContext.
+	///
+	/// @return WebAppContext, may be `null` if Jetty has not been started yet.
 	protected final CONTEXT getWebAppContext() {
 		return webAppContext;
 	}
 
-	/**
-	 * Initialize new instance of Jetty WebAppContext.
-	 *
-	 * @return New WebAppContext instance.
-	 */
+	/// Initialize new instance of Jetty WebAppContext.
+	///
+	/// @return New WebAppContext instance.
 	protected abstract CONTEXT newWebAppContext();
 
-	/**
-	 * Attribute name for the container JAR pattern configuration flag.
-	 *
-	 * @return Attribute name.
-	 */
+	/// Attribute name for the container JAR pattern configuration flag.
+	///
+	/// @return Attribute name.
 	protected abstract String containerJarPatternPropertyName();
 
-	/**
-	 * Attribute name for the WebInf pattern configuration flag.
-	 *
-	 * @return Attribute name.
-	 */
+	/// Attribute name for the WebInf pattern configuration flag.
+	///
+	/// @return Attribute name.
 	protected abstract String webInfJarPatternPropertyName();
 
-	/**
-	 * Set WebAppContext {@code overrideDescriptor} value.
-	 *
-	 * @param context Jetty WebAppContext.
-	 * @param overrideDescriptor The {@code overrideDescriptor} value.
-	 */
+	/// Set WebAppContext `overrideDescriptor` value.
+	///
+	/// @param context Jetty WebAppContext.
+	/// @param overrideDescriptor The `overrideDescriptor` value.
 	protected abstract void setOverrideDescriptor(CONTEXT context, String overrideDescriptor);
 
-	/**
-	 * Set WebAppContext {@code overrideDescriptor} value.
-	 *
-	 * @param context Jetty WebAppContext.
-	 * @param tempDirectory The {@code overrideDescriptor} value.
-	 */
+	/// Set WebAppContext `overrideDescriptor` value.
+	///
+	/// @param context Jetty WebAppContext.
+	/// @param tempDirectory The `overrideDescriptor` value.
 	protected abstract void setTempDirectory(CONTEXT context, String tempDirectory);
 
-	/**
-	 * Initialize Jetty WebAppContext configuration classes.
-	 *
-	 * @param context Jetty WebAppContext.
-	 */
+	/// Initialize Jetty WebAppContext configuration classes.
+	///
+	/// @param context Jetty WebAppContext.
 	protected abstract void configure(CONTEXT context);
 
-	/**
-	 * Set WebAppContext {@code parentLoaderPriority} value.
-	 *
-	 * @param context Jetty WebAppContext.
-	 * @param parentLoaderPriority The {@code parentLoaderPriority} value.
-	 */
+	/// Set WebAppContext `parentLoaderPriority` value.
+	///
+	/// @param context Jetty WebAppContext.
+	/// @param parentLoaderPriority The `parentLoaderPriority` value.
 	protected abstract void setParentLoaderPriority(CONTEXT context, boolean parentLoaderPriority);
 
-	/**
-	 * Set WebAppContext {@code war} value.
-	 *
-	 * @param context Jetty WebAppContext.
-	 * @param war The {@code war} value.
-	 */
+	/// Set WebAppContext `war` value.
+	///
+	/// @param context Jetty WebAppContext.
+	/// @param war The `war` value.
 	protected abstract void setWar(CONTEXT context, Resource war);
 
-	/**
-	 * Configure Jetty container resource.
-	 *
-	 * @param context Jetty WebAppContext.
-	 * @param containerResources Container resource.
-	 */
+	/// Configure Jetty container resource.
+	///
+	/// @param context Jetty WebAppContext.
+	/// @param containerResources Container resource.
 	protected abstract void addContainerResources(CONTEXT context, Resource containerResources);
 
-	/**
-	 * Set WebAppContext attribute value.
-	 *
-	 * @param context Jetty WebAppContext.
-	 * @param name Attribute name.
-	 * @param value Attribute value.
-	 */
+	/// Set WebAppContext attribute value.
+	///
+	/// @param context Jetty WebAppContext.
+	/// @param name Attribute name.
+	/// @param value Attribute value.
 	protected abstract void setAttribute(CONTEXT context, String name, String value);
 
-	/**
-	 * Create new Jetty {@link Resource} for given WebAppContext.
-	 *
-	 * @param ctx Jetty WebAppContext.
-	 * @param resource The resource path.
-	 * @return Create {@link Resource}.
-	 * @throws IOException In case the resource cannot be created.
-	 */
+	/// Create new Jetty [Resource] for given WebAppContext.
+	///
+	/// @param ctx Jetty WebAppContext.
+	/// @param resource The resource path.
+	/// @return Create [Resource].
+	/// @throws IOException In case the resource cannot be created.
 	protected abstract Resource newResource(CONTEXT ctx, String resource) throws IOException;
 
-	/**
-	 * Create new Jetty {@link Resource} for given WebAppContext.
-	 *
-	 * @param ctx Jetty WebAppContext.
-	 * @param resource The resource URI.
-	 * @return Create {@link Resource}.
-	 * @throws IOException In case the resource cannot be created.
-	 */
+	/// Create new Jetty [Resource] for given WebAppContext.
+	///
+	/// @param ctx Jetty WebAppContext.
+	/// @param resource The resource URI.
+	/// @return Create [Resource].
+	/// @throws IOException In case the resource cannot be created.
 	protected abstract Resource newResource(CONTEXT ctx, URI resource) throws IOException;
 
-	/**
-	 * Set WebAppContext initialization parameter value.
-	 *
-	 * @param ctx Jetty WebAppContext.
-	 * @param name Parameter name.
-	 * @param value Parameter value.
-	 */
+	/// Set WebAppContext initialization parameter value.
+	///
+	/// @param ctx Jetty WebAppContext.
+	/// @param name Parameter name.
+	/// @param value Parameter value.
 	protected abstract void setInitParameter(CONTEXT ctx, String name, Object value);
 
 	private ServerConnector findConnector() {

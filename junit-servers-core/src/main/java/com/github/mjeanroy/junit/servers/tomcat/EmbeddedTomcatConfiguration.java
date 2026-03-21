@@ -24,41 +24,31 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-/**
- * Tomcat configuration settings.
- */
+/// Tomcat configuration settings.
 public class EmbeddedTomcatConfiguration extends AbstractEmbeddedTomcatConfiguration {
 
-	/**
-	 * Get configuration builder.
-	 *
-	 * @return Builder.
-	 */
+	/// Get configuration builder.
+	///
+	/// @return Builder.
 	public static Builder builder() {
 		return new Builder();
 	}
 
-	/**
-	 * Get default configuration.
-	 *
-	 * @return Default configuration.
-	 */
+	/// Get default configuration.
+	///
+	/// @return Default configuration.
 	public static EmbeddedTomcatConfiguration defaultConfiguration() {
 		return new Builder().build();
 	}
 
-	/**
-	 * Build new tomcat configuration.
-	 *
-	 * @param builder Builder object.
-	 */
+	/// Build new tomcat configuration.
+	///
+	/// @param builder Builder object.
 	private EmbeddedTomcatConfiguration(Builder builder) {
 		super(builder);
 	}
 
-	/**
-	 * Builder for {@link EmbeddedTomcatConfiguration}.
-	 */
+	/// Builder for [EmbeddedTomcatConfiguration].
 	public static class Builder extends AbstractEmbeddedTomcatConfigurationBuilder<Builder, EmbeddedTomcatConfiguration> {
 
 		private Builder() {

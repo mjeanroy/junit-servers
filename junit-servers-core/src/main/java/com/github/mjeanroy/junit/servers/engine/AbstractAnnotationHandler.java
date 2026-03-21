@@ -27,21 +27,15 @@ package com.github.mjeanroy.junit.servers.engine;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-/**
- * Abstract skeleton of {@link AnnotationHandler}.
- */
+/// Abstract skeleton of [AnnotationHandler].
 abstract class AbstractAnnotationHandler implements AnnotationHandler {
 
-	/**
-	 * Annotation class processed by handler.
-	 */
+	/// Annotation class processed by handler.
 	private final Class<? extends Annotation> annotationKlass;
 
-	/**
-	 * Initialize new abstract handler.
-	 *
-	 * @param annotationKlass Annotation class processed by handler.
-	 */
+	/// Initialize new abstract handler.
+	///
+	/// @param annotationKlass Annotation class processed by handler.
 	AbstractAnnotationHandler(Class<? extends Annotation> annotationKlass) {
 		this.annotationKlass = annotationKlass;
 	}
@@ -61,11 +55,9 @@ abstract class AbstractAnnotationHandler implements AnnotationHandler {
 		// Should be overridden
 	}
 
-	/**
-	 * Get {@link #annotationKlass}
-	 *
-	 * @return {@link #annotationKlass}
-	 */
+	/// Get [#annotationKlass]
+	///
+	/// @return Returns [#annotationKlass]
 	Class<? extends Annotation> getAnnotationKlass() {
 		return annotationKlass;
 	}

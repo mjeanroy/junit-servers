@@ -28,19 +28,15 @@ import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
 
-/**
- * Embedded Tomcat Provider used by the service provider interface from the JDK.
- *
- * @deprecated Use {@code junit-servers-tomcat-8} instead.
- */
+/// Embedded Tomcat Provider used by the service provider interface from the JDK.
+///
+/// @deprecated Use `junit-servers-tomcat-8` instead.
 @Deprecated
 public class EmbeddedTomcatProvider implements EmbeddedServerProvider<EmbeddedTomcatConfiguration> {
 
 	private static final Logger log = LoggerFactory.getLogger(EmbeddedTomcatProvider.class);
 
-	/**
-	 * Create provider.
-	 */
+	/// Create provider.
 	public EmbeddedTomcatProvider() {
 	}
 

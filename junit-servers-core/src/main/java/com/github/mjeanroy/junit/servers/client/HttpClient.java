@@ -24,144 +24,110 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-/**
- * Http client that can be used to query embedded server.
- *
- * <p>
- *
- * After test suite, client should be properly destroyed
- * using {@link HttpClient#destroy} method.
- */
+/// Http client that can be used to query embedded server.
+///
+/// After test suite, client should be properly destroyed
+/// using [HttpClient#destroy] method.
 public interface HttpClient extends AutoCloseable {
 
-	/**
-	 * Get the client configuration.
-	 *
-	 * @return HTTP Client configuration.
-	 */
+	/// Get the client configuration.
+	///
+	/// @return HTTP Client configuration.
 	HttpClientConfiguration getConfiguration();
 
-	/**
-	 * Create {@code GET} request.
-	 *
-	 * @param endpoint URL, full url or path relative to server url.
-	 * @return GET request.
-	 * @see #prepareRequest(HttpMethod, String)
-	 */
+	/// Create `GET` request.
+	///
+	/// @param endpoint URL, full url or path relative to server url.
+	/// @return GET request.
+	/// @see #prepareRequest(HttpMethod, String)
 	HttpRequest prepareGet(String endpoint);
 
-	/**
-	 * Create {@code POST} request.
-	 *
-	 * @param endpoint URL, full url or path relative to server url.
-	 * @return POST request.
-	 * @see #prepareRequest(HttpMethod, String)
-	 */
+	/// Create `POST` request.
+	///
+	/// @param endpoint URL, full url or path relative to server url.
+	/// @return POST request.
+	/// @see #prepareRequest(HttpMethod, String)
 	HttpRequest preparePost(String endpoint);
 
-	/**
-	 * Create {@code POST} request.
-	 *
-	 * @param endpoint URL, full url or path relative to server url.
-	 * @param body Request body.
-	 * @return POST request.
-	 * @see #prepareRequest(HttpMethod, String)
-	 */
+	/// Create `POST` request.
+	///
+	/// @param endpoint URL, full url or path relative to server url.
+	/// @param body Request body.
+	/// @return POST request.
+	/// @see #prepareRequest(HttpMethod, String)
 	HttpRequest preparePost(String endpoint, HttpRequestBody body);
 
-	/**
-	 * Create {@code PUT} request.
-	 *
-	 * @param url URL, full url or path relative to server url.
-	 * @return PUT request.
-	 * @see #prepareRequest(HttpMethod, String)
-	 */
+	/// Create `PUT` request.
+	///
+	/// @param url URL, full url or path relative to server url.
+	/// @return PUT request.
+	/// @see #prepareRequest(HttpMethod, String)
 	HttpRequest preparePut(String url);
 
-	/**
-	 * Create {@code PUT} request.
-	 *
-	 * @param url URL, full url or path relative to server url.
-	 * @param body Request body.
-	 * @return PUT request.
-	 * @see #prepareRequest(HttpMethod, String)
-	 */
+	/// Create `PUT` request.
+	///
+	/// @param url URL, full url or path relative to server url.
+	/// @param body Request body.
+	/// @return PUT request.
+	/// @see #prepareRequest(HttpMethod, String)
 	HttpRequest preparePut(String url, HttpRequestBody body);
 
-	/**
-	 * Create {@code DELETE} request.
-	 *
-	 * @param endpoint URL, full url or path relative to server url.
-	 * @return DELETE request.
-	 * @see #prepareRequest(HttpMethod, String)
-	 */
+	/// Create `DELETE` request.
+	///
+	/// @param endpoint URL, full url or path relative to server url.
+	/// @return DELETE request.
+	/// @see #prepareRequest(HttpMethod, String)
 	HttpRequest prepareDelete(String endpoint);
 
-	/**
-	 * Create {@code DELETE} request.
-	 *
-	 * @param endpoint URL, full url or path relative to server url.
-	 * @param body Request body.
-	 * @return DELETE request.
-	 * @see #prepareRequest(HttpMethod, String)
-	 */
+	/// Create `DELETE` request.
+	///
+	/// @param endpoint URL, full url or path relative to server url.
+	/// @param body Request body.
+	/// @return DELETE request.
+	/// @see #prepareRequest(HttpMethod, String)
 	HttpRequest prepareDelete(String endpoint, HttpRequestBody body);
 
-	/**
-	 * Create {@code PATCH} request.
-	 *
-	 * @param endpoint URL, full url or path relative to server url.
-	 * @return PATCH request.
-	 * @see #prepareRequest(HttpMethod, String)
-	 */
+	/// Create `PATCH` request.
+	///
+	/// @param endpoint URL, full url or path relative to server url.
+	/// @return PATCH request.
+	/// @see #prepareRequest(HttpMethod, String)
 	HttpRequest preparePatch(String endpoint);
 
-	/**
-	 * Create {@code PATCH} request.
-	 *
-	 * @param endpoint URL, full url or path relative to server url.
-	 * @param body Request body.
-	 * @return PATCH request.
-	 * @see #prepareRequest(HttpMethod, String)
-	 */
+	/// Create `PATCH` request.
+	///
+	/// @param endpoint URL, full url or path relative to server url.
+	/// @param body Request body.
+	/// @return PATCH request.
+	/// @see #prepareRequest(HttpMethod, String)
 	HttpRequest preparePatch(String endpoint, HttpRequestBody body);
 
-	/**
-	 * Create {@code HEAD} request.
-	 *
-	 * @param endpoint URL, full url or path relative to server url.
-	 * @return HEAD request.
-	 * @see #prepareRequest(HttpMethod, String)
-	 */
+	/// Create `HEAD` request.
+	///
+	/// @param endpoint URL, full url or path relative to server url.
+	/// @return HEAD request.
+	/// @see #prepareRequest(HttpMethod, String)
 	HttpRequest prepareHead(String endpoint);
 
-	/**
-	 * Create request.
-	 *
-	 * <p>
-	 *
-	 * Once destroyed, this client should not be able to create HTTP request and should
-	 * throw an instance of {@link IllegalStateException}.
-	 *
-	 * @param httpMethod Http method (i.e {@code GET}, {@code POST}, {@code PUT}, {@code DELETE}).
-	 * @param endpoint URL, full url or path relative to server url.
-	 * @return The request.
-	 * @throws IllegalStateException If client has already been destroyed.
-	 * @see #destroy()
-	 * @see #isDestroyed()
-	 */
+	/// Create request.
+	///
+	/// Once destroyed, this client should not be able to create HTTP request and should
+	/// throw an instance of [IllegalStateException].
+	///
+	/// @param httpMethod Http method (i.e `GET`, `POST`, `PUT`, `DELETE`).
+	/// @param endpoint URL, full url or path relative to server url.
+	/// @return The request.
+	/// @throws IllegalStateException If client has already been destroyed.
+	/// @see #destroy()
+	/// @see #isDestroyed()
 	HttpRequest prepareRequest(HttpMethod httpMethod, String endpoint);
 
-	/**
-	 * Destroy client.
-	 */
+	/// Destroy client.
 	void destroy();
 
-	/**
-	 * Check that HTTP client has been destroyed.
-	 *
-	 * @return {@code true} if client is closed, {@code false} otherwise.
-	 */
+	/// Check that HTTP client has been destroyed.
+	///
+	/// @return `true` if client is closed, `false` otherwise.
 	boolean isDestroyed();
 
 	@Override

@@ -31,29 +31,23 @@ import java.util.*;
 
 import static java.util.Collections.addAll;
 
-/**
- * Static date utilities.
- *
- * <p>
- *
- * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
- * or have their access level decreased from public to protected, package, or private in future versions without notice.
- */
+/// Static date utilities.
+///
+/// **Internal API**: these methods are part of the internal API and may be removed, have their signature change,
+/// or have their access level decreased from public to protected, package, or private in future versions without notice.
 public final class Dates {
 
 	private Dates() {
 	}
 
-	/**
-	 * Parse date using given pattern.
-	 * Note that this method will return null if pattern is not
-	 * valid or throws a {@link ParseException}.
-	 *
-	 * @param date Date.
-	 * @param pattern Pattern.
-	 * @param patterns Other pattern to test.
-	 * @return Date, null if pattern is not valid.
-	 */
+	/// Parse date using given pattern.
+	/// Note that this method will return null if pattern is not
+	/// valid or throws a [ParseException].
+	///
+	/// @param date Date.
+	/// @param pattern Pattern.
+	/// @param patterns Other pattern to test.
+	/// @return Date, null if pattern is not valid.
 	static Date parse(String date, String pattern, String... patterns) {
 		Set<String> set = new HashSet<>();
 		set.add(pattern);
@@ -73,39 +67,34 @@ public final class Dates {
 		return null;
 	}
 
-	/**
-	 * Parse date using given pattern and return time value.
-	 * Note that this method will return null if pattern is not
-	 * valid or throws a {@link ParseException}.
-	 *
-	 * @param date Date.
-	 * @param pattern Pattern.
-	 * @param patterns Other pattern to test.
-	 * @return Time value, null if pattern is not valid.
-	 */
+	/// Parse date using given pattern and return time value.
+	///
+	/// Note that this method will return null if pattern is not
+	/// valid or throws a [ParseException].
+	///
+	/// @param date Date.
+	/// @param pattern Pattern.
+	/// @param patterns Other pattern to test.
+	/// @return Time value, null if pattern is not valid.
 	public static Long getTime(String date, String pattern, String... patterns) {
 		Date d = parse(date, pattern, patterns);
 		return d == null ? null : d.getTime();
 	}
 
-	/**
-	 * Format date according to given pattern.
-	 *
-	 * @param date Date.
-	 * @param pattern Pattern.
-	 * @return Formatted date.
-	 */
+	/// Format date according to given pattern.
+	///
+	/// @param date Date.
+	/// @param pattern Pattern.
+	/// @return Formatted date.
 	public static String format(Date date, String pattern) {
 		return df(pattern).format(date);
 	}
 
-	/**
-	 * Format timestamp according to given pattern.
-	 *
-	 * @param time Timestamp.
-	 * @param pattern Pattern.
-	 * @return Formatted date.
-	 */
+	/// Format timestamp according to given pattern.
+	///
+	/// @param time Timestamp.
+	/// @param pattern Pattern.
+	/// @return Formatted date.
 	static String formatTime(long time, String pattern) {
 		Date date = new Date();
 		date.setTime(time);

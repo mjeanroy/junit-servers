@@ -34,21 +34,15 @@ import java.util.Objects;
 
 import static java.util.Collections.unmodifiableList;
 
-/**
- * An implementation of {@link HttpRequestBody} for form url-encoded request bodies.
- */
+/// An implementation of [HttpRequestBody] for form url-encoded request bodies.
 public final class HttpRequestBodyForm implements HttpRequestBody {
 
-	/**
-	 * Form parameters.
-	 */
+	/// Form parameters.
 	private final List<HttpParameter> parameters;
 
-	/**
-	 * Create request body from given parameters.
-	 *
-	 * @param parameters Form parameters.
-	 */
+	/// Create request body from given parameters.
+	///
+	/// @param parameters Form parameters.
 	HttpRequestBodyForm(Collection<HttpParameter> parameters) {
 		this.parameters = unmodifiableList(new ArrayList<>(parameters));
 	}
@@ -69,11 +63,9 @@ public final class HttpRequestBodyForm implements HttpRequestBody {
 		return Ios.toUtf8Bytes(rawBody);
 	}
 
-	/**
-	 * Get {@link #parameters}
-	 *
-	 * @return {@link #parameters}
-	 */
+	/// Get [#parameters]
+	///
+	/// @return [#parameters]
 	public Collection<HttpParameter> getParameters() {
 		return parameters;
 	}

@@ -24,16 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
-/**
- * Exception thrown when server cannot be started.
- */
+/// Exception thrown when server cannot be started.
 public final class ServerStartException extends AbstractEmbeddedServerException {
 
-	/**
-	 * Create exception.
-	 *
-	 * @param throwable Original cause.
-	 */
+	/// Create exception.
+	///
+	/// @param throwable Original cause.
 	public ServerStartException(Throwable throwable) {
 		super(throwable);
 	}

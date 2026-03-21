@@ -33,37 +33,27 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * A simple implementation of {@link HttpResponse}.
- */
+/// A simple implementation of [HttpResponse].
 public final class DefaultHttpResponse extends AbstractHttpResponse {
 
-	/**
-	 * Create a default HTTP Response from given values.
-	 *
-	 * @param duration Request-Response duration.
-	 * @param status The response status code.
-	 * @param body The response body.
-	 * @param headers The response headers.
-	 * @return The HTTP response.
-	 */
+	/// Create a default HTTP Response from given values.
+	///
+	/// @param duration Request-Response duration.
+	/// @param status The response status code.
+	/// @param body The response body.
+	/// @param headers The response headers.
+	/// @return The HTTP response.
 	public static DefaultHttpResponse of(long duration, int status, String body, Collection<HttpHeader> headers) {
 		return new DefaultHttpResponse(duration, status, body, headers);
 	}
 
-	/**
-	 * The response status code.
-	 */
+	/// The response status code.
 	private final int status;
 
-	/**
-	 * The response body.
-	 */
+	/// The response body.
 	private final String body;
 
-	/**
-	 * The response headers.
-	 */
+	/// The response headers.
 	private final Map<String, HttpHeader> headers;
 
 	private DefaultHttpResponse(long duration, int status, String body, Collection<HttpHeader> headers) {

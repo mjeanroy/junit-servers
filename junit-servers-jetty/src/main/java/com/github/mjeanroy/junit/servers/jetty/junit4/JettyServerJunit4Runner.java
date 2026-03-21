@@ -31,36 +31,28 @@ import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import org.junit.runners.model.InitializationError;
 
-/**
- * Rule that can be used to start and stop embedded jetty server.
- *
- * @deprecated Use {@code junit-servers-jetty-9} instead.
- */
+/// Rule that can be used to start and stop embedded jetty server.
+///
+/// @deprecated Use `junit-servers-jetty-9` instead.
 @Deprecated
 public class JettyServerJunit4Runner extends JunitServerRunner {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(JettyServerJunit4Runner.class);
 
-	/**
-	 * Create runner.
-	 *
-	 * @param klass Running class.
-	 * @throws InitializationError If an error occurred while starting embedded server.
-	 */
+	/// Create runner.
+	///
+	/// @param klass Running class.
+	/// @throws InitializationError If an error occurred while starting embedded server.
 	public JettyServerJunit4Runner(Class<?> klass) throws InitializationError {
 		super(klass, instantiate(klass));
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", JettyServerJunit4Runner.class);
 	}
 
-	/**
-	 * Instantiate embedded jetty to be used in tests.
-	 *
-	 * @param klass The tested class.
-	 * @return The embedded jetty.
-	 */
+	/// Instantiate embedded jetty to be used in tests.
+	///
+	/// @param klass The tested class.
+	/// @return The embedded jetty.
 	private static EmbeddedJetty instantiate(Class<?> klass) {
 		log.debug("Instantiate embedded jetty for class: {}", klass);
 		return EmbeddedJettyFactory.createFrom(klass);

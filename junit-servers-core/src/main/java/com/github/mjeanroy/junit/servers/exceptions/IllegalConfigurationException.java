@@ -24,16 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
-/**
- * Error thrown when server configuration is not valid.
- */
+/// Error thrown when server configuration is not valid.
 public class IllegalConfigurationException extends AbstractException {
 
-	/**
-	 * Create exception.
-	 *
-	 * @param message Error message.
-	 */
+	/// Create exception.
+	///
+	/// @param message Error message.
 	public IllegalConfigurationException(String message) {
 		super(message);
 	}

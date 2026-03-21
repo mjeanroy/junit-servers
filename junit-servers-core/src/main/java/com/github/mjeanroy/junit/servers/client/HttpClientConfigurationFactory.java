@@ -24,15 +24,11 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-/**
- * Factory for {@link HttpClientConfiguration}.
- */
+/// Factory for [HttpClientConfiguration].
 public interface HttpClientConfigurationFactory {
 
-	/**
-	 * Create configuration.
-	 *
-	 * @return The configuration.
-	 */
+	/// Create configuration.
+	///
+	/// @return The configuration.
 	HttpClientConfiguration build();
 }

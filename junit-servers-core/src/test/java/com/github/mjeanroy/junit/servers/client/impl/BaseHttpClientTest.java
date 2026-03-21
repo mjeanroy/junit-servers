@@ -41,9 +41,7 @@ import static com.github.mjeanroy.junit.servers.testing.ReflectionTestUtils.read
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-/**
- * Tests skeleton for http client implementations.
- */
+/// Tests skeleton for http client implementations.
 public abstract class BaseHttpClientTest {
 
 	private EmbeddedServer<?> server;
@@ -235,37 +233,29 @@ public abstract class BaseHttpClientTest {
 		}
 	}
 
-	/**
-	 * Should create a default http client.
-	 *
-	 * @param server Fake embedded server.
-	 * @return Default http client.
-	 */
+	/// Should create a default http client.
+	///
+	/// @param server Fake embedded server.
+	/// @return Default http client.
 	protected abstract HttpClient createDefaultClient(EmbeddedServer<?> server);
 
-	/**
-	 * Should create a custom http client.
-	 *
-	 * @param configuration The HTTP client custom configuration.
-	 * @param server Fake embedded server.
-	 * @return Default http client.
-	 */
+	/// Should create a custom http client.
+	///
+	/// @param configuration The HTTP client custom configuration.
+	/// @param server Fake embedded server.
+	/// @return Default http client.
 	protected abstract HttpClient createCustomClient(HttpClientConfiguration configuration, EmbeddedServer<?> server);
 
-	/**
-	 * Should check internal data of previously created custom
-	 * http client.
-	 *
-	 * @param httpClient Previously created client.
-	 */
+	/// Should check internal data of previously created custom
+	/// http client.
+	///
+	/// @param httpClient Previously created client.
 	protected abstract void checkInternalHttpClient(HttpClient httpClient);
 
-	/**
-	 * Should check internal data of previously created custom
-	 * http client.
-	 *
-	 * @param configuration The configuration used to create client.
-	 * @param httpClient Previously created client.
-	 */
+	/// Should check internal data of previously created custom
+	/// http client.
+	///
+	/// @param configuration The configuration used to create client.
+	/// @param httpClient Previously created client.
 	protected abstract void checkInternalHttpClient(HttpClientConfiguration configuration, HttpClient httpClient);
 }

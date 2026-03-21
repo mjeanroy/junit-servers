@@ -28,21 +28,15 @@ import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.jetty10.EmbeddedJetty;
 import org.junit.runner.RunWith;
 
-/**
- * Simple abstraction that define a server rule using jetty as embedded server.
- */
+/// Simple abstraction that define a server rule using jetty as embedded server.
 @RunWith(JettyServerJunit4Runner.class)
 public abstract class AbstractJettyJunit4Test {
 
-	/**
-	 * The started embedded server.
-	 */
+	/// The started embedded server.
 	@TestServer
 	public static EmbeddedJetty server;
 
-	/**
-	 * Initialize test suite.
-	 */
+	/// Initialize test suite.
 	public AbstractJettyJunit4Test() {
 	}
 }

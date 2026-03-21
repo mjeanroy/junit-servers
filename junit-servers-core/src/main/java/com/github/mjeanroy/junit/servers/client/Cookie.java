@@ -28,83 +28,57 @@ import com.github.mjeanroy.junit.servers.commons.lang.ToStringBuilder;
 
 import java.util.Objects;
 
-/**
- * Default implementation for cookie object.
- *
- * <br>
- *
- * To build a cookie, use:
- * <ul>
- *   <li>The {@link Builder} API</li>
- *   <li>Or one of the static factories in {@link Cookies} class</li>
- * </ul>
- *
- * <br>
- *
- * Using the builder is easy:
- *
- * <pre>{@code
- *   Cookie cookie = new Cookie.Builder("name", "value")
- *     .domain("domain")
- *     .path("path")
- *     .secure(true)   // Defaults to false.
- *     .httpOnly(true) // Defaults to false.
- *     .maxAge(3600)
- *     .expires(tt.getTime())
- *     .build();
- * }</pre>
- *
- * You can also use one of the static factories:
- *
- * <pre>{@code
- *   Cookie c1 = Cookies.cookie("name", "value");
- *   Cookie c2 = Cookies.cookie("name", "value", "domain", "path", maxAge, expires, true, true);
- * }</pre>
- *
- * @see <a href="https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Set-Cookie">https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Set-Cookie</a>
- */
+/// Default implementation for cookie object.
+///
+/// To build a cookie, use:
+/// - The [Builder] API
+/// - Or one of the static factories in [Cookies] class
+///
+/// Using the builder is easy:
+///
+/// ```
+///  Cookie cookie = new Cookie.Builder("name", "value")
+///    .domain("domain")
+///    .path("path")
+///    .secure(true) // Defaults to false.
+///    .httpOnly(true) // Defaults to false.
+///    .maxAge(3600)
+///    .expires(tt.getTime())
+///    .build();
+/// ```
+///
+/// You can also use one of the static factories:
+///
+/// ```
+///  Cookie c1 = Cookies.cookie("name", "value");
+///  Cookie c2 = Cookies.cookie("name", "value", "domain", "path", maxAge, expires, true, true);
+/// ```
 public class Cookie {
 
-	/**
-	 * Cookie name.
-	 * Must not be null, empty or blank.
-	 */
+	/// Cookie name.
+	/// Must not be null, empty or blank.
 	private final String name;
 
-	/**
-	 * Cookie value.
-	 * Must not be null.
-	 */
+	/// Cookie value.
+	/// Must not be null.
 	private final String value;
 
-	/**
-	 * Cookie domain.
-	 */
+	/// Cookie domain.
 	private final String domain;
 
-	/**
-	 * Cookie path.
-	 */
+	/// Cookie path.
 	private final String path;
 
-	/**
-	 * Cookie expires value.
-	 */
+	/// Cookie expires value.
 	private final Long expires;
 
-	/**
-	 * Cookie max age.
-	 */
+	/// Cookie max age.
 	private final Long maxAge;
 
-	/**
-	 * Secure flag.
-	 */
+	/// Secure flag.
 	private final boolean secure;
 
-	/**
-	 * Http Only flag.
-	 */
+	/// Http Only flag.
 	private final boolean httpOnly;
 
 	// Use static factories
@@ -119,78 +93,63 @@ public class Cookie {
 		this.httpOnly = httpOnly;
 	}
 
-	/**
-	 * Get cookie name.
-	 *
-	 * @return Cookie name.
-	 */
+	/// Get cookie name.
+	///
+	/// @return Cookie name.
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * Get cookie value.
-	 *
-	 * @return Cookie value.
-	 */
+	/// Get cookie value.
+	///
+	/// @return Cookie value.
 	public String getValue() {
 		return value;
 	}
 
-	/**
-	 * Get cookie domain.
-	 *
-	 * @return Cookie domain.
-	 */
+	/// Get cookie domain.
+	///
+	/// @return Cookie domain.
 	public String getDomain() {
 		return domain;
 	}
 
-	/**
-	 * Get cookie path.
-	 *
-	 * @return Cookie path.
-	 */
+	/// Get cookie path.
+	///
+	/// @return Cookie path.
 	public String getPath() {
 		return path;
 	}
 
-	/**
-	 * Get cookie expires value.
-	 * The value is a timestamp.
-	 * If value is lower than zero, it means that expires
-	 * value has not been set on cookie.
-	 *
-	 * @return Expires value.
-	 */
+	/// Get cookie expires value.
+	/// The value is a timestamp.
+	///
+	/// If value is lower than zero, it means that expires
+	/// value has not been set on cookie.
+	///
+	/// @return Expires value.
 	public Long getExpires() {
 		return expires;
 	}
 
-	/**
-	 * Cookie max age.
-	 * This is the max validity time in seconds.
-	 *
-	 * @return Max age value.
-	 */
+	/// Cookie max age.
+	/// This is the max validity time in seconds.
+	///
+	/// @return Max age value.
 	public Long getMaxAge() {
 		return maxAge;
 	}
 
-	/**
-	 * Cookie secure flag.
-	 *
-	 * @return Secure flag.
-	 */
+	/// Cookie secure flag.
+	///
+	/// @return Secure flag.
 	public boolean isSecure() {
 		return secure;
 	}
 
-	/**
-	 * Cookie http-only flag.
-	 *
-	 * @return Http-Only flag.
-	 */
+	/// Cookie http-only flag.
+	///
+	/// @return Http-Only flag.
 	public boolean isHttpOnly() {
 		return httpOnly;
 	}
@@ -235,140 +194,106 @@ public class Cookie {
 			.build();
 	}
 
-	/**
-	 * Builder to create {@link Cookie} instances.
-	 */
+	/// Builder to create [Cookie] instances.
 	public static class Builder {
-		/**
-		 * The cookie name.
-		 * @see Cookie#name
-		 */
+		/// The cookie name.
+		/// @see Cookie#name
 		private final String name;
 
-		/**
-		 * The cookie value.
-		 * @see Cookie#value
-		 */
+		/// The cookie value.
+		/// @see Cookie#value
 		private final String value;
 
-		/**
-		 * The cookie domain.
-		 * @see Cookie#domain
-		 */
+		/// The cookie domain.
+		/// @see Cookie#domain
 		private String domain;
 
-		/**
-		 * The cookie path.
-		 * @see Cookie#path
-		 */
+		/// The cookie path.
+		/// @see Cookie#path
 		private String path;
 
-		/**
-		 * The cookie max-age.
-		 * @see Cookie#maxAge
-		 */
+		/// The cookie max-age.
+		/// @see Cookie#maxAge
 		private Long maxAge;
 
-		/**
-		 * The cookie expires value.
-		 * @see Cookie#expires
-		 */
+		/// The cookie expires value.
+		/// @see Cookie#expires
 		private Long expires;
 
-		/**
-		 * The cookie secure flag.
-		 * @see Cookie#secure
-		 */
+		/// The cookie secure flag.
+		/// @see Cookie#secure
 		private boolean secure;
 
-		/**
-		 * The cookie http-only flag.
-		 * @see Cookie#httpOnly
-		 */
+		/// The cookie http-only flag.
+		/// @see Cookie#httpOnly
 		private boolean httpOnly;
 
-		/**
-		 * Create the builder with a cookie name and value.
-		 *
-		 * @param name Cookie name.
-		 * @param value Cookie value.
-		 */
+		/// Create the builder with a cookie name and value.
+		///
+		/// @param name Cookie name.
+		/// @param value Cookie value.
 		public Builder(String name, String value) {
 			this.name = name;
 			this.value = value;
 		}
 
-		/**
-		 * Update cookie domain.
-		 *
-		 * @param domain Cookie domain.
-		 * @return The builder (for chaining).
-		 */
+		/// Update cookie domain.
+		///
+		/// @param domain Cookie domain.
+		/// @return The builder (for chaining).
 		public Builder domain(String domain) {
 			this.domain = domain;
 			return this;
 		}
 
-		/**
-		 * Update cookie path.
-		 *
-		 * @param path Cookie path.
-		 * @return The builder (for chaining).
-		 */
+		/// Update cookie path.
+		///
+		/// @param path Cookie path.
+		/// @return The builder (for chaining).
 		public Builder path(String path) {
 			this.path = path;
 			return this;
 		}
 
-		/**
-		 * Update cookie secure flag.
-		 *
-		 * @param secure Cookie secure flag.
-		 * @return The builder (for chaining).
-		 */
+		/// Update cookie secure flag.
+		///
+		/// @param secure Cookie secure flag.
+		/// @return The builder (for chaining).
 		public Builder secure(boolean secure) {
 			this.secure = secure;
 			return this;
 		}
 
-		/**
-		 * Update cookie http-only flag.
-		 *
-		 * @param httpOnly Cookie http-only flag.
-		 * @return The builder (for chaining).
-		 */
+		/// Update cookie http-only flag.
+		///
+		/// @param httpOnly Cookie http-only flag.
+		/// @return The builder (for chaining).
 		public Builder httpOnly(boolean httpOnly) {
 			this.httpOnly = httpOnly;
 			return this;
 		}
 
-		/**
-		 * Update cookie max-age.
-		 *
-		 * @param maxAge Cookie max-age.
-		 * @return The builder (for chaining).
-		 */
+		/// Update cookie max-age.
+		///
+		/// @param maxAge Cookie max-age.
+		/// @return The builder (for chaining).
 		public Builder maxAge(long maxAge) {
 			this.maxAge = maxAge;
 			return this;
 		}
 
-		/**
-		 * Update cookie expires value.
-		 *
-		 * @param expires Cookie expires.
-		 * @return The builder (for chaining).
-		 */
+		/// Update cookie expires value.
+		///
+		/// @param expires Cookie expires.
+		/// @return The builder (for chaining).
 		public Builder expires(long expires) {
 			this.expires = expires;
 			return this;
 		}
 
-		/**
-		 * Create the cookie.
-		 *
-		 * @return The cookie.
-		 */
+		/// Create the cookie.
+		///
+		/// @return The cookie.
 		public Cookie build() {
 			return new Cookie(name, value, domain, path, secure, httpOnly, expires, maxAge);
 		}

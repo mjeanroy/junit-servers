@@ -35,35 +35,27 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * Implementation of {@link HttpClient} using OkHttp library from Square.
- *
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
- * @see <a href="http://square.github.io/okhttp">http://square.github.io/okhttp</a>
- */
+/// Implementation of [HttpClient] using [OkHttp](http://square.github.io/okhttp) library from Square.
+///
+/// @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#OK_HTTP3
 public class OkHttpClient extends AbstractHttpClient {
 
-	/**
-	 * Create new http client using internal
-	 * http client from ok-http library.
-	 *
-	 * @param server Embedded server.
-	 * @return Http client.
-	 * @throws NullPointerException If {@code server} is {@code null}.
-	 */
+	/// Create new http client using internal http client from ok-http library.
+	///
+	/// @param server Embedded server.
+	/// @return Http client.
+	/// @throws NullPointerException If `server` is `null`.
 	public static OkHttpClient defaultOkHttpClient(EmbeddedServer<?> server) {
 		HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
 		return newOkHttpClient(configuration, server);
 	}
 
-	/**
-	 * Create new http client using custom configuration.
-	 *
-	 * @param configuration Client configuration.
-	 * @param server Embedded server.
-	 * @return Http client.
-	 * @throws NullPointerException If {@code server} or {@code configuration} are {@code null}.
-	 */
+	/// Create new http client using custom configuration.
+	///
+	/// @param configuration Client configuration.
+	/// @param server Embedded server.
+	/// @return Http client.
+	/// @throws NullPointerException If `server` or `configuration` are `null`.
 	public static OkHttpClient newOkHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
 		okhttp3.OkHttpClient client = new okhttp3.OkHttpClient.Builder()
 			.followRedirects(configuration.isFollowRedirect())
@@ -72,21 +64,15 @@ public class OkHttpClient extends AbstractHttpClient {
 		return new OkHttpClient(configuration, server, client);
 	}
 
-	/**
-	 * Flag to ensure that the http client has been destroyed or not.
-	 */
+	/// Flag to ensure that the http client has been destroyed or not.
 	private final AtomicBoolean destroyed;
 
-	/**
-	 * The native OkHttp client.
-	 */
+	/// The native OkHttp client.
 	private final okhttp3.OkHttpClient client;
 
-	/**
-	 * Create the client.
-	 * @param server The embedded server that will be queried.
-	 * @param client The internal client.
-	 */
+	/// Create the client.
+	/// @param server The embedded server that will be queried.
+	/// @param client The internal client.
 	private OkHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server, okhttp3.OkHttpClient client) {
 		super(configuration, server);
 		this.client = client;

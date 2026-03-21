@@ -38,20 +38,16 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
-/**
- * Jetty Embedded Server.
- *
- * @param <CONFIGURATION> The jetty configuration implementation.
- */
+/// Jetty Embedded Server.
+///
+/// @param <CONFIGURATION> The jetty configuration implementation.
 public abstract class AbstractEmbeddedJetty<
 	CONFIGURATION extends AbstractEmbeddedJettyConfiguration
 > extends AbstractBaseEmbeddedJetty<WebAppContext, CONFIGURATION> {
 
-	/**
-	 * Build embedded jetty server.
-	 *
-	 * @param configuration Server configuration.
-	 */
+	/// Build embedded jetty server.
+	///
+	/// @param configuration Server configuration.
 	protected AbstractEmbeddedJetty(CONFIGURATION configuration) {
 		super(configuration);
 	}

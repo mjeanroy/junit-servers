@@ -32,10 +32,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * An annotation to capture {@code System.out} stream during test, and allow to retrieve what
- * has been printed by injecting {@link CaptureSystemOut} into tests.
- */
+/// An annotation to capture `System.out` stream during test, and allow to retrieve what
+/// has been printed by injecting [CaptureSystemOut] into tests.
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @ExtendWith(CaptureSystemOutExtension.class)

@@ -31,32 +31,24 @@ import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcat;
 import com.github.mjeanroy.junit.servers.tomcat8.EmbeddedTomcatFactory;
 import org.junit.runners.model.InitializationError;
 
-/**
- * Rule that can be used to start and stop embedded tomcat server.
- */
+/// Rule that can be used to start and stop embedded tomcat server.
 public class TomcatServerJunit4Runner extends JunitServerRunner {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(TomcatServerJunit4Runner.class);
 
-	/**
-	 * Create runner.
-	 *
-	 * @param klass Running class.
-	 * @throws InitializationError If an error occurred while starting embedded server.
-	 */
+	/// Create runner.
+	///
+	/// @param klass Running class.
+	/// @throws InitializationError If an error occurred while starting embedded server.
 	public TomcatServerJunit4Runner(Class<?> klass) throws InitializationError {
 		super(klass, instantiate(klass));
 	}
 
-	/**
-	 * Instantiate embedded tomcat to be used in tests.
-	 *
-	 * @param klass The tested class.
-	 * @return The embedded tomcat.
-	 */
+	/// Instantiate embedded tomcat to be used in tests.
+	///
+	/// @param klass The tested class.
+	/// @return The embedded tomcat.
 	private static EmbeddedTomcat instantiate(Class<?> klass) {
 		log.debug("Instantiating embedded tomcat for class: {}", klass);
 		return EmbeddedTomcatFactory.createFrom(klass);

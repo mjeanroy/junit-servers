@@ -27,30 +27,24 @@ package com.github.mjeanroy.junit.servers.servers;
 import java.util.List;
 import java.util.Map;
 
-/**
- * A fake implementation of {@link AbstractConfiguration} to use in unit tests.
- */
+/// A fake implementation of [AbstractConfiguration] to use in unit tests.
 final class EmbeddedConfiguration extends AbstractConfiguration {
 
-	/**
-	 * Initialize default configuration.
-	 */
+	/// Initialize default configuration.
 	EmbeddedConfiguration() {
 		super();
 	}
 
-	/**
-	 * Initialize custom configuration.
-	 *
-	 * @param classpath The classpath.
-	 * @param path The path.
-	 * @param webapp The webapp.
-	 * @param port The port.
-	 * @param envProperties Environment properties.
-	 * @param hooks Server hooks.
-	 * @param parentClassLoader The parent classloader, may be {@code null}.
-	 * @param overrideDescriptor The overridden descriptor, may be {@code null}.
-	 */
+	/// Initialize custom configuration.
+	///
+	/// @param classpath The classpath.
+	/// @param path The path.
+	/// @param webapp The webapp.
+	/// @param port The port.
+	/// @param envProperties Environment properties.
+	/// @param hooks Server hooks.
+	/// @param parentClassLoader The parent classloader, may be `null`.
+	/// @param overrideDescriptor The overridden descriptor, may be `null`.
 	EmbeddedConfiguration(
 		String classpath,
 		String path,

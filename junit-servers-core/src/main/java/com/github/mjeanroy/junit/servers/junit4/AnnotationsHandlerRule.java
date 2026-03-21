@@ -29,24 +29,18 @@ import com.github.mjeanroy.junit.servers.engine.AnnotationsHandlerRunner;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 
-/**
- * Create new rule that will execute a list of annotation
- * handlers before and after test executions.
- */
+/// Create new rule that will execute a list of annotation
+/// handlers before and after test executions.
 class AnnotationsHandlerRule extends AbstractRuleInstance {
 
-	/**
-	 * List of handlers.
-	 */
+	/// List of handlers.
 	private final AnnotationsHandlerRunner annotationHandlers;
 
-	/**
-	 * Create new rules.
-	 *
-	 * @param target Target class (i.e tested class).
-	 * @param server The embedded server used in the tested class instance.
-	 * @param configuration The embedded server configuration.
-	 */
+	/// Create new rules.
+	///
+	/// @param target Target class (i.e tested class).
+	/// @param server The embedded server used in the tested class instance.
+	/// @param configuration The embedded server configuration.
 	AnnotationsHandlerRule(Object target, EmbeddedServer<?> server, AbstractConfiguration configuration) {
 		super(target);
 		this.annotationHandlers = new AnnotationsHandlerRunner(server, configuration);

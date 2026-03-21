@@ -38,35 +38,28 @@ import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
-/**
- * Implementation of {@link HttpClient} using async-http-client
- * under the hood.
- *
- * @see <a href="https://asynchttpclient.github.io/">https://asynchttpclient.github.io/</a>
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#ASYNC_HTTP_CLIENT
- */
+/// Implementation of [HttpClient] using [async-http-client](https://asynchttpclient.github.io)
+/// under the hood.
+///
+/// @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#ASYNC_HTTP_CLIENT
 public class AsyncHttpClient extends AbstractHttpClient {
 
-	/**
-	 * Create new http client using default internal http client.
-	 *
-	 * @param server Embedded server.
-	 * @return Http client.
-	 * @throws NullPointerException If {@code server} is {@code null}.
-	 */
+	/// Create new http client using default internal http client.
+	///
+	/// @param server Embedded server.
+	/// @return Http client.
+	/// @throws NullPointerException If `server` is `null`.
 	public static AsyncHttpClient defaultAsyncHttpClient(EmbeddedServer<?> server) {
 		HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
 		return newAsyncHttpClient(configuration, server);
 	}
 
-	/**
-	 * Create new http client using custom configuration.
-	 *
-	 * @param configuration Client configuration.
-	 * @param server Embedded server.
-	 * @return Http client.
-	 * @throws NullPointerException If {@code server} or {@code configuration} are {@code null}.
-	 */
+	/// Create new http client using custom configuration.
+	///
+	/// @param configuration Client configuration.
+	/// @param server Embedded server.
+	/// @return Http client.
+	/// @throws NullPointerException If `server` or `configuration` are `null`.
 	public static AsyncHttpClient newAsyncHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
 		AsyncHttpClientConfig config = new DefaultAsyncHttpClientConfig.Builder()
 			.setFollowRedirect(configuration.isFollowRedirect())
@@ -76,9 +69,7 @@ public class AsyncHttpClient extends AbstractHttpClient {
 		return new AsyncHttpClient(configuration, server, client);
 	}
 
-	/**
-	 * Original http client.
-	 */
+	/// Original http client.
 	private final org.asynchttpclient.AsyncHttpClient client;
 
 	// Use static factory

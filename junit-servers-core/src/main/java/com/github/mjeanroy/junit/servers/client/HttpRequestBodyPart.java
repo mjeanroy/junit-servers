@@ -44,70 +44,54 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 import static java.util.Collections.unmodifiableMap;
 
-/**
- * An implementation of {@link HttpRequestBody} for {@code "multipart/form-data"} request bodies.
- */
+/// An implementation of [HttpRequestBody] for `"multipart/form-data"` request bodies.
 public final class HttpRequestBodyPart {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(HttpRequestBodyPart.class);
 
-	/**
-	 * Create body part without any header and body.
-	 *
-	 * @param body Part body.
-	 * @return The request body part.
-	 */
+	/// Create body part without any header and body.
+	///
+	/// @param body Part body.
+	/// @return The request body part.
 	static HttpRequestBodyPart of(HttpRequestBody body) {
 		notNull(body, "body");
 		return new HttpRequestBodyPart(body, emptyList());
 	}
 
-	/**
-	 * Create body part with given header and body.
-	 *
-	 * @param body Part body.
-	 * @param headers Part headers.
-	 * @return The request body part.
-	 */
+	/// Create body part with given header and body.
+	///
+	/// @param body Part body.
+	/// @param headers Part headers.
+	/// @return The request body part.
 	static HttpRequestBodyPart of(HttpRequestBody body, Collection<HttpHeader> headers) {
 		notNull(body, "body");
 		doesNotContainNull(headers, "headers");
 		return new HttpRequestBodyPart(body, headers);
 	}
 
-	/**
-	 * Create body part with given single header and body.
-	 *
-	 * @param body Part body.
-	 * @param header Part header.
-	 * @return The request body part.
-	 * @throws NullPointerException If {@code body} or {@code header} are {@code null}.
-	 */
+	/// Create body part with given single header and body.
+	///
+	/// @param body Part body.
+	/// @param header Part header.
+	/// @return The request body part.
+	/// @throws NullPointerException If `body` or `header` are `null`.
 	static HttpRequestBodyPart of(HttpRequestBody body, HttpHeader header) {
 		notNull(body, "body");
 		notNull(header, "header");
 		return new HttpRequestBodyPart(body, singleton(header));
 	}
 
-	/**
-	 * The list of headers for this body part.
-	 */
+	/// The list of headers for this body part.
 	private final Map<String, HttpHeader> headers;
 
-	/**
-	 * The request body.
-	 */
+	/// The request body.
 	private final HttpRequestBody body;
 
-	/**
-	 * Create the body part.
-	 *
-	 * @param body The part body.
-	 * @param headers The list of headers to add.
-	 */
+	/// Create the body part.
+	///
+	/// @param body The part body.
+	/// @param headers The list of headers to add.
 	private HttpRequestBodyPart(HttpRequestBody body, Collection<HttpHeader> headers) {
 		Map<String, HttpHeader> map = new LinkedHashMap<>();
 		for (HttpHeader header : headers) {
@@ -118,12 +102,10 @@ public final class HttpRequestBodyPart {
 		this.headers = unmodifiableMap(map);
 	}
 
-	/**
-	 * Serialize body port as a byte array (using UTF-8 charset).
-	 *
-	 * @return The serialization result.
-	 * @throws IOException If an error occurred during byte transformation.
-	 */
+	/// Serialize body port as a byte array (using UTF-8 charset).
+	///
+	/// @return The serialization result.
+	/// @throws IOException If an error occurred during byte transformation.
 	byte[] serialize() throws IOException {
 		log.debug("Writing part body");
 
@@ -149,20 +131,16 @@ public final class HttpRequestBodyPart {
 		return bos.toByteArray();
 	}
 
-	/**
-	 * Get {@link #body}
-	 *
-	 * @return {@link #body}
-	 */
+	/// Get [#body]
+	///
+	/// @return Returns [#body]
 	HttpRequestBody getBody() {
 		return body;
 	}
 
-	/**
-	 * Get {@link #headers}
-	 *
-	 * @return {@link #headers}
-	 */
+	/// Get [#headers]
+	///
+	/// @return Returns [#headers]
 	Collection<HttpHeader> getHeaders() {
 		return headers.values();
 	}

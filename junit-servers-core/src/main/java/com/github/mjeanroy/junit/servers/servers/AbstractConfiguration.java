@@ -40,109 +40,81 @@ import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
 
-/**
- * Generic configuration that should be extended for
- * each custom embedded server.
- */
+/// Generic configuration that should be extended for
+/// each custom embedded server.
 public abstract class AbstractConfiguration {
 
-	/**
-	 * The default path.
-	 */
+	/// The default path.
 	static final String DEFAULT_PATH = "/";
 
-	/**
-	 * The default webapp value.
-	 */
+	/// The default webapp value.
 	static final String DEFAULT_WEBAPP = toFilePath("src", "main", "webapp");
 
-	/**
-	 * The default classpath.
-	 */
+	/// The default classpath.
 	static final String DEFAULT_CLASSPATH = ".";
 
-	/**
-	 * The default port: zero means that a random port will be assigned.
-	 */
+	/// The default port: zero means that a random port will be assigned.
 	static final int DEFAULT_PORT = 0;
 
-	/**
-	 * Server Path.
-	 * This path is "/" by default, but it can be customized (and path
-	 * suffix will have to be used to query application url).
-	 */
+	/// Server Path.
+	/// This path is "/" by default, but it can be customized (and path
+	/// suffix will have to be used to query application url).
 	private final String path;
 
-	/**
-	 * Webapp Path.
-	 *
-	 * By default, the path follow maven convention and is
-	 * set to "src/main/webapp".
-	 *
-	 * Path should be customized if project do not follow maven
-	 * convention or webapp path must be set to maven sub-module.
-	 */
+	/// Webapp Path.
+	///
+	/// By default, the path follow maven convention and is
+	/// set to "src/main/webapp".
+	///
+	/// Path should be customized if project do not follow maven
+	/// convention or webapp path must be set to maven sub-module.
 	private final String webapp;
 
-	/**
-	 * Server port, default is to use a random port.
-	 *
-	 * Use this configuration port to define a specific port, otherwise
-	 * use a random port to be sure application start on an
-	 * available port.
-	 */
+	/// Server port, default is to use a random port.
+	///
+	/// Use this configuration port to define a specific port, otherwise
+	/// use a random port to be sure application start on an
+	/// available port.
 	private final int port;
 
-	/**
-	 * Additional classpath.
-	 *
-	 * The path will be added to application classpath
-	 * before server is started.
-	 *
-	 * This additional classpath entry is useful to start
-	 * application configured with java configuration instead
-	 * of "classic" web.xml file.
-	 */
+	/// Additional classpath.
+	///
+	/// The path will be added to application classpath
+	/// before server is started.
+	///
+	/// This additional classpath entry is useful to start
+	/// application configured with java configuration instead
+	/// of "classic" web.xml file.
 	private final String classpath;
 
-	/**
-	 * Additional parent (classloader) classpath.
-	 *
-	 * The path will be added to application parent classloader classpath
-	 * before server is started.
-	 */
+	/// Additional parent (classloader) classpath.
+	///
+	/// The path will be added to application parent classloader classpath
+	/// before server is started.
 	private final ClassLoader parentClassLoader;
 
-	/**
-	 * Map of environment properties to set before server start.
-	 *
-	 * These properties could also be set / unset using
-	 * a custom hooks but since it is a common tasks, this is
-	 * supported under the hood.
-	 *
-	 * Note that custom properties will be set before embedded server
-	 * is started and removed after server is stopped.
-	 */
+	/// Map of environment properties to set before server start.
+	///
+	/// These properties could also be set / unset using
+	/// a custom hooks but since it is a common tasks, this is
+	/// supported under the hood.
+	///
+	/// Note that custom properties will be set before embedded server
+	/// is started and removed after server is stopped.
 	private final Map<String, String> envProperties;
 
-	/**
-	 * Execution hooks.
-	 *
-	 * These hooks will be executed during server start and stop
-	 * phases.
-	 *
-	 * Be careful that these hooks should be thread safe.
-	 */
+	/// Execution hooks.
+	///
+	/// These hooks will be executed during server start and stop
+	/// phases.
+	///
+	/// Be careful that these hooks should be thread safe.
 	private final List<Hook> hooks;
 
-	/**
-	 * The path to the custom descriptor file (a.k.a web.xml).
-	 */
+	/// The path to the custom descriptor file (a.k.a web.xml).
 	private final String overrideDescriptor;
 
-	/**
-	 * Initialize configuration with default values.
-	 */
+	/// Initialize configuration with default values.
 	protected AbstractConfiguration() {
 		this.classpath = DEFAULT_CLASSPATH;
 		this.path = DEFAULT_PATH;
@@ -154,18 +126,16 @@ public abstract class AbstractConfiguration {
 		this.overrideDescriptor = null;
 	}
 
-	/**
-	 * Initialize configuration.
-	 *
-	 * @param classpath New {@link #classpath} value.
-	 * @param path New {@link #path} value.
-	 * @param webapp New {@link #webapp} value.
-	 * @param port New {@link #port} value.
-	 * @param envProperties New {@link #envProperties} value.
-	 * @param hooks New {@link #hooks} value.
-	 * @param parentClassLoader New {@link #parentClassLoader} value.
-	 * @param overrideDescriptor New {@link #overrideDescriptor} value.
-	 */
+	/// Initialize configuration.
+	///
+	/// @param classpath New [#classpath] value.
+	/// @param path New [#path] value.
+	/// @param webapp New [#webapp] value.
+	/// @param port New [#port] value.
+	/// @param envProperties New [#envProperties] value.
+	/// @param hooks New [#hooks] value.
+	/// @param parentClassLoader New [#parentClassLoader] value.
+	/// @param overrideDescriptor New [#overrideDescriptor] value.
 	protected AbstractConfiguration(
 		String classpath,
 		String path,
@@ -186,74 +156,58 @@ public abstract class AbstractConfiguration {
 		this.overrideDescriptor = overrideDescriptor;
 	}
 
-	/**
-	 * Get {@link #path}.
-	 *
-	 * @return {@link #path}
-	 */
+	/// Get [#path].
+	///
+	/// @return Returns [#path]
 	public String getPath() {
 		return path;
 	}
 
-	/**
-	 * Get {@link #webapp}.
-	 *
-	 * @return {@link #webapp}
-	 */
+	/// Get [#webapp].
+	///
+	/// @return Returns [#webapp]
 	public String getWebapp() {
 		return webapp;
 	}
 
-	/**
-	 * Get {@link #classpath}.
-	 *
-	 * @return {@link #classpath}
-	 */
+	/// Get [#classpath].
+	///
+	/// @return Returns [#classpath]
 	public String getClasspath() {
 		return classpath;
 	}
 
-	/**
-	 * Get {@link #parentClassLoader}, as a non-modifiable collection.
-	 *
-	 * @return {@link #parentClassLoader}
-	 */
+	/// Get [#parentClassLoader], as a non-modifiable collection.
+	///
+	/// @return Returns [#parentClassLoader]
 	public ClassLoader getParentClassLoader() {
 		return parentClassLoader;
 	}
 
-	/**
-	 * Get {@link #port}.
-	 *
-	 * @return {@link #port}
-	 */
+	/// Get [#port].
+	///
+	/// @return Returns [#port]
 	public int getPort() {
 		return port;
 	}
 
-	/**
-	 * Get {@link #overrideDescriptor}.
-	 *
-	 * @return {@link #overrideDescriptor}
-	 */
+	/// Get [#overrideDescriptor].
+	///
+	/// @return Returns [#overrideDescriptor]
 	public String getOverrideDescriptor() {
 		return overrideDescriptor;
 	}
 
-	/**
-	 * Get {@link #envProperties} as a non-modifiable map.
-	 *
-	 * @return {@link #envProperties}
-	 */
+	/// Get [#envProperties] as a non-modifiable map.
+	///
+	/// @return Returns [#envProperties]
 	public Map<String, String> getEnvProperties() {
 		return unmodifiableMap(envProperties);
 	}
 
-	/**
-	 * Get {@link #hooks} as a non-modifiable list.
-	 *
-	 * @return {@link #hooks}
-	 */
+	/// Get [#hooks] as a non-modifiable list.
+	///
+	/// @return Returns [#hooks]
 	public List<Hook> getHooks() {
 		return unmodifiableList(hooks);
 	}
@@ -280,12 +234,10 @@ public abstract class AbstractConfiguration {
 		return false;
 	}
 
-	/**
-	 * Ensure that an object can be equal to the current instance.
-	 *
-	 * @param o The tested object.
-	 * @return {@code true} if {@code o} can be equal to {@code this}, {@code false} otherwise.
-	 */
+	/// Ensure that an object can be equal to the current instance.
+	///
+	/// @param o The tested object.
+	/// @return `true` if `o` can be equal to `this`, `false` otherwise.
 	protected boolean canEqual(Object o) {
 		return getClass().isInstance(o);
 	}

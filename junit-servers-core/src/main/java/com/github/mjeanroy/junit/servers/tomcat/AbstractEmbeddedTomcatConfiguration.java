@@ -29,9 +29,7 @@ import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 
 import java.util.Objects;
 
-/**
- * Tomcat configuration settings.
- */
+/// Tomcat configuration settings.
 abstract class AbstractEmbeddedTomcatConfiguration extends AbstractConfiguration {
 
 	static final String DEFAULT_CLASSPATH = "./target/classes";
@@ -40,38 +38,28 @@ abstract class AbstractEmbeddedTomcatConfiguration extends AbstractConfiguration
 	static final boolean DEFAULT_ENABLE_NAMING = true;
 	static final boolean DEFAULT_FORCE_META_INF = true;
 
-	/**
-	 * Tomcat Base Directory: this directory is where tomcat will store
-	 * temporary files.
-	 *
-	 * @see org.apache.catalina.startup.Tomcat#setBaseDir(String)
-	 */
+	/// Tomcat Base Directory: this directory is where tomcat will store
+	/// temporary files.
+	///
+	/// @see org.apache.catalina.startup.Tomcat#setBaseDir(String)
 	private final String baseDir;
 
-	/**
-	 * Keep Tomcat Base Directory content on server stop.
-	 */
+	/// Keep Tomcat Base Directory content on server stop.
 	private final boolean keepBaseDir;
 
-	/**
-	 * Flag used to enable / disable naming.
-	 * This is a flag to enables JNDI naming.
-	 *
-	 * @see org.apache.catalina.startup.Tomcat#enableNaming()
-	 */
+	/// Flag used to enable / disable naming.
+	/// This is a flag to enables JNDI naming.
+	///
+	/// @see org.apache.catalina.startup.Tomcat#enableNaming()
 	private final boolean enableNaming;
 
-	/**
-	 * Flag used to force META-INF directory creation
-	 * for additional classpath entries.
-	 */
+	/// Flag used to force META-INF directory creation
+	/// for additional classpath entries.
 	private final boolean forceMetaInf;
 
-	/**
-	 * Build new tomcat configuration.
-	 *
-	 * @param builder Builder object.
-	 */
+	/// Build new tomcat configuration.
+	///
+	/// @param builder Builder object.
 	AbstractEmbeddedTomcatConfiguration(
 			AbstractEmbeddedTomcatConfigurationBuilder<?, ?> builder
 	) {
@@ -92,53 +80,36 @@ abstract class AbstractEmbeddedTomcatConfiguration extends AbstractConfiguration
 		this.forceMetaInf = builder.isForceMetaInf();
 	}
 
-	/**
-	 * Get tomcat base directory.
-	 *
-	 * @return Tomcat base directory.
-	 */
+	/// Get tomcat base directory.
+	///
+	/// @return Tomcat base directory.
 	public String getBaseDir() {
 		return baseDir;
 	}
 
-	/**
-	 * Get the base dir cleanup flag:
-	 *
-	 * <ul>
-	 *   <li>{@code true} if the tomcat base dir is deleted when server stops.</li>
-	 *   <li>{@code false} to keep default behavior.</li>
-	 * </ul>
-	 *
-	 * @return {@code true} if tomcat base dir is deleted when server stops, {@code false} if nothing is done.
-	 */
+	/// Get the base dir cleanup flag:
+	/// - `true` if the tomcat base dir is deleted when server stops.
+	/// - `false` to keep default behavior.
+	///
+	/// @return `true` if tomcat base dir is deleted when server stops, `false` if nothing is done.
 	public boolean isKeepBaseDir() {
 		return keepBaseDir;
 	}
 
-	/**
-	 * Get the JNDI flag:
-	 *
-	 * <ul>
-	 *   <li>{@code true} if JNDI naming is enabled.</li>
-	 *   <li>{@code false} if JNDI naming is disabled.</li>
-	 * </ul>
-	 *
-	 * @return {@code true} if JNDI naming is enabled, {@code false} otherwise.
-	 */
+	/// Get the JNDI flag:
+	/// - `true` if JNDI naming is enabled.
+	/// - `false` if JNDI naming is disabled.
+	///
+	/// @return `true` if JNDI naming is enabled, `false` otherwise.
 	public boolean isEnableNaming() {
 		return enableNaming;
 	}
 
-	/**
-	 * Get the meta-inf directory flag:
-	 *
-	 * <ul>
-	 *   <li>{@code true} if meta-inf directory creation is enforced.</li>
-	 *   <li>{@code false} otherwise.</li>
-	 * </ul>
-	 *
-	 * @return {@code true} if the {@code meta-inf} directory creation is enforced, {@code false} otherwise.
-	 */
+	/// Get the meta-inf directory flag:
+	/// - `true` if meta-inf directory creation is enforced.
+	/// - `false` otherwise.
+	///
+	/// @return `true` if the `meta-inf` directory creation is enforced, `false` otherwise.
 	public boolean isForceMetaInf() {
 		return forceMetaInf;
 	}

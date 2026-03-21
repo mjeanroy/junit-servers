@@ -35,41 +35,27 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-/**
- * Available strategies that can be used to build
- * appropriate implementation of http client.
- *
- * <p>
- *
- * Currently, following strategies are available:
- * <ul>
- *   <li>{@link HttpClientStrategy#ASYNC_HTTP_CLIENT}: use the <a href="https://github.com/AsyncHttpClient/async-http-client">async-http-client</a> library.</li>
- *   <li>{@link HttpClientStrategy#OK_HTTP3}: use <a href="http://square.github.io/okhttp/">OkHttp</a> library.</li>
- *   <li>{@link HttpClientStrategy#NING_ASYNC_HTTP_CLIENT}: use <a href="https://github.com/ning/async-http-client">async-http-client from ning</a> library.</li>
- *   <li>{@link HttpClientStrategy#APACHE_HTTP_CLIENT}: use <a href="https://hc.apache.org/">apache http-client</a> library.</li>
- *   <li>{@link HttpClientStrategy#AUTO}: use classpath detection and choose the best available strategy (see below).</li>
- * </ul>
- *
- * <p>
- *
- * <strong>How the "best" strategy is selected:</strong>
- * <br>
- * Classpath detection is implemented in this order:
- * <ol>
- *   <li>If OkHttp library is detected, this strategy is automatically selected.</li>
- *   <li>
- *     If async-http-client is detected, this strategy is automatically (note that this strategy will be skipped
- *     with a jdk &lt; 8, since this library requires Java 8).
- *   </li>
- *   <li>Third test is ning-async-http-client, and it will be selected if library is detected.</li>
- *   <li>Finally, apache httpcomponent will be selected if available.</li>
- *   <li>If none of these libraries are available, an exception will be thrown.</li>
- * </ol>
- */
+/// Available strategies that can be used to build
+/// appropriate implementation of http client.
+///
+/// Currently, following strategies are available:
+/// - [HttpClientStrategy#ASYNC_HTTP_CLIENT]: use the [async-http-client](https://github.com/AsyncHttpClient/async-http-client) library.
+/// - [HttpClientStrategy#OK_HTTP3]: use [OkHttp](http://square.github.io/okhttp) library.
+/// - [HttpClientStrategy#NING_ASYNC_HTTP_CLIENT]: use [async-http-client from ning](https://github.com/ning/async-http-client) library.
+/// - [HttpClientStrategy#APACHE_HTTP_CLIENT]: use [apache http-client](https://hc.apache.org/) library.
+/// - [HttpClientStrategy#AUTO]: use classpath detection and choose the best available strategy (see below).
+///
+/// **How the "best" strategy is selected:**
+///
+/// Classpath detection is implemented in this order:
+/// 1. If OkHttp library is detected, this strategy is automatically selected.
+/// 2. If async-http-client is detected, this strategy is automatically (note that this strategy will be skipped
+///    with a jdk &lt; 8, since this library requires Java 8).
+/// 3. Third test is ning-async-http-client, and it will be selected if library is detected.
+/// 4. Finally, apache httpcomponent will be selected if available.
+/// 5. If none of these libraries are available, an exception will be thrown.
 public enum HttpClientStrategy {
-	/**
-	 * Build http client using <a href="http://square.github.io/okhttp/">OkHttp</a> library.
-	 */
+	/// Build http client using [OkHttp](http://square.github.io/okhttp/) library.
 	OK_HTTP3("OkHttp") {
 		@Override
 		public boolean support() {
@@ -87,13 +73,9 @@ public enum HttpClientStrategy {
 		}
 	},
 
-	/**
-	 * Build http client using <a href="https://github.com/AsyncHttpClient/async-http-client">AsyncHttpClient</a> library.
-	 *
-	 * <p>
-	 *
-	 * <strong>This strategy requires Java 8.</strong>
-	 */
+	/// Build http client using [AsyncHttpClient](https://github.com/AsyncHttpClient/async-http-client) library.
+	///
+	/// **This strategy requires Java 8.**
 	ASYNC_HTTP_CLIENT("AsyncHttpClient") {
 		@Override
 		public boolean support() {
@@ -111,9 +93,7 @@ public enum HttpClientStrategy {
 		}
 	},
 
-	/**
-	 * Build http client using <a href="https://github.com/ning/async-http-client">(Ning) AsyncHttpClient</a> library.
-	 */
+	/// Build http client using [(Ning) AsyncHttpClient](https://github.com/ning/async-http-client) library.
 	NING_ASYNC_HTTP_CLIENT("(Ning) AsyncHttpClient") {
 		@Override
 		public boolean support() {
@@ -131,9 +111,7 @@ public enum HttpClientStrategy {
 		}
 	},
 
-	/**
-	 * Build http client using <a href="https://hc.apache.org/">ApacheHttpClient</a> library.
-	 */
+	/// Build http client using [ApacheHttpClient](https://hc.apache.org/) library.
 	APACHE_HTTP_CLIENT("Apache HttpComponent") {
 		@Override
 		public boolean support() {
@@ -151,17 +129,12 @@ public enum HttpClientStrategy {
 		}
 	},
 
-	/**
-	 * Detect class available on classpath and use appropriate strategy to
-	 * build http client client implementation:
-	 *
-	 * <ol>
-	 *   <li>Try {@link HttpClientStrategy#OK_HTTP3}.</li>
-	 *   <li>Try {@link HttpClientStrategy#ASYNC_HTTP_CLIENT}.</li>
-	 *   <li>Try {@link HttpClientStrategy#NING_ASYNC_HTTP_CLIENT}.</li>
-	 *   <li>Try {@link HttpClientStrategy#APACHE_HTTP_CLIENT}.</li>
-	 * </ol>
-	 */
+	/// Detect class available on classpath and use appropriate strategy to
+	/// build http client client implementation:
+	/// 1. Try [HttpClientStrategy#OK_HTTP3].
+	/// 2. Try [HttpClientStrategy#ASYNC_HTTP_CLIENT].
+	/// 3. Try [HttpClientStrategy#NING_ASYNC_HTTP_CLIENT].
+	/// 4. Try [HttpClientStrategy#APACHE_HTTP_CLIENT].
 	AUTO("OkHttp OR AsyncHttpClient OR Apache HttpComponent") {
 		@Override
 		public boolean support() {
@@ -215,136 +188,94 @@ public enum HttpClientStrategy {
 		}
 	};
 
-	/**
-	 * Look into {@link HttpClientProvider} available using the standard Service Provider Interface.
-	 *
-	 * @return Custom {@link HttpClientProvider}, {@code null} if no one exists.
-	 */
+	/// Look into [HttpClientProvider] available using the standard Service Provider Interface.
+	///
+	/// @return Custom [HttpClientProvider], `null` if no one exists.
 	private static HttpClientProvider findProviders() {
 		ServiceLoader<HttpClientProvider> providers = ServiceLoader.load(HttpClientProvider.class);
 		Iterator<HttpClientProvider> it = providers.iterator();
 		return it.hasNext() ? it.next() : null;
 	}
 
-	/**
-	 * The FQN entry point for the async-http-client library.
-	 *
-	 * @see <a href="http://www.javadoc.io/doc/org.asynchttpclient/async-http-client">http://www.javadoc.io/doc/org.asynchttpclient/async-http-client</a>
-	 */
+	/// The FQN entry point for the [async-http-client](http://www.javadoc.io/doc/org.asynchttpclient/async-http-client) library.
 	private static final String ASYNC_HTTP_CLIENT_CLASS = "org.asynchttpclient.DefaultAsyncHttpClient";
 
-	/**
-	 * A flag that can be used to know if async-http-client is available.
-	 * The following conditions must be met:
-	 * <ul>
-	 *   <li>The runtime must be executed on, at least, <strong>Java 8</strong>.</li>
-	 *   <li>The async-http-client library must be available on the classpath.</li>
-	 * </ul>
-	 *
-	 * @see HttpClientStrategy#ASYNC_HTTP_CLIENT_CLASS
-	 * @see <a href="https://github.com/AsyncHttpClient/async-http-client">https://github.com/AsyncHttpClient/async-http-client</a>
-	 * @see <a href="http://www.javadoc.io/doc/org.asynchttpclient/async-http-client">http://www.javadoc.io/doc/org.asynchttpclient/async-http-client</a>
-	 */
+	/// A flag that can be used to know if async-http-client is available.
+	///
+	/// The following conditions must be met:
+	/// - The runtime must be executed on, at least, **Java 8**.
+	/// - The async-http-client library must be available on the classpath.
+	///
+	/// @see HttpClientStrategy#ASYNC_HTTP_CLIENT_CLASS
 	private static final boolean SUPPORT_ASYNC_HTTP_CLIENT = Classes.isPresent(ASYNC_HTTP_CLIENT_CLASS);
 
-	/**
-	 * The FQN entry point for the (ning) async-http-client library.
-	 *
-	 * @see <a href="http://www.javadoc.io/doc/com.ning/async-http-client">http://www.javadoc.io/doc/com.ning/async-http-client</a>
-	 */
+	/// The FQN entry point for the (ning) async-http-client library.
 	private static final String NING_ASYNC_HTTP_CLIENT_CLASS = "com.ning.http.client.AsyncHttpClient";
 
-	/**
-	 * A flag that can be used to know if (ning) async-http-client is available.
-	 * For now, the only condition is that the (ning) async-http-client library is available
-	 * on the classpath.
-	 *
-	 * @see HttpClientStrategy#NING_ASYNC_HTTP_CLIENT_CLASS
-	 * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
-	 * @see <a href="http://www.javadoc.io/doc/com.ning/async-http-client">http://www.javadoc.io/doc/com.ning/async-http-client</a>
-	 */
+	/// A flag that can be used to know if (ning) async-http-client is available.
+	///
+	/// For now, the only condition is that the (ning) async-http-client library is available
+	/// on the classpath.
+	///
+	/// @see HttpClientStrategy#NING_ASYNC_HTTP_CLIENT_CLASS
 	private static final boolean SUPPORT_NING_ASYNC_HTTP_CLIENT = Classes.isPresent(NING_ASYNC_HTTP_CLIENT_CLASS);
 
-	/**
-	 * The FQN entry point for the apache http-component library.
-	 *
-	 * @see <a href="http://www.javadoc.io/doc/org.apache.httpcomponents/httpclient">http://www.javadoc.io/doc/org.apache.httpcomponents/httpclient</a>
-	 */
+	/// The FQN entry point for the apache http-component library.
 	private static final String APACHE_HTTP_CLIENT_CLASS = "org.apache.http.impl.client.CloseableHttpClient";
 
-	/**
-	 * A flag that can be used to know if apache http-component library is available.
-	 * For now, the only condition is that the library is available
-	 * on the classpath.
-	 *
-	 * @see HttpClientStrategy#APACHE_HTTP_CLIENT_CLASS
-	 * @see <a href="https://hc.apache.org/">https://hc.apache.org/</a>
-	 * @see <a href="http://www.javadoc.io/doc/org.apache.httpcomponents/httpclient">http://www.javadoc.io/doc/org.apache.httpcomponents/httpclient</a>
-	 */
+	/// A flag that can be used to know if apache http-component library is available.
+	///
+	/// For now, the only condition is that the library is available
+	/// on the classpath.
+	///
+	/// @see HttpClientStrategy#APACHE_HTTP_CLIENT_CLASS
 	private static final boolean SUPPORT_APACHE_HTTP_CLIENT = Classes.isPresent(APACHE_HTTP_CLIENT_CLASS);
 
-	/**
-	 * The FQN entry point for the square okhttp library.
-	 *
-	 * @see <a href="http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1>http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1</a>
-	 */
+	/// The FQN entry point for the square okhttp library.
 	private static final String OK_HTTP3_CLIENT_CLASS = "okhttp3.OkHttpClient";
 
-	/**
-	 * A flag that can be used to know if okhttp library is available.
-	 * For now, the only condition is that the library is available
-	 * on the classpath.
-	 *
-	 * @see HttpClientStrategy#OK_HTTP3_CLIENT_CLASS
-	 * @see <a href="http://square.github.io/okhttp/">http://square.github.io/okhttp/</a>
-	 * @see <a href="http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1>http://www.javadoc.io/doc/com.squareup.okhttp3/okhttp/3.8.1</a>
-	 */
+	/// A flag that can be used to know if okhttp library is available.
+	///
+	/// For now, the only condition is that the library is available
+	/// on the classpath.
+	///
+	/// @see HttpClientStrategy#OK_HTTP3_CLIENT_CLASS
 	private static final boolean SUPPORT_OK_HTTP3_CLIENT = Classes.isPresent(OK_HTTP3_CLIENT_CLASS);
 
-	/**
-	 * The name of the underlying library.
-	 */
+	/// The name of the underlying library.
 	private final String library;
 
-	/**
-	 * Create strategy.
-	 *
-	 * @param library Name of underlying library.
-	 */
+	/// Create strategy.
+	///
+	/// @param library Name of underlying library.
 	HttpClientStrategy(String library) {
 		this.library = library;
 	}
 
-	/**
-	 * Return the http client implementation.
-	 *
-	 * @param server Embedded server.
-	 * @return Http client.
-	 * @throws UnsupportedOperationException If the runtime environment does not allow the strategy (such as: the library has not been imported).
-	 */
+	/// Return the http client implementation.
+	///
+	/// @param server Embedded server.
+	/// @return Http client.
+	/// @throws UnsupportedOperationException If the runtime environment does not allow the strategy (such as: the library has not been imported).
 	public HttpClient build(EmbeddedServer<? extends AbstractConfiguration> server) {
 		checkSupport();
 		return instantiate(server);
 	}
 
-	/**
-	 * Return the http client implementation.
-	 *
-	 * @param configuration HTTP Client configuration.
-	 * @param server Embedded server.
-	 * @return Http client.
-	 * @throws UnsupportedOperationException If the runtime environment does not allow the strategy (such as: the library has not been imported).
-	 */
+	/// Return the http client implementation.
+	///
+	/// @param configuration HTTP Client configuration.
+	/// @param server Embedded server.
+	/// @return Http client.
+	/// @throws UnsupportedOperationException If the runtime environment does not allow the strategy (such as: the library has not been imported).
 	public HttpClient build(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server) {
 		checkSupport();
 		return instantiate(configuration, server);
 	}
 
-	/**
-	 * Ensure that the strategy is supported, throw {@link UnsupportedOperationException} otherwise.
-	 *
-	 * @throws UnsupportedOperationException If the strategy is not supported by the runtime environment.
-	 */
+	/// Ensure that the strategy is supported, throw [UnsupportedOperationException] otherwise.
+	///
+	/// @throws UnsupportedOperationException If the strategy is not supported by the runtime environment.
 	void checkSupport() {
 		if (!support()) {
 			throw new UnsupportedOperationException(
@@ -353,27 +284,21 @@ public enum HttpClientStrategy {
 		}
 	}
 
-	/**
-	 * Check if the strategy can be used as it is supported by the runtime environment.
-	 *
-	 * @return {@code true} if the strategy can be instantiated, {@code false} otherwise.
-	 */
+	/// Check if the strategy can be used as it is supported by the runtime environment.
+	///
+	/// @return `true` if the strategy can be instantiated, `false` otherwise.
 	public abstract boolean support();
 
-	/**
-	 * Instantiate strategy.
-	 *
-	 * @param server The target server.
-	 * @return The new http client instance.
-	 */
+	/// Instantiate strategy.
+	///
+	/// @param server The target server.
+	/// @return The new http client instance.
 	abstract HttpClient instantiate(EmbeddedServer<? extends AbstractConfiguration> server);
 
-	/**
-	 * Instantiate strategy with custom configuration.
-	 *
-	 * @param configuration HTTP Client configuration.
-	 * @param server The target server.
-	 * @return The new http client instance.
-	 */
+	/// Instantiate strategy with custom configuration.
+	///
+	/// @param configuration HTTP Client configuration.
+	/// @param server The target server.
+	/// @return The new http client instance.
 	abstract HttpClient instantiate(HttpClientConfiguration configuration, EmbeddedServer<? extends AbstractConfiguration> server);
 }

@@ -44,23 +44,17 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
-/**
- * Implementation of {@link HttpResponse} delegating calls to original {@link org.apache.http.HttpResponse}
- * instance.
- */
+/// Implementation of [HttpResponse] delegating calls to original [org.apache.http.HttpResponse]
+/// instance.
 final class ApacheHttpResponse extends AbstractHttpResponse {
 
-	/**
-	 * The original response.
-	 */
+	/// The original response.
 	private final org.apache.http.HttpResponse response;
 
-	/**
-	 * Create the response from Apache HTTP Component.
-	 *
-	 * @param response The original response.
-	 * @param duration Request duration.
-	 */
+	/// Create the response from Apache HTTP Component.
+	///
+	/// @param response The original response.
+	/// @param duration Request duration.
 	ApacheHttpResponse(org.apache.http.HttpResponse response, long duration) {
 		super(duration);
 		this.response = notNull(response, "Response");

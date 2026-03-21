@@ -28,19 +28,15 @@ import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
 
-/**
- * Jetty Embedded Server provider, used by the service provider interface from the JDK.
- *
- * @deprecated Use {@code junit-servers-jetty-9} instead.
- */
+/// Jetty Embedded Server provider, used by the service provider interface from the JDK.
+///
+/// @deprecated Use `junit-servers-jetty-9` instead.
 @Deprecated
 public class EmbeddedJettyProvider implements EmbeddedServerProvider<EmbeddedJettyConfiguration> {
 
 	private static final Logger log = LoggerFactory.getLogger(EmbeddedJettyProvider.class);
 
-	/**
-	 * Create provider.
-	 */
+	/// Create provider.
 	public EmbeddedJettyProvider() {
 	}
 

@@ -46,9 +46,7 @@ import static java.nio.charset.Charset.defaultCharset;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-/**
- * Builder for {@link HttpResponse} instances.
- */
+/// Builder for [HttpResponse] instances.
 public class AsyncHttpResponseBuilder extends AbstractHttpResponseBuilder<Response, AsyncHttpResponseBuilder> {
 
 	@Override

@@ -39,19 +39,13 @@ import java.lang.reflect.Parameter;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
-/**
- * A JUnit Jupiter extension for {@link WireMockServer}.
- */
+/// A JUnit Jupiter extension for [WireMockServer].
 class WireMockExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
-	/**
-	 * The extension namespace identifier.
-	 */
+	/// The extension namespace identifier.
 	private static final Namespace NAMESPACE = Namespace.create(WireMockExtension.class);
 
-	/**
-	 * The key for the wiremock server in the internal store.
-	 */
+	/// The key for the wiremock server in the internal store.
 	private static final String STORE_KEY = "wireMockServer";
 
 	@Override

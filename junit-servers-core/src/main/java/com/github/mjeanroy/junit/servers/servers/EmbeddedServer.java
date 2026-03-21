@@ -24,100 +24,68 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-/**
- * Specification of embedded server.
- *
- * <p>
- *
- * An embedded server:
- * <ul>
- *   <li>Can be started, stopped or restarted.</li>
- *   <li>Must provide port that can be used to query resources.</li>
- * </ul>
- *
- * @param <CONFIGURATION> The type of configuration used by the embedded server implementation.
- */
+/// Specification of embedded server.
+///
+/// An embedded server:
+/// - Can be started, stopped or restarted.
+/// - Must provide port that can be used to query resources.
+///
+/// @param <CONFIGURATION> The type of configuration used by the embedded server implementation.
 public interface EmbeddedServer<CONFIGURATION extends AbstractConfiguration> {
 
-	/**
-	 * Start embedded server.
-	 * If server is already started, this method should do nothing.
-	 */
+	/// Start embedded server.
+	/// If server is already started, this method should do nothing.
 	void start();
 
-	/**
-	 * Stop embedded server.
-	 * If server is already stopped, this method should do nothing.
-	 */
+	/// Stop embedded server.
+	/// If server is already stopped, this method should do nothing.
 	void stop();
 
-	/**
-	 * Restart embedded server.
-	 */
+	/// Restart embedded server.
 	void restart();
 
-	/**
-	 * Return server configuration.
-	 *
-	 * @return Configuration.
-	 */
+	/// Return server configuration.
+	///
+	/// @return Configuration.
 	CONFIGURATION getConfiguration();
 
-	/**
-	 * Check if embedded server is started.
-	 *
-	 * @return {@code true} if embedded server is started, {@code false} otherwise.
-	 */
+	/// Check if embedded server is started.
+	///
+	/// @return `true` if embedded server is started, `false` otherwise.
 	boolean isStarted();
 
-	/**
-	 * Get the protocol scheme ({@code "http"}, {@code "https"}).
-	 *
-	 * @return Protocol scheme.
-	 */
+	/// Get the protocol scheme (`"http"`, `"https"`).
+	///
+	/// @return Protocol scheme.
 	String getScheme();
 
-	/**
-	 * Get the host, should be {@code "localhost"}, unless specific configuration.
-	 *
-	 * @return The server hostname.
-	 */
+	/// Get the host, should be `"localhost"`, unless specific configuration.
+	///
+	/// @return The server hostname.
 	String getHost();
 
-	/**
-	 * Get port used by embedded server.
-	 *
-	 * <p>
-	 *
-	 * Note that:
-	 * <ul>
-	 *   <li>If the server is not started, the returned port should be the one set in the configuration.</li>
-	 *   <li>Otherwise, the "real" port should be returned (the port used by the embedded server)</li>
-	 * </ul>
-	 *
-	 * @return Port.
-	 */
+	/// Get port used by embedded server.
+	///
+	/// Note that:
+	/// - If the server is not started, the returned port should be the one set in the configuration.
+	/// - Otherwise, the "real" port should be returned (the port used by the embedded server)
+	///
+	/// @return Port.
 	int getPort();
 
-	/**
-	 * Get server context path.
-	 *
-	 * @return Server context path.
-	 */
+	/// Get server context path.
+	///
+	/// @return Server context path.
 	String getPath();
 
-	/**
-	 * Get URL to query embedded server.
-	 *
-	 * @return URL.
-	 */
+	/// Get URL to query embedded server.
+	///
+	/// @return URL.
 	String getUrl();
 
-	/**
-	 * Get servlet context used within container.
-	 * If container is not a servlet container, this method should return null.
-	 *
-	 * @return Servlet Context from container.
-	 */
+	/// Get servlet context used within container.
+	/// If container is not a servlet container, this method should return null.
+	///
+	/// @return Servlet Context from container.
 	Object getServletContext();
 }

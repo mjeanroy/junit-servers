@@ -29,27 +29,21 @@ import java.lang.reflect.Field;
 
 interface AnnotationHandler {
 
-	/**
-	 * Check that given handler support given annotation.
-	 *
-	 * @param annotation Annotation.
-	 * @return True if handler support annotation, false otherwise.c
-	 */
+	/// Check that given handler support given annotation.
+	///
+	/// @param annotation Annotation.
+	/// @return True if handler support annotation, false otherwise.c
 	boolean support(Annotation annotation);
 
-	/**
-	 * Execute handler before test invocation.
-	 *
-	 * @param target Test class instance.
-	 * @param field Field.
-	 */
+	/// Execute handler before test invocation.
+	///
+	/// @param target Test class instance.
+	/// @param field Field.
 	void before(Object target, Field field);
 
-	/**
-	 * Execute handler after test invocation.
-	 *
-	 * @param target Test class instance.
-	 * @param field Field.
-	 */
+	/// Execute handler after test invocation.
+	///
+	/// @param target Test class instance.
+	/// @param field Field.
 	void after(Object target, Field field);
 }

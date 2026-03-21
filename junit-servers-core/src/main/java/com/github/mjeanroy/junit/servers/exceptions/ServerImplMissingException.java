@@ -24,17 +24,14 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
-/**
- * Exception thrown when embedded server implementation is missing.
- * For example, this exception can be thrown in junit runner when no
- * implementation can be found at runtime.
- */
+/// Exception thrown when embedded server implementation is missing.
+///
+/// For example, this exception can be thrown in junit runner when no
+/// implementation can be found at runtime.
 @SuppressWarnings("serial")
 public class ServerImplMissingException extends AbstractEmbeddedServerException {
 
-	/**
-	 * Create exception.
-	 */
+	/// Create exception.
 	public ServerImplMissingException() {
 		super("Embedded server implementation is missing, please import appropriate sub-module");
 	}

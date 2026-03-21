@@ -24,16 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.tomcat;
 
-/**
- * A {@link EmbeddedTomcatConfiguration} provider.
- */
+/// A [EmbeddedTomcatConfiguration] provider.
 public interface EmbeddedTomcatConfigurationProvider {
 
-	/**
-	 * Create {@link EmbeddedTomcatConfiguration} for given test class.
-	 *
-	 * @param testClass The test class.
-	 * @return The embedded tomcat configuration.
-	 */
+	/// Create [EmbeddedTomcatConfiguration] for given test class.
+	///
+	/// @param testClass The test class.
+	/// @return The embedded tomcat configuration.
 	EmbeddedTomcatConfiguration build(Class<?> testClass);
 }

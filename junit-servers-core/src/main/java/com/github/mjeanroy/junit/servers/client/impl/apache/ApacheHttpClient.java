@@ -39,35 +39,28 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
-/**
- * Implementation of {@link HttpClient} using apache http client
- * library under the hood.
- *
- * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
- */
+/// Implementation of [HttpClient] using [apache http client](http://hc.apache.org/httpcomponents-client-ga/index.html)
+/// library under the hood.
+///
+/// @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
 public class ApacheHttpClient extends AbstractHttpClient {
 
-	/**
-	 * Create new http client using default internal client.
-	 *
-	 * @param server Embedded server.
-	 * @return Http client.
-	 * @throws NullPointerException If {@code server} is {@code null}.
-	 */
+	/// Create new http client using default internal client.
+	///
+	/// @param server Embedded server.
+	/// @return Http client.
+	/// @throws NullPointerException If `server` is `null`.
 	public static ApacheHttpClient defaultApacheHttpClient(EmbeddedServer<?> server) {
 		HttpClientConfiguration configuration = HttpClientConfiguration.defaultConfiguration();
 		return newApacheHttpClient(configuration, server);
 	}
 
-	/**
-	 * Create new http client using custom configuration.
-	 *
-	 * @param configuration Client configuration.
-	 * @param server Embedded server.
-	 * @return Http client.
-	 * @throws NullPointerException If {@code server} or {@code configuration} are {@code null}.
-	 */
+	/// Create new http client using custom configuration.
+	///
+	/// @param configuration Client configuration.
+	/// @param server Embedded server.
+	/// @return Http client.
+	/// @throws NullPointerException If `server` or `configuration` are `null`.
 	public static ApacheHttpClient newApacheHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
 		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 		if (!configuration.isFollowRedirect()) {
@@ -78,16 +71,12 @@ public class ApacheHttpClient extends AbstractHttpClient {
 		return new ApacheHttpClient(configuration, server, client);
 	}
 
-	/**
-	 * The {@code close} flag.
-	 */
+	/// The `close` flag.
 	private final AtomicBoolean destroyed;
 
-	/**
-	 * Internal apache http client.
-	 * This http client will be closed when http client
-	 * is destroyed.
-	 */
+	/// Internal apache http client.
+	/// This http client will be closed when http client
+	/// is destroyed.
 	private final CloseableHttpClient client;
 
 	// Use static factory

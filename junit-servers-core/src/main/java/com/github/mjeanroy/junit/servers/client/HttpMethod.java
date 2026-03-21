@@ -24,51 +24,29 @@
 
 package com.github.mjeanroy.junit.servers.client;
 
-/**
- * Http methods available with abstract
- * client.
- */
+/// Http methods available with abstract
+/// client.
 public enum HttpMethod {
 
-	/**
-	 * The {@code GET} HTTP method.
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.3">https://tools.ietf.org/html/rfc2616#section-9.3</a>
-	 */
+	/// The `GET` HTTP method ([RFC 2616](https://tools.ietf.org/html/rfc2616#section-9.3)).
 	GET(false),
 
-	/**
-	 * The {@code POST} HTTP method.
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.5">https://tools.ietf.org/html/rfc2616#section-9.5</a>
-	 */
+	/// The `POST` HTTP method ([RFC 2616](https://tools.ietf.org/html/rfc2616#section-9.5)).
 	POST(true),
 
-	/**
-	 * The {@code PUT} HTTP method.
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.6">https://tools.ietf.org/html/rfc2616#section-9.6</a>
-	 */
+	/// The `PUT` HTTP method ([RFC 2616](https://tools.ietf.org/html/rfc2616#section-9.6)).
 	PUT(true),
 
-	/**
-	 * The {@code PATCH} HTTP method.
-	 * @see <a href="https://tools.ietf.org/html/rfc2068#section-19.6.1.1">https://tools.ietf.org/html/rfc2068#section-19.6.1.1</a>
-	 */
+	/// The `PATCH` HTTP method ([RFC 2068](https://tools.ietf.org/html/rfc2068#section-19.6.1.1)).
 	PATCH(true),
 
-	/**
-	 * The {@code DELETE} HTTP method.
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.7">https://tools.ietf.org/html/rfc2616#section-9.7</a>
-	 */
+	/// The `DELETE` HTTP method ([RFC 2616](https://tools.ietf.org/html/rfc2616#section-9.7)).
 	DELETE(true),
 
-	/**
-	 * The {@code HEAD} HTTP method.
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-9.4">https://tools.ietf.org/html/rfc2616#section-9.4</a>
-	 */
+	/// The `HEAD` HTTP method ([RFC 2616](https://tools.ietf.org/html/rfc2616#section-9.4)).
 	HEAD(false);
 
-	/**
-	 * Flag to know if http method allow body request.
-	 */
+	/// Flag to know if http method allow body request.
 	private final boolean allowBody;
 
 	// Enum private constructor
@@ -76,26 +54,19 @@ public enum HttpMethod {
 		this.allowBody = allowBody;
 	}
 
-	/**
-	 * Get formatted http verb:
-	 *
-	 * <ul>
-	 *   <li>Always in upper case.</li>
-	 *   <li>Related to given HTTP method.</li>
-	 * </ul>
-	 *
-	 * @return Verb.
-	 */
+	/// Get formatted http verb:
+	/// - Always in upper case.
+	/// - Related to given HTTP method.
+	///
+	/// @return Verb.
 	public String getVerb() {
 		return name();
 	}
 
-	/**
-	 * Check if request method allow body request (as form url encoded parameter or
-	 * as json / xml body).
-	 *
-	 * @return {@code true} if method allow body request, {@code false} otherwise.
-	 */
+	/// Check if request method allow body request (as form url encoded parameter or
+	/// as json / xml body).
+	///
+	/// @return `true` if method allow body request, `false` otherwise.
 	public boolean isBodyAllowed() {
 		return allowBody;
 	}

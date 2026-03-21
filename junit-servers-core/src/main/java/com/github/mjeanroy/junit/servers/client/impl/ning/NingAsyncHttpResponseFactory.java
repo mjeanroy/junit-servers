@@ -28,26 +28,21 @@ import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
 import com.ning.http.client.Response;
 
-/**
- * Implementation of {@link HttpResponse} using (ning) async-http-client
- * under the hood.
- *
- * @see <a href="https://github.com/ning/async-http-client">https://github.com/ning/async-http-client</a>
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
- */
+/// Implementation of [HttpResponse] using (ning) async-http-client
+/// under the hood.
+///
+/// @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#NING_ASYNC_HTTP_CLIENT
 final class NingAsyncHttpResponseFactory {
 
 	// Ensure non instantiation.
 	private NingAsyncHttpResponseFactory() {
 	}
 
-	/**
-	 * Create the final {@link DefaultHttpResponse} instance.
-	 *
-	 * @param response The Ning HTTP response.
-	 * @param duration The request duration.
-	 * @return The HTTP response.
-	 */
+	/// Create the final [DefaultHttpResponse] instance.
+	///
+	/// @param response The Ning HTTP response.
+	/// @param duration The request duration.
+	/// @return The HTTP response.
 	static HttpResponse of(Response response, long duration) {
 		return new NingAsyncHttpResponse(response, duration);
 	}

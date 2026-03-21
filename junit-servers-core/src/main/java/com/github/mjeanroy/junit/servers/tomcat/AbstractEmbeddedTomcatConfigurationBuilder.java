@@ -38,37 +38,30 @@ abstract class AbstractEmbeddedTomcatConfigurationBuilder<
 	CONFIG extends AbstractEmbeddedTomcatConfiguration
 > extends AbstractConfigurationBuilder<SELF, CONFIG> {
 
-	/**
-	 * The tomcat baseDir configuration: this directory is where tomcat will store
-	 * temporary files.
-	 * Default is {@link AbstractEmbeddedTomcatConfiguration#DEFAULT_BASE_DIR}.
-	 *
-	 * @see AbstractEmbeddedTomcatConfiguration#DEFAULT_BASE_DIR
-	 * @see org.apache.catalina.startup.Tomcat#setBaseDir(String)
-	 */
+	/// The tomcat baseDir configuration: this directory is where tomcat will store
+	/// temporary files.
+	///
+	/// Default is [AbstractEmbeddedTomcatConfiguration#DEFAULT_BASE_DIR].
+	///
+	/// @see AbstractEmbeddedTomcatConfiguration#DEFAULT_BASE_DIR
+	/// @see org.apache.catalina.startup.Tomcat#setBaseDir(String)
 	private String baseDir;
 
-	/**
-	 * Keep tomcat base directory content on server stop.
-	 * Default is {@link AbstractEmbeddedTomcatConfiguration#DEFAULT_KEEP_BASE_DIR}.
-	 *
-	 * @see AbstractEmbeddedTomcatConfiguration#DEFAULT_KEEP_BASE_DIR
-	 */
+	/// Keep tomcat base directory content on server stop.
+	/// Default is [AbstractEmbeddedTomcatConfiguration#DEFAULT_KEEP_BASE_DIR].
+	///
+	/// @see AbstractEmbeddedTomcatConfiguration#DEFAULT_KEEP_BASE_DIR
 	private boolean keepBaseDir = DEFAULT_KEEP_BASE_DIR;
 
-	/**
-	 * Enable/Disable naming: this is a flag to enables JNDI naming.
-	 * Default is {@link AbstractEmbeddedTomcatConfiguration#DEFAULT_ENABLE_NAMING}.
-	 *
-	 * @see AbstractEmbeddedTomcatConfiguration#DEFAULT_ENABLE_NAMING}
-	 * @see org.apache.catalina.startup.Tomcat#enableNaming()
-	 */
+	/// Enable/Disable naming: this is a flag to enables JNDI naming.
+	/// Default is [AbstractEmbeddedTomcatConfiguration#DEFAULT_ENABLE_NAMING].
+	///
+	/// @see AbstractEmbeddedTomcatConfiguration#DEFAULT_ENABLE_NAMING}
+	/// @see org.apache.catalina.startup.Tomcat#enableNaming()
 	private boolean enableNaming;
 
-	/**
-	 * Force the creation of the {@code META-INF} directory if it does not exist
-	 * in the classpath.
-	 */
+	/// Force the creation of the `META-INF` directory if it does not exist
+	/// in the classpath.
 	private boolean forceMetaInf;
 
 	AbstractEmbeddedTomcatConfigurationBuilder() {
@@ -79,138 +72,106 @@ abstract class AbstractEmbeddedTomcatConfigurationBuilder<
 		withClasspath(DEFAULT_CLASSPATH);
 	}
 
-	/**
-	 * Get the tomcat base directory;
-	 *
-	 * @return The tomcat base directory.
-	 */
+	/// Get the tomcat base directory;
+	///
+	/// @return The tomcat base directory.
 	public String getBaseDir() {
 		return baseDir;
 	}
 
-	/**
-	 * Keep tomcat base directory content on server stop.
-	 *
-	 * @return {@code true} if tomcat base directory is preserved on server stop, {@code false} otheriwse.
-	 */
+	/// Keep tomcat base directory content on server stop.
+	///
+	/// @return `true` if tomcat base directory is preserved on server stop, `false` otheriwse.
 	public boolean isKeepBaseDir() {
 		return keepBaseDir;
 	}
 
-	/**
-	 * flag to enable/disable JNDI naming.
-	 *
-	 * @return {@code true} of JNDI naming is enabled, {@code false} otherwise.
-	 */
+	/// flag to enable/disable JNDI naming.
+	///
+	/// @return `true` of JNDI naming is enabled, `false` otherwise.
 	public boolean isEnableNaming() {
 		return enableNaming;
 	}
 
-	/**
-	 * Flag use to force the creation of the META-INF directory
-	 * if it does not exist in the classpath.
-	 *
-	 * @return {@code true} to force the creation of the meta-inf directory, {@code false} otherwise..
-	 */
+	/// Flag use to force the creation of the META-INF directory
+	/// if it does not exist in the classpath.
+	///
+	/// @return `true` to force the creation of the meta-inf directory, `false` otherwise..
 	public boolean isForceMetaInf() {
 		return forceMetaInf;
 	}
 
-	/**
-	 * Change tomcat base directory.
-	 *
-	 * @param baseDir Base directory.
-	 * @return this.
-	 * @throws NullPointerException If {@code baseDir} is {@code null}.
-	 */
+	/// Change tomcat base directory.
+	///
+	/// @param baseDir Base directory.
+	/// @return this.
+	/// @throws NullPointerException If `baseDir` is `null`.
 	public SELF withBaseDir(String baseDir) {
 		this.baseDir = notNull(baseDir, "baseDir");
 		return self();
 	}
 
-	/**
-	 * Keep tomcat base directory content on server stop.
-	 *
-	 * @return this.
-	 */
+	/// Keep tomcat base directory content on server stop.
+	///
+	/// @return this.
 	public SELF keepBaseDir() {
 		this.keepBaseDir = true;
 		return self();
 	}
 
-	/**
-	 * Delete tomcat base directory on server stop.
-	 *
-	 * @return this.
-	 */
+	/// Delete tomcat base directory on server stop.
+	///
+	/// @return this.
 	public SELF deleteBaseDir() {
 		this.keepBaseDir = false;
 		return self();
 	}
 
-	/**
-	 * Enable naming (i.e enable JNDI) on tomcat server.
-	 *
-	 * @return this.
-	 */
+	/// Enable naming (i.e enable JNDI) on tomcat server.
+	///
+	/// @return this.
 	public SELF enableNaming() {
 		return toggleNaming(true);
 	}
 
-	/**
-	 * Disable naming (i.e disable JNDI) on tomcat server.
-	 *
-	 * @return this.
-	 */
+	/// Disable naming (i.e disable JNDI) on tomcat server.
+	///
+	/// @return this.
 	public SELF disableNaming() {
 		return toggleNaming(false);
 	}
 
-	/**
-	 * Enable META-INF creation.
-	 *
-	 * @return this.
-	 */
+	/// Enable META-INF creation.
+	///
+	/// @return this.
 	public SELF enableForceMetaInf() {
 		return toggleMetaInf(true);
 	}
 
-	/**
-	 * Disable META-INF creation.
-	 *
-	 * @return this.
-	 */
+	/// Disable META-INF creation.
+	///
+	/// @return this.
 	public SELF disableForceMetaInf() {
 		return toggleMetaInf(false);
 	}
 
-	/**
-	 * Update JNDI naming directory flag:
-	 *
-	 * <ul>
-	 *   <li>Use {@code true} to enable JNDI naming.</li>
-	 *   <li>Use {@code false} to disable JNDI naming.</li>
-	 * </ul>
-	 *
-	 * @param enableNaming The JNDI naming flag.
-	 * @return this.
-	 */
+	/// Update JNDI naming directory flag:
+	/// - Use `true` to enable JNDI naming.
+	/// - Use `false` to disable JNDI naming.
+	///
+	/// @param enableNaming The JNDI naming flag.
+	/// @return this.
 	private SELF toggleNaming(boolean enableNaming) {
 		this.enableNaming = enableNaming;
 		return self();
 	}
 
-	/**
-	 * Update meta-inf directory flag:
-	 *
-	 * <ul>
-	 *   <li>Use {@code true} to force the creation of the {@code meta-inf} directory.</li>
-	 *   <li>Use {@code false} to not do anything.</li>
-	 * </ul>
-	 *
-	 * @param forceMetaInf The flag value.
-	 * @return this.
-	 */
+	/// Update meta-inf directory flag:
+	/// - Use `true` to force the creation of the `meta-inf` directory.
+	/// - Use `false` to not do anything.
+	///
+	/// @param forceMetaInf The flag value.
+	/// @return this.
 	private SELF toggleMetaInf(boolean forceMetaInf) {
 		this.forceMetaInf = forceMetaInf;
 		return self();

@@ -33,46 +33,30 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Builder for mock instances of {@link EmbeddedTomcat}.
- */
+/// Builder for mock instances of [EmbeddedTomcat].
 @SuppressWarnings("deprecation")
 public class EmbeddedTomcatMockBuilder {
 
-	/**
-	 * Server scheme (for example, {@code "http"} or {@code "https"}).
-	 * Default is {@code "http"}
-	 */
+	/// Server scheme (for example, `"http"` or `"https"`).
+	/// Default is `"http"`
 	private String scheme;
 
-	/**
-	 * Server host (default is {@code "localhost"}).
-	 */
+	/// Server host (default is `"localhost"`).
 	private String host;
 
-	/**
-	 * Server port (default is {@code 80}).
-	 */
+	/// Server port (default is `80`).
 	private int port;
 
-	/**
-	 * Server path (default is {@code "/"}).
-	 */
+	/// Server path (default is `"/"`).
 	private String path;
 
-	/**
-	 * Server URL (default is an URL built using {@link #scheme}, {@link #host}, {@link #port} and {@link #path}).
-	 */
+	/// Server URL (default is an URL built using [#scheme], [#host], [#port] and [#path]).
 	private String url;
 
-	/**
-	 * Server Configuration.
-	 */
+	/// Server Configuration.
 	private EmbeddedTomcatConfiguration configuration;
 
-	/**
-	 * Create builder with default initial values.
-	 */
+	/// Create builder with default initial values.
 	public EmbeddedTomcatMockBuilder() {
 		this.scheme = "http";
 		this.host = "localhost";
@@ -80,77 +64,63 @@ public class EmbeddedTomcatMockBuilder {
 		this.path = "/";
 	}
 
-	/**
-	 * Set new {@link #scheme}.
-	 *
-	 * @param scheme New {@link #scheme}
-	 * @return The builder.
-	 */
+	/// Set new [#scheme].
+	///
+	/// @param scheme New [#scheme]
+	/// @return The builder.
 	public EmbeddedTomcatMockBuilder withScheme(String scheme) {
 		this.scheme = scheme;
 		return this;
 	}
 
-	/**
-	 * Set new {@link #host}.
-	 *
-	 * @param host New {@link #host}
-	 * @return The builder.
-	 */
+	/// Set new [#host].
+	///
+	/// @param host New [#host]
+	/// @return The builder.
 	public EmbeddedTomcatMockBuilder withHost(String host) {
 		this.host = host;
 		return this;
 	}
 
-	/**
-	 * Set new {@link #port}.
-	 *
-	 * @param port New {@link #port}
-	 * @return The builder.
-	 */
+	/// Set new [#port].
+	///
+	/// @param port New [#port]
+	/// @return The builder.
 	public EmbeddedTomcatMockBuilder withPort(int port) {
 		this.port = port;
 		return this;
 	}
 
-	/**
-	 * Set new {@link #path}.
-	 *
-	 * @param path New {@link #path}
-	 * @return The builder.
-	 */
+	/// Set new [#path].
+	///
+	/// @param path New [#path]
+	/// @return The builder.
 	public EmbeddedTomcatMockBuilder withPath(String path) {
 		this.path = path;
 		return this;
 	}
 
-	/**
-	 * Set new {@link #url}.
-	 *
-	 * @param url New {@link #url}
-	 * @return The builder.
-	 */
+	/// Set new [#url].
+	///
+	/// @param url New [#url]
+	/// @return The builder.
 	public EmbeddedTomcatMockBuilder withUrl(String url) {
 		this.url = url;
 		return this;
 	}
 
-	/**
-	 * Set new {@link #configuration}.
-	 *
-	 * @param configuration New {@link #configuration}
-	 * @return The builder.
-	 */
+	/// Set new [#configuration].
+	///
+	/// @param configuration New [#configuration]
+	/// @return The builder.
 	public EmbeddedTomcatMockBuilder withConfiguration(EmbeddedTomcatConfiguration configuration) {
 		this.configuration = configuration;
 		return this;
 	}
 
-	/**
-	 * Build mock instance of {@link EmbeddedTomcat}.
-	 *
-	 * @return The mock instance.
-	 */
+	/// Build mock instance of [EmbeddedTomcat].
+	///
+	/// @return The mock instance.
 	public EmbeddedTomcat build() {
 		EmbeddedTomcat tomcat = mock(EmbeddedTomcat.class);
 		when(tomcat.getScheme()).thenReturn(scheme);

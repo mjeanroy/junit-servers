@@ -30,59 +30,41 @@ import org.eclipse.jetty.util.resource.Resource;
 
 import java.util.Objects;
 
-/**
- * Jetty configuration settings.
- */
+/// Jetty configuration settings.
 abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration {
 
 	static final int DEFAULT_STOP_TIMEOUT = 30000;
 	static final boolean DEFAULT_STOP_AT_SHUTDOWN = true;
 
-	/**
-	 * Configure the stop timeout in milliseconds: set a graceful stop time.
-	 *
-	 * @see org.eclipse.jetty.server.Server#setStopTimeout(long)
-	 */
+	/// Configure the stop timeout in milliseconds: set a graceful stop time.
+	///
+	/// @see org.eclipse.jetty.server.Server#setStopTimeout(long)
 	private final int stopTimeout;
 
-	/**
-	 * Configure jetty embedded server to stop at shutdown.
-	 *
-	 * <p>
-	 *
-	 * If true, the server instance will be explicitly stopped when the
-	 * JVM is shutdown. Otherwise the JVM is stopped with the server running.
-	 *
-	 * @see org.eclipse.jetty.server.Server#setStopAtShutdown(boolean)
-	 */
+	/// Configure jetty embedded server to stop at shutdown.
+	///
+	/// If true, the server instance will be explicitly stopped when the
+	/// JVM is shutdown. Otherwise the JVM is stopped with the server running.
+	///
+	/// @see org.eclipse.jetty.server.Server#setStopAtShutdown(boolean)
 	private final boolean stopAtShutdown;
 
-	/**
-	 * The Jetty base resource (default is "./src/main/webapp").
-	 */
+	/// The Jetty base resource (default is "./src/main/webapp").
 	private final Resource baseResource;
 
-	/**
-	 * Control which parts of the container’s classpath should be processed for things like annotations,
-	 * META-INF/resources, META-INF/web-fragment.xml and tlds inside META-INF.
-	 */
+	/// Control which parts of the container’s classpath should be processed for things like annotations,
+	/// META-INF/resources, META-INF/web-fragment.xml and tlds inside META-INF.
 	private final String containerJarPattern;
 
-	/**
-	 * Control which parts of the webinf’s classpath should be processed for things like annotations,
-	 * META-INF/resources, META-INF/web-fragment.xml and tlds inside META-INF.
-	 */
+	/// Control which parts of the webinf’s classpath should be processed for things like annotations,
+	/// META-INF/resources, META-INF/web-fragment.xml and tlds inside META-INF.
 	private final String webInfJarPattern;
 
-	/**
-	 * If true, directory listings are returned if no welcome file is found.
-	 * Else 403 Forbidden.
-	 */
+	/// If true, directory listings are returned if no welcome file is found.
+	/// Else 403 Forbidden.
 	private final boolean dirAllowed;
 
-	/**
-	 * The jetty temp directory.
-	 */
+	/// The jetty temp directory.
 	private final String tempDirectory;
 
 	AbstractEmbeddedJettyConfiguration(
@@ -108,69 +90,55 @@ abstract class AbstractEmbeddedJettyConfiguration extends AbstractConfiguration 
 		this.tempDirectory = builder.getTempDirectory();
 	}
 
-	/**
-	 * Get jetty stop timeout.
-	 *
-	 * @return The stop timeout, for graceful shutdown.
-	 */
+	/// Get jetty stop timeout.
+	///
+	/// @return The stop timeout, for graceful shutdown.
 	public int getStopTimeout() {
 		return stopTimeout;
 	}
 
-	/**
-	 * When {@code true}, jetty server is automatically stopped at shutdown.
-	 *
-	 * @return {@code true} if jetty is stopped at shutdown, {@code false} otherwise.
-	 */
+	/// When `true`, jetty server is automatically stopped at shutdown.
+	///
+	/// @return `true` if jetty is stopped at shutdown, `false` otherwise.
 	public boolean isStopAtShutdown() {
 		return stopAtShutdown;
 	}
 
-	/**
-	 * Jetty base resource.
-	 *
-	 * @return Jetty base resource.
-	 */
+	/// Jetty base resource.
+	///
+	/// @return Jetty base resource.
 	public Resource getBaseResource() {
 		return baseResource;
 	}
 
-	/**
-	 * Get the pattern controlling which parts of the container’s classpath should be
-	 * processed for things like annotations, {@code META-INF/resources}, {@code META-INF/web-fragment.xml}
-	 * and tlds inside META-INF.
-	 *
-	 * @return Pattern controlling which parts of the container’s classpath should be processed.
-	 */
+	/// Get the pattern controlling which parts of the container’s classpath should be
+	/// processed for things like annotations, `META-INF/resources`, `META-INF/web-fragment.xml`
+	/// and tlds inside META-INF.
+	///
+	/// @return Pattern controlling which parts of the container’s classpath should be processed.
 	public String getContainerJarPattern() {
 		return containerJarPattern;
 	}
 
-	/**
-	 * Get the pattern controlling which parts of the webinf’s classpath should be processed for
-	 * things like annotations, {@code META-INF/resources}, {@code META-INF/web-fragment.xml}
-	 * and tlds inside META-INF.
-	 *
-	 * @return Pattern controlling which parts of the webinf’s classpath should be processed.
-	 */
+	/// Get the pattern controlling which parts of the webinf’s classpath should be processed for
+	/// things like annotations, `META-INF/resources`, `META-INF/web-fragment.xml`
+	/// and tlds inside META-INF.
+	///
+	/// @return Pattern controlling which parts of the webinf’s classpath should be processed.
 	public String getWebInfJarPattern() {
 		return webInfJarPattern;
 	}
 
-	/**
-	 * Control if directory listing is enabled or not.
-	 *
-	 * @return {@code true} if directory listing is enabled, {@code false} otherwise.
-	 */
+	/// Control if directory listing is enabled or not.
+	///
+	/// @return `true` if directory listing is enabled, `false` otherwise.
 	public boolean isDirAllowed() {
 		return dirAllowed;
 	}
 
-	/**
-	 * Jetty temp directory.
-	 *
-	 * @return Jetty temp directory.
-	 */
+	/// Jetty temp directory.
+	///
+	/// @return Jetty temp directory.
 	public String getTempDirectory() {
 		return tempDirectory;
 	}

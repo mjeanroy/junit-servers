@@ -38,26 +38,18 @@ import java.util.Optional;
 
 import static com.github.mjeanroy.junit.servers.client.HttpClientConfiguration.defaultConfiguration;
 
-/**
- * Resolve {@link com.github.mjeanroy.junit.servers.client.HttpClient} parameter.
- */
+/// Resolve [com.github.mjeanroy.junit.servers.client.HttpClient] parameter.
 class HttpClientParameterResolverFunction implements ParameterResolverFunction {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(HttpClientParameterResolverFunction.class);
 
-	/**
-	 * The singleton instance.
-	 */
+	/// The singleton instance.
 	private static final HttpClientParameterResolverFunction INSTANCE = new HttpClientParameterResolverFunction();
 
-	/**
-	 * Get instance of {@link HttpClientParameterResolverFunction} resolver.
-	 *
-	 * @return The instance.
-	 */
+	/// Get instance of [HttpClientParameterResolverFunction] resolver.
+	///
+	/// @return The instance.
 	static HttpClientParameterResolverFunction getInstance() {
 		return INSTANCE;
 	}

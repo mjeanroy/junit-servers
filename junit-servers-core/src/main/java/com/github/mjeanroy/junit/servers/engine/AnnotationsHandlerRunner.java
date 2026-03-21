@@ -42,39 +42,25 @@ import static com.github.mjeanroy.junit.servers.engine.HttpClientAnnotationHandl
 import static com.github.mjeanroy.junit.servers.engine.ServerAnnotationHandler.newServerAnnotationHandler;
 import static java.util.Arrays.asList;
 
-/**
- * An engine that will handle various annotations defined by Junit-Servers:
- *
- * <ul>
- *   <li>{@link com.github.mjeanroy.junit.servers.annotations.TestServer}</li>
- *   <li>{@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration}</li>
- *   <li>{@link com.github.mjeanroy.junit.servers.annotations.TestHttpClient}</li>
- * </ul>
- */
+/// An engine that will handle various annotations defined by Junit-Servers:
+/// - [com.github.mjeanroy.junit.servers.annotations.TestServer]
+/// - [com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration]
+/// - [com.github.mjeanroy.junit.servers.annotations.TestHttpClient]
 public class AnnotationsHandlerRunner extends AbstractTestRunner {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(AnnotationsHandlerRunner.class);
 
-	/**
-	 * List of handlers.
-	 */
+	/// List of handlers.
 	private final List<AnnotationHandler> handlers;
 
-	/**
-	 * Create test lifecycle engine that will setup following Junit-Servers annotations declared in test class:
-	 *
-	 * <ul>
-	 *   <li>{@link com.github.mjeanroy.junit.servers.annotations.TestServer}</li>
-	 *   <li>{@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration}</li>
-	 *   <li>{@link com.github.mjeanroy.junit.servers.annotations.TestHttpClient}</li>
-	 * </ul>
-	 *
-	 * @param server The embedded server used in the tested class instance.
-	 * @param configuration The embedded server configuration.
-	 */
+	/// Create test lifecycle engine that will setup following Junit-Servers annotations declared in test class:
+	/// - [com.github.mjeanroy.junit.servers.annotations.TestServer]
+	/// - [com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration]
+	/// - [com.github.mjeanroy.junit.servers.annotations.TestHttpClient]
+	///
+	/// @param server The embedded server used in the tested class instance.
+	/// @param configuration The embedded server configuration.
 	public AnnotationsHandlerRunner(EmbeddedServer<?> server, AbstractConfiguration configuration) {
 		this.handlers = asList(
 			newServerAnnotationHandler(server),
@@ -102,12 +88,10 @@ public class AnnotationsHandlerRunner extends AbstractTestRunner {
 			.build();
 	}
 
-	/**
-	 * Process handlers.
-	 *
-	 * @param target Target class (i.e tested class).
-	 * @param before Flag to know if handler has to run "before" phase or "after" phase.
-	 */
+	/// Process handlers.
+	///
+	/// @param target Target class (i.e tested class).
+	/// @param before Flag to know if handler has to run "before" phase or "after" phase.
 	private void process(Object target, boolean before) {
 		List<Field> fields = findAllFields(target.getClass());
 		for (Field field : fields) {
@@ -117,14 +101,12 @@ public class AnnotationsHandlerRunner extends AbstractTestRunner {
 		}
 	}
 
-	/**
-	 * Process field for given handler.
-	 *
-	 * @param target Target class (i.e tested class).
-	 * @param handler Handler.
-	 * @param field Field.
-	 * @param before Flag to know if handler has to run "before" phase or "after" phase.
-	 */
+	/// Process field for given handler.
+	///
+	/// @param target Target class (i.e tested class).
+	/// @param handler Handler.
+	/// @param field Field.
+	/// @param before Flag to know if handler has to run "before" phase or "after" phase.
 	private void processField(Object target, AnnotationHandler handler, Field field, boolean before) {
 		log.debug("Processing field: {}", field);
 		Collection<Annotation> annotations = Annotations.findAnnotations(field);
@@ -135,15 +117,13 @@ public class AnnotationsHandlerRunner extends AbstractTestRunner {
 		}
 	}
 
-	/**
-	 * Process given annotations for given field.
-	 *
-	 * @param target Class target.
-	 * @param handler The handler being processed.
-	 * @param field The annotated field.
-	 * @param before If the handler should run the "before" step or the "after" step.
-	 * @param annotation The processed annotation.
-	 */
+	/// Process given annotations for given field.
+	///
+	/// @param target Class target.
+	/// @param handler The handler being processed.
+	/// @param field The annotated field.
+	/// @param before If the handler should run the "before" step or the "after" step.
+	/// @param annotation The processed annotation.
 	private void processFieldAnnotation(Object target, AnnotationHandler handler, Field field, boolean before, Annotation annotation) {
 		log.debug("Checking for annotation: {}", annotation);
 		if (handler.support(annotation)) {

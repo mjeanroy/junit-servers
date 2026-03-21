@@ -56,37 +56,26 @@ import java.nio.charset.StandardCharsets;
 import static com.github.mjeanroy.junit.servers.client.HttpHeaders.COOKIE;
 import static java.lang.System.nanoTime;
 
-/**
- * Implementation for {@link HttpRequest} that use apache http-client
- * under the hood.
- *
- * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
- */
+/// Implementation for [HttpRequest] that use [apache http-client](http://hc.apache.org/httpcomponents-client-ga/index.html)
+/// under the hood.
+///
+/// @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
 class ApacheHttpRequest extends AbstractHttpRequest {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(ApacheHttpRequest.class);
 
-	/**
-	 * A factory that creates {@link HttpRequestBase} from given {@link HttpMethod}.
-	 */
+	/// A factory that creates [HttpRequestBase] from given [HttpMethod].
 	private static final ApacheHttpRequestFactory FACTORY = new ApacheHttpRequestFactory();
 
-	/**
-	 * Original http client, will be used to execute http request.
-	 */
+	/// Original http client, will be used to execute http request.
 	private final HttpClient client;
 
-	/**
-	 * Create apache http request.
-	 *
-	 * @param client Apache http client.
-	 * @param httpMethod Http method.
-	 * @param endpoint Http request url.
-	 */
+	/// Create apache http request.
+	///
+	/// @param client Apache http client.
+	/// @param httpMethod Http method.
+	/// @param endpoint Http request url.
 	ApacheHttpRequest(HttpClient client, HttpMethod httpMethod, HttpUrl endpoint) {
 		super(endpoint, httpMethod);
 		this.client = client;
@@ -110,11 +99,9 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 		return ApacheHttpResponseFactory.of(httpResponse, duration);
 	}
 
-	/**
-	 * Add request body.
-	 *
-	 * @param httpRequest The HTTP request.
-	 */
+	/// Add request body.
+	///
+	/// @param httpRequest The HTTP request.
 	private void handleBody(HttpRequestBase httpRequest) throws IOException {
 		if (!hasBody()) {
 			log.debug("HTTP Request does not have body, skip.");
@@ -134,14 +121,12 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 		}
 	}
 
-	/**
-	 * Create request URI.
-	 * Each additional query parameters will be appended to final URI.
-	 *
-	 * @return Created URI.
-	 * @throws URISyntaxException If an error occurred while building URI.
-	 * @see URIBuilder
-	 */
+	/// Create request URI.
+	/// Each additional query parameters will be appended to final URI.
+	///
+	/// @return Created URI.
+	/// @throws URISyntaxException If an error occurred while building URI.
+	/// @see URIBuilder
 	private URI createRequestURI() throws URISyntaxException {
 		URI uri = getEndpoint().toURI();
 		URIBuilder builder = new URIBuilder(uri).setCharset(StandardCharsets.UTF_8);
@@ -152,23 +137,19 @@ class ApacheHttpRequest extends AbstractHttpRequest {
 		return builder.build();
 	}
 
-	/**
-	 * Add headers to http request.
-	 *
-	 * @param httpRequest Http request in creation.
-	 * @see org.apache.http.HttpRequest#addHeader(Header)
-	 */
+	/// Add headers to http request.
+	///
+	/// @param httpRequest Http request in creation.
+	/// @see org.apache.http.HttpRequest#addHeader(Header)
 	private void handleHeaders(HttpRequestBase httpRequest) {
 		for (HttpHeader header : headers.values()) {
 			httpRequest.setHeader(header.getName(), header.serializeValues());
 		}
 	}
 
-	/**
-	 * Add cookies to http request.
-	 *
-	 * @param httpRequest Http request in creation.
-	 */
+	/// Add cookies to http request.
+	///
+	/// @param httpRequest Http request in creation.
 	private void handleCookies(HttpRequestBase httpRequest) {
 		if (!cookies.isEmpty()) {
 			httpRequest.addHeader(COOKIE, Cookies.serialize(cookies));

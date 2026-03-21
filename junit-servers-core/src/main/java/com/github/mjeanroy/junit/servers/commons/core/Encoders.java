@@ -30,28 +30,22 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-/**
- * Static encoding utilities.
- *
- * <p>
- *
- * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
- * or have their access level decreased from public to protected, package, or private in future versions without notice.
- */
+/// Static encoding utilities.
+///
+/// **Internal API**: these methods are part of the internal API and may be removed, have their signature change,
+/// or have their access level decreased from public to protected, package, or private in future versions without notice.
 public final class Encoders {
 
 	// Ensure non instantiation.
 	private Encoders() {
 	}
 
-	/**
-	 * Translates a string into {@code application/x-www-form-urlencoded}
-	 * format using UTF-8 encoding.
-	 *
-	 * @param value The string value.
-	 * @return The encoded value.
-	 * @throws Utf8EncodingException If, for some weird reason, UTF-8 encoding is not supported.
-	 */
+	/// Translates a string into `application/x-www-form-urlencoded`
+	/// format using UTF-8 encoding.
+	///
+	/// @param value The string value.
+	/// @return The encoded value.
+	/// @throws Utf8EncodingException If, for some weird reason, UTF-8 encoding is not supported.
 	public static String urlEncode(String value) {
 		try {
 			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());

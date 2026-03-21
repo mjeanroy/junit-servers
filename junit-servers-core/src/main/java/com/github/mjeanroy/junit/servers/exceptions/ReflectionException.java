@@ -24,18 +24,14 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
-/**
- * Exception thrown when reflection api throws exception (such
- * as IllegalAccessException) in annotations handlers.
- */
+/// Exception thrown when reflection api throws exception (such
+/// as IllegalAccessException) in annotations handlers.
 @SuppressWarnings("serial")
 public class ReflectionException extends AbstractException {
 
-	/**
-	 * Create exception.
-	 *
-	 * @param throwable Original exception.
-	 */
+	/// Create exception.
+	///
+	/// @param throwable Original exception.
 	public ReflectionException(Throwable throwable) {
 		super(String.format("Unable to set field: %s", throwable.getMessage()));
 	}

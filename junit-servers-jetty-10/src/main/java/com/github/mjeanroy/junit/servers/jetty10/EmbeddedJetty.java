@@ -30,23 +30,17 @@ import org.eclipse.jetty.webapp.MetaInfConfiguration;
 
 import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 
-/**
- * Jetty Embedded Server.
- */
+/// Jetty Embedded Server.
 public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration> {
 
-	/**
-	 * Build default embedded jetty server.
-	 */
+	/// Build default embedded jetty server.
 	public EmbeddedJetty() {
 		this(defaultConfiguration());
 	}
 
-	/**
-	 * Build embedded jetty server.
-	 *
-	 * @param configuration Server configuration.
-	 */
+	/// Build embedded jetty server.
+	///
+	/// @param configuration Server configuration.
 	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
 	}

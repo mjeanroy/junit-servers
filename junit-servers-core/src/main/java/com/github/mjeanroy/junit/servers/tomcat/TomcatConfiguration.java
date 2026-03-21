@@ -31,20 +31,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Annotation that can be used to specify {@link EmbeddedTomcatConfiguration} provider that will be used
- * to create new {@link EmbeddedTomcatConfiguration} and use it for the test suite.
- */
+/// Annotation that can be used to specify [EmbeddedTomcatConfiguration] provider that will be used
+/// to create new [EmbeddedTomcatConfiguration] and use it for the test suite.
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
 @Inherited
 public @interface TomcatConfiguration {
 
-	/**
-	 * The configuration provider.
-	 *
-	 * @return The configuration provider class.
-	 */
+	/// The configuration provider.
+	///
+	/// @return The configuration provider class.
 	Class<? extends EmbeddedTomcatConfigurationProvider> providedBy();
 }

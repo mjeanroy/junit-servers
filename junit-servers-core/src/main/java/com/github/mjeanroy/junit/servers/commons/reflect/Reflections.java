@@ -42,32 +42,24 @@ import static com.github.mjeanroy.junit.servers.commons.reflect.Annotations.isAn
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Collections.addAll;
 
-/**
- * Static reflection utilities.
- *
- * <p>
- *
- * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
- * or have their access level decreased from public to protected, package, or private in future versions without notice.
- */
+/// Static reflection utilities.
+///
+/// **Internal API**: these methods are part of the internal API and may be removed, have their signature change,
+/// or have their access level decreased from public to protected, package, or private in future versions without notice.
 public final class Reflections {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(Reflections.class);
 
 	// Ensure non instantiation.
 	private Reflections() {
 	}
 
-	/**
-	 * Get all fields on given object and look for fields of
-	 * super classes.
-	 *
-	 * @param type Class to inspect.
-	 * @return Fields.
-	 */
+	/// Get all fields on given object and look for fields of
+	/// super classes.
+	///
+	/// @param type Class to inspect.
+	/// @return Fields.
 	public static List<Field> findAllFields(Class<?> type) {
 		List<Field> fields = new LinkedList<>();
 		if (type != null) {
@@ -80,60 +72,50 @@ public final class Reflections {
 		return fields;
 	}
 
-	/**
-	 * Get all static fields on given class object.
-	 *
-	 * @param type Class to inspect.
-	 * @return Fields.
-	 */
+	/// Get all static fields on given class object.
+	///
+	/// @param type Class to inspect.
+	/// @return Fields.
 	private static Stream<Field> findStaticFields(Class<?> type) {
 		return Arrays.stream(type.getDeclaredFields()).filter(field -> isStatic(field.getModifiers()));
 	}
 
-	/**
-	 * Get all static methods on given class object.
-	 *
-	 * @param type Class to inspect.
-	 * @return Fields.
-	 */
+	/// Get all static methods on given class object.
+	///
+	/// @param type Class to inspect.
+	/// @return Fields.
 	private static Stream<Method> findStaticMethods(Class<?> type) {
 		return Arrays.stream(type.getDeclaredMethods()).filter(method -> isStatic(method.getModifiers()));
 	}
 
-	/**
-	 * Get all static fields on given class object
-	 * annotated with given annotation.
-	 *
-	 * @param type Class to inspect.
-	 * @param annotationClass Annotation class.
-	 * @return Fields.
-	 */
+	/// Get all static fields on given class object
+	/// annotated with given annotation.
+	///
+	/// @param type Class to inspect.
+	/// @param annotationClass Annotation class.
+	/// @return Fields.
 	public static List<Field> findStaticFieldsAnnotatedWith(Class<?> type, Class<? extends Annotation> annotationClass) {
 		log.trace("Find static fields of {} annotated with {}", type, annotationClass);
 		return findStaticFields(type).filter(field -> isAnnotationPresent(field, annotationClass)).collect(Collectors.toList());
 	}
 
-	/**
-	 * Get all static methods on given class object
-	 * annotated with given annotation.
-	 *
-	 * @param type Class to inspect.
-	 * @param annotationClass Annotation class.
-	 * @return Fields.
-	 */
+	/// Get all static methods on given class object
+	/// annotated with given annotation.
+	///
+	/// @param type Class to inspect.
+	/// @param annotationClass Annotation class.
+	/// @return Fields.
 	public static List<Method> findStaticMethodsAnnotatedWith(Class<?> type, Class<? extends Annotation> annotationClass) {
 		log.trace("Extract static methods of class {} annotated with {}", type, annotationClass);
 		return findStaticMethods(type).filter(method -> isAnnotationPresent(method, annotationClass)).collect(Collectors.toList());
 	}
 
-	/**
-	 * Set value of given field on given instance.
-	 *
-	 * @param instance Instance.
-	 * @param field Field.
-	 * @param value Field value.
-	 * @throws ReflectionException if set operation is not permitted.
-	 */
+	/// Set value of given field on given instance.
+	///
+	/// @param instance Instance.
+	/// @param field Field.
+	/// @param value Field value.
+	/// @throws ReflectionException if set operation is not permitted.
 	public static void setter(Object instance, Field field, Object value) {
 		boolean forceAccess = false;
 
@@ -155,27 +137,23 @@ public final class Reflections {
 		}
 	}
 
-	/**
-	 * Get value of static field.
-	 *
-	 * @param field Field.
-	 * @param <T> Type of expected value.
-	 * @return Value of static field.
-	 */
+	/// Get value of static field.
+	///
+	/// @param field Field.
+	/// @param <T> Type of expected value.
+	/// @return Value of static field.
 	public static <T> T getter(Field field) {
 		return getter(null, field);
 	}
 
-	/**
-	 * Get value of field on target object.
-	 * If target is null, it means that field is static and do not
-	 * need any target instance.
-	 *
-	 * @param target Target object.
-	 * @param field Field.
-	 * @param <T> Type of expected value.
-	 * @return Field value.
-	 */
+	/// Get value of field on target object.
+	/// If target is null, it means that field is static and do not
+	/// need any target instance.
+	///
+	/// @param target Target object.
+	/// @param field Field.
+	/// @param <T> Type of expected value.
+	/// @return Field value.
 	@SuppressWarnings("unchecked")
 	public static <T> T getter(Object target, Field field) {
 		boolean forceAccess = false;
@@ -198,13 +176,11 @@ public final class Reflections {
 		}
 	}
 
-	/**
-	 * Invoke the static method without any arguments.
-	 *
-	 * @param method The method to invoke.
-	 * @param <T> Return type.
-	 * @return The result of the method invocation.
-	 */
+	/// Invoke the static method without any arguments.
+	///
+	/// @param method The method to invoke.
+	/// @param <T> Return type.
+	/// @return The result of the method invocation.
 	@SuppressWarnings("unchecked")
 	public static <T> T invoke(Method method) {
 		boolean forceAccess = false;

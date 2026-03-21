@@ -36,30 +36,24 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Objects.firstNonNul
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
-/**
- * An implementation of {@link HttpRequestBody} with a file body.
- */
+/// An implementation of [HttpRequestBody] with a file body.
 final class HttpRequestBodyFile implements HttpRequestBody {
 
-	/**
-	 * Create body file from given {@code file}.
-	 *
-	 * @param file The file.
-	 * @return The request body.
-	 * @throws NullPointerException If {@code file} is {@code null}
-	 */
+	/// Create body file from given `file`.
+	///
+	/// @param file The file.
+	/// @return The request body.
+	/// @throws NullPointerException If `file` is `null`
 	static HttpRequestBodyFile of(File file) {
 		notNull(file, "file");
 		return HttpRequestBodyFile.of(file.toPath());
 	}
 
-	/**
-	 * Create body file from given {@code path}.
-	 *
-	 * @param path The path.
-	 * @return The request body.
-	 * @throws NullPointerException If {@code path} is {@code null}
-	 */
+	/// Create body file from given `path`.
+	///
+	/// @param path The path.
+	/// @return The request body.
+	/// @throws NullPointerException If `path` is `null`
 	static HttpRequestBodyFile of(Path path) {
 		notNull(path, "path");
 
@@ -71,51 +65,41 @@ final class HttpRequestBodyFile implements HttpRequestBody {
 		return new HttpRequestBodyFile(contentType, path);
 	}
 
-	/**
-	 * Create body file from given {@code file} and given content type.
-	 *
-	 * @param contentType The content type.
-	 * @param file The file.
-	 * @return The request body.
-	 * @throws NullPointerException If {@code file} or {@code contentType} are {@code null}
-	 * @throws IllegalArgumentException If {@code contentType} is empty or blank.
-	 */
+	/// Create body file from given `file` and given content type.
+	///
+	/// @param contentType The content type.
+	/// @param file The file.
+	/// @return The request body.
+	/// @throws NullPointerException If `file` or `contentType` are `null`
+	/// @throws IllegalArgumentException If `contentType` is empty or blank.
 	static HttpRequestBodyFile of(File file, String contentType) {
 		notNull(file, "file");
 		notBlank(contentType, "content type");
 		return new HttpRequestBodyFile(contentType, file.toPath());
 	}
 
-	/**
-	 * Create body file from given {@code path} and given content type.
-	 *
-	 * @param contentType The content type.
-	 * @param path The path.
-	 * @return The request body.
-	 * @throws NullPointerException If {@code path} or {@code contentType} are {@code null}
-	 * @throws IllegalArgumentException If {@code contentType} is empty or blank.
-	 */
+	/// Create body file from given `path` and given content type.
+	///
+	/// @param contentType The content type.
+	/// @param path The path.
+	/// @return The request body.
+	/// @throws NullPointerException If `path` or `contentType` are `null`
+	/// @throws IllegalArgumentException If `contentType` is empty or blank.
 	static HttpRequestBodyFile of(Path path, String contentType) {
 		notNull(path, "path");
 		notBlank(contentType, "Content Type");
 		return new HttpRequestBodyFile(contentType, path);
 	}
 
-	/**
-	 * File content type.
-	 */
+	/// File content type.
 	private final String contentType;
 
-	/**
-	 * The file.
-	 */
+	/// The file.
 	private final Path path;
 
-	/**
-	 * Create body file.
-	 * @param contentType The request body content type.
-	 * @param path The path file.
-	 */
+	/// Create body file.
+	/// @param contentType The request body content type.
+	/// @param path The path file.
 	private HttpRequestBodyFile(String contentType, Path path) {
 		this.contentType = contentType;
 		this.path = path;
@@ -131,20 +115,16 @@ final class HttpRequestBodyFile implements HttpRequestBody {
 		return Ios.toBytes(path);
 	}
 
-	/**
-	 * Get {@link #path}
-	 *
-	 * @return {@link #path}
-	 */
+	/// Get [#path]
+	///
+	/// @return Returns [#path]
 	Path getPath() {
 		return path;
 	}
 
-	/**
-	 * Get name of given file.
-	 *
-	 * @return Filename.
-	 */
+	/// Get name of given file.
+	///
+	/// @return Filename.
 	String getFilename() {
 		return path.getFileName().toString();
 	}

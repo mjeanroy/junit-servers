@@ -26,31 +26,23 @@ package com.github.mjeanroy.junit.servers.loggers;
 
 import com.github.mjeanroy.junit.servers.commons.reflect.Classes;
 
-/**
- * Static Logger Factory.
- */
+/// Static Logger Factory.
 public final class LoggerFactory {
 
-	/**
-	 * A flag indicating if SL4J is available in the classpath.
-	 */
+	/// A flag indicating if SL4J is available in the classpath.
 	private static final boolean SLF4J_AVAILABLE = Classes.isPresent("org.slf4j.LoggerFactory");
 
-	/**
-	 * A flag indicating if LOG4J2 is available in the classpath.
-	 */
+	/// A flag indicating if LOG4J2 is available in the classpath.
 	private static final boolean LOG4J2_AVAILABLE = Classes.isPresent("org.apache.logging.log4j.Logger");
 
 	// Ensure no instantiation.
 	private LoggerFactory() {
 	}
 
-	/**
-	 * Create logger from given class (class name will be used as logger name).
-	 *
-	 * @param klass Class name.
-	 * @return The logger.
-	 */
+	/// Create logger from given class (class name will be used as logger name).
+	///
+	/// @param klass Class name.
+	/// @return The logger.
 	public static Logger getLogger(Class<?> klass) {
 		if (SLF4J_AVAILABLE) {
 			return new Slf4jLogger(klass);

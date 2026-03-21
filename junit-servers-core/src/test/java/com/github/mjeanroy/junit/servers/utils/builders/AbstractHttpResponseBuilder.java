@@ -29,66 +29,50 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Builder for HTTP Response instances.
- */
+/// Builder for HTTP Response instances.
 public abstract class AbstractHttpResponseBuilder<T, U> {
 
-	/**
-	 * The HTTP Response status code.
-	 */
+	/// The HTTP Response status code.
 	int status;
 
-	/**
-	 * The HTTP Response body.
-	 */
+	/// The HTTP Response body.
 	String body;
 
-	/**
-	 * The list of headers.
-	 */
+	/// The list of headers.
 	final Map<String, List<String>> headers;
 
-	/**
-	 * Create builder with default values.
-	 */
+	/// Create builder with default values.
 	AbstractHttpResponseBuilder() {
 		this.status = 200;
 		this.body = "";
 		this.headers = new LinkedHashMap<>();
 	}
 
-	/**
-	 * Set {@link #status}
-	 *
-	 * @param status New {@link #status}
-	 * @return The builder.
-	 */
+	/// Set [#status]
+	///
+	/// @param status New [#status]
+	/// @return The builder.
 	@SuppressWarnings("unchecked")
 	public U withStatus(int status) {
 		this.status = status;
 		return (U) this;
 	}
 
-	/**
-	 * Set {@link #body}
-	 *
-	 * @param body New {@link #body}
-	 * @return The builder.
-	 */
+	/// Set [#body]
+	///
+	/// @param body New [#body]
+	/// @return The builder.
 	@SuppressWarnings("unchecked")
 	public U withBody(String body) {
 		this.body = body;
 		return (U) this;
 	}
 
-	/**
-	 * Add new header.
-	 *
-	 * @param name Header name.
-	 * @param value Header value.
-	 * @return The builder.
-	 */
+	/// Add new header.
+	///
+	/// @param name Header name.
+	/// @param value Header value.
+	/// @return The builder.
 	@SuppressWarnings("unchecked")
 	public U withHeader(String name, String value) {
 		if (!headers.containsKey(name)) {
@@ -99,10 +83,8 @@ public abstract class AbstractHttpResponseBuilder<T, U> {
 		return (U) this;
 	}
 
-	/**
-	 * Build final HTTP response instance.
-	 *
-	 * @return The final instance.
-	 */
+	/// Build final HTTP response instance.
+	///
+	/// @return The final instance.
 	public abstract T build();
 }

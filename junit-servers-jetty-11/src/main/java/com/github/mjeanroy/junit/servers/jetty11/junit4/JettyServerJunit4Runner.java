@@ -31,32 +31,24 @@ import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import org.junit.runners.model.InitializationError;
 
-/**
- * Rule that can be used to start and stop embedded jetty server.
- */
+/// Rule that can be used to start and stop embedded jetty server.
 public class JettyServerJunit4Runner extends JunitServerRunner {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(JettyServerJunit4Runner.class);
 
-	/**
-	 * Create runner.
-	 *
-	 * @param klass Running class.
-	 * @throws InitializationError If an error occurred while starting embedded server.
-	 */
+	/// Create runner.
+	///
+	/// @param klass Running class.
+	/// @throws InitializationError If an error occurred while starting embedded server.
 	public JettyServerJunit4Runner(Class<?> klass) throws InitializationError {
 		super(klass, instantiate(klass));
 	}
 
-	/**
-	 * Instantiate embedded jetty to be used in tests.
-	 *
-	 * @param klass The tested class.
-	 * @return The embedded jetty.
-	 */
+	/// Instantiate embedded jetty to be used in tests.
+	///
+	/// @param klass The tested class.
+	/// @return The embedded jetty.
 	private static EmbeddedJetty instantiate(Class<?> klass) {
 		log.debug("Instantiate embedded jetty for class: {}", klass);
 		return EmbeddedJettyFactory.createFrom(klass);

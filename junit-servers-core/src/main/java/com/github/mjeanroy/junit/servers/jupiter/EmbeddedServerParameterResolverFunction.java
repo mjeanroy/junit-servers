@@ -29,26 +29,18 @@ import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import org.junit.jupiter.api.extension.ParameterContext;
 
-/**
- * Resolve {@link com.github.mjeanroy.junit.servers.servers.EmbeddedServer} parameter.
- */
+/// Resolve [com.github.mjeanroy.junit.servers.servers.EmbeddedServer] parameter.
 class EmbeddedServerParameterResolverFunction implements ParameterResolverFunction {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(EmbeddedServerParameterResolverFunction.class);
 
-	/**
-	 * The singleton instance.
-	 */
+	/// The singleton instance.
 	private static final EmbeddedServerParameterResolverFunction INSTANCE = new EmbeddedServerParameterResolverFunction();
 
-	/**
-	 * Get instance of {@link EmbeddedServerParameterResolverFunction} resolver.
-	 *
-	 * @return The instance.
-	 */
+	/// Get instance of [EmbeddedServerParameterResolverFunction] resolver.
+	///
+	/// @return The instance.
 	static EmbeddedServerParameterResolverFunction getInstance() {
 		return INSTANCE;
 	}

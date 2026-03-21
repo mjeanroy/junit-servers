@@ -27,221 +27,175 @@ package com.github.mjeanroy.junit.servers.client;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Http response, defined by:
- *
- * <ul>
- *   <li>A status code: http return code (i.e 200, 400, 500 etc.).</li>
- *   <li>A response body: this is the body of the http response as textual representation.</li>
- *   <li>A set of headers.</li>
- *   <li>Duration: time to produce http response.</li>
- * </ul>
- *
- * @see <a href="https://tools.ietf.org/html/rfc2616#section-6">https://tools.ietf.org/html/rfc2616#section-6</a>
- */
+/// Http response, defined by:
+/// - A status code: http return code (i.e 200, 400, 500 etc.).
+/// - A response body: this is the body of the http response as textual representation.
+/// - A set of headers.
+/// - Duration: time to produce http response.
+///
+/// See [RFC 2616](https://tools.ietf.org/html/rfc2616#section-6")
 public interface HttpResponse {
 
-	/**
-	 * Get duration of request execution in nano seconds.
-	 *
-	 * @return Request execution duration.
-	 */
+	/// Get duration of request execution in nano seconds.
+	///
+	/// @return Request execution duration.
 	long getRequestDuration();
 
-	/**
-	 * Get duration of request execution in milli seconds (shortcut for {@code getRequestDuration() / 100}).
-	 *
-	 * @return Request execution duration.
-	 * @see #getRequestDuration()
-	 */
+	/// Get duration of request execution in milli seconds (shortcut for `getRequestDuration() / 100`).
+	///
+	/// @return Request execution duration.
+	/// @see #getRequestDuration()
 	long getRequestDurationInMillis();
 
-	/**
-	 * Http status code.
-	 *
-	 * @return Status code.
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-6.1">https://tools.ietf.org/html/rfc2616#section-6.1</a>
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-10">https://tools.ietf.org/html/rfc2616#section-10</a>
-	 */
+	/// Http status code.
+	///
+	/// See:
+	/// - [RFC 2616 - Section 6.1](https://tools.ietf.org/html/rfc2616#section-6.1)
+	/// - [RFC 2616 - Section 10](https://tools.ietf.org/html/rfc2616#section-10)
+	///
+	/// @return Status code.
 	int status();
 
-	/**
-	 * Http response body.
-	 *
-	 * @return Body.
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-7.2">https://tools.ietf.org/html/rfc2616#section-7.2</a>
-	 */
+	/// Http response body ([RFC 2616](https://tools.ietf.org/html/rfc2616#section-7.2)).
+	///
+	/// @return Body.
 	String body();
 
-	/**
-	 * Get the list of headers.
-	 *
-	 * @return Header list.
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-6.2">https://tools.ietf.org/html/rfc2616#section-6.2</a>
-	 */
+	/// Get the list of headers ([RFC 2616](https://tools.ietf.org/html/rfc2616#section-6.2)).
+	///
+	/// @return Header list.
 	Collection<HttpHeader> getHeaders();
 
-	/**
-	 * Check that given header is available.
-	 *
-	 * @param name Header name.
-	 * @return {@code true} if header is in response, {@code false} otherwise.
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-6.2">https://tools.ietf.org/html/rfc2616#section-6.2</a>
-	 */
+	/// Check that given header is available ([RFC 2616](https://tools.ietf.org/html/rfc2616#section-6.2)).
+	///
+	/// @param name Header name.
+	/// @return `true` if header is in response, `false` otherwise.
 	boolean containsHeader(String name);
 
-	/**
-	 * Get header from HTTP response (if header is missing, {@code null} will be returned).
-	 *
-	 * @param name Header name.
-	 * @return Header, {@code null} if header is not in http response.
-	 * @throws NullPointerException If name is {@code null}.
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-6.2">https://tools.ietf.org/html/rfc2616#section-6.2</a>
-	 */
+	/// Get header from HTTP response ([RFC 2616](https://tools.ietf.org/html/rfc2616#section-6.2)).
+	/// If header is missing, `null` will be returned.
+	///
+	/// @param name Header name.
+	/// @return Header, `null` if header is not in http response.
+	/// @throws NullPointerException If name is `null`.
 	HttpHeader getHeader(String name);
 
-	/**
-	 * Get cookie by its name (if cookie is missing, {@code null} is returned).
-	 *
-	 * @param name Cookie name.
-	 * @return Cookie.
-	 * @see HttpHeaders#SET_COOKIE
-	 * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie</a>
-	 * @see <a href="https://tools.ietf.org/html/rfc6265#section-4.1">https://tools.ietf.org/html/rfc6265#section-4.1</a>
-	 */
+	/// Get cookie by its name.
+	/// If cookie is missing, `null` is returned.
+	///
+	/// See:
+	/// - [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
+	/// - [RFC 6265](https://tools.ietf.org/html/rfc6265#section-4.1)
+	///
+	/// @param name Cookie name.
+	/// @return Cookie.
+	/// @see HttpHeaders#SET_COOKIE
 	Cookie getCookie(String name);
 
-	/**
-	 * Get all cookies sent by server.
-	 *
-	 * @return Cookies.
-	 * @see HttpHeaders#SET_COOKIE
-	 * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie</a>
-	 * @see <a href="https://tools.ietf.org/html/rfc6265#section-4.1">https://tools.ietf.org/html/rfc6265#section-4.1</a>
-	 */
+	/// Get all cookies sent by server.
+	///
+	/// See:
+	/// - [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
+	/// - [RFC 6265](https://tools.ietf.org/html/rfc6265#section-4.1)
+	///
+	/// @return Cookies.
+	/// @see HttpHeaders#SET_COOKIE
 	List<Cookie> getCookies();
 
-	/**
-	 * Get {@code ETag} header from http response.
-	 *
-	 * @return ETag header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#ETAG
-	 * @see <a href="https://tools.ietf.org/html/rfc7232#section-2.3">https://tools.ietf.org/html/rfc7232#section-2.3</a>
-	 */
+	/// Get `ETag` header from http response ([RFC 7232](https://tools.ietf.org/html/rfc7232#section-2.3)).
+	///
+	/// @return ETag header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#ETAG
 	HttpHeader getETag();
 
-	/**
-	 * Get {@code Content-Type} header from http response.
-	 *
-	 * @return Content-Type header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#CONTENT_TYPE
-	 * @see <a href="https://www.w3.org/Protocols/rfc1341/4_Content-Type.html">https://www.w3.org/Protocols/rfc1341/4_Content-Type.html</a>
-	 */
+	/// Get `Content-Type` header from http response ([RFC 1341](https://www.w3.org/Protocols/rfc1341/4_Content-Type.html)).
+	///
+	/// @return Content-Type header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#CONTENT_TYPE
 	HttpHeader getContentType();
 
-	/**
-	 * Get {@code Content-Encoding} header from http response.
-	 *
-	 * @return Content-Encoding header.
-	 * @see HttpHeaders#CONTENT_ENCODING
-	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-3.1.2.2">https://tools.ietf.org/html/rfc7231#section-3.1.2.2</a>
-	 */
+	/// Get `Content-Encoding` header from http response ([RFC 7231](https://tools.ietf.org/html/rfc7231#section-3.1.2.2)).
+	///
+	/// @return Content-Encoding header.
+	/// @see HttpHeaders#CONTENT_ENCODING
 	HttpHeader getContentEncoding();
 
-	/**
-	 * Get {@code Location} header from http response.
-	 *
-	 * @return Location header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#LOCATION
-	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-7.1.2">https://tools.ietf.org/html/rfc7231#section-7.1.2</a>
-	 */
+	/// Get `Location` header from http response ([RFC 7231](https://tools.ietf.org/html/rfc7231#section-7.1.2)).
+	///
+	/// @return Location header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#LOCATION
 	HttpHeader getLocation();
 
-	/**
-	 * Get {@code Cache-Control} header from http response.
-	 *
-	 * @return Cache-Control header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#CACHE_CONTROL
-	 * @see <a href="https://tools.ietf.org/html/rfc7234#section-5.2">https://tools.ietf.org/html/rfc7234#section-5.2</a>
-	 */
+	/// Get `Cache-Control` header from http response ([RFC 7234](https://tools.ietf.org/html/rfc7234#section-5.2)).
+	///
+	/// @return Cache-Control header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#CACHE_CONTROL
 	HttpHeader getCacheControl();
 
-	/**
-	 * Get {@code Last-Modified} header from http response.
-	 *
-	 * @return Last-Modified header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#LAST_MODIFIED
-	 * @see <a href="https://tools.ietf.org/html/rfc7232#section-2.2">https://tools.ietf.org/html/rfc7232#section-2.2</a>
-	 */
+	/// Get `Last-Modified` header from http response ([RFC 7232](https://tools.ietf.org/html/rfc7232#section-2.2)).
+	///
+	/// @return Last-Modified header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#LAST_MODIFIED
 	HttpHeader getLastModified();
 
-	/**
-	 * Get {@code Strict-Transport-Security} header from http response.
-	 *
-	 * @return Strict-Transport-Security header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#STRICT_TRANSPORT_SECURITY
-	 * @see <a href="https://tools.ietf.org/html/rfc6797">https://tools.ietf.org/html/rfc6797</a>
-	 */
+	/// Get `Strict-Transport-Security` header from http response ([RFC 6797](https://tools.ietf.org/html/rfc6797)).
+	///
+	/// @return Strict-Transport-Security header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#STRICT_TRANSPORT_SECURITY
 	HttpHeader getStrictTransportSecurity();
 
-	/**
-	 * Get {@code Content-Security-Policy} header from http response.
-	 *
-	 * @return Content-Security-Policy header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#CONTENT_SECURITY_POLICY
-	 * @see <a href="https://www.w3.org/TR/2011/WD-CSP-20111129/">https://www.w3.org/TR/2011/WD-CSP-20111129/</a>
-	 * @see <a href="https://content-security-policy.com/">https://content-security-policy.com/</a>
-	 */
+	/// Get `Content-Security-Policy` header from http response.
+	///
+	/// See:
+	/// - [W3C](https://www.w3.org/TR/2011/WD-CSP-20111129)
+	/// - [CSP](https://content-security-policy.com/)
+	///
+	/// @return Content-Security-Policy header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#CONTENT_SECURITY_POLICY
 	HttpHeader getContentSecurityPolicy();
 
-	/**
-	 * Get {@code X-Content-Security-Policy} header from http response: this header was initially an experimental
-	 * header implemented in Firefox.
-	 *
-	 * @return X-Content-Security-Policy header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#X_CONTENT_SECURITY_POLICY
-	 * @see <a href="https://www.w3.org/TR/2011/WD-CSP-20111129/">https://www.w3.org/TR/2011/WD-CSP-20111129/</a>
-	 * @see <a href="https://content-security-policy.com/">https://content-security-policy.com/</a>
-	 */
+	/// Get `X-Content-Security-Policy` header from http response: this header was initially an experimental
+	/// header implemented in Firefox.
+	///
+	/// See:
+	/// - [W3C](https://www.w3.org/TR/2011/WD-CSP-20111129)
+	/// - [CSP](https://content-security-policy.com/)
+	///
+	/// @return X-Content-Security-Policy header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#X_CONTENT_SECURITY_POLICY
 	HttpHeader getXContentSecurityPolicy();
 
-	/**
-	 * Get {@code X-Webkit-CSP} header from http response: this header was initially an experimental header implemented
-	 * in Webkit browser (Chrome and Safari).
-	 *
-	 * @return }X-Content-Security-Policy header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#X_WEBKIT_CSP
-	 * @see <a href="https://www.w3.org/TR/2011/WD-CSP-20111129/">https://www.w3.org/TR/2011/WD-CSP-20111129/</a>
-	 * @see <a href="https://content-security-policy.com/">https://content-security-policy.com/</a>
-	 */
+	/// Get `X-Webkit-CSP` header from http response: this header was initially an experimental header implemented
+	/// in Webkit browser (Chrome and Safari).
+	///
+	/// See:
+	/// - [W3C](https://www.w3.org/TR/2011/WD-CSP-20111129)
+	/// - [CSP](https://content-security-policy.com/)
+	///
+	/// @return }X-Content-Security-Policy header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#X_WEBKIT_CSP
 	HttpHeader getXWebkitCSP();
 
-	/**
-	 * Get {@code X-Content-Type-Options} header from http response.
-	 *
-	 * @return X-Content-Type-Options header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#X_CONTENT_TYPE_OPTIONS
-	 * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options</a>
-	 */
+	/// Get `X-Content-Type-Options` header from http response ([MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options)).
+	///
+	/// @return X-Content-Type-Options header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#X_CONTENT_TYPE_OPTIONS
 	HttpHeader getXContentTypeOptions();
 
-	/**
-	 * Get {@code X-XSS-Protection} header from http response.
-	 *
-	 * @return X-XSS-Protection header.
-	 * @see #getHeader(String)
-	 * @see HttpHeaders#X_XSS_PROTECTION
-	 * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection</a>
-	 */
+	/// Get `X-XSS-Protection` header from http response ([MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)).
+	///
+	/// @return X-XSS-Protection header.
+	/// @see #getHeader(String)
+	/// @see HttpHeaders#X_XSS_PROTECTION
 	HttpHeader getXXSSProtection();
 }

@@ -28,35 +28,25 @@ import java.net.URL;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
-/**
- * A composite classloader is a classloader that has:
- * <ul>
- *   <li>A parent classloader.</li>
- *   <li>A fallback classloader.</li>
- * </ul>
- *
- * When resolving classes or resources, the parent classloader is consulted first,
- * and if that classloader cannot find the class (or resource), the fallback classloader
- * is tried.
- *
- * <p>
- *
- * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
- * or have their access level decreased from public to protected, package, or private in future versions without notice.
- */
+/// A composite classloader is a classloader that has:
+/// - A parent classloader.
+/// - A fallback classloader.
+///
+/// When resolving classes or resources, the parent classloader is consulted first,
+/// and if that classloader cannot find the class (or resource), the fallback classloader
+/// is tried.
+///
+/// **Internal API**: these methods are part of the internal API and may be removed, have their signature change,
+/// or have their access level decreased from public to protected, package, or private in future versions without notice.
 public class CompositeClassLoader extends ClassLoader {
 
-	/**
-	 * Fallback classloader that will be tried after parent classloader.
-	 */
+	/// Fallback classloader that will be tried after parent classloader.
 	private final ClassLoader fallback;
 
-	/**
-	 * Create the classloader.
-	 *
-	 * @param parent Parent classloader.
-	 * @param fallback Fallback classloader.
-	 */
+	/// Create the classloader.
+	///
+	/// @param parent Parent classloader.
+	/// @param fallback Fallback classloader.
 	public CompositeClassLoader(ClassLoader parent, ClassLoader fallback) {
 		super(parent);
 		this.fallback = notNull(fallback, "Fallback classloader");

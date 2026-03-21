@@ -31,21 +31,18 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-/**
- * Static Test Utilities.
- */
+/// Static Test Utilities.
 public final class TestUtils {
 
 	// Ensure non instantiation.
 	private TestUtils() {
 	}
 
-	/**
-	 * URL encode string value.
-	 * @param value String value.
-	 * @return URL encoded value.
-	 * @see URLEncoder#encode(String, String)
-	 */
+	/// URL encode string value.
+	///
+	/// @param value String value.
+	/// @return URL encoded value.
+	/// @see URLEncoder#encode(String, String)
 	public static String urlEncode(String value) {
 		try {
 			return URLEncoder.encode(value, StandardCharsets.UTF_8.displayName());
@@ -55,22 +52,18 @@ public final class TestUtils {
 		}
 	}
 
-	/**
-	 * Translate array of bytes to a string using UTF-8 encoding.
-	 *
-	 * @param bytes Array of bytes.
-	 * @return The result string.
-	 */
+	/// Translate array of bytes to a string using UTF-8 encoding.
+	///
+	/// @param bytes Array of bytes.
+	/// @return The result string.
 	public static String toUtf8String(byte[] bytes) {
 		return new String(bytes, StandardCharsets.UTF_8);
 	}
 
-	/**
-	 * Read given file to an array of bytes.
-	 *
-	 * @param file The file to read.
-	 * @return The result.
-	 */
+	/// Read given file to an array of bytes.
+	///
+	/// @param file The file to read.
+	/// @return The result.
 	public static byte[] readFile(File file) {
 		try {
 			return Files.readAllBytes(file.toPath());

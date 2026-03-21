@@ -28,31 +28,23 @@ import com.github.mjeanroy.junit.servers.jetty9.EmbeddedJetty;
 import com.github.mjeanroy.junit.servers.junit4.ServerRule;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
-/**
- * Rule that can be used to start and stop embedded jetty server.
- */
+/// Rule that can be used to start and stop embedded jetty server.
 public class JettyServerJunit4Rule extends ServerRule {
-	/**
-	 * Create rule.
-	 *
-	 * @param jetty Jetty Embedded Server.
-	 */
+	/// Create rule.
+	///
+	/// @param jetty Jetty Embedded Server.
 	public JettyServerJunit4Rule(EmbeddedJetty jetty) {
 		super(jetty);
 	}
 
-	/**
-	 * Create rule using jetty as embedded server.
-	 */
+	/// Create rule using jetty as embedded server.
 	public JettyServerJunit4Rule() {
 		this(new EmbeddedJetty());
 	}
 
-	/**
-	 * Create rule.
-	 *
-	 * @param configuration Jetty Configuration.
-	 */
+	/// Create rule.
+	///
+	/// @param configuration Jetty Configuration.
 	public JettyServerJunit4Rule(EmbeddedJettyConfiguration configuration) {
 		this(new EmbeddedJetty(configuration));
 	}

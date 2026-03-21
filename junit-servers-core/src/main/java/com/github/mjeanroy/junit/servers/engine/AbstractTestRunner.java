@@ -24,10 +24,8 @@
 
 package com.github.mjeanroy.junit.servers.engine;
 
-/**
- * Abstract skeleton for {@link TestRunner} where every methods are
- * implemented as a no operation.
- */
+/// Abstract skeleton for [TestRunner] where every methods are
+/// implemented as a no operation.
 class AbstractTestRunner implements TestRunner {
 
 	@Override

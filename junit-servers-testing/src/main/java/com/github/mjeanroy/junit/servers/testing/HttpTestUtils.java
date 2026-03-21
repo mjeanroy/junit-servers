@@ -30,23 +30,19 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
-/**
- * Static HTTP Utilities, used only for testing.
- */
+/// Static HTTP Utilities, used only for testing.
 public final class HttpTestUtils {
 
 	private HttpTestUtils() {
 	}
 
-	/**
-	 * Create URL string.
-	 *
-	 * @param scheme URL Scheme (HTTP, HTTPS).
-	 * @param host URL Host.
-	 * @param port URL port.
-	 * @param path URL path.
-	 * @return Full URL.
-	 */
+	/// Create URL string.
+	///
+	/// @param scheme URL Scheme (HTTP, HTTPS).
+	/// @param host URL Host.
+	/// @param port URL port.
+	/// @param path URL path.
+	/// @return Full URL.
 	public static String url(String scheme, String host, int port, String path) {
 		return new StringBuilder()
 			.append(scheme)
@@ -58,33 +54,27 @@ public final class HttpTestUtils {
 			.toString();
 	}
 
-	/**
-	 * Create URL string with HTTP scheme and "localhost" host.
-	 *
-	 * @param port URL port.
-	 * @param path URL path.
-	 * @return Full URL.
-	 */
+	/// Create URL string with HTTP scheme and "localhost" host.
+	///
+	/// @param port URL port.
+	/// @param path URL path.
+	/// @return Full URL.
 	public static String localhost(int port, String path) {
 		return url("http", "localhost", port, path);
 	}
 
-	/**
-	 * Create URL string with HTTP scheme and "localhost" host.
-	 *
-	 * @param port URL port.
-	 * @return Full URL.
-	 */
+	/// Create URL string with HTTP scheme and "localhost" host.
+	///
+	/// @param port URL port.
+	/// @return Full URL.
 	public static String localhost(int port) {
 		return "http://localhost:" + port + "/";
 	}
 
-	/**
-	 * Run GET HTTP query and returns response.
-	 *
-	 * @param url HTTP URL.
-	 * @return HTTP Response.
-	 */
+	/// Run GET HTTP query and returns response.
+	///
+	/// @param url HTTP URL.
+	/// @return HTTP Response.
 	public static HttpResponse get(String url) {
 		OkHttpClient client = new OkHttpClient();
 		Request rq = new Request.Builder().url(url).build();
@@ -98,18 +88,12 @@ public final class HttpTestUtils {
 		}
 	}
 
-	/**
-	 * Basic HTTP response, used only for testing.
-	 */
+	/// Basic HTTP response, used only for testing.
 	public static final class HttpResponse {
-		/**
-		 * Response code (a.k.a HTTP Status Code).
-		 */
+		/// Response code (a.k.a HTTP Status Code).
 		private final int statusCode;
 
-		/**
-		 * Response body, may be {@code null}.
-		 */
+		/// Response body, may be `null`.
 		private final String responseBody;
 
 		private HttpResponse(int statusCode, String responseBody) {
@@ -117,20 +101,16 @@ public final class HttpTestUtils {
 			this.responseBody = responseBody;
 		}
 
-		/**
-		 * Get {@link #statusCode}
-		 *
-		 * @return {@link #statusCode}
-		 */
+		/// Get [#statusCode]
+		///
+		/// @return Returns [#statusCode]
 		public int getStatusCode() {
 			return statusCode;
 		}
 
-		/**
-		 * Get {@link #responseBody}
-		 *
-		 * @return {@link #responseBody}
-		 */
+		/// Get [#responseBody]
+		///
+		/// @return Returns [#responseBody]
 		public String getResponseBody() {
 			return responseBody;
 		}

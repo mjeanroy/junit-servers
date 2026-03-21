@@ -26,26 +26,20 @@ package com.github.mjeanroy.junit.servers.commons.lang;
 
 import java.util.Collection;
 
-/**
- * Static collection utilities.
- *
- * <p>
- *
- * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
- * or have their access level decreased from public to protected, package, or private in future versions without notice.
- */
+/// Static collection utilities.
+///
+/// **Internal API**: these methods are part of the internal API and may be removed, have their signature change,
+/// or have their access level decreased from public to protected, package, or private in future versions without notice.
 public final class Collections {
 
 	// Ensure non instantiation
 	private Collections() {
 	}
 
-	/**
-	 * Check if a collection is null or empty.
-	 *
-	 * @param collection Collection to check.
-	 * @return True if collection is null or empty, false otherwise.
-	 */
+	/// Check if a collection is null or empty.
+	///
+	/// @param collection Collection to check.
+	/// @return True if collection is null or empty, false otherwise.
 	public static boolean isEmpty(Collection<?> collection) {
 		return collection == null || collection.isEmpty();
 	}

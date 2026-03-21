@@ -34,39 +34,25 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Builder for mock instances of {@link EmbeddedServer}.
- */
+/// Builder for mock instances of [EmbeddedServer].
 public class EmbeddedServerMockBuilder {
 
-	/**
-	 * The embedded server configuration.
-	 */
+	/// The embedded server configuration.
 	private AbstractConfiguration configuration;
 
-	/**
-	 * Server scheme.
-	 */
+	/// Server scheme.
 	private String scheme;
 
-	/**
-	 * Server host.
-	 */
+	/// Server host.
 	private String host;
 
-	/**
-	 * Server port.
-	 */
+	/// Server port.
 	private int port;
 
-	/**
-	 * Server path.
-	 */
+	/// Server path.
 	private String path;
 
-	/**
-	 * Create new builder.
-	 */
+	/// Create new builder.
 	public EmbeddedServerMockBuilder() {
 		this.configuration = new AbstractConfigurationMockBuilder().build();
 		this.scheme = "http";
@@ -75,66 +61,54 @@ public class EmbeddedServerMockBuilder {
 		this.path = "/";
 	}
 
-	/**
-	 * Update {@link #configuration}.
-	 *
-	 * @param configuration New {@link #configuration}
-	 * @return The builder.
-	 */
+	/// Update [#configuration].
+	///
+	/// @param configuration New [#configuration]
+	/// @return The builder.
 	public EmbeddedServerMockBuilder withConfiguration(AbstractConfiguration configuration) {
 		this.configuration = configuration;
 		return this;
 	}
 
-	/**
-	 * Update {@link #scheme}.
-	 *
-	 * @param scheme New {@link #scheme}
-	 * @return The builder.
-	 */
+	/// Update [#scheme].
+	///
+	/// @param scheme New [#scheme]
+	/// @return The builder.
 	public EmbeddedServerMockBuilder withScheme(String scheme) {
 		this.scheme = scheme;
 		return this;
 	}
 
-	/**
-	 * Update {@link #host}.
-	 *
-	 * @param host New {@link #host}
-	 * @return The builder.
-	 */
+	/// Update [#host].
+	///
+	/// @param host New [#host]
+	/// @return The builder.
 	public EmbeddedServerMockBuilder withHost(String host) {
 		this.host = host;
 		return this;
 	}
 
-	/**
-	 * Update {@link #path}.
-	 *
-	 * @param path New {@link #path}
-	 * @return The builder.
-	 */
+	/// Update [#path].
+	///
+	/// @param path New [#path]
+	/// @return The builder.
 	public EmbeddedServerMockBuilder withPath(String path) {
 		this.path = path;
 		return this;
 	}
 
-	/**
-	 * Update {@link #port}.
-	 *
-	 * @param port New {@link #port}
-	 * @return The builder.
-	 */
+	/// Update [#port].
+	///
+	/// @param port New [#port]
+	/// @return The builder.
 	public EmbeddedServerMockBuilder withPort(int port) {
 		this.port = port;
 		return this;
 	}
 
-	/**
-	 * Create new mock instance of {@link EmbeddedServer}.
-	 *
-	 * @return The mock instance.
-	 */
+	/// Create new mock instance of [EmbeddedServer].
+	///
+	/// @return The mock instance.
 	public EmbeddedServer<?> build() {
 		EmbeddedServer<?> server = mock(EmbeddedServer.class, "MockEmbeddedServer");
 

@@ -24,47 +24,35 @@
 
 package com.github.mjeanroy.junit.servers.commons.core;
 
-/**
- * Static Java Utilities.
- *
- * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
- * or have their access level decreased from public to protected, package, or private in future versions without notice.
- */
+/// Static Java Utilities.
+///
+/// **Internal API**: these methods are part of the internal API and may be removed, have their signature change,
+/// or have their access level decreased from public to protected, package, or private in future versions without notice.
 public final class Java {
 
 	// Ensure non instantiation.
 	private Java() {
 	}
 
-	/**
-	 * The system property name that will be read to get Java version.
-	 */
+	/// The system property name that will be read to get Java version.
 	private static final String JAVA_SPECIFICATION_VERSION_PROP = "java.specification.version";
 
-	/**
-	 * The Java Specification version.
-	 */
+	/// The Java Specification version.
 	private static final String JAVA_SPECIFICATION_VERSION = System.getProperty(JAVA_SPECIFICATION_VERSION_PROP);
 
-	/**
-	 * The parsed Java Version.
-	 */
+	/// The parsed Java Version.
 	private static final int JAVA_MAJOR_VERSION = parseJavaVersion();
 
-	/**
-	 * Check if runtime java version is at least Java 9.
-	 *
-	 * @return {@code true} if current Java version is at least Java 9, {@code false} otherwise.
-	 */
+	/// Check if runtime java version is at least Java 9.
+	///
+	/// @return `true` if current Java version is at least Java 9, `false` otherwise.
 	public static boolean isPostJdk9() {
 		return JAVA_MAJOR_VERSION >= 9;
 	}
 
-	/**
-	 * Parse java version.
-	 *
-	 * @return The JAVA Version.
-	 */
+	/// Parse java version.
+	///
+	/// @return The JAVA Version.
 	private static int parseJavaVersion() {
 		String[] parts = JAVA_SPECIFICATION_VERSION.split("\\.");
 		int nbParts = parts.length;

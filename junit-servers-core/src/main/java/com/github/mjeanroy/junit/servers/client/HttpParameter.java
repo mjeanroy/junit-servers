@@ -32,51 +32,39 @@ import static com.github.mjeanroy.junit.servers.commons.core.Encoders.urlEncode;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.lang.Strings.nullToEmpty;
 
-/**
- * Parameter object that could be sent in an http request as:
- * <ul>
- *   <li>Query parameters (following {@code ?} character in URL.</li>
- *   <li>Form parameters (such as HTML forms, with {@link MediaType#APPLICATION_FORM_URL_ENCODED} media type).</li>
- * </ul>
- */
+/// Parameter object that could be sent in an http request as:
+/// - Query parameters (following `?` character in URL.
+/// - Form parameters (such as HTML forms, with [MediaType#APPLICATION_FORM_URL_ENCODED] media type).
 public class HttpParameter {
 
-	/**
-	 * Create new parameter object.
-	 *
-	 * @param name Parameter name.
-	 * @param value Parameter value.
-	 * @return Parameter object.
-	 * @throws NullPointerException if {@code name} is {@code null}.
-	 * @throws IllegalArgumentException if {@code name} is empty or blank.
-	 */
+	/// Create new parameter object.
+	///
+	/// @param name Parameter name.
+	/// @param value Parameter value.
+	/// @return Parameter object.
+	/// @throws NullPointerException if `name` is `null`.
+	/// @throws IllegalArgumentException if `name` is empty or blank.
 	public static HttpParameter of(String name, String value) {
 		return param(name, value);
 	}
 
-	/**
-	 * Create new parameter object.
-	 *
-	 * @param name Parameter name.
-	 * @param value Parameter value.
-	 * @return Parameter object.
-	 * @throws NullPointerException if {@code name} is {@code null}.
-	 * @throws IllegalArgumentException if {@code name} is empty or blank.
-	 */
+	/// Create new parameter object.
+	///
+	/// @param name Parameter name.
+	/// @param value Parameter value.
+	/// @return Parameter object.
+	/// @throws NullPointerException if `name` is `null`.
+	/// @throws IllegalArgumentException if `name` is empty or blank.
 	public static HttpParameter param(String name, String value) {
 		return new HttpParameter(name, value);
 	}
 
-	/**
-	 * Parameter name.
-	 * Must not be blank.
-	 */
+	/// Parameter name.
+	/// Must not be blank.
 	private final String name;
 
-	/**
-	 * Parameter value.
-	 * Must not be null.
-	 */
+	/// Parameter value.
+	/// Must not be null.
 	private final String value;
 
 	private HttpParameter(String name, String value) {
@@ -84,48 +72,38 @@ public class HttpParameter {
 		this.value = value;
 	}
 
-	/**
-	 * Get {@link #name}.
-	 *
-	 * @return {@link #name}.
-	 */
+	/// Get [#name].
+	///
+	/// @return [#name].
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * Get {@link #value}.
-	 *
-	 * @return {@link #value}.
-	 */
+	/// Get [#value].
+	///
+	/// @return [#value].
 	public String getValue() {
 		return value;
 	}
 
-	/**
-	 * Get the URL encoded parameter name.
-	 *
-	 * @return URL encoded parameter name.
-	 */
+	/// Get the URL encoded parameter name.
+	///
+	/// @return URL encoded parameter name.
 	public String getEncodedName() {
 		return urlEncode(name);
 	}
 
-	/**
-	 * Get the URL encoded parameter value.
-	 *
-	 * @return URL encoded parameter value.
-	 */
+	/// Get the URL encoded parameter value.
+	///
+	/// @return URL encoded parameter value.
 	public String getEncodedValue() {
 		return value == null ? null : urlEncode(value);
 	}
 
-	/**
-	 * Serialize parameter to the {@code key=value} format, and url encode
-	 * name and value.
-	 *
-	 * @return The encoded serialization.
-	 */
+	/// Serialize parameter to the `key=value` format, and url encode
+	/// name and value.
+	///
+	/// @return The encoded serialization.
 	public String asEncodedString() {
 		return urlEncode(name) + "=" + urlEncode(nullToEmpty(value));
 	}

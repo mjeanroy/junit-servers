@@ -38,24 +38,20 @@ import java.util.Objects;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
-/**
- * Implementation of {@link HttpResponse} delegating calls to original {@link Response}
- * instance.
- */
+/// Implementation of [HttpResponse] delegating calls to original [Response]
+/// instance.
 final class OkHttpResponse extends AbstractHttpResponse {
 
 	private final int code;
 	private final String body;
 	private final Headers headers;
 
-	/**
-	 * Create the response from OkHTTP3
-	 *
-	 * @param code The original response status.
-	 * @param body The original response body.
-	 * @param headers The original response headers.
-	 * @param duration Request duration.
-	 */
+	/// Create the response from OkHTTP3
+	///
+	/// @param code The original response status.
+	/// @param body The original response body.
+	/// @param headers The original response headers.
+	/// @param duration Request duration.
 	OkHttpResponse(
 			int code,
 			String body,

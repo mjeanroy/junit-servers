@@ -31,23 +31,17 @@ import org.apache.catalina.Context;
 
 import static com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration.defaultConfiguration;
 
-/**
- * Embedded server using tomcat as implementation.
- */
+/// Embedded server using tomcat as implementation.
 public class EmbeddedTomcat extends AbstractEmbeddedTomcat<EmbeddedTomcatConfiguration> {
 
-	/**
-	 * Build embedded tomcat with default configuration.
-	 */
+	/// Build embedded tomcat with default configuration.
 	public EmbeddedTomcat() {
 		this(defaultConfiguration());
 	}
 
-	/**
-	 * Build embedded tomcat.
-	 *
-	 * @param configuration Tomcat configuration.
-	 */
+	/// Build embedded tomcat.
+	///
+	/// @param configuration Tomcat configuration.
 	public EmbeddedTomcat(EmbeddedTomcatConfiguration configuration) {
 		super(configuration);
 	}

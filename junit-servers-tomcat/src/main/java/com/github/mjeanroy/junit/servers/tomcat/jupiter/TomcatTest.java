@@ -36,11 +36,9 @@ import java.lang.annotation.Target;
 
 import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_CLASS;
 
-/**
- * Create test with {@link TomcatServerExtension}.
- *
- * @deprecated Use {@code junit-servers-tomcat-8} instead.
- */
+/// Create test with [TomcatServerExtension].
+///
+/// @deprecated Use `junit-servers-tomcat-8` instead.
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @ExtendWith(TomcatServerExtension.class)
@@ -48,10 +46,8 @@ import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLife
 @Inherited
 @Deprecated
 public @interface TomcatTest {
-	/**
-	 * Lifecycle, defaults to {@link JunitServerExtensionLifecycle#PER_CLASS}.
-	 *
-	 * @return Lifecycle.
-	 */
+	/// Lifecycle, defaults to [JunitServerExtensionLifecycle#PER_CLASS].
+	///
+	/// @return Lifecycle.
 	JunitServerExtensionLifecycle lifecycle() default PER_CLASS;
 }

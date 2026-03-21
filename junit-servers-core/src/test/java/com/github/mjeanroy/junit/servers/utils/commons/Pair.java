@@ -28,41 +28,31 @@ import java.util.List;
 
 import static java.util.Collections.singletonList;
 
-/**
- * Pair of strings to use in unit tests.
- */
+/// Pair of strings to use in unit tests.
 public class Pair {
 
-	/**
-	 * Create new pair of strings.
-	 *
-	 * @param o1 String 1.
-	 * @param o2 String 2.
-	 * @return Pair object.
-	 */
+	/// Create new pair of strings.
+	///
+	/// @param o1 String 1.
+	/// @param o2 String 2.
+	/// @return Pair object.
 	public static Pair pair(String o1, String o2) {
 		return new Pair(o1, singletonList(o2));
 	}
 
-	/**
-	 * Create new pair of strings.
-	 *
-	 * @param o1 String 1.
-	 * @param o2 String 2.
-	 * @return Pair object.
-	 */
+	/// Create new pair of strings.
+	///
+	/// @param o1 String 1.
+	/// @param o2 String 2.
+	/// @return Pair object.
 	public static Pair pair(String o1, List<String> o2) {
 		return new Pair(o1, o2);
 	}
 
-	/**
-	 * First string.
-	 */
+	/// First string.
 	private final String o1;
 
-	/**
-	 * Second string.
-	 */
+	/// Second string.
 	private final List<String> o2;
 
 	// Use static factory

@@ -26,21 +26,15 @@ package com.github.mjeanroy.junit.servers.loggers;
 
 import org.slf4j.LoggerFactory;
 
-/**
- * A logger delegating implementation to SLF4J {@link org.slf4j.Logger}.
- */
+/// A logger delegating implementation to SLF4J [org.slf4j.Logger].
 class Slf4jLogger implements Logger {
 
-	/**
-	 * The internal logger.
-	 */
+	/// The internal logger.
 	private final org.slf4j.Logger log;
 
-	/**
-	 * Create logger.
-	 *
-	 * @param klass Logger name.
-	 */
+	/// Create logger.
+	///
+	/// @param klass Logger name.
 	Slf4jLogger(Class<?> klass) {
 		log = LoggerFactory.getLogger(klass);
 	}

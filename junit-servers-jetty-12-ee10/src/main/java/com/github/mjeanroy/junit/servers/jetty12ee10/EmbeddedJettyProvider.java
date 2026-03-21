@@ -27,14 +27,10 @@ package com.github.mjeanroy.junit.servers.jetty12ee10;
 import com.github.mjeanroy.junit.servers.servers.EmbeddedServerProvider;
 import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 
-/**
- * Jetty Embedded Server provider, used by the service provider interface from the JDK.
- */
+/// Jetty Embedded Server provider, used by the service provider interface from the JDK.
 public class EmbeddedJettyProvider implements EmbeddedServerProvider<EmbeddedJettyConfiguration> {
 
-	/**
-	 * Create provider.
-	 */
+	/// Create provider.
 	public EmbeddedJettyProvider() {
 	}
 

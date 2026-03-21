@@ -28,24 +28,18 @@ import com.github.mjeanroy.junit.servers.annotations.TestServer;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcat;
 import org.junit.runner.RunWith;
 
-/**
- * Simple abstraction that define a server rule using tomcat as embedded server.
- *
- * @deprecated Use {@code junit-servers-tomcat-8} instead.
- */
+/// Simple abstraction that define a server rule using tomcat as embedded server.
+///
+/// @deprecated Use `junit-servers-tomcat-8` instead.
 @Deprecated
 @RunWith(TomcatServerJunit4Runner.class)
 public abstract class AbstractTomcatJunit4Test {
 
-	/**
-	 * The started embedded server.
-	 */
+	/// The started embedded server.
 	@TestServer
 	public static EmbeddedTomcat server;
 
-	/**
-	 * Initialize test suite.
-	 */
+	/// Initialize test suite.
 	public AbstractTomcatJunit4Test() {
 	}
 }

@@ -45,63 +45,47 @@ import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.gett
 import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.invoke;
 import static java.lang.System.lineSeparator;
 
-/**
- * Static utilities for server instantiation
- * and configuration.
- */
+/// Static utilities for server instantiation
+/// and configuration.
 public final class Servers {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(Servers.class);
 
 	// Ensure non instantiation
 	private Servers() {
 	}
 
-	/**
-	 * Instantiate jetty or tomcat embedded server.
-	 *
-	 * <p>
-	 *
-	 * Server configuration is automatically read on static field / methods
-	 * available on given class (i.e field or method annotated
-	 * with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} annotation).
-	 *
-	 * <p>
-	 *
-	 * Server implementation is automatically detected (jetty or
-	 * tomcat) with classpath detection.
-	 *
-	 * @param klass Class to inspect.
-	 * @return Embedded server.
-	 */
+	/// Instantiate jetty or tomcat embedded server.
+	///
+	/// Server configuration is automatically read on static field / methods
+	/// available on given class (i.e field or method annotated
+	/// with [com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration] annotation).
+	///
+	/// Server implementation is automatically detected (jetty or
+	/// tomcat) with classpath detection.
+	///
+	/// @param klass Class to inspect.
+	/// @return Embedded server.
 	public static EmbeddedServer<?> instantiate(Class<?> klass) {
 		AbstractConfiguration configuration = findConfiguration(klass);
 		return instantiate(configuration);
 	}
 
-	/**
-	 * Instantiate jetty or tomcat embedded server.
-	 *
-	 * <p>
-	 *
-	 * Configuration is an optional parameter and can be null.
-	 * If configuration is null, empty constructor will be used to instantiate
-	 * embedded server.
-	 * Otherwise, constructor with one parameter (configuration) will
-	 * be used.
-	 *
-	 * <p>
-	 *
-	 * Server implementation is automatically detected (jetty or
-	 * tomcat) with classpath detection.
-	 *
-	 * @param configuration Optional configuration.
-	 * @return Embedded server.
-	 * @param <CONFIGURATION> Type of configuration.
-	 */
+	/// Instantiate jetty or tomcat embedded server.
+	///
+	/// Configuration is an optional parameter and can be null.
+	/// If configuration is null, empty constructor will be used to instantiate
+	/// embedded server.
+	/// Otherwise, constructor with one parameter (configuration) will
+	/// be used.
+	///
+	/// Server implementation is automatically detected (jetty or
+	/// tomcat) with classpath detection.
+	///
+	/// @param configuration Optional configuration.
+	/// @return Embedded server.
+	/// @param <CONFIGURATION> Type of configuration.
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static <CONFIGURATION extends AbstractConfiguration> EmbeddedServer<CONFIGURATION> instantiate(CONFIGURATION configuration) {
 		log.debug("Instantiating embedded server using configuration: {}", configuration);
@@ -151,15 +135,13 @@ public final class Servers {
 		return configuration == null ? provider.instantiate() : provider.instantiate(configuration);
 	}
 
-	/**
-	 * Find configuration object on static field / method on
-	 * running class. Configuration is read from static method or static field
-	 * annotated with {@link com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration} annotation.
-	 *
-	 * @param klass Class to inspect.
-	 * @param <CONFIGURATION> Type of configuration.
-	 * @return Configuration.
-	 */
+	/// Find configuration object on static field / method on
+	/// running class. Configuration is read from static method or static field
+	/// annotated with [com.github.mjeanroy.junit.servers.annotations.TestServerConfiguration] annotation.
+	///
+	/// @param klass Class to inspect.
+	/// @param <CONFIGURATION> Type of configuration.
+	/// @return Configuration.
 	public static <CONFIGURATION extends AbstractConfiguration> CONFIGURATION findConfiguration(Class<?> klass) {
 		log.debug("Extract configuration from class: {}", klass);
 

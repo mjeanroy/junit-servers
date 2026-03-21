@@ -26,31 +26,23 @@ package com.github.mjeanroy.junit.servers.junit4;
 
 import org.junit.rules.ExternalResource;
 
-/**
- * Abstract skeleton of rule that will be executed before
- * and after each methods.
- */
+/// Abstract skeleton of rule that will be executed before
+/// and after each methods.
 abstract class AbstractRuleInstance extends ExternalResource {
 
-	/**
-	 * Tested class.
-	 */
+	/// Tested class.
 	private final Object target;
 
-	/**
-	 * Create abstract rule.
-	 *
-	 * @param target Tested class.
-	 */
+	/// Create abstract rule.
+	///
+	/// @param target Tested class.
 	AbstractRuleInstance(Object target) {
 		this.target = target;
 	}
 
-	/**
-	 * Get tested class.
-	 *
-	 * @return Tested class.
-	 */
+	/// Get tested class.
+	///
+	/// @return Tested class.
 	Object getTarget() {
 		return target;
 	}

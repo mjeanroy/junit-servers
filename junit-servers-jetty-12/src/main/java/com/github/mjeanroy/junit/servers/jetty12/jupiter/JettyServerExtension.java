@@ -38,81 +38,65 @@ import java.util.Optional;
 
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
-/**
- * A specialized {@link JunitServerExtension} that will instantiate an {@link EmbeddedJetty}
- * server automatically instead of using the Service Provider API.
- *
- * Since this jupiter extends {@link JunitServerExtension}, it has exactly the same features (parameter
- * injections, etc.).
- *
- * @see JunitServerExtension
- */
+/// A specialized [JunitServerExtension] that will instantiate an [EmbeddedJetty]
+/// server automatically instead of using the Service Provider API.
+///
+/// Since this jupiter extends [JunitServerExtension], it has exactly the same features (parameter
+/// injections, etc.).
+///
+/// @see JunitServerExtension
 public class JettyServerExtension extends JunitServerExtension {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(JettyServerExtension.class);
 
-	/**
-	 * Create the jupiter with default behavior.
-	 */
+	/// Create the jupiter with default behavior.
 	public JettyServerExtension() {
 		super();
 	}
 
-	/**
-	 * Create the jupiter with default behavior.
-	 *
-	 * @param lifecycle The extension lifecycle.
-	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
-	 */
+	/// Create the jupiter with default behavior.
+	///
+	/// @param lifecycle The extension lifecycle.
+	/// @throws NullPointerException If `lifecycle` is `null`.
 	public JettyServerExtension(JunitServerExtensionLifecycle lifecycle) {
 		super(lifecycle);
 	}
 
-	/**
-	 * Create the jupiter and specify the embedded jetty instance to use.
-	 *
-	 * @param jetty The embedded jetty instance to use.
-	 * @throws NullPointerException If {@code jetty} is {@code null}.
-	 */
+	/// Create the jupiter and specify the embedded jetty instance to use.
+	///
+	/// @param jetty The embedded jetty instance to use.
+	/// @throws NullPointerException If `jetty` is `null`.
 	public JettyServerExtension(EmbeddedJetty jetty) {
 		super(jetty);
 	}
 
-	/**
-	 * Create the jupiter and specify the embedded jetty instance to use.
-	 *
-	 * @param lifecycle The extension lifecycle.
-	 * @param jetty The embedded jetty instance to use.
-	 * @throws NullPointerException If {@code jetty} is {@code null}.
-	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
-	 */
+	/// Create the jupiter and specify the embedded jetty instance to use.
+	///
+	/// @param lifecycle The extension lifecycle.
+	/// @param jetty The embedded jetty instance to use.
+	/// @throws NullPointerException If `jetty` is `null`.
+	/// @throws NullPointerException If `lifecycle` is `null`.
 	public JettyServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedJetty jetty) {
 		super(lifecycle, jetty);
 	}
 
-	/**
-	 * Create the jupiter and specify the embedded jetty configuration to use (when using
-	 * jupiter with {@link org.junit.jupiter.api.extension.RegisterExtension}).
-	 *
-	 * @param configuration The embedded jetty configuration to use.
-	 * @throws NullPointerException If {@code configuration} is {@code null}.
-	 */
+	/// Create the jupiter and specify the embedded jetty configuration to use (when using
+	/// jupiter with [org.junit.jupiter.api.extension.RegisterExtension]).
+	///
+	/// @param configuration The embedded jetty configuration to use.
+	/// @throws NullPointerException If `configuration` is `null`.
 	public JettyServerExtension(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
 	}
 
-	/**
-	 * Create the jupiter and specify the embedded jetty configuration to use (when using
-	 * jupiter with {@link org.junit.jupiter.api.extension.RegisterExtension}).
-	 *
-	 * @param lifecycle The extension lifecycle.
-	 * @param configuration The embedded jetty configuration to use.
-	 * @throws NullPointerException If {@code configuration} is {@code null}.
-	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
-	 */
+	/// Create the jupiter and specify the embedded jetty configuration to use (when using
+	/// jupiter with [org.junit.jupiter.api.extension.RegisterExtension]).
+	///
+	/// @param lifecycle The extension lifecycle.
+	/// @param configuration The embedded jetty configuration to use.
+	/// @throws NullPointerException If `configuration` is `null`.
+	/// @throws NullPointerException If `lifecycle` is `null`.
 	public JettyServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedJettyConfiguration configuration) {
 		super(lifecycle, configuration);
 	}

@@ -32,21 +32,15 @@ import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * A fake {@link ParameterContext} implementation using a map as internal implementation.
- */
+/// A fake [ParameterContext] implementation using a map as internal implementation.
 public class FakeJunitParameterContext implements ParameterContext {
 
-	/**
-	 * The internal map implementation.
-	 */
+	/// The internal map implementation.
 	private final Parameter parameter;
 
-	/**
-	 * Create fake JUnit {@link ParameterContext} from given parameter.
-	 *
-	 * @param parameter The parameter.
-	 */
+	/// Create fake JUnit [ParameterContext] from given parameter.
+	///
+	/// @param parameter The parameter.
 	public FakeJunitParameterContext(Parameter parameter) {
 		this.parameter = parameter;
 	}

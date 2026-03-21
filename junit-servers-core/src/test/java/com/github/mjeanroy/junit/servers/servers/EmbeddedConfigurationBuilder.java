@@ -24,9 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.servers;
 
-/**
- * A fake implementation of {@link AbstractConfigurationBuilder} to use in unit tests.
- */
+/// A fake implementation of [AbstractConfigurationBuilder] to use in unit tests.
 class EmbeddedConfigurationBuilder extends AbstractConfigurationBuilder<EmbeddedConfigurationBuilder, EmbeddedConfiguration> {
 
 	@Override

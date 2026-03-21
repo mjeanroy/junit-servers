@@ -37,13 +37,11 @@ final class HttpTestUtils {
 	private HttpTestUtils() {
 	}
 
-	/**
-	 * Encode URL path (i.e replace illegal characters with the percent encoded
-	 * value). For example, a space is replaced by {@code "%20"} string).
-	 *
-	 * @param path The path to encode.
-	 * @return The encoded path.
-	 */
+	/// Encode URL path (i.e replace illegal characters with the percent encoded
+	/// value). For example, a space is replaced by `"%20"` string).
+	///
+	/// @param path The path to encode.
+	/// @return The encoded path.
 	static String encodePath(String path) {
 		try {
 			URI uri = new URI(null, null, path, null);
@@ -54,42 +52,36 @@ final class HttpTestUtils {
 		}
 	}
 
-	/**
-	 * Encode query parameters: this is almost the same algorithm than {@link HttpTestUtils#encodeFormParam(String, String)}.
-	 *
-	 * @param name Parameter name.
-	 * @param value Parameter value.
-	 * @return The formatted value.
-	 */
+	/// Encode query parameters: this is almost the same algorithm than [HttpTestUtils#encodeFormParam(String, String)].
+	///
+	/// @param name Parameter name.
+	/// @param value Parameter value.
+	/// @return The formatted value.
 	static String encodeQueryParam(String name, String value) {
 		return encodeFormParam(name, value);
 	}
 
-	/**
-	 * Translates a key-value pair into {@code "application/x-www-form-urlencoded"}
-	 * format using UTF-8 encoding scheme.
-	 *
-	 * @param name The key (a.k.a parameter name).
-	 * @param value The value (a.k.a parameter value).
-	 * @return The encoded string.
-	 */
+	/// Translates a key-value pair into `"application/x-www-form-urlencoded"`
+	/// format using UTF-8 encoding scheme.
+	///
+	/// @param name The key (a.k.a parameter name).
+	/// @param value The value (a.k.a parameter value).
+	/// @return The encoded string.
 	static String encodeFormParam(String name, String value) {
 		String encodedName = urlEncode(name);
 		String encodedValue = value == null ? null : urlEncode(value);
 		return encodedName + (encodedValue == null ? "" : "=" + encodedValue);
 	}
 
-	/**
-	 * Translate date to UTC date that can be used as a HTTP header value.
-	 *
-	 * @param year The year.
-	 * @param month The month.
-	 * @param dayOfMonth The day of the month.
-	 * @param hour The hour.
-	 * @param minutes The minutes.
-	 * @param second The second.
-	 * @return The date created with UTC timezone.
-	 */
+	/// Translate date to UTC date that can be used as a HTTP header value.
+	///
+	/// @param year The year.
+	/// @param month The month.
+	/// @param dayOfMonth The day of the month.
+	/// @param hour The hour.
+	/// @param minutes The minutes.
+	/// @param second The second.
+	/// @return The date created with UTC timezone.
 	static Date utcDate(int year, int month, int dayOfMonth, int hour, int minutes, int second) {
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.set(Calendar.YEAR, year);

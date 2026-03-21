@@ -27,17 +27,13 @@ package com.github.mjeanroy.junit.servers.jupiter;
 import com.github.mjeanroy.junit.servers.engine.EmbeddedServerRunner;
 import org.junit.jupiter.api.extension.ParameterContext;
 
-/**
- * A parameter resolver, used by {@link JunitServerExtension}.
- */
+/// A parameter resolver, used by [JunitServerExtension].
 interface ParameterResolverFunction {
 
-	/**
-	 * Resolve parameter value.
-	 *
-	 * @param parameterContext The parameter context.
-	 * @param serverAdapter The server that is already configured/started.
-	 * @return The parameter value.
-	 */
+	/// Resolve parameter value.
+	///
+	/// @param parameterContext The parameter context.
+	/// @param serverAdapter The server that is already configured/started.
+	/// @return The parameter value.
 	Object resolve(ParameterContext parameterContext, EmbeddedServerRunner serverAdapter);
 }

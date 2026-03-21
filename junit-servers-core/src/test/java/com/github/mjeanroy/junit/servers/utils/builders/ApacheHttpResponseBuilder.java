@@ -37,9 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Builder for {@link HttpResponse} instances.
- */
+/// Builder for [HttpResponse] instances.
 public class ApacheHttpResponseBuilder extends AbstractHttpResponseBuilder<HttpResponse, ApacheHttpResponseBuilder> {
 
 	@Override

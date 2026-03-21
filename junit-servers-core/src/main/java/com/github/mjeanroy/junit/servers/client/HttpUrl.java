@@ -39,42 +39,29 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
 import static com.github.mjeanroy.junit.servers.commons.core.Urls.ensureAbsolutePath;
 import static java.util.Collections.unmodifiableMap;
 
-/**
- * URL object without:
- *
- * <ul>
- *   <li>Authority part.</li>
- *   <li>Query string.</li>
- *   <li>Fragment.</li>
- * </ul>
- */
+/// URL object without:
+/// - Authority part.
+/// - Query string.
+/// - Fragment.
 public class HttpUrl {
 
-	/**
-	 * Default URL scheme.
-	 */
+	/// Default URL scheme.
 	private static final HttpScheme DEFAULT_SCHEME = HttpScheme.HTTP;
 
-	/**
-	 * Default URL host.
-	 */
+	/// Default URL host.
 	private static final String DEFAULT_HOST = "localhost";
 
-	/**
-	 * Default URL path.
-	 */
+	/// Default URL path.
 	private static final String DEFAULT_PATH = "/";
 
 	private static final String SCHEME_SEPARATOR = "://";
 	private static final String PORT_SEPARATOR = ":";
 
-	/**
-	 * Parse URL string to create new {@link HttpUrl} instance.
-	 *
-	 * @param endpoint URL value.
-	 * @return The final {@link HttpUrl} instance.
-	 * @throws IllegalArgumentException If URL is malformed.
-	 */
+	/// Parse URL string to create new [HttpUrl] instance.
+	///
+	/// @param endpoint URL value.
+	/// @return The final [HttpUrl] instance.
+	/// @throws IllegalArgumentException If URL is malformed.
 	public static HttpUrl parse(String endpoint) {
 		try {
 			final URL url = new URL(endpoint);
@@ -94,34 +81,24 @@ public class HttpUrl {
 		}
 	}
 
-	/**
-	 * URL Scheme.
-	 */
+	/// URL Scheme.
 	private final HttpScheme scheme;
 
-	/**
-	 * URL Host.
-	 */
+	/// URL Host.
 	private final String host;
 
-	/**
-	 * URL Port.
-	 */
+	/// URL Port.
 	private final int port;
 
-	/**
-	 * URL Path.
-	 */
+	/// URL Path.
 	private final String path;
 
-	/**
-	 * Create URL.
-	 *
-	 * @param scheme URL Scheme.
-	 * @param host URL Host.
-	 * @param port URL Port.
-	 * @param path URL Path.
-	 */
+	/// Create URL.
+	///
+	/// @param scheme URL Scheme.
+	/// @param host URL Host.
+	/// @param port URL Port.
+	/// @param path URL Path.
 	private HttpUrl(HttpScheme scheme, String host, int port, String path) {
 		this.scheme = scheme;
 		this.host = host;
@@ -129,51 +106,41 @@ public class HttpUrl {
 		this.path = path;
 	}
 
-	/**
-	 * Get URL Scheme.
-	 *
-	 * @return URL Scheme.
-	 * @see #scheme
-	 */
+	/// Get URL Scheme.
+	///
+	/// @return URL Scheme.
+	/// @see #scheme
 	public String getScheme() {
 		return scheme.getProtocol();
 	}
 
-	/**
-	 * Get URL Host.
-	 *
-	 * @return URL Host.
-	 * @see #host
-	 */
+	/// Get URL Host.
+	///
+	/// @return URL Host.
+	/// @see #host
 	public String getHost() {
 		return host;
 	}
 
-	/**
-	 * Get URL Port.
-	 *
-	 * @return URL Port.
-	 * @see #port
-	 */
+	/// Get URL Port.
+	///
+	/// @return URL Port.
+	/// @see #port
 	public int getPort() {
 		return port;
 	}
 
-	/**
-	 * Get URL Path.
-	 * @return URL Path.
-	 * @see #path
-	 */
+	/// Get URL Path.
+	/// @return URL Path.
+	/// @see #path
 	public String getPath() {
 		return path;
 	}
 
-	/**
-	 * Create new {@link URI} from URL fields.
-	 *
-	 * @return URI instance.
-	 * @throws IllegalArgumentException If {@code URI} cannot be built because of {@link URISyntaxException}.
-	 */
+	/// Create new [URI] from URL fields.
+	///
+	/// @return URI instance.
+	/// @throws IllegalArgumentException If `URI` cannot be built because of [URISyntaxException].
 	public URI toURI() {
 		final String protocol = scheme.getProtocol();
 		try {
@@ -227,46 +194,32 @@ public class HttpUrl {
 		return Objects.hash(scheme, host, port, path);
 	}
 
-	/**
-	 * Builder used to create {@link HttpUrl} instances.
-	 */
+	/// Builder used to create [HttpUrl] instances.
 	public static class Builder {
 
-		/**
-		 * The URL Scheme, default to {@code "http"}.
-		 * @see HttpUrl#DEFAULT_SCHEME
-		 */
+		/// The URL Scheme, default to `"http"`.
+		/// @see HttpUrl#DEFAULT_SCHEME
 		private HttpScheme scheme;
 
-		/**
-		 * The URL Host, default to {@code "localhost"}.
-		 * @see HttpUrl#DEFAULT_HOST
-		 */
+		/// The URL Host, default to `"localhost"`.
+		/// @see HttpUrl#DEFAULT_HOST
 		private String host;
 
-		/**
-		 * The URL Port, default to {@code 80} if scheme is {@code "http"}, 443 if scheme is {@code https}.
-		 */
+		/// The URL Port, default to `80` if scheme is `"http"`, 443 if scheme is `https`.
 		private Integer port;
 
-		/**
-		 * The URL Path, default to {@code "/"}.
-		 * @see HttpUrl#DEFAULT_PATH
-		 */
+		/// The URL Path, default to `"/"`.
+		/// @see HttpUrl#DEFAULT_PATH
 		private String path;
 
-		/**
-		 * Create builder.
-		 */
+		/// Create builder.
 		public Builder() {
 		}
 
-		/**
-		 * Update URL Scheme.
-		 *
-		 * @param scheme New URL Scheme.
-		 * @return The builder (for chaining).
-		 */
+		/// Update URL Scheme.
+		///
+		/// @param scheme New URL Scheme.
+		/// @return The builder (for chaining).
 		public Builder withScheme(String scheme) {
 			notNull(scheme, "scheme");
 
@@ -279,44 +232,36 @@ public class HttpUrl {
 			return this;
 		}
 
-		/**
-		 * Update URL Host.
-		 *
-		 * @param host New URL Host.
-		 * @return The builder (for chaining).
-		 */
+		/// Update URL Host.
+		///
+		/// @param host New URL Host.
+		/// @return The builder (for chaining).
 		public Builder withHost(String host) {
 			this.host = notNull(host, "host");
 			return this;
 		}
 
-		/**
-		 * Update URL Port.
-		 *
-		 * @param port New URL Port.
-		 * @return The builder (for chaining).
-		 */
+		/// Update URL Port.
+		///
+		/// @param port New URL Port.
+		/// @return The builder (for chaining).
 		public Builder withPort(int port) {
 			this.port = port;
 			return this;
 		}
 
-		/**
-		 * Update URL Path.
-		 *
-		 * @param path New URL Path.
-		 * @return The builder (for chaining).
-		 */
+		/// Update URL Path.
+		///
+		/// @param path New URL Path.
+		/// @return The builder (for chaining).
 		public Builder withPath(String path) {
 			this.path = notNull(path, "path");
 			return this;
 		}
 
-		/**
-		 * Create immutable {@link HttpUrl} instance from current field values.
-		 *
-		 * @return URL.
-		 */
+		/// Create immutable [HttpUrl] instance from current field values.
+		///
+		/// @return URL.
 		public HttpUrl build() {
 			final HttpScheme scheme = firstNonNull(this.scheme, DEFAULT_SCHEME);
 			final String host = firstNonNull(this.host, DEFAULT_HOST);
@@ -326,28 +271,18 @@ public class HttpUrl {
 		}
 	}
 
-	/**
-	 * Supported scheme: currently only {@code "http"} and {@code "https"} protocols.
-	 */
+	/// Supported scheme: currently only `"http"` and `"https"` protocols.
 	private enum HttpScheme {
-		/**
-		 * The {@code "http"} protocol.
-		 */
+		/// The `"http"` protocol.
 		HTTP("http", 80),
 
-		/**
-		 * The {@code "https"}protocol.
-		 */
+		/// The `"https"`protocol.
 		HTTPS("https", 443);
 
-		/**
-		 * The protocol identifier to use in URL.
-		 */
+		/// The protocol identifier to use in URL.
 		private final String protocol;
 
-		/**
-		 * The default port for the given protocol.
-		 */
+		/// The default port for the given protocol.
 		private final int defaultPort;
 
 		HttpScheme(String protocol, int defaultPort) {
@@ -355,20 +290,16 @@ public class HttpUrl {
 			this.defaultPort = defaultPort;
 		}
 
-		/**
-		 * Get default port for the given scheme.
-		 *
-		 * @return Default port.
-		 */
+		/// Get default port for the given scheme.
+		///
+		/// @return Default port.
 		private int getDefaultPort() {
 			return defaultPort;
 		}
 
-		/**
-		 * Get protocol prefix to use in URL.
-		 *
-		 * @return The protocol.
-		 */
+		/// Get protocol prefix to use in URL.
+		///
+		/// @return The protocol.
 		private String getProtocol() {
 			return protocol;
 		}
@@ -383,12 +314,10 @@ public class HttpUrl {
 			VALUES = unmodifiableMap(values);
 		}
 
-		/**
-		 * Parse protocol to get the corresponding scheme.
-		 *
-		 * @param protocol The protocol.
-		 * @return The scheme, {@code null} if it does not exist.
-		 */
+		/// Parse protocol to get the corresponding scheme.
+		///
+		/// @param protocol The protocol.
+		/// @return The scheme, `null` if it does not exist.
 		private static HttpScheme parse(String protocol) {
 			return VALUES.get(protocol.toLowerCase());
 		}

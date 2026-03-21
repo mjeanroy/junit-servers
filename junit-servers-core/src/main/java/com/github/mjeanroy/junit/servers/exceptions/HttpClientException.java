@@ -24,18 +24,14 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
-/**
- * Exception thrown when http request throws exception (such
- * as IOException).
- */
+/// Exception thrown when http request throws exception (such
+/// as IOException).
 @SuppressWarnings("serial")
 public class HttpClientException extends AbstractException {
 
-	/**
-	 * Create exception.
-	 *
-	 * @param throwable Original exception.
-	 */
+	/// Create exception.
+	///
+	/// @param throwable Original exception.
 	public HttpClientException(Throwable throwable) {
 		super(throwable);
 	}

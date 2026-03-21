@@ -30,25 +30,19 @@ import com.github.mjeanroy.junit.servers.servers.EmbeddedServer;
 import static com.github.mjeanroy.junit.servers.samples.utils.SpringWebTestUtils.verifySpringWebContext;
 import static com.github.mjeanroy.junit.servers.samples.utils.WebTestUtils.ensureIndexIsOk;
 
-/**
- * Static Embedded WebApp Utilities for various samples.
- */
+/// Static Embedded WebApp Utilities for various samples.
 public final class EmbeddedWebAppTestUtils {
 
 	// Ensure non instantiation.
 	private EmbeddedWebAppTestUtils() {
 	}
 
-	/**
-	 * Ensure that:
-	 * <ul>
-	 *   <li>Index view is OK.</li>
-	 *   <li>Web Application is correctly started and spring web-context can be retrieved.</li>
-	 * </ul>
-	 *
-	 * @param client The HTTP client used to query embedded server.
-	 * @param server The embedded server.
-	 */
+	/// Ensure that:
+	/// - Index view is OK.
+	/// - Web Application is correctly started and spring web-context can be retrieved.
+	///
+	/// @param client The HTTP client used to query embedded server.
+	/// @param server The embedded server.
 	public static void ensureWebAppIsOk(HttpClient client, EmbeddedServer<?> server) {
 		ensureIndexIsOk(client);
 		verifySpringWebContext(server);

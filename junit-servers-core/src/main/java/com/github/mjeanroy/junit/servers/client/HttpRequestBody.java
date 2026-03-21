@@ -26,23 +26,17 @@ package com.github.mjeanroy.junit.servers.client;
 
 import java.io.IOException;
 
-/**
- * HTTP Request Body.
- */
+/// HTTP Request Body.
 public interface HttpRequestBody {
 
-	/**
-	 * The request body content type, may be {@code null}.
-	 *
-	 * @return The content type.
-	 */
+	/// The request body content type, may be `null`.
+	///
+	/// @return The content type.
 	String getContentType();
 
-	/**
-	 * The request body.
-	 *
-	 * @return Request body.
-	 * @throws IOException If an error occurs while reading request body.
-	 */
+	/// The request body.
+	///
+	/// @return Request body.
+	/// @throws IOException If an error occurs while reading request body.
 	byte[] getBody() throws IOException;
 }

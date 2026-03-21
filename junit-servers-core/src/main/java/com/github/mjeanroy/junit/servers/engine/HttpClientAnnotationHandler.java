@@ -39,30 +39,22 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNu
 import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.getter;
 import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.setter;
 
-/**
- * Annotation handler that will set simple http client implementation
- * in test classes.
- */
+/// Annotation handler that will set simple http client implementation
+/// in test classes.
 class HttpClientAnnotationHandler extends AbstractAnnotationHandler {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(HttpClientAnnotationHandler.class);
 
-	/**
-	 * Create new handler.
-	 * @param server Embedded server.
-	 * @return Handler.
-	 * @throws NullPointerException if server is null.
-	 */
+	/// Create new handler.
+	/// @param server Embedded server.
+	/// @return Handler.
+	/// @throws NullPointerException if server is null.
 	static AnnotationHandler newHttpClientAnnotationHandler(EmbeddedServer<?> server) {
 		return new HttpClientAnnotationHandler(notNull(server, "server"));
 	}
 
-	/**
-	 * Embedded server that will be used with http client.
-	 */
+	/// Embedded server that will be used with http client.
 	private final EmbeddedServer<?> server;
 
 	// Use static factory instead

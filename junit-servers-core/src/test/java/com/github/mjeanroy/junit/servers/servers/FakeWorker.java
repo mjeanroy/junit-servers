@@ -28,57 +28,43 @@ import com.github.mjeanroy.junit.servers.utils.impl.FakeEmbeddedServer;
 
 import java.util.concurrent.CountDownLatch;
 
-/**
- * Worker that is used to test thread safety of {@link AbstractEmbeddedServer} class.
- */
+/// Worker that is used to test thread safety of [AbstractEmbeddedServer] class.
 class FakeWorker implements Runnable {
 
 	private static final Operation START_OP = AbstractEmbeddedServer::start;
 
 	private static final Operation STOP_OP = AbstractEmbeddedServer::stop;
 
-	/**
-	 * Create worker that will start {@code server} (i.e call {@code server.start()}.
-	 *
-	 * @param server The server.
-	 * @param startSignal The signal that will let {@code start} method to be called.
-	 * @param doneSignal The signal that will be released when {@code start} has been called.
-	 * @return The worker.
-	 */
+	/// Create worker that will start `server` (i.e call `server.start()`.
+	///
+	/// @param server The server.
+	/// @param startSignal The signal that will let `start` method to be called.
+	/// @param doneSignal The signal that will be released when `start` has been called.
+	/// @return The worker.
 	static FakeWorker startWorker(FakeEmbeddedServer server, CountDownLatch startSignal, CountDownLatch doneSignal) {
 		return new FakeWorker(START_OP, server, startSignal, doneSignal);
 	}
 
-	/**
-	 * Create worker that will stop {@code server} (i.e call {@code server.stop()}.
-	 *
-	 * @param server The server.
-	 * @param startSignal The signal that will let {@code stop} method to be called.
-	 * @param doneSignal The signal that will be released when {@code stop} has been called.
-	 * @return The worker.
-	 */
+	/// Create worker that will stop `server` (i.e call `server.stop()`.
+	///
+	/// @param server The server.
+	/// @param startSignal The signal that will let `stop` method to be called.
+	/// @param doneSignal The signal that will be released when `stop` has been called.
+	/// @return The worker.
 	static FakeWorker stopWorker(FakeEmbeddedServer server, CountDownLatch startSignal, CountDownLatch doneSignal) {
 		return new FakeWorker(STOP_OP, server, startSignal, doneSignal);
 	}
 
-	/**
-	 * The server.
-	 */
+	/// The server.
 	private final FakeEmbeddedServer server;
 
-	/**
-	 * The signal that will let {@link #operation} method to be called.
-	 */
+	/// The signal that will let [#operation] method to be called.
 	private final CountDownLatch startSignal;
 
-	/**
-	 * The signal that will be called once {@link #operation} has been called.
-	 */
+	/// The signal that will be called once [#operation] has been called.
 	private final CountDownLatch doneSignal;
 
-	/**
-	 * The server operation.
-	 */
+	/// The server operation.
 	private final Operation operation;
 
 	// Create the worker.

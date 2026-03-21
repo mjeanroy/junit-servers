@@ -30,29 +30,23 @@ import org.eclipse.jetty.webapp.WebInfConfiguration;
 
 import static com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration.defaultConfiguration;
 
-/**
- * Jetty Embedded Server.
- *
- * @deprecated Use {@code junit-servers-jetty-9} instead.
- */
+/// Jetty Embedded Server.
+///
+/// @deprecated Use `junit-servers-jetty-9` instead.
 @Deprecated
 public class EmbeddedJetty extends AbstractEmbeddedJetty<EmbeddedJettyConfiguration> {
 
 	private static final Logger log = LoggerFactory.getLogger(EmbeddedJetty.class);
 
-	/**
-	 * Build default embedded jetty server.
-	 */
+	/// Build default embedded jetty server.
 	public EmbeddedJetty() {
 		this(defaultConfiguration());
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", EmbeddedJetty.class);
 	}
 
-	/**
-	 * Build embedded jetty server.
-	 *
-	 * @param configuration Server configuration.
-	 */
+	/// Build embedded jetty server.
+	///
+	/// @param configuration Server configuration.
 	public EmbeddedJetty(EmbeddedJettyConfiguration configuration) {
 		super(configuration);
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", EmbeddedJetty.class);

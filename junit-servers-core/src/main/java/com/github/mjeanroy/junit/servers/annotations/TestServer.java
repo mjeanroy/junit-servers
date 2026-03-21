@@ -31,10 +31,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Annotation that can be used to inject embedded server
- * into unit tests.
- */
+/// Annotation that can be used to inject embedded server into unit tests.
 @Retention(RetentionPolicy.RUNTIME)
 @Target({
 	ElementType.FIELD,

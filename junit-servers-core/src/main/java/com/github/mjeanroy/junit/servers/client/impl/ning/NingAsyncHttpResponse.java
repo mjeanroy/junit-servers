@@ -40,23 +40,17 @@ import java.util.Objects;
 
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
-/**
- * Implementation of {@link HttpResponse} delegating calls to original {@link Response}
- * instance.
- */
+/// Implementation of [HttpResponse] delegating calls to original [Response]
+/// instance.
 final class NingAsyncHttpResponse extends AbstractHttpResponse {
 
-	/**
-	 * The original response.
-	 */
+	/// The original response.
 	private final Response response;
 
-	/**
-	 * Create the response from AsyncHttpClient.
-	 *
-	 * @param response The original response.
-	 * @param duration Request duration.
-	 */
+	/// Create the response from AsyncHttpClient.
+	///
+	/// @param response The original response.
+	/// @param duration Request duration.
 	NingAsyncHttpResponse(Response response, long duration) {
 		super(duration);
 		this.response = notNull(response, "Response");

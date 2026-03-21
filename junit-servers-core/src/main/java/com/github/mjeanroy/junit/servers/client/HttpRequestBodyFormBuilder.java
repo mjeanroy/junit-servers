@@ -37,30 +37,22 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.doesN
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static java.util.Collections.singleton;
 
-/**
- * A builder for {@link HttpRequestBodyForm}.
- */
+/// A builder for [HttpRequestBodyForm].
 public final class HttpRequestBodyFormBuilder {
 
-	/**
-	 * Request body parameters.
-	 */
+	/// Request body parameters.
 	private final Map<String, HttpParameter> parameters;
 
-	/**
-	 * Create builder without any parameters.
-	 */
+	/// Create builder without any parameters.
 	HttpRequestBodyFormBuilder() {
 		this.parameters = new LinkedHashMap<>();
 	}
 
-	/**
-	 * Add parameter.
-	 *
-	 * @param parameter The Parameter.
-	 * @return The builder.
-	 * @throws NullPointerException If {@code parameter} is {@code null}
-	 */
+	/// Add parameter.
+	///
+	/// @param parameter The Parameter.
+	/// @return The builder.
+	/// @throws NullPointerException If `parameter` is `null`
 	public HttpRequestBodyFormBuilder add(HttpParameter parameter) {
 		notNull(parameter, "HTTP Parameter must not be null");
 		return doAddAll(
@@ -68,29 +60,25 @@ public final class HttpRequestBodyFormBuilder {
 		);
 	}
 
-	/**
-	 * Add parameter.
-	 *
-	 * @param name Parameter name.
-	 * @param value Parameter value.
-	 * @return The builder.
-	 * @throws NullPointerException If {@code name} is {@code null}
-	 * @throws IllegalArgumentException If {@code name} is empty or blank.
-	 */
+	/// Add parameter.
+	///
+	/// @param name Parameter name.
+	/// @param value Parameter value.
+	/// @return The builder.
+	/// @throws NullPointerException If `name` is `null`
+	/// @throws IllegalArgumentException If `name` is empty or blank.
 	public HttpRequestBodyFormBuilder add(String name, String value) {
 		return add(
 			HttpParameter.of(name, value)
 		);
 	}
 
-	/**
-	 * Add all parameters.
-	 *
-	 * @param parameters Parameters.
-	 * @return The builder.
-	 * @throws NullPointerException If one of given parameters name is {@code null}
-	 * @throws IllegalArgumentException If one of given parameters name is empty or blank.
-	 */
+	/// Add all parameters.
+	///
+	/// @param parameters Parameters.
+	/// @return The builder.
+	/// @throws NullPointerException If one of given parameters name is `null`
+	/// @throws IllegalArgumentException If one of given parameters name is empty or blank.
 	public HttpRequestBodyFormBuilder addAll(Map<String, String> parameters) {
 		List<HttpParameter> params = new ArrayList<>(parameters.size());
 
@@ -103,24 +91,20 @@ public final class HttpRequestBodyFormBuilder {
 		return doAddAll(params);
 	}
 
-	/**
-	 * Add all parameters.
-	 *
-	 * @param parameters Parameters.
-	 * @return The builder.
-	 * @throws NullPointerException If one of given parameters {@code null}
-	 */
+	/// Add all parameters.
+	///
+	/// @param parameters Parameters.
+	/// @return The builder.
+	/// @throws NullPointerException If one of given parameters `null`
 	public HttpRequestBodyFormBuilder addAll(Collection<HttpParameter> parameters) {
 		return doAddAll(parameters);
 	}
 
-	/**
-	 * Add all parameters.
-	 *
-	 * @param parameters Parameters.
-	 * @return The builder.
-	 * @throws NullPointerException If one of given parameters {@code null}
-	 */
+	/// Add all parameters.
+	///
+	/// @param parameters Parameters.
+	/// @return The builder.
+	/// @throws NullPointerException If one of given parameters `null`
 	private HttpRequestBodyFormBuilder doAddAll(Collection<HttpParameter> parameters) {
 		doesNotContainNull(parameters, "parameters");
 
@@ -131,11 +115,9 @@ public final class HttpRequestBodyFormBuilder {
 		return this;
 	}
 
-	/**
-	 * Build request body.
-	 *
-	 * @return The request body.
-	 */
+	/// Build request body.
+	///
+	/// @return The request body.
 	public HttpRequestBody build() {
 		return new HttpRequestBodyForm(parameters.values());
 	}

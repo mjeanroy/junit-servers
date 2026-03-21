@@ -24,39 +24,26 @@
 
 package com.github.mjeanroy.junit.servers.engine;
 
-/**
- * A test adapter: this is a class that implements commons test lifecycle hooks (before-all, before, after-all,
- * after), thus will be able to be used in various test engine:
- *
- * <ul>
- *   <li>JUnit 4 Rules.</li>
- *   <li>JUnit 4 Runner.</li>
- *   <li>JUnit Jupiter Extensions.</li>
- * </ul>
- */
+/// A test adapter: this is a class that implements commons test lifecycle hooks (before-all, before, after-all,
+/// after), thus will be able to be used in various test engine:
+/// - JUnit 4 Rules.
+/// - JUnit 4 Runner.
+/// - JUnit Jupiter Extensions.
 public interface TestRunner {
 
-	/**
-	 * Method called before instantiating the test class and any test instance.
-	 */
+	/// Method called before instantiating the test class and any test instance.
 	void beforeAll();
 
-	/**
-	 * Method called after all tests have been run.
-	 */
+	/// Method called after all tests have been run.
 	void afterAll();
 
-	/**
-	 * Method called before running unit test.
-	 *
-	 * @param target The test class instance.
-	 */
+	/// Method called before running unit test.
+	///
+	/// @param target The test class instance.
 	void beforeEach(Object target);
 
-	/**
-	 * Method called after running unit test.
-	 *
-	 * @param target The test class instance.
-	 */
+	/// Method called after running unit test.
+	///
+	/// @param target The test class instance.
 	void afterEach(Object target);
 }

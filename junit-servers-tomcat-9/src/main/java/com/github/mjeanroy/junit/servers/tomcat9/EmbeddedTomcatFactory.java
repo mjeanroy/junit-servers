@@ -30,31 +30,25 @@ import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 import com.github.mjeanroy.junit.servers.tomcat.AbstractEmbeddedTomcatFactory;
 import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 
-/**
- * Static factories for {@link EmbeddedTomcat} that can be used in JUnit 4 Runner implementation
- * or JUnit Jupiter Extension.
- */
+/// Static factories for [EmbeddedTomcat] that can be used in JUnit 4 Runner implementation
+/// or JUnit Jupiter Extension.
 public final class EmbeddedTomcatFactory extends AbstractEmbeddedTomcatFactory<EmbeddedTomcat> {
 
 	private static final EmbeddedTomcatFactory INSTANCE = new EmbeddedTomcatFactory();
 
-	/**
-	 * Instantiate embedded tomcat from given test class.
-	 *
-	 * @param testClass The test class.
-	 * @return Created embedded tomcat instance.
-	 */
+	/// Instantiate embedded tomcat from given test class.
+	///
+	/// @param testClass The test class.
+	/// @return Created embedded tomcat instance.
 	public static EmbeddedTomcat createFrom(Class<?> testClass) {
 		return INSTANCE.instantiateFrom(testClass, null);
 	}
 
-	/**
-	 * Instantiate embedded tomcat from given test class, with given provided configuration (may be {@code null}).
-	 *
-	 * @param testClass The test class.
-	 * @param configuration The configuration to use, may be {@code null}.
-	 * @return Created embedded tomcat instance.
-	 */
+	/// Instantiate embedded tomcat from given test class, with given provided configuration (may be `null`).
+	///
+	/// @param testClass The test class.
+	/// @param configuration The configuration to use, may be `null`.
+	/// @return Created embedded tomcat instance.
 	public static EmbeddedTomcat createFrom(Class<?> testClass, AbstractConfiguration configuration) {
 		if (configuration == null) {
 			return createFrom(testClass);

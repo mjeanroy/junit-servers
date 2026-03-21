@@ -32,21 +32,17 @@ import javax.servlet.ServletContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
-/**
- * Static Spring-Web Utilities for various samples.
- */
+/// Static Spring-Web Utilities for various samples.
 final class SpringWebTestUtils {
 
 	// Ensure non instantiation.
 	private SpringWebTestUtils() {
 	}
 
-	/**
-	 * Ensure the servlet context can be retrieved from embedded server, and spring web application
-	 * context can be retrieved from it.
-	 *
-	 * @param server The embedded server.
-	 */
+	/// Ensure the servlet context can be retrieved from embedded server, and spring web application
+	/// context can be retrieved from it.
+	///
+	/// @param server The embedded server.
 	static void verifySpringWebContext(EmbeddedServer<?> server) {
 		// Try to get servlet context
 		ServletContext servletContext = (ServletContext) server.getServletContext();

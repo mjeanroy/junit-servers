@@ -24,24 +24,20 @@
 
 package com.github.mjeanroy.junit.servers.commons.lang;
 
-/**
- * Static Object Utilities.
- */
+/// Static Object Utilities.
 public final class Objects {
 
 	// Ensure non instantiation.
 	private Objects() {
 	}
 
-	/**
-	 * Get first object that is not {@code null}, may returns {@code null}
-	 * if both parameter are.
-	 *
-	 * @param o1 First object.
-	 * @param o2 Second object.
-	 * @param <T> Type of both parameter.
-	 * @return The first non {@code null} parameter.
-	 */
+	/// Get first object that is not `null`, may returns `null`
+	/// if both parameter are.
+	///
+	/// @param o1 First object.
+	/// @param o2 Second object.
+	/// @param <T> Type of both parameter.
+	/// @return The first non `null` parameter.
 	public static <T> T firstNonNull(T o1, T o2) {
 		return o1 == null ? o2 : o1;
 	}

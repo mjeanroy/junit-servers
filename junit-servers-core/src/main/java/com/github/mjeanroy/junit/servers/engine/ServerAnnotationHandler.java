@@ -35,30 +35,22 @@ import java.lang.reflect.Field;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.reflect.Reflections.setter;
 
-/**
- * Annotation handler that will set embedded server to a field
- * on a given class instance.
- */
+/// Annotation handler that will set embedded server to a field
+/// on a given class instance.
 class ServerAnnotationHandler extends AbstractAnnotationHandler {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(ServerAnnotationHandler.class);
 
-	/**
-	 * Create new handler.
-	 * @param server Embedded server.
-	 * @return Handler.
-	 * @throws NullPointerException if server is null.
-	 */
+	/// Create new handler.
+	/// @param server Embedded server.
+	/// @return Handler.
+	/// @throws NullPointerException if server is null.
 	static AnnotationHandler newServerAnnotationHandler(EmbeddedServer<?> server) {
 		return new ServerAnnotationHandler(notNull(server, "server"));
 	}
 
-	/**
-	 * Embedded server set on class fields.
-	 */
+	/// Embedded server set on class fields.
 	private final EmbeddedServer<?> server;
 
 	// Use static factory instead

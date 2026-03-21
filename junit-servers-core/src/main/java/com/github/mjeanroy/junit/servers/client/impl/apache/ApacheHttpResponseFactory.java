@@ -27,25 +27,20 @@ package com.github.mjeanroy.junit.servers.client.impl.apache;
 import com.github.mjeanroy.junit.servers.client.impl.DefaultHttpResponse;
 import org.apache.http.HttpResponse;
 
-/**
- * Factory to produce {@link com.github.mjeanroy.junit.servers.client.HttpResponse} from {@link HttpResponse}.
- *
- * @see <a href="http://hc.apache.org/httpcomponents-client-ga/index.html">http://hc.apache.org/httpcomponents-client-ga/index.html</a>
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
- */
+/// Factory to produce [com.github.mjeanroy.junit.servers.client.HttpResponse] from [HttpResponse].
+///
+/// @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#APACHE_HTTP_CLIENT
 final class ApacheHttpResponseFactory {
 
 	// Ensure non instantiation.
 	private ApacheHttpResponseFactory() {
 	}
 
-	/**
-	 * Create the final {@link DefaultHttpResponse} instance.
-	 *
-	 * @param response The Apache response.
-	 * @param duration The request duration.
-	 * @return The HTTP response.
-	 */
+	/// Create the final [DefaultHttpResponse] instance.
+	///
+	/// @param response The Apache response.
+	/// @param duration The request duration.
+	/// @return The HTTP response.
 	static com.github.mjeanroy.junit.servers.client.HttpResponse of(HttpResponse response, long duration) {
 		return new ApacheHttpResponse(response, duration);
 	}

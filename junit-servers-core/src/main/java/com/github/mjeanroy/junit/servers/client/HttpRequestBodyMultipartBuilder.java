@@ -35,53 +35,39 @@ import java.util.Objects;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
-/**
- * A builder for {@link HttpRequestBodyMultipart} request.
- */
+/// A builder for [HttpRequestBodyMultipart] request.
 public final class HttpRequestBodyMultipartBuilder {
 
-	/**
-	 * The content type, default is {@link MediaType#MULTIPART_FORM_DATA}.
-	 */
+	/// The content type, default is [MediaType#MULTIPART_FORM_DATA].
 	private String contentType;
 
-	/**
-	 * Multipart boundaries.
-	 */
+	/// Multipart boundaries.
 	private String boundaries;
 
-	/**
-	 * Request parts.
-	 */
+	/// Request parts.
 	private final List<HttpRequestBodyPart> parts;
 
-	/**
-	 * Create multipart request builder.
-	 */
+	/// Create multipart request builder.
 	HttpRequestBodyMultipartBuilder() {
 		this.contentType = MediaType.MULTIPART_FORM_DATA;
 		this.parts = new ArrayList<>();
 	}
 
-	/**
-	 * Define new boundaries value.
-	 *
-	 * @param boundaries New {@link #boundaries}
-	 * @return The builder.
-	 */
+	/// Define new boundaries value.
+	///
+	/// @param boundaries New [#boundaries]
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder withBoundaries(String boundaries) {
 		this.boundaries = notBlank(boundaries, "boundaries");
 		return this;
 	}
 
-	/**
-	 * Add {@code "form-data"} part. Instead of a "simple" part, a {@code Content-Disposition} header
-	 * will be automatically added with this part, such as: {@code Content-Disposition: form-data; name="<name>"}.
-	 *
-	 * @param body Part body.
-	 * @param name The name attribute of {@code COntent-Disposition} header.
-	 * @return The builder.
-	 */
+	/// Add `"form-data"` part. Instead of a "simple" part, a `Content-Disposition` header
+	/// will be automatically added with this part, such as: `Content-Disposition: form-data; name="<name>"`.
+	///
+	/// @param body Part body.
+	/// @param name The name attribute of `COntent-Disposition` header.
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder addFormDataPart(HttpRequestBody body, String name) {
 		notNull(body, "body");
 		notBlank(name, "name");
@@ -99,15 +85,13 @@ public final class HttpRequestBodyMultipartBuilder {
 	}
 
 
-	/**
-	 * Add {@code "form-data"} part. Instead of a "simple" part, a {@code Content-Disposition} header
-	 * will be automatically added with this part, such as: {@code Content-Disposition: form-data; name="<name>"}.
-	 *
-	 * @param body Part body.
-	 * @param name The name attribute of {@code Content-Disposition} header.
-	 * @param filename The filename attribute {@code Content-Disposition} header.
-	 * @return The builder.
-	 */
+	/// Add `"form-data"` part. Instead of a "simple" part, a `Content-Disposition` header
+	/// will be automatically added with this part, such as: `Content-Disposition: form-data; name="<name>"`.
+	///
+	/// @param body Part body.
+	/// @param name The name attribute of `Content-Disposition` header.
+	/// @param filename The filename attribute `Content-Disposition` header.
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder addFormDataPart(HttpRequestBody body, String name, String filename) {
 		notNull(body, "body");
 		notBlank(name, "name");
@@ -118,14 +102,12 @@ public final class HttpRequestBodyMultipartBuilder {
 		);
 	}
 
-	/**
-	 * Add {@code "form-data"} part. Instead of a "simple" part, a {@code Content-Disposition} header
-	 * will be automatically added with this part, such as: {@code Content-Disposition: form-data; name="<name>"}.
-	 *
-	 * @param name The name attribute of {@code COntent-Disposition} header.
-	 * @param value Part raw value.
-	 * @return The builder.
-	 */
+	/// Add `"form-data"` part. Instead of a "simple" part, a `Content-Disposition` header
+	/// will be automatically added with this part, such as: `Content-Disposition: form-data; name="<name>"`.
+	///
+	/// @param name The name attribute of `COntent-Disposition` header.
+	/// @param value Part raw value.
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder addFormDataPart(String name, String value) {
 		notBlank(name, "name");
 		notNull(value, "value");
@@ -135,16 +117,13 @@ public final class HttpRequestBodyMultipartBuilder {
 		);
 	}
 
-	/**
-	 * Add {@code "form-data"} part. Instead of a "simple" part, a {@code Content-Disposition} header
-	 * will be automatically added with this part, such as: {@code Content-Disposition: form-data; name="<name>"; filename="<filename>"}.
-	 *
-	 * The name of the file in parameter will be automatically used as the {@code filename} attribute of {@code Content-Disposition} header.
-	 *
-	 * @param file The file being sent.
-	 * @param name The name attribute of {@code COntent-Disposition} header.
-	 * @return The builder.
-	 */
+	/// Add `"form-data"` part. Instead of a "simple" part, a `Content-Disposition` header
+	/// will be automatically added with this part, such as: `Content-Disposition: form-data; name="<name>"; filename="<filename>"`.
+	/// The name of the file in parameter will be automatically used as the `filename` attribute of `Content-Disposition` header.
+	///
+	/// @param file The file being sent.
+	/// @param name The name attribute of `COntent-Disposition` header.
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder addFormDataPart(File file, String name) {
 		notNull(file, "file");
 		notBlank(name, "name");
@@ -154,15 +133,13 @@ public final class HttpRequestBodyMultipartBuilder {
 		);
 	}
 
-	/**
-	 * Add {@code "form-data"} part. Instead of a "simple" part, a {@code Content-Disposition} header
-	 * will be automatically added with this part, such as: {@code Content-Disposition: form-data; name="<name>"; filename="<filename>"}.
-	 *
-	 * @param file The file being sent.
-	 * @param name The name attribute of {@code COntent-Disposition} header.
-	 * @param filename The filename attribute {@code Content-Disposition} header.
-	 * @return The builder.
-	 */
+	/// Add `"form-data"` part. Instead of a "simple" part, a `Content-Disposition` header
+	/// will be automatically added with this part, such as: `Content-Disposition: form-data; name="<name>"; filename="<filename>"`.
+	///
+	/// @param file The file being sent.
+	/// @param name The name attribute of `COntent-Disposition` header.
+	/// @param filename The filename attribute `Content-Disposition` header.
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder addFormDataPart(File file, String name, String filename) {
 		notNull(file, "file");
 		notBlank(name, "name");
@@ -173,14 +150,12 @@ public final class HttpRequestBodyMultipartBuilder {
 		);
 	}
 
-	/**
-	 * Add {@code "form-data"} part. Instead of a "simple" part, a {@code Content-Disposition} header
-	 * will be automatically added with this part, such as: {@code Content-Disposition: form-data; name="<name>"; filename="<filename>"}.
-	 *
-	 * @param path The file being sent.
-	 * @param name The name attribute of {@code COntent-Disposition} header.
-	 * @return The builder.
-	 */
+	/// Add `"form-data"` part. Instead of a "simple" part, a `Content-Disposition` header
+	/// will be automatically added with this part, such as: `Content-Disposition: form-data; name="<name>"; filename="<filename>"`.
+	///
+	/// @param path The file being sent.
+	/// @param name The name attribute of `COntent-Disposition` header.
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder addFormDataPart(Path path, String name) {
 		notNull(path, "path");
 		notBlank(name, "name");
@@ -190,15 +165,13 @@ public final class HttpRequestBodyMultipartBuilder {
 		);
 	}
 
-	/**
-	 * Add {@code "form-data"} part. Instead of a "simple" part, a {@code Content-Disposition} header
-	 * will be automatically added with this part, such as: {@code Content-Disposition: form-data; name="<name>"; filename="<filename>"}.
-	 *
-	 * @param path The file being sent.
-	 * @param name The name attribute of {@code COntent-Disposition} header.
-	 * @param filename The filename attribute {@code COntent-Disposition} header.
-	 * @return The builder.
-	 */
+	/// Add `"form-data"` part. Instead of a "simple" part, a `Content-Disposition` header
+	/// will be automatically added with this part, such as: `Content-Disposition: form-data; name="<name>"; filename="<filename>"`.
+	///
+	/// @param path The file being sent.
+	/// @param name The name attribute of `COntent-Disposition` header.
+	/// @param filename The filename attribute `COntent-Disposition` header.
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder addFormDataPart(Path path, String name, String filename) {
 		notNull(path, "path");
 		notBlank(name, "name");
@@ -209,73 +182,59 @@ public final class HttpRequestBodyMultipartBuilder {
 		);
 	}
 
-	/**
-	 * Add part to request body.
-	 *
-	 * @param part Part to add.
-	 * @return The builder.
-	 */
+	/// Add part to request body.
+	///
+	/// @param part Part to add.
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder addPart(HttpRequestBodyPart part) {
 		notNull(part, "part");
 		this.parts.add(part);
 		return this;
 	}
 
-	/**
-	 * Update content-type to {@code "multipart/form-data"}.
-	 *
-	 * @return The builder.
-	 */
+	/// Update content-type to `"multipart/form-data"`.
+	///
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder asMultipartFormData() {
 		this.contentType = MediaType.MULTIPART_FORM_DATA;
 		return this;
 	}
 
-	/**
-	 * Update content-type to {@code "multipart/mixed"}.
-	 *
-	 * @return The builder.
-	 */
+	/// Update content-type to `"multipart/mixed"`.
+	///
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder asMultipartMixed() {
 		this.contentType = MediaType.MULTIPART_MIXED;
 		return this;
 	}
 
-	/**
-	 * Update content-type to {@code "multipart/alternative"}.
-	 *
-	 * @return The builder.
-	 */
+	/// Update content-type to `"multipart/alternative"`.
+	///
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder asMultipartAlternative() {
 		this.contentType = MediaType.MULTIPART_ALTERNATIVE;
 		return this;
 	}
 
-	/**
-	 * Update content-type to {@code "multipart/digest"}.
-	 *
-	 * @return The builder.
-	 */
+	/// Update content-type to `"multipart/digest"`.
+	///
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder asMultipartDigest() {
 		this.contentType = MediaType.MULTIPART_DIGEST;
 		return this;
 	}
 
-	/**
-	 * Update content-type to {@code "multipart/parallel"}.
-	 *
-	 * @return The builder.
-	 */
+	/// Update content-type to `"multipart/parallel"`.
+	///
+	/// @return The builder.
 	public HttpRequestBodyMultipartBuilder asMultipartParallel() {
 		this.contentType = MediaType.MULTIPART_PARALLEL;
 		return this;
 	}
 
-	/**
-	 * Build multipart body.
-	 *
-	 * @return The multipart body.
-	 */
+	/// Build multipart body.
+	///
+	/// @return The multipart body.
 	public HttpRequestBody build() {
 		return new HttpRequestBodyMultipart(contentType, boundaries, parts);
 	}

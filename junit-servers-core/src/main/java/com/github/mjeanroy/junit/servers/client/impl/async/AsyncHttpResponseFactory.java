@@ -27,25 +27,20 @@ package com.github.mjeanroy.junit.servers.client.impl.async;
 import com.github.mjeanroy.junit.servers.client.HttpResponse;
 import org.asynchttpclient.Response;
 
-/**
- * Factory that produce {@link HttpResponse} from {@link Response} instances.
- *
- * @see <a href="https://asynchttpclient.github.io/">https://asynchttpclient.github.io/</a>
- * @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#ASYNC_HTTP_CLIENT
- */
+/// Factory that produce [HttpResponse] from [Response] instances.
+///
+/// @see com.github.mjeanroy.junit.servers.client.HttpClientStrategy#ASYNC_HTTP_CLIENT
 final class AsyncHttpResponseFactory {
 
 	// Ensure non instantiation.
 	private AsyncHttpResponseFactory() {
 	}
 
-	/**
-	 * Create the final {@link HttpResponse} instance.
-	 *
-	 * @param response The AsyncHttpClient response.
-	 * @param duration The request duration.
-	 * @return The HTTP response.
-	 */
+	/// Create the final [HttpResponse] instance.
+	///
+	/// @param response The AsyncHttpClient response.
+	/// @param duration The request duration.
+	/// @return The HTTP response.
 	static HttpResponse of(Response response, long duration) {
 		return new AsyncHttpResponse(response, duration);
 	}

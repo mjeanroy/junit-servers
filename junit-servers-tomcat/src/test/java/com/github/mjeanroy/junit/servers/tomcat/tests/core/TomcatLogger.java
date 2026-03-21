@@ -30,20 +30,14 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
-/**
- * An implementation of Java Util Logging for Tomcat, delegating all call to
- * a slf4j logger.
- *
- * <br>
- *
- * Note that this class will automatically be loaded by tomcat using the Service Provider
- * Interface.
- */
+/// An implementation of Java Util Logging for Tomcat, delegating all call to
+/// a slf4j logger.
+///
+/// Note that this class will automatically be loaded by tomcat using the Service Provider
+/// Interface.
 public class TomcatLogger implements Log {
 
-	/**
-	 * The internal SLF4J Logger.
-	 */
+	/// The internal SLF4J Logger.
 	private final Logger logger;
 
 	// this constructor is important, otherwise the ServiceLoader cannot start

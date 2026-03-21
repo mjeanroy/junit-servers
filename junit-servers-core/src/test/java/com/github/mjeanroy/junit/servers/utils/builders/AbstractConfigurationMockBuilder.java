@@ -28,16 +28,12 @@ import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 
 import static org.mockito.Mockito.mock;
 
-/**
- * Builder for mock instances of {@link AbstractConfiguration}.
- */
+/// Builder for mock instances of [AbstractConfiguration].
 public class AbstractConfigurationMockBuilder {
 
-	/**
-	 * Create new mock instance of {@link AbstractConfiguration}.
-	 *
-	 * @return The mock instance.
-	 */
+	/// Create new mock instance of [AbstractConfiguration].
+	///
+	/// @return The mock instance.
 	public AbstractConfiguration build() {
 		return mock(AbstractConfiguration.class, "MockAbstractConfiguration");
 	}

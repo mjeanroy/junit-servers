@@ -32,10 +32,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * A simple annotation that can be used to start wiremock before all test (and stop
- * it after all tests).
- */
+/// A simple annotation that can be used to start wiremock before all test (and stop
+/// it after all tests).
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented

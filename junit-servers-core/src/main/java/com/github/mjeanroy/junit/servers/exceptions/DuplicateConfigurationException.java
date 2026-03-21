@@ -24,16 +24,12 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
-/**
- * Error thrown when multiple server configuration are detected in given test class.
- */
+/// Error thrown when multiple server configuration are detected in given test class.
 public class DuplicateConfigurationException extends AbstractEmbeddedServerException {
 
-	/**
-	 * Create exception.
-	 *
-	 * @param message Error message.
-	 */
+	/// Create exception.
+	///
+	/// @param message Error message.
 	public DuplicateConfigurationException(String message) {
 		super(message);
 	}

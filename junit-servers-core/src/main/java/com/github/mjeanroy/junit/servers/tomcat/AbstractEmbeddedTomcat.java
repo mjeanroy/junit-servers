@@ -44,35 +44,25 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isEmpty;
 import static com.github.mjeanroy.junit.servers.commons.lang.Strings.isNotBlank;
 import static com.github.mjeanroy.junit.servers.commons.lang.Strings.trim;
 
-/**
- * Embedded server using tomcat as implementation.
- *
- * @param <CONFIGURATION> The tomcat configuration implementation.
- */
+/// Embedded server using tomcat as implementation.
+///
+/// @param <CONFIGURATION> The tomcat configuration implementation.
 public abstract class AbstractEmbeddedTomcat<
 	CONFIGURATION extends AbstractEmbeddedTomcatConfiguration
 > extends AbstractEmbeddedServer<Tomcat, CONFIGURATION> {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(AbstractEmbeddedTomcat.class);
 
-	/**
-	 * Tomcat instance.
-	 */
+	/// Tomcat instance.
 	private final Tomcat tomcat;
 
-	/**
-	 * Tomcat context.
-	 */
+	/// Tomcat context.
 	private volatile Context context;
 
-	/**
-	 * Build embedded tomcat.
-	 *
-	 * @param configuration Tomcat configuration.
-	 */
+	/// Build embedded tomcat.
+	///
+	/// @param configuration Tomcat configuration.
 	protected AbstractEmbeddedTomcat(CONFIGURATION configuration) {
 		super(configuration);
 		this.tomcat = initServer();
@@ -106,12 +96,10 @@ public abstract class AbstractEmbeddedTomcat<
 		}
 	}
 
-	/**
-	 * Create tomcat context.
-	 * May be override by subclasses.
-	 *
-	 * @return Tomcat context.
-	 */
+	/// Create tomcat context.
+	/// May be override by subclasses.
+	///
+	/// @return Tomcat context.
 	private Context createContext() {
 		final Context context;
 
@@ -272,11 +260,9 @@ public abstract class AbstractEmbeddedTomcat<
 		return getConnector().getLocalPort();
 	}
 
-	/**
-	 * Get tomcat context.
-	 *
-	 * @return Tomcat context.
-	 */
+	/// Get tomcat context.
+	///
+	/// @return Tomcat context.
 	protected Context getContext() {
 		return context;
 	}

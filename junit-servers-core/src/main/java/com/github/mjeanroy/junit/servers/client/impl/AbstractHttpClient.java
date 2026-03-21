@@ -42,37 +42,25 @@ import static com.github.mjeanroy.junit.servers.commons.core.Urls.startsWithHttp
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 import static com.github.mjeanroy.junit.servers.commons.lang.Strings.removePrefix;
 
-/**
- * Abstract skeleton of {@link HttpClient} interface.
- *
- * <p>
- *
- * <strong>This abstract class is not part of the public API and should not be used publicly.</strong>
- */
+/// Abstract skeleton of [HttpClient] interface.
+///
+/// **This abstract class is not part of the public API and should not be used publicly.**
 public abstract class AbstractHttpClient implements HttpClient {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(AbstractHttpClient.class);
 
-	/**
-	 * The client configuration.
-	 */
+	/// The client configuration.
 	private final HttpClientConfiguration configuration;
 
-	/**
-	 * Embedded server to query.
-	 */
+	/// Embedded server to query.
 	private final EmbeddedServer<?> server;
 
-	/**
-	 * Create abstract skeleton.
-	 *
-	 * @param configuration The HTTP client configuration.
-	 * @param server Server.
-	 * @throws NullPointerException if server is null.
-	 */
+	/// Create abstract skeleton.
+	///
+	/// @param configuration The HTTP client configuration.
+	/// @param server Server.
+	/// @throws NullPointerException if server is null.
 	protected AbstractHttpClient(HttpClientConfiguration configuration, EmbeddedServer<?> server) {
 		this.configuration = notNull(configuration, "configuration");
 		this.server = notNull(server, "server");
@@ -196,27 +184,21 @@ public abstract class AbstractHttpClient implements HttpClient {
 		}
 	}
 
-	/**
-	 * Build request object.
-	 *
-	 * @param httpMethod Http method.
-	 * @param endpoint Request url.
-	 * @return Http request.
-	 */
+	/// Build request object.
+	///
+	/// @param httpMethod Http method.
+	/// @param endpoint Request url.
+	/// @return Http request.
 	protected abstract HttpRequest buildRequest(HttpMethod httpMethod, HttpUrl endpoint);
 
-	/**
-	 * Effectively destroy HTTP Client.
-	 *
-	 * @throws Exception If an error occurs while destroying client.
-	 */
+	/// Effectively destroy HTTP Client.
+	///
+	/// @throws Exception If an error occurs while destroying client.
 	protected abstract void doDestroy() throws Exception;
 
-	/**
-	 * Get {@link #server}
-	 *
-	 * @return {@link #server}
-	 */
+	/// Get [#server]
+	///
+	/// @return Returns [#server]
 	protected EmbeddedServer<?> getServer() {
 		return server;
 	}

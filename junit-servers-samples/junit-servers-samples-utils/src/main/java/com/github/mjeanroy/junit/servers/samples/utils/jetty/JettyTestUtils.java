@@ -29,21 +29,17 @@ import com.github.mjeanroy.junit.servers.jetty.EmbeddedJettyConfiguration;
 import java.io.File;
 import java.net.URL;
 
-/**
- * Static Jetty Utilities for various samples.
- */
+/// Static Jetty Utilities for various samples.
 public class JettyTestUtils {
 
 	// Ensure non instantiation.
 	private JettyTestUtils() {
 	}
 
-	/**
-	 * Create the Jetty Embedded configuration to use in unit tests.
-	 *
-	 * @return The Jetty Embedded Configuration.
-	 * @throws AssertionError If an error occurred while creation the configuration object.
-	 */
+	/// Create the Jetty Embedded configuration to use in unit tests.
+	///
+	/// @return The Jetty Embedded Configuration.
+	/// @throws AssertionError If an error occurred while creation the configuration object.
 	public static EmbeddedJettyConfiguration createJettyConfiguration() {
 		try {
 			EmbeddedJettyConfiguration.Builder builder = EmbeddedJettyConfiguration.builder()

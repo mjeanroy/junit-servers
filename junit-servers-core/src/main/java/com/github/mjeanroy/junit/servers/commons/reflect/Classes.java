@@ -31,31 +31,23 @@ import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-/**
- * Static class utilities.
- *
- * <p>
- *
- * <strong>Internal API</strong>: these methods are part of the internal API and may be removed, have their signature change,
- * or have their access level decreased from public to protected, package, or private in future versions without notice.
- */
+/// Static class utilities.
+///
+/// **Internal API**: these methods are part of the internal API and may be removed, have their signature change,
+/// or have their access level decreased from public to protected, package, or private in future versions without notice.
 public final class Classes {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(Classes.class);
 
 	// Ensure non instantiation
 	private Classes() {
 	}
 
-	/**
-	 * Check if a given class is available in classpath.
-	 *
-	 * @param className Fully qualified name of class to test.
-	 * @return {@code true} if class is available, {@code false} otherwise.
-	 */
+	/// Check if a given class is available in classpath.
+	///
+	/// @param className Fully qualified name of class to test.
+	/// @return `true` if class is available, `false` otherwise.
 	public static boolean isPresent(String className) {
 		try {
 			Class.forName(className);
@@ -66,13 +58,11 @@ public final class Classes {
 		}
 	}
 
-	/**
-	 * Instantie new class instance using its empty constructor (may be a private constructor).
-	 *
-	 * @param klass The class.
-	 * @param <T> The new instance type.
-	 * @return The new instance.
-	 */
+	/// Instantiate new class instance using its empty constructor (may be a private constructor).
+	///
+	/// @param klass The class.
+	/// @param <T> The new instance type.
+	/// @return The new instance.
 	public static <T> T instantiate(Class<T> klass) {
 		boolean wasAccessible = true;
 		Constructor<T> ctor = null;

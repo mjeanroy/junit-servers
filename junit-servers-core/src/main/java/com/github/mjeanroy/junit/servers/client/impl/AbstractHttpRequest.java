@@ -65,52 +65,34 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Dates.format;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notBlank;
 import static com.github.mjeanroy.junit.servers.commons.lang.Preconditions.notNull;
 
-/**
- * Abstract skeleton of {@link HttpRequest} interface.
- *
- * <p>
- *
- * <strong>This abstract class is not part of the public API and should not be used publicly.</strong>
- */
+/// Abstract skeleton of [HttpRequest] interface.
+///
+/// **This abstract class is not part of the public API and should not be used publicly.**
 public abstract class AbstractHttpRequest implements HttpRequest {
 
-	/**
-	 * The request URL.
-	 */
+	/// The request URL.
 	private final HttpUrl endpoint;
 
-	/**
-	 * The request method.
-	 */
+	/// The request method.
 	private final HttpMethod method;
 
-	/**
-	 * Request parameters.
-	 * Query parameters are the parameters following {@code ?} character in the URL.
-	 */
+	/// Request parameters.
+	/// Query parameters are the parameters following `?` character in the URL.
 	protected final Map<String, HttpParameter> queryParams;
 
-	/**
-	 * The request body.
-	 */
+	/// The request body.
 	protected HttpRequestBody body;
 
-	/**
-	 * Cookie elements.
-	 */
+	/// Cookie elements.
 	protected final List<Cookie> cookies;
 
-	/**
-	 * HTTP Headers.
-	 */
+	/// HTTP Headers.
 	protected final Map<String, HttpHeader> headers;
 
-	/**
-	 * Create request.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param method Request method.
-	 */
+	/// Create request.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param method Request method.
 	protected AbstractHttpRequest(HttpUrl endpoint, HttpMethod method) {
 		this.endpoint = notNull(endpoint, "endpoint");
 		this.method = notNull(method, "method");
@@ -316,22 +298,19 @@ public abstract class AbstractHttpRequest implements HttpRequest {
 		return asXml().acceptXml().execute();
 	}
 
-	/**
-	 * Check if the request have a body content (form parameters or request body value).
-	 *
-	 * @return {@code true} if request has a body, {@code false} otherwise.
-	 */
+	/// Check if the request have a body content (form parameters or request body value).
+	///
+	/// @return `true` if request has a body, `false` otherwise.
 	protected boolean hasBody() {
 		return body != null;
 	}
 
-	/**
-	 * Execute request.
-	 * Exception will be automatically translated into
-	 * an instance of {@link HttpClientException}.
-	 *
-	 * @return Http response.
-	 * @throws Exception If an error occurred.
-	 */
+	/// Execute request.
+	///
+	/// Exception will be automatically translated into
+	/// an instance of [HttpClientException].
+	///
+	/// @return Http response.
+	/// @throws Exception If an error occurred.
 	protected abstract HttpResponse doExecute() throws Exception;
 }

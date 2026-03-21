@@ -47,9 +47,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Builder for {@link Response} instances.
- */
+/// Builder for [Response] instances.
 public class NingHttpResponseBuilder extends AbstractHttpResponseBuilder<Response, NingHttpResponseBuilder> {
 
 	@Override

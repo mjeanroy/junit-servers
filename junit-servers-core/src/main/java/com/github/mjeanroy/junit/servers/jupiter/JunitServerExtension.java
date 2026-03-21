@@ -56,96 +56,71 @@ import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLife
 import static com.github.mjeanroy.junit.servers.jupiter.JunitServerExtensionLifecycle.PER_METHOD;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
-/**
- * Extension for Junit Jupiter.
- *
- * This jupiter will:
- *
- * <ul>
- *   <li>Inject an embedded server <strong>before all</strong> tests and stop it <strong>after all</strong> tests.</li>
- *   <li>Read server configuration annotated with {@link TestServerConfiguration}</li>
- *   <li>
- *     Resolve parameters of type (or any parameters inheriting from):
- *     <ul>
- *       <li>{@link EmbeddedServer}</li>
- *       <li>{@link AbstractConfiguration}</li>
- *       <li>{@link HttpClient}</li>
- *     </ul>
- *   </li>
- *   <li>
- *     Inject class field annotated with:
- *     <ul>
- *       <li>{@link TestServer}</li>
- *       <li>{@link TestServerConfiguration}</li>
- *       <li>{@link TestHttpClient}</li>
- *     </ul>
- *   </li>
- * </ul>
- *
- * <strong>Note that it is strongly recommended to use parameter instead instead of class injection.</strong>
- *
- * For example:
- *
- * <pre><code>
- *  &#064;ExtendWith(JunitServerExtension.class)
- *  public class MyTest {
- *
- *    &#064;Test
- *    void testGET(HttpClient client) {
- *      HttpResponse rsp = client.prepareGet("/path")
- *        .acceptJson()
- *        .execute();
- *
- *      Assertions.assertTrue(rsp.status() == 200);
- *    }
- *  }
- * </code></pre>
- *
- * The extension may also be used with {@link RegisterExtension}, in this case you can use it in two ways:
- *
- * <ul>
- *   <li>
- *     If the extension is declared as {@code static}, the server will be started <strong>before all</strong> tests
- *     and stopped <strong>after all</strong> tests (the recommended way).
- *   </li>
- *   <li>
- *     If the extension is not declared as {@code static}, the server will be started <strong>before each</strong> test
- *     and <strong>stopped after</strong> each test.
- *   </li>
- * </ul>
- *
- * For example:
- *
- * <pre><code>
- * public class MyTest {
- *
- *   // The `static` here means that the server will be started before all tests
- *   // and stopped after all tests.
- *   // Remove the `static` keyword to start/stop server before/after each test (not recommended).
- *   &#064;RegisterExtension
- *   static JunitServerExtension extension = new JunitServerExtension();
- *
- *   &#064;Test
- *   void testGET(HttpClient client) {
- *     HttpResponse rsp = client.prepareGet("/path")
- *       .acceptJson()
- *       .execute();
- *
- *     Assertions.assertTrue(rsp.status() == 200);
- *   }
- * }
- * </code></pre>
- */
+/// Extension for Junit Jupiter.
+/// This jupiter will:
+/// - Inject an embedded server **before all** tests and stop it **after all** tests.
+/// - Read server configuration annotated with [TestServerConfiguration]
+/// - Resolve parameters of type (or any parameters inheriting from):
+///   - [EmbeddedServer]
+///   - [AbstractConfiguration]
+///   - [HttpClient]
+/// - Inject class field annotated with:
+///   - [TestServer]
+///   - [TestServerConfiguration]
+///   - [TestHttpClient]
+///
+/// **Note that it is strongly recommended to use parameter instead instead of class injection.**
+///
+/// For example:
+///
+/// ```
+///  @ExtendWith(JunitServerExtension.class)
+///  public class MyTest {
+///
+///    @Test
+///    void testGET(HttpClient client) {
+///      HttpResponse rsp = client.prepareGet("/path")
+///        .acceptJson()
+///        .execute();
+///
+///      Assertions.assertTrue(rsp.status() == 200);
+///    }
+///  }
+/// ```
+///
+/// The extension may also be used with [RegisterExtension], in this case you can use it in two ways:
+/// - If the extension is declared as `static`, the server will be started **before all** tests
+///   and stopped **after all** tests (the recommended way).
+/// - If the extension is not declared as `static`, the server will be started **before each** test
+///   and **stopped after** each test.
+///
+/// For example:
+///
+/// ```
+/// public class MyTest {
+///
+///   // The `static` here means that the server will be started before all tests
+///   // and stopped after all tests.
+///   // Remove the `static` keyword to start/stop server before/after each test (not recommended).
+///   @RegisterExtension
+///   static JunitServerExtension extension = new JunitServerExtension();
+///
+///   @Test
+///   void testGET(HttpClient client) {
+///     HttpResponse rsp = client.prepareGet("/path")
+///       .acceptJson()
+///       .execute();
+///
+///     Assertions.assertTrue(rsp.status() == 200);
+///   }
+/// }
+/// ```
 public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
-	/**
-	 * Class Logger.
-	 */
+	/// Class Logger.
 	private static final Logger log = LoggerFactory.getLogger(JunitServerExtension.class);
 
-	/**
-	 * The list of parameter resolvers.
-	 */
+	/// The list of parameter resolvers.
 	private static final Map<Class<?>, ParameterResolverFunction> RESOLVERS = new HashMap<>();
 
 	static {
@@ -154,85 +129,65 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		RESOLVERS.put(HttpClient.class, HttpClientParameterResolverFunction.getInstance());
 	}
 
-	/**
-	 * The embedded server to use.
-	 */
+	/// The embedded server to use.
 	private final EmbeddedServer<?> server;
 
-	/**
-	 * The embedded server configuration when instantiating it.
-	 */
+	/// The embedded server configuration when instantiating it.
 	private final AbstractConfiguration configuration;
 
-	/**
-	 * The extension lifecycle.
-	 */
+	/// The extension lifecycle.
 	private final JunitServerExtensionLifecycle lifecycle;
 
-	/**
-	 * The extension namespace.
-	 */
+	/// The extension namespace.
 	private final Namespace namespace;
 
-	/**
-	 * Create the jupiter with default server that will be automatically detected using the Service Provider
-	 * API.
-	 */
+	/// Create the jupiter with default server that will be automatically detected using the Service Provider
+	/// API.
 	public JunitServerExtension() {
 		this(null, null, null);
 	}
 
-	/**
-	 * Create the jupiter with default server that will be automatically detected using the Service Provider
-	 * API.
-	 *
-	 * @param lifecycle The extension lifecycle.
-	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
-	 */
+	/// Create the jupiter with default server that will be automatically detected using the Service Provider
+	/// API.
+	///
+	/// @param lifecycle The extension lifecycle.
+	/// @throws NullPointerException If `lifecycle` is `null`.
 	public JunitServerExtension(JunitServerExtensionLifecycle lifecycle) {
 		this(notNull(lifecycle, "lifecycle"), null, null);
 	}
 
-	/**
-	 * Create the jupiter with given server to start/stop before/after tests.
-	 *
-	 * @param server The embedded server to use.
-	 * @throws NullPointerException If {@code server} is {@code null}.
-	 */
+	/// Create the jupiter with given server to start/stop before/after tests.
+	///
+	/// @param server The embedded server to use.
+	/// @throws NullPointerException If `server` is `null`.
 	public JunitServerExtension(EmbeddedServer<?> server) {
 		this(null, null, notNull(server, "server"));
 	}
 
-	/**
-	 * Create the jupiter with given server to start/stop before/after tests.
-	 *
-	 * @param lifecycle The extension lifecycle.
-	 * @param server The embedded server to use.
-	 * @throws NullPointerException If {@code server} is {@code null}.
-	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
-	 */
+	/// Create the jupiter with given server to start/stop before/after tests.
+	///
+	/// @param lifecycle The extension lifecycle.
+	/// @param server The embedded server to use.
+	/// @throws NullPointerException If `server` is `null`.
+	/// @throws NullPointerException If `lifecycle` is `null`.
 	public JunitServerExtension(JunitServerExtensionLifecycle lifecycle, EmbeddedServer<?> server) {
 		this(notNull(lifecycle, "lifecycle"), null, notNull(server, "server"));
 	}
 
-	/**
-	 * Create the jupiter with given server configuration.
-	 *
-	 * @param configuration The embedded server configuration to use.
-	 * @throws NullPointerException If {@code configuration} is {@code null}.
-	 */
+	/// Create the jupiter with given server configuration.
+	///
+	/// @param configuration The embedded server configuration to use.
+	/// @throws NullPointerException If `configuration` is `null`.
 	public JunitServerExtension(AbstractConfiguration configuration) {
 		this(null, configuration, null);
 	}
 
-	/**
-	 * Create the jupiter with given server configuration.
-	 *
-	 * @param lifecycle The extension lifecycle.
-	 * @param configuration The embedded server configuration to use.
-	 * @throws NullPointerException If {@code configuration} is {@code null}.
-	 * @throws NullPointerException If {@code lifecycle} is {@code null}.
-	 */
+	/// Create the jupiter with given server configuration.
+	///
+	/// @param lifecycle The extension lifecycle.
+	/// @param configuration The embedded server configuration to use.
+	/// @throws NullPointerException If `configuration` is `null`.
+	/// @throws NullPointerException If `lifecycle` is `null`.
 	public JunitServerExtension(JunitServerExtensionLifecycle lifecycle, AbstractConfiguration configuration) {
 		this(notNull(lifecycle, "lifecycle"), configuration, null);
 	}
@@ -363,14 +318,12 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		return null;
 	}
 
-	/**
-	 * Instantiate server (implementation to use is automatically detected using the Service Provider
-	 * API).
-	 *
-	 * @param testClass The test class instance.
-	 * @param configuration The embedded server configuration to use.
-	 * @return The embedded server.
-	 */
+	/// Instantiate server (implementation to use is automatically detected using the Service Provider
+	/// API).
+	///
+	/// @param testClass The test class instance.
+	/// @param configuration The embedded server configuration to use.
+	/// @return The embedded server.
 	protected EmbeddedServer<?> instantiateServer(Class<?> testClass, AbstractConfiguration configuration) {
 		log.debug("Instantiating embedded server for test class: {}", testClass);
 		return Servers.instantiate(
@@ -414,15 +367,13 @@ public class JunitServerExtension implements BeforeAllCallback, AfterAllCallback
 		return findLifecycle(testClass).orElse(defaults);
 	}
 
-	/**
-	 * Find configured embedded server {@link JunitServerExtensionLifecycle lifecycle}, defaults
-	 * to {@link JunitServerExtensionLifecycle#PER_CLASS} for backward compatibility reasons,
-	 * but {@link JunitServerExtensionLifecycle#GLOBAL} is the recommended setup and will become the
-	 * default in the next major release.
-	 *
-	 * @param testClass The tested class.
-	 * @return The lifecycle configuration, may be empty and will default to {@link JunitServerExtensionLifecycle#PER_CLASS} in this case.
-	 */
+	/// Find configured embedded server [lifecycle][JunitServerExtensionLifecycle], defaults
+	/// to [JunitServerExtensionLifecycle#PER_CLASS] for backward compatibility reasons,
+	/// but [JunitServerExtensionLifecycle#GLOBAL] is the recommended setup and will become the
+	/// default in the next major release.
+	///
+	/// @param testClass The tested class.
+	/// @return The lifecycle configuration, may be empty and will default to [JunitServerExtensionLifecycle#PER_CLASS] in this case.
 	protected Optional<JunitServerExtensionLifecycle> findLifecycle(Class<?> testClass) {
 		return findAnnotation(testClass, JunitServerTest.class).map(JunitServerTest::lifecycle);
 	}

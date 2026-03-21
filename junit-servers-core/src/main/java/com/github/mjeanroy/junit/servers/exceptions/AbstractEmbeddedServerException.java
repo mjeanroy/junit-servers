@@ -24,25 +24,19 @@
 
 package com.github.mjeanroy.junit.servers.exceptions;
 
-/**
- * Exception thrown when embedded server fail.
- */
+/// Exception thrown when embedded server fail.
 abstract class AbstractEmbeddedServerException extends AbstractException {
 
-	/**
-	 * Wrap existing exception.
-	 *
-	 * @param throwable Original exception.
-	 */
+	/// Wrap existing exception.
+	///
+	/// @param throwable Original exception.
 	AbstractEmbeddedServerException(Throwable throwable) {
 		super(throwable);
 	}
 
-	/**
-	 * Create exception with specific message.
-	 *
-	 * @param msg Message.
-	 */
+	/// Create exception with specific message.
+	///
+	/// @param msg Message.
 	AbstractEmbeddedServerException(String msg) {
 		super(msg);
 	}

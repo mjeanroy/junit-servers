@@ -28,36 +28,30 @@ import com.github.mjeanroy.junit.servers.loggers.Logger;
 import com.github.mjeanroy.junit.servers.loggers.LoggerFactory;
 import com.github.mjeanroy.junit.servers.servers.AbstractConfiguration;
 
-/**
- * Static factories for {@link EmbeddedJetty} that can be used in JUnit 4 Runner implementation
- * or JUnit Jupiter Extension.
- *
- * @deprecated Use {@code junit-servers-jetty-9} instead.
- */
+/// Static factories for [EmbeddedJetty] that can be used in JUnit 4 Runner implementation
+/// or JUnit Jupiter Extension.
+///
+/// @deprecated Use `junit-servers-jetty-9` instead.
 @Deprecated
 public final class EmbeddedJettyFactory extends AbstractEmbeddedJettyFactory<EmbeddedJetty>{
 
 	private static final Logger log = LoggerFactory.getLogger(EmbeddedJettyFactory.class);
 	private static final EmbeddedJettyFactory INSTANCE = new EmbeddedJettyFactory();
 
-	/**
-	 * Instantiate embedded jetty from given test class.
-	 *
-	 * @param testClass The test class.
-	 * @return Created embedded jetty instance.
-	 */
+	/// Instantiate embedded jetty from given test class.
+	///
+	/// @param testClass The test class.
+	/// @return Created embedded jetty instance.
 	public static EmbeddedJetty createFrom(Class<?> testClass) {
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", EmbeddedJettyFactory.class);
 		return INSTANCE.instantiateFrom(testClass, null);
 	}
 
-	/**
-	 * Instantiate embedded jetty from given test class, with given provided configuration (may be {@code null}).
-	 *
-	 * @param testClass The test class.
-	 * @param configuration The configuration to use, may be {@code null}.
-	 * @return Created embedded jetty instance.
-	 */
+	/// Instantiate embedded jetty from given test class, with given provided configuration (may be `null`).
+	///
+	/// @param testClass The test class.
+	/// @param configuration The configuration to use, may be `null`.
+	/// @return Created embedded jetty instance.
 	public static EmbeddedJetty createFrom(Class<?> testClass, AbstractConfiguration configuration) {
 		log.warn("{} is deprecated and will be removed in the next major release, use junit-servers-tomcat-8 instead, see https://mjeanroy.dev/junit-servers", EmbeddedJettyFactory.class);
 

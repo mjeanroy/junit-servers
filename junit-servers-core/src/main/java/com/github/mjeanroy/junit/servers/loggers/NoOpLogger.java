@@ -24,9 +24,7 @@
 
 package com.github.mjeanroy.junit.servers.loggers;
 
-/**
- * A logger that does nothing.
- */
+/// A logger that does nothing.
 class NoOpLogger implements Logger {
 
 	NoOpLogger() {

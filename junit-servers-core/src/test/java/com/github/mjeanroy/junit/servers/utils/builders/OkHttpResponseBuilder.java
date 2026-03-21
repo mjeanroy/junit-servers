@@ -33,9 +33,7 @@ import okhttp3.ResponseBody;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Builder for {@link Response} instances.
- */
+/// Builder for [Response] instances.
 public class OkHttpResponseBuilder extends AbstractHttpResponseBuilder<Response, OkHttpResponseBuilder> {
 
 	@SuppressWarnings("deprecation")

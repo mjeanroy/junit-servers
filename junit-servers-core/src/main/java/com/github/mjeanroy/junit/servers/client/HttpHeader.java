@@ -38,93 +38,72 @@ import static com.github.mjeanroy.junit.servers.commons.lang.Strings.toLowerCase
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 
-/**
- * Http getHeader representation.
- *
- * <p>
- * A header is defined by:
- * <ul>
- *   <li> A (case insensitive) name.</li>
- *   <li>A value, or a list of values.</li>
- * </ul>
- */
+/// Http getHeader representation.
+///
+/// A header is defined by:
+/// -  A (case insensitive) name.
+/// - A value, or a list of values.
 public final class HttpHeader {
 
-	/**
-	 * The separator for header values.
-	 */
+	/// The separator for header values.
 	private static final String HEADER_SEPARATOR = ",";
 
-	/**
-	 * Create a header with a single value.
-	 *
-	 * @param name Header name, must not be blank.
-	 * @param value Header value.
-	 * @return Header.
-	 * @throws NullPointerException If {@code name} or {@code value} are {@code null}.
-	 * @throws IllegalArgumentException If {@code name} is blank.
-	 */
+	/// Create a header with a single value.
+	///
+	/// @param name Header name, must not be blank.
+	/// @param value Header value.
+	/// @return Header.
+	/// @throws NullPointerException If `name` or `value` are `null`.
+	/// @throws IllegalArgumentException If `name` is blank.
 	public static HttpHeader header(String name, String value) {
 		return HttpHeader.of(name, value);
 	}
 
-	/**
-	 * Create a header with multiple values.
-	 *
-	 * @param name Header name.
-	 * @param values Header values, must not be empty.
-	 * @return Header.
-	 * @throws NullPointerException If {@code name} or one of {@code values} are {@code null}.
-	 * @throws IllegalArgumentException If {@code name} is blank.
-	 */
+	/// Create a header with multiple values.
+	///
+	/// @param name Header name.
+	/// @param values Header values, must not be empty.
+	/// @return Header.
+	/// @throws NullPointerException If `name` or one of `values` are `null`.
+	/// @throws IllegalArgumentException If `name` is blank.
 	public static HttpHeader header(String name, Collection<String> values) {
 		return HttpHeader.of(name, values);
 	}
 
-	/**
-	 * Create a header with a single value.
-	 *
-	 * @param name Header name, must not be blank.
-	 * @param value Header value.
-	 * @return Header.
-	 * @throws NullPointerException If {@code name} or {@code value} are {@code null}.
-	 * @throws IllegalArgumentException If {@code name} is blank.
-	 */
+	/// Create a header with a single value.
+	///
+	/// @param name Header name, must not be blank.
+	/// @param value Header value.
+	/// @return Header.
+	/// @throws NullPointerException If `name` or `value` are `null`.
+	/// @throws IllegalArgumentException If `name` is blank.
 	public static HttpHeader of(String name, String value) {
 		return new HttpHeader(name, singletonList(value));
 	}
 
-	/**
-	 * Create a header with multiple values.
-	 *
-	 * @param name Header name.
-	 * @param values Header values, must not be empty.
-	 * @return Header.
-	 * @throws NullPointerException If {@code name} or one of {@code values} are {@code null}.
-	 * @throws IllegalArgumentException If {@code name} is blank.
-	 */
+	/// Create a header with multiple values.
+	///
+	/// @param name Header name.
+	/// @param values Header values, must not be empty.
+	/// @return Header.
+	/// @throws NullPointerException If `name` or one of `values` are `null`.
+	/// @throws IllegalArgumentException If `name` is blank.
 	public static HttpHeader of(String name, Collection<String> values) {
 		return new HttpHeader(name, values);
 	}
 
-	/**
-	 * Create builder for {@link HttpHeader}.
-	 *
-	 * @param name Header name.
-	 * @return Header value.
-	 */
+	/// Create builder for [HttpHeader].
+	///
+	/// @param name Header name.
+	/// @return Header value.
 	public static HttpHeader.Builder builder(String name) {
 		return new Builder(name);
 	}
 
-	/**
-	 * Header name.
-	 */
+	/// Header name.
 	private final String name;
 
-	/**
-	 * Header values.
-	 */
+	/// Header values.
 	private final List<String> values;
 
 	// Use static factories
@@ -137,59 +116,47 @@ public final class HttpHeader {
 		}
 	}
 
-	/**
-	 * Get header name.
-	 *
-	 * @return Header name.
-	 */
+	/// Get header name.
+	///
+	/// @return Header name.
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * Get header values (returned list is not modifiable).
-	 *
-	 * @return Header values.
-	 */
+	/// Get header values (returned list is not modifiable).
+	///
+	/// @return Header values.
 	public List<String> getValues() {
 		return unmodifiableList(values);
 	}
 
-	/**
-	 * Get first value of header.
-	 *
-	 * @return First header value.
-	 */
+	/// Get first value of header.
+	///
+	/// @return First header value.
 	public String getFirstValue() {
 		return values.get(0);
 	}
 
-	/**
-	 * Get last value of header.
-	 * If header has only a single value, result will be the same as the
-	 * result of {@link #getFirstValue()}.
-	 *
-	 * @return Last header value.
-	 */
+	/// Get last value of header.
+	/// If header has only a single value, result will be the same as the
+	/// result of [#getFirstValue()].
+	///
+	/// @return Last header value.
 	public String getLastValue() {
 		return values.get(values.size() - 1);
 	}
 
-	/**
-	 * Serialize header values using the default separator. The result is a string value that
-	 * can be added to any HTTP request.
-	 *
-	 * @return Header values serialized as a string.
-	 */
+	/// Serialize header values using the default separator. The result is a string value that
+	/// can be added to any HTTP request.
+	///
+	/// @return Header values serialized as a string.
 	public String serializeValues() {
 		return String.join(HEADER_SEPARATOR, values);
 	}
 
-	/**
-	 * Serialize header as it should appear in raw HTTP request.
-	 *
-	 * @return The serialized header.
-	 */
+	/// Serialize header as it should appear in raw HTTP request.
+	///
+	/// @return The serialized header.
 	public String serialize() {
 		return name + ": " + serializeValues();
 	}
@@ -222,18 +189,12 @@ public final class HttpHeader {
 			.build();
 	}
 
-	/**
-	 * Builder for {@link HttpHeader}.
-	 */
+	/// Builder for [HttpHeader].
 	public static class Builder {
-		/**
-		 * The header name.
-		 */
+		/// The header name.
 		private final String name;
 
-		/**
-		 * Header values.
-		 */
+		/// Header values.
 		private final List<String> values;
 
 		private Builder(String name) {
@@ -241,22 +202,18 @@ public final class HttpHeader {
 			this.values = new ArrayList<>();
 		}
 
-		/**
-		 * Add value to http header.
-		 *
-		 * @param value Header value.
-		 * @return The builder.
-		 */
+		/// Add value to http header.
+		///
+		/// @param value Header value.
+		/// @return The builder.
 		public Builder addValue(String value) {
 			this.values.add(value);
 			return this;
 		}
 
-		/**
-		 * Build HTTP header instance.
-		 *
-		 * @return The created HTTP header.
-		 */
+		/// Build HTTP header instance.
+		///
+		/// @return The created HTTP header.
 		public HttpHeader build() {
 			return header(name, values);
 		}

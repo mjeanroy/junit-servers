@@ -61,18 +61,13 @@ final class WireMockTestUtils {
 	private static final String DELETE = "DELETE";
 	private static final String HEAD = "HEAD";
 
-	/**
-	 * Stub default request:
-	 *
-	 * <ul>
-	 *   <li>GET request.</li>
-	 *   <li>Returns HTTP status code 200.</li>
-	 *   <li>Returns response with JSON content type.</li>
-	 *   <li>Returns response with body: {@code "[]"}</li>
-	 * </ul>
-	 *
-	 * @param endpoint Endpoint to stub.
-	 */
+	/// Stub default request:
+	/// - GET request.
+	/// - Returns HTTP status code 200.
+	/// - Returns response with JSON content type.
+	/// - Returns response with body: `"[]"`
+	///
+	/// @param endpoint Endpoint to stub.
 	static void stubDefaultRequest(String endpoint) {
 		int status = 200;
 		Collection<Pair> headers = singleton(pair(CONTENT_TYPE, APPLICATION_JSON));
@@ -80,103 +75,85 @@ final class WireMockTestUtils {
 		stubRequest(GET, endpoint, status, headers, body);
 	}
 
-	/**
-	 * Stub {@code GET} request.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param status Response HTTP status code.
-	 * @param headers Response headers.
-	 * @param body Response body.
-	 */
+	/// Stub `GET` request.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param status Response HTTP status code.
+	/// @param headers Response headers.
+	/// @param body Response body.
 	static void stubGetRequest(String endpoint, int status, Collection<Pair> headers, String body) {
 		stubRequest(GET, endpoint, status, headers, body);
 	}
 
-	/**
-	 * Stub {@code HEAD} request.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param status Response HTTP status code.
-	 * @param headers Response headers.
-	 */
+	/// Stub `HEAD` request.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param status Response HTTP status code.
+	/// @param headers Response headers.
 	static void stubHeadRequest(String endpoint, int status, Collection<Pair> headers) {
 		stubRequest(HEAD, endpoint, status, headers);
 	}
 
-	/**
-	 * Stub {@code POST} request.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param status Response HTTP status code.
-	 * @param headers Response headers.
-	 * @param body Response body.
-	 */
+	/// Stub `POST` request.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param status Response HTTP status code.
+	/// @param headers Response headers.
+	/// @param body Response body.
 	static void stubPostRequest(String endpoint, int status, Collection<Pair> headers, String body) {
 		stubRequest(POST, endpoint, status, headers, body);
 	}
 
-	/**
-	 * Stub {@code PUT} request.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param status Response HTTP status code.
-	 * @param headers Response headers.
-	 */
+	/// Stub `PUT` request.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param status Response HTTP status code.
+	/// @param headers Response headers.
 	static void stubPutRequest(String endpoint, int status, Collection<Pair> headers) {
 		stubRequest(PUT, endpoint, status, headers);
 	}
 
-	/**
-	 * Stub {@code PATCH} request.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param status Response HTTP status code.
-	 * @param headers Response headers.
-	 * @param body Response body.
-	 */
+	/// Stub `PATCH` request.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param status Response HTTP status code.
+	/// @param headers Response headers.
+	/// @param body Response body.
 	static void stubPatchRequest(String endpoint, int status, Collection<Pair> headers, String body) {
 		stubRequest(PATCH, endpoint, status, headers, body);
 	}
 
-	/**
-	 * Stub {@code DELETE} request.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param status Response HTTP status code.
-	 * @param headers Response headers.
-	 */
+	/// Stub `DELETE` request.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param status Response HTTP status code.
+	/// @param headers Response headers.
 	static void stubDeleteRequest(String endpoint, int status, Collection<Pair> headers) {
 		stubRequest(DELETE, endpoint, status, headers);
 	}
 
-	/**
-	 * Stub {@code DELETE} request.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param status Response HTTP status code.
-	 * @param headers Response headers.
-	 * @param body Request body.
-	 */
+	/// Stub `DELETE` request.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param status Response HTTP status code.
+	/// @param headers Response headers.
+	/// @param body Request body.
 	static void stubDeleteRequest(String endpoint, int status, Collection<Pair> headers, String body) {
 		stubRequest(DELETE, endpoint, status, headers, body);
 	}
 
-	/**
-	 * Stub File Upload Request.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param status Response HTTP status code.
-	 */
+	/// Stub File Upload Request.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param status Response HTTP status code.
 	static void stubUploadRequest(String endpoint, int status) {
 		stubRequest(POST, endpoint, status, emptyList());
 	}
 
-	/**
-	 * Verify that a given request has been triggered.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param method Request method.
-	 */
+	/// Verify that a given request has been triggered.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param method Request method.
 	static void assertRequest(String endpoint, HttpMethod method) {
 		UrlPattern urlPattern = urlEqualTo(endpoint);
 		RequestMethod rqMethod = new RequestMethod(method.name());
@@ -184,12 +161,10 @@ final class WireMockTestUtils {
 		WireMock.verify(1, rq);
 	}
 
-	/**
-	 * Verify that a given request has been triggered.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param method Request method.
-	 */
+	/// Verify that a given request has been triggered.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param method Request method.
 	static void assertUploadRequest(String endpoint, HttpMethod method, File file) {
 		UrlPattern urlPattern = urlEqualTo(endpoint);
 		RequestMethod rqMethod = new RequestMethod(method.name());
@@ -202,14 +177,12 @@ final class WireMockTestUtils {
 		WireMock.verify(1, rq);
 	}
 
-	/**
-	 * Verify that a given request has been triggered.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param method Request method.
-	 * @param headerName Header name.
-	 * @param headerValue Header value.
-	 */
+	/// Verify that a given request has been triggered.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param method Request method.
+	/// @param headerName Header name.
+	/// @param headerValue Header value.
 	static void assertRequestWithHeader(String endpoint, HttpMethod method, String headerName, String headerValue) {
 		UrlPattern urlPattern = urlEqualTo(endpoint);
 		RequestMethod rqMethod = new RequestMethod(method.name());
@@ -218,13 +191,11 @@ final class WireMockTestUtils {
 		WireMock.verify(1, rq);
 	}
 
-	/**
-	 * Verify that a given request has been triggered.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param method Request method.
-	 * @param body Request body.
-	 */
+	/// Verify that a given request has been triggered.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param method Request method.
+	/// @param body Request body.
 	static void assertRequestWithBody(String endpoint, HttpMethod method, String body) {
 		UrlPattern urlPattern = urlEqualTo(endpoint);
 		RequestMethod rqMethod = new RequestMethod(method.name());
@@ -233,25 +204,21 @@ final class WireMockTestUtils {
 		WireMock.verify(1, rq);
 	}
 
-	/**
-	 * Verify that a given request has been triggered.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param method Request method.
-	 * @param cookieName Cookie name sent in HTTP request.
-	 * @param cookieValue Cookie value sent in HTTP request.
-	 */
+	/// Verify that a given request has been triggered.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param method Request method.
+	/// @param cookieName Cookie name sent in HTTP request.
+	/// @param cookieValue Cookie value sent in HTTP request.
 	static void assertRequestWithCookie(String endpoint, HttpMethod method, String cookieName, String cookieValue) {
 		assertRequestWithCookies(endpoint, method, singleton(pair(cookieName, cookieValue)));
 	}
 
-	/**
-	 * Verify that a given request has been triggered.
-	 *
-	 * @param endpoint Request endpoint.
-	 * @param method Request method.
-	 * @param cookies Cookies sent in HTTP request.
-	 */
+	/// Verify that a given request has been triggered.
+	///
+	/// @param endpoint Request endpoint.
+	/// @param method Request method.
+	/// @param cookies Cookies sent in HTTP request.
 	static void assertRequestWithCookies(String endpoint, HttpMethod method, Iterable<Pair> cookies) {
 		UrlPattern urlPattern = urlEqualTo(endpoint);
 		RequestMethod rqMethod = new RequestMethod(method.name());

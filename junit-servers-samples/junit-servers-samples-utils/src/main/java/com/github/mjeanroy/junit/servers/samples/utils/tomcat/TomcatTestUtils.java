@@ -29,31 +29,25 @@ import com.github.mjeanroy.junit.servers.tomcat.EmbeddedTomcatConfiguration;
 import java.io.File;
 import java.net.URL;
 
-/**
- * Static Tomcat Utilities for various samples.
- */
+/// Static Tomcat Utilities for various samples.
 public final class TomcatTestUtils {
 
 	// Ensure non instantiation.
 	private TomcatTestUtils() {
 	}
 
-	/**
-	 * Create configuration for Embedded Tomcat in Unit Test.
-	 *
-	 * @return The configuration.
-	 * @throws AssertionError If an error occurred while creating configuration.
-	 */
+	/// Create configuration for Embedded Tomcat in Unit Test.
+	///
+	/// @return The configuration.
+	/// @throws AssertionError If an error occurred while creating configuration.
 	public static EmbeddedTomcatConfiguration createTomcatConfiguration() {
 		return createBasicConfiguration().build();
 	}
 
-	/**
-	 * Create configuration for Embedded Tomcat in Unit Test.
-	 *
-	 * @return The configuration.
-	 * @throws AssertionError If an error occurred while creating configuration.
-	 */
+	/// Create configuration for Embedded Tomcat in Unit Test.
+	///
+	/// @return The configuration.
+	/// @throws AssertionError If an error occurred while creating configuration.
 	public static EmbeddedTomcatConfiguration createTomcatConfigurationWithWebXml() {
 		return createBasicConfiguration()
 			.withOverrideDescriptor("src/test/resources/web.xml")

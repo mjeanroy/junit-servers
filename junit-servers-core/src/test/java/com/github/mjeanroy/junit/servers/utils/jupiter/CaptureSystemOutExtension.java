@@ -39,19 +39,13 @@ import java.lang.reflect.Parameter;
 
 class CaptureSystemOutExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
-	/**
-	 * The extension namespace.
-	 */
+	/// The extension namespace.
 	private static final Namespace NAMESPACE = Namespace.create(CaptureSystemOutExtension.class);
 
-	/**
-	 * The key under which the original {@code System.out} stream is saved.
-	 */
+	/// The key under which the original `System.out` stream is saved.
 	private static final String ORIGINAL_OUT_STORE_KEY = "originalOut";
 
-	/**
-	 * The key under which the temporary out stream is saved.
-	 */
+	/// The key under which the temporary out stream is saved.
 	private static final String TEMPORARY_OUT_STORE_KEY = "out";
 
 	@Override
@@ -87,22 +81,18 @@ class CaptureSystemOutExtension implements BeforeEachCallback, AfterEachCallback
 		return new CaptureSystemOut(out);
 	}
 
-	/**
-	 * Save origin {@code System.out} stream in the test store, to be able
-	 * to restore it after each test.
-	 *
-	 * @param store The extension store.
-	 */
+	/// Save origin `System.out` stream in the test store, to be able
+	/// to restore it after each test.
+	///
+	/// @param store The extension store.
 	private static void storeOriginalSystemOut(Store store) {
 		PrintStream originalOut = System.out;
 		store.put(ORIGINAL_OUT_STORE_KEY, originalOut);
 	}
 
-	/**
-	 * Override {@code System.out} stream with custom out stream.
-	 *
-	 * @param store The extension store.
-	 */
+	/// Override `System.out` stream with custom out stream.
+	///
+	/// @param store The extension store.
 	private static void overrideSystemOut(Store store) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		PrintStream outStream = new PrintStream(out);
@@ -110,12 +100,10 @@ class CaptureSystemOutExtension implements BeforeEachCallback, AfterEachCallback
 		store.put(TEMPORARY_OUT_STORE_KEY, out);
 	}
 
-	/**
-	 * Restore {@code System.out} stream and clear extension store (even if an error
-	 * occurred while restoring stream).
-	 *
-	 * @param store The extension store.
-	 */
+	/// Restore `System.out` stream and clear extension store (even if an error
+	/// occurred while restoring stream).
+	///
+	/// @param store The extension store.
 	private static void restoreSystemOutAndClearStore(Store store) {
 		try {
 			restoreSystemOut(store);
@@ -125,43 +113,35 @@ class CaptureSystemOutExtension implements BeforeEachCallback, AfterEachCallback
 		}
 	}
 
-	/**
-	 * Flush and close the previously created temporary {@code System.out} stream.
-	 *
-	 * @param store The extension store.
-	 * @throws Exception If an error occurred while closing the stream.
-	 */
+	/// Flush and close the previously created temporary `System.out` stream.
+	///
+	/// @param store The extension store.
+	/// @throws Exception If an error occurred while closing the stream.
 	private static void closeTemporaryOut(Store store) throws Exception {
 		ByteArrayOutputStream out = store.get(TEMPORARY_OUT_STORE_KEY, ByteArrayOutputStream.class);
 		out.flush();
 		out.close();
 	}
 
-	/**
-	 * Restore origin {@code System.out} stream.
-	 *
-	 * @param store The extension store.
-	 */
+	/// Restore origin `System.out` stream.
+	///
+	/// @param store The extension store.
 	private static void restoreSystemOut(Store store) {
 		System.setOut(store.get(ORIGINAL_OUT_STORE_KEY, PrintStream.class));
 	}
 
-	/**
-	 * Clear extension store.
-	 *
-	 * @param store The store.
-	 */
+	/// Clear extension store.
+	///
+	/// @param store The store.
 	private static void clearStore(Store store) {
 		store.remove(TEMPORARY_OUT_STORE_KEY);
 		store.remove(ORIGINAL_OUT_STORE_KEY);
 	}
 
-	/**
-	 * Get extension store.
-	 *
-	 * @param context The extension context.
-	 * @return The extension store.
-	 */
+	/// Get extension store.
+	///
+	/// @param context The extension context.
+	/// @return The extension store.
 	private static Store getStore(ExtensionContext context) {
 		return context.getStore(NAMESPACE);
 	}
