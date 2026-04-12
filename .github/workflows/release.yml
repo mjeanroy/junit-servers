@@ -95,10 +95,13 @@ jobs:
           ./mvnw -B --color always -U \
             release:prepare \
             release:perform \
-            -DdryRun=${{ inputs.dry_run }} \
-            -DreleaseVersion=${{ github.event.inputs.releaseVersion }} \
-            -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}-SNAPSHOT \
+            "-DdryRun=${DRY_RUN}" \
+            "-DreleaseVersion=${RELEASE_VERSION}" \
+            "-DdevelopmentVersion=${DEVELOPMENT_VERSION}-SNAPSHOT" \
         env:
+          DRY_RUN: ${{ inputs.dry_run }}
+          RELEASE_VERSION: ${{ github.event.inputs.releaseVersion }}
+          DEVELOPMENT_VERSION: ${{ github.event.inputs.developmentVersion }}
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
