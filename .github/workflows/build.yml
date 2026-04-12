@@ -26,6 +26,8 @@ name: Build & Test
 
 on: [push]
 
+permissions: {}
+
 jobs:
   build:
 
