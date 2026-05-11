@@ -43,3 +43,6 @@ updates:
     # equalsverifier >= 4.0.0 requires Java 11
     - dependency-name: nl.jqno.equalsverifier:equalsverifier
       update-types: [ "version-update:semver-major" ]
+    # wiremock-jre8-standalone >= 3.0.0 requires Java 11
+    - dependency-name: com.github.tomakehurst:wiremock-jre8-standalone
+      update-types: [ "version-update:semver-major" ]
