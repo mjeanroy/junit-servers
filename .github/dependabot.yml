@@ -49,3 +49,16 @@ updates:
     # async-http-client >= 3.0.0 requires Java 17
     - dependency-name: org.asynchttpclient:async-http-client
       update-types: [ "version-update:semver-major" ]
+    # junit-jupiter >= 6.0.0 requires Java 17
+    - dependency-name: org.junit.jupiter:junit-jupiter-api
+      update-types: [ "version-update:semver-major" ]
+    - dependency-name: org.junit.jupiter:junit-jupiter-engine
+      update-types: [ "version-update:semver-major" ]
+    - dependency-name: org.junit.vintage:junit-vintage-engine
+      update-types: [ "version-update:semver-major" ]
+    - dependency-name: org.junit.platform:junit-platform-testkit
+      update-types: [ "version-update:semver-major" ]
+    - dependency-name: org.junit.platform:junit-platform-engine
+      update-types: [ "version-update:semver-major" ]
+    - dependency-name: org.junit.platform:junit-platform-launcher
+      update-types: [ "version-update:semver-major" ]
