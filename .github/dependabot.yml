@@ -62,3 +62,8 @@ updates:
       update-types: [ "version-update:semver-major" ]
     - dependency-name: org.junit.platform:junit-platform-launcher
       update-types: [ "version-update:semver-major" ]
+    # spring >= 6.0.0 requires Java 17
+    - dependency-name: org.springframework:spring-context
+      update-types: [ "version-update:semver-major" ]
+    - dependency-name: org.springframework:spring-webmvc
+      update-types: [ "version-update:semver-major" ]
