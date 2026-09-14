@@ -89,7 +89,7 @@
 
     <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
     <apache-rat-plugin.version>0.18</apache-rat-plugin.version>
-    <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
+    <versions-maven-plugin.version>2.22.0</versions-maven-plugin.version>
 
     <java-module-name>com.github.mjeanroy.junit.servers</java-module-name>
 
